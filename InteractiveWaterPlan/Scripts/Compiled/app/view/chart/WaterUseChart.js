@@ -15,7 +15,6 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
       showInLegend: true,
       tips: {
         trackMouse: true,
-        anchorToTarget: true,
         width: 140,
         height: 28,
         renderer: function(storeItem, item) {

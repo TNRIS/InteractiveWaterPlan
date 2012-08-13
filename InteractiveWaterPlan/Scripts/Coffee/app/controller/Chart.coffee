@@ -12,8 +12,10 @@ Ext.define('ISWP.controller.Chart', {
 
 
     refs: [
-        ref: 'waterUseChart'
-        selector: '#waterUseChart'
+        {
+            ref: 'waterUseChart'
+            selector: '#waterUseChart'
+        }
     ]
 
     init: () ->

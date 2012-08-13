@@ -9,6 +9,11 @@ body
     height: 420px;
 }
 
+#waterUseChart
+{
+    background-color: white;
+}
+
 .olMapViewport img
 {
     max-width:none;

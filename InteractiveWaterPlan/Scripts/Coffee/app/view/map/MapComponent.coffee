@@ -3,14 +3,9 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     alias: 'widget.mapcomponent'
 
-    layout: 'fit'
+    #layout: 'fit'
 
     map: null
-
-    listeners:
-        render: ()->
-            this.map = this.initializeMap(this.el.dom)
-
 
     initializeMap: (mapDomNode) ->
  

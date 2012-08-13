@@ -1,13 +1,16 @@
 Ext.define('ISWP.view.Viewport', {
     extend: 'Ext.panel.Panel'
 
-    layout: 'border'
-
+    
     renderTo: 'appContainer'
 
     border: false
-    height: 1400
     
+    height: 1200
+    width: '100%'
+    
+    layout: 'border'
+
     items: [
         {
             region: 'north'
@@ -17,19 +20,22 @@ Ext.define('ISWP.view.Viewport', {
             
         }
         {
-            region: 'center'
-            xtype: 'panel'
-            height: 500
-            #layout: 'fit'
-            
-            items: [
-                height: 300
-                width: 300
-                xtype: 'waterusechart'
-                id: 'waterUseChart'
-            ]
-           
+            region: 'west'
+            xtype: 'waterusechart'
+            id: 'waterUseChart'
 
+            width: 300
+        }
+        {
+            region: 'center'
+            html: 'center region'
+            #border: false
+        }
+        {
+            region: 'south'
+            html: 'south region'
+            height: 320
+            #border: false
         }
 
     ]

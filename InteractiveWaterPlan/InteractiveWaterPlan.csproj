@@ -1416,8 +1416,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Scripts\Coffee\app\model\" />
-    <Folder Include="Scripts\Coffee\app\store\" />
     <Folder Include="Scripts\Compiled\" />
   </ItemGroup>
   <ItemGroup>
@@ -1580,7 +1578,11 @@
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\config.rb" />
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\my-ext-theme.scss" />
     <None Include="Scripts\Coffee\app.coffee" />
+    <None Include="Scripts\Coffee\app\controller\Chart.coffee" />
     <None Include="Scripts\Coffee\app\controller\Map.coffee" />
+    <None Include="Scripts\Coffee\app\model\WaterUseData.coffee" />
+    <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
+    <None Include="Scripts\Coffee\app\view\chart\WaterUseChart.coffee" />
     <None Include="Scripts\Coffee\app\view\map\MapComponent.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
   </ItemGroup>
