@@ -10,7 +10,7 @@ Ext.create('Ext.app.Application', {
   name: 'ISWP',
   autoCreateViewport: true,
   appFolder: 'Scripts/Compiled/app',
-  controllers: ['Map'],
+  controllers: ['Map', 'Chart'],
   launch: function() {
     return null;
   }

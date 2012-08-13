@@ -1355,6 +1355,7 @@
     <Content Include="Content\OpenLayers\img\zoom-plus-mini.png" />
     <Content Include="Content\OpenLayers\img\zoom-world-mini.png" />
     <Content Include="Content\OpenLayers\img\zoombar.png" />
+    <Content Include="Content\OpenLayers\OpenLayers.debug.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\OpenLayers\theme\default\google.css" />
     <Content Include="Content\OpenLayers\theme\default\google.tidy.css" />
@@ -1598,12 +1599,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>43232</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:43232/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -9,7 +9,7 @@ Ext.create('Ext.app.Application', {
 	autoCreateViewport: true
 	appFolder: 'Scripts/Compiled/app'
 
-	controllers: ['Map']
+	controllers: ['Map', 'Chart']
 
 	launch: () ->
 

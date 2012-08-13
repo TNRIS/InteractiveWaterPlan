@@ -6,4 +6,6 @@ Ext.define('ISWP.controller.Map', {
         'map.MapComponent'
     ]
 
+    stores: []
+
 })

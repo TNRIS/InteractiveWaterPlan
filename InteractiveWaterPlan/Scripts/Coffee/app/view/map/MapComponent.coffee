@@ -15,10 +15,13 @@ Ext.define('ISWP.view.map.MapComponent', {
     initializeMap: (mapDomNode) ->
  
         mapEvent = (evt) ->
-            console.log(evt)
+            if evt.type = "moveend"
+                console.log("moveend", map.getCenter().transform(
+                    map.projection, map.displayProjection))
+
 
             if evt.type == 'click'
-                console.log(map.getLonLatFromPixel(evt.xy).transform(
+                console.log("click", map.getLonLatFromPixel(evt.xy).transform(
                     map.projection, map.displayProjection
                 ))
 
@@ -29,15 +32,13 @@ Ext.define('ISWP.view.map.MapComponent', {
             projection: new OpenLayers.Projection("EPSG:900913"), #web mercator
             displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84
             eventListeners:
-                #moveend: mapEvent
+                moveend: mapEvent
                 click: mapEvent
         )
 
-        map.addControl(new OpenLayers.Control.LayerSwitcher('lsDiv'));
+        map.addControl(new OpenLayers.Control.LayerSwitcher());
 
-        apiKey = 'AqShzxCh8f_yETzw_wg-d9sjHUo56Nr8q1y4J121_V00CindVyzWWXi7R1jsiQXV'
-
-        osmap = new OpenLayers.Layer.OSM('Open Street Map')
+        #osmap = new OpenLayers.Layer.OSM('Open Street Map')
 
         mapquest_open = new OpenLayers.Layer.XYZ(
             "Open MapQuest", 
@@ -48,7 +49,7 @@ Ext.define('ISWP.view.map.MapComponent', {
                 "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"
             ],
             {
-                attribution: "Tiles courtesy <a href='http://www.mapquest.com/'  target='_blank'>MapQuest</a>",
+                attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
                 transitionEffect: "resize"
             }
         )
@@ -62,38 +63,43 @@ Ext.define('ISWP.view.map.MapComponent', {
                 "http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png"
             ],
             {
-                attribution: "Tiles courtesy <a href='http://www.mapquest.com/'  target='_blank'>MapQuest</a>",
+                attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
                 transitionEffect: "resize"
             }
         )
 
-        ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
-            "http://vmap0.tiles.osgeo.org/wms/vmap0",
-            {layers: 'basic'} );
+        #ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+        #    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+        #    {layers: 'basic'} );
 
-        road = new OpenLayers.Layer.Bing({
+        bingApiKey = 'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
+
+        ###
+        bing_road = new OpenLayers.Layer.Bing({
             name: "Bing Road",
-            key: apiKey,
+            key: bingApiKey,
             type: "Road"
+            transitionEffect: "resize"
         });
-        hybrid = new OpenLayers.Layer.Bing({
-            name: "Bing Hybrid",
-            key: apiKey,
-            type: "AerialWithLabels"
-        });
-        aerial = new OpenLayers.Layer.Bing({
-            name: "Bing Aerial",
-            key: apiKey,
-            type: "Aerial"
-        });
-
-        #map.setCenter(new OpenLayers.LonLat(-98.8769, 31.4609), 7);
         
+        bing_hybrid = new OpenLayers.Layer.Bing({
+            name: "Bing Hybrid",
+            key: bingApiKey,
+            type: "AerialWithLabels"
+            transitionEffect: "resize"
+        });
 
-        map.addLayers([mapquest_open, osmap, road, hybrid, aerial]);
-        #map.setCenter(new OpenLayers.LonLat(-10848041.052721, 3661639.4024632), 7);  
-        map.setCenter(new OpenLayers.LonLat(-98.8769, 31.4609).transform(
-            map.displayProjection, map.projection), 7);
+        bing_aerial = new OpenLayers.Layer.Bing({
+            name: "Bing Aerial",
+            key: bingApiKey,
+            type: "Aerial"
+            transitionEffect: "resize"
+        });
+        ###
+
+        map.addLayers([mapquest_open, mapquest_aerial]);
+        map.setCenter(new OpenLayers.LonLat(-99.1845, 31.3108).transform(
+            map.displayProjection, map.projection), 6);
 
         return map
 })
