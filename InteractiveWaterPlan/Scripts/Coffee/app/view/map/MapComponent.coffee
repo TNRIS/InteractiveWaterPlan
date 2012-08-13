@@ -15,11 +15,13 @@ Ext.define('ISWP.view.map.MapComponent', {
                     map.projection, map.displayProjection))
 
 
-            if evt.type == 'click'
+            else if evt.type == 'click'
                 console.log("click", map.getLonLatFromPixel(evt.xy).transform(
                     map.projection, map.displayProjection
                 ))
 
+            else
+                console.log(evt.type)
 
             return null
 

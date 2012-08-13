@@ -18,7 +18,7 @@ Ext.define('ISWP.controller.Map', {
     init: () ->
         this.control({
             'mapcomponent': 
-                render: (mapComp) ->
+                afterrender: (mapComp) ->
                     mapComp.map = mapComp.initializeMap(mapComp.el.dom)
                     mapComp.map.updateSize()
                     return null
