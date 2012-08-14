@@ -6,9 +6,10 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
     layout: 'fit'
     
     tbar: [
-        {
-            text: 'Planning Year: '
-        }
+        
+
+        'Planning Year: '
+        
         {
             xtype: 'button'
             text: '2012'
@@ -46,20 +47,33 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
             year: 2060
             toggleGroup: 'yearButtons'
         }
+        '-' #separator
+        '->' #align the rest to the right
+        {
+            #TODO: textbox?
+            xtype: 'combobox'
+            hideLabel: true
+            #typeAhead: true
+            #store: 'entitiesStore'
+            emptyText: 'Enter a Location Name'
+            width: 200
+        }
+
     ]
 
     lbar: [
         {
             xtype: 'button'
             text: 'Water Usage'
-            theme: 'theme-1'
+            theme: 'water-usage'
+            size: 'large'
             pressed: true
             toggleGroup: 'themeButtons'
         }
         {
             xtype: 'button'
-            text: 'Theme 2'
-            theme: 'theme-2'
+            text: 'Proposed Reservoirs'
+            theme: 'proposed-reservoirs'
             toggleGroup: 'themeButtons'
         }
         {
