@@ -13,7 +13,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
     #    position: 'right'
     
     insetPadding: 30
-    theme: 'Base:gradients'
+    theme: 'Blue:gradients'
 
 
     series: [
@@ -39,14 +39,12 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
             highlight:
                 segment:
                     margin: 20
-                shadow:
-                    margin: 2
+                
             label:
                 field: 'Name'
                 display: 'rotate'
-                minMargin: 10
                 contrast: true
-                font: '14px Arial'
+                font: '14px Arial Bold'
         }
     ]
 

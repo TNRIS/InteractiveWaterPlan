@@ -30,7 +30,8 @@ Ext.define('ISWP.view.Viewport', {
 
         {
             region: 'center'
-            xtype: 'planyeartabpanel'
+            xtype: 'mainpanel'
+            id: 'mainPanel'
         }
 
 

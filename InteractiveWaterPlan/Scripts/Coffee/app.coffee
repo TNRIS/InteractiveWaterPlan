@@ -7,6 +7,7 @@ Ext.Loader.setConfig({
 #need to add path for TNRIS custom widgets
 Ext.Loader.setPath('TNRIS', 'Scripts/Compiled/TNRIS') 
 
+#not sure why this doesn't just get loaded, but it doesn't
 Ext.require('TNRIS.proxy.ParameterProxy')
 
 Ext.create('Ext.app.Application', {
@@ -14,7 +15,7 @@ Ext.create('Ext.app.Application', {
 	autoCreateViewport: true
 	appFolder: 'Scripts/Compiled/app'
 
-	controllers: ['Map', 'Chart', 'Data']
+	controllers: ['Map', 'Data']
 
 	launch: () ->
 

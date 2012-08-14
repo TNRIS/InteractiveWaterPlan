@@ -6,9 +6,6 @@ Ext.define('TNRIS.proxy.ParameterProxy', {
     alias: 'proxy.parameterproxy'
 
     buildUrl: (request) ->
-        
-        console.log(request)
-
         return this.substituteParameters(this.callParent(arguments), request)
 
     substituteParameters: (url, request) ->
