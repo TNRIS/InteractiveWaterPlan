@@ -11,24 +11,29 @@ Ext.define('ISWP.store.WaterUseData', {
     #TODO: Get the data from an ajax service
     data: [
         {
-            Name: 'Agriculture'
-            Value: 500
-        }
-        {
             Name: 'Municipal'
-            Value: 300
+            Value: 4851201
         }
         {
-            Name: 'Power'
-            Value: 150
+            Name: 'Irrigation'
+            Value: 10079215
+        }
+        {
+            Name: 'Manufacturing'
+            Value: 1727808
+        }
+        {
+            Name: 'Mining'
+            Value: 296230
+        }
+        {
+            Name: 'Steam-electric'
+            Value: 733179
         }
         {
             Name: 'Livestock'
-            Value: 80
+            Value: 322966
         }
-        {
-            Name: 'Industrial'
-            Value: 200
-        }
+        
     ]
 })

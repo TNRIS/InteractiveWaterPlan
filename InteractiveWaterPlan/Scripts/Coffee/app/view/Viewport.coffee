@@ -20,25 +20,37 @@ Ext.define('ISWP.view.Viewport', {
             id: 'mapContainer'
             
         }
-        {
-            region: 'west'
-            xtype: 'waterusechart'
-            id: 'waterUseChart'
 
-            width: 300
-        }
         {
             region: 'center'
-            html: 'center region'
-            #border: false
+            xtype: 'planyeartabpanel'
         }
+
+
         {
             region: 'south'
             html: 'south region'
-            height: 320
+            height: 220
             #border: false
         }
 
     ]
 
 })
+
+###
+{
+    #TODO: Perhaps change the center region to a tab
+    # container.
+    region: 'west'
+    xtype: 'waterusechart'
+    id: 'waterUseChart'
+
+    width: 400
+}
+{
+    region: 'center'
+    html: 'center region'
+    #border: false
+}
+###

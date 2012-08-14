@@ -21,11 +21,10 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
             type: 'pie'
             field: 'Value'
             showInLegend: true
-            
             tips:
                 trackMouse: true
 
-                width: 140
+                width: 160
                 height: 28
                 renderer: (storeItem, item) ->
                     total = 0
@@ -33,7 +32,8 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
                         total += rec.get('Value')
                     )
 
-                    this.setTitle("#{storeItem.get('Name')}: #{Ext.util.Format.number(storeItem.get('Value')/total*100,'0.00%')}")
+                    this.setTitle(" #{Ext.util.Format.number(storeItem.get('Value'), '0,000,000,000')} ac-ft (#{Ext.util.Format.number(storeItem.get('Value')/total*100,'0.00%')})")
+                    
                     return null
 
             highlight:
@@ -44,6 +44,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
             label:
                 field: 'Name'
                 display: 'rotate'
+                minMargin: 10
                 contrast: true
                 font: '14px Arial'
         }

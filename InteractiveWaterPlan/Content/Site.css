@@ -23,3 +23,8 @@ body
 {
     bottom: 4px;
 }
+
+.olControlLayerSwitcher label {
+    display: inline;   
+    margin-left: 6px;
+}
