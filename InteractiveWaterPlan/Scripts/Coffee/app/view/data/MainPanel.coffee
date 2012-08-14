@@ -10,6 +10,9 @@ Ext.define("ISWP.view.data.MainPanel", {
 
     tbar: [
         {
+            text: 'Planning Year: '
+        }
+        {
             xtype: 'button'
             text: '2012'
             year: 2012
@@ -47,6 +50,42 @@ Ext.define("ISWP.view.data.MainPanel", {
             toggleGroup: 'yearButtons'
         }
     ]
+
+    lbar: [
+        {
+            xtype: 'button'
+            text: 'Water Usage'
+            theme: 'theme-1'
+            pressed: true
+            toggleGroup: 'themeButtons'
+        }
+        {
+            xtype: 'button'
+            text: 'Theme 2'
+            theme: 'theme-2'
+            toggleGroup: 'themeButtons'
+        }
+        {
+            xtype: 'button'
+            text: 'Theme 3'
+            theme: 'theme-3'
+            toggleGroup: 'themeButtons'
+        }
+        {
+            xtype: 'button'
+            text: 'Theme 4'
+            theme: 'theme-4'
+            toggleGroup: 'themeButtons'
+        }
+        {
+            xtype: 'button'
+            text: 'Theme 5'
+            theme: 'theme-5'
+            toggleGroup: 'themeButtons'
+        }
+
+    ]
+
 
     items: [
         {

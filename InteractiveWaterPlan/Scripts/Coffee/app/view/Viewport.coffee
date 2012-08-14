@@ -38,7 +38,7 @@ Ext.define('ISWP.view.Viewport', {
         {
             region: 'south'
             html: 'south region'
-            height: 220
+            height: 120
             #border: false
         }
 
