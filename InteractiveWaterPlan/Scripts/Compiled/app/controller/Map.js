@@ -13,9 +13,8 @@ Ext.define('ISWP.controller.Map', {
   init: function() {
     return this.control({
       'mapcomponent': {
-        afterrender: function(mapComp) {
+        render: function(mapComp) {
           mapComp.map = mapComp.initializeMap(mapComp.el.dom);
-          mapComp.map.updateSize();
           return null;
         }
       }

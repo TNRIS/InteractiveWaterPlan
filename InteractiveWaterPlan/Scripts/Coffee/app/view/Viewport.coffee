@@ -16,6 +16,7 @@ Ext.define('ISWP.view.Viewport', {
             region: 'north'
             xtype: 'mapcomponent'
             height: 580
+            width: '100%'
             id: 'mapContainer'
             
         }
