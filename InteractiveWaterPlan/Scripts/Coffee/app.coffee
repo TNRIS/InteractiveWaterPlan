@@ -4,6 +4,11 @@ Ext.Loader.setConfig({
 	disableCaching: false
 })
 
+#need to add path for TNRIS custom widgets
+Ext.Loader.setPath('TNRIS', 'Scripts/Compiled/TNRIS') 
+
+Ext.require('TNRIS.proxy.ParameterProxy')
+
 Ext.create('Ext.app.Application', {
 	name: 'ISWP'
 	autoCreateViewport: true
@@ -12,8 +17,6 @@ Ext.create('Ext.app.Application', {
 	controllers: ['Map', 'Chart', 'Data']
 
 	launch: () ->
-
-		#this.map = initializeMap()
 
 		return null
 })

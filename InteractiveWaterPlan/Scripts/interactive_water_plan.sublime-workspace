@@ -231,23 +231,15 @@
 			"file": "Coffee/app.coffee",
 			"settings":
 			{
-				"buffer_size": 273,
+				"buffer_size": 393,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Coffee/app/controller/Chart.coffee",
+			"file": "Coffee/app/controller/Map.coffee",
 			"settings":
 			{
-				"buffer_size": 290,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Coffee/app/view/chart/WaterUseChart.coffee",
-			"settings":
-			{
-				"buffer_size": 847,
+				"buffer_size": 486,
 				"line_ending": "Windows"
 			}
 		},
@@ -255,25 +247,31 @@
 			"file": "Coffee/app/store/WaterUseData.coffee",
 			"settings":
 			{
-				"buffer_size": 687,
-				"line_ending": "Windows",
-				"name": "Ext.define('ISWP.store.WaterUseData', {"
+				"buffer_size": 322,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Coffee/app/model/WaterUseData.coffee",
+			"file": "Coffee/app/controller/Data.coffee",
 			"settings":
 			{
-				"buffer_size": 194,
-				"line_ending": "Windows",
-				"name": "Ext.define('ISWP.model.WaterUseData', {"
+				"buffer_size": 248,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Coffee/app/view/map/MapComponent.coffee",
+			"file": "Coffee/TNRIS/proxy/ParameterProxy.coffee",
 			"settings":
 			{
-				"buffer_size": 3347,
+				"buffer_size": 435,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Coffee/app/controller/Chart.coffee",
+			"settings":
+			{
+				"buffer_size": 676,
 				"line_ending": "Windows"
 			}
 		},
@@ -281,8 +279,26 @@
 			"file": "Coffee/app/view/Viewport.coffee",
 			"settings":
 			{
-				"buffer_size": 417,
+				"buffer_size": 1163,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Coffee/app/view/map/MapComponent.coffee",
+			"settings":
+			{
+				"buffer_size": 3388,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 20 files for \"mapcontainer\"\n\nC:\\Users\\jseppi\\CODE\\InteractiveWaterPlan\\InteractiveWaterPlan\\Scripts\\interactive_water_plan.sublime-workspace:\n  500  			\"bclink\",\n  501  			\"animDuration\",\n  502: 			\"mapcontainer\",\n  503  			\"draw\",\n  504  			\"extent\",\n  505  			\"microsoft\",\n  506: 			\"mapContainer\",\n  507  			\"+\",\n  508  			\"layerId\",\n\nC:\\Users\\jseppi\\CODE\\InteractiveWaterPlan\\InteractiveWaterPlan\\Scripts\\Coffee\\app\\view\\Viewport.coffee:\n   17              xtype: 'mapcomponent'\n   18              height: 580\n   19:             id: 'mapContainer'\n   20              \n   21          }\n\nC:\\Users\\jseppi\\CODE\\InteractiveWaterPlan\\InteractiveWaterPlan\\Scripts\\Compiled\\app\\view\\Viewport.js:\n   13        xtype: 'mapcomponent',\n   14        height: 580,\n   15:       id: 'mapContainer'\n   16      }, {\n   17        region: 'west',\n\n4 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 867,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		}
 	],
@@ -346,10 +362,24 @@
 	},
 	"file_history":
 	[
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/TNRIS/proxy/ParameterProxy.js",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/Stuff/proxy/ParameterProxy.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/model/WaterUseData.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/TNRIS/proxy/ParameterProxy.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/view/chart/WaterUseChart.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/.gitignore",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app.js",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/view/data/PlanYearTabPanel.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app/view/Viewport.js",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/store/WaterUseData.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/view/map/MapComponent.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/view/chart/SomeView.coffee",
+		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/app/view/Viewport.coffee",
+		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/app.coffee",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app/view/chart/WaterUseChart.js",
+		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app/view/map/MapComponent.js",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/controller/Map.coffee",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app/view/Map/MapComponent.js",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/app.coffee",
-		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app.js",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/view/Map/MapComponent.coffee",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Compiled/app/Viewport.js",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/Viewport.coffee",
@@ -357,11 +387,9 @@
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/Coffee/app/app.coffee",
 		"/C/Users/jseppi/AppData/Roaming/Sublime Text 2/Packages/User/CoffeeBuildGemss2.sublime-build",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/Scripts/jquery.min.js",
-		"/C/Users/jseppi/CODE/InteractiveWaterPlan/.gitignore",
 		"/C/Users/jseppi/CODE/InteractiveWaterPlan/InteractiveWaterPlan/packages.config",
 		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/app/view/catalog/CategoriesListPanel.coffee",
 		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/TNRIS/component/BaseCardControl.coffee",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/app/view/Viewport.coffee",
 		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Compiled/app.js",
 		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/TNRIS/view/BaseCategoriesList.coffee",
 		"/C/Users/jseppi/CODE/TNRIS_Various/statusmaps/status_map.coffee",
@@ -461,19 +489,7 @@
 		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/GEMSS2.Publish.xml",
 		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/packages.config",
 		"/C/Users/jseppi/CODE/GEMSS2/.gitignore",
-		"/O/CoffeeBuildGemss2.sublime-build",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.DataAccess/packages.config",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/packages/repositories.config",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2/ConnectionStrings.config.sample",
-		"/C/Users/jseppi/CODE/GEMSS Project Code as on 06-25-2012/GEMSS - Production/Default.aspx.cs",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/Coffee/TNRIS/panel/FooterPanel.coffee",
-		"/C/Users/jseppi/CODE/GEMSS2/Code/GEMSS2.MVC/Scripts/gemss2coffee.sublime-project",
-		"/C/Users/jseppi/CODE/WOFpy/examples/odm_sqlserver/odm_dao.py",
-		"/C/Users/jseppi/CODE/WOFpy/examples/odm_sqlserver/sqlalch_odm_models.py",
-		"/C/Users/jseppi/CODE/WOFpy/examples/cbi/cbi_sos_parser.py",
-		"/C/Users/jseppi/CODE/WOFpy/examples/cbi/cbi_config.cfg",
-		"/C/Users/jseppi/CODE/WOFpy/examples/cbi/cbi_dao.py",
-		"/C/Users/jseppi/CODE/WOFpy/examples/cbi/build_cbi_cache.py"
+		"/O/CoffeeBuildGemss2.sublime-build"
 	],
 	"find":
 	{
@@ -484,6 +500,7 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"<open folders>",
 			"C:\\Users\\jseppi\\CODE\\GEMSS2\\Code\\GEMSS2.MVC\\Scripts\\Coffee",
 			"C:\\Users\\jseppi\\CODE\\GEMSS2\\Code\\GEMSS2\\Scripts\\Coffee",
 			"C:\\Users\\jseppi\\CODE\\GEMSS2\\Code\\GEMSS2"
@@ -494,6 +511,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"mapcontainer",
+			"todo",
+			"appContainer",
+			"console.log",
 			"mapquest_aerial",
 			"setConfig",
 			"CategoriesListBreadcrumbs",
@@ -617,11 +638,7 @@
 			"configxml",
 			"\"Id\"",
 			"ccnet",
-			"infrastructure",
-			"debug",
-			"intransition",
-			".un",
-			"quadkey"
+			"infrastructure"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -667,7 +684,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -675,15 +692,15 @@
 					"file": "Coffee/app.coffee",
 					"settings":
 					{
-						"buffer_size": 273,
+						"buffer_size": 393,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								205,
-								205
+								359,
+								359
 							]
 						],
 						"settings":
@@ -791,129 +808,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "Coffee/app/controller/Chart.coffee",
+					"file": "Coffee/app/controller/Map.coffee",
 					"settings":
 					{
-						"buffer_size": 290,
+						"buffer_size": 486,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								256,
-								256
-							]
-						],
-						"settings":
-						{
-							"is_xml": false,
-							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Coffee/app/view/chart/WaterUseChart.coffee",
-					"settings":
-					{
-						"buffer_size": 847,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								102,
-								115
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"is_xml": false,
-							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Coffee/app/store/WaterUseData.coffee",
-					"settings":
-					{
-						"buffer_size": 687,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								213,
-								213
-							]
-						],
-						"settings":
-						{
-							"auto_name": "Ext.define('ISWP.store.WaterUseData', {",
-							"is_xml": false,
-							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Coffee/app/model/WaterUseData.coffee",
-					"settings":
-					{
-						"buffer_size": 194,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								126,
-								126
-							]
-						],
-						"settings":
-						{
-							"auto_name": "Ext.define('ISWP.model.WaterUseData', {",
-							"is_xml": false,
-							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "Coffee/app/view/map/MapComponent.coffee",
-					"settings":
-					{
-						"buffer_size": 3347,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2920,
-								2920
+								83,
+								83
 							]
 						],
 						"settings":
@@ -1012,31 +918,25 @@
 							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 765.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 6,
-					"file": "Coffee/app/view/Viewport.coffee",
+					"buffer": 2,
+					"file": "Coffee/app/store/WaterUseData.coffee",
 					"settings":
 					{
-						"buffer_size": 417,
+						"buffer_size": 322,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								380,
-								380
+								208,
+								208
 							]
 						],
 						"settings":
@@ -1141,6 +1041,482 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Coffee/app/controller/Data.coffee",
+					"settings":
+					{
+						"buffer_size": 248,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								234,
+								234
+							]
+						],
+						"settings":
+						{
+							"is_xml": false,
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 4,
+					"file": "Coffee/TNRIS/proxy/ParameterProxy.coffee",
+					"settings":
+					{
+						"buffer_size": 435,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								386,
+								386
+							]
+						],
+						"settings":
+						{
+							"is_xml": false,
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Coffee/app/controller/Chart.coffee",
+					"settings":
+					{
+						"buffer_size": 676,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								593,
+								593
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"is_xml": false,
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": false,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501",
+								"E201",
+								"E202",
+								"E203",
+								"E204"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": false,
+							"sublimelinter_delay": 0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_mark_style": "outline",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Coffee/app/view/Viewport.coffee",
+					"settings":
+					{
+						"buffer_size": 1163,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								525,
+								525
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": false,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501",
+								"E201",
+								"E202",
+								"E203",
+								"E204"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": false,
+							"sublimelinter_delay": 0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_mark_style": "outline",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Coffee/app/view/map/MapComponent.coffee",
+					"settings":
+					{
+						"buffer_size": 3388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								647,
+								647
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": false,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501",
+								"E201",
+								"E202",
+								"E203",
+								"E204"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": false,
+							"sublimelinter_delay": 0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_mark_style": "outline",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"settings":
+					{
+						"buffer_size": 867,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										209,
+										221
+									],
+									[
+										296,
+										308
+									],
+									[
+										548,
+										560
+									],
+									[
+										782,
+										794
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								384,
+								384
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -1198,8 +1574,24 @@
 		"selected_items":
 		[
 			[
+				"parameter",
+				"Compiled/TNRIS/proxy/ParameterProxy.js"
+			],
+			[
+				"paramet",
+				"Compiled/TNRIS/proxy/ParameterProxy.js"
+			],
+			[
 				"mapcom",
-				"Compiled/app/view/Map/MapComponent.js"
+				"Coffee/app/view/map/MapComponent.coffee"
+			],
+			[
+				"waterusechar",
+				"Compiled/app/view/chart/WaterUseChart.js"
+			],
+			[
+				"mapcom.js",
+				"Compiled/app/view/map/MapComponent.js"
 			],
 			[
 				"app.js",

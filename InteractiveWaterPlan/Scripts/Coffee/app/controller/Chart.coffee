@@ -22,7 +22,12 @@ Ext.define('ISWP.controller.Chart', {
         this.control({
             'waterusechart': {
                 render: (chart) ->
-                   
+                    chart.store.load({
+                        params:
+                            Year: 2012
+                            LocationType: 'State'
+                            LocationName: 'Texas'
+                    })
                     return null
             }
         })
