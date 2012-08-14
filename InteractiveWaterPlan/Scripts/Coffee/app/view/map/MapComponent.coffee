@@ -3,9 +3,8 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     alias: 'widget.mapcomponent'
 
-    #layout: 'fit'
-
     map: null
+    bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
 
     initializeMap: (mapDomNode) ->
  
@@ -38,7 +37,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         #osmap = new OpenLayers.Layer.OSM('Open Street Map')
 
         mapquest_open = new OpenLayers.Layer.XYZ(
-            "Open MapQuest", 
+            "MapQuest Open Street", 
             [
                 "http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
                 "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
@@ -52,7 +51,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         )
 
         mapquest_aerial = new OpenLayers.Layer.XYZ(
-            "MapQuest Aerial", 
+            "MapQuest Open Aerial", 
             [
                 "http://oatile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png",
                 "http://oatile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png",
@@ -69,33 +68,32 @@ Ext.define('ISWP.view.map.MapComponent', {
         #    "http://vmap0.tiles.osgeo.org/wms/vmap0",
         #    {layers: 'basic'} );
 
-        bingApiKey = 'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
-
         ###
+        
         bing_road = new OpenLayers.Layer.Bing({
             name: "Bing Road",
-            key: bingApiKey,
+            key: this.bingApiKey,
             type: "Road"
             transitionEffect: "resize"
         });
         
         bing_hybrid = new OpenLayers.Layer.Bing({
             name: "Bing Hybrid",
-            key: bingApiKey,
+            key: this.bingApiKey,
             type: "AerialWithLabels"
             transitionEffect: "resize"
         });
 
         bing_aerial = new OpenLayers.Layer.Bing({
             name: "Bing Aerial",
-            key: bingApiKey,
+            key: this.bingApiKey,
             type: "Aerial"
             transitionEffect: "resize"
         });
         ###
 
         map.addLayers([mapquest_open, mapquest_aerial]);
-        map.setCenter(new OpenLayers.LonLat(-99.1845, 31.3108).transform(
+        map.setCenter(new OpenLayers.LonLat(-98.9867, 32.76358).transform(
             map.displayProjection, map.projection), 6);
 
         return map

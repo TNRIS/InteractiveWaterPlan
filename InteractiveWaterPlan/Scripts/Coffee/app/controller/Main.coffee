@@ -1,10 +1,12 @@
-Ext.define('ISWP.controller.Data', {
+Ext.define('ISWP.controller.Main', {
 
     extend: 'Ext.app.Controller'
 
     views: [
         'chart.WaterUseChart'
         'data.MainPanel'
+        'map.MapComponent'
+        'map.ThemeYearMapPanel'
     ]
 
     stores: [
@@ -24,12 +26,22 @@ Ext.define('ISWP.controller.Data', {
             ref: 'mainContent'
             selector: '#mainContent'
         }
+        {
+            ref: 'mapComponent'
+            selector: 'mapcomponent'
+        }
     ]
 
 
     init: () ->
         this.control({
-            'mainpanel button[toggleGroup=yearButtons]':
+            'mapcomponent': 
+                render: (mapComp) ->
+                    mapComp.map = mapComp.initializeMap(mapComp.el.dom)
+                    
+                    return null
+
+            'button[toggleGroup=yearButtons]':
                 click: (btn, evt) ->
                     this.getMainChart().store.load({
                         params:

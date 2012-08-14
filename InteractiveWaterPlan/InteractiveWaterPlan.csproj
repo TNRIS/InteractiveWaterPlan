@@ -1401,7 +1401,7 @@
     <Content Include="Content\OpenLayers\theme\default\style.mobile.tidy.css" />
     <Content Include="Content\OpenLayers\theme\default\style.tidy.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Content\jquery.min.js" />
     <Content Include="Content\OpenLayers\OpenLayers.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1579,14 +1579,13 @@
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\config.rb" />
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\my-ext-theme.scss" />
     <None Include="Scripts\Coffee\app.coffee" />
-    <None Include="Scripts\Coffee\app\controller\Chart.coffee" />
-    <None Include="Scripts\Coffee\app\controller\Data.coffee" />
-    <None Include="Scripts\Coffee\app\controller\Map.coffee" />
+    <None Include="Scripts\Coffee\app\controller\Main.coffee" />
     <None Include="Scripts\Coffee\app\model\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\view\chart\WaterUseChart.coffee" />
-    <None Include="Scripts\Coffee\app\view\data\PlanYearTabPanel.coffee" />
+    <None Include="Scripts\Coffee\app\view\data\MainPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\map\MapComponent.coffee" />
+    <None Include="Scripts\Coffee\app\view\map\ThemeYearMapPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
   </ItemGroup>
