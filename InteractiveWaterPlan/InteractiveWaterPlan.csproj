@@ -1399,6 +1399,16 @@
     <Content Include="Global.asax" />
     <Content Include="Content\jquery.min.js" />
     <Content Include="Content\OpenLayers\OpenLayers.js" />
+    <Content Include="Scripts\Compiled\app.js" />
+    <Content Include="Scripts\Compiled\app\controller\Main.js" />
+    <Content Include="Scripts\Compiled\app\model\WaterUseData.js" />
+    <Content Include="Scripts\Compiled\app\store\WaterUseData.js" />
+    <Content Include="Scripts\Compiled\app\view\chart\WaterUseChart.js" />
+    <Content Include="Scripts\Compiled\app\view\data\MainPanel.js" />
+    <Content Include="Scripts\Compiled\app\view\map\MapComponent.js" />
+    <Content Include="Scripts\Compiled\app\view\map\ThemeYearMapPanel.js" />
+    <Content Include="Scripts\Compiled\app\view\Viewport.js" />
+    <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1413,7 +1423,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Scripts\Compiled\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
