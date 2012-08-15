@@ -1353,6 +1353,7 @@
     <Content Include="Content\OpenLayers\img\zoom-world-mini.png" />
     <Content Include="Content\OpenLayers\img\zoombar.png" />
     <Content Include="Content\OpenLayers\OpenLayers.debug.js" />
+    <Content Include="Content\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\OpenLayers\theme\default\google.css" />
     <Content Include="Content\OpenLayers\theme\default\google.tidy.css" />
