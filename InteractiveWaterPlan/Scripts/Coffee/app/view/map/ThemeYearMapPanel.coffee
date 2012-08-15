@@ -7,7 +7,6 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
     
     tbar: [
         
-
         'Planning Year: '
         
         {
@@ -58,7 +57,6 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
             emptyText: 'Enter a Location Name'
             width: 200
         }
-
     ]
 
     lbar: [
