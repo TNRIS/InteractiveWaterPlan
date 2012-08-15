@@ -92,9 +92,21 @@ Ext.define('ISWP.view.map.MapComponent', {
         });
         ###
 
+
+        #http://134.125.70.3/_vetile/tile.aspx?l=852&t=${quadkey}&type=wms&refInt=15
+
         map.addLayers([mapquest_open, mapquest_aerial]);
         map.setCenter(new OpenLayers.LonLat(-98.9867, 32.76358).transform(
             map.displayProjection, map.projection), 6);
+
+        proposed_reservoirs_lyr = new OpenLayers.Layer.QuadKey(
+            "Proposed Reservoirs",
+            "http://134.125.70.3/_vetile/tile.aspx?l=852&t=${quadkey}&type=wms&refInt=15",
+            {
+                isBaseLayer: false
+            }
+        )
+        map.addLayers([proposed_reservoirs_lyr])
 
         return map
 })
