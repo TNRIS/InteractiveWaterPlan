@@ -106,7 +106,16 @@ Ext.define('ISWP.view.map.MapComponent', {
                 isBaseLayer: false
             }
         )
-        map.addLayers([proposed_reservoirs_lyr])
+
+        db12_entities_lyr = new OpenLayers.Layer.QuadKey(
+            "DB12 Entities",
+            "http://134.125.70.3/_vetile/tile.aspx?l=851&t=${quadkey}&type=wms&refInt=15",
+            {
+                isBaseLayer: false
+            }
+        )
+
+        map.addLayers([proposed_reservoirs_lyr, db12_entities_lyr])
 
         return map
 })
