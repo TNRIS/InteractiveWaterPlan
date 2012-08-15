@@ -25,7 +25,7 @@ Ext.define('ISWP.view.map.MapComponent', {
             return null
 
         map = new OpenLayers.Map(mapDomNode,
-            projection: new OpenLayers.Projection("EPSG:900913"), #web mercator
+            projection: new OpenLayers.Projection("EPSG:3857"), #spherical mercator (aka 900913)
             displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84
             eventListeners:
                 moveend: mapEvent
@@ -64,11 +64,6 @@ Ext.define('ISWP.view.map.MapComponent', {
             }
         )
 
-        #ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
-        #    "http://vmap0.tiles.osgeo.org/wms/vmap0",
-        #    {layers: 'basic'} );
-
-        
         
         bing_road = new OpenLayers.Layer.Bing({
             name: "Bing Road",
@@ -91,31 +86,10 @@ Ext.define('ISWP.view.map.MapComponent', {
             transitionEffect: "resize"
         });
         
-
-
-        #http://134.125.70.3/_vetile/tile.aspx?l=852&t=${quadkey}&type=wms&refInt=15
-
         map.addLayers([mapquest_open, mapquest_aerial, bing_road, bing_hybrid, bing_aerial]);
         map.setCenter(new OpenLayers.LonLat(-98.9867, 32.76358).transform(
             map.displayProjection, map.projection), 6);
 
-        proposed_reservoirs_lyr = new OpenLayers.Layer.QuadKey(
-            "Proposed Reservoirs",
-            "http://134.125.70.3/_vetile/tile.aspx?l=852&t=${quadkey}&type=wms&refInt=15",
-            {
-                isBaseLayer: false
-            }
-        )
-
-        db12_entities_lyr = new OpenLayers.Layer.QuadKey(
-            "DB12 Entities",
-            "http://134.125.70.3/_vetile/tile.aspx?l=851&t=${quadkey}&type=wms&refInt=15",
-            {
-                isBaseLayer: false
-            }
-        )
-
-        map.addLayers([proposed_reservoirs_lyr, db12_entities_lyr])
-
+        
         return map
 })

@@ -30,6 +30,12 @@ namespace InteractiveWaterPlan
 
 
             routes.MapRoute(
+                "GetThemeRoute",
+                "Theme/{ThemeName}",
+                new { controller = "Theme", action = "GetTheme" }
+            );
+
+            routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults

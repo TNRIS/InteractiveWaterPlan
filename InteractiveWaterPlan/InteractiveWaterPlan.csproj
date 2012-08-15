@@ -64,9 +64,13 @@
   <ItemGroup>
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ThemeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Theme.cs" />
+    <Compile Include="Models\LayerInfo.cs" />
+    <Compile Include="Models\WMSLayerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1402,7 +1406,10 @@
     <Content Include="Content\OpenLayers\OpenLayers.js" />
     <Content Include="Scripts\Compiled\app.js" />
     <Content Include="Scripts\Compiled\app\controller\Main.js" />
+    <Content Include="Scripts\Compiled\app\model\LayerInfo.js" />
+    <Content Include="Scripts\Compiled\app\model\Theme.js" />
     <Content Include="Scripts\Compiled\app\model\WaterUseData.js" />
+    <Content Include="Scripts\Compiled\app\store\Theme.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\view\chart\WaterUseChart.js" />
     <Content Include="Scripts\Compiled\app\view\data\MainPanel.js" />
@@ -1422,9 +1429,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -1586,7 +1591,10 @@
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\my-ext-theme.scss" />
     <None Include="Scripts\Coffee\app.coffee" />
     <None Include="Scripts\Coffee\app\controller\Main.coffee" />
+    <None Include="Scripts\Coffee\app\model\LayerInfo.coffee" />
+    <None Include="Scripts\Coffee\app\model\Theme.coffee" />
     <None Include="Scripts\Coffee\app\model\WaterUseData.coffee" />
+    <None Include="Scripts\Coffee\app\store\Theme.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\view\chart\WaterUseChart.coffee" />
     <None Include="Scripts\Coffee\app\view\data\MainPanel.coffee" />
