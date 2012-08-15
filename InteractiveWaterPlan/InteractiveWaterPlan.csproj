@@ -15,6 +15,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
+    <JSLintSkip>\Content\OpenLayers\|\Content\ExtJS\|\Content\jquery.min.js</JSLintSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1437,6 +1438,7 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ConnectionStrings.config.sample" />
     <None Include="Content\ExtJS\resources\themes\compass_init.rb" />
     <None Include="Content\ExtJS\resources\themes\lib\utils.rb" />
     <None Include="Content\ExtJS\resources\themes\stylesheets\ext4\default\core\_core.scss" />
