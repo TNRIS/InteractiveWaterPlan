@@ -68,7 +68,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         #    "http://vmap0.tiles.osgeo.org/wms/vmap0",
         #    {layers: 'basic'} );
 
-        ###
+        
         
         bing_road = new OpenLayers.Layer.Bing({
             name: "Bing Road",
@@ -90,12 +90,12 @@ Ext.define('ISWP.view.map.MapComponent', {
             type: "Aerial"
             transitionEffect: "resize"
         });
-        ###
+        
 
 
         #http://134.125.70.3/_vetile/tile.aspx?l=852&t=${quadkey}&type=wms&refInt=15
 
-        map.addLayers([mapquest_open, mapquest_aerial]);
+        map.addLayers([mapquest_open, mapquest_aerial, bing_road, bing_hybrid, bing_aerial]);
         map.setCenter(new OpenLayers.LonLat(-98.9867, 32.76358).transform(
             map.displayProjection, map.projection), 6);
 
