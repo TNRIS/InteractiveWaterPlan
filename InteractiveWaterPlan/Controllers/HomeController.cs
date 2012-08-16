@@ -13,8 +13,14 @@ namespace InteractiveWaterPlan.Controllers
 
         public ActionResult Index()
         {
+            return RedirectToAction("Viewer");
+        }
+
+        public ActionResult Viewer()
+        {
             return View();
         }
+
 
     }
 }

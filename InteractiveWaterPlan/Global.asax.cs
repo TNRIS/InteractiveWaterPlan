@@ -24,8 +24,8 @@ namespace InteractiveWaterPlan
 
             routes.MapRoute(
                 "GetDataRoute",
-                "Data/{LocationType}/{LocationName}/{Year}",
-                new { controller = "Data", action = "GetData" }
+                "Data/WaterUsage/{LocationType}/{LocationName}/{Year}",
+                new { controller = "Data", action = "GetWaterUsageData" }
             );
 
 
@@ -36,9 +36,21 @@ namespace InteractiveWaterPlan
             );
 
             routes.MapRoute(
+                "Viewer",
+                "Viewer",
+                new { controller = "Home", action = "Viewer" }
+            );
+
+            routes.MapRoute(
+                "HomeViewer",
+                "Home/Viewer",
+                new { controller = "Home", action = "Index" }
+            );
+
+            routes.MapRoute(
                 "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                "{controller}/{action}", // URL with parameters
+                new { controller = "Home", action = "Viewer" } // Parameter defaults
             );
 
             
