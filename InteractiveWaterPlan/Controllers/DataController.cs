@@ -10,7 +10,7 @@ namespace InteractiveWaterPlan.Controllers
     {
         private readonly string[] _validYears = new string[]{"2012", "2020", "2030", "2040", "2050", "2060"};
 
-        public ActionResult GetWaterUsageData(string LocationType, string LocationName, string Year)
+        public ActionResult GetWaterUseData(string LocationType, string LocationName, string Year)
         {
             if (!_validYears.Contains(Year))
             {

@@ -62,8 +62,8 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
     lbar: [
         {
             xtype: 'button'
-            text: 'Water Usage'
-            theme: 'water-usage'
+            text: 'Water Use'
+            theme: 'water-use'
             size: 'large'
             pressed: true
             toggleGroup: 'themeButtons'

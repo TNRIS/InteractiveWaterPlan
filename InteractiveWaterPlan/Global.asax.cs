@@ -24,8 +24,8 @@ namespace InteractiveWaterPlan
 
             routes.MapRoute(
                 "GetDataRoute",
-                "Data/WaterUsage/{LocationType}/{LocationName}/{Year}",
-                new { controller = "Data", action = "GetWaterUsageData" }
+                "Data/WaterUse/{LocationType}/{LocationName}/{Year}",
+                new { controller = "Data", action = "GetWaterUseData" }
             );
 
 

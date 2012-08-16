@@ -42,7 +42,7 @@ Ext.define('ISWP.controller.Main', {
                     
                     #TODO: better way to load the default theme
                     # somehow tie in with which themeButton is 'pressed'
-                    this.loadThemeIntoMap('water-usage')
+                    this.loadThemeIntoMap('water-use')
                     return null
 
             'button[toggleGroup=yearButtons]':

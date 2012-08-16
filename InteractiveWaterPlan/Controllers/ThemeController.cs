@@ -16,6 +16,9 @@ namespace InteractiveWaterPlan.Controllers
         /// <returns></returns>
         public ActionResult GetTheme(string ThemeName)
         {
+            //TODO: Themes should be described in some external source
+            // and both the JS and the C# code should build components based on this source
+
             if ("proposed-reservoirs".Equals(ThemeName, StringComparison.InvariantCultureIgnoreCase))
             {
                 //TODO: all this should come from repository, not constructed here in the controller
@@ -30,7 +33,7 @@ namespace InteractiveWaterPlan.Controllers
 
                 return Json(themeData, JsonRequestBehavior.AllowGet);
             }
-            else if ("water-usage".Equals(ThemeName, StringComparison.InvariantCultureIgnoreCase))
+            else if ("water-use".Equals(ThemeName, StringComparison.InvariantCultureIgnoreCase))
             {
                 var themeData = new Theme("Water Use");
                 themeData.Layers.Add(
