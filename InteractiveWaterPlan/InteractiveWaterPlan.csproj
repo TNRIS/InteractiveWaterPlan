@@ -1405,6 +1405,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\jquery.min.js" />
     <Content Include="Content\OpenLayers\OpenLayers.js" />
+    <Content Include="lib\log4net.dll" />
+    <Content Include="lib\NHibernate.dll" />
+    <Content Include="lib\Spring.Rest.dll" />
     <Content Include="Scripts\Compiled\app.js" />
     <Content Include="Scripts\Compiled\app\controller\Main.js" />
     <Content Include="Scripts\Compiled\app\model\LayerInfo.js" />
