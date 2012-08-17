@@ -1,10 +1,21 @@
+###
+The ThemeYearMapPanel is a Panel that holds a MapComponent and
+ the toolbars for controlling the current data view of the application.
+###
 Ext.define('ISWP.view.map.ThemeYearMapPanel', {
     
     extend: 'Ext.panel.Panel'
     alias: 'widget.themeyearmappanel'
 
     layout: 'fit'
-    
+    items: [
+        {
+            xtype: 'mapcomponent'
+            id: 'mapComponent'
+
+        }
+    ]
+
     tbar: [
         
         'Planning Year: '
@@ -95,12 +106,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
 
     ]
 
-    items: [
-        {
-            xtype: 'mapcomponent'
-            id: 'mapContainer'
-        }
-    ]
+    
 
 
 })

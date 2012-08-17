@@ -1,40 +1,37 @@
+###
+The MapComponent holds the OpenLayers map.
+###
+
 Ext.define('ISWP.view.map.MapComponent', {
     extend: 'Ext.Component'
 
     alias: 'widget.mapcomponent'
 
     map: null
+
+    #TODO: read this from app config
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
 
-    initializeMap: (mapDomNode) ->
- 
-        mapEvent = (evt) ->
-            if evt.type = "moveend"
-                console.log("moveend", map.getCenter().transform(
-                    map.projection, map.displayProjection))
+
+    handleMapEvent: (evt) ->
+        map = this
+        ###
+        if evt.type = "moveend"
+            console.log("moveend", map.getCenter().transform(
+                map.projection, map.displayProjection))
 
 
-            else if evt.type == 'click'
-                console.log("click", map.getLonLatFromPixel(evt.xy).transform(
-                    map.projection, map.displayProjection
-                ))
+        else if evt.type == 'click'
+            console.log("click", map.getLonLatFromPixel(evt.xy).transform(
+                map.projection, map.displayProjection
+            ))
+        ### 
 
-            else
-                console.log(evt.type)
+        return null
 
-            return null
-
-        map = new OpenLayers.Map(mapDomNode,
-            projection: new OpenLayers.Projection("EPSG:3857"), #spherical mercator (aka 900913)
-            displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84
-            eventListeners:
-                moveend: mapEvent
-                click: mapEvent
-        )
-
-        map.addControl(new OpenLayers.Control.LayerSwitcher());
-
-        #osmap = new OpenLayers.Layer.OSM('Open Street Map')
+    initializeMap: () ->
+        merc_proj = new OpenLayers.Projection("EPSG:3857") #spherical mercator (aka 900913)
+        wgs84_proj = new OpenLayers.Projection("EPSG:4326") #geographic wgs-84
 
         mapquest_open = new OpenLayers.Layer.XYZ(
             "MapQuest Open Street", 
@@ -86,10 +83,23 @@ Ext.define('ISWP.view.map.MapComponent', {
             transitionEffect: "resize"
         });
         
-        map.addLayers([mapquest_open, mapquest_aerial, bing_road, bing_hybrid, bing_aerial]);
-        map.setCenter(new OpenLayers.LonLat(-98.9867, 32.76358).transform(
-            map.displayProjection, map.projection), 6);
 
+        this.map = new OpenLayers.Map(
+            div: this.id,
+            projection: merc_proj, 
+            displayProjection: wgs84_proj 
+            layers: [mapquest_open, mapquest_aerial, bing_road, bing_hybrid, bing_aerial]
+            center: new OpenLayers.LonLat(-99.294317, 31.348335).transform(wgs84_proj, merc_proj)
+            zoom: 6
+            eventListeners:
+                moveend: this.handleMapEvent
+                click: this.handleMapEvent
+                updatesize: (evt) ->
+                    console.log(this.size)
+        )
+
+        this.map.addControl(new OpenLayers.Control.LayerSwitcher());
         
-        return map
+        #return a reference to the map
+        return this.map
 })

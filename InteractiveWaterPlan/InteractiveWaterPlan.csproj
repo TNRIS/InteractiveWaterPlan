@@ -93,6 +93,7 @@
     <Compile Include="Models\WMSLayerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ThemeRepository.cs" />
+    <Compile Include="Rest\WMSService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap\css\bootstrap.css" />
@@ -1378,7 +1379,6 @@
     <Content Include="Content\OpenLayers\img\zoom-world-mini.png" />
     <Content Include="Content\OpenLayers\img\zoombar.png" />
     <Content Include="Content\OpenLayers\OpenLayers.debug.js" />
-    <Content Include="Content\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\OpenLayers\theme\default\google.css" />
     <Content Include="Content\OpenLayers\theme\default\google.tidy.css" />
@@ -1425,6 +1425,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\jquery.min.js" />
     <Content Include="Content\OpenLayers\OpenLayers.js" />
+    <Content Include="lib\Common.Logging.dll" />
     <Content Include="lib\log4net.dll" />
     <Content Include="lib\NHibernate.dll" />
     <Content Include="lib\Spring.Rest.dll" />
@@ -1440,6 +1441,8 @@
     <Content Include="Scripts\Compiled\app\view\map\MapComponent.js" />
     <Content Include="Scripts\Compiled\app\view\map\ThemeYearMapPanel.js" />
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
+    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeatureInfo.js" />
+    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1628,6 +1631,8 @@
     <None Include="Scripts\Coffee\app\view\map\MapComponent.coffee" />
     <None Include="Scripts\Coffee\app\view\map\ThemeYearMapPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
+    <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeatureInfo.coffee" />
+    <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

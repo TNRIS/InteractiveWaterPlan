@@ -1,4 +1,9 @@
-
+###
+Custom proxy class that can replace variables in parameterized URLS
+ for Ajax requests
+For example, /Path/To/Resource/{Type}/{VarId}
+ would have {Type} and {VarId} replaced if those keys were specified in the request params
+###
 Ext.define('TNRIS.proxy.ParameterProxy', {
     
     extend: 'Ext.data.proxy.Ajax'

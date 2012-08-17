@@ -1,7 +1,7 @@
 ﻿#This is to prevent errors in IE when a console statement
 # is in the remaining code
 try
-    console.log("IE is broken")
+    console.log("Console is defined")
 catch e
     console = {}
     console.log = () ->
