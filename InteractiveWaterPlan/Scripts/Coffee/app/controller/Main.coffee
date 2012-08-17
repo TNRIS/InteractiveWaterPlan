@@ -143,8 +143,6 @@ Ext.define('ISWP.controller.Main', {
                     
         map.addLayers(new_layers)
 
-
-
         info = new OpenLayers.Control.GetFeatureInfo({
             layers: new_layers
             serviceUrl: 'Feature/Info' #TODO: make this a parameter
