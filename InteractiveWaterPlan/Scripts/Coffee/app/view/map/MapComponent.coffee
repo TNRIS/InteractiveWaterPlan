@@ -11,10 +11,13 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     #TODO: read this from app config
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
+    featureInfoControlId: null
 
+    #TODO: Maybe move the store here? Could use Ext.StoreManager.lookup('storeId')
+    store: ''
 
     handleMapEvent: (evt) ->
-        map = this
+        
         ###
         if evt.type = "moveend"
             console.log("moveend", map.getCenter().transform(
@@ -94,12 +97,56 @@ Ext.define('ISWP.view.map.MapComponent', {
             eventListeners:
                 moveend: this.handleMapEvent
                 click: this.handleMapEvent
-                updatesize: (evt) ->
-                    console.log(this.size)
         )
 
         this.map.addControl(new OpenLayers.Control.LayerSwitcher());
         
         #return a reference to the map
         return this.map
+
+
+    removePopupsFromMap: () ->
+        this.map.removePopup(p) for p in this.map.popups
+
+    removeLayersFromMap: (layers) ->
+        for layer in layers
+            for map_lyr in this.map.getLayersByName(layer.Name)
+                #use destroy as suggested at http://dev.openlayers.org/apidocs/files/OpenLayers/Map-js.html#OpenLayers.Map.removeLayer
+                map_lyr.destroy()
+        return null
+
+    addLayersToMap: (layers) ->
+        this.map.addLayers(layers)
+        return null
+
+    setupFeatureInfoControl: (layers) ->
+        #remove the old featureInfoControl
+        if this.featureInfoControlId
+            ctl = this.map.getControl(this.featureInfoControlId)
+            ctl.destroy()
+            this.map.removeControl(ctl)
+
+        info = new OpenLayers.Control.GetFeatureInfo({
+            layers: layers
+            serviceUrl: 'Feature/Info' #TODO: make this a parameter
+            title: 'Identify Features by Clicking'
+            queryVisible: true
+            maxFeatures: 1
+            eventListeners: {
+
+                nofeaturefound: (evt) =>
+                    this.fireEvent("nofeaturefound", this.map, evt)
+                    return null
+
+                getfeatureinfo: (evt) =>   
+                    this.fireEvent("getfeatureinfo", this.map, evt)
+                    return null  
+            }
+        })
+
+       
+        this.map.addControl(info)
+        info.activate()
+        this.featureInfoControlId = info.id
+
 })

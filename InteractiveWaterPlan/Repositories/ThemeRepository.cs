@@ -6,9 +6,9 @@ using InteractiveWaterPlan.Models;
 
 namespace InteractiveWaterPlan.Repositories
 {
-    public static class ThemeRepository
+    public class ThemeRepository
     {
-        public static Theme GetThemeByName(string name)
+        public Theme GetThemeByName(string name)
         {
             Theme theme = null;
             

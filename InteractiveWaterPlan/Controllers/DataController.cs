@@ -4,20 +4,41 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using InteractiveWaterPlan.Repositories;
+
 namespace InteractiveWaterPlan.Controllers
 {
     public class DataController : Controller
     {
-        private readonly string[] _validYears = new string[]{"2012", "2020", "2030", "2040", "2050", "2060"};
+        private readonly int[] _validYears = new int[]{2012, 2020, 2030, 2040, 2050, 2060};
 
-        public ActionResult GetWaterUseData(string LocationType, string LocationName, string Year)
+        //Data/ProposedReservoirs/{ReservoirId}/{Year}
+        public ActionResult GetProposedReservoirEntities(int ReservoirId, int Year)
         {
             if (!_validYears.Contains(Year))
             {
                 //TODO: Make an error class that will serialize to messages like this
                 return Json(
                     new {
-                        Error="Invalid Year: "+ Year+". Valid Years are " + String.Join(", ",_validYears)
+                        Error="Invalid Year: " + Year + ". Valid Years are " + String.Join(", ",_validYears)
+                    }, JsonRequestBehavior.AllowGet);
+            }
+
+
+            var repo = new EntityRepository();
+            
+            return Json(repo.GetEntityUsage(ReservoirId, Year), JsonRequestBehavior.AllowGet);
+        }
+
+        //Data/WaterUse/{LocationType}/{LocationName}/{Year}
+        public ActionResult GetWaterUseData(string LocationType, string LocationName, int Year)
+        {
+            if (!_validYears.Contains(Year))
+            {
+                //TODO: Make an error class that will serialize to messages like this
+                return Json(
+                    new {
+                        Error="Invalid Year: " + Year + ". Valid Years are " + String.Join(", ",_validYears)
                     }, JsonRequestBehavior.AllowGet);
             }
 
@@ -28,7 +49,7 @@ namespace InteractiveWaterPlan.Controllers
                 
                 switch (Year)
                 {
-                    case "2012":
+                    case 2012:
                         return Json(new[] 
                         {
                             new { Name="Muncipal", Value=4851201}, 
@@ -39,7 +60,7 @@ namespace InteractiveWaterPlan.Controllers
                             new { Name="Irrigation", Value=10079215}
                         }, JsonRequestBehavior.AllowGet);
                         
-                    case "2020":
+                    case 2020:
                         return Json(new[] 
                         {
                             new { Name="Muncipal", Value=5580979}, 
@@ -50,7 +71,7 @@ namespace InteractiveWaterPlan.Controllers
                             new { Name="Irrigation", Value=9643908}
                         }, JsonRequestBehavior.AllowGet);
                         
-                    case "2030":
+                    case 2030:
                         return Json(new[] 
                         {
                             new { Name="Muncipal", Value=6254784}, 
@@ -61,7 +82,7 @@ namespace InteractiveWaterPlan.Controllers
                             new { Name="Irrigation", Value=9299464}
                         }, JsonRequestBehavior.AllowGet);
                         
-                    case "2040":
+                    case 2040:
                         return Json(new[] 
                         {
                             new { Name="Muncipal", Value=6917722}, 
@@ -72,7 +93,7 @@ namespace InteractiveWaterPlan.Controllers
                             new { Name="Irrigation", Value=9024866}
                         }, JsonRequestBehavior.AllowGet);
                         
-                    case "2050":
+                    case 2050:
                         return Json(new[] 
                         {
                             new { Name="Muncipal", Value=7630808}, 
@@ -83,7 +104,7 @@ namespace InteractiveWaterPlan.Controllers
                             new { Name="Irrigation", Value=8697560}
                         }, JsonRequestBehavior.AllowGet);
                         
-                    case "2060":
+                    case 2060:
                         return Json(new [] 
                         {
                             new { Name="Muncipal", Value=8414492}, 

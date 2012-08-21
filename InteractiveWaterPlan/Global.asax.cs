@@ -23,12 +23,17 @@ namespace InteractiveWaterPlan
 
 
             routes.MapRoute(
-                "GetDataRoute",
+                "GetProposedReservoirEntitiesRoute",
+                "Data/ProposedReservoirs/{ReservoirId}/{Year}",
+                new { controller = "Data", action = "GetProposedReservoirEntities" }
+            );
+
+            routes.MapRoute(
+                "GetWaterUseDataRoute",
                 "Data/WaterUse/{LocationType}/{LocationName}/{Year}",
                 new { controller = "Data", action = "GetWaterUseData" }
             );
-
-
+            
             routes.MapRoute(
                 "GetThemeRoute",
                 "Theme/{ThemeName}",

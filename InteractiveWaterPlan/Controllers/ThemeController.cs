@@ -19,8 +19,8 @@ namespace InteractiveWaterPlan.Controllers
         {
             //TODO: Themes should be described in some external source
             // and both the JS and the C# code should build components based on this source
-
-            var theme = ThemeRepository.GetThemeByName(ThemeName);
+            var repo = new ThemeRepository();
+            var theme = repo.GetThemeByName(ThemeName);
 
             if (theme != null)
                 return Json(theme, JsonRequestBehavior.AllowGet);

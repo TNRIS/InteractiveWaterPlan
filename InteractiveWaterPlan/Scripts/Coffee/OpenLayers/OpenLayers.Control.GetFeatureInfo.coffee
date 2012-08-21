@@ -21,7 +21,6 @@ OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
 
     format: null
 
-
     initialize: (options) ->
 
         OpenLayers.Control.prototype.initialize.apply(this, [options])

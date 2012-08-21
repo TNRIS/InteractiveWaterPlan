@@ -20,8 +20,6 @@ namespace InteractiveWaterPlan.Controllers
          * &HEIGHT=420&WIDTH=936&FORMAT=image%2Fpng&INFO_FORMAT=text%2Fhtml&SRS=EPSG%3A3857&X=357&Y=210
          */
 
-        
-
         public ActionResult Info(string layers, string srs, string bbox, string height, string width, string x, string y)
         {
 
