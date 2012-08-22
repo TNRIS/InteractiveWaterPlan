@@ -21,6 +21,10 @@ Ext.define('ISWP.controller.Main', {
             selector: 'mainpanel'
         }
         {
+            ref: 'themeYearMapPanel'
+            selector: 'themeyearmappanel'
+        }
+        {
             ref: 'mainChart'
             selector: '#mainChart'
         }
@@ -36,8 +40,8 @@ Ext.define('ISWP.controller.Main', {
 
     featureInfoControlId: null
 
-    selectedYear: 2012
-    selectedTheme: 'water-use'
+    selectedYear: null
+    selectedTheme: null
 
     init: () ->
         this.control({
@@ -46,19 +50,20 @@ Ext.define('ISWP.controller.Main', {
                     #This must be called once the underlying box has finished its layout
                     # or else the size will be off and the map will render incorrectly
                     mapComp.initializeMap()
+
+                    this.selectedTheme = this.getThemeYearMapPanel().getSelectedTheme()
+                        
+                    this.loadThemeIntoMap(this.selectedTheme)
                     
-                    #TODO: better way to load the default theme
-                    # somehow tie in with which themeButton is 'pressed'
-                    this.loadThemeIntoMap('water-use')
                     return null
 
-                nofeaturefound: (map, evt) ->
-                    map.removePopup(p) for p in map.popups
+                nofeaturefound: (mapComp, evt) ->
+                    mapComp.removePopupsFromMap()
                     return null
 
-                getfeatureinfo: (map, evt) ->
+                getfeatureinfo: (mapComp, evt) ->
                     #remove any popups
-                    map.removePopup(p) for p in map.popups
+                    mapComp.removePopupsFromMap()
 
                     #TODO: better processing of evt.features
                     # to make nicer looking popups
@@ -66,6 +71,8 @@ Ext.define('ISWP.controller.Main', {
                     popupText = ""
                     popupText += ("#{prop}: #{evt.features[prop]}<br/>") for prop of evt.features
                     
+                    map = mapComp.map
+
                     map.addPopup(
                         new OpenLayers.Popup.FramedCloud(
                             "Feature Info"
@@ -76,8 +83,9 @@ Ext.define('ISWP.controller.Main', {
                             true
                         )
                     )
-
                     
+                    #TODO: Find somewhere else to define the custom behavior for each layer
+                    # Maybe a Theme class that implements some common interface
                     if this.selectedTheme == 'proposed-reservoirs'
                         this.getWaterUseEntityStore().load({
                             params:
@@ -139,9 +147,11 @@ Ext.define('ISWP.controller.Main', {
 
             '#mainChart':
                 render: (chart) ->
+                    
+                    this.selectedYear = this.getThemeYearMapPanel().getSelectedYear()
                     chart.store.load({
                         params:
-                            Year: 2012
+                            Year: this.selectedYear
                             LocationType: 'State'
                             LocationName: 'Texas'
                     })
@@ -195,7 +205,6 @@ Ext.define('ISWP.controller.Main', {
                 return null
         })
 
-        return null
+        return null  
 
-    
 })

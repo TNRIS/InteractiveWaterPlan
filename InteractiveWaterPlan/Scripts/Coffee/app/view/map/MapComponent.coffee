@@ -135,11 +135,11 @@ Ext.define('ISWP.view.map.MapComponent', {
             eventListeners: {
 
                 nofeaturefound: (evt) =>
-                    this.fireEvent("nofeaturefound", this.map, evt)
+                    this.fireEvent("nofeaturefound", this, evt)
                     return null
 
                 getfeatureinfo: (evt) =>   
-                    this.fireEvent("getfeatureinfo", this.map, evt)
+                    this.fireEvent("getfeatureinfo", this, evt)
                     return null  
             }
         })
