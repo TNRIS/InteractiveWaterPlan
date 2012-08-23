@@ -8,10 +8,12 @@ Ext.define('ISWP.view.map.MapComponent', {
     alias: 'widget.mapcomponent'
 
     map: null
+    vectorLayer: null
 
     #TODO: read this from app config
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
     featureInfoControlId: null
+    selectFeatureControlId: null
 
     #TODO: Maybe move the store here? Could use Ext.StoreManager.lookup('storeId')
     store: ''
@@ -112,6 +114,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         for layer in layers
             for map_lyr in this.map.getLayersByName(layer.Name)
                 #use destroy as suggested at http://dev.openlayers.org/apidocs/files/OpenLayers/Map-js.html#OpenLayers.Map.removeLayer
+                this.map.removeLayer(map_lyr)
                 map_lyr.destroy()
         return null
 
@@ -119,16 +122,31 @@ Ext.define('ISWP.view.map.MapComponent', {
         this.map.addLayers(layers)
         return null
 
-    setupFeatureInfoControl: (layers) ->
-        #remove the old featureInfoControl
-        if this.featureInfoControlId
+    clearVectorLayer: () ->
+        if this.selectFeatureControlId?
+            ctl = this.map.getControl(this.selectFeatureControlId)
+            ctl.destroy()
+            this.map.removeControl(ctl)
+            this.selectFeatureControlId = null
+
+        #destroy the old vector layer
+        this.vectorLayer.destroy() if this.vectorLayer?
+
+        return null
+
+    removeFeatureInfoControl: () ->
+        if this.featureInfoControlId?
             ctl = this.map.getControl(this.featureInfoControlId)
             ctl.destroy()
             this.map.removeControl(ctl)
 
+    setupFeatureInfoControl: (layers) ->
+        #remove the old featureInfoControl
+        this.removeFeatureInfoControl()
+
         info = new OpenLayers.Control.GetFeatureInfo({
             layers: layers
-            serviceUrl: 'Feature/Info' #TODO: make this a parameter
+            serviceUrl: 'Feature/Info'
             title: 'Identify Features by Clicking'
             queryVisible: true
             maxFeatures: 1
@@ -148,5 +166,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         this.map.addControl(info)
         info.activate()
         this.featureInfoControlId = info.id
+
+
 
 })

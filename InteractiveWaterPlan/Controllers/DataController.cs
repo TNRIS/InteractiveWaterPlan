@@ -5,12 +5,34 @@ using System.Web;
 using System.Web.Mvc;
 
 using InteractiveWaterPlan.Repositories;
+using System.Web.Script.Serialization;
 
 namespace InteractiveWaterPlan.Controllers
 {
     public class DataController : Controller
     {
         private readonly int[] _validYears = new int[]{2012, 2020, 2030, 2040, 2050, 2060};
+
+
+        public ActionResult GetAllEntities()
+        {
+            var repo = new EntityRepository();
+            return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetAllProposedReservoirs()
+        {
+            var serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 50000000;
+
+            var repo = new EntityRepository();
+            return new ContentResult()
+            {
+                Content = serializer.Serialize(repo.GetAllProposedReservoirs()),
+                ContentType = "application/json"
+            };
+            //return Json(repo.GetAllProposedReservoirs(), JsonRequestBehavior.AllowGet);
+        }
 
         //Data/ProposedReservoirs/{ReservoirId}/{Year}
         public ActionResult GetProposedReservoirEntities(int ReservoirId, int Year)
@@ -27,7 +49,7 @@ namespace InteractiveWaterPlan.Controllers
 
             var repo = new EntityRepository();
             
-            return Json(repo.GetEntityUsage(ReservoirId, Year), JsonRequestBehavior.AllowGet);
+            return Json(repo.GetEntitiesServedByReservoir(ReservoirId, Year), JsonRequestBehavior.AllowGet);
         }
 
         //Data/WaterUse/{LocationType}/{LocationName}/{Year}

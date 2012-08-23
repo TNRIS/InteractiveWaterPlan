@@ -5,9 +5,9 @@ Ext.define('ISWP.model.WaterUseEntity', {
     fields: [
         'Id'
         'Name'
-        'Geography'
+        'WKTGeog'
         'SSUsage'
-        'IsRedudantDisplay'
+        'IsRedundantSupply'
         'SourceName'
         'SourceId'
     ]

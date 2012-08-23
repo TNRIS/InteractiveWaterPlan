@@ -23,8 +23,20 @@ namespace InteractiveWaterPlan
 
 
             routes.MapRoute(
+                "GetAllEntitiesRoute",
+                "Data/Entity/All",
+                new { controller = "Data", action = "GetAllEntities" }
+            );
+
+            routes.MapRoute(
+                "GetAllProposedReservoirsRoute",
+                "Data/Reservoir/Proposed/All",
+                new { controller = "Data", action = "GetAllProposedReservoirs" }
+            );
+
+            routes.MapRoute(
                 "GetProposedReservoirEntitiesRoute",
-                "Data/ProposedReservoirs/{ReservoirId}/{Year}",
+                "Data/Reservoir/Entity/{ReservoirId}/{Year}",
                 new { controller = "Data", action = "GetProposedReservoirEntities" }
             );
 

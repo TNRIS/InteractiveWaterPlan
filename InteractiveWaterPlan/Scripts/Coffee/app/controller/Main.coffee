@@ -13,6 +13,7 @@ Ext.define('ISWP.controller.Main', {
         'WaterUseData'
         'Theme'
         'WaterUseEntity'
+        'Entity'
     ]
 
     refs: [
@@ -38,10 +39,12 @@ Ext.define('ISWP.controller.Main', {
         }
     ]
 
-    featureInfoControlId: null
+    selectFeatureControlId: null
 
     selectedYear: null
     selectedTheme: null
+    wktFormat: new OpenLayers.Format.WKT
+    vectorLayer: null
 
     init: () ->
         this.control({
@@ -83,36 +86,121 @@ Ext.define('ISWP.controller.Main', {
                             true
                         )
                     )
+
+                    #TODO: somehow highlight the feature that was clicked
+                    #if features['SQL_GEOG'] was returned from the WMS GetFeatureInfo service, then we could do this
+
+                    #TODO: don't show a popup, instead change the main content area to display the reservoir information
+
+                    #TODO: add a hover to the related feature points to display their info
+
+                    #TODO: The MapComponent should probably do all this stuff and keep track of its controls
+                    #TODO: Any way to update a control?
                     
-                    #TODO: Find somewhere else to define the custom behavior for each layer
+
+                    #TODO: Reload when the year selection changes
+
+                    #TODO: Find somewhere else to define the custom behavior for each theme and its layers
                     # Maybe a Theme class that implements some common interface
                     if this.selectedTheme == 'proposed-reservoirs'
+
                         this.getWaterUseEntityStore().load({
                             params:
                                 Year: this.selectedYear
                                 ReservoirId: evt.features['DB12_Id']
                             
+                            scope: this #scope to the controller
                             callback: (records, operation, success) ->
-                                wktFormat = new OpenLayers.Format.WKT()
-                                vectorLayer = new OpenLayers.Layer.Vector("Users Served by Planned Reservoir")
+                                
+                                #clear the vector layer and its controls
+                                mapComp.clearVectorLayer()
 
+                                if records.length == 0
+                                    return null
+
+                                style = new OpenLayers.StyleMap({
+                                    default:
+                                        graphicName: 'circle'
+                                        pointRadius: 4
+                                        strokeColor: 'cyan'
+                                        strokeWidth: 0.5
+                                        fillColor: 'blue'
+                                        fillOpacity: 0.8
+                                    select: #would have to create and activate a SelectFeature control
+                                        pointRadius: 6
+                                        fillOpacity: 1
+                                })
+
+                                #create a new one
+                                mapComp.vectorLayer = new OpenLayers.Layer.Vector(
+                                    "Planned Reservoir User Entities", 
+                                    {
+                                        styleMap: style
+                                    }
+                                )
+
+                                bounds = null
                                 relatedFeatures = []
                                 for rec in records
                                     data = rec.data
-                                    relatedFeatures.push(wktFormat.read(rec.data.Geography))
+                                    new_feat = this.wktFormat.read(rec.data.WKTGeog)
+                                    new_feat.data = data
+                                    new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
+                                    #TODO: apply the style here instead of using the stylemap ?
 
-                                bounds = null
-                                for feat in relatedFeatures
-                                    feat.geometry = feat.geometry.transform(map.displayProjection, map.projection)
+                                    #Use the clicked reservoir point and the new_feat point to construct a line
+                                    clickedResPoint = map.getLonLatFromPixel(evt.xy)
+                                    line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
+                                        new OpenLayers.Geometry.Point(clickedResPoint.lon, clickedResPoint.lat),
+                                        new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)
+                                    ])) #attributes and style can be added
+                                    relatedFeatures.push(line) #TODO: maybe make its own layer and stylemap
 
                                     if not bounds?
-                                        bounds = feat.geometry.getBounds()
+                                        bounds = new_feat.geometry.getBounds()
                                     else
-                                        bounds.extend(feat.geometry.getBounds())
+                                        bounds.extend(new_feat.geometry.getBounds())
 
-                                vectorLayer.addFeatures(relatedFeatures)
-                                map.addLayer(vectorLayer)
+                                    relatedFeatures.push(new_feat)
+
+
+
+                                mapComp.vectorLayer.addFeatures(relatedFeatures)
+                                map.addLayer(mapComp.vectorLayer)
                                 #map.zoomToExtent(bounds)
+
+                                #Create a new select feature control and add it to the map.
+                                #Create a new select feature control and add it to the map.
+                                select = new OpenLayers.Control.SelectFeature(mapComp.vectorLayer, {
+                                    hover: false #listen to clicks
+                                    onSelect: (feature) ->    
+                                        console.log(data)
+                                        popup = new OpenLayers.Popup.FramedCloud("featurepopup", 
+                                            feature.geometry.getBounds().getCenterLonLat(), 
+                                            null,
+                                            """
+                                            <h3>#{feature.data.Name}</h3>
+                                            SSUsage: #{[year, feature.data.SSUsage[year]] for year of feature.data.SSUsage}<br/>
+                                            Redundant Supply: #{if feature.data.IsRedundantSupply then 'Yes' else 'No'}
+                                            """,
+                                            null,
+                                            true,
+                                            () ->
+                                                select.unselect(feature)
+                                                return null
+                                        )
+                                        feature.popup = popup
+                                        map.addPopup(popup)
+                                    onUnselect: (feature) ->
+                                        map.removePopup(feature.popup)
+                                        feature.popup.destroy()
+                                        feature.popup = null
+                                        return null
+                                })
+
+                                map.addControl(select);
+                                mapComp.selectFeatureControlId = select.id
+                                select.activate();
 
                                 return null
                         })
@@ -158,10 +246,8 @@ Ext.define('ISWP.controller.Main', {
                     return null
 
         })
-
-
+        
     loadThemeIntoMap: (themeName) ->
-
         #First remove all layers that are in the ThemeStore
         mapComp = this.getMapComponent()
         this.getThemeStore().each((rec) ->
@@ -171,10 +257,104 @@ Ext.define('ISWP.controller.Main', {
 
         #remove any popups
         mapComp.removePopupsFromMap()
-        
+
+        #clear the old vector layer and its controls
+        mapComp.clearVectorLayer()
+
+        #remove the old feature info control
+        mapComp.removeFeatureInfoControl()
+
         #Then request and add the new layers to the ThemeStore
         # and add them to the map
         
+        
+        #TEST TEST TEST
+        if themeName == 'water-use'
+            map = mapComp.map
+            this.getEntityStore().load({
+
+                scope: this
+                callback: (records, operation, success) ->
+
+                    style = new OpenLayers.StyleMap({
+                        default:
+                            graphicName: 'circle'
+                            pointRadius: 4
+                            strokeColor: 'cyan'
+                            strokeWidth: 0.5
+                            fillColor: 'blue'
+                            fillOpacity: 0.8
+                        hover: 
+                            pointRadius: 6
+                            fillOpacity: 1
+                    })
+
+                    #create a new one
+                    mapComp.vectorLayer = new OpenLayers.Layer.Vector(
+                        "Water Users", 
+                        {
+                            styleMap: style
+                        }
+                    )
+
+                    bounds = null
+                    entity_features = []
+                    for rec in records
+                        data = rec.data
+                        new_feat = this.wktFormat.read(rec.data.WKTGeog)
+                        new_feat.data = data
+                        new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
+                        
+                        if not bounds?
+                            bounds = new_feat.geometry.getBounds()
+                        else
+                            bounds.extend(new_feat.geometry.getBounds())
+
+                        entity_features.push(new_feat)
+
+                    mapComp.vectorLayer.addFeatures(entity_features)
+                    map.addLayer(mapComp.vectorLayer)
+                    #map.zoomToExtent(bounds)
+
+                    #Create a new select feature control and add it to the map.
+                    select = new OpenLayers.Control.SelectFeature(mapComp.vectorLayer, {
+                        hover: false #listen to clicks
+                        onSelect: (feature) ->    
+                            popup = new OpenLayers.Popup.FramedCloud("featurepopup", 
+                                feature.geometry.getBounds().getCenterLonLat(), 
+                                null,
+                                """
+                                <h3>#{feature.data.Name}</h3>
+                                Type: #{feature.data.Type}<br/>
+                                RWP: #{feature.data.RWP}<br/>
+                                County: #{feature.data.County}<br/>
+                                Basin: #{feature.data.Basin}<br/>
+                                """,
+                                null,
+                                true,
+                                () ->
+                                    select.unselect(feature)
+                                    return null
+                            )
+                            feature.popup = popup
+                            map.addPopup(popup)
+                        onUnselect: (feature) ->
+                            map.removePopup(feature.popup)
+                            feature.popup.destroy()
+                            feature.popup = null
+                            return null
+                    });
+                    map.addControl(select);
+                    mapComp.selectFeatureControlId = select.id
+                    select.activate();
+
+                    return null
+            })
+
+
+            return null
+        #END TEST
+
         this.getThemeStore().load({
             params:
                 ThemeName: themeName
