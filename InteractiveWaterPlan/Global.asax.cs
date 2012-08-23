@@ -21,7 +21,6 @@ namespace InteractiveWaterPlan
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-
             routes.MapRoute(
                 "GetAllEntitiesRoute",
                 "Data/Entity/All",
@@ -78,7 +77,7 @@ namespace InteractiveWaterPlan
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
+            RegisterRoutes(RouteTable.Routes);   
         }
     }
 }

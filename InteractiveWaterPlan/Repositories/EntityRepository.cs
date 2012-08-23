@@ -11,18 +11,12 @@ using InteractiveWaterPlan.Models;
 
 namespace InteractiveWaterPlan.Repositories
 {
-    public class EntityRepository
+    public class EntityRepository : AbstractRepository
     {
-        SqlConnection _connection; 
-
+ 
         //usp_Select_WaterEntityUsage_By_ProposedReservoir_and_Year
         //usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs
         //usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
-
-        public EntityRepository()
-        {
-            _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WaterPlanDB"].ConnectionString);
-        }
 
         public IList<Entity> GetAllEntities()
         {
@@ -30,29 +24,34 @@ namespace InteractiveWaterPlan.Repositories
                 this._connection);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            SqlDataReader reader = null;
-            var entityList = new List<Entity>();
+            
 
             try
             {
                 this._connection.Open();
-                reader = cmd.ExecuteReader();
-                foreach (IDataRecord record in reader)
+                var entityList = new List<Entity>();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    var entity = new Entity()
+                    foreach (IDataRecord record in reader)
                     {
-                        SqlId = Convert.ToInt32(record["SQL_ID"]),
-                        Id = Convert.ToInt32(record["Entity_ID"]),
-                        Name = record["Entity_Name"].ToString(),
-                        Type = record["Entity_Type"].ToString(),
-                        RWP = record["Entity_RWP"].ToString(),
-                        County = record["Entity_County"].ToString(),
-                        Basin = record["Entity_Basin"].ToString(),
-                        WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
+                        var entity = new Entity()
+                        {
+                            SqlId = Convert.ToInt32(record["SQL_ID"]),
+                            Id = Convert.ToInt32(record["Entity_ID"]),
+                            Name = record["Entity_Name"].ToString(),
+                            Type = record["Entity_Type"].ToString(),
+                            RWP = record["Entity_RWP"].ToString(),
+                            County = record["Entity_County"].ToString(),
+                            Basin = record["Entity_Basin"].ToString(),
+                            WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
 
-                    };
+                        };
 
-                    entityList.Add(entity);
+                        entityList.Add(entity);
+                    }
+
+                    return entityList;
                 }
             }
             catch (Exception ex)
@@ -63,11 +62,7 @@ namespace InteractiveWaterPlan.Repositories
             finally
             {
                 this._connection.Close();
-                if (reader != null)
-                    reader.Close();
             }
-
-            return entityList;
             
         }
 
@@ -77,26 +72,31 @@ namespace InteractiveWaterPlan.Repositories
                 this._connection);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            SqlDataReader reader = null;
-            var reservoirList = new List<Reservoir>();
+           
 
             try
             {
                 this._connection.Open();
-                reader = cmd.ExecuteReader();
-                foreach (IDataRecord record in reader)
+                var reservoirList = new List<Reservoir>();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    var reservoir = new Reservoir()
+                    foreach (IDataRecord record in reader)
                     {
-                        SqlId = Convert.ToInt32(record["SQL_ID"]),
-                        Id = Convert.ToInt32(record["DB12_Id"]),
-                        Name = record["Reservoir_Name"].ToString(),
-                        RecommendationCode = Convert.ToInt32(record["Recommendation_Code"]),
-                        WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
+                        var reservoir = new Reservoir()
+                        {
+                            SqlId = Convert.ToInt32(record["SQL_ID"]),
+                            Id = Convert.ToInt32(record["DB12_Id"]),
+                            Name = record["Reservoir_Name"].ToString(),
+                            RecommendationCode = Convert.ToInt32(record["Recommendation_Code"]),
+                            WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
 
-                    };
+                        };
 
-                    reservoirList.Add(reservoir);
+                        reservoirList.Add(reservoir);
+                    }
+
+                    return reservoirList;
                 }
             }
             catch (Exception ex)
@@ -107,11 +107,7 @@ namespace InteractiveWaterPlan.Repositories
             finally
             {
                 this._connection.Close();
-                if (reader != null)
-                    reader.Close();
             }
-
-            return reservoirList;
         }
 
         public IList<WaterUseEntity> GetEntitiesServedByReservoir(int proposedReservoirId, int year)
@@ -126,43 +122,40 @@ namespace InteractiveWaterPlan.Repositories
             cmd.Parameters.Add(new SqlParameter("@var_DB12_ID", proposedReservoirId));
             cmd.Parameters.Add(new SqlParameter("@var_EstYear", year));
 
-
-            SqlDataReader reader = null;
-            var entityList = new List<WaterUseEntity>();
             try 
 	        {
                 this._connection.Open();
-		        reader = cmd.ExecuteReader();
-                foreach (IDataRecord record in reader)
+                var entityList = new List<WaterUseEntity>();
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    var entity = new WaterUseEntity()
+                    foreach (IDataRecord record in reader)
                     {
-                        Name = record["Entity_Name"].ToString(),
-                        Id = Convert.ToInt32(record["SQL_ID"]),
-                        WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
-                        IsRedundantSupply = "Y".Equals(record["Redundant_Water"].ToString()),
-                        SourceName = record["Source_Name"].ToString(),
-                        SourceId = Convert.ToInt32(record["Source_ID"])
-                    };
-                    
-                    entity.SSUsage.Add(year.ToString(), record["SS" + year.ToString()].ToString());
-                    entityList.Add(entity);
+                        var entity = new WaterUseEntity()
+                        {
+                            Name = record["Entity_Name"].ToString(),
+                            Id = Convert.ToInt32(record["SQL_ID"]),
+                            WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
+                            IsRedundantSupply = "Y".Equals(record["Redundant_Water"].ToString()),
+                            SourceName = record["Source_Name"].ToString(),
+                            SourceId = Convert.ToInt32(record["Source_ID"])
+                        };
+
+                        entity.SSUsage.Add(year.ToString(), record["SS" + year.ToString()].ToString());
+                        entityList.Add(entity);
+                    }
+
+                    return entityList;
                 }
 	        }
 	        catch (Exception ex)
 	        {
-
 		        //TODO: Log the exception
                 return null;
 	        }
             finally
             {
                 this._connection.Close();
-                if (reader != null)
-                    reader.Close();
             }
-
-            return entityList;
         }
     }
 }

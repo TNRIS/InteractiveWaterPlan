@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using InteractiveWaterPlan.Models;
 
 using InteractiveWaterPlan.Repositories;
 using System.Web.Script.Serialization;
+
 
 namespace InteractiveWaterPlan.Controllers
 {
@@ -13,6 +15,13 @@ namespace InteractiveWaterPlan.Controllers
     {
         private readonly int[] _validYears = new int[]{2012, 2020, 2030, 2040, 2050, 2060};
 
+        private static PixelBufferTable _pixelBufferTable;
+
+        static DataController()
+        {
+            var repo = new PixelBufferRepository();
+            _pixelBufferTable = repo.GetPixelBufferTable();
+        }
 
         public ActionResult GetAllEntities()
         {

@@ -12,7 +12,9 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     #TODO: read this from app config
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
-    featureInfoControlId: null
+    
+    #TODO: why not just store references to the controls instead of their ids?
+    featureInfoControl: null
     selectFeatureControlId: null
 
     #TODO: Maybe move the store here? Could use Ext.StoreManager.lookup('storeId')
@@ -135,10 +137,9 @@ Ext.define('ISWP.view.map.MapComponent', {
         return null
 
     removeFeatureInfoControl: () ->
-        if this.featureInfoControlId?
-            ctl = this.map.getControl(this.featureInfoControlId)
-            ctl.destroy()
-            this.map.removeControl(ctl)
+        if this.featureInfoControl?
+            this.featureInfoControl.destroy()
+            this.map.removeControl(this.featureInfoControl)
 
     setupFeatureInfoControl: (layers) ->
         #remove the old featureInfoControl
@@ -165,7 +166,7 @@ Ext.define('ISWP.view.map.MapComponent', {
        
         this.map.addControl(info)
         info.activate()
-        this.featureInfoControlId = info.id
+        this.featureInfoControl = info
 
 
 
