@@ -20,6 +20,13 @@ Ext.define('ISWP.view.map.MapComponent', {
     #TODO: Maybe move the store here? Could use Ext.StoreManager.lookup('storeId')
     store: ''
 
+    origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(
+        new OpenLayers.Projection("EPSG:4326"), #geographic wgs-84
+        new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
+    )
+
+    origZoom: 6
+
     handleMapEvent: (evt) ->
         
         ###
@@ -37,8 +44,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         return null
 
     initializeMap: () ->
-        merc_proj = new OpenLayers.Projection("EPSG:3857") #spherical mercator (aka 900913)
-        wgs84_proj = new OpenLayers.Projection("EPSG:4326") #geographic wgs-84
+        
 
         mapquest_open = new OpenLayers.Layer.XYZ(
             "MapQuest Open Street", 
@@ -93,11 +99,11 @@ Ext.define('ISWP.view.map.MapComponent', {
 
         this.map = new OpenLayers.Map(
             div: this.id,
-            projection: merc_proj, 
-            displayProjection: wgs84_proj 
+            projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
+            displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84 
             layers: [mapquest_open, mapquest_aerial, bing_road, bing_hybrid, bing_aerial]
-            center: new OpenLayers.LonLat(-99.294317, 31.348335).transform(wgs84_proj, merc_proj)
-            zoom: 6
+            center: this.origCenter
+            zoom: this.origZoom
             eventListeners:
                 moveend: this.handleMapEvent
                 click: this.handleMapEvent
@@ -108,6 +114,10 @@ Ext.define('ISWP.view.map.MapComponent', {
         #return a reference to the map
         return this.map
 
+    resetExtent: () ->
+        this.map.setCenter(
+            this.origCenter, 
+            this.origZoom)
 
     removePopupsFromMap: () ->
         this.map.removePopup(p) for p in this.map.popups

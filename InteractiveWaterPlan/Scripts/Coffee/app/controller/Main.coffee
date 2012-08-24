@@ -188,7 +188,7 @@ Ext.define('ISWP.controller.Main', {
                                 #Create a new select feature control and add it to the map.
                                 #Create a new select feature control and add it to the map.
                                 select = new OpenLayers.Control.SelectFeature(mapComp.vectorLayer, {
-                                    hover: false #listen to clicks
+                                    hover: false #listen to clicks, not to hover
                                     onSelect: (feature) ->    
                                         
                                         point = {}
@@ -244,12 +244,16 @@ Ext.define('ISWP.controller.Main', {
                     return null
 
             'button[toggleGroup=themeButtons]':
-                
                 click: (btn, evt) ->
                     this.selectedTheme = btn.theme
                     this.loadThemeIntoMap(btn.theme)
 
                     #TODO: change the chart/main area based on some info in the theme
+                    return null
+
+            '#resetExtentButton':
+                click: (btn, evt) ->
+                    this.getMapComponent().resetExtent()
                     return null
 
             '#mainChart':

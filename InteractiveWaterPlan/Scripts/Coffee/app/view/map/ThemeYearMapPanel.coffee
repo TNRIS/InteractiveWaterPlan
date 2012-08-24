@@ -12,7 +12,6 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
         {
             xtype: 'mapcomponent'
             id: 'mapComponent'
-
         }
     ]
 
@@ -64,6 +63,11 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                 }
                 '-' #separator
                 '->' #align the rest to the right
+                {
+                    xtype: 'button'
+                    text: 'Zoom to Texas'
+                    id: 'resetExtentButton'
+                }
                 {
                     #TODO: textbox?
                     xtype: 'combobox'
