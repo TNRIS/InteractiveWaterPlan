@@ -6,13 +6,14 @@ using System.Web.Mvc;
 using System.Configuration;
 using System.Xml;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
-using InteractiveWaterPlan.Rest;
+using System.Web.Script.Serialization;
+using InteractiveWaterPlan.Repositories;
 
 namespace InteractiveWaterPlan.Controllers
 {
     public class FeatureController : Controller
     {
+        private readonly int[] _validYears = new int[] { 2012, 2020, 2030, 2040, 2050, 2060 };
 
         /* http://services.tnris.org/ArcGIS/services/TWDB_StateWaterPlan/MapServer/WMSServer?
          * QUERY_LAYERS=2&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo
@@ -20,22 +21,59 @@ namespace InteractiveWaterPlan.Controllers
          * &HEIGHT=420&WIDTH=936&FORMAT=image%2Fpng&INFO_FORMAT=text%2Fhtml&SRS=EPSG%3A3857&X=357&Y=210
          */
 
-        public ActionResult Info(string layers, string srs, string bbox, string height, string width, string x, string y)
-        {
 
-            try
+        public ActionResult GetAllProposedReservoirs()
+        {
+            var serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 50000000;
+
+            var repo = new EntityRepository();
+            return new ContentResult()
             {
-                string wmsServerUrl = ConfigurationManager.AppSettings["WMSServerUrl"];
-                
-                var featureInfoJson = WMSService.GetFeatureInfoJson(new Uri(wmsServerUrl), layers, srs, bbox, height, width, x, y);
-                return new ContentResult { Content = featureInfoJson, ContentType = "application/json" };  
-            }
-            catch (Exception ex)
-            {
-                //TODO: log the execption, return a different message to client
-                return Json(new { Error = ex.Message }, JsonRequestBehavior.AllowGet);
-            }
+                Content = serializer.Serialize(repo.GetAllProposedReservoirs()),
+                ContentType = "application/json"
+            };
         }
 
+        //Feature/Reservoir/Proposed?zoomLevel=Z&lat=Y&lon=X
+        public ActionResult GetProposedReservoir(double lat, double lon, int zoom)
+        {
+            var repo = new EntityRepository();
+            var clickedReservoir = repo.GetReservoirByBufferedClickPoint(lat, lon, zoom);
+
+            return Json(clickedReservoir, JsonRequestBehavior.AllowGet);
+        }
+
+        //Feature/Entity/{Year}?forReservoir={ReservoirId}
+        public ActionResult GetEntities(int Year, int forReservoirId=-1)
+        {
+            if (!_validYears.Contains(Year))
+            {
+                //TODO: Make an error class that will serialize to messages like this
+                return Json(
+                    new
+                    {
+                        Error = "Invalid Year: " + Year + ". Valid Years are " + String.Join(", ", _validYears)
+                    }, JsonRequestBehavior.AllowGet);
+            }
+            else if (forReservoirId == -1)
+            {
+                return Json(
+                    new
+                    {
+                        Error = "forReservoirId must be specified."
+                    }, JsonRequestBehavior.AllowGet);
+            }
+
+            var repo = new EntityRepository();
+            var relatedEntities = repo.GetEntitiesServedByReservoir(forReservoirId, Year);
+            return Json(relatedEntities, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetAllEntities()
+        {
+            var repo = new EntityRepository();
+            return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -64,31 +64,34 @@ Ext.define('ISWP.controller.Main', {
                     mapComp.removePopupsFromMap()
                     return null
 
-                getfeatureinfo: (mapComp, evt) ->
+                getfeature: (mapComp, evt) ->
                     #remove any popups
                     mapComp.removePopupsFromMap()
 
-                    #TODO: better processing of evt.features
-                    # to make nicer looking popups
-                    # Maybe define a template in the theme config
-                    popupText = ""
-                    popupText += ("#{prop}: #{evt.features[prop]}<br/>") for prop of evt.features
-                    
                     map = mapComp.map
 
-                    map.addPopup(
-                        new OpenLayers.Popup.FramedCloud(
-                            "Feature Info"
-                            map.getLonLatFromPixel(evt.xy)
-                            null
-                            popupText
-                            null
-                            true
+                    unless this.selectedTheme == 'proposed-reservoirs'
+                        #TODO: better processing of evt.features
+                        # to make nicer looking popups
+                        # Maybe define a template in the theme config
+                        popupText = ""
+                        popupText += ("#{prop}: #{evt.features[prop]}<br/>") for prop of evt.features
+                        
+                        
+
+                        map.addPopup(
+                            new OpenLayers.Popup.FramedCloud(
+                                "Feature Info"
+                                map.getLonLatFromPixel(evt.xy)
+                                null
+                                popupText
+                                null
+                                true
+                            )
                         )
-                    )
 
                     #TODO: somehow highlight the feature that was clicked
-                    #if features['SQL_GEOG'] was returned from the WMS GetFeatureInfo service, then we could do this
+                    #if features['SQL_GEOG'] was returned from the WMS GetFeature service, then we could do this
 
                     #TODO: don't show a popup, instead change the main content area to display the reservoir information
 
@@ -102,42 +105,52 @@ Ext.define('ISWP.controller.Main', {
 
                     #TODO: Find somewhere else to define the custom behavior for each theme and its layers
                     # Maybe a Theme class that implements some common interface
-                    if this.selectedTheme == 'proposed-reservoirs'
+                    else
+                        style = new OpenLayers.StyleMap({
+                            default:
+                                graphicName: 'circle'
+                                pointRadius: 4
+                                strokeColor: 'cyan'
+                                strokeWidth: 0.5
+                                fillColor: 'blue'
+                                fillOpacity: 0.8
+                            select: #would have to create and activate a SelectFeature control
+                                pointRadius: 6
+                                fillOpacity: 1
+                        })
 
+                        #clear the vector layer and its controls
+                        mapComp.clearVectorLayer()
+
+                        mapComp.vectorLayer = new OpenLayers.Layer.Vector(
+                            "Planned Reservoir User Entities", 
+                            {
+                                styleMap: style
+                            }
+                        )
+
+                        #highlight the reservoir feature
+                        reservoir = evt.features[0]
+                        
+                        res_feat = this.wktFormat.read(reservoir.WKTGeog)
+                        res_feat.geometry.transform(map.displayProjection, map.projection)
+                        
+                        res_feat.data = reservoir
+                        delete res_feat.data['WKTGeog']
+
+                        mapComp.vectorLayer.addFeatures(res_feat)
+
+                        #TODO: reload when year changes
                         this.getWaterUseEntityStore().load({
                             params:
                                 Year: this.selectedYear
-                                ReservoirId: evt.features['DB12_Id']
+                                forReservoirId: reservoir['Id']
                             
                             scope: this #scope to the controller
                             callback: (records, operation, success) ->
                                 
-                                #clear the vector layer and its controls
-                                mapComp.clearVectorLayer()
-
-                                if records.length == 0
+                                if not records? or records.length == 0
                                     return null
-
-                                style = new OpenLayers.StyleMap({
-                                    default:
-                                        graphicName: 'circle'
-                                        pointRadius: 4
-                                        strokeColor: 'cyan'
-                                        strokeWidth: 0.5
-                                        fillColor: 'blue'
-                                        fillOpacity: 0.8
-                                    select: #would have to create and activate a SelectFeature control
-                                        pointRadius: 6
-                                        fillOpacity: 1
-                                })
-
-                                #create a new one
-                                mapComp.vectorLayer = new OpenLayers.Layer.Vector(
-                                    "Planned Reservoir User Entities", 
-                                    {
-                                        styleMap: style
-                                    }
-                                )
 
                                 bounds = null
                                 relatedFeatures = []
@@ -150,8 +163,11 @@ Ext.define('ISWP.controller.Main', {
 
                                     #Use the clicked reservoir point and the new_feat point to construct a line
                                     clickedResPoint = map.getLonLatFromPixel(evt.xy)
+                                    
+                                    res_feat_centroid = res_feat.geometry.getCentroid()
+
                                     line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
-                                        new OpenLayers.Geometry.Point(clickedResPoint.lon, clickedResPoint.lat),
+                                        new OpenLayers.Geometry.Point(res_feat_centroid.x, res_feat_centroid.y),
                                         new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)
                                     ])) #attributes and style can be added
                                     relatedFeatures.push(line) #TODO: maybe make its own layer and stylemap
@@ -174,9 +190,12 @@ Ext.define('ISWP.controller.Main', {
                                 select = new OpenLayers.Control.SelectFeature(mapComp.vectorLayer, {
                                     hover: false #listen to clicks
                                     onSelect: (feature) ->    
-                                        console.log(data)
+                                        
+                                        point = {}
+                                        [point.lon, point.lat] = [feature.geometry.getCentroid().x, feature.geometry.getCentroid().y]
+
                                         popup = new OpenLayers.Popup.FramedCloud("featurepopup", 
-                                            feature.geometry.getBounds().getCenterLonLat(), 
+                                            point,
                                             null,
                                             """
                                             <h3>#{feature.data.Name}</h3>
@@ -262,7 +281,7 @@ Ext.define('ISWP.controller.Main', {
         mapComp.clearVectorLayer()
 
         #remove the old feature info control
-        mapComp.removeFeatureInfoControl()
+        mapComp.removeFeatureControl()
 
         #Then request and add the new layers to the ThemeStore
         # and add them to the map
@@ -381,7 +400,7 @@ Ext.define('ISWP.controller.Main', {
                             new_layers.push(new_lyr)
                             
                 mapComp.addLayersToMap(new_layers)
-                mapComp.setupFeatureInfoControl(new_layers)
+                mapComp.setupFeatureControl(new_layers)
                 return null
         })
 

@@ -14,7 +14,7 @@ Ext.define('ISWP.view.map.MapComponent', {
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
     
     #TODO: why not just store references to the controls instead of their ids?
-    featureInfoControl: null
+    featureControl: null
     selectFeatureControlId: null
 
     #TODO: Maybe move the store here? Could use Ext.StoreManager.lookup('storeId')
@@ -136,18 +136,18 @@ Ext.define('ISWP.view.map.MapComponent', {
 
         return null
 
-    removeFeatureInfoControl: () ->
-        if this.featureInfoControl?
-            this.featureInfoControl.destroy()
-            this.map.removeControl(this.featureInfoControl)
+    removeFeatureControl: () ->
+        if this.featureControl?
+            this.featureControl.destroy()
+            this.map.removeControl(this.featureControl)
 
-    setupFeatureInfoControl: (layers) ->
-        #remove the old featureInfoControl
-        this.removeFeatureInfoControl()
+    setupFeatureControl: (layers) ->
+        #remove the old featureControl
+        this.removeFeatureControl()
 
-        info = new OpenLayers.Control.GetFeatureInfo({
+        info = new OpenLayers.Control.GetFeature({
             layers: layers
-            serviceUrl: 'Feature/Info'
+            serviceUrl: 'Feature/Reservoir/Proposed'
             title: 'Identify Features by Clicking'
             queryVisible: true
             maxFeatures: 1
@@ -157,8 +157,8 @@ Ext.define('ISWP.view.map.MapComponent', {
                     this.fireEvent("nofeaturefound", this, evt)
                     return null
 
-                getfeatureinfo: (evt) =>   
-                    this.fireEvent("getfeatureinfo", this, evt)
+                getfeature: (evt) =>   
+                    this.fireEvent("getfeature", this, evt)
                     return null  
             }
         })
@@ -166,7 +166,7 @@ Ext.define('ISWP.view.map.MapComponent', {
        
         this.map.addControl(info)
         info.activate()
-        this.featureInfoControl = info
+        this.featureControl = info
 
 
 

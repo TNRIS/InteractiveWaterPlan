@@ -3,63 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using InteractiveWaterPlan.Models;
+using System.Web.Script.Serialization;
 
 using InteractiveWaterPlan.Repositories;
-using System.Web.Script.Serialization;
+
 
 
 namespace InteractiveWaterPlan.Controllers
 {
     public class DataController : Controller
     {
-        private readonly int[] _validYears = new int[]{2012, 2020, 2030, 2040, 2050, 2060};
-
-        private static PixelBufferTable _pixelBufferTable;
-
-        static DataController()
-        {
-            var repo = new PixelBufferRepository();
-            _pixelBufferTable = repo.GetPixelBufferTable();
-        }
-
-        public ActionResult GetAllEntities()
-        {
-            var repo = new EntityRepository();
-            return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetAllProposedReservoirs()
-        {
-            var serializer = new JavaScriptSerializer();
-            serializer.MaxJsonLength = 50000000;
-
-            var repo = new EntityRepository();
-            return new ContentResult()
-            {
-                Content = serializer.Serialize(repo.GetAllProposedReservoirs()),
-                ContentType = "application/json"
-            };
-            //return Json(repo.GetAllProposedReservoirs(), JsonRequestBehavior.AllowGet);
-        }
-
-        //Data/ProposedReservoirs/{ReservoirId}/{Year}
-        public ActionResult GetProposedReservoirEntities(int ReservoirId, int Year)
-        {
-            if (!_validYears.Contains(Year))
-            {
-                //TODO: Make an error class that will serialize to messages like this
-                return Json(
-                    new {
-                        Error="Invalid Year: " + Year + ". Valid Years are " + String.Join(", ",_validYears)
-                    }, JsonRequestBehavior.AllowGet);
-            }
-
-
-            var repo = new EntityRepository();
-            
-            return Json(repo.GetEntitiesServedByReservoir(ReservoirId, Year), JsonRequestBehavior.AllowGet);
-        }
+        private readonly int[] _validYears = new int[] { 2012, 2020, 2030, 2040, 2050, 2060 };
 
         //Data/WaterUse/{LocationType}/{LocationName}/{Year}
         public ActionResult GetWaterUseData(string LocationType, string LocationName, int Year)

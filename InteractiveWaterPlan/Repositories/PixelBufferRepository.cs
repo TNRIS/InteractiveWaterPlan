@@ -7,49 +7,48 @@ using System.Data.SqlClient;
 using Microsoft.SqlServer.Types;
 
 using InteractiveWaterPlan.Models;
+using System.Configuration;
 
 
 namespace InteractiveWaterPlan.Repositories
 {
-    public class PixelBufferRepository : AbstractRepository
+    public class PixelBufferRepository
     {
 
         public PixelBufferTable GetPixelBufferTable()
         {
             //usp_Select_ALL_lk_GEMSS_VE_Pixel_Buffer
-            var cmd = new SqlCommand("usp_Select_ALL_lk_GEMSS_VE_Pixel_Buffer", 
-                this._connection);
-            cmd.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                this._connection.Open();
-                PixelBufferTable pixelBufferTable = new PixelBufferTable();
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var cxn = new SqlConnection(
+                    ConfigurationManager.ConnectionStrings["WaterPlanDB"].ConnectionString))
                 {
-                   
+                    var cmd = new SqlCommand("usp_Select_ALL_lk_GEMSS_VE_Pixel_Buffer", cxn);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    foreach (IDataRecord record in reader)
+                    cxn.Open();
+                    PixelBufferTable pixelBufferTable = new PixelBufferTable();
+
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        pixelBufferTable.AddPixelBufferPair(
-                            Convert.ToInt32(record["VE_Zoom_Level"]),
-                            Convert.ToDouble(record["Ground_Rez_M"]),
-                            Convert.ToInt32(record["Buffer_Multiplier"])
-                        );
-                    }
+                        foreach (IDataRecord record in reader)
+                        {
+                            pixelBufferTable.AddPixelBufferPair(
+                                Convert.ToInt32(record["VE_Zoom_Level"]),
+                                Convert.ToDouble(record["Ground_Rez_M"]),
+                                Convert.ToInt32(record["Buffer_Multiplier"])
+                            );
+                        }
 
-                    return pixelBufferTable;
+                        return pixelBufferTable;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 //TODO: Log the exception
                 return null;
-            }
-            finally
-            {
-                this._connection.Close();
             }
         }
     }

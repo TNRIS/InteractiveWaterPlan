@@ -101,7 +101,6 @@
     <Compile Include="Models\LayerInfo.cs" />
     <Compile Include="Models\WMSLayerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\AbstractRepository.cs" />
     <Compile Include="Repositories\EntityRepository.cs" />
     <Compile Include="Repositories\PixelBufferRepository.cs" />
     <Compile Include="Repositories\ThemeRepository.cs" />
@@ -1457,7 +1456,7 @@
     <Content Include="Scripts\Compiled\app\view\map\MapComponent.js" />
     <Content Include="Scripts\Compiled\app\view\map\ThemeYearMapPanel.js" />
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
-    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeatureInfo.js" />
+    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\BaseTheme.js" />
@@ -1651,7 +1650,7 @@
     <None Include="Scripts\Coffee\app\view\map\MapComponent.coffee" />
     <None Include="Scripts\Coffee\app\view\map\ThemeYearMapPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
-    <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeatureInfo.coffee" />
+    <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
     <None Include="Scripts\Coffee\TNRIS\theme\BaseTheme.coffee" />

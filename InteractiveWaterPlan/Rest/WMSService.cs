@@ -5,28 +5,21 @@ using System.Web;
 using System.Xml;
 using Spring.Rest.Client;
 using Newtonsoft.Json;
+using InteractiveWaterPlan.Repositories;
 
 namespace InteractiveWaterPlan.Rest
 {
-
     public static class WMSService
     {
-        
-        private static string _createQueryString(IDictionary<string, string> dict)
-        {
-            return "?" + string.Join("&", Array.ConvertAll(
-                dict.Keys.ToArray(), key => string.Format("{0}={1}",
-                    HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(dict[key]))));
-        }
-
-        public static XmlDocument GetFeatureInfo(Uri wmsServerUrl, string layers, string srs, string bbox, string height, string width, string x, string y, int featureCount=1)
+        public static XmlDocument GetFeatureInfo(Uri wmsServerUrl, string layers, string srs, string bbox, string height, 
+            string width, string x, string y, int featureCount=1, string infoFormat = "text/xml", string version = "1.1.1")
         {
             var getFeatureInfoParams = new Dictionary<string, string>();
             //params that won't change
             getFeatureInfoParams.Add("SERVICE", "WMS");
-            getFeatureInfoParams.Add("VERSION", "1.1.1");
             getFeatureInfoParams.Add("REQUEST", "GetFeatureInfo");
-            getFeatureInfoParams.Add("INFO_FORMAT", "text/xml");
+            getFeatureInfoParams.Add("VERSION", version);
+            getFeatureInfoParams.Add("INFO_FORMAT", infoFormat);
             getFeatureInfoParams.Add("FEATURE_COUNT", featureCount.ToString());
 
             //params that change based on input
@@ -61,6 +54,13 @@ namespace InteractiveWaterPlan.Rest
             json = json.Replace("@", "");
 
             return json;
+        }
+
+        private static string _createQueryString(IDictionary<string, string> dict)
+        {
+            return "?" + string.Join("&", Array.ConvertAll(
+                dict.Keys.ToArray(), key => string.Format("{0}={1}",
+                    HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(dict[key]))));
         }
 
     }

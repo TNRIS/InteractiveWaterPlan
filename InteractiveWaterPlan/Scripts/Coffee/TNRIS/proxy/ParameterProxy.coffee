@@ -16,7 +16,9 @@ Ext.define('TNRIS.proxy.ParameterProxy', {
     substituteParameters: (url, request) ->
 
         for key of request.params
-            url = url.replace("{#{key}}", request.params[key])
+            if url.indexOf("{#{key}}") != -1
+                url = url.replace("{#{key}}", request.params[key])
+                delete request.params[key]
    
         return url
 })

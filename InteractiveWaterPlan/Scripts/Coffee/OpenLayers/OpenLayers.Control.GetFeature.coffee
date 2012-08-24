@@ -1,5 +1,5 @@
 
-OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
+OpenLayers.Control.GetFeature = OpenLayers.Class(OpenLayers.Control, {
     
     #The service url to make the query to
     #The service at this endpoint should expect the following request params:
@@ -37,7 +37,7 @@ OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
         return null
 
     getInfoForClick: (evt) ->
-        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy})
+        this.events.triggerEvent("beforegetfeature", {xy: evt.xy})
         
         #add the cursor wait class
         OpenLayers.Element.addClass(this.map.viewPortDiv, "olCursorWait");
@@ -48,7 +48,7 @@ OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
         layers = this.findLayers()
 
         if layers.length is 0
-            this.events.triggerEvent("nogetfeatureinfo");
+            this.events.triggerEvent("nogetfeature");
             # Reset the cursor.
             OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
             return null
@@ -74,22 +74,19 @@ OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
         if layerProj and layerProj.equals(this.map.getProjectionObject())
             projection = layerProj.getCode();
 
+        geogLonLat = this.map.getLonLatFromPixel(clickPosition).transform(
+            this.map.projection, this.map.displayProjection)
 
         params = OpenLayers.Util.extend({
-            layers: layerNames
-            bbox: this.map.getExtent().toBBOX(
-                null, firstLayer.reverseAxisOrder())
-            height: this.map.getSize().h
-            width: this.map.getSize().w
-            feature_count: this.maxFeatures
-            srs: projection
-            x: parseInt(clickPosition.x)
-            y: parseInt(clickPosition.y)
+            lon: geogLonLat.lon
+            lat: geogLonLat.lat
+            zoom: this.map.getZoom()
+
         })
 
         return {
             url: url
-            params: OpenLayers.Util.upperCaseObject(params)
+            params: params
             scope: this
             callback: (request) ->
                 this.handleResponse(clickPosition, request, url)
@@ -98,19 +95,25 @@ OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
 
 
     handleResponse: (xy, request, url) ->
-        features = this.format.read(request.responseText)
-        
-        if features["Error"]
+        if request.responseText == ""
             OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait")
             this.events.triggerEvent("nofeaturefound")
 
         else
-            this.triggerGetFeatureInfo(request, xy, features)
+            features = this.format.read(request.responseText)
+        
+            if features["Error"]
+                OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait")
+                this.events.triggerEvent("nofeaturefound")
+
+            else
+                features = [features] if  features not instanceof Array
+                this.triggerGetFeature(request, xy, features)
         
         return null
 
-    triggerGetFeatureInfo: (request, xy, features) ->
-        this.events.triggerEvent("getfeatureinfo", {
+    triggerGetFeature: (request, xy, features) ->
+        this.events.triggerEvent("getfeature", {
             text: request.responseText
             request: request
             xy: xy
@@ -129,5 +132,5 @@ OpenLayers.Control.GetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
 
         return layers
 
-    CLASS_NAME: "OpenLayers.Control.GetFeatureInfo"
+    CLASS_NAME: "OpenLayers.Control.GetFeature"
 })
