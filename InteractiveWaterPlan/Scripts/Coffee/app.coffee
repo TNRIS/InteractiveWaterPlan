@@ -18,6 +18,9 @@ Ext.Loader.setPath('TNRIS', 'Scripts/Compiled/TNRIS')
 
 #not sure why this doesn't just get loaded, but it doesn't
 Ext.require('TNRIS.proxy.ParameterProxy')
+Ext.require('TNRIS.theme.InteractiveTheme')
+Ext.require('TNRIS.theme.WaterUsageTheme')
+Ext.require('TNRIS.theme.ProposedReservoirsTheme')
 
 Ext.create('Ext.app.Application', {
 	name: 'ISWP'

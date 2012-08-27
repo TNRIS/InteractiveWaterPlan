@@ -1459,7 +1459,9 @@
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
-    <Content Include="Scripts\Compiled\TNRIS\theme\BaseTheme.js" />
+    <Content Include="Scripts\Compiled\TNRIS\theme\InteractiveTheme.js" />
+    <Content Include="Scripts\Compiled\TNRIS\theme\ProposedReservoirsTheme.js" />
+    <Content Include="Scripts\Compiled\TNRIS\theme\WaterUsageTheme.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1653,7 +1655,9 @@
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
-    <None Include="Scripts\Coffee\TNRIS\theme\BaseTheme.coffee" />
+    <None Include="Scripts\Coffee\TNRIS\theme\InteractiveTheme.coffee" />
+    <None Include="Scripts\Coffee\TNRIS\theme\ProposedReservoirsTheme.coffee" />
+    <None Include="Scripts\Coffee\TNRIS\theme\WaterUsageTheme.coffee" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InteractiveWaterPlan.Data\InteractiveWaterPlan.Data.csproj">
@@ -1661,6 +1665,7 @@
       <Name>InteractiveWaterPlan.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

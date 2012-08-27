@@ -13,7 +13,9 @@ namespace InteractiveWaterPlan.Repositories
 {
     public class EntityRepository
     {
- 
+
+        //usp_SpatialSelect_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
+
         //usp_Select_WaterEntityUsage_By_ProposedReservoir_and_Year
         //usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs
         //usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
@@ -40,7 +42,10 @@ namespace InteractiveWaterPlan.Repositories
             _pixelBufferTable = repo.GetPixelBufferTable();
         }
 
-
+        /// <summary>
+        /// Returns a list of all DB12 Entities.
+        /// </summary>
+        /// <returns></returns>
         public IList<Entity> GetAllEntities()
         {
             try
@@ -81,6 +86,56 @@ namespace InteractiveWaterPlan.Repositories
             catch (Exception ex)
             {
                 //TODO: Log the exception
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of all DB12 Entities within the given polygon
+        /// </summary>
+        /// <param name="poly"></param>
+        /// <returns></returns>
+        public IList<Entity> GetEntitiesInGeography(SqlGeography poly)
+        {
+            try
+            {
+                using (var cxn = new SqlConnection(
+                    ConfigurationManager.ConnectionStrings["WaterPlanDB"].ConnectionString))
+                {
+                    var cmd = new SqlCommand("usp_SpatialSelect_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities",
+                        cxn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@var_SelectPoly", poly));
+                    
+                    cxn.Open();
+                    var entityList = new List<Entity>();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        foreach (IDataRecord record in reader)
+                        {
+                            var entity = new Entity()
+                            {
+                                SqlId = Convert.ToInt32(record["SQL_ID"]),
+                                Id = Convert.ToInt32(record["Entity_ID"]),
+                                Name = record["Entity_Name"].ToString(),
+                                Type = record["Entity_Type"].ToString(),
+                                RWP = record["Entity_RWP"].ToString(),
+                                County = record["Entity_County"].ToString(),
+                                Basin = record["Entity_Basin"].ToString(),
+                                WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
+                            };
+
+                            entityList.Add(entity);
+                        }
+
+                        return entityList;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: log the exception
                 return null;
             }
         }
@@ -151,11 +206,13 @@ namespace InteractiveWaterPlan.Repositories
             
         }
 
-
+        /// <summary>
+        /// Returns a list of all proposed Reservoirs.
+        /// </summary>
+        /// <returns></returns>
         public IList<Reservoir> GetAllProposedReservoirs()
         {
-            
-
+          
             try
             {
                 using (var cxn = new SqlConnection(
@@ -196,6 +253,8 @@ namespace InteractiveWaterPlan.Repositories
             }
         }
 
+        //TODO: Make Entity and WaterUseEntity the same.  Will need the stored proc to be updated to 
+        // return the same fields/info.
         public IList<WaterUseEntity> GetEntitiesServedByReservoir(int proposedReservoirId, int year)
         {
             if (year == 2012)

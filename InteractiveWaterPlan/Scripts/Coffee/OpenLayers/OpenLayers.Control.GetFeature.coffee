@@ -3,13 +3,9 @@ OpenLayers.Control.GetFeature = OpenLayers.Class(OpenLayers.Control, {
     
     #The service url to make the query to
     #The service at this endpoint should expect the following request params:
-    #  layers
-    #  srs
-    #  bbox
-    #  height
-    #  width
-    #  x
-    #  y
+    #double lat
+    #double lon
+    #int zoom
     serviceUrl: null
     
     #The list of layers to for which the request should be made
@@ -45,35 +41,14 @@ OpenLayers.Control.GetFeature = OpenLayers.Class(OpenLayers.Control, {
         return null
 
     request: (clickPosition) ->
-        layers = this.findLayers()
 
-        if layers.length is 0
-            this.events.triggerEvent("nogetfeature");
-            # Reset the cursor.
-            OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
-            return null
-
-
-        serviceOptions = this.buildServiceOptions(this.serviceUrl, layers, clickPosition)
+        serviceOptions = this.buildServiceOptions(this.serviceUrl, clickPosition)
         request = OpenLayers.Request.GET(serviceOptions)
 
         return null
 
 
-    buildServiceOptions: (url, layers, clickPosition) ->
-        layerNames = []
-        for lyr in layers
-            layerNames = layerNames.concat(lyr.params.LAYERS)
-
-
-        firstLayer = layers[0]
-        # use the firstLayer's projection if it matches the map projection -
-        # this assumes that all layers will be available in this projection
-        projection = this.map.getProjection();
-        layerProj = firstLayer.projection;
-        if layerProj and layerProj.equals(this.map.getProjectionObject())
-            projection = layerProj.getCode();
-
+    buildServiceOptions: (url, clickPosition) ->
         geogLonLat = this.map.getLonLatFromPixel(clickPosition).transform(
             this.map.projection, this.map.displayProjection)
 
@@ -122,15 +97,6 @@ OpenLayers.Control.GetFeature = OpenLayers.Class(OpenLayers.Control, {
         #Reset the cursor.
         OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait")
         return null
-
-    findLayers: () ->
-        candidates = this.layers
-        layers = []
-        for lyr in candidates
-            if lyr instanceof OpenLayers.Layer.WMS
-                layers.push(lyr)
-
-        return layers
 
     CLASS_NAME: "OpenLayers.Control.GetFeature"
 })
