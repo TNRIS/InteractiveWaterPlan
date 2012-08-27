@@ -98,7 +98,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         this.mapComp.vectorLayer.addFeatures(res_feat)
 
-        #TODO: reload when year changes
         this.dataStore.load({
             params:
                 Year: year

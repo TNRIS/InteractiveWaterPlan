@@ -116,16 +116,9 @@ Ext.define('ISWP.controller.Main', {
         
     loadThemeIntoMap: (themeName) ->
         
-        #TODO: put this behavior in the base InteractiveTheme
         #First remove all layers that are in the ThemeStore
-        mapComp = this.getMapComponent()
-        this.getThemeStore().each((rec) ->
-            mapComp.removeLayersFromMap(rec.data.Layers)
-            return true
-        )
-
-        #Then request and add the new layers to the ThemeStore
-        # and add them to the map
+        this.interactiveTheme.unload()
+        
         if themeName == 'water-use'
             this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
                 mapComp: this.getMapComponent()

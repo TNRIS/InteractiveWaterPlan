@@ -30,6 +30,17 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
 
         return null
 
+    unload: () ->
+        this.fireEvent("beforethemeunload")
+
+        this.themeStore.each((rec) ->
+            this.mapComp.removeLayersFromMap(rec.data.Layers)
+            return true
+        )
+
+        this.fireEvent("themeunload")
+        return null
+
     load: () ->
         this.fireEvent("beforethemeload", this.theme)
 
