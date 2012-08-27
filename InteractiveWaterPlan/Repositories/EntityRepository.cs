@@ -280,9 +280,15 @@ namespace InteractiveWaterPlan.Repositories
                         {
                             var entity = new WaterUseEntity()
                             {
+                                SqlId = Convert.ToInt32(record["SQL_ID"]),
+                                Id = Convert.ToInt32(record["Entity_ID"]),
                                 Name = record["Entity_Name"].ToString(),
-                                Id = Convert.ToInt32(record["SQL_ID"]),
+                                Type = record["Entity_Type"].ToString(),
+                                RWP = record["Entity_RWP"].ToString(),
+                                County = record["Entity_County"].ToString(),
+                                Basin = record["Entity_Basin"].ToString(),
                                 WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
+                                
                                 IsRedundantSupply = "Y".Equals(record["Redundant_Water"].ToString()),
                                 SourceName = record["Source_Name"].ToString(),
                                 SourceId = Convert.ToInt32(record["Source_ID"])

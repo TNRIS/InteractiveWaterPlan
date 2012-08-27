@@ -8,7 +8,7 @@ namespace InteractiveWaterPlan.Models
 {
     //TODO: Make this extend a normal Entity
     // Will need the DB to return all the base Entity fields as well
-    public class WaterUseEntity : AbstractFeature
+    public class WaterUseEntity : Entity
     {
         public IDictionary<string, string> SSUsage; //TODO: What is SS?
 
