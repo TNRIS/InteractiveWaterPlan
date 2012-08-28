@@ -14,6 +14,14 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.mapComp.clearVectorLayer()
         this.mapComp.removeFeatureControl()
 
+        this.contentPanel.update(
+            """
+            <h3>Proposed Reservoirs</h3>
+            <p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>
+            """
+        )
+
+
         this.themeStore.load({
             params:
                 ThemeName: this.themeName
@@ -44,6 +52,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         })
 
         return null
+
 
     showFeatureResult: (features, clickedPoint, year) ->
         map = this.mapComp.map
@@ -94,7 +103,12 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         
         res_feat.data = reservoir
         res_feat.attributes['type'] = 'reservoir'
-        delete res_feat.data['WKTGeog']
+        delete res_feat.data['WKTGeog'] #remove it so we don't show it in the info popup
+
+        #TODO: define an Ext Template or XTemplate for updating the main content area
+        this.contentPanel.update("<h3>#{res_feat.data.Name}: #{year}</h3>")
+
+        #TODO: figure out how to update the chart
 
         this.mapComp.vectorLayer.addFeatures(res_feat)
 

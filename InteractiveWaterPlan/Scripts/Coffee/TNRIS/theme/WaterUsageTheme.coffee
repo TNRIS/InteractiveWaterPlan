@@ -25,6 +25,14 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         this.mapComp.clearVectorLayer()
         this.mapComp.removeFeatureControl()
 
+
+        this.contentPanel.update(
+            """
+            <h3>Water Use</h3>
+            <p>Click on a dot to view the information for that water user group.</p>
+            """
+        )
+
         this.dataStore.load({
             scope: this
             callback: (records, operation, success) ->

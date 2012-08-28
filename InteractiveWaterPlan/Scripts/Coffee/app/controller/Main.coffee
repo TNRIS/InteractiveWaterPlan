@@ -79,9 +79,6 @@ Ext.define('ISWP.controller.Main', {
                             LocationName: 'Texas'
                         })
 
-
-                    this.getMainContent().update("Main content for #{btn.year}")
-
                     #Reload the theme with the new year
                     this.loadThemeIntoMap(this.selectedTheme)
 
@@ -125,6 +122,7 @@ Ext.define('ISWP.controller.Main', {
                 themeStore: this.getThemeStore()
                 themeName: themeName
                 dataStore: this.getEntityStore()
+                contentPanel: this.getMainContent()
             })
         else if themeName == 'proposed-reservoirs'
             this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
@@ -132,6 +130,7 @@ Ext.define('ISWP.controller.Main', {
                 themeStore: this.getThemeStore()
                 themeName: themeName
                 dataStore: this.getWaterUseEntityStore()
+                contentPanel: this.getMainContent()
             })
 
         this.interactiveTheme.loadTheme()

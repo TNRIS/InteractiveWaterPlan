@@ -15,6 +15,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     dataStore: null
     
     mapComp: null #reference to the map component
+    contentPanel: null
 
     loadTheme: null #must define this method
 
@@ -38,6 +39,8 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
             return true
         )
 
+        this.contentPanel.update("")
+
         this.fireEvent("themeunload")
         return null
 
@@ -51,4 +54,5 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
 
     showFeatureResult: (features, clickedPoint, year) ->
         return null
+
 })
