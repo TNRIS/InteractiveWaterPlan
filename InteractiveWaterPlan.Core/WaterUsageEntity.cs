@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.SqlServer.Types;
 
-namespace InteractiveWaterPlan.Models
+namespace InteractiveWaterPlan.Core
 {
     //TODO: Make this extend a normal Entity
     // Will need the DB to return all the base Entity fields as well

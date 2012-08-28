@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Web.Script.Serialization;
 using InteractiveWaterPlan.Repositories;
+using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.Controllers
 {
@@ -44,6 +45,14 @@ namespace InteractiveWaterPlan.Controllers
             return Json(clickedReservoir, JsonRequestBehavior.AllowGet);
         }
 
+        //Feature/Entity/All
+        [NHibernateSession]
+        public ActionResult GetAllEntities()
+        {
+            var repo = new EntityRepository();
+            return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
+        }
+
         //Feature/Entity/{Year}?forReservoir={ReservoirId}
         public ActionResult GetEntities(int Year, int forReservoirId=-1)
         {
@@ -70,10 +79,6 @@ namespace InteractiveWaterPlan.Controllers
             return Json(relatedEntities, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetAllEntities()
-        {
-            var repo = new EntityRepository();
-            return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
-        }
+        
     }
 }

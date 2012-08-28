@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan", "Int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan.Data", "InteractiveWaterPlan.Data\InteractiveWaterPlan.Data.csproj", "{C24A31F3-98A7-43F5-9547-A4107860FEE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan.Core", "InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj", "{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{C24A31F3-98A7-43F5-9547-A4107860FEE3}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C24A31F3-98A7-43F5-9547-A4107860FEE3}.Release|x86.ActiveCfg = Release|x86
 		{C24A31F3-98A7-43F5-9547-A4107860FEE3}.Release|x86.Build.0 = Release|x86
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

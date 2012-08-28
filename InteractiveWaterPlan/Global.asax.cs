@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan
 {
@@ -90,6 +91,8 @@ namespace InteractiveWaterPlan
 
         protected void Application_Start()
         {
+            var factory = NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
+            
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);

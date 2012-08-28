@@ -7,24 +7,15 @@ using System.Configuration;
 using System.Data;
 using Microsoft.SqlServer.Types;
 
+using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.Data;
 using InteractiveWaterPlan.Models;
+using NHibernate;
 
 namespace InteractiveWaterPlan.Repositories
 {
-    public class EntityRepository
+    public class EntityRepository : Repository<int, Entity>
     {
-
-        //usp_SpatialSelect_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
-
-        //usp_Select_WaterEntityUsage_By_ProposedReservoir_and_Year
-        //usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs
-        //usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
-        
-        //usp_Select_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs
-            //SQLGeography @var_PointGeog
-            //SQLGeography @var_BufferPoly
-            //returns SQLGeography? and other attributes
-
         /// <summary>
         /// Lookup table that contains the data for calculating buffered 
         /// geographies around screen pixel click locations.
@@ -42,52 +33,24 @@ namespace InteractiveWaterPlan.Repositories
             _pixelBufferTable = repo.GetPixelBufferTable();
         }
 
+
+        #region Constructors
+
+        public EntityRepository() : base(typeof(EntityRepository)) { }
+
+        public EntityRepository(ISession session) : base(session, typeof(EntityRepository)) { }
+
+        #endregion
+
+
         /// <summary>
         /// Returns a list of all DB12 Entities.
         /// </summary>
         /// <returns></returns>
         public IList<Entity> GetAllEntities()
         {
-            try
-            {
-                using (var cxn = new SqlConnection(
-                    ConfigurationManager.ConnectionStrings["WaterPlanDB"].ConnectionString))
-                {
-                    var cmd = new SqlCommand(
-                        "usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities", cxn);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cxn.Open();
-                    var entityList = new List<Entity>();
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        foreach (IDataRecord record in reader)
-                        {
-                            var entity = new Entity()
-                            {
-                                SqlId = Convert.ToInt32(record["SQL_ID"]),
-                                Id = Convert.ToInt32(record["Entity_ID"]),
-                                Name = record["Entity_Name"].ToString(),
-                                Type = record["Entity_Type"].ToString(),
-                                RWP = record["Entity_RWP"].ToString(),
-                                County = record["Entity_County"].ToString(),
-                                Basin = record["Entity_Basin"].ToString(),
-                                WKTGeog = new string(((SqlGeography)record["SQL_GEOG"]).STAsText().Value),
-                            };
-
-                            entityList.Add(entity);
-                        }
-
-                        return entityList;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log the exception
-                return null;
-            }
+            return Session.GetNamedQuery("GetAllEntities")
+                .List<Entity>();
         }
 
         /// <summary>

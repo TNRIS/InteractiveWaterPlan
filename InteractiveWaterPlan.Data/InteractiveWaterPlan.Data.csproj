@@ -11,7 +11,8 @@
     <RootNamespace>InteractiveWaterPlan.Data</RootNamespace>
     <AssemblyName>InteractiveWaterPlan.Data</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -38,13 +39,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="lib\Common.Logging.dll" />
+    <Content Include="lib\Iesi.Collections.dll" />
     <Content Include="lib\log4net.dll" />
     <Content Include="lib\NHibernate.dll" />
+    <Content Include="lib\System.Web.Mvc.dll" />
+    <Content Include="Mappings\README.txt" />
+    <EmbeddedResource Include="Mappings\Entity.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -54,6 +63,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IRepository.Generic.cs" />
+    <Compile Include="NHibernateSessionAttribute.cs" />
+    <Compile Include="NHibernateSessionManager.cs" />
+    <Compile Include="Repository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj">
+      <Project>{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}</Project>
+      <Name>InteractiveWaterPlan.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

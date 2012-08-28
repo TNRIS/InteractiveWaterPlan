@@ -92,11 +92,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AbstractFeature.cs" />
-    <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\PixelBuffer.cs" />
-    <Compile Include="Models\Reservoir.cs" />
-    <Compile Include="Models\WaterUsageEntity.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\LayerInfo.cs" />
     <Compile Include="Models\WMSLayerInfo.cs" />
@@ -1636,6 +1632,7 @@
     <None Include="Content\ExtJS\resources\themes\stylesheets\neptune\default\_widgets.scss" />
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\config.rb" />
     <None Include="Content\ExtJS\resources\themes\templates\resources\sass\my-ext-theme.scss" />
+    <Content Include="Hibernate.config" />
     <None Include="Scripts\Coffee\app.coffee" />
     <None Include="Scripts\Coffee\app\controller\Main.coffee" />
     <None Include="Scripts\Coffee\app\model\Entity.coffee" />
@@ -1660,6 +1657,10 @@
     <None Include="Scripts\Coffee\TNRIS\theme\WaterUsageTheme.coffee" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj">
+      <Project>{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}</Project>
+      <Name>InteractiveWaterPlan.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InteractiveWaterPlan.Data\InteractiveWaterPlan.Data.csproj">
       <Project>{C24A31F3-98A7-43F5-9547-A4107860FEE3}</Project>
       <Name>InteractiveWaterPlan.Data</Name>
