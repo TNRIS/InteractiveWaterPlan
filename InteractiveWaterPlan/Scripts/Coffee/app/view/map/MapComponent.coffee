@@ -101,7 +101,7 @@ Ext.define('ISWP.view.map.MapComponent', {
             div: this.id,
             projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
             displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84 
-            layers: [mapquest_open, mapquest_aerial, bing_road, bing_hybrid, bing_aerial]
+            layers: [bing_road, mapquest_open, mapquest_aerial, bing_hybrid, bing_aerial]
             center: this.origCenter
             zoom: this.origZoom
             eventListeners:

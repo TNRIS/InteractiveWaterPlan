@@ -44,7 +44,9 @@
     <Content Include="lib\NHibernate.dll" />
     <Content Include="lib\Spring.Rest.dll" />
     <Content Include="lib\System.Web.Mvc.dll" />
-    <EmbeddedResource Include="Mappings\PixelBufferRecord.hbm.xml" />
+    <EmbeddedResource Include="Mappings\PixelBufferRecord.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Mappings\README.txt" />
     <EmbeddedResource Include="Mappings\Reservoir.hbm.xml" />
     <EmbeddedResource Include="Mappings\Entity.hbm.xml" />
