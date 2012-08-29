@@ -7,7 +7,6 @@ using System.Configuration;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Web.Script.Serialization;
-using InteractiveWaterPlan.Repositories;
 using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.Controllers
@@ -16,13 +15,7 @@ namespace InteractiveWaterPlan.Controllers
     {
         private readonly int[] _validYears = new int[] { 2012, 2020, 2030, 2040, 2050, 2060 };
 
-        /* http://services.tnris.org/ArcGIS/services/TWDB_StateWaterPlan/MapServer/WMSServer?
-         * QUERY_LAYERS=2&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo
-         * &BBOX=-12163869.973212%2C3350308.213223%2C-9874428.102333%2C4377621.873233&FEATURE_COUNT=1
-         * &HEIGHT=420&WIDTH=936&FORMAT=image%2Fpng&INFO_FORMAT=text%2Fhtml&SRS=EPSG%3A3857&X=357&Y=210
-         */
-
-
+        [NHibernateSession]
         public ActionResult GetAllProposedReservoirs()
         {
             var serializer = new JavaScriptSerializer();
@@ -37,6 +30,7 @@ namespace InteractiveWaterPlan.Controllers
         }
 
         //Feature/Reservoir/Proposed?zoomLevel=Z&lat=Y&lon=X
+        [NHibernateSession]
         public ActionResult GetProposedReservoir(double lat, double lon, int zoom)
         {
             var repo = new EntityRepository();
@@ -54,6 +48,7 @@ namespace InteractiveWaterPlan.Controllers
         }
 
         //Feature/Entity/{Year}?forReservoir={ReservoirId}
+        [NHibernateSession]
         public ActionResult GetEntities(int Year, int forReservoirId=-1)
         {
             if (!_validYears.Contains(Year))

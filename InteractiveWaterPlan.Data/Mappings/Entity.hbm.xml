@@ -13,8 +13,29 @@
     <property column="Entity_County" name="County" />
     <property column="Entity_Basin" name="Basin" />
     <property column="SQL_GEOG" name="WKTGeog" />
+
   </class>
 
+  <class name="WaterUseEntity">
+    <id name="SqlId">
+      <column name="SQL_ID"/>
+    </id>
+
+    <property column="Entity_ID" name="Id" />
+    <property column="Entity_Name" name="Name" />
+    <property column="Entity_Type" name="Type" />
+    <property column="Entity_RWP" name="RWP" />
+    <property column="Entity_County" name="County" />
+    <property column="Entity_Basin" name="Basin" />
+    <property column="SQL_GEOG" name="WKTGeog" />
+    
+    <property column="Redundant_Water" name="IsRedundantSupply" />
+    <property column="Source_Name" name="SourceName" />
+    <property column="Source_ID" name="SourceId" />
+    
+    <!--//TODO: SSYEAR entries? -->
+  </class>
+  
   <sql-query name="GetAllEntities">
     <return class="Entity"/>
     exec dbo.usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
@@ -26,8 +47,10 @@
   </sql-query>
 
   <sql-query name="GetEntitiesForReservoir">
-    <return class="Entity"/>
-    exec dbo.usp_Select_WaterEntityUsage_By_ProposedReservoir_and_Year :var_DB12_ID :var_EstYear
+    <query-param name="ReservoirId" type="int"/>
+    <query-param name="Year" type="int"/>
+    <return class="WaterUseEntity"/>
+    exec dbo.usp_Select_WaterEntityUsage_By_ProposedReservoir_and_Year :var_DB12_ID, :var_EstYear
   </sql-query>
   
 </hibernate-mapping>

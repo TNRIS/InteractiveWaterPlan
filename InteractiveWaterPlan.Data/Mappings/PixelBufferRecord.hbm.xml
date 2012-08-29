@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
+
+  <class name="PixelBufferRecord" mutable="false">
+    <id name="ZoomLevel">
+      <column name="VE_Zoom_Level"/>
+    </id>
+
+    <property column="Ground_Rez_M" name="GroundRes" />
+    <property column="Buffer_Multiplier" name="Multiplier" />
+
+  </class>
+
+  <sql-query name="GetPixelBufferRecords">
+    <return class="PixelBufferRecord"/>
+    exec usp_Select_ALL_lk_GEMSS_VE_Pixel_Buffer
+  </sql-query>
+  
+</hibernate-mapping>

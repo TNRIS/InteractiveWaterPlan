@@ -41,10 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractFeature.cs" />
+    <Compile Include="BaseLayerInfo.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="PixelBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reservoir.cs" />
-    <Compile Include="WaterUsageEntity.cs" />
+    <Compile Include="WaterUseEntity.cs" />
+    <Compile Include="WMSLayerInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

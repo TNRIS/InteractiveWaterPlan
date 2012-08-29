@@ -42,8 +42,11 @@
     <Content Include="lib\Iesi.Collections.dll" />
     <Content Include="lib\log4net.dll" />
     <Content Include="lib\NHibernate.dll" />
+    <Content Include="lib\Spring.Rest.dll" />
     <Content Include="lib\System.Web.Mvc.dll" />
+    <EmbeddedResource Include="Mappings\PixelBufferRecord.hbm.xml" />
     <Content Include="Mappings\README.txt" />
+    <EmbeddedResource Include="Mappings\Reservoir.hbm.xml" />
     <EmbeddedResource Include="Mappings\Entity.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -59,11 +62,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\System.Web.Mvc.dll</HintPath>
@@ -75,11 +83,13 @@
     <Compile Include="IRepository.Generic.cs" />
     <Compile Include="NHibernateSessionAttribute.cs" />
     <Compile Include="NHibernateSessionManager.cs" />
+    <Compile Include="Repositories\EntityRepository.cs" />
+    <Compile Include="Repositories\PixelBufferRepository.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="Type\SqlGeographyType.cs" />
+    <Compile Include="Type\SqlGeometryType.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj">
       <Project>{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}</Project>

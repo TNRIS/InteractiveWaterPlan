@@ -12,7 +12,7 @@ Ext.define('ISWP.model.WaterUseEntity', {
         'County'
         'Basin'
         
-        'SSUsage'
+        #'SSUsage'
         'IsRedundantSupply'
         'SourceName'
         'SourceId'

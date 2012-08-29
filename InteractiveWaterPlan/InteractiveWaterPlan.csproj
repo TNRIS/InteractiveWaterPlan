@@ -92,14 +92,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\PixelBuffer.cs" />
     <Compile Include="Models\Theme.cs" />
-    <Compile Include="Models\LayerInfo.cs" />
-    <Compile Include="Models\WMSLayerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\EntityRepository.cs" />
-    <Compile Include="Repositories\PixelBufferRepository.cs" />
-    <Compile Include="Repositories\ThemeRepository.cs" />
     <Compile Include="Rest\WMSService.cs" />
   </ItemGroup>
   <ItemGroup>

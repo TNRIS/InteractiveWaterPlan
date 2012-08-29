@@ -171,8 +171,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                             null,
                             """
                             <h3>#{feature.data.Name}</h3>
-                            SSUsage: #{[year, feature.data.SSUsage[year]] for year of feature.data.SSUsage}<br/>
-                            Redundant Supply: #{if feature.data.IsRedundantSupply then 'Yes' else 'No'}
+                            
+                            Redundant Supply: #{feature.data.IsRedundantSupply}
                             """,
                             null,
                             true,

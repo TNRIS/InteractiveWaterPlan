@@ -4,11 +4,6 @@ namespace InteractiveWaterPlan.Core
 {
     public class Reservoir : AbstractFeature
     {
-        public int RecommendationCode;
-
-        public Reservoir() : base()
-        {
-
-        }
+        public virtual int RecommendationCode { get; set; }
     }
 }
