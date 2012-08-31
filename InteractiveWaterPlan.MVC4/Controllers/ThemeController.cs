@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using InteractiveWaterPlan.Models;
+using InteractiveWaterPlan.MVC4.Models;
 using InteractiveWaterPlan.Data;
 using InteractiveWaterPlan.Core;
 
-namespace InteractiveWaterPlan.Controllers
+namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class ThemeController : Controller
     {

@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using System.Web.Script.Serialization;
 using InteractiveWaterPlan.Data;
 
-namespace InteractiveWaterPlan.Controllers
+namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class FeatureController : Controller
     {

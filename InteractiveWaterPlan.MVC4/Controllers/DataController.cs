@@ -9,7 +9,7 @@ using InteractiveWaterPlan.Data;
 
 
 
-namespace InteractiveWaterPlan.Controllers
+namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class DataController : Controller
     {

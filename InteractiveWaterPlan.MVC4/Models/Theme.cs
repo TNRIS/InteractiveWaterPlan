@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using InteractiveWaterPlan.Core;
 
-namespace InteractiveWaterPlan.Models
+namespace InteractiveWaterPlan.MVC4.Models
 {
     public class Theme
     {

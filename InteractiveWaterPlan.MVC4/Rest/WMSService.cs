@@ -7,7 +7,7 @@ using Spring.Rest.Client;
 using Newtonsoft.Json;
 using InteractiveWaterPlan.Data;
 
-namespace InteractiveWaterPlan.Rest
+namespace InteractiveWaterPlan.MVC4.Rest
 {
     public static class WMSService
     {
