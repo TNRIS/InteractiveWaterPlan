@@ -80,28 +80,38 @@ Ext.define('ISWP.view.map.MapComponent', {
             key: this.bingApiKey,
             type: "Road"
             transitionEffect: "resize"
-        });
+        })
         
         bing_hybrid = new OpenLayers.Layer.Bing({
             name: "Bing Hybrid",
             key: this.bingApiKey,
             type: "AerialWithLabels"
             transitionEffect: "resize"
-        });
+        })
 
         bing_aerial = new OpenLayers.Layer.Bing({
             name: "Bing Aerial",
             key: this.bingApiKey,
             type: "Aerial"
             transitionEffect: "resize"
-        });
+        })
         
+        esri_gray = new OpenLayers.Layer.XYZ(
+            'ESRI Gray',
+            [
+                'http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'
+            ],
+            {
+                attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
+            }
+
+        )
 
         this.map = new OpenLayers.Map(
             div: this.id,
             projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
             displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84 
-            layers: [bing_road, mapquest_open, mapquest_aerial, bing_hybrid, bing_aerial]
+            layers: [esri_gray, bing_road, mapquest_open, mapquest_aerial, bing_hybrid, bing_aerial]
             center: this.origCenter
             zoom: this.origZoom
             eventListeners:

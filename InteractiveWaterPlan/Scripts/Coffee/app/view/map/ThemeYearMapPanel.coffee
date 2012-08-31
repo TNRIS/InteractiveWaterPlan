@@ -18,7 +18,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
     dockedItems: [
         {
             xtype: 'toolbar'
-            dock: 'top'
+            dock: 'bottom'
             id: 'yearButtonBar'
             items: [
 
