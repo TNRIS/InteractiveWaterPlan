@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan", "InteractiveWaterPlan\InteractiveWaterPlan.csproj", "{0B45546D-1B8B-46D3-A999-FB6D4583FA88}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan.Data", "InteractiveWaterPlan.Data\InteractiveWaterPlan.Data.csproj", "{C24A31F3-98A7-43F5-9547-A4107860FEE3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan.Core", "InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj", "{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveWaterPlan.MVC4", "InteractiveWaterPlan.MVC4\InteractiveWaterPlan.MVC4.csproj", "{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,16 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{0B45546D-1B8B-46D3-A999-FB6D4583FA88}.Release|x86.ActiveCfg = Release|Any CPU
 		{C24A31F3-98A7-43F5-9547-A4107860FEE3}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{C24A31F3-98A7-43F5-9547-A4107860FEE3}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{C24A31F3-98A7-43F5-9547-A4107860FEE3}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -47,6 +37,16 @@ Global
 		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B15901B1-93F4-49B7-94B1-8BCA26CFD1C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EEE8F4CF-437D-446F-84EB-4EEBBCD0C515}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

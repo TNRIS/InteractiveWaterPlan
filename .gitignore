@@ -2,7 +2,6 @@ packages
 packages.config
 InteractiveWaterPlan/Scripts/Compiled/
 *.Publish.xml
-*.sublime-project
 *.sublime-workspace
 ConnectionStrings.config
 
