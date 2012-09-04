@@ -192,13 +192,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     return null;
   },
   _calculateScaledValue: function(max, min, scale_max, scale_min, val) {
-    var b, m, scaled_val;
+    var scaled_val;
     if (max === min) {
       return scale_min;
     }
-    m = (scale_max - scale_min) / (max - min);
-    b = scale_min - min * m;
-    scaled_val = m * val + b;
+    scaled_val = (scale_max - scale_min) * (val - min) / (max - min) + scale_min;
     return scaled_val;
   }
 });

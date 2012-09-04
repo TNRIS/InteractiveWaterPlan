@@ -247,11 +247,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     _calculateScaledValue: (max, min, scale_max, scale_min, val) ->
         if max == min then return scale_min
 
-        #linearly scale the input value based using y=mx+b
-        m = (scale_max-scale_min)/(max-min) #calculuate the slope
-        b = scale_min - min*m #calculate the intercept
-        scaled_val = m*val+b #calculate the return value
-
+        #linearly scale the input value
+        scaled_val = (scale_max - scale_min)*(val - min)/(max-min) + scale_min
+        
         return scaled_val
 
 })
