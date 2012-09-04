@@ -6,7 +6,41 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     #TODO: add a hover to the related feature points to display their info
 
+    max_radius: 12
+    min_radius: 4
+
     themeName: null
+    curr_reservoir: null
+
+    layerName: 'Planned Reservoir User Entities'
+    styleMap: new OpenLayers.Style(
+        pointRadius: '${getPointRadius}'
+        strokeColor: '${getStrokeColor}'
+        strokeWidth: 0.5
+        fillColor: '${getColor}'
+        fillOpacity: 0.8
+
+        {
+            context:
+                getColor: (feature) ->
+                    switch feature.attributes['type']
+                        when 'reservoir' then return 'blue'
+                        when 'entity' then return 'green'
+                        when 'line' then return 'grey' 
+                    return 'red'
+                getStrokeColor: (feature) ->
+                    switch feature.attributes['type']
+                        when 'reservoir' then return 'cyan'
+                        when 'entity' then return 'lime'
+                        when 'line' then return 'lightgrey'  
+                    return 'red'
+                getPointRadius: (feature) ->
+                    if feature.size?
+                        return feature.size
+                    return 0
+        }
+    )
+
 
     loadTheme: () ->
         map = this.mapComp.map
@@ -53,8 +87,22 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         return null
 
+    updateYear: (year) ->
+        if this.curr_reservoir?
+            this._showReservoirAndRelatedEntities(year)
+        
+        return null
 
     showFeatureResult: (features, clickedPoint, year) ->
+        
+        this.curr_reservoir = features[0]
+
+        this._showReservoirAndRelatedEntities(year)
+
+        return null
+
+
+    _showReservoirAndRelatedEntities: (year) ->
         map = this.mapComp.map
 
         #clear any popups
@@ -65,77 +113,69 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         #create a new vector layer
         this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(
-            "Planned Reservoir User Entities", 
+            this.layerName, 
             {
-                styleMap: new OpenLayers.Style(
-
-                    pointRadius: 4
-                    strokeColor: '${getStrokeColor}'
-                    strokeWidth: 0.5
-                    fillColor: '${getColor}'
-                    fillOpacity: 0.8
-
-                    {
-                        context:
-                            getColor: (feature) ->
-                                switch feature.attributes['type']
-                                    when 'reservoir' then return 'blue'
-                                    when 'entity' then return 'green'
-                                    when 'line' then return 'grey' 
-                                return 'red'
-                            getStrokeColor: (feature) ->
-                                switch feature.attributes['type']
-                                    when 'reservoir' then return 'cyan'
-                                    when 'entity' then return 'lime'
-                                    when 'line' then return 'grey'  
-                                return 'red'
-                    }
-                )
+                styleMap: this.styleMap
             }
         )
 
         #highlight the reservoir feature
-        reservoir = features[0]
-        
         wktFormat = new OpenLayers.Format.WKT()
-        res_feat = wktFormat.read(reservoir.WKTGeog)
+        res_feat = wktFormat.read(this.curr_reservoir.WKTGeog)
         res_feat.geometry.transform(map.displayProjection, map.projection)
         
-        res_feat.data = reservoir
+        res_feat.data = this.curr_reservoir
         res_feat.attributes['type'] = 'reservoir'
-        delete res_feat.data['WKTGeog'] #remove it so we don't show it in the info popup
-
-        #TODO: define an Ext Template or XTemplate for updating the main content area
-        this.contentPanel.update("<h3>#{res_feat.data.Name}: #{year}</h3>")
-
-        #TODO: figure out how to update the chart
-
+        
+        #add the reservoir feature to the map
         this.mapComp.vectorLayer.addFeatures(res_feat)
 
+
+        map.addLayer(this.mapComp.vectorLayer)
+
+        #TODO: define an Ext Template or XTemplate for updating the main content area
+        this.contentPanel.update("<h3>#{this.curr_reservoir.Name}: #{year}</h3>")
+
+        
         this.dataStore.load({
             params:
                 Year: year
-                forReservoirId: reservoir['Id']
+                forReservoirId: this.curr_reservoir['Id']
             
             scope: this
             callback: (records, operation, success) ->
-                
                 if not records? or records.length == 0
                     return null
 
                 bounds = null
-                relatedFeatures = []
+                related_entity_features = []
+                connector_lines = []
+
+                #find the max and min source supply values
+                max_supply = null
+                min_supply = null
+                for rec in records
+                    if not max_supply? or max_supply < rec.data.SourceSupply
+                        max_supply = rec.data.SourceSupply
+                    
+                    if not min_supply? or min_supply > rec.data.SourceSupply
+                        min_supply = rec.data.SourceSupply
+
+                
                 for rec in records
                     data = rec.data
                     new_feat = wktFormat.read(rec.data.WKTGeog)
                     new_feat.data = data
                     new_feat.attributes['type'] = 'entity'
                     new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
+                    
+                    new_feat.size = this._calculateScaledValue(
+                        max_supply, min_supply, this.max_radius, this.min_radius, 
+                        new_feat.data.SourceSupply)
+
                     #TODO: apply the style here instead of using the stylemap ?
 
-                    #Use the clicked reservoir point and the new_feat point to construct a line
-                    clickedResPoint = map.getLonLatFromPixel(clickedPoint)
-                    
+                    #Use the reservoir's centroid the new_feat point to construct a line
                     res_feat_centroid = res_feat.geometry.getCentroid()
 
                     line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
@@ -143,17 +183,18 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)
                     ])) #attributes and style can be added
                     line.attributes['type'] = 'line'
-                    relatedFeatures.push(line) #TODO: maybe make its own layer and stylemap
+                    connector_lines.push(line) #TODO: maybe make its own layer and stylemap
 
                     if not bounds?
                         bounds = new_feat.geometry.getBounds()
                     else
                         bounds.extend(new_feat.geometry.getBounds())
 
-                    relatedFeatures.push(new_feat)
+                    related_entity_features.push(new_feat)
 
-                this.mapComp.vectorLayer.addFeatures(relatedFeatures)
-                map.addLayer(this.mapComp.vectorLayer)
+                this.mapComp.vectorLayer.addFeatures(connector_lines)
+                this.mapComp.vectorLayer.addFeatures(related_entity_features)
+
                 #map.zoomToExtent(bounds)
 
                 #Create a new select feature control and add it to the map.
@@ -172,7 +213,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                             """
                             <h3>#{feature.data.Name}</h3>
                             
-                            Redundant Supply: #{feature.data.IsRedundantSupply}
+                            Source Supply: #{feature.data.SourceSupply} ac-ft/yr<br/>
+                            Is Redundant Supply: #{feature.data.IsRedundantSupply}
                             """,
                             null,
                             true,
@@ -200,5 +242,16 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         })
 
         return null
+
+
+    _calculateScaledValue: (max, min, scale_max, scale_min, val) ->
+        if max == min then return scale_min
+
+        #linearly scale the input value based using y=mx+b
+        m = (scale_max-scale_min)/(max-min) #calculuate the slope
+        b = scale_min - min*m #calculate the intercept
+        scaled_val = m*val+b #calculate the return value
+
+        return scaled_val
 
 })

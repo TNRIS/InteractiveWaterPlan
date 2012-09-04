@@ -26,39 +26,45 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                 
                 {
                     xtype: 'button'
-                    text: '2012'
-                    year: 2012
+                    text: '2010'
+                    year: 2010
                     pressed: true
+                    allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
                 {
                     xtype: 'button'
                     text: '2020'
                     year: 2020
+                    allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
                 {
                     xtype: 'button'
                     text: '2030'
                     year: 2030
+                    allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
                 {
                     xtype: 'button'
                     text: '2040'
                     year: 2040
+                    allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
                 {
                     xtype: 'button'
                     text: '2050'
                     year: 2050
+                    allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
                 {
                     xtype: 'button'
                     text: '2060'
                     year: 2060
+                    allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
                 '-' #separator
@@ -91,6 +97,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     text: 'Water Use'
                     theme: 'water-use'
                     #pressed: true
+                    allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
                 {
@@ -98,24 +105,28 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     text: 'Proposed Reservoirs'
                     theme: 'proposed-reservoirs'
                     pressed: true
+                    allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
                 {
                     xtype: 'button'
                     text: 'Theme 3'
                     theme: 'theme-3'
+                    allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
                 {
                     xtype: 'button'
                     text: 'Theme 4'
                     theme: 'theme-4'
+                    allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
                 {
                     xtype: 'button'
                     text: 'Theme 5'
                     theme: 'theme-5'
+                    allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
             ]

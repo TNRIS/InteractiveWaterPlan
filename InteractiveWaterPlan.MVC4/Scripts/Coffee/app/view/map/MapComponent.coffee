@@ -29,17 +29,6 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     handleMapEvent: (evt) ->
         
-        ###
-        if evt.type = "moveend"
-            console.log("moveend", map.getCenter().transform(
-                map.projection, map.displayProjection))
-
-
-        else if evt.type == 'click'
-            console.log("click", map.getLonLatFromPixel(evt.xy).transform(
-                map.projection, map.displayProjection
-            ))
-        ### 
 
         return null
 

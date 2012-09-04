@@ -2,7 +2,49 @@
 
 Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
+  max_radius: 12,
+  min_radius: 4,
   themeName: null,
+  curr_reservoir: null,
+  layerName: 'Planned Reservoir User Entities',
+  styleMap: new OpenLayers.Style({
+    pointRadius: '${getPointRadius}',
+    strokeColor: '${getStrokeColor}',
+    strokeWidth: 0.5,
+    fillColor: '${getColor}',
+    fillOpacity: 0.8
+  }, {
+    context: {
+      getColor: function(feature) {
+        switch (feature.attributes['type']) {
+          case 'reservoir':
+            return 'blue';
+          case 'entity':
+            return 'green';
+          case 'line':
+            return 'grey';
+        }
+        return 'red';
+      },
+      getStrokeColor: function(feature) {
+        switch (feature.attributes['type']) {
+          case 'reservoir':
+            return 'cyan';
+          case 'entity':
+            return 'lime';
+          case 'line':
+            return 'lightgrey';
+        }
+        return 'red';
+      },
+      getPointRadius: function(feature) {
+        if (feature.size != null) {
+          return feature.size;
+        }
+        return 0;
+      }
+    }
+  }),
   loadTheme: function() {
     var map;
     map = this.mapComp.map;
@@ -42,88 +84,79 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     });
     return null;
   },
+  updateYear: function(year) {
+    if (this.curr_reservoir != null) {
+      this._showReservoirAndRelatedEntities(year);
+    }
+    return null;
+  },
   showFeatureResult: function(features, clickedPoint, year) {
-    var map, res_feat, reservoir, wktFormat;
+    this.curr_reservoir = features[0];
+    this._showReservoirAndRelatedEntities(year);
+    return null;
+  },
+  _showReservoirAndRelatedEntities: function(year) {
+    var map, res_feat, wktFormat;
     map = this.mapComp.map;
     this.mapComp.removePopupsFromMap();
     this.mapComp.clearVectorLayer();
-    this.mapComp.vectorLayer = new OpenLayers.Layer.Vector("Planned Reservoir User Entities", {
-      styleMap: new OpenLayers.Style({
-        pointRadius: 4,
-        strokeColor: '${getStrokeColor}',
-        strokeWidth: 0.5,
-        fillColor: '${getColor}',
-        fillOpacity: 0.8
-      }, {
-        context: {
-          getColor: function(feature) {
-            switch (feature.attributes['type']) {
-              case 'reservoir':
-                return 'blue';
-              case 'entity':
-                return 'green';
-              case 'line':
-                return 'grey';
-            }
-            return 'red';
-          },
-          getStrokeColor: function(feature) {
-            switch (feature.attributes['type']) {
-              case 'reservoir':
-                return 'cyan';
-              case 'entity':
-                return 'lime';
-              case 'line':
-                return 'grey';
-            }
-            return 'red';
-          }
-        }
-      })
+    this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(this.layerName, {
+      styleMap: this.styleMap
     });
-    reservoir = features[0];
     wktFormat = new OpenLayers.Format.WKT();
-    res_feat = wktFormat.read(reservoir.WKTGeog);
+    res_feat = wktFormat.read(this.curr_reservoir.WKTGeog);
     res_feat.geometry.transform(map.displayProjection, map.projection);
-    res_feat.data = reservoir;
+    res_feat.data = this.curr_reservoir;
     res_feat.attributes['type'] = 'reservoir';
-    delete res_feat.data['WKTGeog'];
-    this.contentPanel.update("<h3>" + res_feat.data.Name + ": " + year + "</h3>");
     this.mapComp.vectorLayer.addFeatures(res_feat);
+    map.addLayer(this.mapComp.vectorLayer);
+    this.contentPanel.update("<h3>" + this.curr_reservoir.Name + ": " + year + "</h3>");
     this.dataStore.load({
       params: {
         Year: year,
-        forReservoirId: reservoir['Id']
+        forReservoirId: this.curr_reservoir['Id']
       },
       scope: this,
       callback: function(records, operation, success) {
-        var bounds, clickedResPoint, data, line, new_feat, rec, relatedFeatures, res_feat_centroid, select, _i, _len;
+        var bounds, connector_lines, data, line, max_supply, min_supply, new_feat, rec, related_entity_features, res_feat_centroid, select, _i, _j, _len, _len1;
         if (!(records != null) || records.length === 0) {
           return null;
         }
         bounds = null;
-        relatedFeatures = [];
+        related_entity_features = [];
+        connector_lines = [];
+        max_supply = null;
+        min_supply = null;
         for (_i = 0, _len = records.length; _i < _len; _i++) {
           rec = records[_i];
+          if (!(max_supply != null) || max_supply < rec.data.SourceSupply) {
+            max_supply = rec.data.SourceSupply;
+          }
+          if (!(min_supply != null) || min_supply > rec.data.SourceSupply) {
+            min_supply = rec.data.SourceSupply;
+          }
+        }
+        for (_j = 0, _len1 = records.length; _j < _len1; _j++) {
+          rec = records[_j];
           data = rec.data;
           new_feat = wktFormat.read(rec.data.WKTGeog);
           new_feat.data = data;
           new_feat.attributes['type'] = 'entity';
           new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);
-          clickedResPoint = map.getLonLatFromPixel(clickedPoint);
+          new_feat.size = this._calculateScaledValue(max_supply, min_supply, this.max_radius, this.min_radius, new_feat.data.SourceSupply);
           res_feat_centroid = res_feat.geometry.getCentroid();
           line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([new OpenLayers.Geometry.Point(res_feat_centroid.x, res_feat_centroid.y), new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)]));
           line.attributes['type'] = 'line';
-          relatedFeatures.push(line);
+          connector_lines.push(line);
           if (!(bounds != null)) {
             bounds = new_feat.geometry.getBounds();
           } else {
             bounds.extend(new_feat.geometry.getBounds());
           }
-          relatedFeatures.push(new_feat);
+          related_entity_features.push(new_feat);
         }
-        this.mapComp.vectorLayer.addFeatures(relatedFeatures);
-        map.addLayer(this.mapComp.vectorLayer);
+        this.mapComp.vectorLayer.addFeatures(connector_lines);
+        this.mapComp.vectorLayer.addFeatures(related_entity_features);
         select = new OpenLayers.Control.SelectFeature(this.mapComp.vectorLayer, {
           hover: false,
           onSelect: function(feature) {
@@ -133,7 +166,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             }
             point = {};
             _ref = [feature.geometry.getCentroid().x, feature.geometry.getCentroid().y], point.lon = _ref[0], point.lat = _ref[1];
-            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\n\nRedundant Supply: " + feature.data.IsRedundantSupply, null, true, function() {
+            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\n\nSource Supply: " + feature.data.SourceSupply + " ac-ft/yr<br/>\nIs Redundant Supply: " + feature.data.IsRedundantSupply, null, true, function() {
               select.unselect(feature);
               return null;
             });
@@ -157,5 +190,15 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       }
     });
     return null;
+  },
+  _calculateScaledValue: function(max, min, scale_max, scale_min, val) {
+    var b, m, scaled_val;
+    if (max === min) {
+      return scale_min;
+    }
+    m = (scale_max - scale_min) / (max - min);
+    b = scale_min - min * m;
+    scaled_val = m * val + b;
+    return scaled_val;
   }
 });

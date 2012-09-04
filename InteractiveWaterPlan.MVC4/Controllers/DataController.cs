@@ -13,7 +13,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class DataController : Controller
     {
-        private readonly int[] _validYears = new int[] { 2012, 2020, 2030, 2040, 2050, 2060 };
+        private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
 
         //Data/WaterUse/{LocationType}/{LocationName}/{Year}
         public ActionResult GetWaterUseData(string LocationType, string LocationName, int Year)
@@ -34,7 +34,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                 
                 switch (Year)
                 {
-                    case 2012:
+                    case 2010:
                         return Json(new[] 
                         {
                             new { Name="Muncipal", Value=4851201}, 

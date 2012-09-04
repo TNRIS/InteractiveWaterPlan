@@ -15,17 +15,6 @@ Ext.define('ISWP.view.map.MapComponent', {
   origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:3857")),
   origZoom: 6,
   handleMapEvent: function(evt) {
-    /*
-            if evt.type = "moveend"
-                console.log("moveend", map.getCenter().transform(
-                    map.projection, map.displayProjection))
-    
-    
-            else if evt.type == 'click'
-                console.log("click", map.getLonLatFromPixel(evt.xy).transform(
-                    map.projection, map.displayProjection
-                ))
-    */
     return null;
   },
   initializeMap: function() {

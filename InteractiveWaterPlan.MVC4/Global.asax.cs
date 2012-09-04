@@ -22,7 +22,7 @@ namespace InteractiveWaterPlan.MVC4
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            var factory = NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
+            NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
         }
     }
 }

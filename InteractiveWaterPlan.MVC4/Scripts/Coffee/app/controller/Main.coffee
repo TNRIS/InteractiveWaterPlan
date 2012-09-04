@@ -80,7 +80,8 @@ Ext.define('ISWP.controller.Main', {
                         })
 
                     #Reload the theme with the new year
-                    this.loadThemeIntoMap(this.selectedTheme)
+                    this.interactiveTheme.updateYear(btn.year)
+                    #this.loadThemeIntoMap(this.selectedTheme)
 
                     return null
 

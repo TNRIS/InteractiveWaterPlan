@@ -14,7 +14,7 @@ Ext.define("ISWP.view.data.MainPanel", {
       id: 'mainChart'
     }, {
       flex: 2,
-      html: 'Main content for 2012',
+      html: 'Main content for 2010',
       id: 'mainContent',
       border: false
     }

@@ -13,7 +13,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class FeatureController : Controller
     {
-        private readonly int[] _validYears = new int[] { 2012, 2020, 2030, 2040, 2050, 2060 };
+        private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
 
         [NHibernateSession]
         public ActionResult GetAllProposedReservoirs()

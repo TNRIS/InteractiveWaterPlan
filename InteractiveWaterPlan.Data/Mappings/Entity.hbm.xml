@@ -28,7 +28,8 @@
     <property column="Entity_County" name="County" />
     <property column="Entity_Basin" name="Basin" />
     <property column="SQL_GEOG" name="WKTGeog" />
-    
+
+    <property column="S_Supply" name="SourceSupply" />
     <property column="Redundant_Water" name="IsRedundantSupply" />
     <property column="Source_Name" name="SourceName" />
     <property column="Source_ID" name="SourceId" />

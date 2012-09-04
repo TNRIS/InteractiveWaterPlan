@@ -37,6 +37,9 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     this.fireEvent("themeload", this.theme);
     return null;
   },
+  updateYear: function(year) {
+    return null;
+  },
   showFeatureResult: function(features, clickedPoint, year) {
     return null;
   }

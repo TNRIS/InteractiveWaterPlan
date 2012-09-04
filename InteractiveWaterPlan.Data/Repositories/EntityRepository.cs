@@ -100,9 +100,6 @@ namespace InteractiveWaterPlan.Data
         // return the same fields/info.
         public IList<WaterUseEntity> GetEntitiesServedByReservoir(int proposedReservoirId, int year)
         {
-            if (year == 2012)
-                year = 2010;
-
             return Session.GetNamedQuery("GetEntitiesForReservoir")
                 .SetParameter("var_DB12_ID", proposedReservoirId)
                 .SetParameter("var_EstYear", year)

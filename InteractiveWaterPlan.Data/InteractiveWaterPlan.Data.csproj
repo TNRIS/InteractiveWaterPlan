@@ -49,7 +49,9 @@
     </EmbeddedResource>
     <Content Include="Mappings\README.txt" />
     <EmbeddedResource Include="Mappings\Reservoir.hbm.xml" />
-    <EmbeddedResource Include="Mappings\Entity.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Entity.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">

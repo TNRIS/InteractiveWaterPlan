@@ -54,7 +54,7 @@ Ext.define('ISWP.controller.Main', {
               LocationName: 'Texas'
             }
           });
-          this.loadThemeIntoMap(this.selectedTheme);
+          this.interactiveTheme.updateYear(btn.year);
           return null;
         }
       },

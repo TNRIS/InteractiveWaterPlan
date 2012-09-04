@@ -52,6 +52,9 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
         this.fireEvent("themeload", this.theme)
         return null
 
+    updateYear: (year) ->
+        return null
+
     showFeatureResult: (features, clickedPoint, year) ->
         return null
 
