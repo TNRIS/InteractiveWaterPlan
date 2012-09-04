@@ -14,7 +14,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
     public class ThemeController : ApiController
     {
         /// <summary>
-        /// Returns a JSON containing a description the desired theme
+        /// Returns an object containing a description of the desired theme
         /// </summary>
         /// <param name="ThemeName"></param>
         /// <returns></returns>

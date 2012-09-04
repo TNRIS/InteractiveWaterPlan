@@ -38,8 +38,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return 'red';
       },
       getPointRadius: function(feature) {
-        if (feature.size != null) {
-          return feature.size;
+        switch (feature.attributes['type']) {
+          case 'reservoir':
+            return 5;
+          case 'entity':
+            return feature.size;
         }
         return 0;
       }

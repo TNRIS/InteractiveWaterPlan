@@ -55,7 +55,7 @@ OpenLayers.Control.GetFeature = OpenLayers.Class(OpenLayers.Control, {
       this.events.triggerEvent("nofeaturefound");
     } else {
       features = this.format.read(request.responseText);
-      if (features["Error"]) {
+      if (!(features != null)) {
         OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
         this.events.triggerEvent("nofeaturefound");
       } else {

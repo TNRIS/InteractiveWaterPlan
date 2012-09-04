@@ -35,8 +35,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         when 'line' then return 'lightgrey'  
                     return 'red'
                 getPointRadius: (feature) ->
-                    if feature.size?
-                        return feature.size
+                    switch feature.attributes['type']
+                        when 'reservoir' then return 5
+                        when 'entity' then return feature.size
                     return 0
         }
     )
