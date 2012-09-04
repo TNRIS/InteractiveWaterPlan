@@ -36,7 +36,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             var repo = new EntityRepository();
             var clickedReservoir = repo.GetReservoirByBufferedClickPoint(lat, lon, zoom);
             return clickedReservoir;
-            //return Json(clickedReservoir, JsonRequestBehavior.AllowGet);
         }
 
         //api/feature/entity/all
@@ -45,7 +44,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         {
             var repo = new EntityRepository();
             return repo.GetAllEntities();
-            //return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
         }
 
         //api/feature/entity/{Year}?forReservoir={ReservoirId}
