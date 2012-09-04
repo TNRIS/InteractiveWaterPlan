@@ -11,7 +11,7 @@ Ext.define('ISWP.store.Theme', {
     proxy:
         type: 'parameterproxy'
         
-        url: 'Theme/{ThemeName}'
+        url: 'api/theme/{ThemeName}'
 
         reader:
             type: 'json'

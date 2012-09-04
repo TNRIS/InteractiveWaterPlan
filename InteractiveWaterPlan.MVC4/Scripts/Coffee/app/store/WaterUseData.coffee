@@ -11,7 +11,7 @@ Ext.define('ISWP.store.WaterUseData', {
     proxy:
         type: 'parameterproxy'
         
-        url: 'Data/WaterUse/{LocationType}/{LocationName}/{Year}'
+        url: 'api/data/wateruse/{LocationType}/{LocationName}/{Year}'
 
         reader:
             type: 'json'

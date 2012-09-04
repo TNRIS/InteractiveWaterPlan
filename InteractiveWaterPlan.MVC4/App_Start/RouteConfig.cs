@@ -13,50 +13,6 @@ namespace InteractiveWaterPlan.MVC4
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            #region Feature Routes
-            routes.MapRoute(
-                "GetAllEntitiesRoute",
-                "Feature/Entity/All",
-                new { controller = "Feature", action = "GetAllEntities" }
-            );
-
-            routes.MapRoute(
-                "GetAllProposedReservoirsRoute",
-                "Feature/Reservoir/Proposed/All",
-                new { controller = "Feature", action = "GetAllProposedReservoirs" }
-            );
-
-            routes.MapRoute(
-                "GetProposedReservoirByLatLonRoute",
-                "Feature/Reservoir/Proposed",
-                new { controller = "Feature", action = "GetProposedReservoir" }
-            );
-
-            routes.MapRoute(
-                "GetProposedReservoirEntitiesRoute",
-                "Feature/Entity/{Year}",
-                new { controller = "Feature", action = "GetEntities" }
-            );
-
-            #endregion
-
-            #region Data Routes
-
-            routes.MapRoute(
-                "GetWaterUseDataRoute",
-                "Data/WaterUse/{LocationType}/{LocationName}/{Year}",
-                new { controller = "Data", action = "GetWaterUseData" }
-            );
-            #endregion
-
-            #region Theme Routes
-            routes.MapRoute(
-                "GetThemeRoute",
-                "Theme/{ThemeName}",
-                new { controller = "Theme", action = "GetTheme" }
-            );
-            #endregion
-
             #region View Routes
             routes.MapRoute(
                 "Viewer",

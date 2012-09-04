@@ -118,7 +118,7 @@ Ext.define('ISWP.view.map.MapComponent', {
     this.removeFeatureControl();
     info = new OpenLayers.Control.GetFeature({
       layers: layers,
-      serviceUrl: 'Feature/Reservoir/Proposed',
+      serviceUrl: 'api/feature/reservoir/proposed',
       title: 'Identify Features by Clicking',
       queryVisible: true,
       maxFeatures: 1,

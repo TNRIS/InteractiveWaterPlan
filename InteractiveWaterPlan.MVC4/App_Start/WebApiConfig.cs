@@ -9,6 +9,56 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void Register(HttpConfiguration config)
         {
+            
+
+            #region Feature Routes
+            config.Routes.MapHttpRoute(
+                "GetAllEntitiesRoute",
+                "api/feature/entity/all",
+                new { controller = "Feature", action = "GetAllEntities" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetAllProposedReservoirsRoute",
+                "api/feature/reservoir/proposed/all",
+                new { controller = "Feature", action = "GetAllProposedReservoirs" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetProposedReservoirByLatLonRoute",
+                "api/feature/reservoir/proposed",
+                new { controller = "Feature", action = "GetProposedReservoir" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetProposedReservoirEntitiesRoute",
+                "api/feature/entity/{Year}",
+                new { controller = "Feature", action = "GetEntities" }
+            );
+
+            #endregion
+
+
+            #region Data Routes
+
+            config.Routes.MapHttpRoute(
+                "GetWaterUseDataRoute",
+                "api/data/wateruse/{LocationType}/{LocationName}/{Year}",
+                new { controller = "Data", action = "GetWaterUseData" }
+            );
+
+            #endregion
+
+            #region Theme Routes
+
+            config.Routes.MapHttpRoute(
+                "GetThemeRoute",
+                "api/theme/{ThemeName}",
+                new { controller = "Theme", action = "GetTheme" }
+            );
+
+            #endregion
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

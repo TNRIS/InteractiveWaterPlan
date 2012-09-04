@@ -7,71 +7,72 @@ using System.Configuration;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Web.Script.Serialization;
+using System.Web.Http;
+using System.Net.Http;
+using System.Net;
+
+using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
+
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
-    public class FeatureController : Controller
+    public class FeatureController : ApiController
     {
         private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
 
+        //api/feature/reservoir/proposed/all
         [NHibernateSession]
-        public ActionResult GetAllProposedReservoirs()
-        {
-            var serializer = new JavaScriptSerializer();
-            serializer.MaxJsonLength = 50000000;
-
+        public IEnumerable<Reservoir> GetAllProposedReservoirs()
+        {      
             var repo = new EntityRepository();
-            return new ContentResult()
-            {
-                Content = serializer.Serialize(repo.GetAllProposedReservoirs()),
-                ContentType = "application/json"
-            };
+            return repo.GetAllProposedReservoirs();
         }
 
-        //Feature/Reservoir/Proposed?zoomLevel=Z&lat=Y&lon=X
+        //api/feature/reservoir/proposed?zoomLevel=Z&lat=Y&lon=X
         [NHibernateSession]
-        public ActionResult GetProposedReservoir(double lat, double lon, int zoom)
+        public Reservoir GetProposedReservoir(double lat, double lon, int zoom)
         {
             var repo = new EntityRepository();
             var clickedReservoir = repo.GetReservoirByBufferedClickPoint(lat, lon, zoom);
-
-            return Json(clickedReservoir, JsonRequestBehavior.AllowGet);
+            return clickedReservoir;
+            //return Json(clickedReservoir, JsonRequestBehavior.AllowGet);
         }
 
-        //Feature/Entity/All
+        //api/feature/entity/all
         [NHibernateSession]
-        public ActionResult GetAllEntities()
+        public IEnumerable<Entity> GetAllEntities()
         {
             var repo = new EntityRepository();
-            return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
+            return repo.GetAllEntities();
+            //return Json(repo.GetAllEntities(), JsonRequestBehavior.AllowGet);
         }
 
-        //Feature/Entity/{Year}?forReservoir={ReservoirId}
+        //api/feature/entity/{Year}?forReservoir={ReservoirId}
         [NHibernateSession]
-        public ActionResult GetEntities(int Year, int forReservoirId=-1)
+        public IEnumerable<WaterUseEntity> GetEntities(int Year, int forReservoirId=-1)
         {
             if (!_validYears.Contains(Year))
             {
-                //TODO: Make an error class that will serialize to messages like this
-                return Json(
-                    new
-                    {
-                        Error = "Invalid Year: " + Year + ". Valid Years are " + String.Join(", ", _validYears)
-                    }, JsonRequestBehavior.AllowGet);
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(
+                        "Invalid Year: " + Year + ". Valid Years are " + String.Join(", ", _validYears))
+                };
+                throw new HttpResponseException(resp);
             }
             else if (forReservoirId == -1)
             {
-                return Json(
-                    new
-                    {
-                        Error = "forReservoirId must be specified."
-                    }, JsonRequestBehavior.AllowGet);
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent("forReservoirId must be specified.")
+                };
+                throw new HttpResponseException(resp);
             }
 
             var repo = new EntityRepository();
             var relatedEntities = repo.GetEntitiesServedByReservoir(forReservoirId, Year);
-            return Json(relatedEntities, JsonRequestBehavior.AllowGet);
+            return relatedEntities;
         }
 
         

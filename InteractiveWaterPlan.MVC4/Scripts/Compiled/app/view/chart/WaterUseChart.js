@@ -3,7 +3,7 @@
 Ext.define('ISWP.view.chart.WaterUseChart', {
   extend: 'Ext.chart.Chart',
   alias: 'widget.waterusechart',
-  animate: true,
+  animate: false,
   store: 'WaterUseData',
   shadow: true,
   insetPadding: 30,
