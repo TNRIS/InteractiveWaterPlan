@@ -36,21 +36,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Common.Logging.dll</HintPath>
+      <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Rest, Version=1.1.0.5340, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Spring.Rest.dll</HintPath>
+      <HintPath>..\packages\Spring.Rest.1.1.0\lib\net40\Spring.Rest.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -135,6 +134,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App_Readme\Spring.Rest.txt" />
     <Content Include="Content\bootstrap\css\bootstrap.css" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\bootstrap\img\glyphicons-halflings-white.png" />
@@ -1464,10 +1464,6 @@
     <Content Include="Content\OpenLayers\theme\default\style.tidy.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
-    <Content Include="lib\Common.Logging.dll" />
-    <Content Include="lib\log4net.dll" />
-    <Content Include="lib\NHibernate.dll" />
-    <Content Include="lib\Spring.Rest.dll" />
     <Content Include="Scripts\Compiled\app.js" />
     <Content Include="Scripts\Compiled\app\controller\Main.js" />
     <Content Include="Scripts\Compiled\app\model\Entity.js" />
@@ -1490,7 +1486,9 @@
     <Content Include="Scripts\Compiled\TNRIS\theme\InteractiveTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\ProposedReservoirsTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\WaterUsageTheme.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
