@@ -1,5 +1,4 @@
 packages
-packages.config
 InteractiveWaterPlan/Scripts/Compiled/
 *.Publish.xml
 *.sublime-workspace
