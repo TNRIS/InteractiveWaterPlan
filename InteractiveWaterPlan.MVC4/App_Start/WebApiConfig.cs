@@ -6,8 +6,6 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void Register(HttpConfiguration config)
         {
-            
-
             #region Feature Routes
             config.Routes.MapHttpRoute(
                 "GetAllEntitiesRoute",
