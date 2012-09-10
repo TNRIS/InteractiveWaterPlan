@@ -74,14 +74,17 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     text: 'Zoom to Texas'
                     id: 'resetExtentButton'
                 }
+                '-' #separator
+
                 {
                     #TODO: textbox?
                     xtype: 'combobox'
-                    hideLabel: true
+                    hideLabel: false
+                    fieldLabel: 'Zoom to Location'
                     #typeAhead: true
                     #store: 'entitiesStore'
                     emptyText: 'Enter a Location Name'
-                    width: 200
+                    width: 350
                 }
             ]
         }

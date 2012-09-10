@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Http;
-using InteractiveWaterPlan.MVC4.Models;
-using InteractiveWaterPlan.Data;
-using InteractiveWaterPlan.Core;
 using System.Net;
+using System.Web.Http;
+using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.MVC4.Models;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
