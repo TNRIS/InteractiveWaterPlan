@@ -22,7 +22,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
             id: 'yearButtonBar'
             items: [
 
-                'Planning Year: '
+                'Planning Decade: '
                 
                 {
                     xtype: 'button'
@@ -97,7 +97,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
             items: [
                 {
                     xtype: 'button'
-                    text: 'Water Use'
+                    text: 'Existing Supply'
                     theme: 'water-use'
                     #pressed: true
                     allowDepress: false
@@ -105,7 +105,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                 }
                 {
                     xtype: 'button'
-                    text: 'Proposed Reservoirs'
+                    text: 'Recommended Reservoirs'
                     theme: 'proposed-reservoirs'
                     pressed: true
                     allowDepress: false
