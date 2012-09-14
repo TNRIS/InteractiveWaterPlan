@@ -111,27 +111,6 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
-                {
-                    xtype: 'button'
-                    text: 'Theme 3'
-                    theme: 'theme-3'
-                    allowDepress: false
-                    toggleGroup: 'themeButtons'
-                }
-                {
-                    xtype: 'button'
-                    text: 'Theme 4'
-                    theme: 'theme-4'
-                    allowDepress: false
-                    toggleGroup: 'themeButtons'
-                }
-                {
-                    xtype: 'button'
-                    text: 'Theme 5'
-                    theme: 'theme-5'
-                    allowDepress: false
-                    toggleGroup: 'themeButtons'
-                }
             ]
         }
 
