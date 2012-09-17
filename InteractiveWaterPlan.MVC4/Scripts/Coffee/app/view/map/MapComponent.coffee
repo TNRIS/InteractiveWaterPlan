@@ -28,7 +28,7 @@ Ext.define('ISWP.view.map.MapComponent', {
     origZoom: 6
 
     handleMapEvent: (evt) ->
-        
+        console.log("Zoom, SCALE", this.getZoom(), this.getScale())
 
         return null
 
@@ -104,8 +104,7 @@ Ext.define('ISWP.view.map.MapComponent', {
             center: this.origCenter
             zoom: this.origZoom
             eventListeners:
-                moveend: this.handleMapEvent
-                click: this.handleMapEvent
+                zoomend: this.handleMapEvent
         )
 
         this.map.addControl(new OpenLayers.Control.LayerSwitcher());

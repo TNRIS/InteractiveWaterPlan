@@ -44,7 +44,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Mappings\README.txt" />
-    <EmbeddedResource Include="Mappings\Reservoir.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Reservoir.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Mappings\Entity.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

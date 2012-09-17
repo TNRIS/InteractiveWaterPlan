@@ -15,6 +15,7 @@ Ext.define('ISWP.view.map.MapComponent', {
   origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:3857")),
   origZoom: 6,
   handleMapEvent: function(evt) {
+    console.log("Zoom, SCALE", this.getZoom(), this.getScale());
     return null;
   },
   initializeMap: function() {
@@ -56,8 +57,7 @@ Ext.define('ISWP.view.map.MapComponent', {
       center: this.origCenter,
       zoom: this.origZoom,
       eventListeners: {
-        moveend: this.handleMapEvent,
-        click: this.handleMapEvent
+        zoomend: this.handleMapEvent
       }
     });
     this.map.addControl(new OpenLayers.Control.LayerSwitcher());

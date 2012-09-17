@@ -41,13 +41,36 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                 this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(
                     "Water Users", 
                     {
-                        styleMap: new OpenLayers.StyleMap({
-                            pointRadius: 4
-                            strokeColor: 'cyan'
-                            strokeWidth: 0.5
-                            fillColor: 'blue'
-                            fillOpacity: 0.8
-                        })
+                        styleMap: new OpenLayers.Style(
+                            {
+                                pointRadius: 4
+                                strokeColor: 'cyan'
+                                strokeWidth: 0.5
+                                fillColor: 'blue'
+                                fillOpacity: 0.8
+                            },
+                            {
+                                rules: [
+                                    new OpenLayers.Rule({
+                                        symbolizer: {
+                                            pointRadius: 4,
+                                        }
+                                    }),
+                                    new OpenLayers.Rule({
+                                        maxScaleDenominator: 866688,
+                                        symbolizer: {
+                                            fontSize: "10px"
+                                            labelAlign: 'lb'
+                                            labelOutlineColor: "white"
+                                            labelOutlineWidth: 2
+                                            labelXOffset: 3
+                                            labelYOffset: 5
+                                            label: "${label}"
+                                        }        
+                                    })
+                                ]
+                            }
+                        )
                     }
                 )
 
@@ -59,7 +82,8 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                     new_feat = wktFormat.read(rec.data.WKTGeog)
                     new_feat.data = data
                     new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
-                    
+                    new_feat.attributes['label'] = data['Name']
+
                     if not bounds?
                         bounds = new_feat.geometry.getBounds()
                     else

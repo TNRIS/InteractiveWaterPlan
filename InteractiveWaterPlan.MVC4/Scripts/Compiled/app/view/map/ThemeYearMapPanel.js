@@ -57,16 +57,14 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           year: 2060,
           allowDepress: false,
           toggleGroup: 'yearButtons'
-        }, '-', '->', {
+        }, '->', {
           xtype: 'button',
           text: 'Zoom to Texas',
           id: 'resetExtentButton'
         }, '-', {
           xtype: 'combobox',
-          hideLabel: false,
-          fieldLabel: 'Zoom to Location',
-          emptyText: 'Enter a Location Name',
-          width: 350
+          emptyText: 'Go to Location',
+          width: 200
         }
       ]
     }, {
@@ -76,13 +74,13 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
       items: [
         {
           xtype: 'button',
-          text: 'Existing Supply',
+          text: 'Existing<br/>Supply',
           theme: 'water-use',
           allowDepress: false,
           toggleGroup: 'themeButtons'
         }, {
           xtype: 'button',
-          text: 'Recommended Reservoirs',
+          text: 'Recommended<br/>Reservoirs',
           theme: 'proposed-reservoirs',
           pressed: true,
           allowDepress: false,
