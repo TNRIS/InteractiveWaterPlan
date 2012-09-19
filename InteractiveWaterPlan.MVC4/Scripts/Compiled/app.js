@@ -14,7 +14,7 @@ try {
 
 Ext.Loader.setConfig({
   enabled: true,
-  disableCaching: false
+  disableCaching: true
 });
 
 Ext.Loader.setPath('TNRIS', 'Scripts/Compiled/TNRIS');

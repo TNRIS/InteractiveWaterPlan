@@ -10,7 +10,7 @@ catch e
 
 Ext.Loader.setConfig({
 	enabled: true
-	disableCaching: false
+	disableCaching: true
 })
 
 #need to add path for TNRIS custom widgets
