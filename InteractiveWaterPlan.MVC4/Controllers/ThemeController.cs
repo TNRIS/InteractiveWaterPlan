@@ -22,7 +22,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             //TODO: all this should come from DB/NHibernate, not constructed here
             if ("proposed-reservoirs".Equals(themeName, StringComparison.InvariantCultureIgnoreCase))
             {
-
                 theme = new Theme("Proposed Reservoirs");
                 theme.Layers.Add(
                     new WMSLayerInfo(

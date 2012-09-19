@@ -43,6 +43,9 @@
     <EmbeddedResource Include="Mappings\PixelBufferRecord.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Mappings\Place.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Mappings\README.txt" />
     <EmbeddedResource Include="Mappings\Reservoir.hbm.xml">
       <SubType>Designer</SubType>
@@ -81,6 +84,7 @@
     <Compile Include="NHibernateSessionManager.cs" />
     <Compile Include="Repositories\EntityRepository.cs" />
     <Compile Include="Repositories\PixelBufferRepository.cs" />
+    <Compile Include="Repositories\PlaceRepository.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Type\SqlGeographyType.cs" />
     <Compile Include="Type\SqlGeometryType.cs" />
