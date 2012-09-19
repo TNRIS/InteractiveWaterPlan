@@ -15,6 +15,7 @@
     <property column="PlaceName_Category_Name" name="Name" />
   </class>
 
+  <!-- TODO: PlaceFeature 
   <class name="PlaceFeature" mutable="false">
     <id name="SqlId">
       <column name="SQL_ID"/>
@@ -22,23 +23,7 @@
     
     <property column="PlaceName" name="Name" />
     <property column="PlaceName_Geog" name="WKTGeog" />
-  </class>
-
-  <class name="Entity" mutable="false">
-    <id name="SqlId">
-      <column name="SQL_ID"/>
-    </id>
-
-    <property column="Entity_ID" name="Id" />
-    <property column="Entity_Name" name="Name" />
-    <property column="Entity_Type" name="Type" />
-    <property column="Entity_RWP" name="RWP" />
-    <property column="Entity_County" name="County" />
-    <property column="Entity_Basin" name="Basin" />
-    <property column="SQL_GEOG" name="WKTGeog" />
-
-  </class>
-  
+  </class>-->
   
   <sql-query name="GetPlacesByCategory">
     <return class="Place"/>

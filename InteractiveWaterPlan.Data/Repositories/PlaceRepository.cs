@@ -12,7 +12,7 @@ using NHibernate.Spatial;
 
 using InteractiveWaterPlan.Core;
 
-namespace InteractiveWaterPlan.Data.Repositories
+namespace InteractiveWaterPlan.Data
 {
 
     public class PlaceRepository : Repository<int, Entity>
@@ -31,20 +31,23 @@ namespace InteractiveWaterPlan.Data.Repositories
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        public IList<Place> GetPlacesByCategory(int categoryId)
+        public IEnumerable<Place> GetPlacesByCategory(int categoryId)
         {
-            return Session.GetNamedQuery("usp_Select_Places_by_Category_tbl_GEMSS_Vector_PlaceNames")
+            return Session.GetNamedQuery("GetPlacesByCategory")
                 .SetParameter("var_CategoryID", categoryId)
-                .List<Place>();
+                .List<Place>()
+                .OrderBy(p => p.SqlId);
         }
 
         /// <summary>
         /// Returns a list of all PlaceCategories
         /// </summary>
         /// <returns></returns>
-        public IList<PlaceCategory> GetAllPlaceCategories()
+        public IEnumerable<PlaceCategory> GetAllPlaceCategories()
         {
-            return Session.GetNamedQuery("GetAllPlaceCategories").List<PlaceCategory>();
+            return Session.GetNamedQuery("GetAllPlaceCategories")
+                .List<PlaceCategory>()
+                .OrderBy(pc => pc.Id);
         }
 
         /// <summary>
@@ -53,9 +56,12 @@ namespace InteractiveWaterPlan.Data.Repositories
         /// </summary>
         /// <param name="namePart"></param>
         /// <returns></returns>
-        public IList<Place> GetPlacesByNamePart(string namePart)
+        public IEnumerable<Place> GetPlacesByNamePart(string name)
         {
-            return Session.GetNamedQuery("GetPlacesByNamePart").List<Place>();
+            return Session.GetNamedQuery("GetPlacesByNamePart")
+                .SetParameter("var_NamePart", name)
+                .List<Place>()
+                .OrderBy(p => p.Name);
         }
         
         

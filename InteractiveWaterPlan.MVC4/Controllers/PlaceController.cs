@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
@@ -11,31 +7,29 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class PlaceController : ApiController
     {
-        // GET api/place
-        public IEnumerable<string> Get()
+        //api/place/{category}
+        [NHibernateSession]
+        public IEnumerable<Place> GetPlacesByCategory(int category)
         {
-            return new string[] { "value1", "value2" };
+            var repo = new PlaceRepository();
+            return repo.GetPlacesByCategory(category);
         }
 
-        // GET api/place/5
-        public string Get(int id)
+        //api/place/categories
+        [NHibernateSession]
+        public IEnumerable<PlaceCategory> GetAllPlaceCategories()
         {
-            return "value";
+            var repo = new PlaceRepository();
+            return repo.GetAllPlaceCategories();
         }
 
-        // POST api/place
-        public void Post([FromBody]string value)
+        //api/place/{name}
+        [NHibernateSession]
+        public IEnumerable<Place> GetPlacesByNamePart(string name)
         {
+            var repo = new PlaceRepository();
+            return repo.GetPlacesByNamePart(name);
         }
 
-        // PUT api/place/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/place/5
-        public void Delete(int id)
-        {
-        }
     }
 }
