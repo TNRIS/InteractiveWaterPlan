@@ -7,7 +7,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class PlaceController : ApiController
     {
-        //api/place/{category}
+        //api/place?category={category}
         [NHibernateSession]
         public IEnumerable<Place> GetPlacesByCategory(int category)
         {
@@ -23,7 +23,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return repo.GetAllPlaceCategories();
         }
 
-        //api/place/{name}
+        //api/place?name={name}
         [NHibernateSession]
         public IEnumerable<Place> GetPlacesByNamePart(string name)
         {
