@@ -40,17 +40,6 @@ namespace InteractiveWaterPlan.Data
         }
 
         /// <summary>
-        /// Returns a list of all PlaceCategories
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<PlaceCategory> GetAllPlaceCategories()
-        {
-            return Session.GetNamedQuery("GetAllPlaceCategories")
-                .List<PlaceCategory>()
-                .OrderBy(pc => pc.Id);
-        }
-
-        /// <summary>
         /// Returns a list of Places that have names starting with the input namePart. 
         /// Useful for autocompleting UI elements.
         /// </summary>
@@ -63,8 +52,17 @@ namespace InteractiveWaterPlan.Data
                 .List<Place>()
                 .OrderBy(p => p.Name);
         }
-        
-        
+
+        /// <summary>
+        /// Returns a list of all PlaceCategories
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PlaceCategory> GetAllPlaceCategories()
+        {
+            return Session.GetNamedQuery("GetAllPlaceCategories")
+                .List<PlaceCategory>()
+                .OrderBy(pc => pc.Id);
+        }
 
     }
 }
