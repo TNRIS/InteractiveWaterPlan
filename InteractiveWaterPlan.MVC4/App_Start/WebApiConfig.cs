@@ -14,7 +14,6 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Place", action = "GetAllPlaceCategories" }
             );
 
-
             #endregion
 
 

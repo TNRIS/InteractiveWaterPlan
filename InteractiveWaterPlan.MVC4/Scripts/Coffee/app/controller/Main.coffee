@@ -14,6 +14,7 @@ Ext.define('ISWP.controller.Main', {
         'Theme'
         'WaterUseEntity'
         'Entity'
+        'Place'
     ]
 
     refs: [

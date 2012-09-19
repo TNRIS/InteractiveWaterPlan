@@ -76,10 +76,18 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                 '-' #separator
 
                 {
-                    #TODO: textbox?
                     xtype: 'combobox'
-                    #typeAhead: true
-                    #store: 'entitiesStore'
+                    typeAhead: true
+                    store: 'Place'
+                    queryMode: 'remote'
+                    queryCaching: true
+                    queryParam: 'name'
+                    queryDelay: 200
+                    typeAheadDelay: 200
+                    minChars: 2
+                    hideTrigger: true
+                    valueField: 'SqlId'
+                    displayField: 'Name'
                     emptyText: 'Go to Location'
                     width: 200
                 }

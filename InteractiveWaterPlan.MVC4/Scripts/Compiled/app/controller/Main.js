@@ -3,7 +3,7 @@
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
   views: ['chart.WaterUseChart', 'data.MainPanel', 'map.MapComponent', 'map.ThemeYearMapPanel'],
-  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity'],
+  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place'],
   refs: [
     {
       ref: 'mainPanel',

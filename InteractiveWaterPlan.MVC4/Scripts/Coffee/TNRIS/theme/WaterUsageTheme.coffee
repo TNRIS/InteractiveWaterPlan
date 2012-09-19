@@ -104,8 +104,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                             null,
                             """
                             <h3>#{feature.data.Name}</h3>
-                            Type: #{feature.data.Type}<br/>
-                            RWP: #{feature.data.RWP}<br/>
+                            Planning Region: #{feature.data.RWP}<br/>
                             County: #{feature.data.County}<br/>
                             Basin: #{feature.data.Basin}<br/>
                             """,

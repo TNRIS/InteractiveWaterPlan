@@ -63,6 +63,17 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           id: 'resetExtentButton'
         }, '-', {
           xtype: 'combobox',
+          typeAhead: true,
+          store: 'Place',
+          queryMode: 'remote',
+          queryCaching: true,
+          queryParam: 'name',
+          queryDelay: 200,
+          typeAheadDelay: 200,
+          minChars: 2,
+          hideTrigger: true,
+          valueField: 'SqlId',
+          displayField: 'Name',
           emptyText: 'Go to Location',
           width: 200
         }

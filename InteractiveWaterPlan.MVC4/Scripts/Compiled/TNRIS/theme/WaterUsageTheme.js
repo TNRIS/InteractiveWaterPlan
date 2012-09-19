@@ -73,7 +73,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
           hover: false,
           onSelect: function(feature) {
             var popup;
-            popup = new OpenLayers.Popup.FramedCloud("featurepopup", feature.geometry.getBounds().getCenterLonLat(), null, "<h3>" + feature.data.Name + "</h3>\nType: " + feature.data.Type + "<br/>\nRWP: " + feature.data.RWP + "<br/>\nCounty: " + feature.data.County + "<br/>\nBasin: " + feature.data.Basin + "<br/>", null, true, function() {
+            popup = new OpenLayers.Popup.FramedCloud("featurepopup", feature.geometry.getBounds().getCenterLonLat(), null, "<h3>" + feature.data.Name + "</h3>\nPlanning Region: " + feature.data.RWP + "<br/>\nCounty: " + feature.data.County + "<br/>\nBasin: " + feature.data.Basin + "<br/>", null, true, function() {
               select.unselect(feature);
               return null;
             });

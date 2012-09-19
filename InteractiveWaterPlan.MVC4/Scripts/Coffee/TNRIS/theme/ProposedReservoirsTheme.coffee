@@ -213,9 +213,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                             null,
                             """
                             <h3>#{feature.data.Name}</h3>
-                            
                             Source Supply: #{feature.data.SourceSupply} ac-ft/yr<br/>
-                            Is Redundant Supply: #{feature.data.IsRedundantSupply}
                             """,
                             null,
                             true,

@@ -169,7 +169,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             }
             point = {};
             _ref = [feature.geometry.getCentroid().x, feature.geometry.getCentroid().y], point.lon = _ref[0], point.lat = _ref[1];
-            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\n\nSource Supply: " + feature.data.SourceSupply + " ac-ft/yr<br/>\nIs Redundant Supply: " + feature.data.IsRedundantSupply, null, true, function() {
+            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\nSource Supply: " + feature.data.SourceSupply + " ac-ft/yr<br/>", null, true, function() {
               select.unselect(feature);
               return null;
             });

@@ -2,6 +2,7 @@
 body 
 {
     padding-top: 60px;
+    line-height: 12px;
 }
 
 #waterUseChart
@@ -30,3 +31,8 @@ body
     /* when OL encounters a 404, don't display the pink image */
     display: none !important;
 } 
+
+.x-boundlist ul
+{
+    margin: 0;   
+}

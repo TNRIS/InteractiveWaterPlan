@@ -1474,6 +1474,7 @@
     <Content Include="Scripts\Compiled\app\model\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\model\WaterUseEntity.js" />
     <Content Include="Scripts\Compiled\app\store\Entity.js" />
+    <Content Include="Scripts\Compiled\app\store\Place.js" />
     <Content Include="Scripts\Compiled\app\store\Theme.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseEntity.js" />
@@ -1516,6 +1517,7 @@
     <None Include="Scripts\Coffee\app\model\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\model\WaterUseEntity.coffee" />
     <None Include="Scripts\Coffee\app\store\Entity.coffee" />
+    <None Include="Scripts\Coffee\app\store\Place.coffee" />
     <None Include="Scripts\Coffee\app\store\Theme.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseEntity.coffee" />
@@ -1530,8 +1532,6 @@
     <None Include="Scripts\Coffee\TNRIS\theme\InteractiveTheme.coffee" />
     <None Include="Scripts\Coffee\TNRIS\theme\ProposedReservoirsTheme.coffee" />
     <None Include="Scripts\Coffee\TNRIS\theme\WaterUsageTheme.coffee" />
-    <None Include="Scripts\interactive_water_plan.sublime-project" />
-    <None Include="Scripts\interactive_water_plan.sublime-workspace" />
     <Content Include="Views\Home\Viewer.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
