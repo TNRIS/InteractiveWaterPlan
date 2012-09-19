@@ -60,11 +60,10 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                                         maxScaleDenominator: 866688,
                                         symbolizer: {
                                             fontSize: "10px"
-                                            labelAlign: 'lb'
+                                            labelAlign: 'cb'
                                             labelOutlineColor: "white"
                                             labelOutlineWidth: 2
-                                            labelXOffset: 3
-                                            labelYOffset: 5
+                                            labelYOffset: 6
                                             label: "${label}"
                                         }        
                                     })
