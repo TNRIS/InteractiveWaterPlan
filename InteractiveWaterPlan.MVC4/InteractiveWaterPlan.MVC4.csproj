@@ -1475,6 +1475,7 @@
     <Content Include="Scripts\Compiled\app\model\WaterUseEntity.js" />
     <Content Include="Scripts\Compiled\app\store\Entity.js" />
     <Content Include="Scripts\Compiled\app\store\Place.js" />
+    <Content Include="Scripts\Compiled\app\store\PlaceFeature.js" />
     <Content Include="Scripts\Compiled\app\store\Theme.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseEntity.js" />
@@ -1518,6 +1519,7 @@
     <None Include="Scripts\Coffee\app\model\WaterUseEntity.coffee" />
     <None Include="Scripts\Coffee\app\store\Entity.coffee" />
     <None Include="Scripts\Coffee\app\store\Place.coffee" />
+    <None Include="Scripts\Coffee\app\store\PlaceFeature.coffee" />
     <None Include="Scripts\Coffee\app\store\Theme.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseEntity.coffee" />

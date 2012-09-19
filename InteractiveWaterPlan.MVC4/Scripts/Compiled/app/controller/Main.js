@@ -3,7 +3,7 @@
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
   views: ['chart.WaterUseChart', 'data.MainPanel', 'map.MapComponent', 'map.ThemeYearMapPanel'],
-  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place'],
+  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature'],
   refs: [
     {
       ref: 'mainPanel',
@@ -68,6 +68,34 @@ Ext.define('ISWP.controller.Main', {
       '#resetExtentButton': {
         click: function(btn, evt) {
           this.getMapComponent().resetExtent();
+          return null;
+        }
+      },
+      '#placeCombo': {
+        select: function(combo, records) {
+          var selectedPlace;
+          if (records.length !== 1) {
+            return null;
+          }
+          selectedPlace = records[0].data;
+          this.getPlaceFeatureStore().load({
+            params: {
+              placeId: selectedPlace.SqlId
+            },
+            scope: this,
+            callback: function(records, operation, success) {
+              var bounds, placeFeature, wktFormat;
+              if (!(success && records.length === 1)) {
+                return null;
+              }
+              wktFormat = new OpenLayers.Format.WKT();
+              placeFeature = wktFormat.read(records[0].data.WKTGeog);
+              bounds = placeFeature.geometry.getBounds();
+              bounds = this.getMapComponent().transformToWebMerc(bounds);
+              this.getMapComponent().zoomToExtent(bounds);
+              return null;
+            }
+          });
           return null;
         }
       },

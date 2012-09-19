@@ -66,5 +66,12 @@ namespace InteractiveWaterPlan.Data
                 .OrderBy(pc => pc.Id);
         }
 
+        public PlaceFeature GetPlaceFeature(int placeId)
+        {
+            return Session.GetNamedQuery("GetPlaceFeature")
+                .SetParameter("var_PlaceID", placeId)
+                .UniqueResult<PlaceFeature>();
+        }
+
     }
 }

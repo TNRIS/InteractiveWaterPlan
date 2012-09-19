@@ -77,6 +77,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
 
                 {
                     xtype: 'combobox'
+                    id: 'placeCombo'
                     typeAhead: true
                     store: 'Place'
                     queryMode: 'remote'

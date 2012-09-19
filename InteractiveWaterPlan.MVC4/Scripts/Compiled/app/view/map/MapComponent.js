@@ -15,7 +15,6 @@ Ext.define('ISWP.view.map.MapComponent', {
   origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:3857")),
   origZoom: 6,
   handleMapEvent: function(evt) {
-    console.log("Zoom, SCALE", this.getZoom(), this.getScale());
     return null;
   },
   initializeMap: function() {
@@ -63,18 +62,25 @@ Ext.define('ISWP.view.map.MapComponent', {
     this.map.addControl(new OpenLayers.Control.LayerSwitcher());
     return this.map;
   },
+  zoomToExtent: function(extent) {
+    this.map.zoomToExtent(extent);
+    return null;
+  },
   resetExtent: function() {
-    return this.map.setCenter(this.origCenter, this.origZoom);
+    this.map.setCenter(this.origCenter, this.origZoom);
+    return null;
+  },
+  transformToWebMerc: function(geography) {
+    return geography.transform(this.map.displayProjection, this.map.projection);
   },
   removePopupsFromMap: function() {
-    var p, _i, _len, _ref, _results;
+    var p, _i, _len, _ref;
     _ref = this.map.popups;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       p = _ref[_i];
-      _results.push(this.map.removePopup(p));
+      this.map.removePopup(p);
     }
-    return _results;
+    return null;
   },
   removeLayersFromMap: function(layers) {
     var layer, map_lyr, _i, _j, _len, _len1, _ref;

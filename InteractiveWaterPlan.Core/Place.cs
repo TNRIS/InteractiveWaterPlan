@@ -13,9 +13,9 @@ namespace InteractiveWaterPlan.Core
         public virtual string Name { get; set; }
     }
 
-    public class PlaceFeature : AbstractFeature
+    public class PlaceFeature //TODO: extend AbstractFeature
     {
-        //TODO: Hibernate mapping for related stored procedure
+        public virtual string WKTGeog { get; set; }
     }
 
     public class PlaceCategory

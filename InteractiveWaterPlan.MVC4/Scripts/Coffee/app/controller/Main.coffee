@@ -15,6 +15,7 @@ Ext.define('ISWP.controller.Main', {
         'WaterUseEntity'
         'Entity'
         'Place'
+        'PlaceFeature'
     ]
 
     refs: [
@@ -78,7 +79,7 @@ Ext.define('ISWP.controller.Main', {
                             Year: btn.year
                             LocationType: 'State'
                             LocationName: 'Texas'
-                        })
+                    })
 
                     #Reload the theme with the new year
                     this.interactiveTheme.updateYear(btn.year)
@@ -97,6 +98,36 @@ Ext.define('ISWP.controller.Main', {
             '#resetExtentButton':
                 click: (btn, evt) ->
                     this.getMapComponent().resetExtent()
+                    return null
+
+            '#placeCombo':
+                select: (combo, records) ->
+                    unless records.length == 1 then return null
+
+                    selectedPlace = records[0].data
+
+                    #Use the selectedPlace.SqlId as a parameter to 
+                    # the PlaceFeature store
+                    this.getPlaceFeatureStore().load({
+                        params:
+                            placeId: selectedPlace.SqlId
+                        scope: this
+                        callback: (records, operation, success) ->
+                            unless success and records.length == 1 then return null
+                                
+                            wktFormat = new OpenLayers.Format.WKT()
+                            placeFeature = wktFormat.read(records[0].data.WKTGeog)
+
+                            bounds = placeFeature.geometry.getBounds()
+                            
+                            #convert the bounds to web mercator
+                            bounds = this.getMapComponent().transformToWebMerc(bounds)
+
+                            this.getMapComponent().zoomToExtent(bounds)
+
+                            return null       
+                    })
+
                     return null
 
             '#mainChart':

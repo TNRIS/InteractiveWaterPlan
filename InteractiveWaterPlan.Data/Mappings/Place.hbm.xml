@@ -15,15 +15,13 @@
     <property column="PlaceName_Category_Name" name="Name" />
   </class>
 
-  <!-- TODO: PlaceFeature 
   <class name="PlaceFeature" mutable="false">
-    <id name="SqlId">
-      <column name="SQL_ID"/>
+    <id name="WKTGeog"> <!-- TODO: Use the id field as the id (once it is returned by the stored procedure) -->
+      <column name="PlaceName_Geog" />
     </id>
-    
-    <property column="PlaceName" name="Name" />
-    <property column="PlaceName_Geog" name="WKTGeog" />
-  </class>-->
+  </class>
+  
+  <!-- Queries -->
   
   <sql-query name="GetPlacesByCategory">
     <return class="Place"/>
@@ -38,6 +36,11 @@
   <sql-query name="GetPlacesByNamePart">
     <return class="Place"/>
     exec dbo.usp_Select_AutoComplete_tbl_GEMSS_Vector_PlaceNames :var_NamePart
+  </sql-query>
+
+  <sql-query name="GetPlaceFeature">
+    <return class="PlaceFeature" />
+    exec dbo.usp_Select_GEOG_by_PlaceID_tbl_GEMSS_Vector_PlaceNames :var_PlaceID
   </sql-query>
   
 </hibernate-mapping>

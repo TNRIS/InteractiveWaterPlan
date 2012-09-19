@@ -14,6 +14,12 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Place", action = "GetAllPlaceCategories" }
             );
 
+            config.Routes.MapHttpRoute(
+                "GetPlaceFeatureRoute",
+                "api/place/feature",
+                new { controller = "Place", action = "GetPlaceFeature" }
+            );
+
             #endregion
 
 

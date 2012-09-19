@@ -28,8 +28,7 @@ Ext.define('ISWP.view.map.MapComponent', {
     origZoom: 6
 
     handleMapEvent: (evt) ->
-        console.log("Zoom, SCALE", this.getZoom(), this.getScale())
-
+        
         return null
 
     initializeMap: () ->
@@ -112,13 +111,22 @@ Ext.define('ISWP.view.map.MapComponent', {
         #return a reference to the map
         return this.map
 
+    zoomToExtent: (extent) ->
+        this.map.zoomToExtent(extent)
+        return null
+
     resetExtent: () ->
         this.map.setCenter(
             this.origCenter, 
             this.origZoom)
+        return null
+
+    transformToWebMerc: (geography) ->
+        return geography.transform(this.map.displayProjection, this.map.projection)
 
     removePopupsFromMap: () ->
         this.map.removePopup(p) for p in this.map.popups
+        return null
 
     removeLayersFromMap: (layers) ->
         for layer in layers
