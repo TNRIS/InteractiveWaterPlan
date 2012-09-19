@@ -137,7 +137,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         #TODO: define an Ext Template or XTemplate for updating the main content area
         this.contentPanel.update("<h3>#{this.curr_reservoir.Name}: #{year}</h3>")
 
-        
         this.dataStore.load({
             params:
                 Year: year
