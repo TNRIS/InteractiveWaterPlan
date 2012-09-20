@@ -100,14 +100,10 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         });
         wktFormat = new OpenLayers.Format.WKT();
         res_features = [];
-        console.log(records);
         for (_i = 0, _len = records.length; _i < _len; _i++) {
           rec = records[_i];
           data = rec.data;
           new_feat = wktFormat.read(data.WKTGeog);
-          if (data.Name === "Lake Ralph Hall") {
-            console.log("RALPH:", new_feat);
-          }
           if (new_feat.geometry == null) {
             continue;
           }

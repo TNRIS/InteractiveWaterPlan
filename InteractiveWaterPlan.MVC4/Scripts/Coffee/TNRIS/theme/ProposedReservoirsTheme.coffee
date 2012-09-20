@@ -110,14 +110,12 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
                 wktFormat = new OpenLayers.Format.WKT()
                 res_features = []
-                console.log(records)
+                
                 for rec in records
                     data = rec.data
                     new_feat = wktFormat.read(data.WKTGeog)
 
-                    if data.Name == "Lake Ralph Hall"
-                        console.log("RALPH:", new_feat)
-
+                    #TODO: This is in here because of the GeometryCollection issue with Ralph Hall and Turkey Peak
                     unless new_feat.geometry? then continue
 
                     this.mapComp.transformToWebMerc(new_feat.geometry)
