@@ -16,6 +16,7 @@ Ext.define('ISWP.controller.Main', {
         'Entity'
         'Place'
         'PlaceFeature'
+        'ReservoirFeature'
     ]
 
     refs: [
@@ -100,7 +101,14 @@ Ext.define('ISWP.controller.Main', {
                     this.getMapComponent().resetExtent()
                     return null
 
+            '#clearPlaceButton':
+                click: (btn, evt) ->
+                    this.getMapComponent().clearPlaceLayer()
+                    return null
+
             '#placeCombo':
+                
+
                 select: (combo, records) ->
                     unless records.length == 1 then return null
 
@@ -115,15 +123,19 @@ Ext.define('ISWP.controller.Main', {
                         callback: (records, operation, success) ->
                             unless success and records.length == 1 then return null
                                 
+                            mapComp = this.getMapComponent()
+
                             wktFormat = new OpenLayers.Format.WKT()
                             placeFeature = wktFormat.read(records[0].data.WKTGeog)
+                            
+                            #convert geometry to web mercator
+                            mapComp.transformToWebMerc(placeFeature.geometry)
 
                             bounds = placeFeature.geometry.getBounds()
                             
-                            #convert the bounds to web mercator
-                            bounds = this.getMapComponent().transformToWebMerc(bounds)
+                            mapComp.zoomToExtent(bounds)
 
-                            this.getMapComponent().zoomToExtent(bounds)
+                            mapComp.addPlaceLayer(selectedPlace.Name, placeFeature)
 
                             return null       
                     })
@@ -164,6 +176,8 @@ Ext.define('ISWP.controller.Main', {
                 themeName: themeName
                 dataStore: this.getWaterUseEntityStore()
                 contentPanel: this.getMainContent()
+
+                reservoirStore: this.getReservoirFeatureStore()
             })
 
         this.interactiveTheme.loadTheme()

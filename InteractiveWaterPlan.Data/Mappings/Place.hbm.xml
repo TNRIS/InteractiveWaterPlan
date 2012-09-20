@@ -6,6 +6,8 @@
       <column name="SQL_ID"/>
     </id>
     <property column="PlaceName" name="Name" />
+    <!-- TODO: Include this once all stored procs return it <property column="PlaceName_Category_ID" name="CategoryId" /> -->
+    <property column="PlaceName_Category_Name" name="CategoryName" />
   </class>
 
   <class name="PlaceCategory" mutable="false">
@@ -16,9 +18,11 @@
   </class>
 
   <class name="PlaceFeature" mutable="false">
-    <id name="WKTGeog"> <!-- TODO: Use the id field as the id (once it is returned by the stored procedure) -->
-      <column name="PlaceName_Geog" />
+    <id name="SqlId">
+      <column name="SQL_ID" />
     </id>
+    <property column="PlaceName_Geog" name="WKTGeog" />
+    <property column="PlaceName" name="Name" />
   </class>
   
   <!-- Queries -->

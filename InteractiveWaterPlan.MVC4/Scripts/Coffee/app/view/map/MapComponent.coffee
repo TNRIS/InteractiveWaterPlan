@@ -9,6 +9,7 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     map: null
     vectorLayer: null
+    placeLayer: null
 
     #TODO: read this from app config
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
@@ -95,6 +96,11 @@ Ext.define('ISWP.view.map.MapComponent', {
 
         )
 
+        arclayer = new OpenLayers.Layer.ArcGIS93Rest( "ArcGIS Server Layer",
+                    "http://services.tnris.org/ArcGIS/rest/services/TWDB_StateWaterPlan/MapServer/export", 
+                    {layers: "show:1,2"});
+       
+
         this.map = new OpenLayers.Map(
             div: this.id,
             projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
@@ -121,8 +127,8 @@ Ext.define('ISWP.view.map.MapComponent', {
             this.origZoom)
         return null
 
-    transformToWebMerc: (geography) ->
-        return geography.transform(this.map.displayProjection, this.map.projection)
+    transformToWebMerc: (geometry) ->
+        return geometry.transform(this.map.displayProjection, this.map.projection)
 
     removePopupsFromMap: () ->
         this.map.removePopup(p) for p in this.map.popups
@@ -152,18 +158,33 @@ Ext.define('ISWP.view.map.MapComponent', {
 
         return null
 
+    addPlaceLayer: (placeName, placeFeature) ->
+        this.clearPlaceLayer()
+
+        this.placeLayer = new OpenLayers.Layer.Vector(
+            placeName 
+            #TODO: styleMap
+        )
+
+        this.placeLayer.addFeatures(placeFeature)
+        this.map.addLayer(this.placeLayer)
+
+    clearPlaceLayer: () ->
+        this.placeLayer.destroy() if this.placeLayer?
+        return null
+
     removeFeatureControl: () ->
         if this.featureControl?
             this.featureControl.destroy()
             this.map.removeControl(this.featureControl)
 
-    setupFeatureControl: (layers) ->
+    setupFeatureControl: (layers, serviceUrl) ->
         #remove the old featureControl
         this.removeFeatureControl()
 
         info = new OpenLayers.Control.GetFeature({
             layers: layers
-            serviceUrl: 'api/feature/reservoir/proposed'
+            serviceUrl: serviceUrl
             title: 'Identify Features by Clicking'
             queryVisible: true
             maxFeatures: 1
@@ -179,7 +200,6 @@ Ext.define('ISWP.view.map.MapComponent', {
             }
         })
 
-       
         this.map.addControl(info)
         info.activate()
         this.featureControl = info

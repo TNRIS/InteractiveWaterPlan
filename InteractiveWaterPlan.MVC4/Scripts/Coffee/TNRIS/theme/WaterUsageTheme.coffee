@@ -36,6 +36,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         this.dataStore.load({
             scope: this
             callback: (records, operation, success) ->
+                unless success then return false
 
                 #create a new vector layer
                 this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(
@@ -128,5 +129,8 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                 return null
         })
 
+        return null
+
+    unloadTheme: () ->
         return null
 })

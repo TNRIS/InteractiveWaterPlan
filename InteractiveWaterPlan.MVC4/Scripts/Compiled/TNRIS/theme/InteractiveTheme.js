@@ -15,6 +15,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
   mapComp: null,
   contentPanel: null,
   loadTheme: null,
+  unloadTheme: null,
   constructor: function(config) {
     this.mixins.observable.constructor.call(this, config);
     this.addEvents('beforethemeload', 'themeload', 'beforethemeunload', 'themeunload');
@@ -28,6 +29,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
       return true;
     });
     this.contentPanel.update("");
+    this.unloadTheme();
     this.fireEvent("themeunload");
     return null;
   },

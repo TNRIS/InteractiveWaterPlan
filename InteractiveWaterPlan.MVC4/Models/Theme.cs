@@ -8,6 +8,7 @@ namespace InteractiveWaterPlan.MVC4.Models
     {
         public string Name { get; set; }
         public IList<BaseLayerInfo> Layers { get; set; }
+        public string ServiceUrl { get; set; }
 
         public Theme(string Name)
         {

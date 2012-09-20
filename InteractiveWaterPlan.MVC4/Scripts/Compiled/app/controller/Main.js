@@ -3,7 +3,7 @@
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
   views: ['chart.WaterUseChart', 'data.MainPanel', 'map.MapComponent', 'map.ThemeYearMapPanel'],
-  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature'],
+  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature'],
   refs: [
     {
       ref: 'mainPanel',
@@ -71,6 +71,12 @@ Ext.define('ISWP.controller.Main', {
           return null;
         }
       },
+      '#clearPlaceButton': {
+        click: function(btn, evt) {
+          this.getMapComponent().clearPlaceLayer();
+          return null;
+        }
+      },
       '#placeCombo': {
         select: function(combo, records) {
           var selectedPlace;
@@ -84,15 +90,17 @@ Ext.define('ISWP.controller.Main', {
             },
             scope: this,
             callback: function(records, operation, success) {
-              var bounds, placeFeature, wktFormat;
+              var bounds, mapComp, placeFeature, wktFormat;
               if (!(success && records.length === 1)) {
                 return null;
               }
+              mapComp = this.getMapComponent();
               wktFormat = new OpenLayers.Format.WKT();
               placeFeature = wktFormat.read(records[0].data.WKTGeog);
+              mapComp.transformToWebMerc(placeFeature.geometry);
               bounds = placeFeature.geometry.getBounds();
-              bounds = this.getMapComponent().transformToWebMerc(bounds);
-              this.getMapComponent().zoomToExtent(bounds);
+              mapComp.zoomToExtent(bounds);
+              mapComp.addPlaceLayer(selectedPlace.Name, placeFeature);
               return null;
             }
           });
@@ -132,7 +140,8 @@ Ext.define('ISWP.controller.Main', {
         themeStore: this.getThemeStore(),
         themeName: themeName,
         dataStore: this.getWaterUseEntityStore(),
-        contentPanel: this.getMainContent()
+        contentPanel: this.getMainContent(),
+        reservoirStore: this.getReservoirFeatureStore()
       });
     }
     this.interactiveTheme.loadTheme();

@@ -47,7 +47,7 @@ namespace InteractiveWaterPlan.Data
         /// Returns a list of all DB12 Entities.
         /// </summary>
         /// <returns></returns>
-        public IList<Entity> GetAllEntities()
+        public IEnumerable<Entity> GetAllEntities()
         {
             return Session.GetNamedQuery("GetAllEntities")
                 .List<Entity>();
@@ -58,7 +58,7 @@ namespace InteractiveWaterPlan.Data
         /// </summary>
         /// <param name="poly"></param>
         /// <returns></returns>
-        public IList<Entity> GetEntitiesInGeography(SqlGeography poly)
+        public IEnumerable<Entity> GetEntitiesInGeography(SqlGeography poly)
         {
             return Session.GetNamedQuery("GetEntitiesInGeography")
                 .SetParameter("var_SelectPoly", poly)
@@ -79,26 +79,40 @@ namespace InteractiveWaterPlan.Data
 
             var bufferGeogPoly = clickedGeogPoint.STBuffer(
                 _pixelBufferTable.GetBufferRadius(zoomLevel));
-            
-            return Session.GetNamedQuery("GetReservoirInBufferedPoint")
+
+            var res = Session.GetNamedQuery("GetReservoirInBufferedPoint")
                 .SetParameter("var_PointGeog", clickedGeogPoint, new NHibernate.Spatial.Type.SqlGeographyType())
                 .SetParameter("var_BufferPoly", bufferGeogPoly, new NHibernate.Spatial.Type.SqlGeographyType())
                 .UniqueResult<Reservoir>();
+
+            //Reduce the geometry
+            if (res == null) return null;
+            
+            res.WKTGeog = new String(SqlGeography.Parse(res.WKTGeog).Reduce(200).AsTextZM().Value);
+            return res;
+                
         }
 
         /// <summary>
         /// Returns a list of all proposed Reservoirs.
         /// </summary>
         /// <returns></returns>
-        public IList<Reservoir> GetAllProposedReservoirs()
+        public IEnumerable<Reservoir> GetAllProposedReservoirs()
         {
             return Session.GetNamedQuery("GetAllProposedReservoirs")
-                .List<Reservoir>();
+                .List<Reservoir>()
+                .Select(r => 
+                {
+                    //Reduce the geometry
+                    r.WKTGeog = new String(SqlGeography.Parse(r.WKTGeog).Reduce(200).AsTextZM().Value); 
+                    return r; 
+                });
+
         }
 
         //TODO: Make Entity and WaterUseEntity the same.  Will need the stored proc to be updated to 
         // return the same fields/info.
-        public IList<WaterUseEntity> GetEntitiesServedByReservoir(int proposedReservoirId, int year)
+        public IEnumerable<WaterUseEntity> GetEntitiesServedByReservoir(int proposedReservoirId, int year)
         {
             return Session.GetNamedQuery("GetEntitiesForReservoir")
                 .SetParameter("var_DB12_ID", proposedReservoirId)

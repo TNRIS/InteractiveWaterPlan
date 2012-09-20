@@ -2,7 +2,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     
     extend: 'TNRIS.theme.InteractiveTheme'
    
-    #TODO: don't show a popup, instead change the main content area to display the reservoir information
+    #change the main content area to display the reservoir information
 
     #TODO: add a hover to the related feature points to display their info
 
@@ -12,11 +12,17 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     themeName: null
     curr_reservoir: null
 
+    reservoirStore: null
+    reservoirLayer: null
+
+    serviceUrl: 'api/feature/reservoir/proposed'
+
     layerName: 'Planned Reservoir User Entities'
+
     styleMap: new OpenLayers.Style(
         pointRadius: '${getPointRadius}'
         strokeColor: '${getStrokeColor}'
-        strokeWidth: 0.5
+        strokeWidth: '${getStrokeWidth}'
         fillColor: '${getColor}'
         fillOpacity: 0.8
 
@@ -24,13 +30,18 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             context:
                 getColor: (feature) ->
                     switch feature.attributes['type']
-                        when 'reservoir' then return 'blue'
+                        when 'reservoir' then return 'transparent'
                         when 'entity' then return 'green'
                         when 'line' then return 'grey' 
                     return 'red'
+                getStrokeWidth: (feature) ->
+                    if feature.attributes['type'] == 'reservoir'
+                        return 2
+                    return 0.5
+
                 getStrokeColor: (feature) ->
                     switch feature.attributes['type']
-                        when 'reservoir' then return 'cyan'
+                        when 'reservoir' then return 'blue'
                         when 'entity' then return 'lime'
                         when 'line' then return 'lightgrey'  
                     return 'red'
@@ -57,35 +68,106 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         )
 
 
+        this.reservoirStore.load({
+            scope: this
+            callback: (records, operation, success) ->
+                unless success then return false
+
+                this.reservoirLayer = new OpenLayers.Layer.Vector(
+                    "Recommended Reservoirs",
+                    {
+                        styleMap: new OpenLayers.Style(
+                            {
+                                pointRadius: 4
+                                strokeColor: 'blue'
+                                strokeWidth: 0.5
+                                fillColor: 'cyan'
+                                fillOpacity: 0.8
+                            },
+                            {
+                                rules: [
+                                    new OpenLayers.Rule({
+                                        symbolizer: {
+                                            pointRadius: 4,
+                                        }
+                                    }),
+                                    new OpenLayers.Rule({
+                                        maxScaleDenominator: 1866688,
+                                        symbolizer: {
+                                            fontSize: "12px"
+                                            labelAlign: 'cb'
+                                            labelOutlineColor: "white"
+                                            labelOutlineWidth: 2
+                                            labelYOffset: 6
+                                            label: "${label}"
+                                        }        
+                                    })
+                                ]
+                            }
+                        )
+                    }
+                )
+
+                wktFormat = new OpenLayers.Format.WKT()
+                res_features = []
+                console.log(records)
+                for rec in records
+                    data = rec.data
+                    new_feat = wktFormat.read(data.WKTGeog)
+
+                    if data.Name == "Lake Ralph Hall"
+                        console.log("RALPH:", new_feat)
+
+                    unless new_feat.geometry? then continue
+
+                    this.mapComp.transformToWebMerc(new_feat.geometry)
+                    
+                    new_feat.attributes['label'] = data['Name']
+                    res_features.push(new_feat)
+
+                this.reservoirLayer.addFeatures(res_features)
+                map.addLayer(this.reservoirLayer)
+
+                this.mapComp.setupFeatureControl(this.reservoirLayer, this.serviceUrl)
+                
+                return null
+        })
+
+        ###
         this.themeStore.load({
             params:
                 ThemeName: this.themeName
             scope: this #scope the callback to this controller
             callback: (records, operation, success) ->
                 new_layers = []
-                
-                if not success
-                    #TODO display error message
+
+                unless success and records.length == 1
                     return false
 
-                for rec in records
-                    for layer in rec.data.Layers
-                        if layer.ServiceType == "WMS"
-                            new_lyr = new OpenLayers.Layer.WMS(
-                                layer.Name,
-                                layer.Url,
-                                {
-                                    layers: layer.WMSLayerNames
-                                    transparent: true
-                                }
-                            )
-                            new_layers.push(new_lyr)
-                            
+                themeData = records[0].data
+
+                for layer in themeData.Layers
+                    if layer.ServiceType == "WMS"
+                        new_lyr = new OpenLayers.Layer.WMS(
+                            layer.Name,
+                            layer.Url,
+                            {
+                                layers: layer.WMSLayerNames
+                                transparent: true
+                            }
+                        )
+                        new_layers.push(new_lyr)
+                         
                 this.mapComp.addLayersToMap(new_layers)
-                this.mapComp.setupFeatureControl(new_layers)
+                this.mapComp.setupFeatureControl(new_layers, themeData.ServiceUrl)
                 return null
         })
+        ###
 
+        return null
+
+    unloadTheme: () ->
+        this.reservoirLayer.destroy() if this.reservoirLayer?
         return null
 
     updateYear: (year) ->

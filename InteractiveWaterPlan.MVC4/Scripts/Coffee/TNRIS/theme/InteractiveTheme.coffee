@@ -18,6 +18,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     contentPanel: null
 
     loadTheme: null #must define this method
+    unloadTheme: null #must define this method
 
     constructor: (config) ->
         this.mixins.observable.constructor.call(this, config)
@@ -40,6 +41,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
         )
 
         this.contentPanel.update("")
+        this.unloadTheme()
 
         this.fireEvent("themeunload")
         return null

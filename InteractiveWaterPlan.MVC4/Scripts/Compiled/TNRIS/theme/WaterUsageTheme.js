@@ -22,6 +22,9 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
       scope: this,
       callback: function(records, operation, success) {
         var bounds, data, entity_features, new_feat, rec, select, wktFormat, _i, _len;
+        if (!success) {
+          return false;
+        }
         this.mapComp.vectorLayer = new OpenLayers.Layer.Vector("Water Users", {
           styleMap: new OpenLayers.Style({
             pointRadius: 4,
@@ -92,6 +95,9 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         return null;
       }
     });
+    return null;
+  },
+  unloadTheme: function() {
     return null;
   }
 });

@@ -15,11 +15,12 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         /// <returns></returns>
         public Theme GetTheme(string themeName)
         {
-            //TODO: Themes should be described in some external source
-            // and both the JS and the C# code should build components based on this source
+
+            //TODO: We can probably get rid of this controller and stop using these data
+            // in the javascript side.  Everything is handled there currently.
+
             Theme theme = null;
 
-            //TODO: all this should come from DB/NHibernate, not constructed here
             if ("proposed-reservoirs".Equals(themeName, StringComparison.InvariantCultureIgnoreCase))
             {
                 theme = new Theme("Proposed Reservoirs");
@@ -30,6 +31,8 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                         "0,1"
                     )
                 );
+
+                theme.ServiceUrl = "api/feature/reservoir/proposed";
             }
             else if ("water-use".Equals(themeName, StringComparison.InvariantCultureIgnoreCase))
             {

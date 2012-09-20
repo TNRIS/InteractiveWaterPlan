@@ -36,3 +36,34 @@ body
 {
     margin: 0;   
 }
+
+.x-boundlist-item .catName
+{
+    font-size:10px;
+    color: #666;
+}
+
+
+.icon-fullscreen
+{
+    background-position: -456px -144px !important;
+    background-image: url("bootstrap/img/glyphicons-halflings.png");
+    background-repeat: no-repeat !important;
+    margin-top: 1px;
+}
+
+.icon-remove
+{
+    background-position: -312px 0 !important;
+    background-image: url("bootstrap/img/glyphicons-halflings.png");
+    background-repeat: no-repeat !important;
+    margin-top: 1px;
+}
+
+.icon-play
+{
+    background-position: -264px -72px !important;
+    background-image: url("bootstrap/img/glyphicons-halflings.png");
+    background-repeat: no-repeat !important;
+    margin-top: 1px;
+}

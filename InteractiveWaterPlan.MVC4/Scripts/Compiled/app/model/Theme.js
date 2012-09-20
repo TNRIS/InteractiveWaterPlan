@@ -6,6 +6,6 @@ Ext.define('ISWP.model.Theme', {
     'Name', {
       name: 'Layers',
       type: 'LayerInfo'
-    }
+    }, 'ServiceUrl'
   ]
 });

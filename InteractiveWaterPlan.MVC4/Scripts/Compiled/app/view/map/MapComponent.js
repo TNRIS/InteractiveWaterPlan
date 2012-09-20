@@ -8,6 +8,7 @@ Ext.define('ISWP.view.map.MapComponent', {
   alias: 'widget.mapcomponent',
   map: null,
   vectorLayer: null,
+  placeLayer: null,
   bingApiKey: 'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N',
   featureControl: null,
   selectFeatureControlId: null,
@@ -18,7 +19,7 @@ Ext.define('ISWP.view.map.MapComponent', {
     return null;
   },
   initializeMap: function() {
-    var bing_aerial, bing_hybrid, bing_road, esri_gray, mapquest_aerial, mapquest_open;
+    var arclayer, bing_aerial, bing_hybrid, bing_road, esri_gray, mapquest_aerial, mapquest_open;
     mapquest_open = new OpenLayers.Layer.XYZ("MapQuest Open Street", ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"], {
       attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
       transitionEffect: "resize"
@@ -48,6 +49,9 @@ Ext.define('ISWP.view.map.MapComponent', {
     esri_gray = new OpenLayers.Layer.XYZ('ESRI Gray', ['http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'], {
       attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
     });
+    arclayer = new OpenLayers.Layer.ArcGIS93Rest("ArcGIS Server Layer", "http://services.tnris.org/ArcGIS/rest/services/TWDB_StateWaterPlan/MapServer/export", {
+      layers: "show:1,2"
+    });
     this.map = new OpenLayers.Map({
       div: this.id,
       projection: new OpenLayers.Projection("EPSG:3857"),
@@ -70,8 +74,8 @@ Ext.define('ISWP.view.map.MapComponent', {
     this.map.setCenter(this.origCenter, this.origZoom);
     return null;
   },
-  transformToWebMerc: function(geography) {
-    return geography.transform(this.map.displayProjection, this.map.projection);
+  transformToWebMerc: function(geometry) {
+    return geometry.transform(this.map.displayProjection, this.map.projection);
   },
   removePopupsFromMap: function() {
     var p, _i, _len, _ref;
@@ -112,19 +116,31 @@ Ext.define('ISWP.view.map.MapComponent', {
     }
     return null;
   },
+  addPlaceLayer: function(placeName, placeFeature) {
+    this.clearPlaceLayer();
+    this.placeLayer = new OpenLayers.Layer.Vector(placeName);
+    this.placeLayer.addFeatures(placeFeature);
+    return this.map.addLayer(this.placeLayer);
+  },
+  clearPlaceLayer: function() {
+    if (this.placeLayer != null) {
+      this.placeLayer.destroy();
+    }
+    return null;
+  },
   removeFeatureControl: function() {
     if (this.featureControl != null) {
       this.featureControl.destroy();
       return this.map.removeControl(this.featureControl);
     }
   },
-  setupFeatureControl: function(layers) {
+  setupFeatureControl: function(layers, serviceUrl) {
     var info,
       _this = this;
     this.removeFeatureControl();
     info = new OpenLayers.Control.GetFeature({
       layers: layers,
-      serviceUrl: 'api/feature/reservoir/proposed',
+      serviceUrl: serviceUrl,
       title: 'Identify Features by Clicking',
       queryVisible: true,
       maxFeatures: 1,

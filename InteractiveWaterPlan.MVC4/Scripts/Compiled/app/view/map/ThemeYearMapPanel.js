@@ -57,10 +57,16 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           year: 2060,
           allowDepress: false,
           toggleGroup: 'yearButtons'
+        }, {
+          xtype: 'button',
+          text: 'Animate',
+          iconCls: 'icon-play',
+          iconAlign: 'right'
         }, '->', {
           xtype: 'button',
           text: 'Zoom to Texas',
-          id: 'resetExtentButton'
+          id: 'resetExtentButton',
+          iconCls: 'icon-fullscreen'
         }, '-', {
           xtype: 'combobox',
           id: 'placeCombo',
@@ -76,7 +82,17 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           valueField: 'SqlId',
           displayField: 'Name',
           emptyText: 'Go to Location',
-          width: 200
+          width: 240,
+          listConfig: {
+            getInnerTpl: function() {
+              return '<div data-qtip="{Name} ({CategoryName})">{Name} <span class="catName">{CategoryName}</span></div>';
+            }
+          }
+        }, {
+          xtype: 'button',
+          iconCls: 'icon-remove',
+          text: null,
+          id: 'clearPlaceButton'
         }
       ]
     }, {

@@ -67,11 +67,20 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
+                # TODO: animate the proposed reservoirs theme
+                #   Might be better to put this button somewhere else though
+                {
+                    xtype: 'button'
+                    text: 'Animate'
+                    iconCls: 'icon-play'
+                    iconAlign: 'right'
+                }
                 '->' #align the rest to the right
                 {
                     xtype: 'button'
                     text: 'Zoom to Texas'
                     id: 'resetExtentButton'
+                    iconCls: 'icon-fullscreen'
                 }
                 '-' #separator
 
@@ -90,7 +99,17 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     valueField: 'SqlId'
                     displayField: 'Name'
                     emptyText: 'Go to Location'
-                    width: 200
+                    width: 240
+                    listConfig: {
+                        getInnerTpl: () ->
+                            return '<div data-qtip="{Name} ({CategoryName})">{Name} <span class="catName">{CategoryName}</span></div>'
+                    }
+                }
+                {
+                    xtype: 'button'
+                    iconCls: 'icon-remove'
+                    text: null
+                    id: 'clearPlaceButton'
                 }
             ]
         }

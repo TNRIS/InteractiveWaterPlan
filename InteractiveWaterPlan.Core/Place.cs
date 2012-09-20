@@ -11,11 +11,13 @@ namespace InteractiveWaterPlan.Core
     {
         public virtual int SqlId { get; set; }
         public virtual string Name { get; set; }
+        //public virtual int CategoryId { get; set; } TODO: Not all stored procs return this yet
+        public virtual string CategoryName { get; set; }
     }
 
-    public class PlaceFeature //TODO: extend AbstractFeature
+    public class PlaceFeature : AbstractFeature
     {
-        public virtual string WKTGeog { get; set; }
+
     }
 
     public class PlaceCategory
