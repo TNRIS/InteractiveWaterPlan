@@ -20,6 +20,9 @@ Ext.define('ISWP.controller.Main', {
     }, {
       ref: 'mapComponent',
       selector: 'mapcomponent'
+    }, {
+      ref: 'placeCombo',
+      selector: '#placeCombo'
     }
   ],
   selectFeatureControlId: null,
@@ -73,7 +76,8 @@ Ext.define('ISWP.controller.Main', {
       },
       '#clearPlaceButton': {
         click: function(btn, evt) {
-          this.getMapComponent().clearPlaceLayer();
+          this.getPlaceCombo().clearValue();
+          this.getMapComponent().clearPlaceFeature();
           return null;
         }
       },
@@ -100,7 +104,7 @@ Ext.define('ISWP.controller.Main', {
               mapComp.transformToWebMerc(placeFeature.geometry);
               bounds = placeFeature.geometry.getBounds();
               mapComp.zoomToExtent(bounds);
-              mapComp.addPlaceLayer(selectedPlace.Name, placeFeature);
+              mapComp.setPlaceFeature(selectedPlace.Name, placeFeature);
               return null;
             }
           });

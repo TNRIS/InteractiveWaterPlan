@@ -112,6 +112,12 @@ Ext.define('ISWP.view.map.MapComponent', {
                 zoomend: this.handleMapEvent
         )
 
+        this.placeLayer = this.placeLayer = new OpenLayers.Layer.Vector("Place Layer",
+            {
+                displayInLayerSwitcher: false
+            })
+        this.map.addLayer(this.placeLayer)
+
         this.map.addControl(new OpenLayers.Control.LayerSwitcher());
         
         #return a reference to the map
@@ -146,6 +152,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         this.map.addLayers(layers)
         return null
 
+
     clearVectorLayer: () ->
         if this.selectFeatureControlId?
             ctl = this.map.getControl(this.selectFeatureControlId)
@@ -158,19 +165,15 @@ Ext.define('ISWP.view.map.MapComponent', {
 
         return null
 
-    addPlaceLayer: (placeName, placeFeature) ->
-        this.clearPlaceLayer()
-
-        this.placeLayer = new OpenLayers.Layer.Vector(
-            placeName 
-            #TODO: styleMap
-        )
+    setPlaceFeature: (placeName, placeFeature) ->
+        this.clearPlaceFeature()
 
         this.placeLayer.addFeatures(placeFeature)
-        this.map.addLayer(this.placeLayer)
+        
+        return null
 
-    clearPlaceLayer: () ->
-        this.placeLayer.destroy() if this.placeLayer?
+    clearPlaceFeature: () ->
+        this.placeLayer.removeAllFeatures()
         return null
 
     removeFeatureControl: () ->
@@ -203,7 +206,5 @@ Ext.define('ISWP.view.map.MapComponent', {
         this.map.addControl(info)
         info.activate()
         this.featureControl = info
-
-
 
 })

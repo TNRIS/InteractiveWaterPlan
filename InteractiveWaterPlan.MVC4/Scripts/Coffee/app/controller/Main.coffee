@@ -40,6 +40,10 @@ Ext.define('ISWP.controller.Main', {
             ref: 'mapComponent'
             selector: 'mapcomponent'
         }
+        {
+            ref: 'placeCombo'
+            selector: '#placeCombo'
+        }
     ]
 
     selectFeatureControlId: null
@@ -103,12 +107,12 @@ Ext.define('ISWP.controller.Main', {
 
             '#clearPlaceButton':
                 click: (btn, evt) ->
-                    this.getMapComponent().clearPlaceLayer()
+                    this.getPlaceCombo().clearValue()
+                    this.getMapComponent().clearPlaceFeature()
                     return null
 
             '#placeCombo':
                 
-
                 select: (combo, records) ->
                     unless records.length == 1 then return null
 
@@ -135,7 +139,7 @@ Ext.define('ISWP.controller.Main', {
                             
                             mapComp.zoomToExtent(bounds)
 
-                            mapComp.addPlaceLayer(selectedPlace.Name, placeFeature)
+                            mapComp.setPlaceFeature(selectedPlace.Name, placeFeature)
 
                             return null       
                     })

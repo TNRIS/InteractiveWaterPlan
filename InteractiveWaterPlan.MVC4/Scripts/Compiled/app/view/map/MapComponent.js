@@ -63,6 +63,10 @@ Ext.define('ISWP.view.map.MapComponent', {
         zoomend: this.handleMapEvent
       }
     });
+    this.placeLayer = this.placeLayer = new OpenLayers.Layer.Vector("Place Layer", {
+      displayInLayerSwitcher: false
+    });
+    this.map.addLayer(this.placeLayer);
     this.map.addControl(new OpenLayers.Control.LayerSwitcher());
     return this.map;
   },
@@ -116,16 +120,13 @@ Ext.define('ISWP.view.map.MapComponent', {
     }
     return null;
   },
-  addPlaceLayer: function(placeName, placeFeature) {
-    this.clearPlaceLayer();
-    this.placeLayer = new OpenLayers.Layer.Vector(placeName);
+  setPlaceFeature: function(placeName, placeFeature) {
+    this.clearPlaceFeature();
     this.placeLayer.addFeatures(placeFeature);
-    return this.map.addLayer(this.placeLayer);
+    return null;
   },
-  clearPlaceLayer: function() {
-    if (this.placeLayer != null) {
-      this.placeLayer.destroy();
-    }
+  clearPlaceFeature: function() {
+    this.placeLayer.removeAllFeatures();
     return null;
   },
   removeFeatureControl: function() {
