@@ -8,8 +8,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   curr_reservoir: null,
   reservoirStore: null,
   reservoirLayer: null,
+  relatedWUGLayer: null,
   serviceUrl: 'api/feature/reservoir/proposed',
-  layerName: 'Planned Reservoir User Entities',
   styleMap: new OpenLayers.Style({
     pointRadius: '${getPointRadius}',
     strokeColor: '${getStrokeColor}',
@@ -60,9 +60,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   loadTheme: function() {
     var map;
     map = this.mapComp.map;
-    this.mapComp.removePopupsFromMap();
-    this.mapComp.clearVectorLayer();
-    this.mapComp.removeFeatureControl();
     this.contentPanel.update("<h3>Proposed Reservoirs</h3>\n<p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>");
     this.reservoirStore.load({
       scope: this,
@@ -151,8 +148,14 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     return null;
   },
   unloadTheme: function() {
+    this.mapComp.removePopupsFromMap();
+    this.mapComp.removeSelectFeatureControl();
+    this.mapComp.removeFeatureControl();
     if (this.reservoirLayer != null) {
       this.reservoirLayer.destroy();
+    }
+    if (this.relatedWUGLayer != null) {
+      this.relatedWUGLayer.destroy();
     }
     return null;
   },
@@ -171,8 +174,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     var map, res_feat, wktFormat;
     map = this.mapComp.map;
     this.mapComp.removePopupsFromMap();
-    this.mapComp.clearVectorLayer();
-    this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(this.layerName, {
+    this.mapComp.removeSelectFeatureControl();
+    if (this.relatedWUGLayer != null) {
+      this.relatedWUGLayer.destroy();
+    }
+    this.relatedWUGLayer = new OpenLayers.Layer.Vector('Related WUGs', {
       styleMap: this.styleMap
     });
     wktFormat = new OpenLayers.Format.WKT();
@@ -180,8 +186,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     res_feat.geometry.transform(map.displayProjection, map.projection);
     res_feat.data = this.curr_reservoir;
     res_feat.attributes['type'] = 'reservoir';
-    this.mapComp.vectorLayer.addFeatures(res_feat);
-    map.addLayer(this.mapComp.vectorLayer);
+    this.relatedWUGLayer.addFeatures(res_feat);
+    map.addLayer(this.relatedWUGLayer);
     this.contentPanel.update("<h3>" + this.curr_reservoir.Name + ": " + year + "</h3>");
     this.dataStore.load({
       params: {
@@ -227,9 +233,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           }
           related_entity_features.push(new_feat);
         }
-        this.mapComp.vectorLayer.addFeatures(connector_lines);
-        this.mapComp.vectorLayer.addFeatures(related_entity_features);
-        select = new OpenLayers.Control.SelectFeature(this.mapComp.vectorLayer, {
+        this.relatedWUGLayer.addFeatures(connector_lines);
+        this.relatedWUGLayer.addFeatures(related_entity_features);
+        select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
           hover: false,
           onSelect: function(feature) {
             var point, popup, _ref;

@@ -8,7 +8,6 @@ Ext.define('ISWP.view.map.MapComponent', {
     alias: 'widget.mapcomponent'
 
     map: null
-    vectorLayer: null
     placeLayer: null
 
     #TODO: read this from app config
@@ -152,16 +151,12 @@ Ext.define('ISWP.view.map.MapComponent', {
         this.map.addLayers(layers)
         return null
 
-
-    clearVectorLayer: () ->
+    removeSelectFeatureControl: () ->
         if this.selectFeatureControlId?
             ctl = this.map.getControl(this.selectFeatureControlId)
             ctl.destroy()
             this.map.removeControl(ctl)
             this.selectFeatureControlId = null
-
-        #destroy the old vector layer
-        this.vectorLayer.destroy() if this.vectorLayer?
 
         return null
 

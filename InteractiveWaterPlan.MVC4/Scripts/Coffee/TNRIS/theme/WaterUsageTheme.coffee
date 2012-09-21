@@ -2,6 +2,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     
     extend: 'TNRIS.theme.InteractiveTheme'
    
+    WUGLayer: null
 
     showFeatureResult: (features, clickedPoint, year) ->
         popupText = ""
@@ -21,11 +22,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
 
     loadTheme: () ->
         map = this.mapComp.map
-        this.mapComp.removePopupsFromMap()
-        this.mapComp.clearVectorLayer()
-        this.mapComp.removeFeatureControl()
-
-
+        
         this.contentPanel.update(
             """
             <h3>Water Use</h3>
@@ -39,7 +36,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                 unless success then return false
 
                 #create a new vector layer
-                this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(
+                this.WUGLayer = new OpenLayers.Layer.Vector(
                     "Water Users", 
                     {
                         styleMap: new OpenLayers.Style(
@@ -91,12 +88,12 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
 
                     entity_features.push(new_feat)
 
-                this.mapComp.vectorLayer.addFeatures(entity_features)
-                map.addLayer(this.mapComp.vectorLayer)
+                this.WUGLayer.addFeatures(entity_features)
+                map.addLayer(this.WUGLayer)
                 #map.zoomToExtent(bounds)
 
                 #Create a new select feature control and add it to the map.
-                select = new OpenLayers.Control.SelectFeature(this.mapComp.vectorLayer, {
+                select = new OpenLayers.Control.SelectFeature(this.WUGLayer, {
                     hover: false #listen to clicks
                     onSelect: (feature) ->    
                         popup = new OpenLayers.Popup.FramedCloud("featurepopup", 
@@ -132,5 +129,10 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         return null
 
     unloadTheme: () ->
+        this.mapComp.removePopupsFromMap()
+        this.mapComp.removeSelectFeatureControl()
+        this.mapComp.removeFeatureControl()
+
+        this.WUGLayer.destroy() if this.WUGLayer?
         return null
 })

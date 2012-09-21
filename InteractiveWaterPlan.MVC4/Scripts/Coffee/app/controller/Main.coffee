@@ -162,8 +162,8 @@ Ext.define('ISWP.controller.Main', {
         
     loadThemeIntoMap: (themeName) ->
         
-        #First remove all layers that are in the ThemeStore
-        if this.interactiveTheme? then this.interactiveTheme.unload()
+        #First unload the them
+        this.interactiveTheme.unload() if this.interactiveTheme?
         
         if themeName == 'water-use'
             this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({

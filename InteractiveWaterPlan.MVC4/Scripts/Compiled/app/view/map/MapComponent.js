@@ -7,7 +7,6 @@ Ext.define('ISWP.view.map.MapComponent', {
   extend: 'Ext.Component',
   alias: 'widget.mapcomponent',
   map: null,
-  vectorLayer: null,
   placeLayer: null,
   bingApiKey: 'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N',
   featureControl: null,
@@ -107,16 +106,13 @@ Ext.define('ISWP.view.map.MapComponent', {
     this.map.addLayers(layers);
     return null;
   },
-  clearVectorLayer: function() {
+  removeSelectFeatureControl: function() {
     var ctl;
     if (this.selectFeatureControlId != null) {
       ctl = this.map.getControl(this.selectFeatureControlId);
       ctl.destroy();
       this.map.removeControl(ctl);
       this.selectFeatureControlId = null;
-    }
-    if (this.vectorLayer != null) {
-      this.vectorLayer.destroy();
     }
     return null;
   },

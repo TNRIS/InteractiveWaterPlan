@@ -2,6 +2,7 @@
 
 Ext.define('TNRIS.theme.WaterUsageTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
+  WUGLayer: null,
   showFeatureResult: function(features, clickedPoint, year) {
     var popupText, prop;
     popupText = "";
@@ -14,9 +15,6 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
   loadTheme: function() {
     var map;
     map = this.mapComp.map;
-    this.mapComp.removePopupsFromMap();
-    this.mapComp.clearVectorLayer();
-    this.mapComp.removeFeatureControl();
     this.contentPanel.update("<h3>Water Use</h3>\n<p>Click on a dot to view the information for that water user group.</p>");
     this.dataStore.load({
       scope: this,
@@ -25,7 +23,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         if (!success) {
           return false;
         }
-        this.mapComp.vectorLayer = new OpenLayers.Layer.Vector("Water Users", {
+        this.WUGLayer = new OpenLayers.Layer.Vector("Water Users", {
           styleMap: new OpenLayers.Style({
             pointRadius: 4,
             strokeColor: 'cyan',
@@ -69,9 +67,9 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
           }
           entity_features.push(new_feat);
         }
-        this.mapComp.vectorLayer.addFeatures(entity_features);
-        map.addLayer(this.mapComp.vectorLayer);
-        select = new OpenLayers.Control.SelectFeature(this.mapComp.vectorLayer, {
+        this.WUGLayer.addFeatures(entity_features);
+        map.addLayer(this.WUGLayer);
+        select = new OpenLayers.Control.SelectFeature(this.WUGLayer, {
           hover: false,
           onSelect: function(feature) {
             var popup;
@@ -98,6 +96,12 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     return null;
   },
   unloadTheme: function() {
+    this.mapComp.removePopupsFromMap();
+    this.mapComp.removeSelectFeatureControl();
+    this.mapComp.removeFeatureControl();
+    if (this.WUGLayer != null) {
+      this.WUGLayer.destroy();
+    }
     return null;
   }
 });

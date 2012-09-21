@@ -15,9 +15,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     reservoirStore: null
     reservoirLayer: null
 
-    serviceUrl: 'api/feature/reservoir/proposed'
+    relatedWUGLayer: null
 
-    layerName: 'Planned Reservoir User Entities'
+    serviceUrl: 'api/feature/reservoir/proposed'
 
     styleMap: new OpenLayers.Style(
         pointRadius: '${getPointRadius}'
@@ -56,9 +56,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     loadTheme: () ->
         map = this.mapComp.map
-        this.mapComp.removePopupsFromMap()
-        this.mapComp.clearVectorLayer()
-        this.mapComp.removeFeatureControl()
+        
 
         this.contentPanel.update(
             """
@@ -165,7 +163,12 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return null
 
     unloadTheme: () ->
+        this.mapComp.removePopupsFromMap()
+        this.mapComp.removeSelectFeatureControl()
+        this.mapComp.removeFeatureControl()
+
         this.reservoirLayer.destroy() if this.reservoirLayer?
+        this.relatedWUGLayer.destroy() if this.relatedWUGLayer?
         return null
 
     updateYear: (year) ->
@@ -190,11 +193,12 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.mapComp.removePopupsFromMap()
 
         #clear the vector layer and its controls
-        this.mapComp.clearVectorLayer()
-
+        this.mapComp.removeSelectFeatureControl()
+        if this.relatedWUGLayer? then this.relatedWUGLayer.destroy()
+        
         #create a new vector layer
-        this.mapComp.vectorLayer = new OpenLayers.Layer.Vector(
-            this.layerName, 
+        this.relatedWUGLayer = new OpenLayers.Layer.Vector(
+            'Related WUGs', 
             {
                 styleMap: this.styleMap
             }
@@ -209,10 +213,10 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         res_feat.attributes['type'] = 'reservoir'
         
         #add the reservoir feature to the map
-        this.mapComp.vectorLayer.addFeatures(res_feat)
+        this.relatedWUGLayer.addFeatures(res_feat)
 
 
-        map.addLayer(this.mapComp.vectorLayer)
+        map.addLayer(this.relatedWUGLayer)
 
         #TODO: define an Ext Template or XTemplate for updating the main content area
         this.contentPanel.update("<h3>#{this.curr_reservoir.Name}: #{year}</h3>")
@@ -272,14 +276,14 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
                     related_entity_features.push(new_feat)
 
-                this.mapComp.vectorLayer.addFeatures(connector_lines)
-                this.mapComp.vectorLayer.addFeatures(related_entity_features)
+                this.relatedWUGLayer.addFeatures(connector_lines)
+                this.relatedWUGLayer.addFeatures(related_entity_features)
 
                 #map.zoomToExtent(bounds)
 
                 #Create a new select feature control and add it to the map.
                 #Create a new select feature control and add it to the map.
-                select = new OpenLayers.Control.SelectFeature(this.mapComp.vectorLayer, {
+                select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
                     hover: false #listen to clicks, not to hover
                     onSelect: (feature) ->    
                         if not feature.data.Name then return false
