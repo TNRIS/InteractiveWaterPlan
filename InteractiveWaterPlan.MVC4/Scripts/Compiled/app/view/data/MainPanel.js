@@ -16,7 +16,8 @@ Ext.define("ISWP.view.data.MainPanel", {
       flex: 2,
       html: 'Main content for 2010',
       id: 'mainContent',
-      border: false
+      border: false,
+      layout: 'border'
     }
   ]
 });

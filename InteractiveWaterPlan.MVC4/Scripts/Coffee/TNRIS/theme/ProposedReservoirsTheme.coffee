@@ -19,6 +19,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     serviceUrl: 'api/feature/reservoir/proposed'
 
+    grid: null
+
     styleMap: new OpenLayers.Style(
         pointRadius: '${getPointRadius}'
         strokeColor: '${getStrokeColor}'
@@ -56,15 +58,34 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     loadTheme: () ->
         map = this.mapComp.map
-        
 
-        this.contentPanel.update(
-            """
-            <h3>Proposed Reservoirs</h3>
-            <p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>
-            """
-        )
+        headerPanel = Ext.create('Ext.panel.Panel', {
+            region: 'north'
+            height: 50
+            html:   """
+                    <h3>Recommended Reservoirs</h3>
+                    <p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>
+                    """
 
+
+        })
+        this.contentPanel.add(headerPanel)
+
+        #TODO: hook up to 'select' event select the feature for selected reservoir in the grid
+        # and vice versa
+
+        #TODO: Could use a "grouping" grid http://docs.sencha.com/ext-js/4-1/extjs-build/examples/grid/group-summary-grid.js
+        this.grid = Ext.create('Ext.grid.Panel', {
+            store: this.reservoirStore,
+            columns: [
+                {text: "Recommended Reservoir", width: 120, dataIndex: 'Name', sortable: true, hideable: false}
+            ],
+            forceFit: true,
+            autoScroll: true
+            region: 'center'
+        });
+
+        this.contentPanel.add(this.grid)
 
         this.reservoirStore.load({
             scope: this
@@ -138,6 +159,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         this.reservoirLayer.destroy() if this.reservoirLayer?
         this.relatedWUGLayer.destroy() if this.relatedWUGLayer?
+
+        this.contentPanel.removeAll(true)
         return null
 
     updateYear: (year) ->

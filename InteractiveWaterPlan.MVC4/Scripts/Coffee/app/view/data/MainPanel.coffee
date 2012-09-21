@@ -20,6 +20,7 @@ Ext.define("ISWP.view.data.MainPanel", {
             html: 'Main content for 2010'
             id: 'mainContent'
             border: false
+            layout: 'border'
         }
     ]
 

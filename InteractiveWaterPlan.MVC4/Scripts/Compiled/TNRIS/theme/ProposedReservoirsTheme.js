@@ -10,6 +10,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   reservoirLayer: null,
   relatedWUGLayer: null,
   serviceUrl: 'api/feature/reservoir/proposed',
+  grid: null,
   styleMap: new OpenLayers.Style({
     pointRadius: '${getPointRadius}',
     strokeColor: '${getStrokeColor}',
@@ -58,9 +59,30 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     }
   }),
   loadTheme: function() {
-    var map;
+    var headerPanel, map;
     map = this.mapComp.map;
-    this.contentPanel.update("<h3>Proposed Reservoirs</h3>\n<p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>");
+    headerPanel = Ext.create('Ext.panel.Panel', {
+      region: 'north',
+      height: 50,
+      html: "<h3>Recommended Reservoirs</h3>\n<p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>"
+    });
+    this.contentPanel.add(headerPanel);
+    this.grid = Ext.create('Ext.grid.Panel', {
+      store: this.reservoirStore,
+      columns: [
+        {
+          text: "Recommended Reservoir",
+          width: 120,
+          dataIndex: 'Name',
+          sortable: true,
+          hideable: false
+        }
+      ],
+      forceFit: true,
+      autoScroll: true,
+      region: 'center'
+    });
+    this.contentPanel.add(this.grid);
     this.reservoirStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -114,37 +136,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return null;
       }
     });
-    /*
-            this.themeStore.load({
-                params:
-                    ThemeName: this.themeName
-                scope: this #scope the callback to this controller
-                callback: (records, operation, success) ->
-                    new_layers = []
-    
-                    unless success and records.length == 1
-                        return false
-    
-                    themeData = records[0].data
-    
-                    for layer in themeData.Layers
-                        if layer.ServiceType == "WMS"
-                            new_lyr = new OpenLayers.Layer.WMS(
-                                layer.Name,
-                                layer.Url,
-                                {
-                                    layers: layer.WMSLayerNames
-                                    transparent: true
-                                }
-                            )
-                            new_layers.push(new_lyr)
-                             
-                    this.mapComp.addLayersToMap(new_layers)
-                    this.mapComp.setupFeatureControl(new_layers, themeData.ServiceUrl)
-                    return null
-            })
-    */
-
     return null;
   },
   unloadTheme: function() {
@@ -157,6 +148,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     if (this.relatedWUGLayer != null) {
       this.relatedWUGLayer.destroy();
     }
+    this.contentPanel.removeAll(true);
     return null;
   },
   updateYear: function(year) {
