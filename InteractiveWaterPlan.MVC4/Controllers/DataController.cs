@@ -3,6 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Collections.Generic;
+using InteractiveWaterPlan.Core;
 
 
 
@@ -13,7 +15,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
 
         //api/data/wateruse/{LocationType}/{LocationName}/{Year}
-        public object GetWaterUseData(string LocationType, string LocationName, int Year)
+        public IEnumerable<WaterUseData> GetWaterUseData(string LocationType, string LocationName, int Year)
         {
             if (!_validYears.Contains(Year))
             {
@@ -32,69 +34,69 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                 switch (Year)
                 {
                     case 2010:
-                        return new[] 
+                        return new List<WaterUseData> ()
                         {
-                            new { Name="Muncipal", Value=4851201}, 
-                            new { Name="Manufacturing", Value=1727808},
-                            new { Name="Mining", Value=296230},
-                            new { Name="Steam-electric", Value=733179},
-                            new { Name="Livestock", Value=322966},
-                            new { Name="Irrigation", Value=10079215}
+                            new WaterUseData { Name="Muncipal", Value=4851201}, 
+                            new WaterUseData { Name="Manufacturing", Value=1727808},
+                            new WaterUseData { Name="Mining", Value=296230},
+                            new WaterUseData { Name="Steam-electric", Value=733179},
+                            new WaterUseData { Name="Livestock", Value=322966},
+                            new WaterUseData { Name="Irrigation", Value=10079215}
                         };
                         
                     case 2020:
-                        return new[] 
+                        return new List<WaterUseData>()
                         {
-                            new { Name="Muncipal", Value=5580979}, 
-                            new { Name="Manufacturing", Value=2153551},
-                            new { Name="Mining", Value=313327},
-                            new { Name="Steam-electric", Value=1010555},
-                            new { Name="Livestock", Value=336634},
-                            new { Name="Irrigation", Value=9643908}
+                            new WaterUseData { Name="Muncipal", Value=5580979}, 
+                            new WaterUseData { Name="Manufacturing", Value=2153551},
+                            new WaterUseData { Name="Mining", Value=313327},
+                            new WaterUseData { Name="Steam-electric", Value=1010555},
+                            new WaterUseData { Name="Livestock", Value=336634},
+                            new WaterUseData { Name="Irrigation", Value=9643908}
                         };
                         
                     case 2030:
-                        return new[] 
+                        return new List<WaterUseData>() 
                         {
-                            new { Name="Muncipal", Value=6254784}, 
-                            new { Name="Manufacturing", Value=2465789},
-                            new { Name="Mining", Value=296472},
-                            new { Name="Steam-electric", Value=1160401},
-                            new { Name="Livestock", Value=344242},
-                            new { Name="Irrigation", Value=9299464}
+                            new WaterUseData { Name="Muncipal", Value=6254784}, 
+                            new WaterUseData { Name="Manufacturing", Value=2465789},
+                            new WaterUseData { Name="Mining", Value=296472},
+                            new WaterUseData { Name="Steam-electric", Value=1160401},
+                            new WaterUseData { Name="Livestock", Value=344242},
+                            new WaterUseData { Name="Irrigation", Value=9299464}
                         };
                         
                     case 2040:
-                        return new[] 
+                        return new List<WaterUseData>()
                         {
-                            new { Name="Muncipal", Value=6917722}, 
-                            new { Name="Manufacturing", Value=2621183},
-                            new { Name="Mining", Value=285002},
-                            new { Name="Steam-electric", Value=1316577},
-                            new { Name="Livestock", Value=352536},
-                            new { Name="Irrigation", Value=9024866}
+                            new WaterUseData { Name="Muncipal", Value=6917722}, 
+                            new WaterUseData { Name="Manufacturing", Value=2621183},
+                            new WaterUseData { Name="Mining", Value=285002},
+                            new WaterUseData { Name="Steam-electric", Value=1316577},
+                            new WaterUseData { Name="Livestock", Value=352536},
+                            new WaterUseData { Name="Irrigation", Value=9024866}
                         };
                         
                     case 2050:
-                        return new[] 
+                        return new List<WaterUseData>() 
                         {
-                            new { Name="Muncipal", Value=7630808}, 
-                            new { Name="Manufacturing", Value=2755335},
-                            new { Name="Mining", Value=284640},
-                            new { Name="Steam-electric", Value=1460483},
-                            new { Name="Livestock", Value=361701},
-                            new { Name="Irrigation", Value=8697560}
+                            new WaterUseData { Name="Muncipal", Value=7630808}, 
+                            new WaterUseData { Name="Manufacturing", Value=2755335},
+                            new WaterUseData { Name="Mining", Value=284640},
+                            new WaterUseData { Name="Steam-electric", Value=1460483},
+                            new WaterUseData { Name="Livestock", Value=361701},
+                            new WaterUseData { Name="Irrigation", Value=8697560}
                         };
                         
                     case 2060:
-                        return new [] 
+                        return new List<WaterUseData>() 
                         {
-                            new { Name="Muncipal", Value=8414492}, 
-                            new { Name="Manufacturing", Value=2882524},
-                            new { Name="Mining", Value=292294},
-                            new { Name="Steam-electric", Value=1620411},
-                            new { Name="Livestock", Value=371923},
-                            new { Name="Irrigation", Value=8370554}
+                            new WaterUseData { Name="Muncipal", Value=8414492}, 
+                            new WaterUseData { Name="Manufacturing", Value=2882524},
+                            new WaterUseData { Name="Mining", Value=292294},
+                            new WaterUseData { Name="Steam-electric", Value=1620411},
+                            new WaterUseData { Name="Livestock", Value=371923},
+                            new WaterUseData { Name="Irrigation", Value=8370554}
                         };
                         
                     default:
