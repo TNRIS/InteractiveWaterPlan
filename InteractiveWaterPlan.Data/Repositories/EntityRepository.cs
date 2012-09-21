@@ -101,6 +101,7 @@ namespace InteractiveWaterPlan.Data
         {
             return Session.GetNamedQuery("GetAllProposedReservoirs")
                 .List<Reservoir>()
+                .OrderBy(r => r.Name)
                 .Select(r => 
                 {
                     //Reduce the geometry
@@ -117,7 +118,8 @@ namespace InteractiveWaterPlan.Data
             return Session.GetNamedQuery("GetEntitiesForReservoir")
                 .SetParameter("var_DB12_ID", proposedReservoirId)
                 .SetParameter("var_EstYear", year)
-                .List<WaterUseEntity>();
+                .List<WaterUseEntity>()
+                .OrderBy(e => e.Name);
         }
     }
 }
