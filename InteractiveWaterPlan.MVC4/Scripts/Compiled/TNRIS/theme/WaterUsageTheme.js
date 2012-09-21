@@ -3,6 +3,7 @@
 Ext.define('TNRIS.theme.WaterUsageTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
   WUGLayer: null,
+  selectedYear: null,
   showFeatureResult: function(features, clickedPoint, year) {
     var popupText, prop;
     popupText = "";
@@ -98,7 +99,6 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
   unloadTheme: function() {
     this.mapComp.removePopupsFromMap();
     this.mapComp.removeSelectFeatureControl();
-    this.mapComp.removeFeatureControl();
     if (this.WUGLayer != null) {
       this.WUGLayer.destroy();
     }

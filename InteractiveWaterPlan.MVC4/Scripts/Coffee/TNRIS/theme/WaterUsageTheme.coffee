@@ -4,6 +4,8 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
    
     WUGLayer: null
 
+    selectedYear: null
+
     showFeatureResult: (features, clickedPoint, year) ->
         popupText = ""
         popupText += ("#{prop}: #{features[prop]}<br/>") for prop of features
@@ -131,8 +133,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     unloadTheme: () ->
         this.mapComp.removePopupsFromMap()
         this.mapComp.removeSelectFeatureControl()
-        this.mapComp.removeFeatureControl()
-
+        
         this.WUGLayer.destroy() if this.WUGLayer?
         return null
 })

@@ -2,6 +2,7 @@
 
 Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
+  serviceUrl: 'api/feature/reservoir/proposed',
   max_radius: 12,
   min_radius: 4,
   themeName: null,
@@ -9,8 +10,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   reservoirStore: null,
   reservoirLayer: null,
   relatedWUGLayer: null,
-  serviceUrl: 'api/feature/reservoir/proposed',
-  grid: null,
+  gridPanel: null,
+  headerPanel: null,
+  featureControl: null,
   styleMap: new OpenLayers.Style({
     pointRadius: '${getPointRadius}',
     strokeColor: '${getStrokeColor}',
@@ -59,19 +61,20 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     }
   }),
   loadTheme: function() {
-    var headerPanel, map;
+    var map,
+      _this = this;
     map = this.mapComp.map;
-    headerPanel = Ext.create('Ext.panel.Panel', {
+    this.headerPanel = Ext.create('Ext.panel.Panel', {
       region: 'north',
-      height: 50,
-      html: "<h3>Recommended Reservoirs</h3>\n<p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>"
+      height: 60,
+      html: "<h3>Recommended Reservoirs</h3>\n<p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>"
     });
-    this.contentPanel.add(headerPanel);
-    this.grid = Ext.create('Ext.grid.Panel', {
+    this.contentPanel.add(this.headerPanel);
+    this.gridPanel = Ext.create('Ext.grid.Panel', {
       store: this.reservoirStore,
       columns: [
         {
-          text: "Recommended Reservoir",
+          text: "Name",
           width: 120,
           dataIndex: 'Name',
           sortable: true,
@@ -82,7 +85,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       autoScroll: true,
       region: 'center'
     });
-    this.contentPanel.add(this.grid);
+    this.gridPanel.on('itemdblclick', function(grid, record) {
+      _this.curr_reservoir = record.data;
+      return _this._showReservoirAndRelatedEntities();
+    });
+    this.contentPanel.add(this.gridPanel);
     this.reservoirStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -132,7 +139,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         }
         this.reservoirLayer.addFeatures(res_features);
         map.addLayer(this.reservoirLayer);
-        this.mapComp.setupFeatureControl(this.reservoirLayer, this.serviceUrl);
+        this._setupFeatureControl(this.reservoirLayer, this.serviceUrl);
         return null;
       }
     });
@@ -141,7 +148,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   unloadTheme: function() {
     this.mapComp.removePopupsFromMap();
     this.mapComp.removeSelectFeatureControl();
-    this.mapComp.removeFeatureControl();
+    this._removeFeatureControl();
     if (this.reservoirLayer != null) {
       this.reservoirLayer.destroy();
     }
@@ -152,17 +159,53 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     return null;
   },
   updateYear: function(year) {
+    this.selectedYear = year;
     if (this.curr_reservoir != null) {
-      this._showReservoirAndRelatedEntities(year);
+      this._showReservoirAndRelatedEntities();
     }
     return null;
   },
-  showFeatureResult: function(features, clickedPoint, year) {
-    this.curr_reservoir = features[0];
-    this._showReservoirAndRelatedEntities(year);
-    return null;
+  _removeFeatureControl: function() {
+    if (this.featureControl != null) {
+      this.featureControl.destroy();
+      return this.mapComp.map.removeControl(this.featureControl);
+    }
   },
-  _showReservoirAndRelatedEntities: function(year) {
+  _setupFeatureControl: function(layers, serviceUrl) {
+    var info,
+      _this = this;
+    this._removeFeatureControl();
+    info = new OpenLayers.Control.GetFeature({
+      layers: layers,
+      serviceUrl: serviceUrl,
+      title: 'Identify Features by Clicking',
+      queryVisible: true,
+      maxFeatures: 1,
+      eventListeners: {
+        nofeaturefound: function(evt) {
+          _this.mapComp.removePopupsFromMap();
+          return null;
+        },
+        getfeature: function(evt) {
+          var rec, _i, _len, _ref;
+          _this.curr_reservoir = evt.features[0];
+          _ref = _this.gridPanel.getStore().data.items;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            rec = _ref[_i];
+            if (_this.curr_reservoir.Id === rec.data.Id) {
+              _this.gridPanel.getSelectionModel().select(rec);
+            }
+          }
+          _this._showReservoirAndRelatedEntities();
+          return null;
+        }
+      }
+    });
+    this.mapComp.map.addControl(info);
+    info.activate();
+    return this.featureControl = info;
+  },
+  _showReservoirAndRelatedEntities: function() {
     var map, res_feat, wktFormat;
     map = this.mapComp.map;
     this.mapComp.removePopupsFromMap();
@@ -180,10 +223,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     res_feat.attributes['type'] = 'reservoir';
     this.relatedWUGLayer.addFeatures(res_feat);
     map.addLayer(this.relatedWUGLayer);
-    this.contentPanel.update("<h3>" + this.curr_reservoir.Name + ": " + year + "</h3>");
     this.dataStore.load({
       params: {
-        Year: year,
+        Year: this.selectedYear,
         forReservoirId: this.curr_reservoir['Id']
       },
       scope: this,

@@ -171,35 +171,4 @@ Ext.define('ISWP.view.map.MapComponent', {
         this.placeLayer.removeAllFeatures()
         return null
 
-    removeFeatureControl: () ->
-        if this.featureControl?
-            this.featureControl.destroy()
-            this.map.removeControl(this.featureControl)
-
-    setupFeatureControl: (layers, serviceUrl) ->
-        #remove the old featureControl
-        this.removeFeatureControl()
-
-        info = new OpenLayers.Control.GetFeature({
-            layers: layers
-            serviceUrl: serviceUrl
-            title: 'Identify Features by Clicking'
-            queryVisible: true
-            maxFeatures: 1
-            eventListeners: {
-
-                nofeaturefound: (evt) =>
-                    this.fireEvent("nofeaturefound", this, evt)
-                    return null
-
-                getfeature: (evt) =>   
-                    this.fireEvent("getfeature", this, evt)
-                    return null  
-            }
-        })
-
-        this.map.addControl(info)
-        info.activate()
-        this.featureControl = info
-
 })

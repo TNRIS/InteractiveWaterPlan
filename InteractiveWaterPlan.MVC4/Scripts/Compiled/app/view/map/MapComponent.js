@@ -124,36 +124,5 @@ Ext.define('ISWP.view.map.MapComponent', {
   clearPlaceFeature: function() {
     this.placeLayer.removeAllFeatures();
     return null;
-  },
-  removeFeatureControl: function() {
-    if (this.featureControl != null) {
-      this.featureControl.destroy();
-      return this.map.removeControl(this.featureControl);
-    }
-  },
-  setupFeatureControl: function(layers, serviceUrl) {
-    var info,
-      _this = this;
-    this.removeFeatureControl();
-    info = new OpenLayers.Control.GetFeature({
-      layers: layers,
-      serviceUrl: serviceUrl,
-      title: 'Identify Features by Clicking',
-      queryVisible: true,
-      maxFeatures: 1,
-      eventListeners: {
-        nofeaturefound: function(evt) {
-          _this.fireEvent("nofeaturefound", _this, evt);
-          return null;
-        },
-        getfeature: function(evt) {
-          _this.fireEvent("getfeature", _this, evt);
-          return null;
-        }
-      }
-    });
-    this.map.addControl(info);
-    info.activate();
-    return this.featureControl = info;
   }
 });

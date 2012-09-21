@@ -37,14 +37,6 @@ Ext.define('ISWP.controller.Main', {
           this.selectedTheme = this.getThemeYearMapPanel().getSelectedTheme();
           this.loadThemeIntoMap(this.selectedTheme);
           return null;
-        },
-        nofeaturefound: function(mapComp, evt) {
-          mapComp.removePopupsFromMap();
-          return null;
-        },
-        getfeature: function(mapComp, evt) {
-          this.interactiveTheme.showFeatureResult(evt.features, evt.xy, this.selectedYear);
-          return null;
         }
       },
       'button[toggleGroup=yearButtons]': {
@@ -136,6 +128,7 @@ Ext.define('ISWP.controller.Main', {
         themeStore: this.getThemeStore(),
         themeName: themeName,
         dataStore: this.getEntityStore(),
+        selectedYear: this.selectedYear,
         contentPanel: this.getMainContent()
       });
     } else if (themeName === 'proposed-reservoirs') {
@@ -145,6 +138,7 @@ Ext.define('ISWP.controller.Main', {
         themeName: themeName,
         dataStore: this.getWaterUseEntityStore(),
         contentPanel: this.getMainContent(),
+        selectedYear: this.selectedYear,
         reservoirStore: this.getReservoirFeatureStore()
       });
     }

@@ -67,13 +67,7 @@ Ext.define('ISWP.controller.Main', {
                     
                     return null
 
-                nofeaturefound: (mapComp, evt) ->
-                    mapComp.removePopupsFromMap()
-                    return null
 
-                getfeature: (mapComp, evt) ->
-                    this.interactiveTheme.showFeatureResult(evt.features, evt.xy, this.selectedYear)
-                    return null
 
             'button[toggleGroup=yearButtons]':
                 click: (btn, evt) ->
@@ -171,6 +165,7 @@ Ext.define('ISWP.controller.Main', {
                 themeStore: this.getThemeStore()
                 themeName: themeName
                 dataStore: this.getEntityStore()
+                selectedYear: this.selectedYear
                 contentPanel: this.getMainContent()
             })
         else if themeName == 'proposed-reservoirs'
@@ -180,7 +175,7 @@ Ext.define('ISWP.controller.Main', {
                 themeName: themeName
                 dataStore: this.getWaterUseEntityStore()
                 contentPanel: this.getMainContent()
-
+                selectedYear: this.selectedYear
                 reservoirStore: this.getReservoirFeatureStore()
             })
 

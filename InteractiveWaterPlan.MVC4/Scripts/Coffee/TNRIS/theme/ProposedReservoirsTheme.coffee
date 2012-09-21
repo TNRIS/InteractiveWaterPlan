@@ -5,11 +5,13 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     #change the main content area to display the reservoir information
 
     #TODO: add a hover to the related feature points to display their info
-
+    serviceUrl: 'api/feature/reservoir/proposed'
     max_radius: 12
     min_radius: 4
 
     themeName: null
+    
+
     curr_reservoir: null
 
     reservoirStore: null
@@ -17,9 +19,10 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     relatedWUGLayer: null
 
-    serviceUrl: 'api/feature/reservoir/proposed'
+    gridPanel: null
+    headerPanel: null
 
-    grid: null
+    featureControl: null
 
     styleMap: new OpenLayers.Style(
         pointRadius: '${getPointRadius}'
@@ -59,33 +62,37 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     loadTheme: () ->
         map = this.mapComp.map
 
-        headerPanel = Ext.create('Ext.panel.Panel', {
+        this.headerPanel = Ext.create('Ext.panel.Panel', {
             region: 'north'
-            height: 50
+            height: 60
             html:   """
                     <h3>Recommended Reservoirs</h3>
-                    <p>Click on a reservoir to see the water user groups that will benefit from its supply.</p>
+                    <p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>
                     """
-
-
         })
-        this.contentPanel.add(headerPanel)
+        this.contentPanel.add(this.headerPanel)
 
         #TODO: hook up to 'select' event select the feature for selected reservoir in the grid
         # and vice versa
 
         #TODO: Could use a "grouping" grid http://docs.sencha.com/ext-js/4-1/extjs-build/examples/grid/group-summary-grid.js
-        this.grid = Ext.create('Ext.grid.Panel', {
+        this.gridPanel = Ext.create('Ext.grid.Panel', {
             store: this.reservoirStore,
             columns: [
-                {text: "Recommended Reservoir", width: 120, dataIndex: 'Name', sortable: true, hideable: false}
+                {text: "Name", width: 120, dataIndex: 'Name', sortable: true, hideable: false}
             ],
             forceFit: true,
             autoScroll: true
             region: 'center'
         });
 
-        this.contentPanel.add(this.grid)
+        this.gridPanel.on('itemdblclick', (grid, record) =>
+            
+            this.curr_reservoir = record.data
+            this._showReservoirAndRelatedEntities()
+        )
+
+        this.contentPanel.add(this.gridPanel)
 
         this.reservoirStore.load({
             scope: this
@@ -145,7 +152,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                 this.reservoirLayer.addFeatures(res_features)
                 map.addLayer(this.reservoirLayer)
 
-                this.mapComp.setupFeatureControl(this.reservoirLayer, this.serviceUrl)
+                this._setupFeatureControl(this.reservoirLayer, this.serviceUrl)
                 
                 return null
         })
@@ -155,7 +162,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     unloadTheme: () ->
         this.mapComp.removePopupsFromMap()
         this.mapComp.removeSelectFeatureControl()
-        this.mapComp.removeFeatureControl()
+        this._removeFeatureControl()
 
         this.reservoirLayer.destroy() if this.reservoirLayer?
         this.relatedWUGLayer.destroy() if this.relatedWUGLayer?
@@ -164,21 +171,53 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return null
 
     updateYear: (year) ->
+        this.selectedYear = year
+
         if this.curr_reservoir?
-            this._showReservoirAndRelatedEntities(year)
+            this._showReservoirAndRelatedEntities()
         
         return null
 
-    showFeatureResult: (features, clickedPoint, year) ->
-        
-        this.curr_reservoir = features[0]
+    _removeFeatureControl: () ->
+        if this.featureControl?
+            this.featureControl.destroy()
+            this.mapComp.map.removeControl(this.featureControl)
 
-        this._showReservoirAndRelatedEntities(year)
+    _setupFeatureControl: (layers, serviceUrl) ->
+        #remove the old featureControl
+        this._removeFeatureControl()
 
-        return null
+        info = new OpenLayers.Control.GetFeature({
+            layers: layers
+            serviceUrl: serviceUrl
+            title: 'Identify Features by Clicking'
+            queryVisible: true
+            maxFeatures: 1
+            eventListeners: {
 
+                nofeaturefound: (evt) =>
+                    this.mapComp.removePopupsFromMap()
+                    return null
 
-    _showReservoirAndRelatedEntities: (year) ->
+                getfeature: (evt) =>   
+                    this.curr_reservoir = evt.features[0]
+                    
+                    #select the selected reservoir in the gridPanel
+                    for rec in this.gridPanel.getStore().data.items
+                        if this.curr_reservoir.Id == rec.data.Id
+                            this.gridPanel.getSelectionModel().select(rec)
+
+                    this._showReservoirAndRelatedEntities()
+
+                    return null
+            }
+        })
+
+        this.mapComp.map.addControl(info)
+        info.activate()
+        this.featureControl = info
+
+    _showReservoirAndRelatedEntities: () ->
         map = this.mapComp.map
 
         #clear any popups
@@ -210,12 +249,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         map.addLayer(this.relatedWUGLayer)
 
-        #TODO: define an Ext Template or XTemplate for updating the main content area
-        this.contentPanel.update("<h3>#{this.curr_reservoir.Name}: #{year}</h3>")
-
         this.dataStore.load({
             params:
-                Year: year
+                Year: this.selectedYear
                 forReservoirId: this.curr_reservoir['Id']
             
             scope: this
