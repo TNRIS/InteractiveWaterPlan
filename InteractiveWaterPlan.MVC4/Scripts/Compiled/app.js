@@ -12,6 +12,11 @@ try {
   };
 }
 
+Ext.Ajax.defaultHeaders = {
+  'Accept': 'application/json, application/xml',
+  'Content-Type': 'application/json'
+};
+
 Ext.Loader.setConfig({
   enabled: true,
   disableCaching: true

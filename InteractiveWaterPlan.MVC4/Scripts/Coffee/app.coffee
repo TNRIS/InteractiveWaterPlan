@@ -7,6 +7,12 @@ catch e
     console.log = () ->
         return null
 
+#Must set the default headers to application/json so that Firefox will play
+# well with MVC4's WebApi
+Ext.Ajax.defaultHeaders = {
+    'Accept'         : 'application/json, application/xml',
+    'Content-Type'   : 'application/json'
+}
 
 Ext.Loader.setConfig({
 	enabled: true
