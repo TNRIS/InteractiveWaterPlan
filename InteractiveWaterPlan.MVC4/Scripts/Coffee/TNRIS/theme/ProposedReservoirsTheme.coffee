@@ -129,37 +129,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                 return null
         })
 
-        ###
-        this.themeStore.load({
-            params:
-                ThemeName: this.themeName
-            scope: this #scope the callback to this controller
-            callback: (records, operation, success) ->
-                new_layers = []
-
-                unless success and records.length == 1
-                    return false
-
-                themeData = records[0].data
-
-                for layer in themeData.Layers
-                    if layer.ServiceType == "WMS"
-                        new_lyr = new OpenLayers.Layer.WMS(
-                            layer.Name,
-                            layer.Url,
-                            {
-                                layers: layer.WMSLayerNames
-                                transparent: true
-                            }
-                        )
-                        new_layers.push(new_lyr)
-                         
-                this.mapComp.addLayersToMap(new_layers)
-                this.mapComp.setupFeatureControl(new_layers, themeData.ServiceUrl)
-                return null
-        })
-        ###
-
         return null
 
     unloadTheme: () ->
