@@ -24,6 +24,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     featureControl: null
 
+    selectReservoirControl: null
+
     loadTheme: () ->
         map = this.mapComp.map
 
@@ -70,7 +72,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                                 feat = wktFormat.read(rec.data.WKTGeog)
 
                                 unless feat.geometry then return null
-                                
+
                                 #transform to webmerc
                                 this.mapComp.transformToWebMerc(feat.geometry)
 
@@ -82,15 +84,27 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                     ]
                 }
             ],
-            forceFit: true,
+            forceFit: true
             autoScroll: true
             region: 'center'
         });
 
         this.gridPanel.on('itemdblclick', (grid, record) =>
             
-            this.curr_reservoir = record.data
-            this._showReservoirAndRelatedEntities()
+            this.selectReservoirControl.unselectAll()
+
+            #find the matching reservoir in the feature layer
+            for res_feat in this.reservoirLayer.features
+                if record.data.Id == res_feat.data.Id
+                    #found it - set curr_reservoir to the matching feature
+                    this.curr_reservoir = res_feat
+                    break
+
+            #show the related entities
+            this.selectReservoirControl.select(this.curr_reservoir)
+            this._showRelatedEntities()
+
+            return null
         )
 
         this.contentPanel.add(this.gridPanel)
@@ -103,35 +117,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                 this.reservoirLayer = new OpenLayers.Layer.Vector(
                     "Recommended Reservoirs",
                     {
-                        styleMap: new OpenLayers.Style(
-                            {
-                                pointRadius: 4
-                                strokeColor: 'blue'
-                                strokeWidth: 0.5
-                                fillColor: 'cyan'
-                                fillOpacity: 0.8
-                            },
-                            {
-                                rules: [
-                                    new OpenLayers.Rule({
-                                        symbolizer: {
-                                            pointRadius: 4,
-                                        }
-                                    }),
-                                    new OpenLayers.Rule({
-                                        maxScaleDenominator: 1866688,
-                                        symbolizer: {
-                                            fontSize: "12px"
-                                            labelAlign: 'cb'
-                                            labelOutlineColor: "white"
-                                            labelOutlineWidth: 2
-                                            labelYOffset: 6
-                                            label: "${label}"
-                                        }        
-                                    })
-                                ]
-                            }
-                        )
+                        styleMap: this._reservoirStyleMap
                     }
                 )
 
@@ -147,14 +133,18 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
                     this.mapComp.transformToWebMerc(new_feat.geometry)
                     
+                    #remove WKTGeog -- don't need to carry it around since the geometry provides it
+                    delete data.WKTGeog
+
+                    new_feat.data = data
                     new_feat.attributes['label'] = data['Name']
                     res_features.push(new_feat)
 
                 this.reservoirLayer.addFeatures(res_features)
                 map.addLayer(this.reservoirLayer)
 
-                this._setupFeatureControl(this.reservoirLayer, this.serviceUrl)
-                
+                this._setupSelectReservoirControl()
+
                 return null
         })
 
@@ -163,7 +153,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     unloadTheme: () ->
         this.mapComp.removePopupsFromMap()
         this.mapComp.removeSelectFeatureControl()
-        this._removeFeatureControl()
+        this._removeSelectReservoirControl()
 
         this.reservoirLayer.destroy() if this.reservoirLayer?
         this.relatedWUGLayer.destroy() if this.relatedWUGLayer?
@@ -175,125 +165,88 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.selectedYear = year
 
         if this.curr_reservoir?
-            this._showReservoirAndRelatedEntities()
+            this._showRelatedEntities()
         
         return null
 
-    _removeFeatureControl: () ->
-        if this.featureControl?
-            this.featureControl.destroy()
-            this.mapComp.map.removeControl(this.featureControl)
+    _removeSelectReservoirControl: () ->
+        if this.selectReservoirControl?
+            this.selectReservoirControl.destroy()
+            this.mapComp.map.removeControl(this.selectReservoirControl)
 
-    _setupFeatureControl: (layers, serviceUrl) ->
+        return null
+
+    _setupSelectReservoirControl: () ->
         #remove the old featureControl
-        this._removeFeatureControl()
+        this._removeSelectReservoirControl()
 
-        info = new OpenLayers.Control.GetFeature({
-            layers: layers
-            serviceUrl: serviceUrl
-            title: 'Identify Features by Clicking'
-            queryVisible: true
-            maxFeatures: 1
-            eventListeners: {
+        this.selectReservoirControl = new OpenLayers.Control.SelectFeature(this.reservoirLayer, {
+            #clickout: true
+            #highlightOnly: true
+            hover: false
+            
+            onSelect: (feature) =>
+                this.curr_reservoir = feature
+                console.log(feature)
 
-                nofeaturefound: (evt) =>
-                    this.mapComp.removePopupsFromMap()
-                    return null
+                for rec in this.gridPanel.getStore().data.items
+                    if this.curr_reservoir.data.Id == rec.data.Id
+                        this.gridPanel.getSelectionModel().select(rec)
+                        break
 
-                getfeature: (evt) =>   
-                    this.curr_reservoir = evt.features[0]
-                    
-                    #select the selected reservoir in the gridPanel
-                    for rec in this.gridPanel.getStore().data.items
-                        if this.curr_reservoir.Id == rec.data.Id
-                            this.gridPanel.getSelectionModel().select(rec)
+                this._showRelatedEntities()
+                return null
 
-                    this._showReservoirAndRelatedEntities()
+            onUnselect: (feature) =>
+                this._clearRelatedEntities()
+                this.curr_reservoir = null
+                return null
 
-                    return null
-            }
         })
+        this.mapComp.map.addControl(this.selectReservoirControl)
+        this.selectReservoirControl.activate()
 
-        this.mapComp.map.addControl(info)
-        info.activate()
-        this.featureControl = info
+        return null
 
-    _showReservoirAndRelatedEntities: () ->
-        map = this.mapComp.map
-
+    _clearRelatedEntities: () ->
         #clear any popups
         this.mapComp.removePopupsFromMap()
 
         #clear the vector layer and its controls
         this.mapComp.removeSelectFeatureControl()
         if this.relatedWUGLayer? then this.relatedWUGLayer.destroy()
+
+        return null
+
+    _showRelatedEntities: () ->
+        map = this.mapComp.map
         
+        this._clearRelatedEntities()
+
         #create a new vector layer
         this.relatedWUGLayer = new OpenLayers.Layer.Vector(
             'Related WUGs', 
             {
-                styleMap: new OpenLayers.Style(
-                    pointRadius: '${getPointRadius}'
-                    strokeColor: '${getStrokeColor}'
-                    strokeWidth: '${getStrokeWidth}'
-                    fillColor: '${getColor}'
-                    fillOpacity: 0.8
-
-                    {
-                        context:
-                            getColor: (feature) ->
-                                switch feature.attributes['type']
-                                    when 'reservoir' then return 'transparent'
-                                    when 'entity' then return 'green'
-                                    when 'line' then return 'grey' 
-                                return 'red'
-                            getStrokeWidth: (feature) ->
-                                if feature.attributes['type'] == 'reservoir'
-                                    return 2
-                                return 0.5
-
-                            getStrokeColor: (feature) ->
-                                switch feature.attributes['type']
-                                    when 'reservoir' then return 'blue'
-                                    when 'entity' then return 'lime'
-                                    when 'line' then return 'lightgrey'  
-                                return 'red'
-                            getPointRadius: (feature) ->
-                                switch feature.attributes['type']
-                                    when 'reservoir' then return 5
-                                    when 'entity' then return feature.size
-                                return 0
-                    }
-                )
+                styleMap: this._wugStyleMap
             }
         )
 
-        #highlight the reservoir feature
-        wktFormat = new OpenLayers.Format.WKT()
-        res_feat = wktFormat.read(this.curr_reservoir.WKTGeog)
-        res_feat.geometry.transform(map.displayProjection, map.projection)
-        
-        res_feat.data = this.curr_reservoir
-        res_feat.attributes['type'] = 'reservoir'
-        
-        #add the reservoir feature to the map
-        this.relatedWUGLayer.addFeatures(res_feat)
-
         map.addLayer(this.relatedWUGLayer)
-
+        
         this.dataStore.load({
             params:
                 Year: this.selectedYear
-                forReservoirId: this.curr_reservoir['Id']
+                forReservoirId: this.curr_reservoir.data.Id
             
             scope: this
             callback: (records, operation, success) ->
+                
                 if not records? or records.length == 0
                     return null
 
-                bounds = null
                 related_entity_features = []
                 connector_lines = []
+                wktFormat = new OpenLayers.Format.WKT()
 
                 #find the max and min source supply values
                 max_supply = null
@@ -306,6 +259,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         min_supply = rec.data.SourceSupply
 
                 
+                #calculate the centroid - pass true to specify that it is a weighted calculation
+                res_feat_centroid = this.curr_reservoir.geometry.getCentroid(true) 
+                
                 for rec in records
                     data = rec.data
                     new_feat = wktFormat.read(rec.data.WKTGeog)
@@ -317,11 +273,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         max_supply, min_supply, this.max_radius, this.min_radius, 
                         new_feat.data.SourceSupply)
 
-                    #TODO: apply the style here instead of using the stylemap ?
-
-                    #Use the reservoir's centroid the new_feat point to construct a line
-                    res_feat_centroid = res_feat.geometry.getCentroid()
-
+                    
+                    #Use the reservoir's centroid and the new_feat point to construct a line
                     line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
                         new OpenLayers.Geometry.Point(res_feat_centroid.x, res_feat_centroid.y),
                         new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)
@@ -329,19 +282,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                     line.attributes['type'] = 'line'
                     connector_lines.push(line) #TODO: maybe make its own layer and stylemap
 
-                    if not bounds?
-                        bounds = new_feat.geometry.getBounds()
-                    else
-                        bounds.extend(new_feat.geometry.getBounds())
-
                     related_entity_features.push(new_feat)
 
                 this.relatedWUGLayer.addFeatures(connector_lines)
                 this.relatedWUGLayer.addFeatures(related_entity_features)
 
-                #map.zoomToExtent(bounds)
-
-                #Create a new select feature control and add it to the map.
                 #Create a new select feature control and add it to the map.
                 select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
                     hover: false #listen to clicks, not to hover
@@ -393,5 +338,72 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         scaled_val = (scale_max - scale_min)*(val - min)/(max-min) + scale_min
         
         return scaled_val
+
+
+    _reservoirStyleMap:  new OpenLayers.StyleMap(
+        "default" : new OpenLayers.Style(
+            pointRadius: 4
+            strokeColor: 'blue'
+            strokeWidth: 0.5
+            fillColor: 'cyan'
+            fillOpacity: 0.8
+            {
+                rules: [
+                    new OpenLayers.Rule({
+                        symbolizer: {
+                            pointRadius: 4,
+                        }
+                    }),
+                    new OpenLayers.Rule({
+                        maxScaleDenominator: 1866688,
+                        symbolizer:
+                            fontSize: "12px"
+                            labelAlign: 'cb'
+                            labelOutlineColor: "white"
+                            labelOutlineWidth: 2
+                            labelYOffset: 6
+                            label: "${label}"
+                    })
+                ]
+            }
+        )
+        "select" : new OpenLayers.Style(
+            pointRadius: 5
+            strokeColor: 'blue'
+            strokeWidth: 2
+        )
+    )
+       
+    _wugStyleMap: new OpenLayers.Style(
+        pointRadius: '${getPointRadius}'
+        strokeColor: '${getStrokeColor}'
+        strokeWidth: '${getStrokeWidth}'
+        fillColor: '${getColor}'
+        fillOpacity: 0.8
+        {
+            context:
+                getColor: (feature) ->
+                    switch feature.attributes['type']
+                        when 'reservoir' then return 'transparent'
+                        when 'entity' then return 'green'
+                        when 'line' then return 'grey' 
+                    return 'red'
+                getStrokeWidth: (feature) ->
+                    if feature.attributes['type'] == 'reservoir'
+                        return 2
+                    return 0.5
+
+                getStrokeColor: (feature) ->
+                    switch feature.attributes['type']
+                        when 'reservoir' then return 'blue'
+                        when 'entity' then return 'lime'
+                        when 'line' then return 'lightgrey'  
+                    return 'red'
+                getPointRadius: (feature) ->
+                    if feature.attributes.type? and feature.attributes.type == 'entity'
+                        return feature.size
+                    return 0
+        }
+    )
 
 })

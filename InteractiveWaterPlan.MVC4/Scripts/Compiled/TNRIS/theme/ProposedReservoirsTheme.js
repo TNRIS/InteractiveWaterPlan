@@ -13,6 +13,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   gridPanel: null,
   headerPanel: null,
   featureControl: null,
+  selectReservoirControl: null,
   loadTheme: function() {
     var map,
       _this = this;
@@ -65,8 +66,19 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       region: 'center'
     });
     this.gridPanel.on('itemdblclick', function(grid, record) {
-      _this.curr_reservoir = record.data;
-      return _this._showReservoirAndRelatedEntities();
+      var res_feat, _i, _len, _ref;
+      _this.selectReservoirControl.unselectAll();
+      _ref = _this.reservoirLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        res_feat = _ref[_i];
+        if (record.data.Id === res_feat.data.Id) {
+          _this.curr_reservoir = res_feat;
+          break;
+        }
+      }
+      _this.selectReservoirControl.select(_this.curr_reservoir);
+      _this._showRelatedEntities();
+      return null;
     });
     this.contentPanel.add(this.gridPanel);
     this.reservoirStore.load({
@@ -77,31 +89,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           return false;
         }
         this.reservoirLayer = new OpenLayers.Layer.Vector("Recommended Reservoirs", {
-          styleMap: new OpenLayers.Style({
-            pointRadius: 4,
-            strokeColor: 'blue',
-            strokeWidth: 0.5,
-            fillColor: 'cyan',
-            fillOpacity: 0.8
-          }, {
-            rules: [
-              new OpenLayers.Rule({
-                symbolizer: {
-                  pointRadius: 4
-                }
-              }), new OpenLayers.Rule({
-                maxScaleDenominator: 1866688,
-                symbolizer: {
-                  fontSize: "12px",
-                  labelAlign: 'cb',
-                  labelOutlineColor: "white",
-                  labelOutlineWidth: 2,
-                  labelYOffset: 6,
-                  label: "${label}"
-                }
-              })
-            ]
-          })
+          styleMap: this._reservoirStyleMap
         });
         wktFormat = new OpenLayers.Format.WKT();
         res_features = [];
@@ -113,12 +101,14 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             continue;
           }
           this.mapComp.transformToWebMerc(new_feat.geometry);
+          delete data.WKTGeog;
+          new_feat.data = data;
           new_feat.attributes['label'] = data['Name'];
           res_features.push(new_feat);
         }
         this.reservoirLayer.addFeatures(res_features);
         map.addLayer(this.reservoirLayer);
-        this._setupFeatureControl(this.reservoirLayer, this.serviceUrl);
+        this._setupSelectReservoirControl();
         return null;
       }
     });
@@ -127,7 +117,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   unloadTheme: function() {
     this.mapComp.removePopupsFromMap();
     this.mapComp.removeSelectFeatureControl();
-    this._removeFeatureControl();
+    this._removeSelectReservoirControl();
     if (this.reservoirLayer != null) {
       this.reservoirLayer.destroy();
     }
@@ -140,128 +130,77 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   updateYear: function(year) {
     this.selectedYear = year;
     if (this.curr_reservoir != null) {
-      this._showReservoirAndRelatedEntities();
+      this._showRelatedEntities();
     }
     return null;
   },
-  _removeFeatureControl: function() {
-    if (this.featureControl != null) {
-      this.featureControl.destroy();
-      return this.mapComp.map.removeControl(this.featureControl);
+  _removeSelectReservoirControl: function() {
+    if (this.selectReservoirControl != null) {
+      this.selectReservoirControl.destroy();
+      this.mapComp.map.removeControl(this.selectReservoirControl);
     }
+    return null;
   },
-  _setupFeatureControl: function(layers, serviceUrl) {
-    var info,
-      _this = this;
-    this._removeFeatureControl();
-    info = new OpenLayers.Control.GetFeature({
-      layers: layers,
-      serviceUrl: serviceUrl,
-      title: 'Identify Features by Clicking',
-      queryVisible: true,
-      maxFeatures: 1,
-      eventListeners: {
-        nofeaturefound: function(evt) {
-          _this.mapComp.removePopupsFromMap();
-          return null;
-        },
-        getfeature: function(evt) {
-          var rec, _i, _len, _ref;
-          _this.curr_reservoir = evt.features[0];
-          _ref = _this.gridPanel.getStore().data.items;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            rec = _ref[_i];
-            if (_this.curr_reservoir.Id === rec.data.Id) {
-              _this.gridPanel.getSelectionModel().select(rec);
-            }
+  _setupSelectReservoirControl: function() {
+    var _this = this;
+    this._removeSelectReservoirControl();
+    this.selectReservoirControl = new OpenLayers.Control.SelectFeature(this.reservoirLayer, {
+      hover: false,
+      onSelect: function(feature) {
+        var rec, _i, _len, _ref;
+        _this.curr_reservoir = feature;
+        console.log(feature);
+        _ref = _this.gridPanel.getStore().data.items;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          rec = _ref[_i];
+          if (_this.curr_reservoir.data.Id === rec.data.Id) {
+            _this.gridPanel.getSelectionModel().select(rec);
+            break;
           }
-          _this._showReservoirAndRelatedEntities();
-          return null;
         }
+        _this._showRelatedEntities();
+        return null;
+      },
+      onUnselect: function(feature) {
+        _this._clearRelatedEntities();
+        _this.curr_reservoir = null;
+        return null;
       }
     });
-    this.mapComp.map.addControl(info);
-    info.activate();
-    return this.featureControl = info;
+    this.mapComp.map.addControl(this.selectReservoirControl);
+    this.selectReservoirControl.activate();
+    return null;
   },
-  _showReservoirAndRelatedEntities: function() {
-    var map, res_feat, wktFormat;
-    map = this.mapComp.map;
+  _clearRelatedEntities: function() {
     this.mapComp.removePopupsFromMap();
     this.mapComp.removeSelectFeatureControl();
     if (this.relatedWUGLayer != null) {
       this.relatedWUGLayer.destroy();
     }
+    return null;
+  },
+  _showRelatedEntities: function() {
+    var map;
+    map = this.mapComp.map;
+    this._clearRelatedEntities();
     this.relatedWUGLayer = new OpenLayers.Layer.Vector('Related WUGs', {
-      styleMap: new OpenLayers.Style({
-        pointRadius: '${getPointRadius}',
-        strokeColor: '${getStrokeColor}',
-        strokeWidth: '${getStrokeWidth}',
-        fillColor: '${getColor}',
-        fillOpacity: 0.8
-      }, {
-        context: {
-          getColor: function(feature) {
-            switch (feature.attributes['type']) {
-              case 'reservoir':
-                return 'transparent';
-              case 'entity':
-                return 'green';
-              case 'line':
-                return 'grey';
-            }
-            return 'red';
-          },
-          getStrokeWidth: function(feature) {
-            if (feature.attributes['type'] === 'reservoir') {
-              return 2;
-            }
-            return 0.5;
-          },
-          getStrokeColor: function(feature) {
-            switch (feature.attributes['type']) {
-              case 'reservoir':
-                return 'blue';
-              case 'entity':
-                return 'lime';
-              case 'line':
-                return 'lightgrey';
-            }
-            return 'red';
-          },
-          getPointRadius: function(feature) {
-            switch (feature.attributes['type']) {
-              case 'reservoir':
-                return 5;
-              case 'entity':
-                return feature.size;
-            }
-            return 0;
-          }
-        }
-      })
+      styleMap: this._wugStyleMap
     });
-    wktFormat = new OpenLayers.Format.WKT();
-    res_feat = wktFormat.read(this.curr_reservoir.WKTGeog);
-    res_feat.geometry.transform(map.displayProjection, map.projection);
-    res_feat.data = this.curr_reservoir;
-    res_feat.attributes['type'] = 'reservoir';
-    this.relatedWUGLayer.addFeatures(res_feat);
     map.addLayer(this.relatedWUGLayer);
     this.dataStore.load({
       params: {
         Year: this.selectedYear,
-        forReservoirId: this.curr_reservoir['Id']
+        forReservoirId: this.curr_reservoir.data.Id
       },
       scope: this,
       callback: function(records, operation, success) {
-        var bounds, connector_lines, data, line, max_supply, min_supply, new_feat, rec, related_entity_features, res_feat_centroid, select, _i, _j, _len, _len1;
+        var connector_lines, data, line, max_supply, min_supply, new_feat, rec, related_entity_features, res_feat_centroid, select, wktFormat, _i, _j, _len, _len1;
         if (!(records != null) || records.length === 0) {
           return null;
         }
-        bounds = null;
         related_entity_features = [];
         connector_lines = [];
+        wktFormat = new OpenLayers.Format.WKT();
         max_supply = null;
         min_supply = null;
         for (_i = 0, _len = records.length; _i < _len; _i++) {
@@ -273,6 +212,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             min_supply = rec.data.SourceSupply;
           }
         }
+        res_feat_centroid = this.curr_reservoir.geometry.getCentroid(true);
         for (_j = 0, _len1 = records.length; _j < _len1; _j++) {
           rec = records[_j];
           data = rec.data;
@@ -281,15 +221,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           new_feat.attributes['type'] = 'entity';
           new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);
           new_feat.size = this._calculateScaledValue(max_supply, min_supply, this.max_radius, this.min_radius, new_feat.data.SourceSupply);
-          res_feat_centroid = res_feat.geometry.getCentroid();
           line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([new OpenLayers.Geometry.Point(res_feat_centroid.x, res_feat_centroid.y), new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)]));
           line.attributes['type'] = 'line';
           connector_lines.push(line);
-          if (!(bounds != null)) {
-            bounds = new_feat.geometry.getBounds();
-          } else {
-            bounds.extend(new_feat.geometry.getBounds());
-          }
           related_entity_features.push(new_feat);
         }
         this.relatedWUGLayer.addFeatures(connector_lines);
@@ -335,5 +269,81 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     }
     scaled_val = (scale_max - scale_min) * (val - min) / (max - min) + scale_min;
     return scaled_val;
-  }
+  },
+  _reservoirStyleMap: new OpenLayers.StyleMap({
+    "default": new OpenLayers.Style({
+      pointRadius: 4,
+      strokeColor: 'blue',
+      strokeWidth: 0.5,
+      fillColor: 'cyan',
+      fillOpacity: 0.8
+    }, {
+      rules: [
+        new OpenLayers.Rule({
+          symbolizer: {
+            pointRadius: 4
+          }
+        }), new OpenLayers.Rule({
+          maxScaleDenominator: 1866688,
+          symbolizer: {
+            fontSize: "12px",
+            labelAlign: 'cb',
+            labelOutlineColor: "white",
+            labelOutlineWidth: 2,
+            labelYOffset: 6,
+            label: "${label}"
+          }
+        })
+      ]
+    }),
+    "select": new OpenLayers.Style({
+      pointRadius: 5,
+      strokeColor: 'blue',
+      strokeWidth: 2
+    })
+  }),
+  _wugStyleMap: new OpenLayers.Style({
+    pointRadius: '${getPointRadius}',
+    strokeColor: '${getStrokeColor}',
+    strokeWidth: '${getStrokeWidth}',
+    fillColor: '${getColor}',
+    fillOpacity: 0.8
+  }, {
+    context: {
+      getColor: function(feature) {
+        switch (feature.attributes['type']) {
+          case 'reservoir':
+            return 'transparent';
+          case 'entity':
+            return 'green';
+          case 'line':
+            return 'grey';
+        }
+        return 'red';
+      },
+      getStrokeWidth: function(feature) {
+        if (feature.attributes['type'] === 'reservoir') {
+          return 2;
+        }
+        return 0.5;
+      },
+      getStrokeColor: function(feature) {
+        switch (feature.attributes['type']) {
+          case 'reservoir':
+            return 'blue';
+          case 'entity':
+            return 'lime';
+          case 'line':
+            return 'lightgrey';
+        }
+        return 'red';
+      },
+      getPointRadius: function(feature) {
+        if ((feature.attributes.type != null) && feature.attributes.type === 'entity') {
+          return feature.size;
+        }
+        return 0;
+      }
+    }
+  })
 });

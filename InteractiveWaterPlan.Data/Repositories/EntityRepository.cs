@@ -88,7 +88,7 @@ namespace InteractiveWaterPlan.Data
             //Reduce the geometry
             if (res == null) return null;
             
-            res.WKTGeog = new String(SqlGeography.Parse(res.WKTGeog).Reduce(200).AsTextZM().Value);
+            res.WKTGeog = new String(SqlGeography.Parse(res.WKTGeog).Reduce(100).AsTextZM().Value);
             return res;
                 
         }
@@ -105,7 +105,7 @@ namespace InteractiveWaterPlan.Data
                 .Select(r => 
                 {
                     //Reduce the geometry
-                    r.WKTGeog = new String(SqlGeography.Parse(r.WKTGeog).Reduce(200).AsTextZM().Value); 
+                    r.WKTGeog = new String(SqlGeography.Parse(r.WKTGeog).Reduce(100).AsTextZM().Value); 
                     return r; 
                 });
 
