@@ -12,15 +12,11 @@ Ext.define('ISWP.view.Viewport', {
 
     items: [
         {
-            #TODO: Make some kind of "Zoom-To" control
-            # Will need a method that generates the list with the extents
-            
             region: 'north'
             xtype: 'themeyearmappanel'
             height: 600
             width: '100%'
             id: 'themeYearMapPanel'  
-
         }
 
         {
@@ -28,7 +24,6 @@ Ext.define('ISWP.view.Viewport', {
             xtype: 'mainpanel'
             id: 'mainPanel'
         }
-
 
         {
             region: 'south'

@@ -24,41 +24,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     featureControl: null
 
-    styleMap: new OpenLayers.Style(
-        pointRadius: '${getPointRadius}'
-        strokeColor: '${getStrokeColor}'
-        strokeWidth: '${getStrokeWidth}'
-        fillColor: '${getColor}'
-        fillOpacity: 0.8
-
-        {
-            context:
-                getColor: (feature) ->
-                    switch feature.attributes['type']
-                        when 'reservoir' then return 'transparent'
-                        when 'entity' then return 'green'
-                        when 'line' then return 'grey' 
-                    return 'red'
-                getStrokeWidth: (feature) ->
-                    if feature.attributes['type'] == 'reservoir'
-                        return 2
-                    return 0.5
-
-                getStrokeColor: (feature) ->
-                    switch feature.attributes['type']
-                        when 'reservoir' then return 'blue'
-                        when 'entity' then return 'lime'
-                        when 'line' then return 'lightgrey'  
-                    return 'red'
-                getPointRadius: (feature) ->
-                    switch feature.attributes['type']
-                        when 'reservoir' then return 5
-                        when 'entity' then return feature.size
-                    return 0
-        }
-    )
-
-
     loadTheme: () ->
         map = this.mapComp.map
 
@@ -79,7 +44,43 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.gridPanel = Ext.create('Ext.grid.Panel', {
             store: this.reservoirStore,
             columns: [
-                {text: "Name", width: 120, dataIndex: 'Name', sortable: true, hideable: false}
+                {
+                    text: "Name"
+                    width: 120
+                    dataIndex: 'Name'
+                    sortable: true
+                    hideable: false
+                    resizable: false
+                }
+                {
+                    xtype: 'actioncolumn'
+                    width: 6
+                    resizable: false
+                    sortable: false
+                    hideable: false
+                    items: [
+                        {
+                            iconCls: 'icon-zoom-in'
+                            tooltip: 'Zoom To'
+                            handler: (grid, rowIndex, colIndex) =>
+                                #Zoom to the feature when the action is clicked
+                                rec = grid.getStore().getAt(rowIndex)
+                                wktFormat = new OpenLayers.Format.WKT()
+
+                                feat = wktFormat.read(rec.data.WKTGeog)
+
+                                unless feat.geometry then return null
+                                
+                                #transform to webmerc
+                                this.mapComp.transformToWebMerc(feat.geometry)
+
+                                #grab the bounds and zoom to it
+                                bounds = feat.geometry.getBounds()
+                                this.mapComp.map.zoomToExtent(bounds)
+                                return null
+                        }
+                    ]
+                }
             ],
             forceFit: true,
             autoScroll: true
@@ -231,7 +232,39 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.relatedWUGLayer = new OpenLayers.Layer.Vector(
             'Related WUGs', 
             {
-                styleMap: this.styleMap
+                styleMap: new OpenLayers.Style(
+                    pointRadius: '${getPointRadius}'
+                    strokeColor: '${getStrokeColor}'
+                    strokeWidth: '${getStrokeWidth}'
+                    fillColor: '${getColor}'
+                    fillOpacity: 0.8
+
+                    {
+                        context:
+                            getColor: (feature) ->
+                                switch feature.attributes['type']
+                                    when 'reservoir' then return 'transparent'
+                                    when 'entity' then return 'green'
+                                    when 'line' then return 'grey' 
+                                return 'red'
+                            getStrokeWidth: (feature) ->
+                                if feature.attributes['type'] == 'reservoir'
+                                    return 2
+                                return 0.5
+
+                            getStrokeColor: (feature) ->
+                                switch feature.attributes['type']
+                                    when 'reservoir' then return 'blue'
+                                    when 'entity' then return 'lime'
+                                    when 'line' then return 'lightgrey'  
+                                return 'red'
+                            getPointRadius: (feature) ->
+                                switch feature.attributes['type']
+                                    when 'reservoir' then return 5
+                                    when 'entity' then return feature.size
+                                return 0
+                    }
+                )
             }
         )
 
@@ -245,7 +278,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         
         #add the reservoir feature to the map
         this.relatedWUGLayer.addFeatures(res_feat)
-
 
         map.addLayer(this.relatedWUGLayer)
 

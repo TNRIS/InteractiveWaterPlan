@@ -13,53 +13,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   gridPanel: null,
   headerPanel: null,
   featureControl: null,
-  styleMap: new OpenLayers.Style({
-    pointRadius: '${getPointRadius}',
-    strokeColor: '${getStrokeColor}',
-    strokeWidth: '${getStrokeWidth}',
-    fillColor: '${getColor}',
-    fillOpacity: 0.8
-  }, {
-    context: {
-      getColor: function(feature) {
-        switch (feature.attributes['type']) {
-          case 'reservoir':
-            return 'transparent';
-          case 'entity':
-            return 'green';
-          case 'line':
-            return 'grey';
-        }
-        return 'red';
-      },
-      getStrokeWidth: function(feature) {
-        if (feature.attributes['type'] === 'reservoir') {
-          return 2;
-        }
-        return 0.5;
-      },
-      getStrokeColor: function(feature) {
-        switch (feature.attributes['type']) {
-          case 'reservoir':
-            return 'blue';
-          case 'entity':
-            return 'lime';
-          case 'line':
-            return 'lightgrey';
-        }
-        return 'red';
-      },
-      getPointRadius: function(feature) {
-        switch (feature.attributes['type']) {
-          case 'reservoir':
-            return 5;
-          case 'entity':
-            return feature.size;
-        }
-        return 0;
-      }
-    }
-  }),
   loadTheme: function() {
     var map,
       _this = this;
@@ -78,7 +31,33 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           width: 120,
           dataIndex: 'Name',
           sortable: true,
-          hideable: false
+          hideable: false,
+          resizable: false
+        }, {
+          xtype: 'actioncolumn',
+          width: 6,
+          resizable: false,
+          sortable: false,
+          hideable: false,
+          items: [
+            {
+              iconCls: 'icon-zoom-in',
+              tooltip: 'Zoom To',
+              handler: function(grid, rowIndex, colIndex) {
+                var bounds, feat, rec, wktFormat;
+                rec = grid.getStore().getAt(rowIndex);
+                wktFormat = new OpenLayers.Format.WKT();
+                feat = wktFormat.read(rec.data.WKTGeog);
+                if (!feat.geometry) {
+                  return null;
+                }
+                _this.mapComp.transformToWebMerc(feat.geometry);
+                bounds = feat.geometry.getBounds();
+                _this.mapComp.map.zoomToExtent(bounds);
+                return null;
+              }
+            }
+          ]
         }
       ],
       forceFit: true,
@@ -214,7 +193,53 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       this.relatedWUGLayer.destroy();
     }
     this.relatedWUGLayer = new OpenLayers.Layer.Vector('Related WUGs', {
-      styleMap: this.styleMap
+      styleMap: new OpenLayers.Style({
+        pointRadius: '${getPointRadius}',
+        strokeColor: '${getStrokeColor}',
+        strokeWidth: '${getStrokeWidth}',
+        fillColor: '${getColor}',
+        fillOpacity: 0.8
+      }, {
+        context: {
+          getColor: function(feature) {
+            switch (feature.attributes['type']) {
+              case 'reservoir':
+                return 'transparent';
+              case 'entity':
+                return 'green';
+              case 'line':
+                return 'grey';
+            }
+            return 'red';
+          },
+          getStrokeWidth: function(feature) {
+            if (feature.attributes['type'] === 'reservoir') {
+              return 2;
+            }
+            return 0.5;
+          },
+          getStrokeColor: function(feature) {
+            switch (feature.attributes['type']) {
+              case 'reservoir':
+                return 'blue';
+              case 'entity':
+                return 'lime';
+              case 'line':
+                return 'lightgrey';
+            }
+            return 'red';
+          },
+          getPointRadius: function(feature) {
+            switch (feature.attributes['type']) {
+              case 'reservoir':
+                return 5;
+              case 'entity':
+                return feature.size;
+            }
+            return 0;
+          }
+        }
+      })
     });
     wktFormat = new OpenLayers.Format.WKT();
     res_feat = wktFormat.read(this.curr_reservoir.WKTGeog);

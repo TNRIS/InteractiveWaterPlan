@@ -43,6 +43,10 @@ body
     color: #666;
 }
 
+.x-action-col-icon
+{
+    height:14px;
+}
 
 .icon-fullscreen
 {
@@ -63,6 +67,14 @@ body
 .icon-play
 {
     background-position: -264px -72px !important;
+    background-image: url("bootstrap/img/glyphicons-halflings.png");
+    background-repeat: no-repeat !important;
+    margin-top: 1px;
+}
+
+.icon-zoom-in 
+{
+    background-position: -336px 0 !important;
     background-image: url("bootstrap/img/glyphicons-halflings.png");
     background-repeat: no-repeat !important;
     margin-top: 1px;
