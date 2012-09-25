@@ -77,7 +77,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         }
       }
       _this.selectReservoirControl.select(_this.curr_reservoir);
-      _this._showRelatedEntities();
       return null;
     });
     this.contentPanel.add(this.gridPanel);
@@ -129,6 +128,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   },
   updateYear: function(year) {
     this.selectedYear = year;
+    this._clearRelatedEntities();
     if (this.curr_reservoir != null) {
       this._showRelatedEntities();
     }
@@ -136,8 +136,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   },
   _removeSelectReservoirControl: function() {
     if (this.selectReservoirControl != null) {
-      this.selectReservoirControl.destroy();
       this.mapComp.map.removeControl(this.selectReservoirControl);
+      this.selectReservoirControl.destroy();
     }
     return null;
   },
@@ -148,8 +148,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       hover: false,
       onSelect: function(feature) {
         var rec, _i, _len, _ref;
+        console.log("select fired");
         _this.curr_reservoir = feature;
-        console.log(feature);
         _ref = _this.gridPanel.getStore().data.items;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           rec = _ref[_i];
@@ -162,6 +162,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return null;
       },
       onUnselect: function(feature) {
+        console.log("unselect fired");
         _this._clearRelatedEntities();
         _this.curr_reservoir = null;
         return null;
@@ -182,11 +183,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   _showRelatedEntities: function() {
     var map;
     map = this.mapComp.map;
-    this._clearRelatedEntities();
     this.relatedWUGLayer = new OpenLayers.Layer.Vector('Related WUGs', {
       styleMap: this._wugStyleMap
     });
     map.addLayer(this.relatedWUGLayer);
+    map.raiseLayer(this.relatedWUGLayer, -2);
     this.dataStore.load({
       params: {
         Year: this.selectedYear,

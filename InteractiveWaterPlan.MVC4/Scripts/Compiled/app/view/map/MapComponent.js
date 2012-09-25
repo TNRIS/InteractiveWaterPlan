@@ -108,6 +108,7 @@ Ext.define('ISWP.view.map.MapComponent', {
   },
   removeSelectFeatureControl: function() {
     var ctl;
+    console.log("mapComp remove select feature - " + this.selectFeatureControlId);
     if (this.selectFeatureControlId != null) {
       ctl = this.map.getControl(this.selectFeatureControlId);
       ctl.destroy();

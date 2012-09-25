@@ -152,6 +152,8 @@ Ext.define('ISWP.view.map.MapComponent', {
         return null
 
     removeSelectFeatureControl: () ->
+        console.log("mapComp remove select feature - #{this.selectFeatureControlId}")
+
         if this.selectFeatureControlId?
             ctl = this.map.getControl(this.selectFeatureControlId)
             ctl.destroy()
