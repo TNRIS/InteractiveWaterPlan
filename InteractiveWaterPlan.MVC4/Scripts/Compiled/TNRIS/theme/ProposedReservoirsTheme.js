@@ -10,6 +10,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   reservoirStore: null,
   reservoirLayer: null,
   relatedWUGLayer: null,
+  supplyStore: null,
   gridPanel: null,
   headerPanel: null,
   featureControl: null,
@@ -165,6 +166,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           }
         }
         _this._showRelatedEntities();
+        _this._updateSupplyChart();
         return null;
       },
       onUnselect: function(feature) {
@@ -175,6 +177,27 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     });
     this.mapComp.map.addControl(this.selectReservoirControl);
     this.selectReservoirControl.activate();
+    return null;
+  },
+  _updateSupplyChart: function() {
+    this.supplyStore.load({
+      params: {
+        ReservoirId: this.curr_reservoir.data.Id,
+        Year: this.selectedYear
+      },
+      scope: this,
+      callback: function(records, operation, success) {
+        var key;
+        if (!success) {
+          return false;
+        }
+        console.log(records[0].data);
+        for (key in records[0].data) {
+          console.log("" + key + " - " + records[0].data[key]);
+        }
+        return null;
+      }
+    });
     return null;
   },
   _clearRelatedEntities: function() {
@@ -234,7 +257,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.relatedWUGLayer.addFeatures(connector_lines);
         this.relatedWUGLayer.addFeatures(related_entity_features);
         select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
-          hover: false,
           onSelect: function(feature) {
             var point, popup, _ref;
             if (!feature.data.Name) {

@@ -17,6 +17,7 @@ Ext.define('ISWP.controller.Main', {
         'Place'
         'PlaceFeature'
         'ReservoirFeature'
+        'ReservoirSupplyData'
     ]
 
     refs: [
@@ -177,6 +178,7 @@ Ext.define('ISWP.controller.Main', {
                 contentPanel: this.getMainContent()
                 selectedYear: this.selectedYear
                 reservoirStore: this.getReservoirFeatureStore()
+                supplyStore: this.getReservoirSupplyDataStore()
             })
 
         this.interactiveTheme.loadTheme()

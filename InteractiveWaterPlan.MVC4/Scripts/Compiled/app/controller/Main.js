@@ -3,7 +3,7 @@
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
   views: ['chart.WaterUseChart', 'data.MainPanel', 'map.MapComponent', 'map.ThemeYearMapPanel'],
-  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature'],
+  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData'],
   refs: [
     {
       ref: 'mainPanel',
@@ -139,7 +139,8 @@ Ext.define('ISWP.controller.Main', {
         dataStore: this.getWaterUseEntityStore(),
         contentPanel: this.getMainContent(),
         selectedYear: this.selectedYear,
-        reservoirStore: this.getReservoirFeatureStore()
+        reservoirStore: this.getReservoirFeatureStore(),
+        supplyStore: this.getReservoirSupplyDataStore()
       });
     }
     this.interactiveTheme.loadTheme();

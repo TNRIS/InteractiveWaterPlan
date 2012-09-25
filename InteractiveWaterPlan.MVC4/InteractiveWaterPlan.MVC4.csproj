@@ -1471,6 +1471,7 @@
     <Content Include="Scripts\Compiled\app\model\Entity.js" />
     <Content Include="Scripts\Compiled\app\model\LayerInfo.js" />
     <Content Include="Scripts\Compiled\app\model\ReservoirFeature.js" />
+    <Content Include="Scripts\Compiled\app\model\ReservoirSupplyData.js" />
     <Content Include="Scripts\Compiled\app\model\Theme.js" />
     <Content Include="Scripts\Compiled\app\model\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\model\WaterUseEntity.js" />
@@ -1478,6 +1479,7 @@
     <Content Include="Scripts\Compiled\app\store\Place.js" />
     <Content Include="Scripts\Compiled\app\store\PlaceFeature.js" />
     <Content Include="Scripts\Compiled\app\store\ReservoirFeature.js" />
+    <Content Include="Scripts\Compiled\app\store\ReservoirSupplyData.js" />
     <Content Include="Scripts\Compiled\app\store\Theme.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseEntity.js" />
@@ -1517,6 +1519,7 @@
     <None Include="Scripts\Coffee\app\model\Entity.coffee" />
     <None Include="Scripts\Coffee\app\model\LayerInfo.coffee" />
     <None Include="Scripts\Coffee\app\model\ReservoirFeature.coffee" />
+    <None Include="Scripts\Coffee\app\model\ReservoirSupplyData.coffee" />
     <None Include="Scripts\Coffee\app\model\Theme.coffee" />
     <None Include="Scripts\Coffee\app\model\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\model\WaterUseEntity.coffee" />
@@ -1524,6 +1527,7 @@
     <None Include="Scripts\Coffee\app\store\Place.coffee" />
     <None Include="Scripts\Coffee\app\store\PlaceFeature.coffee" />
     <None Include="Scripts\Coffee\app\store\ReservoirFeature.coffee" />
+    <None Include="Scripts\Coffee\app\store\ReservoirSupplyData.coffee" />
     <None Include="Scripts\Coffee\app\store\Theme.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseEntity.coffee" />

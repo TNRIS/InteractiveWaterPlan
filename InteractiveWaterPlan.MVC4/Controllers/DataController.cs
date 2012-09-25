@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Collections.Generic;
 using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.Data;
 
 
 
@@ -15,6 +16,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
 
         //api/data/wateruse/{LocationType}/{LocationName}/{Year}
+        [NHibernateSession]
         public IEnumerable<WaterUseData> GetWaterUseData(string LocationType, string LocationName, int Year)
         {
             if (!_validYears.Contains(Year))
@@ -107,5 +109,32 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             throw new HttpResponseException(HttpStatusCode.NotFound);
         }
 
+        [NHibernateSession]
+        public ReservoirSupplyData GetReservoirSupplyData(int ReservoirId, int Year)
+        {
+            if (!_validYears.Contains(Year))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(
+                        "Invalid Year: " + Year + ". Valid Years are " + String.Join(", ", _validYears))
+                };
+                throw new HttpResponseException(resp);
+            }
+
+            //TODO: Get from a repository call
+            var r = new Random();
+            var data = new ReservoirSupplyData
+            {
+                Livestock = 0,
+                Irrigation = r.Next(100,1000),
+                Manufacturing = r.Next(100, 1000),
+                Mining = r.Next(100, 1000),
+                Municipal = r.Next(100, 1000),
+                SteamElectricPower = r.Next(100, 1000)
+            };
+
+            return data;
+        }
     }
 }

@@ -58,6 +58,12 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Data", action = "GetWaterUseData" }
             );
 
+            config.Routes.MapHttpRoute(
+                "GetReservoirSupplyDataRoute",
+                "api/data/reservoir/{ReservoirId}/{Year}",
+                new { controller = "Data", action = "GetReservoirSupplyData" }
+            );
+
             #endregion
 
             #region Theme Routes

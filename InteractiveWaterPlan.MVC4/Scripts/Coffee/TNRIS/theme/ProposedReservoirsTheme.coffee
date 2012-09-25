@@ -19,6 +19,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     relatedWUGLayer: null
 
+    supplyStore: null
+
     gridPanel: null
     headerPanel: null
 
@@ -202,6 +204,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         break
 
                 this._showRelatedEntities()
+                this._updateSupplyChart()
                 return null
 
             onUnselect: (feature) =>
@@ -215,6 +218,24 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         return null
 
+    _updateSupplyChart: () ->
+        this.supplyStore.load(
+            params:
+                ReservoirId: this.curr_reservoir.data.Id
+                Year: this.selectedYear
+            scope: this
+            callback: (records, operation, success) ->
+                unless success then return false
+
+                console.log(records[0].data)
+                for key of records[0].data
+                    console.log("#{key} - #{records[0].data[key]}")
+
+                return null
+        )
+
+        return null
+
     _clearRelatedEntities: () ->
         #clear any popups
         this.mapComp.removePopupsFromMap()
@@ -224,9 +245,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         if this.relatedWUGLayer? then this.relatedWUGLayer.destroy()
 
         return null
-
-
-
 
     _showRelatedEntities: () ->
         map = this.mapComp.map
@@ -297,7 +315,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
                 #Create a new select feature control and add it to the map.
                 select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
-                    hover: false #listen to clicks, not to hover
+                    
                     onSelect: (feature) ->    
                         if not feature.data.Name then return false
 
