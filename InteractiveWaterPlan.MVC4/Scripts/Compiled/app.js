@@ -22,7 +22,7 @@ Ext.Loader.setConfig({
   disableCaching: true
 });
 
-Ext.Loader.setPath('TNRIS', 'Scripts/Compiled/TNRIS');
+Ext.Loader.setPath('TNRIS', '/Scripts/Compiled/TNRIS');
 
 Ext.require('TNRIS.proxy.ParameterProxy');
 
@@ -35,7 +35,7 @@ Ext.require('TNRIS.theme.ProposedReservoirsTheme');
 Ext.create('Ext.app.Application', {
   name: 'ISWP',
   autoCreateViewport: true,
-  appFolder: 'Scripts/Compiled/app',
+  appFolder: '/Scripts/Compiled/app',
   controllers: ['Main'],
   launch: function() {
     return null;

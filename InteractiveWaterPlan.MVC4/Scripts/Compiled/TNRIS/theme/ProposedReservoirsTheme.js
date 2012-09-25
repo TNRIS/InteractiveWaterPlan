@@ -46,16 +46,17 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
               iconCls: 'icon-zoom-in',
               tooltip: 'Zoom To',
               handler: function(grid, rowIndex, colIndex) {
-                var bounds, feat, rec, wktFormat;
+                var bounds, rec, res_feat, _i, _len, _ref;
                 rec = grid.getStore().getAt(rowIndex);
-                wktFormat = new OpenLayers.Format.WKT();
-                feat = wktFormat.read(rec.data.WKTGeog);
-                if (!feat.geometry) {
-                  return null;
+                _ref = _this.reservoirLayer.features;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  res_feat = _ref[_i];
+                  if (rec.data.Id === res_feat.data.Id) {
+                    bounds = res_feat.geometry.getBounds();
+                    _this.mapComp.map.zoomToExtent(bounds);
+                    break;
+                  }
                 }
-                _this.mapComp.transformToWebMerc(feat.geometry);
-                bounds = feat.geometry.getBounds();
-                _this.mapComp.map.zoomToExtent(bounds);
                 return null;
               }
             }

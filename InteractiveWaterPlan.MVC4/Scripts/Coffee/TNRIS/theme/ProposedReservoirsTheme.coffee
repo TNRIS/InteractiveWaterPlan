@@ -69,18 +69,16 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                             handler: (grid, rowIndex, colIndex) =>
                                 #Zoom to the feature when the action is clicked
                                 rec = grid.getStore().getAt(rowIndex)
-                                wktFormat = new OpenLayers.Format.WKT()
 
-                                feat = wktFormat.read(rec.data.WKTGeog)
+                                #find the matching reservoir in the feature layer
+                                for res_feat in this.reservoirLayer.features
+                                    if rec.data.Id == res_feat.data.Id
+                                        #found it - grab the bounds and zoom to it
+                                        bounds = res_feat.geometry.getBounds()
+                                        this.mapComp.map.zoomToExtent(bounds)
+                                        break
 
-                                unless feat.geometry then return null
-
-                                #transform to webmerc
-                                this.mapComp.transformToWebMerc(feat.geometry)
-
-                                #grab the bounds and zoom to it
-                                bounds = feat.geometry.getBounds()
-                                this.mapComp.map.zoomToExtent(bounds)
+                               
                                 return null
                         }
                     ]
