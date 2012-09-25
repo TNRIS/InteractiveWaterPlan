@@ -4,6 +4,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
   WUGLayer: null,
   selectedYear: null,
+  selectWUGControl: null,
   showFeatureResult: function(features, clickedPoint, year) {
     var popupText, prop;
     popupText = "";
@@ -88,8 +89,8 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
             return null;
           }
         });
+        this.selectWUGControl = select;
         map.addControl(select);
-        this.mapComp.selectFeatureControlId = select.id;
         select.activate();
         return null;
       }
@@ -98,9 +99,16 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
   },
   unloadTheme: function() {
     this.mapComp.removePopupsFromMap();
-    this.mapComp.removeSelectFeatureControl();
+    this._removeSelectWUGControl();
     if (this.WUGLayer != null) {
       this.WUGLayer.destroy();
+    }
+    return null;
+  },
+  _removeSelectWUGControl: function() {
+    if (this.selectWUGControl != null) {
+      this.mapComp.map.removeControl(this.selectWUGControl);
+      this.selectWUGControl.destroy();
     }
     return null;
   }

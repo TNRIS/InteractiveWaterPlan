@@ -115,7 +115,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   },
   unloadTheme: function() {
     this.mapComp.removePopupsFromMap();
-    this.mapComp.removeSelectFeatureControl();
+    this._removeSelectWUGControl();
     this._removeSelectReservoirControl();
     if (this.reservoirLayer != null) {
       this.reservoirLayer.destroy();
@@ -141,6 +141,13 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     }
     return null;
   },
+  _removeSelectWUGControl: function() {
+    if (this.selectWUGControl != null) {
+      this.mapComp.map.removeControl(this.selectWUGControl);
+      this.selectWUGControl.destroy();
+    }
+    return null;
+  },
   _setupSelectReservoirControl: function() {
     var _this = this;
     this._removeSelectReservoirControl();
@@ -148,7 +155,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       hover: false,
       onSelect: function(feature) {
         var rec, _i, _len, _ref;
-        console.log("select fired");
         _this.curr_reservoir = feature;
         _ref = _this.gridPanel.getStore().data.items;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -162,7 +168,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return null;
       },
       onUnselect: function(feature) {
-        console.log("unselect fired");
         _this._clearRelatedEntities();
         _this.curr_reservoir = null;
         return null;
@@ -174,7 +179,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   },
   _clearRelatedEntities: function() {
     this.mapComp.removePopupsFromMap();
-    this.mapComp.removeSelectFeatureControl();
+    this._removeSelectWUGControl();
     if (this.relatedWUGLayer != null) {
       this.relatedWUGLayer.destroy();
     }
@@ -187,7 +192,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       styleMap: this._wugStyleMap
     });
     map.addLayer(this.relatedWUGLayer);
-    map.raiseLayer(this.relatedWUGLayer, -2);
     this.dataStore.load({
       params: {
         Year: this.selectedYear,
@@ -255,8 +259,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             return null;
           }
         });
+        this.selectWUGControl = select;
         map.addControl(select);
-        this.mapComp.selectFeatureControlId = select.id;
         select.activate();
         return null;
       }

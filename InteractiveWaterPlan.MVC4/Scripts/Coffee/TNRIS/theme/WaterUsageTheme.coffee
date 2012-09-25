@@ -6,6 +6,8 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
 
     selectedYear: null
 
+    selectWUGControl: null
+
     showFeatureResult: (features, clickedPoint, year) ->
         popupText = ""
         popupText += ("#{prop}: #{features[prop]}<br/>") for prop of features
@@ -121,8 +123,11 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                         feature.popup = null
                         return null
                 });
-                map.addControl(select);
-                this.mapComp.selectFeatureControlId = select.id
+
+                #save a reference to the control
+                this.selectWUGControl = select
+
+                map.addControl(select);                
                 select.activate();
 
                 return null
@@ -132,8 +137,16 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
 
     unloadTheme: () ->
         this.mapComp.removePopupsFromMap()
-        this.mapComp.removeSelectFeatureControl()
+        this._removeSelectWUGControl()
         
         this.WUGLayer.destroy() if this.WUGLayer?
+        return null
+
+
+    _removeSelectWUGControl: () ->
+        if this.selectWUGControl?
+            this.mapComp.map.removeControl(this.selectWUGControl)
+            this.selectWUGControl.destroy()
+
         return null
 })

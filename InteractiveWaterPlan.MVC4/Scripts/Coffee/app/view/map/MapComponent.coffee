@@ -13,13 +13,6 @@ Ext.define('ISWP.view.map.MapComponent', {
     #TODO: read this from app config
     bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
     
-    #TODO: why not just store references to the controls instead of their ids?
-    featureControl: null
-    selectFeatureControlId: null
-
-    #TODO: Maybe move the store here? Could use Ext.StoreManager.lookup('storeId')
-    store: ''
-
     origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(
         new OpenLayers.Projection("EPSG:4326"), #geographic wgs-84
         new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
@@ -32,8 +25,6 @@ Ext.define('ISWP.view.map.MapComponent', {
         return null
 
     initializeMap: () ->
-        
-
         mapquest_open = new OpenLayers.Layer.XYZ(
             "MapQuest Open Street", 
             [
@@ -149,17 +140,6 @@ Ext.define('ISWP.view.map.MapComponent', {
 
     addLayersToMap: (layers) ->
         this.map.addLayers(layers)
-        return null
-
-    removeSelectFeatureControl: () ->
-        console.log("mapComp remove select feature - #{this.selectFeatureControlId}")
-
-        if this.selectFeatureControlId?
-            ctl = this.map.getControl(this.selectFeatureControlId)
-            ctl.destroy()
-            this.map.removeControl(ctl)
-            this.selectFeatureControlId = null
-
         return null
 
     setPlaceFeature: (placeName, placeFeature) ->

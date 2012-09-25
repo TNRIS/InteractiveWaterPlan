@@ -91,6 +91,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         this.gridPanel.on('itemdblclick', (grid, record) =>
             
+            #unselect the previous reservoir
             this.selectReservoirControl.unselectAll()
 
             #find the matching reservoir in the feature layer
@@ -100,9 +101,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                     this.curr_reservoir = res_feat
                     break
 
-            #show the related entities
+            #select the reservoir
             this.selectReservoirControl.select(this.curr_reservoir)
-            this._showRelatedEntities()
 
             return null
         )
@@ -152,7 +152,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     unloadTheme: () ->
         this.mapComp.removePopupsFromMap()
-        this.mapComp.removeSelectFeatureControl()
+        this._removeSelectWUGControl()
         this._removeSelectReservoirControl()
 
         this.reservoirLayer.destroy() if this.reservoirLayer?
@@ -164,6 +164,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     updateYear: (year) ->
         this.selectedYear = year
 
+        this._clearRelatedEntities()
+
         if this.curr_reservoir?
             this._showRelatedEntities()
         
@@ -171,9 +173,16 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     _removeSelectReservoirControl: () ->
         if this.selectReservoirControl?
-            this.selectReservoirControl.destroy()
             this.mapComp.map.removeControl(this.selectReservoirControl)
+            this.selectReservoirControl.destroy()
 
+        return null
+
+    _removeSelectWUGControl: () ->
+        if this.selectWUGControl?
+            this.mapComp.map.removeControl(this.selectWUGControl)
+            this.selectWUGControl.destroy()
+            
         return null
 
     _setupSelectReservoirControl: () ->
@@ -182,12 +191,10 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         this.selectReservoirControl = new OpenLayers.Control.SelectFeature(this.reservoirLayer, {
             #clickout: true
-            #highlightOnly: true
             hover: false
             
             onSelect: (feature) =>
                 this.curr_reservoir = feature
-                console.log(feature)
 
                 for rec in this.gridPanel.getStore().data.items
                     if this.curr_reservoir.data.Id == rec.data.Id
@@ -201,8 +208,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                 this._clearRelatedEntities()
                 this.curr_reservoir = null
                 return null
-
         })
+
         this.mapComp.map.addControl(this.selectReservoirControl)
         this.selectReservoirControl.activate()
 
@@ -213,16 +220,17 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.mapComp.removePopupsFromMap()
 
         #clear the vector layer and its controls
-        this.mapComp.removeSelectFeatureControl()
+        this._removeSelectWUGControl()
         if this.relatedWUGLayer? then this.relatedWUGLayer.destroy()
 
         return null
 
+
+
+
     _showRelatedEntities: () ->
         map = this.mapComp.map
         
-        this._clearRelatedEntities()
-
         #create a new vector layer
         this.relatedWUGLayer = new OpenLayers.Layer.Vector(
             'Related WUGs', 
@@ -321,8 +329,10 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         return null
                 })
 
+                #save a reference to the control
+                this.selectWUGControl = select
+
                 map.addControl(select);
-                this.mapComp.selectFeatureControlId = select.id
                 select.activate();
 
                 return null

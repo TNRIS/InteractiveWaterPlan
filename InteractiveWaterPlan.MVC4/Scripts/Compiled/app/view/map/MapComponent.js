@@ -9,9 +9,6 @@ Ext.define('ISWP.view.map.MapComponent', {
   map: null,
   placeLayer: null,
   bingApiKey: 'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N',
-  featureControl: null,
-  selectFeatureControlId: null,
-  store: '',
   origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:3857")),
   origZoom: 6,
   handleMapEvent: function(evt) {
@@ -104,17 +101,6 @@ Ext.define('ISWP.view.map.MapComponent', {
   },
   addLayersToMap: function(layers) {
     this.map.addLayers(layers);
-    return null;
-  },
-  removeSelectFeatureControl: function() {
-    var ctl;
-    console.log("mapComp remove select feature - " + this.selectFeatureControlId);
-    if (this.selectFeatureControlId != null) {
-      ctl = this.map.getControl(this.selectFeatureControlId);
-      ctl.destroy();
-      this.map.removeControl(ctl);
-      this.selectFeatureControlId = null;
-    }
     return null;
   },
   setPlaceFeature: function(placeName, placeFeature) {
