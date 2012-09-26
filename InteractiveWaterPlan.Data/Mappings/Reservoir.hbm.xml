@@ -15,12 +15,12 @@
 
   <sql-query name="GetAllProposedReservoirs">
     <return class="Reservoir"/>
-    exec dbo.usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs
+    exec dbo.usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs :var_SimplifyTolerance
   </sql-query>
 
   <sql-query name="GetReservoirInBufferedPoint">
     <return class="Reservoir"/>
-    exec dbo.usp_Select_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs :var_PointGeog, :var_BufferPoly
+    exec dbo.usp_Select_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs :var_PointGeog, :var_BufferPoly, :var_SimplifyTolerance
   </sql-query>
   
 </hibernate-mapping>

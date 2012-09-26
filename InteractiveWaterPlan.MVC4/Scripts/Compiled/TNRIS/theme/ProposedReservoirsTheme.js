@@ -414,48 +414,53 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       strokeWidth: 2
     })
   }),
-  _wugStyleMap: new OpenLayers.Style({
-    pointRadius: '${getPointRadius}',
-    strokeColor: '${getStrokeColor}',
-    strokeWidth: '${getStrokeWidth}',
-    fillColor: '${getColor}',
-    fillOpacity: 0.8
-  }, {
-    context: {
-      getColor: function(feature) {
-        switch (feature.attributes['type']) {
-          case 'reservoir':
-            return 'transparent';
-          case 'entity':
-            return 'green';
-          case 'line':
-            return 'grey';
+  _wugStyleMap: new OpenLayers.StyleMap({
+    "default": new OpenLayers.Style({
+      pointRadius: '${getPointRadius}',
+      strokeColor: '${getStrokeColor}',
+      strokeWidth: '${getStrokeWidth}',
+      fillColor: '${getColor}',
+      fillOpacity: 0.8
+    }, {
+      context: {
+        getColor: function(feature) {
+          switch (feature.attributes['type']) {
+            case 'reservoir':
+              return 'transparent';
+            case 'entity':
+              return 'green';
+            case 'line':
+              return 'grey';
+          }
+          return 'red';
+        },
+        getStrokeWidth: function(feature) {
+          if (feature.attributes['type'] === 'reservoir') {
+            return 2;
+          }
+          return 0.5;
+        },
+        getStrokeColor: function(feature) {
+          switch (feature.attributes['type']) {
+            case 'reservoir':
+              return 'blue';
+            case 'entity':
+              return 'lime';
+            case 'line':
+              return 'lightgrey';
+          }
+          return 'red';
+        },
+        getPointRadius: function(feature) {
+          if ((feature.attributes.type != null) && feature.attributes.type === 'entity') {
+            return feature.size;
+          }
+          return 0;
         }
-        return 'red';
-      },
-      getStrokeWidth: function(feature) {
-        if (feature.attributes['type'] === 'reservoir') {
-          return 2;
-        }
-        return 0.5;
-      },
-      getStrokeColor: function(feature) {
-        switch (feature.attributes['type']) {
-          case 'reservoir':
-            return 'blue';
-          case 'entity':
-            return 'lime';
-          case 'line':
-            return 'lightgrey';
-        }
-        return 'red';
-      },
-      getPointRadius: function(feature) {
-        if ((feature.attributes.type != null) && feature.attributes.type === 'entity') {
-          return feature.size;
-        }
-        return 0;
       }
-    }
+    }),
+    "select": new OpenLayers.Style({
+      fillColor: "yellow"
+    })
   })
 });

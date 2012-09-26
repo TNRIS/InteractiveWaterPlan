@@ -81,6 +81,7 @@ namespace InteractiveWaterPlan.Data
                 _pixelBufferTable.GetBufferRadius(zoomLevel));
 
             var res = Session.GetNamedQuery("GetReservoirInBufferedPoint")
+                .SetParameter("var_SimplifyTolerance", 100)
                 .SetParameter("var_PointGeog", clickedGeogPoint, new NHibernate.Spatial.Type.SqlGeographyType())
                 .SetParameter("var_BufferPoly", bufferGeogPoly, new NHibernate.Spatial.Type.SqlGeographyType())
                 .UniqueResult<Reservoir>();
@@ -88,9 +89,7 @@ namespace InteractiveWaterPlan.Data
             //Reduce the geometry
             if (res == null) return null;
             
-            res.WKTGeog = new String(SqlGeography.Parse(res.WKTGeog).Reduce(100).AsTextZM().Value);
-            return res;
-                
+            return res;            
         }
 
         /// <summary>
@@ -100,14 +99,9 @@ namespace InteractiveWaterPlan.Data
         public IEnumerable<Reservoir> GetAllProposedReservoirs()
         {
             return Session.GetNamedQuery("GetAllProposedReservoirs")
+                .SetParameter("var_SimplifyTolerance", 100)
                 .List<Reservoir>()
                 .OrderBy(r => r.Name)
-                .Select(r => 
-                {
-                    //Reduce the geometry
-                    r.WKTGeog = new String(SqlGeography.Parse(r.WKTGeog).Reduce(100).AsTextZM().Value); 
-                    return r; 
-                })
                 .ToList<Reservoir>();
 
         }

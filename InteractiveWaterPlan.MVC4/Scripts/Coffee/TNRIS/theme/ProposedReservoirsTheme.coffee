@@ -475,36 +475,41 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         )
     )
        
-    _wugStyleMap: new OpenLayers.Style(
-        pointRadius: '${getPointRadius}'
-        strokeColor: '${getStrokeColor}'
-        strokeWidth: '${getStrokeWidth}'
-        fillColor: '${getColor}'
-        fillOpacity: 0.8
-        {
-            context:
-                getColor: (feature) ->
-                    switch feature.attributes['type']
-                        when 'reservoir' then return 'transparent'
-                        when 'entity' then return 'green'
-                        when 'line' then return 'grey' 
-                    return 'red'
-                getStrokeWidth: (feature) ->
-                    if feature.attributes['type'] == 'reservoir'
-                        return 2
-                    return 0.5
+    _wugStyleMap: new OpenLayers.StyleMap(
+        "default" : new OpenLayers.Style( 
+            pointRadius: '${getPointRadius}'
+            strokeColor: '${getStrokeColor}'
+            strokeWidth: '${getStrokeWidth}'
+            fillColor: '${getColor}'
+            fillOpacity: 0.8
+            {
+                context:
+                    getColor: (feature) ->
+                        switch feature.attributes['type']
+                            when 'reservoir' then return 'transparent'
+                            when 'entity' then return 'green'
+                            when 'line' then return 'grey' 
+                        return 'red'
+                    getStrokeWidth: (feature) ->
+                        if feature.attributes['type'] == 'reservoir'
+                            return 2
+                        return 0.5
 
-                getStrokeColor: (feature) ->
-                    switch feature.attributes['type']
-                        when 'reservoir' then return 'blue'
-                        when 'entity' then return 'lime'
-                        when 'line' then return 'lightgrey'  
-                    return 'red'
-                getPointRadius: (feature) ->
-                    if feature.attributes.type? and feature.attributes.type == 'entity'
-                        return feature.size
-                    return 0
-        }
+                    getStrokeColor: (feature) ->
+                        switch feature.attributes['type']
+                            when 'reservoir' then return 'blue'
+                            when 'entity' then return 'lime'
+                            when 'line' then return 'lightgrey'  
+                        return 'red'
+                    getPointRadius: (feature) ->
+                        if feature.attributes.type? and feature.attributes.type == 'entity'
+                            return feature.size
+                        return 0
+            }
+        )
+        "select" : new OpenLayers.Style(
+            fillColor: "yellow"
+        )
     )
 
 })
