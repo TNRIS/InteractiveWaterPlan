@@ -10,83 +10,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   reservoirLayer: null,
   relatedWUGLayer: null,
   supplyStore: null,
-  gridPanel: null,
-  headerPanel: null,
-  chartPanel: null,
   featureControl: null,
   selectReservoirControl: null,
   loadTheme: function() {
-    var map,
-      _this = this;
+    var map;
     map = this.mapComp.map;
-    this.headerPanel = Ext.create('Ext.panel.Panel', {
-      region: 'north',
-      height: 60,
-      html: "<h3>Recommended Reservoirs</h3>\n<p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>"
-    });
-    this.mainPanel.add(this.headerPanel);
-    this.chartPanel = Ext.create('Ext.panel.Panel', {
-      region: 'west',
-      width: 300
-    });
-    this.mainPanel.add(this.chartPanel);
-    this.gridPanel = Ext.create('Ext.grid.Panel', {
-      store: this.reservoirStore,
-      columns: [
-        {
-          text: "Name",
-          width: 120,
-          dataIndex: 'Name',
-          sortable: true,
-          hideable: false,
-          resizable: false
-        }, {
-          xtype: 'actioncolumn',
-          width: 6,
-          resizable: false,
-          sortable: false,
-          hideable: false,
-          items: [
-            {
-              iconCls: 'icon-zoom-in',
-              tooltip: 'Zoom To',
-              handler: function(grid, rowIndex, colIndex) {
-                var bounds, rec, res_feat, _i, _len, _ref;
-                rec = grid.getStore().getAt(rowIndex);
-                _ref = _this.reservoirLayer.features;
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  res_feat = _ref[_i];
-                  if (rec.data.Id === res_feat.data.Id) {
-                    bounds = res_feat.geometry.getBounds();
-                    _this.mapComp.map.zoomToExtent(bounds);
-                    break;
-                  }
-                }
-                return null;
-              }
-            }
-          ]
-        }
-      ],
-      forceFit: true,
-      autoScroll: true,
-      region: 'center'
-    });
-    this.gridPanel.on('itemdblclick', function(grid, record) {
-      var res_feat, _i, _len, _ref;
-      _this.selectReservoirControl.unselectAll();
-      _ref = _this.reservoirLayer.features;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        res_feat = _ref[_i];
-        if (record.data.Id === res_feat.data.Id) {
-          _this.curr_reservoir = res_feat;
-          break;
-        }
-      }
-      _this.selectReservoirControl.select(_this.curr_reservoir);
-      return null;
-    });
-    this.mainPanel.add(this.gridPanel);
     this.reservoirStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -114,6 +42,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         }
         this.reservoirLayer.addFeatures(res_features);
         map.addLayer(this.reservoirLayer);
+        this._changeToReservoirsLayout();
         this._setupSelectReservoirControl();
         return null;
       }
@@ -161,27 +90,94 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     this.selectReservoirControl = new OpenLayers.Control.SelectFeature(this.reservoirLayer, {
       hover: false,
       onSelect: function(feature) {
-        var rec, _i, _len, _ref;
         _this.curr_reservoir = feature;
-        _ref = _this.gridPanel.getStore().data.items;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          rec = _ref[_i];
-          if (_this.curr_reservoir.data.Id === rec.data.Id) {
-            _this.gridPanel.getSelectionModel().select(rec);
-            break;
-          }
-        }
+        _this._changeToRelatedEntitiesLayout();
         _this._showRelatedEntities();
+        _this._updateSupplyChart();
         return null;
       },
       onUnselect: function(feature) {
         _this._clearRelatedEntities();
+        _this._changeToReservoirsLayout();
         _this.curr_reservoir = null;
         return null;
       }
     });
     this.mapComp.map.addControl(this.selectReservoirControl);
     this.selectReservoirControl.activate();
+    return null;
+  },
+  _changeToReservoirsLayout: function() {
+    var gridPanel, headerPanel,
+      _this = this;
+    this.mainPanel.removeAll(true);
+    headerPanel = Ext.create('Ext.panel.Panel', {
+      region: 'north',
+      height: 60,
+      html: "<h3>Recommended Reservoirs</h3>\n<p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>"
+    });
+    this.mainPanel.add(headerPanel);
+    gridPanel = Ext.create('Ext.grid.Panel', {
+      store: this.reservoirStore,
+      columns: [
+        {
+          text: "Name",
+          width: 120,
+          dataIndex: 'Name',
+          sortable: true,
+          hideable: false,
+          resizable: false
+        }, {
+          xtype: 'actioncolumn',
+          width: 6,
+          resizable: false,
+          sortable: false,
+          hideable: false,
+          items: [
+            {
+              iconCls: 'icon-zoom-in',
+              tooltip: 'Zoom To',
+              handler: function(grid, rowIndex, colIndex) {
+                var bounds, rec, res_feat, _i, _len, _ref;
+                rec = grid.getStore().getAt(rowIndex);
+                _ref = _this.reservoirLayer.features;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  res_feat = _ref[_i];
+                  if (rec.data.Id === res_feat.data.Id) {
+                    bounds = res_feat.geometry.getBounds();
+                    _this.mapComp.map.zoomToExtent(bounds);
+                    break;
+                  }
+                }
+                return null;
+              }
+            }
+          ]
+        }
+      ],
+      forceFit: true,
+      autoScroll: true,
+      region: 'center'
+    });
+    gridPanel.on('itemdblclick', function(grid, record) {
+      var res_feat, _i, _len, _ref;
+      _this.selectReservoirControl.unselectAll();
+      _ref = _this.reservoirLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        res_feat = _ref[_i];
+        if (record.data.Id === res_feat.data.Id) {
+          _this.curr_reservoir = res_feat;
+          break;
+        }
+      }
+      _this.selectReservoirControl.select(_this.curr_reservoir);
+      return null;
+    });
+    this.mainPanel.add(gridPanel);
+    return null;
+  },
+  _changeToRelatedEntitiesLayout: function() {
+    console.log("switching to entities layout");
     return null;
   },
   _updateSupplyChart: function() {
@@ -192,14 +188,10 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       },
       scope: this,
       callback: function(records, operation, success) {
-        var key;
         if (!success) {
           return false;
         }
-        console.log(records[0].data);
-        for (key in records[0].data) {
-          console.log("" + key + " - " + records[0].data[key]);
-        }
+        console.log("loaded data:", records);
         return null;
       }
     });

@@ -6,7 +6,7 @@
       <column name="SQL_ID"/>
     </id>
     <property column="PlaceName" name="Name" />
-    <!-- TODO: Include this once all stored procs return it <property column="PlaceName_Category_ID" name="CategoryId" /> -->
+    <property column="PlaceName_Category_ID" name="CategoryId" />
     <property column="PlaceName_Category_Name" name="CategoryName" />
   </class>
 

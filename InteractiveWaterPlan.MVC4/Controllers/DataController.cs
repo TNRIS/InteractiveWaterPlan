@@ -109,6 +109,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             throw new HttpResponseException(HttpStatusCode.NotFound);
         }
 
+        // api/data/reservoir/{ReservoirId}/{Year}
         [NHibernateSession]
         public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyData(int ReservoirId, int Year)
         {

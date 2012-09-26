@@ -12,7 +12,6 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     }
 
     themeStore: null
-    dataStore: null
     
     mapComp: null #reference to the map component
     

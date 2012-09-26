@@ -138,16 +138,16 @@ Ext.define('ISWP.controller.Main', {
             this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
-                dataStore: this.getEntityStore()
+                entityStore: this.getEntityStore()
                 selectedYear: this.selectedYear
                 mainPanel: this.getMainPanel()
             })
         else if themeName == 'proposed-reservoirs'
-            console.log("#{this.selectedYear}")
             this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
-                dataStore: this.getWaterUseEntityStore()
+
+                relatedWUGStore: this.getWaterUseEntityStore()
                 mainPanel: this.getMainPanel()
                 selectedYear: this.selectedYear
                 reservoirStore: this.getReservoirFeatureStore()

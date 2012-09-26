@@ -37,7 +37,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         })
         this.mainPanel.add(temporaryPanel)
 
-        this.dataStore.load({
+        this.entityStore.load({
             scope: this
             callback: (records, operation, success) ->
                 unless success then return false

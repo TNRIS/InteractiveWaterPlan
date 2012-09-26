@@ -109,7 +109,6 @@ Ext.define('ISWP.controller.Main', {
         mainPanel: this.getMainPanel()
       });
     } else if (themeName === 'proposed-reservoirs') {
-      console.log("" + this.selectedYear);
       this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),

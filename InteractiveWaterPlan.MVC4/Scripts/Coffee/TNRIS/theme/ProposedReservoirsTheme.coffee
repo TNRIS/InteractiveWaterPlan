@@ -18,10 +18,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     supplyStore: null
 
-    gridPanel: null
-    headerPanel: null
-    chartPanel: null
-
     featureControl: null
 
     selectReservoirControl: null
@@ -29,90 +25,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     loadTheme: () ->
         map = this.mapComp.map
 
-        this.headerPanel = Ext.create('Ext.panel.Panel', {
-            region: 'north'
-            height: 60
-            html:   """
-                    <h3>Recommended Reservoirs</h3>
-                    <p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>
-                    """
-        })
-        this.mainPanel.add(this.headerPanel)
-
-
-        this.chartPanel = Ext.create('Ext.panel.Panel', {
-            region: 'west'
-            width: 300
-        })
-        this.mainPanel.add(this.chartPanel)
-
-        #TODO: hook up to 'select' event select the feature for selected reservoir in the grid
-        # and vice versa
-
-        #TODO: Could use a "grouping" grid http://docs.sencha.com/ext-js/4-1/extjs-build/examples/grid/group-summary-grid.js
-        this.gridPanel = Ext.create('Ext.grid.Panel', {
-            store: this.reservoirStore,
-            columns: [
-                {
-                    text: "Name"
-                    width: 120
-                    dataIndex: 'Name'
-                    sortable: true
-                    hideable: false
-                    resizable: false
-                }
-                {
-                    xtype: 'actioncolumn'
-                    width: 6
-                    resizable: false
-                    sortable: false
-                    hideable: false
-                    items: [
-                        {
-                            iconCls: 'icon-zoom-in'
-                            tooltip: 'Zoom To'
-                            handler: (grid, rowIndex, colIndex) =>
-                                #Zoom to the feature when the action is clicked
-                                rec = grid.getStore().getAt(rowIndex)
-
-                                #find the matching reservoir in the feature layer
-                                for res_feat in this.reservoirLayer.features
-                                    if rec.data.Id == res_feat.data.Id
-                                        #found it - grab the bounds and zoom to it
-                                        bounds = res_feat.geometry.getBounds()
-                                        this.mapComp.map.zoomToExtent(bounds)
-                                        break
-
-                               
-                                return null
-                        }
-                    ]
-                }
-            ],
-            forceFit: true
-            autoScroll: true
-            region: 'center'
-        });
-
-        this.gridPanel.on('itemdblclick', (grid, record) =>
-            
-            #unselect the previous reservoir
-            this.selectReservoirControl.unselectAll()
-
-            #find the matching reservoir in the feature layer
-            for res_feat in this.reservoirLayer.features
-                if record.data.Id == res_feat.data.Id
-                    #found it - set curr_reservoir to the matching feature
-                    this.curr_reservoir = res_feat
-                    break
-
-            #select the reservoir
-            this.selectReservoirControl.select(this.curr_reservoir)
-
-            return null
-        )
-
-        this.mainPanel.add(this.gridPanel)
 
         this.reservoirStore.load({
             scope: this
@@ -148,6 +60,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                 this.reservoirLayer.addFeatures(res_features)
                 map.addLayer(this.reservoirLayer)
 
+
+                this._changeToReservoirsLayout()
                 this._setupSelectReservoirControl()
 
                 return null
@@ -201,23 +115,161 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             onSelect: (feature) =>
                 this.curr_reservoir = feature
 
-                for rec in this.gridPanel.getStore().data.items
-                    if this.curr_reservoir.data.Id == rec.data.Id
-                        this.gridPanel.getSelectionModel().select(rec)
-                        break
+                #TODO: Remove - don't need since we don't show this grid
+                #for rec in this.gridPanel.getStore().data.items
+                #    if this.curr_reservoir.data.Id == rec.data.Id
+                #        this.gridPanel.getSelectionModel().select(rec)
+                #        break
 
+                this._changeToRelatedEntitiesLayout()
                 this._showRelatedEntities()
-                #this._updateSupplyChart()
+                this._updateSupplyChart()
                 return null
 
             onUnselect: (feature) =>
                 this._clearRelatedEntities()
+
+                this._changeToReservoirsLayout()
                 this.curr_reservoir = null
                 return null
         })
 
         this.mapComp.map.addControl(this.selectReservoirControl)
         this.selectReservoirControl.activate()
+
+        return null
+
+    _changeToReservoirsLayout: () ->
+        this.mainPanel.removeAll(true)
+
+        headerPanel = Ext.create('Ext.panel.Panel', {
+            region: 'north'
+            height: 60
+            html:   """
+                    <h3>Recommended Reservoirs</h3>
+                    <p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>
+                    """
+        })
+        this.mainPanel.add(headerPanel)
+
+        gridPanel = Ext.create('Ext.grid.Panel', {
+            store: this.reservoirStore,
+            columns: [
+                {
+                    text: "Name"
+                    width: 120
+                    dataIndex: 'Name'
+                    sortable: true
+                    hideable: false
+                    resizable: false
+                }
+                {
+                    xtype: 'actioncolumn'
+                    width: 6
+                    resizable: false
+                    sortable: false
+                    hideable: false
+                    items: [
+                        {
+                            iconCls: 'icon-zoom-in'
+                            tooltip: 'Zoom To'
+                            handler: (grid, rowIndex, colIndex) =>
+                                #Zoom to the feature when the action is clicked
+                                rec = grid.getStore().getAt(rowIndex)
+
+                                #find the matching reservoir in the feature layer
+                                for res_feat in this.reservoirLayer.features
+                                    if rec.data.Id == res_feat.data.Id
+                                        #found it - grab the bounds and zoom to it
+                                        bounds = res_feat.geometry.getBounds()
+                                        this.mapComp.map.zoomToExtent(bounds)
+                                        break
+
+                               
+                                return null
+                        }
+                    ]
+                }
+            ],
+            forceFit: true
+            autoScroll: true
+            region: 'center'
+        });
+
+        gridPanel.on('itemdblclick', (grid, record) =>
+            
+            #unselect the previous reservoir
+            this.selectReservoirControl.unselectAll()
+
+            #find the matching reservoir in the feature layer
+            for res_feat in this.reservoirLayer.features
+                if record.data.Id == res_feat.data.Id
+                    #found it - set curr_reservoir to the matching feature
+                    this.curr_reservoir = res_feat
+                    break
+
+            #select the reservoir
+            this.selectReservoirControl.select(this.curr_reservoir)
+
+            return null
+        )
+
+        this.mainPanel.add(gridPanel)
+        return null
+
+    _changeToRelatedEntitiesLayout: () ->
+        this.mainPanel.removeAll(true)
+
+        #todo: header panel
+
+        gridPanel = Ext.create('Ext.grid.Panel', {
+            store: this.reservoirStore,
+            columns: [
+                {
+                    text: "Name"
+                    width: 120
+                    dataIndex: 'Name'
+                    sortable: true
+                    hideable: false
+                    resizable: false
+                }
+                {
+                    xtype: 'actioncolumn'
+                    width: 6
+                    resizable: false
+                    sortable: false
+                    hideable: false
+                    items: [
+                        {
+                            iconCls: 'icon-zoom-in'
+                            tooltip: 'Zoom To'
+                            handler: (grid, rowIndex, colIndex) =>
+                                #Zoom to the feature when the action is clicked
+                                rec = grid.getStore().getAt(rowIndex)
+
+                                #find the matching reservoir in the feature layer
+                                for res_feat in this.reservoirLayer.features
+                                    if rec.data.Id == res_feat.data.Id
+                                        #found it - grab the bounds and zoom to it
+                                        bounds = res_feat.geometry.getBounds()
+                                        this.mapComp.map.zoomToExtent(bounds)
+                                        break
+
+                               
+                                return null
+                        }
+                    ]
+                }
+            ],
+            forceFit: true
+            autoScroll: true
+            region: 'center'
+        });
+
+        this.mainPanel.add(gridPanel)
+
+
+        #TODO: chart panel
 
         return null
 
@@ -230,9 +282,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             callback: (records, operation, success) ->
                 unless success then return false
 
-                console.log(records[0].data)
-                for key of records[0].data
-                    console.log("#{key} - #{records[0].data[key]}")
+                console.log("loaded data:", records)
+                
 
                 return null
         )
@@ -262,7 +313,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         map.addLayer(this.relatedWUGLayer)
 
-        this.dataStore.load({
+        this.relatedWUGStore.load({
             params:
                 Year: this.selectedYear
                 forReservoirId: this.curr_reservoir.data.Id
