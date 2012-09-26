@@ -191,7 +191,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     headerPanel = Ext.create('Ext.panel.Panel', {
       region: 'north',
       height: 60,
-      html: "<h3>" + this.curr_reservoir.data.Name + " - " + this.selectedYear + "</h3>\n<p>Descriptive text. Animate button.</p>"
+      html: "<h3>" + this.curr_reservoir.data.Name + "</h3>\n<p>Descriptive text. Animate button.</p>"
     });
     this.mainPanel.add(headerPanel);
     relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
@@ -206,7 +206,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           resizable: false
         }, {
           text: "Supply (acre-feet)",
-          width: 50,
+          width: 60,
           dataIndex: "SourceSupply",
           hideable: false,
           draggable: false,
@@ -220,7 +220,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           resizable: false
         }, {
           text: "County",
-          width: 100,
+          width: 60,
           dataIndex: "County",
           hideable: false,
           draggable: false,

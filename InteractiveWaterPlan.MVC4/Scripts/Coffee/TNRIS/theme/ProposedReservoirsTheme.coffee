@@ -236,7 +236,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             region: 'north'
             height: 60
             html:   """
-                    <h3>#{this.curr_reservoir.data.Name} - #{this.selectedYear}</h3>
+                    <h3>#{this.curr_reservoir.data.Name}</h3>
                     <p>Descriptive text. Animate button.</p>
                     """
         })
@@ -246,9 +246,9 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             store: this.relatedWUGStore,
             columns: [
                 { text: "Name", width: 120, dataIndex: "Name", hideable: false, draggable: false, resizable: false}
-                { text: "Supply (acre-feet)", width: 50, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
+                { text: "Supply (acre-feet)", width: 60, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
                 { text: "Planning Area", width: 50, dataIndex: "RWP", hideable: false, draggable: false, resizable: false}
-                { text: "County", width: 100, dataIndex: "County", hideable: false, draggable: false, resizable: false}
+                { text: "County", width: 60, dataIndex: "County", hideable: false, draggable: false, resizable: false}
                 { text: "Basin", width: 50, dataIndex: "Basin", hideable: false, draggable: false, resizable: false}
 
                 {
