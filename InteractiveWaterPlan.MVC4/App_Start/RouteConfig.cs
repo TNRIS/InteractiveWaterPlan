@@ -14,18 +14,7 @@ namespace InteractiveWaterPlan.MVC4
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             #region View Routes
-            routes.MapRoute(
-                "Viewer",
-                "Viewer",
-                new { controller = "Home", action = "Viewer" }
-            );
-
-            routes.MapRoute(
-                "HomeViewer",
-                "Home/Viewer",
-                new { controller = "Home", action = "Index" }
-            );
-
+            
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}", // URL with parameters
