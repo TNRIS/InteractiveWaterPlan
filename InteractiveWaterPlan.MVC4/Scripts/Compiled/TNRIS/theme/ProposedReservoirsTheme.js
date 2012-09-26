@@ -67,6 +67,12 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     this._clearRelatedEntities();
     if (this.curr_reservoir != null) {
       this._showRelatedEntities();
+      this.supplyStore.load({
+        params: {
+          ReservoirId: this.curr_reservoir.data.Id,
+          Year: this.selectedYear
+        }
+      });
     }
     return null;
   },
@@ -179,7 +185,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     return null;
   },
   _changeToRelatedEntitiesLayout: function() {
-    var headerPanel, relatedEntitiesGridPanel,
+    var chart, headerPanel, relatedEntitiesGridPanel,
       _this = this;
     this.mainPanel.removeAll(true);
     headerPanel = Ext.create('Ext.panel.Panel', {
@@ -260,6 +266,14 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       region: 'center'
     });
     this.mainPanel.add(relatedEntitiesGridPanel);
+    chart = Ext.create('ISWP.view.chart.WaterUseChart', {
+      store: this.supplyStore,
+      region: 'west',
+      width: 260,
+      animate: false,
+      shadow: false
+    });
+    this.mainPanel.add(chart);
     return null;
   },
   _updateSupplyChart: function() {
@@ -267,14 +281,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       params: {
         ReservoirId: this.curr_reservoir.data.Id,
         Year: this.selectedYear
-      },
-      scope: this,
-      callback: function(records, operation, success) {
-        if (!success) {
-          return false;
-        }
-        console.log("loaded data:", records);
-        return null;
       }
     });
     return null;

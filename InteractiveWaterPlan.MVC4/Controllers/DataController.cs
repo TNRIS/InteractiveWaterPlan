@@ -127,7 +127,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             var r = new Random();
             var data = new List<WaterSourceSupplyData>
             {
-                new WaterSourceSupplyData { Name = "Livestock", Value = 0 },
                 new WaterSourceSupplyData { Name = "Irrigation", Value = r.Next(100, 1000) },
                 new WaterSourceSupplyData { Name = "Manufacturing", Value = r.Next(100, 1000) },
                 new WaterSourceSupplyData { Name = "Mining", Value = r.Next(100, 1000) },

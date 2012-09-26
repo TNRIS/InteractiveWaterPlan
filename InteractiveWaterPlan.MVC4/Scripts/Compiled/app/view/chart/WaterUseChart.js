@@ -4,7 +4,6 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
   extend: 'Ext.chart.Chart',
   alias: 'widget.waterusechart',
   animate: true,
-  store: 'WaterUseData',
   shadow: true,
   insetPadding: 30,
   theme: 'Blue:gradients',
@@ -23,7 +22,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
           storeItem.store.each(function(rec) {
             return total += rec.get('Value');
           });
-          this.setTitle(" " + (Ext.util.Format.number(storeItem.get('Value'), '0,000,000,000')) + " ac-ft (" + (Ext.util.Format.number(storeItem.get('Value') / total * 100, '0.00%')) + ")");
+          this.setTitle("" + storeItem.data.Name + "<br/>                        " + (Ext.util.Format.number(storeItem.get('Value'), '0,000,000,000')) + " ac-ft                         (" + (Ext.util.Format.number(storeItem.get('Value') / total * 100, '0.00%')) + ")");
           return null;
         }
       },
@@ -36,7 +35,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
         field: 'Name',
         display: 'rotate',
         contrast: true,
-        font: '14px Arial Bold'
+        font: '12px Arial'
       }
     }
   ]

@@ -6,15 +6,12 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
     alias: 'widget.waterusechart'
 
     animate: true
-    store: 'WaterUseData'
-
     shadow: true
     #legend: 
     #    position: 'right'
     
     insetPadding: 30
     theme: 'Blue:gradients'
-
 
     series: [
         {
@@ -32,7 +29,10 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
                         total += rec.get('Value')
                     )
 
-                    this.setTitle(" #{Ext.util.Format.number(storeItem.get('Value'), '0,000,000,000')} ac-ft (#{Ext.util.Format.number(storeItem.get('Value')/total*100,'0.00%')})")
+                    this.setTitle("#{storeItem.data.Name}<br/>
+                        #{Ext.util.Format.number(storeItem.get('Value'), '0,000,000,000')} ac-ft 
+                        (#{Ext.util.Format.number(storeItem.get('Value')/total*100,'0.00%')})"
+                    )
                     
                     return null
 
@@ -44,7 +44,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
                 field: 'Name'
                 display: 'rotate'
                 contrast: true
-                font: '14px Arial Bold'
+                font: '12px Arial'
         }
     ]
 

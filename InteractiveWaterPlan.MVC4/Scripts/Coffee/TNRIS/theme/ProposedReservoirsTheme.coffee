@@ -87,7 +87,16 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         if this.curr_reservoir?
             this._showRelatedEntities()
+            
+            #load the supply data store
+            this.supplyStore.load({
+                params:
+                    ReservoirId: this.curr_reservoir.data.Id
+                    Year: this.selectedYear
+            })
+
         
+
         return null
 
     _removeSelectReservoirControl: () ->
@@ -279,8 +288,15 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
         this.mainPanel.add(relatedEntitiesGridPanel)
 
+        chart = Ext.create('ISWP.view.chart.WaterUseChart', {
+            store: this.supplyStore
+            region: 'west'
+            width: 260
+            animate: false
+            shadow: false
 
-        #TODO: chart panel
+        })
+        this.mainPanel.add(chart)
 
         return null
 
@@ -289,14 +305,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             params:
                 ReservoirId: this.curr_reservoir.data.Id
                 Year: this.selectedYear
-            scope: this
-            callback: (records, operation, success) ->
-                unless success then return false
-
-                console.log("loaded data:", records)
-                
-
-                return null
         )
 
         return null
