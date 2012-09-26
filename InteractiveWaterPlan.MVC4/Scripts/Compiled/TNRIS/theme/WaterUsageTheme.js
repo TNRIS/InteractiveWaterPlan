@@ -15,9 +15,13 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     return null;
   },
   loadTheme: function() {
-    var map;
+    var map, temporaryPanel;
     map = this.mapComp.map;
-    this.contentPanel.update("<h3>Water Use</h3>\n<p>Click on a dot to view the information for that water user group.</p>");
+    temporaryPanel = Ext.create('Ext.panel.Panel', {
+      region: 'center',
+      html: "<h3>Water Use</h3>\n<p>Click on a dot to view the information for that water user group.</p>"
+    });
+    this.mainPanel.add(temporaryPanel);
     this.dataStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -103,6 +107,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     if (this.WUGLayer != null) {
       this.WUGLayer.destroy();
     }
+    this.mainPanel.removeAll(true);
     return null;
   },
   _removeSelectWUGControl: function() {

@@ -107,7 +107,8 @@ namespace InteractiveWaterPlan.Data
                     //Reduce the geometry
                     r.WKTGeog = new String(SqlGeography.Parse(r.WKTGeog).Reduce(100).AsTextZM().Value); 
                     return r; 
-                });
+                })
+                .ToList<Reservoir>();
 
         }
 
@@ -119,7 +120,8 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("var_DB12_ID", proposedReservoirId)
                 .SetParameter("var_EstYear", year)
                 .List<WaterUseEntity>()
-                .OrderBy(e => e.Name);
+                .OrderBy(e => e.Name)
+                .ToList<WaterUseEntity>();
         }
     }
 }

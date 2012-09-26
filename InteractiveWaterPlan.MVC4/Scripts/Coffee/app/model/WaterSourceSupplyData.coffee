@@ -1,4 +1,4 @@
-Ext.define('ISWP.model.WaterUseData', {
+Ext.define('ISWP.model.WaterSourceSupplyData', {
     
     extend: 'Ext.data.Model'
 

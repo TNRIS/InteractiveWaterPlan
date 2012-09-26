@@ -13,6 +13,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
   themeStore: null,
   dataStore: null,
   mapComp: null,
+  mainPanel: null,
   contentPanel: null,
   loadTheme: null,
   unloadTheme: null,
@@ -28,7 +29,6 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
       _this.mapComp.removeLayersFromMap(rec.data.Layers);
       return true;
     });
-    this.contentPanel.update("");
     this.unloadTheme();
     this.fireEvent("themeunload");
     return null;

@@ -17,7 +17,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
         //api/data/wateruse/{LocationType}/{LocationName}/{Year}
         [NHibernateSession]
-        public IEnumerable<WaterUseData> GetWaterUseData(string LocationType, string LocationName, int Year)
+        public IEnumerable<WaterSourceSupplyData> GetWaterUseData(string LocationType, string LocationName, int Year)
         {
             if (!_validYears.Contains(Year))
             {
@@ -36,69 +36,69 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                 switch (Year)
                 {
                     case 2010:
-                        return new List<WaterUseData> ()
+                        return new List<WaterSourceSupplyData> ()
                         {
-                            new WaterUseData { Name="Muncipal", Value=4851201}, 
-                            new WaterUseData { Name="Manufacturing", Value=1727808},
-                            new WaterUseData { Name="Mining", Value=296230},
-                            new WaterUseData { Name="Steam-electric", Value=733179},
-                            new WaterUseData { Name="Livestock", Value=322966},
-                            new WaterUseData { Name="Irrigation", Value=10079215}
+                            new WaterSourceSupplyData { Name="Muncipal", Value=4851201}, 
+                            new WaterSourceSupplyData { Name="Manufacturing", Value=1727808},
+                            new WaterSourceSupplyData { Name="Mining", Value=296230},
+                            new WaterSourceSupplyData { Name="Steam-electric", Value=733179},
+                            new WaterSourceSupplyData { Name="Livestock", Value=322966},
+                            new WaterSourceSupplyData { Name="Irrigation", Value=10079215}
                         };
                         
                     case 2020:
-                        return new List<WaterUseData>()
+                        return new List<WaterSourceSupplyData>()
                         {
-                            new WaterUseData { Name="Muncipal", Value=5580979}, 
-                            new WaterUseData { Name="Manufacturing", Value=2153551},
-                            new WaterUseData { Name="Mining", Value=313327},
-                            new WaterUseData { Name="Steam-electric", Value=1010555},
-                            new WaterUseData { Name="Livestock", Value=336634},
-                            new WaterUseData { Name="Irrigation", Value=9643908}
+                            new WaterSourceSupplyData { Name="Muncipal", Value=5580979}, 
+                            new WaterSourceSupplyData { Name="Manufacturing", Value=2153551},
+                            new WaterSourceSupplyData { Name="Mining", Value=313327},
+                            new WaterSourceSupplyData { Name="Steam-electric", Value=1010555},
+                            new WaterSourceSupplyData { Name="Livestock", Value=336634},
+                            new WaterSourceSupplyData { Name="Irrigation", Value=9643908}
                         };
                         
                     case 2030:
-                        return new List<WaterUseData>() 
+                        return new List<WaterSourceSupplyData>() 
                         {
-                            new WaterUseData { Name="Muncipal", Value=6254784}, 
-                            new WaterUseData { Name="Manufacturing", Value=2465789},
-                            new WaterUseData { Name="Mining", Value=296472},
-                            new WaterUseData { Name="Steam-electric", Value=1160401},
-                            new WaterUseData { Name="Livestock", Value=344242},
-                            new WaterUseData { Name="Irrigation", Value=9299464}
+                            new WaterSourceSupplyData { Name="Muncipal", Value=6254784}, 
+                            new WaterSourceSupplyData { Name="Manufacturing", Value=2465789},
+                            new WaterSourceSupplyData { Name="Mining", Value=296472},
+                            new WaterSourceSupplyData { Name="Steam-electric", Value=1160401},
+                            new WaterSourceSupplyData { Name="Livestock", Value=344242},
+                            new WaterSourceSupplyData { Name="Irrigation", Value=9299464}
                         };
                         
                     case 2040:
-                        return new List<WaterUseData>()
+                        return new List<WaterSourceSupplyData>()
                         {
-                            new WaterUseData { Name="Muncipal", Value=6917722}, 
-                            new WaterUseData { Name="Manufacturing", Value=2621183},
-                            new WaterUseData { Name="Mining", Value=285002},
-                            new WaterUseData { Name="Steam-electric", Value=1316577},
-                            new WaterUseData { Name="Livestock", Value=352536},
-                            new WaterUseData { Name="Irrigation", Value=9024866}
+                            new WaterSourceSupplyData { Name="Muncipal", Value=6917722}, 
+                            new WaterSourceSupplyData { Name="Manufacturing", Value=2621183},
+                            new WaterSourceSupplyData { Name="Mining", Value=285002},
+                            new WaterSourceSupplyData { Name="Steam-electric", Value=1316577},
+                            new WaterSourceSupplyData { Name="Livestock", Value=352536},
+                            new WaterSourceSupplyData { Name="Irrigation", Value=9024866}
                         };
                         
                     case 2050:
-                        return new List<WaterUseData>() 
+                        return new List<WaterSourceSupplyData>() 
                         {
-                            new WaterUseData { Name="Muncipal", Value=7630808}, 
-                            new WaterUseData { Name="Manufacturing", Value=2755335},
-                            new WaterUseData { Name="Mining", Value=284640},
-                            new WaterUseData { Name="Steam-electric", Value=1460483},
-                            new WaterUseData { Name="Livestock", Value=361701},
-                            new WaterUseData { Name="Irrigation", Value=8697560}
+                            new WaterSourceSupplyData { Name="Muncipal", Value=7630808}, 
+                            new WaterSourceSupplyData { Name="Manufacturing", Value=2755335},
+                            new WaterSourceSupplyData { Name="Mining", Value=284640},
+                            new WaterSourceSupplyData { Name="Steam-electric", Value=1460483},
+                            new WaterSourceSupplyData { Name="Livestock", Value=361701},
+                            new WaterSourceSupplyData { Name="Irrigation", Value=8697560}
                         };
                         
                     case 2060:
-                        return new List<WaterUseData>() 
+                        return new List<WaterSourceSupplyData>() 
                         {
-                            new WaterUseData { Name="Muncipal", Value=8414492}, 
-                            new WaterUseData { Name="Manufacturing", Value=2882524},
-                            new WaterUseData { Name="Mining", Value=292294},
-                            new WaterUseData { Name="Steam-electric", Value=1620411},
-                            new WaterUseData { Name="Livestock", Value=371923},
-                            new WaterUseData { Name="Irrigation", Value=8370554}
+                            new WaterSourceSupplyData { Name="Muncipal", Value=8414492}, 
+                            new WaterSourceSupplyData { Name="Manufacturing", Value=2882524},
+                            new WaterSourceSupplyData { Name="Mining", Value=292294},
+                            new WaterSourceSupplyData { Name="Steam-electric", Value=1620411},
+                            new WaterSourceSupplyData { Name="Livestock", Value=371923},
+                            new WaterSourceSupplyData { Name="Irrigation", Value=8370554}
                         };
                         
                     default:
@@ -110,7 +110,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         [NHibernateSession]
-        public ReservoirSupplyData GetReservoirSupplyData(int ReservoirId, int Year)
+        public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyData(int ReservoirId, int Year)
         {
             if (!_validYears.Contains(Year))
             {
@@ -124,14 +124,14 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
             //TODO: Get from a repository call
             var r = new Random();
-            var data = new ReservoirSupplyData
+            var data = new List<WaterSourceSupplyData>
             {
-                Livestock = 0,
-                Irrigation = r.Next(100,1000),
-                Manufacturing = r.Next(100, 1000),
-                Mining = r.Next(100, 1000),
-                Municipal = r.Next(100, 1000),
-                SteamElectricPower = r.Next(100, 1000)
+                new WaterSourceSupplyData { Name = "Livestock", Value = 0 },
+                new WaterSourceSupplyData { Name = "Irrigation", Value = r.Next(100, 1000) },
+                new WaterSourceSupplyData { Name = "Manufacturing", Value = r.Next(100, 1000) },
+                new WaterSourceSupplyData { Name = "Mining", Value = r.Next(100, 1000) },
+                new WaterSourceSupplyData { Name = "Municipal", Value = r.Next(100, 1000) },
+                new WaterSourceSupplyData { Name = "Steam-electric", Value = r.Next(100, 1000) }
             };
 
             return data;

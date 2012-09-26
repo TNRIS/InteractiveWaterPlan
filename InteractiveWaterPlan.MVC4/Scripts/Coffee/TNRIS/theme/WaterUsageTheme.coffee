@@ -27,12 +27,15 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     loadTheme: () ->
         map = this.mapComp.map
         
-        this.contentPanel.update(
-            """
-            <h3>Water Use</h3>
-            <p>Click on a dot to view the information for that water user group.</p>
-            """
-        )
+        temporaryPanel = Ext.create('Ext.panel.Panel', {
+            region: 'center'
+            html: """
+                    <h3>Water Use</h3>
+                    <p>Click on a dot to view the information for that water user group.</p>
+                  """
+
+        })
+        this.mainPanel.add(temporaryPanel)
 
         this.dataStore.load({
             scope: this
@@ -140,6 +143,8 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         this._removeSelectWUGControl()
         
         this.WUGLayer.destroy() if this.WUGLayer?
+
+        this.mainPanel.removeAll(true)
         return null
 
 

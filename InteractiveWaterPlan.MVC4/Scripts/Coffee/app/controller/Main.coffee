@@ -30,12 +30,8 @@ Ext.define('ISWP.controller.Main', {
             selector: 'themeyearmappanel'
         }
         {
-            ref: 'mainChart'
-            selector: '#mainChart'
-        }
-        {
-            ref: 'mainContent'
-            selector: '#mainContent'
+            ref: 'mainPanel'
+            selector: '#mainPanel'
         }
         {
             ref: 'mapComponent'
@@ -55,6 +51,8 @@ Ext.define('ISWP.controller.Main', {
     interactiveTheme: null
 
     init: () ->
+        
+
         this.control({
             'mapcomponent': 
                 boxready: (mapComp) ->
@@ -64,35 +62,24 @@ Ext.define('ISWP.controller.Main', {
 
                     this.selectedTheme = this.getThemeYearMapPanel().getSelectedTheme()
                         
+                    #set the default selectedYear
+                    this.selectedYear = this.getThemeYearMapPanel().getSelectedYear()
+
                     this.loadThemeIntoMap(this.selectedTheme)
                     
                     return null
 
-
-
             'button[toggleGroup=yearButtons]':
                 click: (btn, evt) ->
                     this.selectedYear = btn.year
-
-                    this.getMainChart().store.load({
-                        params:
-                            Year: btn.year
-                            LocationType: 'State'
-                            LocationName: 'Texas'
-                    })
-
                     #Reload the theme with the new year
                     this.interactiveTheme.updateYear(btn.year)
-                    #this.loadThemeIntoMap(this.selectedTheme)
-
                     return null
 
             'button[toggleGroup=themeButtons]':
                 click: (btn, evt) ->
                     this.selectedTheme = btn.theme
                     this.loadThemeIntoMap(btn.theme)
-
-                    #TODO: change the chart/main area based on some info in the theme
                     return null
 
             '#resetExtentButton':
@@ -140,19 +127,6 @@ Ext.define('ISWP.controller.Main', {
                     })
 
                     return null
-
-            '#mainChart':
-                render: (chart) ->
-                    
-                    this.selectedYear = this.getThemeYearMapPanel().getSelectedYear()
-                    chart.store.load({
-                        params:
-                            Year: this.selectedYear
-                            LocationType: 'State'
-                            LocationName: 'Texas'
-                    })
-                    return null
-
         })
         
     loadThemeIntoMap: (themeName) ->
@@ -164,18 +138,17 @@ Ext.define('ISWP.controller.Main', {
             this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
-                themeName: themeName
                 dataStore: this.getEntityStore()
                 selectedYear: this.selectedYear
-                contentPanel: this.getMainContent()
+                mainPanel: this.getMainPanel()
             })
         else if themeName == 'proposed-reservoirs'
+            console.log("#{this.selectedYear}")
             this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
-                themeName: themeName
                 dataStore: this.getWaterUseEntityStore()
-                contentPanel: this.getMainContent()
+                mainPanel: this.getMainPanel()
                 selectedYear: this.selectedYear
                 reservoirStore: this.getReservoirFeatureStore()
                 supplyStore: this.getReservoirSupplyDataStore()

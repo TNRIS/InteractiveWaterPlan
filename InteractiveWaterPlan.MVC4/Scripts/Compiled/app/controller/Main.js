@@ -12,11 +12,8 @@ Ext.define('ISWP.controller.Main', {
       ref: 'themeYearMapPanel',
       selector: 'themeyearmappanel'
     }, {
-      ref: 'mainChart',
-      selector: '#mainChart'
-    }, {
-      ref: 'mainContent',
-      selector: '#mainContent'
+      ref: 'mainPanel',
+      selector: '#mainPanel'
     }, {
       ref: 'mapComponent',
       selector: 'mapcomponent'
@@ -35,6 +32,7 @@ Ext.define('ISWP.controller.Main', {
         boxready: function(mapComp) {
           mapComp.initializeMap();
           this.selectedTheme = this.getThemeYearMapPanel().getSelectedTheme();
+          this.selectedYear = this.getThemeYearMapPanel().getSelectedYear();
           this.loadThemeIntoMap(this.selectedTheme);
           return null;
         }
@@ -42,13 +40,6 @@ Ext.define('ISWP.controller.Main', {
       'button[toggleGroup=yearButtons]': {
         click: function(btn, evt) {
           this.selectedYear = btn.year;
-          this.getMainChart().store.load({
-            params: {
-              Year: btn.year,
-              LocationType: 'State',
-              LocationName: 'Texas'
-            }
-          });
           this.interactiveTheme.updateYear(btn.year);
           return null;
         }
@@ -102,19 +93,6 @@ Ext.define('ISWP.controller.Main', {
           });
           return null;
         }
-      },
-      '#mainChart': {
-        render: function(chart) {
-          this.selectedYear = this.getThemeYearMapPanel().getSelectedYear();
-          chart.store.load({
-            params: {
-              Year: this.selectedYear,
-              LocationType: 'State',
-              LocationName: 'Texas'
-            }
-          });
-          return null;
-        }
       }
     });
   },
@@ -126,18 +104,17 @@ Ext.define('ISWP.controller.Main', {
       this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
-        themeName: themeName,
         dataStore: this.getEntityStore(),
         selectedYear: this.selectedYear,
-        contentPanel: this.getMainContent()
+        mainPanel: this.getMainPanel()
       });
     } else if (themeName === 'proposed-reservoirs') {
+      console.log("" + this.selectedYear);
       this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
-        themeName: themeName,
         dataStore: this.getWaterUseEntityStore(),
-        contentPanel: this.getMainContent(),
+        mainPanel: this.getMainPanel(),
         selectedYear: this.selectedYear,
         reservoirStore: this.getReservoirFeatureStore(),
         supplyStore: this.getReservoirSupplyDataStore()

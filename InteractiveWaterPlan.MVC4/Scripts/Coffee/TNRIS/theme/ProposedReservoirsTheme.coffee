@@ -9,9 +9,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     max_radius: 12
     min_radius: 4
 
-    themeName: null
-    
-
     curr_reservoir: null
 
     reservoirStore: null
@@ -23,6 +20,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
     gridPanel: null
     headerPanel: null
+    chartPanel: null
 
     featureControl: null
 
@@ -39,7 +37,14 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                     <p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>
                     """
         })
-        this.contentPanel.add(this.headerPanel)
+        this.mainPanel.add(this.headerPanel)
+
+
+        this.chartPanel = Ext.create('Ext.panel.Panel', {
+            region: 'west'
+            width: 300
+        })
+        this.mainPanel.add(this.chartPanel)
 
         #TODO: hook up to 'select' event select the feature for selected reservoir in the grid
         # and vice versa
@@ -107,7 +112,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             return null
         )
 
-        this.contentPanel.add(this.gridPanel)
+        this.mainPanel.add(this.gridPanel)
 
         this.reservoirStore.load({
             scope: this
@@ -158,7 +163,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.reservoirLayer.destroy() if this.reservoirLayer?
         this.relatedWUGLayer.destroy() if this.relatedWUGLayer?
 
-        this.contentPanel.removeAll(true)
+        this.mainPanel.removeAll(true)
         return null
 
     updateYear: (year) ->
@@ -202,7 +207,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         break
 
                 this._showRelatedEntities()
-                this._updateSupplyChart()
+                #this._updateSupplyChart()
                 return null
 
             onUnselect: (feature) =>
@@ -256,7 +261,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         )
 
         map.addLayer(this.relatedWUGLayer)
-        
+
         this.dataStore.load({
             params:
                 Year: this.selectedYear

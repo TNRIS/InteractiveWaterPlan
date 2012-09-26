@@ -2,7 +2,7 @@ Ext.define('ISWP.store.ReservoirSupplyData', {
     
     extend: 'Ext.data.Store'
 
-    model: 'ISWP.model.ReservoirSupplyData'
+    model: 'ISWP.model.WaterSourceSupplyData'
 
     storeId: 'reservoirSupplyData'
 

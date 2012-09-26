@@ -6,7 +6,7 @@ using System.Text;
 namespace InteractiveWaterPlan.Core
 {
     
-    public class WaterUseData
+    public class WaterSourceSupplyData
     {
         public string Name;
         public double Value;

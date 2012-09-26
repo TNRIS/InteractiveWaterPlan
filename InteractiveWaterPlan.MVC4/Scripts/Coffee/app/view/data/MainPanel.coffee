@@ -3,25 +3,10 @@ Ext.define("ISWP.view.data.MainPanel", {
     extend: 'Ext.panel.Panel'
     alias: 'widget.mainpanel'
 
-    #rather than separate tabs
-    layout: 
-        type: 'hbox'
-        align: 'stretch'
+    id: 'mainPanel'
 
-    items: [
-        {
-            flex: 1
-            xtype: 'waterusechart'
-            id: 'mainChart'
-
-        }
-        {
-            flex: 2
-            html: 'Main content for 2010'
-            id: 'mainContent'
-            border: false
-            layout: 'border'
-        }
-    ]
+    layout: 'border'
+       
+    
 
 })

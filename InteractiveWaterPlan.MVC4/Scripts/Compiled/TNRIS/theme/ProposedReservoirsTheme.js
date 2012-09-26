@@ -5,7 +5,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   serviceUrl: 'api/feature/reservoir/proposed',
   max_radius: 12,
   min_radius: 4,
-  themeName: null,
   curr_reservoir: null,
   reservoirStore: null,
   reservoirLayer: null,
@@ -13,6 +12,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   supplyStore: null,
   gridPanel: null,
   headerPanel: null,
+  chartPanel: null,
   featureControl: null,
   selectReservoirControl: null,
   loadTheme: function() {
@@ -24,7 +24,12 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       height: 60,
       html: "<h3>Recommended Reservoirs</h3>\n<p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>"
     });
-    this.contentPanel.add(this.headerPanel);
+    this.mainPanel.add(this.headerPanel);
+    this.chartPanel = Ext.create('Ext.panel.Panel', {
+      region: 'west',
+      width: 300
+    });
+    this.mainPanel.add(this.chartPanel);
     this.gridPanel = Ext.create('Ext.grid.Panel', {
       store: this.reservoirStore,
       columns: [
@@ -81,7 +86,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       _this.selectReservoirControl.select(_this.curr_reservoir);
       return null;
     });
-    this.contentPanel.add(this.gridPanel);
+    this.mainPanel.add(this.gridPanel);
     this.reservoirStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -125,7 +130,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     if (this.relatedWUGLayer != null) {
       this.relatedWUGLayer.destroy();
     }
-    this.contentPanel.removeAll(true);
+    this.mainPanel.removeAll(true);
     return null;
   },
   updateYear: function(year) {
@@ -167,7 +172,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           }
         }
         _this._showRelatedEntities();
-        _this._updateSupplyChart();
         return null;
       },
       onUnselect: function(feature) {
