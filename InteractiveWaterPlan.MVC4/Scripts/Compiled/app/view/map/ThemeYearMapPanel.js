@@ -57,11 +57,6 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           year: 2060,
           allowDepress: false,
           toggleGroup: 'yearButtons'
-        }, {
-          xtype: 'button',
-          text: 'Animate',
-          iconCls: 'icon-play',
-          iconAlign: 'right'
         }, '->', {
           xtype: 'button',
           text: 'Zoom to Texas',

@@ -108,7 +108,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     return null;
   },
   _changeToReservoirsLayout: function() {
-    var gridPanel, headerPanel,
+    var headerPanel, reservoirGridPanel,
       _this = this;
     this.mainPanel.removeAll(true);
     headerPanel = Ext.create('Ext.panel.Panel', {
@@ -117,7 +117,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       html: "<h3>Recommended Reservoirs</h3>\n<p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>"
     });
     this.mainPanel.add(headerPanel);
-    gridPanel = Ext.create('Ext.grid.Panel', {
+    reservoirGridPanel = Ext.create('Ext.grid.Panel', {
       store: this.reservoirStore,
       columns: [
         {
@@ -126,6 +126,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           dataIndex: 'Name',
           sortable: true,
           hideable: false,
+          draggable: false,
           resizable: false
         }, {
           xtype: 'actioncolumn',
@@ -133,6 +134,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           resizable: false,
           sortable: false,
           hideable: false,
+          draggable: false,
           items: [
             {
               iconCls: 'icon-zoom-in',
@@ -159,7 +161,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       autoScroll: true,
       region: 'center'
     });
-    gridPanel.on('itemdblclick', function(grid, record) {
+    reservoirGridPanel.on('itemdblclick', function(grid, record) {
       var res_feat, _i, _len, _ref;
       _this.selectReservoirControl.unselectAll();
       _ref = _this.reservoirLayer.features;
@@ -173,11 +175,91 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       _this.selectReservoirControl.select(_this.curr_reservoir);
       return null;
     });
-    this.mainPanel.add(gridPanel);
+    this.mainPanel.add(reservoirGridPanel);
     return null;
   },
   _changeToRelatedEntitiesLayout: function() {
-    console.log("switching to entities layout");
+    var headerPanel, relatedEntitiesGridPanel,
+      _this = this;
+    this.mainPanel.removeAll(true);
+    headerPanel = Ext.create('Ext.panel.Panel', {
+      region: 'north',
+      height: 60,
+      html: "<h3>" + this.curr_reservoir.data.Name + " - " + this.selectedYear + "</h3>\n<p>Descriptive text. Animate button.</p>"
+    });
+    this.mainPanel.add(headerPanel);
+    relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
+      store: this.relatedWUGStore,
+      columns: [
+        {
+          text: "Name",
+          width: 120,
+          dataIndex: "Name",
+          hideable: false,
+          draggable: false,
+          resizable: false
+        }, {
+          text: "Supply (acre-feet)",
+          width: 50,
+          dataIndex: "SourceSupply",
+          hideable: false,
+          draggable: false,
+          resizable: false
+        }, {
+          text: "Planning Area",
+          width: 50,
+          dataIndex: "RWP",
+          hideable: false,
+          draggable: false,
+          resizable: false
+        }, {
+          text: "County",
+          width: 100,
+          dataIndex: "County",
+          hideable: false,
+          draggable: false,
+          resizable: false
+        }, {
+          text: "Basin",
+          width: 50,
+          dataIndex: "Basin",
+          hideable: false,
+          draggable: false,
+          resizable: false
+        }, {
+          xtype: 'actioncolumn',
+          width: 10,
+          resizable: false,
+          sortable: false,
+          hideable: false,
+          draggable: false,
+          items: [
+            {
+              iconCls: 'icon-zoom-in',
+              tooltip: 'Zoom To',
+              handler: function(grid, rowIndex, colIndex) {
+                var bounds, rec, wug_feat, _i, _len, _ref;
+                rec = grid.getStore().getAt(rowIndex);
+                _ref = _this.relatedWUGLayer.features;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  wug_feat = _ref[_i];
+                  if (rec.data.Id === wug_feat.data.Id) {
+                    bounds = wug_feat.geometry.getBounds();
+                    _this.mapComp.map.zoomToExtent(bounds);
+                    break;
+                  }
+                }
+                return null;
+              }
+            }
+          ]
+        }
+      ],
+      forceFit: true,
+      autoScroll: true,
+      region: 'center'
+    });
+    this.mainPanel.add(relatedEntitiesGridPanel);
     return null;
   },
   _updateSupplyChart: function() {
@@ -212,7 +294,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
       styleMap: this._wugStyleMap
     });
     map.addLayer(this.relatedWUGLayer);
-    this.dataStore.load({
+    this.relatedWUGStore.load({
       params: {
         Year: this.selectedYear,
         forReservoirId: this.curr_reservoir.data.Id
@@ -261,7 +343,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             }
             point = {};
             _ref = [feature.geometry.getCentroid().x, feature.geometry.getCentroid().y], point.lon = _ref[0], point.lat = _ref[1];
-            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\nSource Supply: " + feature.data.SourceSupply + " ac-ft/yr<br/>", null, true, function() {
+            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\nSupply: " + feature.data.SourceSupply + " acre-ft<br/>", null, true, function() {
               select.unselect(feature);
               return null;
             });

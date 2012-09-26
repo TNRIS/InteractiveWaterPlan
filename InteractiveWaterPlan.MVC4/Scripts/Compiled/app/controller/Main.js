@@ -104,17 +104,17 @@ Ext.define('ISWP.controller.Main', {
       this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
-        dataStore: this.getEntityStore(),
         selectedYear: this.selectedYear,
-        mainPanel: this.getMainPanel()
+        mainPanel: this.getMainPanel(),
+        entityStore: this.getEntityStore()
       });
     } else if (themeName === 'proposed-reservoirs') {
       this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
-        dataStore: this.getWaterUseEntityStore(),
-        mainPanel: this.getMainPanel(),
         selectedYear: this.selectedYear,
+        mainPanel: this.getMainPanel(),
+        relatedWUGStore: this.getWaterUseEntityStore(),
         reservoirStore: this.getReservoirFeatureStore(),
         supplyStore: this.getReservoirSupplyDataStore()
       });

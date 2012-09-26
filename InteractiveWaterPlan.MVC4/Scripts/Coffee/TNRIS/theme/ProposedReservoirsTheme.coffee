@@ -152,23 +152,17 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         })
         this.mainPanel.add(headerPanel)
 
-        gridPanel = Ext.create('Ext.grid.Panel', {
+        reservoirGridPanel = Ext.create('Ext.grid.Panel', {
             store: this.reservoirStore,
             columns: [
-                {
-                    text: "Name"
-                    width: 120
-                    dataIndex: 'Name'
-                    sortable: true
-                    hideable: false
-                    resizable: false
-                }
+                { text: "Name", width: 120, dataIndex: 'Name', sortable: true, hideable: false, draggable: false, resizable: false }
                 {
                     xtype: 'actioncolumn'
                     width: 6
                     resizable: false
                     sortable: false
                     hideable: false
+                    draggable: false
                     items: [
                         {
                             iconCls: 'icon-zoom-in'
@@ -196,7 +190,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             region: 'center'
         });
 
-        gridPanel.on('itemdblclick', (grid, record) =>
+        reservoirGridPanel.on('itemdblclick', (grid, record) =>
             
             #unselect the previous reservoir
             this.selectReservoirControl.unselectAll()
@@ -214,31 +208,47 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             return null
         )
 
-        this.mainPanel.add(gridPanel)
+        this.mainPanel.add(reservoirGridPanel)
         return null
 
     _changeToRelatedEntitiesLayout: () ->
         this.mainPanel.removeAll(true)
 
-        #todo: header panel
+        # TODO: animate through the years
+        #  
+        # {
+        #    xtype: 'button'
+        #    text: 'Animate'
+        #    iconCls: 'icon-play'
+        #    iconAlign: 'right'
+        # }
 
-        gridPanel = Ext.create('Ext.grid.Panel', {
-            store: this.reservoirStore,
+        headerPanel = Ext.create('Ext.panel.Panel', {
+            region: 'north'
+            height: 60
+            html:   """
+                    <h3>#{this.curr_reservoir.data.Name} - #{this.selectedYear}</h3>
+                    <p>Descriptive text. Animate button.</p>
+                    """
+        })
+        this.mainPanel.add(headerPanel)
+
+        relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
+            store: this.relatedWUGStore,
             columns: [
-                {
-                    text: "Name"
-                    width: 120
-                    dataIndex: 'Name'
-                    sortable: true
-                    hideable: false
-                    resizable: false
-                }
+                { text: "Name", width: 120, dataIndex: "Name", hideable: false, draggable: false, resizable: false}
+                { text: "Supply (acre-feet)", width: 50, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
+                { text: "Planning Area", width: 50, dataIndex: "RWP", hideable: false, draggable: false, resizable: false}
+                { text: "County", width: 100, dataIndex: "County", hideable: false, draggable: false, resizable: false}
+                { text: "Basin", width: 50, dataIndex: "Basin", hideable: false, draggable: false, resizable: false}
+
                 {
                     xtype: 'actioncolumn'
-                    width: 6
+                    width: 10
                     resizable: false
                     sortable: false
                     hideable: false
+                    draggable: false
                     items: [
                         {
                             iconCls: 'icon-zoom-in'
@@ -248,10 +258,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                                 rec = grid.getStore().getAt(rowIndex)
 
                                 #find the matching reservoir in the feature layer
-                                for res_feat in this.reservoirLayer.features
-                                    if rec.data.Id == res_feat.data.Id
+                                #TODO:
+                                for wug_feat in this.relatedWUGLayer.features
+                                    if rec.data.Id == wug_feat.data.Id
                                         #found it - grab the bounds and zoom to it
-                                        bounds = res_feat.geometry.getBounds()
+                                        bounds = wug_feat.geometry.getBounds()
                                         this.mapComp.map.zoomToExtent(bounds)
                                         break
 
@@ -266,7 +277,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             region: 'center'
         });
 
-        this.mainPanel.add(gridPanel)
+        this.mainPanel.add(relatedEntitiesGridPanel)
 
 
         #TODO: chart panel
@@ -381,7 +392,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                             null,
                             """
                             <h3>#{feature.data.Name}</h3>
-                            Source Supply: #{feature.data.SourceSupply} ac-ft/yr<br/>
+                            Supply: #{feature.data.SourceSupply} acre-ft<br/>
                             """,
                             null,
                             true,

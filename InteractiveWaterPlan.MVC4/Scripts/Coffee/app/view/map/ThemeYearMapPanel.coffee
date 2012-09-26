@@ -67,14 +67,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     allowDepress: false
                     toggleGroup: 'yearButtons'
                 }
-                # TODO: animate the proposed reservoirs theme
-                #   Might be better to put this button somewhere else though
-                {
-                    xtype: 'button'
-                    text: 'Animate'
-                    iconCls: 'icon-play'
-                    iconAlign: 'right'
-                }
+                
                 '->' #align the rest to the right
                 {
                     xtype: 'button'

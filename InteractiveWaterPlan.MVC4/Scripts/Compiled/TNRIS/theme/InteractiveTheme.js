@@ -11,7 +11,6 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     observable: 'Ext.util.Observable'
   },
   themeStore: null,
-  dataStore: null,
   mapComp: null,
   mainPanel: null,
   contentPanel: null,

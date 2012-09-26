@@ -22,7 +22,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
       html: "<h3>Water Use</h3>\n<p>Click on a dot to view the information for that water user group.</p>"
     });
     this.mainPanel.add(temporaryPanel);
-    this.dataStore.load({
+    this.entityStore.load({
       scope: this,
       callback: function(records, operation, success) {
         var bounds, data, entity_features, new_feat, rec, select, wktFormat, _i, _len;
