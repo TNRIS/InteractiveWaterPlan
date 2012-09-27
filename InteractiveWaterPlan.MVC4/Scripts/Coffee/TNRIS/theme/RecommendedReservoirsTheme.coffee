@@ -405,6 +405,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         )
         "select" : new OpenLayers.Style(
             fillColor: "yellow"
+            fillOpacity: 1
         )
     )
 

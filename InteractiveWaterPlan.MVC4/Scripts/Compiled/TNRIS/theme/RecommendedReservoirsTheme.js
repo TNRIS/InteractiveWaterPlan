@@ -349,7 +349,8 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       }
     }),
     "select": new OpenLayers.Style({
-      fillColor: "yellow"
+      fillColor: "yellow",
+      fillOpacity: 1
     })
   })
 });

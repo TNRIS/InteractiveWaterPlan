@@ -620,6 +620,8 @@
     <Content Include="Scripts\Compiled\app\view\data\MainContainer.js" />
     <Content Include="Scripts\Compiled\app\view\map\MapComponent.js" />
     <Content Include="Scripts\Compiled\app\view\map\ThemeYearMapPanel.js" />
+    <Content Include="Scripts\Compiled\app\view\theme\RecommendedReservoirsPanel.js" />
+    <Content Include="Scripts\Compiled\app\view\theme\RelatedWUGPanel.js" />
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
@@ -667,6 +669,8 @@
     <None Include="Scripts\Coffee\app\view\data\MainContainer.coffee" />
     <None Include="Scripts\Coffee\app\view\map\MapComponent.coffee" />
     <None Include="Scripts\Coffee\app\view\map\ThemeYearMapPanel.coffee" />
+    <None Include="Scripts\Coffee\app\view\theme\RecommendedReservoirsPanel.coffee" />
+    <None Include="Scripts\Coffee\app\view\theme\RelatedWUGPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />

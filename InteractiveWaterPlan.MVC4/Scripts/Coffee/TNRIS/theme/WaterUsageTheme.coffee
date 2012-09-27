@@ -46,35 +46,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                 this.WUGLayer = new OpenLayers.Layer.Vector(
                     "Water Users", 
                     {
-                        styleMap: new OpenLayers.Style(
-                            {
-                                pointRadius: 4
-                                strokeColor: 'cyan'
-                                strokeWidth: 0.5
-                                fillColor: 'blue'
-                                fillOpacity: 0.8
-                            },
-                            {
-                                rules: [
-                                    new OpenLayers.Rule({
-                                        symbolizer: {
-                                            pointRadius: 4,
-                                        }
-                                    }),
-                                    new OpenLayers.Rule({
-                                        maxScaleDenominator: 866688,
-                                        symbolizer: {
-                                            fontSize: "10px"
-                                            labelAlign: 'cb'
-                                            labelOutlineColor: "white"
-                                            labelOutlineWidth: 2
-                                            labelYOffset: 6
-                                            label: "${label}"
-                                        }        
-                                    })
-                                ]
-                            }
-                        )
+                        styleMap: this._wugStyleMap
                     }
                 )
 
@@ -154,4 +126,39 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
             this.selectWUGControl.destroy()
 
         return null
+
+    _wugStyleMap: new OpenLayers.StyleMap(
+        "default" : new OpenLayers.Style(
+            pointRadius: 5
+            strokeColor: 'cyan'
+            strokeWidth: 0.5
+            fillColor: 'blue'
+            fillOpacity: 0.8
+            {
+                rules: [
+                    new OpenLayers.Rule({
+                        symbolizer: {
+                            pointRadius: 4,
+                        }
+                    }),
+                    new OpenLayers.Rule({
+                        maxScaleDenominator: 866688,
+                        symbolizer: {
+                            fontSize: "10px"
+                            labelAlign: 'cb'
+                            labelOutlineColor: "white"
+                            labelOutlineWidth: 2
+                            labelYOffset: 6
+                            label: "${label}"
+                        }        
+                    })
+                ]
+            }
+        )
+        "select" : new OpenLayers.Style(
+            fillColor: 'yellow'
+            strokeColor: 'blue'
+            fillOpacity: 1
+        )
+    )
 })
