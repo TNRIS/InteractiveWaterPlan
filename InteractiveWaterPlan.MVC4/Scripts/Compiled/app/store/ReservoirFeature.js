@@ -7,7 +7,7 @@ Ext.define('ISWP.store.ReservoirFeature', {
   autoLoad: false,
   proxy: {
     type: 'ajax',
-    url: 'api/feature/reservoir/proposed/all',
+    url: 'api/feature/reservoir/recommended/all',
     reader: {
       type: 'json'
     }

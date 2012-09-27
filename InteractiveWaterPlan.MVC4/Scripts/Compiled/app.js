@@ -30,7 +30,7 @@ Ext.require('TNRIS.theme.InteractiveTheme');
 
 Ext.require('TNRIS.theme.WaterUsageTheme');
 
-Ext.require('TNRIS.theme.ProposedReservoirsTheme');
+Ext.require('TNRIS.theme.RecommendedReservoirsTheme');
 
 Ext.create('Ext.app.Application', {
   name: 'ISWP',

@@ -21,7 +21,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
       region: 'center',
       html: "<h3>Water Use</h3>\n<p>Click on a dot to view the information for that water user group.</p>"
     });
-    this.mainPanel.add(temporaryPanel);
+    this.mainContainer.add(temporaryPanel);
     this.entityStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -107,7 +107,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     if (this.WUGLayer != null) {
       this.WUGLayer.destroy();
     }
-    this.mainPanel.removeAll(true);
+    this.mainContainer.removeAll(true);
     return null;
   },
   _removeSelectWUGControl: function() {

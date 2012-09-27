@@ -2,18 +2,15 @@
 
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
-  views: ['chart.WaterUseChart', 'data.MainPanel', 'map.MapComponent', 'map.ThemeYearMapPanel'],
+  views: ['data.MainContainer', 'map.MapComponent', 'map.ThemeYearMapPanel', 'theme.RecommendedReservoirsPanel'],
   stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData'],
   refs: [
     {
-      ref: 'mainPanel',
-      selector: 'mainpanel'
+      ref: 'mainContainer',
+      selector: '#mainContainer'
     }, {
       ref: 'themeYearMapPanel',
       selector: 'themeyearmappanel'
-    }, {
-      ref: 'mainPanel',
-      selector: '#mainPanel'
     }, {
       ref: 'mapComponent',
       selector: 'mapcomponent'
@@ -105,15 +102,15 @@ Ext.define('ISWP.controller.Main', {
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
         selectedYear: this.selectedYear,
-        mainPanel: this.getMainPanel(),
+        mainContainer: this.getMainContainer(),
         entityStore: this.getEntityStore()
       });
-    } else if (themeName === 'proposed-reservoirs') {
-      this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
+    } else if (themeName === 'recommended-reservoirs') {
+      this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
         selectedYear: this.selectedYear,
-        mainPanel: this.getMainPanel(),
+        mainContainer: this.getMainContainer(),
         relatedWUGStore: this.getWaterUseEntityStore(),
         reservoirStore: this.getReservoirFeatureStore(),
         supplyStore: this.getReservoirSupplyDataStore()

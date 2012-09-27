@@ -21,18 +21,18 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
             Theme theme = null;
 
-            if ("proposed-reservoirs".Equals(themeName, StringComparison.InvariantCultureIgnoreCase))
+            if ("recommended-reservoirs".Equals(themeName, StringComparison.InvariantCultureIgnoreCase))
             {
-                theme = new Theme("Proposed Reservoirs");
+                theme = new Theme("Recommended Reservoirs");
                 theme.Layers.Add(
                     new WMSLayerInfo(
-                        "Proposed Reservoirs",
+                        "Recommended Reservoirs",
                         "http://services.tnris.org/ArcGIS/services/TWDB_StateWaterPlan/MapServer/WMSServer",
                         "0,1"
                     )
                 );
 
-                theme.ServiceUrl = "api/feature/reservoir/proposed";
+                theme.ServiceUrl = "api/feature/reservoir/recommended";
             }
             else if ("water-use".Equals(themeName, StringComparison.InvariantCultureIgnoreCase))
             {

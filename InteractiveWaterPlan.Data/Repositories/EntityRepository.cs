@@ -93,12 +93,12 @@ namespace InteractiveWaterPlan.Data
         }
 
         /// <summary>
-        /// Returns a list of all proposed Reservoirs.
+        /// Returns a list of all recommended Reservoirs.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Reservoir> GetAllProposedReservoirs()
+        public IEnumerable<Reservoir> GetAllRecommendedReservoirs()
         {
-            return Session.GetNamedQuery("GetAllProposedReservoirs")
+            return Session.GetNamedQuery("GetAllRecommendedReservoirs")
                 .SetParameter("var_SimplifyTolerance", 100)
                 .List<Reservoir>()
                 .OrderBy(r => r.Name)
@@ -108,10 +108,10 @@ namespace InteractiveWaterPlan.Data
 
         //TODO: Make Entity and WaterUseEntity the same.  Will need the stored proc to be updated to 
         // return the same fields/info.
-        public IEnumerable<WaterUseEntity> GetEntitiesServedByReservoir(int proposedReservoirId, int year)
+        public IEnumerable<WaterUseEntity> GetEntitiesServedByReservoir(int recommendedReservoirId, int year)
         {
             return Session.GetNamedQuery("GetEntitiesForReservoir")
-                .SetParameter("var_DB12_ID", proposedReservoirId)
+                .SetParameter("var_DB12_ID", recommendedReservoirId)
                 .SetParameter("var_EstYear", year)
                 .List<WaterUseEntity>()
                 .OrderBy(e => e.Name)

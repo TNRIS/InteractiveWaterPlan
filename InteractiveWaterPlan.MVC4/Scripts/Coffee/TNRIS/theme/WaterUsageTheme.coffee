@@ -35,7 +35,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
                   """
 
         })
-        this.mainPanel.add(temporaryPanel)
+        this.mainContainer.add(temporaryPanel)
 
         this.entityStore.load({
             scope: this
@@ -144,7 +144,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
         
         this.WUGLayer.destroy() if this.WUGLayer?
 
-        this.mainPanel.removeAll(true)
+        this.mainContainer.removeAll(true)
         return null
 
 

@@ -15,7 +15,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     
     mapComp: null #reference to the map component
     
-    mainPanel: null #reference to the main panel (for chart, data grid, etc)
+    mainContainer: null #reference to the main panel (for chart, data grid, etc)
 
     contentPanel: null
 

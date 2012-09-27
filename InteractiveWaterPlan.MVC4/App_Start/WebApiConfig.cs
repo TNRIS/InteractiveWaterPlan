@@ -31,21 +31,21 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
-                "GetAllProposedReservoirsRoute",
-                "api/feature/reservoir/proposed/all",
-                new { controller = "Feature", action = "GetAllProposedReservoirs" }
+                "GetAllRecommendedReservoirsRoute",
+                "api/feature/reservoir/recommended/all",
+                new { controller = "Feature", action = "GetAllRecommendedReservoirs" }
             );
 
             config.Routes.MapHttpRoute(
-                "GetProposedReservoirByLatLonRoute",
-                "api/feature/reservoir/proposed",
-                new { controller = "Feature", action = "GetProposedReservoir" }
+                "GetRecommendedReservoirByLatLonRoute",
+                "api/feature/reservoir/recommended",
+                new { controller = "Feature", action = "GetRecommendedReservoir" }
             );
 
             config.Routes.MapHttpRoute(
-                "GetProposedReservoirEntitiesRoute",
+                "GetRecommendedReservoirEntitiesRoute",
                 "api/feature/entity/{Year}",
-                new { controller = "Feature", action = "GetEntities" }
+                new { controller = "Feature", action = "GetEntitiesOfReservoir" }
             );
 
             #endregion

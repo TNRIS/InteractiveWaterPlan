@@ -13,7 +13,7 @@
 
   </class>
 
-  <sql-query name="GetAllProposedReservoirs">
+  <sql-query name="GetAllRecommendedReservoirs">
     <return class="Reservoir"/>
     exec dbo.usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Recommended_Reservoirs :var_SimplifyTolerance
   </sql-query>

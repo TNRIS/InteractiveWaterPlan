@@ -617,7 +617,7 @@
     <Content Include="Scripts\Compiled\app\store\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\store\WaterUseEntity.js" />
     <Content Include="Scripts\Compiled\app\view\chart\WaterUseChart.js" />
-    <Content Include="Scripts\Compiled\app\view\data\MainPanel.js" />
+    <Content Include="Scripts\Compiled\app\view\data\MainContainer.js" />
     <Content Include="Scripts\Compiled\app\view\map\MapComponent.js" />
     <Content Include="Scripts\Compiled\app\view\map\ThemeYearMapPanel.js" />
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
@@ -664,7 +664,7 @@
     <None Include="Scripts\Coffee\app\store\WaterUseData.coffee" />
     <None Include="Scripts\Coffee\app\store\WaterUseEntity.coffee" />
     <None Include="Scripts\Coffee\app\view\chart\WaterUseChart.coffee" />
-    <None Include="Scripts\Coffee\app\view\data\MainPanel.coffee" />
+    <None Include="Scripts\Coffee\app\view\data\MainContainer.coffee" />
     <None Include="Scripts\Coffee\app\view\map\MapComponent.coffee" />
     <None Include="Scripts\Coffee\app\view\map\ThemeYearMapPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />

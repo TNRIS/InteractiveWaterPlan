@@ -1,4 +1,4 @@
-Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
+Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     
     extend: 'TNRIS.theme.InteractiveTheme'
    
@@ -75,7 +75,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         this.reservoirLayer.destroy() if this.reservoirLayer?
         this.relatedWUGLayer.destroy() if this.relatedWUGLayer?
 
-        this.mainPanel.removeAll(true)
+        this.mainContainer.removeAll(true)
         return null
 
     updateYear: (year) ->
@@ -139,7 +139,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
         return null
 
     _changeToReservoirsLayout: () ->
-        this.mainPanel.removeAll(true)
+        this.mainContainer.removeAll(true)
 
         headerPanel = Ext.create('Ext.panel.Panel', {
             region: 'north'
@@ -149,7 +149,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                     <p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>
                     """
         })
-        this.mainPanel.add(headerPanel)
+        this.mainContainer.add(headerPanel)
 
         reservoirGridPanel = Ext.create('Ext.grid.Panel', {
             store: this.reservoirStore,
@@ -207,11 +207,11 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             return null
         )
 
-        this.mainPanel.add(reservoirGridPanel)
+        this.mainContainer.add(reservoirGridPanel)
         return null
 
     _changeToRelatedEntitiesLayout: () ->
-        this.mainPanel.removeAll(true)
+        this.mainContainer.removeAll(true)
 
         # TODO: animate through the years
         #  
@@ -230,7 +230,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                     <p>Descriptive text. Clear Selection button. Animate button.</p>
                     """
         })
-        this.mainPanel.add(headerPanel)
+        this.mainContainer.add(headerPanel)
 
         relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
             store: this.relatedWUGStore,
@@ -294,7 +294,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             return null
         )
 
-        this.mainPanel.add(relatedEntitiesGridPanel)
+        this.mainContainer.add(relatedEntitiesGridPanel)
 
         chart = Ext.create('ISWP.view.chart.WaterUseChart', {
             store: this.supplyStore
@@ -304,7 +304,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             shadow: false
 
         })
-        this.mainPanel.add(chart)
+        this.mainContainer.add(chart)
 
         return null
 

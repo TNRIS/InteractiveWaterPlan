@@ -12,7 +12,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
   },
   themeStore: null,
   mapComp: null,
-  mainPanel: null,
+  mainContainer: null,
   contentPanel: null,
   loadTheme: null,
   unloadTheme: null,

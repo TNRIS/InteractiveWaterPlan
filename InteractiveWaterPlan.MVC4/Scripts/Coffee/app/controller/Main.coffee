@@ -3,10 +3,10 @@ Ext.define('ISWP.controller.Main', {
     extend: 'Ext.app.Controller'
 
     views: [
-        'chart.WaterUseChart'
-        'data.MainPanel'
+        'data.MainContainer'
         'map.MapComponent'
         'map.ThemeYearMapPanel'
+        'theme.RecommendedReservoirsPanel'
     ]
 
     stores: [
@@ -22,16 +22,12 @@ Ext.define('ISWP.controller.Main', {
 
     refs: [
         {
-            ref: 'mainPanel'
-            selector: 'mainpanel'
+            ref: 'mainContainer'
+            selector: '#mainContainer'
         }
         {
             ref: 'themeYearMapPanel'
             selector: 'themeyearmappanel'
-        }
-        {
-            ref: 'mainPanel'
-            selector: '#mainPanel'
         }
         {
             ref: 'mapComponent'
@@ -139,16 +135,16 @@ Ext.define('ISWP.controller.Main', {
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
                 selectedYear: this.selectedYear
-                mainPanel: this.getMainPanel()
+                mainContainer: this.getMainContainer()
 
                 entityStore: this.getEntityStore()
             })
-        else if themeName == 'proposed-reservoirs'
-            this.interactiveTheme = new TNRIS.theme.ProposedReservoirsTheme({
+        else if themeName == 'recommended-reservoirs'
+            this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme({
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
                 selectedYear: this.selectedYear
-                mainPanel: this.getMainPanel()
+                mainContainer: this.getMainContainer()
 
                 relatedWUGStore: this.getWaterUseEntityStore()
                 reservoirStore: this.getReservoirFeatureStore()

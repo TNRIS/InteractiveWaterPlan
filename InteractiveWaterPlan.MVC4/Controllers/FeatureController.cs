@@ -14,17 +14,17 @@ namespace InteractiveWaterPlan.MVC4.Controllers
     {
         private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
 
-        //api/feature/reservoir/proposed/all
+        //api/feature/reservoir/recommended/all
         [NHibernateSession]
-        public IEnumerable<Reservoir> GetAllProposedReservoirs()
+        public IEnumerable<Reservoir> GetAllRecommendedReservoirs()
         {      
             var repo = new EntityRepository();
-            return repo.GetAllProposedReservoirs();
+            return repo.GetAllRecommendedReservoirs();
         }
 
-        //api/feature/reservoir/proposed?zoomLevel=Z&lat=Y&lon=X
+        //api/feature/reservoir/recommended?zoomLevel=Z&lat=Y&lon=X
         [NHibernateSession]
-        public Reservoir GetProposedReservoir(double lat, double lon, int zoom)
+        public Reservoir GetRecommendedReservoir(double lat, double lon, int zoom)
         {
             var repo = new EntityRepository();
             var clickedReservoir = repo.GetReservoirByBufferedClickPoint(lat, lon, zoom);
@@ -41,7 +41,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
         //api/feature/entity/{Year}?forReservoir={ReservoirId}
         [NHibernateSession]
-        public IEnumerable<WaterUseEntity> GetEntities(int Year, int forReservoirId=-1)
+        public IEnumerable<WaterUseEntity> GetEntitiesOfReservoir(int Year, int forReservoirId=-1)
         {
             if (!_validYears.Contains(Year))
             {

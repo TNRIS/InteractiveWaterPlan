@@ -21,8 +21,8 @@ Ext.define('ISWP.view.Viewport', {
 
         {
             region: 'center'
-            xtype: 'mainpanel'
-            id: 'mainPanel'
+            xtype: 'maincontainer'
+            id: 'mainContainer'
         }
 
         {

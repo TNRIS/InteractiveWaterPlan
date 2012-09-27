@@ -125,7 +125,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                 {
                     xtype: 'button'
                     text: 'Recommended<br/>Reservoirs'
-                    theme: 'proposed-reservoirs'
+                    theme: 'recommended-reservoirs'
                     pressed: true
                     allowDepress: false
                     toggleGroup: 'themeButtons'
