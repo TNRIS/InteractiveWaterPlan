@@ -61,10 +61,7 @@ Ext.define("ISWP.view.theme.RecommendedReservoirsPanel", {
                         ]
                     }
                 ]
-                listeners:
-                    itemdblclick: (grid, record) ->
-                        me.fireEvent("itemdblclick", grid, record)
-                        return null       
+                bubbleEvents: ['itemdblclick']    
             })
         )
              

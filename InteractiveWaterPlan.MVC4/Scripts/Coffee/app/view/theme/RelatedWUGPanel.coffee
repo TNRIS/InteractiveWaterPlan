@@ -35,6 +35,10 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
         me.add(Ext.create('Ext.grid.Panel', {
                 store: me.relatedWUGStore
                 emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade."
+                    
+                viewConfig:
+                    deferEmptyText: false
+                
                 forceFit: true
                 autoScroll: true
                 region: 'center'
@@ -75,11 +79,8 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
                         ]
                     }
                 ]
-
-                listeners:
-                    itemdblclick: (grid, record) ->
-                        me.fireEvent("itemdblclick", grid, record)
-                        return null
+                bubbleEvents: ['itemdblclick']
+                
             })
         )
 

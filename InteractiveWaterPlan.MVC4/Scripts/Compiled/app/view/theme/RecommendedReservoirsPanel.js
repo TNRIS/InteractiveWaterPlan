@@ -59,12 +59,7 @@ Ext.define("ISWP.view.theme.RecommendedReservoirsPanel", {
           ]
         }
       ],
-      listeners: {
-        itemdblclick: function(grid, record) {
-          me.fireEvent("itemdblclick", grid, record);
-          return null;
-        }
-      }
+      bubbleEvents: ['itemdblclick']
     }));
     return null;
   },
