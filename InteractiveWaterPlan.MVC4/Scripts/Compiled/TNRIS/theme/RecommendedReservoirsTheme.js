@@ -12,8 +12,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
   featureControl: null,
   selectReservoirControl: null,
   loadTheme: function() {
-    var map;
-    map = this.mapComp.map;
     this.reservoirStore.load({
       scope: this,
       callback: function(records, operation, success) {
@@ -40,9 +38,9 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
           res_features.push(new_feat);
         }
         this.reservoirLayer.addFeatures(res_features);
-        map.addLayer(this.reservoirLayer);
-        this._changeToReservoirsLayout();
+        this.mapComp.map.addLayer(this.reservoirLayer);
         this._setupSelectReservoirControl();
+        this._changeToReservoirsLayout();
         return null;
       }
     });
@@ -96,9 +94,9 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       hover: false,
       onSelect: function(feature) {
         _this.curr_reservoir = feature;
-        _this._changeToRelatedEntitiesLayout();
         _this._showRelatedEntities();
-        _this._updateSupplyChart();
+        _this._updateSupplyStore();
+        _this._changeToRelatedEntitiesLayout();
         return null;
       },
       onUnselect: function(feature) {
@@ -113,60 +111,17 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     return null;
   },
   _changeToReservoirsLayout: function() {
-    var headerPanel, reservoirGridPanel,
+    var reservoirsPanel,
       _this = this;
     this.mainContainer.removeAll(true);
-    headerPanel = Ext.create('Ext.panel.Panel', {
-      region: 'north',
-      height: 60,
-      html: "<h3>Recommended Reservoirs</h3>\n<p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>"
+    reservoirsPanel = Ext.create('ISWP.view.theme.RecommendedReservoirsPanel', {
+      reservoirStore: this.reservoirStore,
+      reservoirLayer: this.reservoirLayer,
+      mapComp: this.mapComp
     });
-    this.mainContainer.add(headerPanel);
-    reservoirGridPanel = Ext.create('Ext.grid.Panel', {
-      store: this.reservoirStore,
-      columns: [
-        {
-          text: "Name",
-          width: 120,
-          dataIndex: 'Name',
-          sortable: true,
-          hideable: false,
-          draggable: false,
-          resizable: false
-        }, {
-          xtype: 'actioncolumn',
-          width: 6,
-          resizable: false,
-          sortable: false,
-          hideable: false,
-          draggable: false,
-          items: [
-            {
-              iconCls: 'icon-zoom-in',
-              tooltip: 'Zoom To',
-              handler: function(grid, rowIndex, colIndex) {
-                var bounds, rec, res_feat, _i, _len, _ref;
-                rec = grid.getStore().getAt(rowIndex);
-                _ref = _this.reservoirLayer.features;
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  res_feat = _ref[_i];
-                  if (rec.data.Id === res_feat.data.Id) {
-                    bounds = res_feat.geometry.getBounds();
-                    _this.mapComp.map.zoomToExtent(bounds);
-                    break;
-                  }
-                }
-                return null;
-              }
-            }
-          ]
-        }
-      ],
-      forceFit: true,
-      autoScroll: true,
-      region: 'center'
-    });
-    reservoirGridPanel.on('itemdblclick', function(grid, record) {
+    this.mainContainer.add(reservoirsPanel);
+    reservoirsPanel.initialize();
+    reservoirsPanel.on("itemdblclick", function(grid, record) {
       var res_feat, _i, _len, _ref;
       _this.selectReservoirControl.unselectAll();
       _ref = _this.reservoirLayer.features;
@@ -180,92 +135,22 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       _this.selectReservoirControl.select(_this.curr_reservoir);
       return null;
     });
-    this.mainContainer.add(reservoirGridPanel);
     return null;
   },
   _changeToRelatedEntitiesLayout: function() {
-    var chart, headerPanel, relatedEntitiesGridPanel,
+    var wugPanel,
       _this = this;
     this.mainContainer.removeAll(true);
-    headerPanel = Ext.create('Ext.panel.Panel', {
-      region: 'north',
-      height: 60,
-      html: "<h3>" + this.curr_reservoir.data.Name + "</h3>\n<p>Descriptive text. Clear Selection button. Animate button.</p>"
+    wugPanel = Ext.create('ISWP.view.theme.RelatedWUGPanel', {
+      supplyStore: this.supplyStore,
+      relatedWUGLayer: this.relatedWUGLayer,
+      relatedWUGStore: this.relatedWUGStore,
+      curr_reservoir: this.curr_reservoir,
+      mapComp: this.mapComp
     });
-    this.mainContainer.add(headerPanel);
-    relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
-      store: this.relatedWUGStore,
-      columns: [
-        {
-          text: "Name",
-          width: 120,
-          dataIndex: "Name",
-          hideable: false,
-          draggable: false,
-          resizable: false
-        }, {
-          text: "Supply (acre-feet)",
-          width: 60,
-          dataIndex: "SourceSupply",
-          hideable: false,
-          draggable: false,
-          resizable: false
-        }, {
-          text: "Planning Area",
-          width: 50,
-          dataIndex: "RWP",
-          hideable: false,
-          draggable: false,
-          resizable: false
-        }, {
-          text: "County",
-          width: 60,
-          dataIndex: "County",
-          hideable: false,
-          draggable: false,
-          resizable: false
-        }, {
-          text: "Basin",
-          width: 50,
-          dataIndex: "Basin",
-          hideable: false,
-          draggable: false,
-          resizable: false
-        }, {
-          xtype: 'actioncolumn',
-          width: 10,
-          resizable: false,
-          sortable: false,
-          hideable: false,
-          draggable: false,
-          items: [
-            {
-              iconCls: 'icon-zoom-in',
-              tooltip: 'Zoom To',
-              handler: function(grid, rowIndex, colIndex) {
-                var bounds, rec, wug_feat, _i, _len, _ref;
-                rec = grid.getStore().getAt(rowIndex);
-                _ref = _this.relatedWUGLayer.features;
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  wug_feat = _ref[_i];
-                  if (rec.data.Id === wug_feat.data.Id) {
-                    bounds = wug_feat.geometry.getBounds();
-                    _this.mapComp.map.zoomToExtent(bounds);
-                    break;
-                  }
-                }
-                return null;
-              }
-            }
-          ]
-        }
-      ],
-      emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade.",
-      forceFit: true,
-      autoScroll: true,
-      region: 'center'
-    });
-    relatedEntitiesGridPanel.on('itemdblclick', function(grid, record) {
+    this.mainContainer.add(wugPanel);
+    wugPanel.initialize();
+    wugPanel.on("itemdblclick", function(grid, record) {
       var wug_feat, _i, _len, _ref;
       _this.selectWUGControl.unselectAll();
       _ref = _this.relatedWUGLayer.features;
@@ -278,18 +163,9 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       }
       return null;
     });
-    this.mainContainer.add(relatedEntitiesGridPanel);
-    chart = Ext.create('ISWP.view.chart.WaterUseChart', {
-      store: this.supplyStore,
-      region: 'west',
-      width: 260,
-      animate: false,
-      shadow: false
-    });
-    this.mainContainer.add(chart);
     return null;
   },
-  _updateSupplyChart: function() {
+  _updateSupplyStore: function() {
     this.supplyStore.load({
       params: {
         ReservoirId: this.curr_reservoir.data.Id,

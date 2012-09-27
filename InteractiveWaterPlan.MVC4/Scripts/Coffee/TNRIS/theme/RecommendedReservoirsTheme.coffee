@@ -21,9 +21,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     #TODO: Separate the 2 views into different components
 
     loadTheme: () ->
-        map = this.mapComp.map
-
-
         this.reservoirStore.load({
             scope: this
             callback: (records, operation, success) ->
@@ -56,11 +53,11 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                     res_features.push(new_feat)
 
                 this.reservoirLayer.addFeatures(res_features)
-                map.addLayer(this.reservoirLayer)
+                this.mapComp.map.addLayer(this.reservoirLayer)
 
 
-                this._changeToReservoirsLayout()
                 this._setupSelectReservoirControl()
+                this._changeToReservoirsLayout()
 
                 return null
         })
@@ -121,9 +118,10 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
             
             onSelect: (feature) =>
                 this.curr_reservoir = feature
-                this._changeToRelatedEntitiesLayout()
                 this._showRelatedEntities()
-                this._updateSupplyChart()
+                this._updateSupplyStore()
+                this._changeToRelatedEntitiesLayout()
+                
                 return null
 
             onUnselect: (feature) =>
@@ -140,57 +138,17 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
     _changeToReservoirsLayout: () ->
         this.mainContainer.removeAll(true)
+        
+        reservoirsPanel = Ext.create('ISWP.view.theme.RecommendedReservoirsPanel', {
+                reservoirStore: this.reservoirStore
+                reservoirLayer: this.reservoirLayer
+                mapComp: this.mapComp
+            })
 
-        headerPanel = Ext.create('Ext.panel.Panel', {
-            region: 'north'
-            height: 60
-            html:   """
-                    <h3>Recommended Reservoirs</h3>
-                    <p>Select a reservoir by clicking on one in the map or double-clicking a name below to see the water user groups that will benefit from its supply.</p>
-                    """
-        })
-        this.mainContainer.add(headerPanel)
+        this.mainContainer.add(reservoirsPanel)
+        reservoirsPanel.initialize()
 
-        reservoirGridPanel = Ext.create('Ext.grid.Panel', {
-            store: this.reservoirStore,
-            columns: [
-                { text: "Name", width: 120, dataIndex: 'Name', sortable: true, hideable: false, draggable: false, resizable: false }
-                {
-                    xtype: 'actioncolumn'
-                    width: 6
-                    resizable: false
-                    sortable: false
-                    hideable: false
-                    draggable: false
-                    items: [
-                        {
-                            iconCls: 'icon-zoom-in'
-                            tooltip: 'Zoom To'
-                            handler: (grid, rowIndex, colIndex) =>
-                                #Zoom to the feature when the action is clicked
-                                rec = grid.getStore().getAt(rowIndex)
-
-                                #find the matching reservoir in the feature layer
-                                for res_feat in this.reservoirLayer.features
-                                    if rec.data.Id == res_feat.data.Id
-                                        #found it - grab the bounds and zoom to it
-                                        bounds = res_feat.geometry.getBounds()
-                                        this.mapComp.map.zoomToExtent(bounds)
-                                        break
-
-                               
-                                return null
-                        }
-                    ]
-                }
-            ],
-            forceFit: true
-            autoScroll: true
-            region: 'center'
-        });
-
-        reservoirGridPanel.on('itemdblclick', (grid, record) =>
-            
+        reservoirsPanel.on("itemdblclick", (grid, record) =>
             #unselect the previous reservoir
             this.selectReservoirControl.unselectAll()
 
@@ -206,81 +164,23 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
             return null
         )
-
-        this.mainContainer.add(reservoirGridPanel)
         return null
 
     _changeToRelatedEntitiesLayout: () ->
-        this.mainContainer.removeAll(true)
+        this.mainContainer.removeAll(true)      
 
-        # TODO: animate through the years
-        #  
-        # {
-        #    xtype: 'button'
-        #    text: 'Animate'
-        #    iconCls: 'icon-play'
-        #    iconAlign: 'right'
-        # }
+        wugPanel = Ext.create('ISWP.view.theme.RelatedWUGPanel', {
+                supplyStore: this.supplyStore
+                relatedWUGLayer: this.relatedWUGLayer
+                relatedWUGStore: this.relatedWUGStore
+                curr_reservoir: this.curr_reservoir
+                mapComp: this.mapComp
+            })
 
-        headerPanel = Ext.create('Ext.panel.Panel', {
-            region: 'north'
-            height: 60
-            html:   """
-                    <h3>#{this.curr_reservoir.data.Name}</h3>
-                    <p>Descriptive text. Clear Selection button. Animate button.</p>
-                    """
-        })
-        this.mainContainer.add(headerPanel)
+        this.mainContainer.add(wugPanel)
+        wugPanel.initialize()
 
-        relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
-            store: this.relatedWUGStore,
-            columns: [
-                { text: "Name", width: 120, dataIndex: "Name", hideable: false, draggable: false, resizable: false}
-                { text: "Supply (acre-feet)", width: 60, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
-                { text: "Planning Area", width: 50, dataIndex: "RWP", hideable: false, draggable: false, resizable: false}
-                { text: "County", width: 60, dataIndex: "County", hideable: false, draggable: false, resizable: false}
-                { text: "Basin", width: 50, dataIndex: "Basin", hideable: false, draggable: false, resizable: false}
-
-                {
-                    xtype: 'actioncolumn'
-                    width: 10
-                    resizable: false
-                    sortable: false
-                    hideable: false
-                    draggable: false
-                    items: [
-                        {
-                            iconCls: 'icon-zoom-in'
-                            tooltip: 'Zoom To'
-                            handler: (grid, rowIndex, colIndex) =>
-                                #Zoom to the feature when the action is clicked
-                                rec = grid.getStore().getAt(rowIndex)
-
-                                #find the matching reservoir in the feature layer
-                                #TODO:
-                                for wug_feat in this.relatedWUGLayer.features
-                                    if rec.data.Id == wug_feat.data.Id
-                                        #found it - grab the bounds and zoom to it
-                                        bounds = wug_feat.geometry.getBounds()
-                                        this.mapComp.map.zoomToExtent(bounds)
-                                        break
-
-                               
-                                return null
-                        }
-                    ]
-                }
-            ]
-
-            emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade."
-            forceFit: true
-            autoScroll: true
-            region: 'center'
-        });
-
-        #Create a double-click listener to highlight the associated feature
-        relatedEntitiesGridPanel.on('itemdblclick', (grid, record) =>
-            
+        wugPanel.on("itemdblclick", (grid, record) =>
             #unselect the previous WUG
             this.selectWUGControl.unselectAll()
 
@@ -294,21 +194,9 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
             return null
         )
 
-        this.mainContainer.add(relatedEntitiesGridPanel)
-
-        chart = Ext.create('ISWP.view.chart.WaterUseChart', {
-            store: this.supplyStore
-            region: 'west'
-            width: 260
-            animate: false
-            shadow: false
-
-        })
-        this.mainContainer.add(chart)
-
         return null
 
-    _updateSupplyChart: () ->
+    _updateSupplyStore: () ->
         this.supplyStore.load(
             params:
                 ReservoirId: this.curr_reservoir.data.Id
