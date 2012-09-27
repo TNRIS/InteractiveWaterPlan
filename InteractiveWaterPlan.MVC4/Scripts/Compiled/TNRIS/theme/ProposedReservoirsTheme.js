@@ -2,7 +2,6 @@
 
 Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
-  serviceUrl: 'api/feature/reservoir/proposed',
   max_radius: 12,
   min_radius: 4,
   curr_reservoir: null,
@@ -191,7 +190,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     headerPanel = Ext.create('Ext.panel.Panel', {
       region: 'north',
       height: 60,
-      html: "<h3>" + this.curr_reservoir.data.Name + "</h3>\n<p>Descriptive text. Animate button.</p>"
+      html: "<h3>" + this.curr_reservoir.data.Name + "</h3>\n<p>Descriptive text. Clear Selection button. Animate button.</p>"
     });
     this.mainPanel.add(headerPanel);
     relatedEntitiesGridPanel = Ext.create('Ext.grid.Panel', {
@@ -261,9 +260,23 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
           ]
         }
       ],
+      emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade.",
       forceFit: true,
       autoScroll: true,
       region: 'center'
+    });
+    relatedEntitiesGridPanel.on('itemdblclick', function(grid, record) {
+      var wug_feat, _i, _len, _ref;
+      _this.selectWUGControl.unselectAll();
+      _ref = _this.relatedWUGLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wug_feat = _ref[_i];
+        if (record.data.Id === wug_feat.data.Id) {
+          _this.selectWUGControl.select(wug_feat);
+          break;
+        }
+      }
+      return null;
     });
     this.mainPanel.add(relatedEntitiesGridPanel);
     chart = Ext.create('ISWP.view.chart.WaterUseChart', {

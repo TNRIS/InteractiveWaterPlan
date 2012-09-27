@@ -2,10 +2,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     
     extend: 'TNRIS.theme.InteractiveTheme'
    
-    #change the main content area to display the reservoir information
-
-    #TODO: add a hover to the related feature points to display their info
-    serviceUrl: 'api/feature/reservoir/proposed'
     max_radius: 12
     min_radius: 4
 
@@ -21,6 +17,8 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
     featureControl: null
 
     selectReservoirControl: null
+
+    #TODO: Separate the 2 views into different components
 
     loadTheme: () ->
         map = this.mapComp.map
@@ -123,13 +121,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             
             onSelect: (feature) =>
                 this.curr_reservoir = feature
-
-                #TODO: Remove - don't need since we don't show this grid
-                #for rec in this.gridPanel.getStore().data.items
-                #    if this.curr_reservoir.data.Id == rec.data.Id
-                #        this.gridPanel.getSelectionModel().select(rec)
-                #        break
-
                 this._changeToRelatedEntitiesLayout()
                 this._showRelatedEntities()
                 this._updateSupplyChart()
@@ -137,7 +128,6 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
 
             onUnselect: (feature) =>
                 this._clearRelatedEntities()
-
                 this._changeToReservoirsLayout()
                 this.curr_reservoir = null
                 return null
@@ -237,7 +227,7 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
             height: 60
             html:   """
                     <h3>#{this.curr_reservoir.data.Name}</h3>
-                    <p>Descriptive text. Animate button.</p>
+                    <p>Descriptive text. Clear Selection button. Animate button.</p>
                     """
         })
         this.mainPanel.add(headerPanel)
@@ -280,11 +270,29 @@ Ext.define('TNRIS.theme.ProposedReservoirsTheme', {
                         }
                     ]
                 }
-            ],
+            ]
+
+            emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade."
             forceFit: true
             autoScroll: true
             region: 'center'
         });
+
+        #Create a double-click listener to highlight the associated feature
+        relatedEntitiesGridPanel.on('itemdblclick', (grid, record) =>
+            
+            #unselect the previous WUG
+            this.selectWUGControl.unselectAll()
+
+            #find the matching WUG in the feature layer
+            for wug_feat in this.relatedWUGLayer.features
+                if record.data.Id == wug_feat.data.Id
+                    #found it - selectthe matching WUG feature
+                    this.selectWUGControl.select(wug_feat)
+                    break  
+
+            return null
+        )
 
         this.mainPanel.add(relatedEntitiesGridPanel)
 
