@@ -3,7 +3,7 @@
 Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
   max_radius: 12,
-  min_radius: 4,
+  min_radius: 6,
   curr_reservoir: null,
   reservoirStore: null,
   reservoirLayer: null,
@@ -163,6 +163,22 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       }
       return null;
     });
+    wugPanel.on("zoomtoclick", function(grid, rowIndex) {
+      var bounds, rec, wug_feat, _i, _len, _ref;
+      rec = grid.getStore().getAt(rowIndex);
+      _ref = _this.relatedWUGLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wug_feat = _ref[_i];
+        if (rec.data.Id === wug_feat.data.Id) {
+          bounds = wug_feat.geometry.getBounds();
+          _this.mapComp.map.zoomToExtent(bounds);
+          _this.selectWUGControl.unselectAll();
+          _this.selectWUGControl.select(wug_feat);
+          break;
+        }
+      }
+      return null;
+    });
     return null;
   },
   _updateSupplyStore: function() {
@@ -196,7 +212,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       },
       scope: this,
       callback: function(records, operation, success) {
-        var connector_lines, data, line, max_supply, min_supply, new_feat, rec, related_entity_features, res_feat_centroid, select, wktFormat, _i, _j, _len, _len1;
+        var bounds, connector_lines, data, line, max_supply, min_supply, new_feat, rec, related_entity_features, res_feat_centroid, select, wktFormat, _i, _j, _len, _len1;
         if (!(records != null) || records.length === 0) {
           return null;
         }
@@ -215,6 +231,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
           }
         }
         res_feat_centroid = this.curr_reservoir.geometry.getCentroid(true);
+        bounds = this.curr_reservoir.geometry.getBounds();
         for (_j = 0, _len1 = records.length; _j < _len1; _j++) {
           rec = records[_j];
           data = rec.data;
@@ -226,8 +243,10 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
           line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([new OpenLayers.Geometry.Point(res_feat_centroid.x, res_feat_centroid.y), new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)]));
           line.attributes['type'] = 'line';
           connector_lines.push(line);
+          bounds.extend(new_feat.geometry.getBounds());
           related_entity_features.push(new_feat);
         }
+        this.mapComp.map.zoomToExtent(bounds);
         this.relatedWUGLayer.addFeatures(connector_lines);
         this.relatedWUGLayer.addFeatures(related_entity_features);
         select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
@@ -276,7 +295,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       pointRadius: 4,
       strokeColor: 'blue',
       strokeWidth: 0.5,
-      fillColor: 'cyan',
+      fillColor: 'aqua',
       fillOpacity: 0.8
     }, {
       rules: [
@@ -318,8 +337,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
               return 'transparent';
             case 'entity':
               return 'green';
-            case 'line':
-              return 'grey';
           }
           return 'red';
         },
@@ -336,7 +353,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
             case 'entity':
               return 'lime';
             case 'line':
-              return 'lightgrey';
+              return 'lightblue';
           }
           return 'red';
         },

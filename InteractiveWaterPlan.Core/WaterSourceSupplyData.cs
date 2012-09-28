@@ -8,7 +8,8 @@ namespace InteractiveWaterPlan.Core
     
     public class WaterSourceSupplyData
     {
-        public string Name;
-        public double Value;
+        public virtual int SourceId { get; set; }
+        public virtual string Name { get; set; }
+        public virtual double Value { get; set; }
     }
 }

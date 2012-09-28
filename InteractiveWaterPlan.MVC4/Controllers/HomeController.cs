@@ -13,14 +13,8 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToActionPermanent("Viewer");
-        }
-
-        public ActionResult Viewer()
-        {
             return View();
         }
-
 
     }
 }

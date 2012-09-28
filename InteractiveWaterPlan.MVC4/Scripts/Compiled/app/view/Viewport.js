@@ -4,7 +4,7 @@ Ext.define('ISWP.view.Viewport', {
   extend: 'Ext.panel.Panel',
   renderTo: 'appContainer',
   border: false,
-  height: 1200,
+  height: 1400,
   width: '100%',
   layout: 'border',
   items: [
@@ -20,8 +20,9 @@ Ext.define('ISWP.view.Viewport', {
       id: 'mainContainer'
     }, {
       region: 'south',
-      html: 'south region',
-      height: 50
+      html: 'Prepared by <a href="http://www.tnris.org">TNRIS</a>',
+      height: 40,
+      bodyCls: 'app-footer'
     }
   ]
 });

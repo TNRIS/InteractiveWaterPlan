@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
+  
+  <class name="WaterSourceSupplyData" mutable="false">
+    <id name="Name">
+      <column name="WU_Type" />
+    </id>
+    <property column="WU_Totals" name="Value" />
+    <property column="Source_ID" name="SourceId" />
+  </class>
+  
+  <!-- Queries -->
+  
+  <sql-query name="GetReservoirSupplyTotals">
+    <return class="WaterSourceSupplyData"/>
+    exec dbo.usp_Select_SUM_By_WU_Type_ProposedReservoir_and_Year :var_Source_ID, :var_EstYear
+  </sql-query>
+</hibernate-mapping>

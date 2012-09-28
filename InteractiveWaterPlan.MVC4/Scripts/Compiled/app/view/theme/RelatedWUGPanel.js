@@ -20,10 +20,9 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
     }));
     me.add(Ext.create('ISWP.view.chart.WaterUseChart', {
       store: me.supplyStore,
-      region: 'west',
-      width: 260,
-      animate: false,
-      shadow: false
+      region: 'south',
+      height: 300,
+      margin: 5
     }));
     me.add(Ext.create('Ext.grid.Panel', {
       store: me.relatedWUGStore,
@@ -82,17 +81,7 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
               iconCls: 'icon-zoom-in',
               tooltip: 'Zoom To',
               handler: function(grid, rowIndex, colIndex) {
-                var bounds, rec, wug_feat, _i, _len, _ref;
-                rec = grid.getStore().getAt(rowIndex);
-                _ref = me.relatedWUGLayer.features;
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  wug_feat = _ref[_i];
-                  if (rec.data.Id === wug_feat.data.Id) {
-                    bounds = wug_feat.geometry.getBounds();
-                    me.mapComp.map.zoomToExtent(bounds);
-                    break;
-                  }
-                }
+                me.fireEvent("zoomtoclick", grid, rowIndex);
                 return null;
               }
             }

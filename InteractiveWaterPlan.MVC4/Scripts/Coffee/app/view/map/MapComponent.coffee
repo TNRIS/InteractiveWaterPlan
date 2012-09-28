@@ -86,16 +86,15 @@ Ext.define('ISWP.view.map.MapComponent', {
 
         )
 
-        arclayer = new OpenLayers.Layer.ArcGIS93Rest( "ArcGIS Server Layer",
-                    "http://services.tnris.org/ArcGIS/rest/services/TWDB_StateWaterPlan/MapServer/export", 
-                    {layers: "show:1,2"});
+        toner = new OpenLayers.Layer.Stamen("toner-lite", "Stamen Toner")
+        watercolor = new OpenLayers.Layer.Stamen("watercolor", "Stamen Watercolor")
        
 
         this.map = new OpenLayers.Map(
             div: this.id,
             projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
             displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84 
-            layers: [esri_gray, bing_road, mapquest_open, mapquest_aerial, bing_hybrid, bing_aerial]
+            layers: [esri_gray, toner, watercolor, bing_road, mapquest_open, mapquest_aerial, bing_hybrid, bing_aerial]
             center: this.origCenter
             zoom: this.origZoom
             eventListeners:

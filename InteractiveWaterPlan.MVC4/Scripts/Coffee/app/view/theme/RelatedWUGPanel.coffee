@@ -25,10 +25,9 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
 
         me.add(Ext.create('ISWP.view.chart.WaterUseChart', {
                 store: me.supplyStore
-                region: 'west'
-                width: 260
-                animate: false
-                shadow: false
+                region: 'south'
+                height: 300
+                margin: 5
             })
         )
 
@@ -62,18 +61,7 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
                                 iconCls: 'icon-zoom-in'
                                 tooltip: 'Zoom To'
                                 handler: (grid, rowIndex, colIndex) =>
-                                    #Zoom to the feature when the action is clicked
-                                    rec = grid.getStore().getAt(rowIndex)
-
-                                    #find the matching reservoir in the feature layer
-                                    for wug_feat in me.relatedWUGLayer.features
-                                        if rec.data.Id == wug_feat.data.Id
-                                            #found it - grab the bounds and zoom to it
-                                            bounds = wug_feat.geometry.getBounds()
-                                            me.mapComp.map.zoomToExtent(bounds)
-                                            break
-
-                                   
+                                    me.fireEvent("zoomtoclick", grid, rowIndex)
                                     return null
                             }
                         ]

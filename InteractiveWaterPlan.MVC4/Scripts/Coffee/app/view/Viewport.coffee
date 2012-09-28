@@ -5,7 +5,7 @@ Ext.define('ISWP.view.Viewport', {
 
     border: false
     
-    height: 1200
+    height: 1400
     width: '100%'
     
     layout: 'border'
@@ -27,8 +27,9 @@ Ext.define('ISWP.view.Viewport', {
 
         {
             region: 'south'
-            html: 'south region'
-            height: 50
+            html: 'Prepared by <a href="http://www.tnris.org">TNRIS</a>'
+            height: 40
+            bodyCls: 'app-footer'
             #border: false
         }
 

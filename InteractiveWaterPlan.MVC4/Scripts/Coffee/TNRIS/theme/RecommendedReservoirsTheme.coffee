@@ -3,7 +3,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     extend: 'TNRIS.theme.InteractiveTheme'
    
     max_radius: 12
-    min_radius: 4
+    min_radius: 6
 
     curr_reservoir: null
 
@@ -169,6 +169,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     _changeToRelatedEntitiesLayout: () ->
         this.mainContainer.removeAll(true)      
 
+
         wugPanel = Ext.create('ISWP.view.theme.RelatedWUGPanel', {
                 supplyStore: this.supplyStore
                 relatedWUGLayer: this.relatedWUGLayer
@@ -190,6 +191,26 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                     #found it - selectthe matching WUG feature
                     this.selectWUGControl.select(wug_feat)
                     break  
+
+            return null
+        )
+
+        wugPanel.on("zoomtoclick", (grid, rowIndex) =>
+            rec = grid.getStore().getAt(rowIndex)
+
+            #find the matching reservoir in the feature layer
+            for wug_feat in this.relatedWUGLayer.features
+                if rec.data.Id == wug_feat.data.Id
+                    #found it - grab the bounds and zoom to it
+                    bounds = wug_feat.geometry.getBounds()
+                    this.mapComp.map.zoomToExtent(bounds)
+
+                    #unselect the previous WUG
+                    this.selectWUGControl.unselectAll()
+
+                    #and select the new one
+                    this.selectWUGControl.select(wug_feat)
+                    break
 
             return null
         )
@@ -257,6 +278,9 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                 #calculate the centroid - pass true to specify that it is a weighted calculation
                 res_feat_centroid = this.curr_reservoir.geometry.getCentroid(true) 
                 
+                #start the bounds with the selected reservoir's bounds
+                bounds = this.curr_reservoir.geometry.getBounds()
+
                 for rec in records
                     data = rec.data
                     new_feat = wktFormat.read(rec.data.WKTGeog)
@@ -277,7 +301,13 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                     line.attributes['type'] = 'line'
                     connector_lines.push(line) #TODO: maybe make its own layer and stylemap
 
+                    #Extend bounds to include each new feature
+                    bounds.extend(new_feat.geometry.getBounds())
+                    
                     related_entity_features.push(new_feat)
+
+                #zoom to the bounds
+                this.mapComp.map.zoomToExtent(bounds)
 
                 this.relatedWUGLayer.addFeatures(connector_lines)
                 this.relatedWUGLayer.addFeatures(related_entity_features)
@@ -342,7 +372,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
             pointRadius: 4
             strokeColor: 'blue'
             strokeWidth: 0.5
-            fillColor: 'cyan'
+            fillColor: 'aqua'
             fillOpacity: 0.8
             {
                 rules: [
@@ -384,7 +414,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                         switch feature.attributes['type']
                             when 'reservoir' then return 'transparent'
                             when 'entity' then return 'green'
-                            when 'line' then return 'grey' 
+                            #when 'line' then return 'grey' 
                         return 'red'
                     getStrokeWidth: (feature) ->
                         if feature.attributes['type'] == 'reservoir'
@@ -395,7 +425,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                         switch feature.attributes['type']
                             when 'reservoir' then return 'blue'
                             when 'entity' then return 'lime'
-                            when 'line' then return 'lightgrey'  
+                            when 'line' then return 'lightblue'  
                         return 'red'
                     getPointRadius: (feature) ->
                         if feature.attributes.type? and feature.attributes.type == 'entity'

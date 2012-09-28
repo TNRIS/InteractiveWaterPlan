@@ -3,15 +3,50 @@
 Ext.define('ISWP.view.chart.WaterUseChart', {
   extend: 'Ext.chart.Chart',
   alias: 'widget.waterusechart',
-  animate: true,
+  animate: false,
   shadow: true,
-  insetPadding: 30,
-  theme: 'Blue:gradients',
+  background: {
+    fill: 'rgb(255, 255, 255)'
+  },
+  theme: 'ISWP',
+  axes: [
+    {
+      type: 'Numeric',
+      position: 'left',
+      fields: ['Value'],
+      label: {
+        renderer: Ext.util.Format.numberRenderer('0,0')
+      },
+      title: 'Supply (acre-feet/year)',
+      minimum: 0,
+      grid: false
+    }, {
+      type: 'Category',
+      position: 'bottom',
+      fields: ['Name'],
+      title: 'Supply Type'
+    }
+  ],
   series: [
     {
-      type: 'pie',
-      field: 'Value',
-      showInLegend: true,
+      type: 'column',
+      axis: 'left',
+      highlight: true,
+      xField: 'Name',
+      yField: 'Value',
+      renderer: function(sprite, storeItem, barAttr, i, store) {
+        var colors;
+        colors = ['#7eae29', '#fdbe2a', '#910019', '#27b4bc', '#d74dbc'];
+        barAttr.fill = colors[i % colors.length];
+        return barAttr;
+      },
+      label: {
+        display: 'outsideEnd',
+        field: 'Value',
+        renderer: Ext.util.Format.numberRenderer('0,0'),
+        orientation: 'horizontal',
+        'text-anchor': 'middle'
+      },
       tips: {
         trackMouse: true,
         width: 160,
@@ -22,21 +57,32 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
           storeItem.store.each(function(rec) {
             return total += rec.get('Value');
           });
-          this.setTitle("" + storeItem.data.Name + "<br/>                        " + (Ext.util.Format.number(storeItem.get('Value'), '0,000,000,000')) + " ac-ft                         (" + (Ext.util.Format.number(storeItem.get('Value') / total * 100, '0.00%')) + ")");
+          this.setTitle("" + storeItem.data.Name + "<br/>                        " + (Ext.util.Format.number(storeItem.get('Value'), '0,0')) + " ac-ft                         (" + (Ext.util.Format.number(storeItem.get('Value') / total * 100, '0.00%')) + ")");
           return null;
         }
-      },
-      highlight: {
-        segment: {
-          margin: 20
-        }
-      },
-      label: {
-        field: 'Name',
-        display: 'rotate',
-        contrast: true,
-        font: '12px Arial'
       }
     }
-  ]
+  ],
+  listeners: {
+    refresh: function(chart) {
+      console.log(chart.store.data);
+      return null;
+    }
+  }
+});
+
+Ext.define('Ext.chart.theme.ISWP', {
+  extend: 'Ext.chart.theme.Base',
+  constructor: function(config) {
+    return this.callParent([
+      Ext.apply({
+        axisTitleLeft: {
+          font: '16px Arial bold'
+        },
+        axisTitleBottom: {
+          font: '16px Arial bold'
+        }
+      }, config)
+    ]);
+  }
 });

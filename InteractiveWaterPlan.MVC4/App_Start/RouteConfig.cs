@@ -18,7 +18,7 @@ namespace InteractiveWaterPlan.MVC4
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}", // URL with parameters
-                new { controller = "Home", action = "Viewer" } // Parameter defaults
+                new { controller = "Home", action = "Index" } // Parameter defaults
             );
             #endregion
         }

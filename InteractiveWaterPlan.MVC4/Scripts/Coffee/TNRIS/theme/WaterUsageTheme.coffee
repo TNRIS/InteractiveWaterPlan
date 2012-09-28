@@ -27,15 +27,10 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     loadTheme: () ->
         map = this.mapComp.map
         
-        temporaryPanel = Ext.create('Ext.panel.Panel', {
-            region: 'center'
-            html: """
-                    <h3>Water Use</h3>
-                    <p>Click on a dot to view the information for that water user group.</p>
-                  """
-
-        })
+        #TODO: Make this panel
+        temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel')
         this.mainContainer.add(temporaryPanel)
+        temporaryPanel.initialize()
 
         this.entityStore.load({
             scope: this
@@ -130,7 +125,7 @@ Ext.define('TNRIS.theme.WaterUsageTheme', {
     _wugStyleMap: new OpenLayers.StyleMap(
         "default" : new OpenLayers.Style(
             pointRadius: 5
-            strokeColor: 'cyan'
+            strokeColor: 'aqua'
             strokeWidth: 0.5
             fillColor: 'blue'
             fillOpacity: 0.8

@@ -123,18 +123,12 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                 throw new HttpResponseException(resp);
             }
 
-            //TODO: Get from a repository call
-            var r = new Random();
-            var data = new List<WaterSourceSupplyData>
-            {
-                new WaterSourceSupplyData { Name = "Irrigation", Value = r.Next(100, 1000) },
-                new WaterSourceSupplyData { Name = "Manufacturing", Value = r.Next(100, 1000) },
-                new WaterSourceSupplyData { Name = "Mining", Value = r.Next(100, 1000) },
-                new WaterSourceSupplyData { Name = "Municipal", Value = r.Next(100, 1000) },
-                new WaterSourceSupplyData { Name = "Steam-electric", Value = r.Next(100, 1000) }
-            };
+            var repo = new SourceSupplyRepository();
+            var data = repo.GetReservoirSupplyTotals(ReservoirId, Year);
 
-            return data;
+
+            //Don't include values of 0
+            return data.Where(d => !(d.Value == 0)).ToList<WaterSourceSupplyData>();
         }
     }
 }
