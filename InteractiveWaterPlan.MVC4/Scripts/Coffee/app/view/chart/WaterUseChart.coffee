@@ -31,7 +31,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
             type: 'Category'
             position: 'bottom'
             fields: ['Name']
-            title: 'Supply Type'
+            title: 'Supply Category'
         }
     ]
 
@@ -73,9 +73,6 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
                     )
                     
                     return null
-
-                
-            
         }
     ]
 

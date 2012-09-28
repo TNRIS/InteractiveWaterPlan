@@ -41,3 +41,14 @@ Ext.create('Ext.app.Application', {
     return null;
   }
 });
+
+Ext.define("Ext.view.AbstractView.LoadMask", {
+  override: "Ext.view.AbstractView",
+  onRender: function() {
+    this.callParent();
+    if (this.loadMask && Ext.isObject(this.store)) {
+      this.setMaskBind(this.store);
+    }
+    return null;
+  }
+});

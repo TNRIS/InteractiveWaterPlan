@@ -11,7 +11,7 @@ Ext.define('ISWP.view.Viewport', {
     {
       region: 'north',
       xtype: 'themeyearmappanel',
-      height: 600,
+      height: 630,
       width: '100%',
       id: 'themeYearMapPanel'
     }, {
