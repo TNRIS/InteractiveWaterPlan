@@ -1,4 +1,3 @@
-
 Ext.define('ISWP.view.chart.WaterUseChart', {
     
     extend: 'Ext.chart.Chart'

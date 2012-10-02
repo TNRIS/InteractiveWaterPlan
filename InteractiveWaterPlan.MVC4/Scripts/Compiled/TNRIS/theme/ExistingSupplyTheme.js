@@ -17,7 +17,9 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
   loadTheme: function() {
     var map, temporaryPanel;
     map = this.mapComp.map;
-    temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel');
+    temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
+      wugStore: this.entityStore
+    });
     this.mainContainer.add(temporaryPanel);
     temporaryPanel.initialize();
     this.entityStore.load({

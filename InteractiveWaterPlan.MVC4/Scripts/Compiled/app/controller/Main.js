@@ -2,7 +2,7 @@
 
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
-  views: ['data.MainContainer', 'map.MapComponent', 'map.ThemeYearMapPanel', 'theme.RecommendedReservoirsPanel'],
+  views: ['data.MainContainer', 'map.MapComponent', 'map.ThemeYearMapPanel', 'theme.RecommendedReservoirsPanel', 'theme.ExistingSupplyPanel'],
   stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData', 'RWP', 'County'],
   refs: [
     {

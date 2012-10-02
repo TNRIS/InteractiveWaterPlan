@@ -28,9 +28,13 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
         map = this.mapComp.map
         
         #TODO: Make this panel
-        temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel')
+        temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
+                wugStore: this.entityStore
+            })
         this.mainContainer.add(temporaryPanel)
         temporaryPanel.initialize()
+
+        
 
         this.entityStore.load({
             scope: this

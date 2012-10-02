@@ -4,8 +4,9 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
   extend: 'Ext.panel.Panel',
   alias: 'widget.existingsupplypanel',
   layout: 'border',
+  wugStore: null,
   initialize: function() {
-    var me, topPanel;
+    var me, topPanel, wugGrid;
     me = this;
     topPanel = Ext.create('Ext.panel.Panel', {
       region: 'north',
@@ -23,7 +24,15 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           editable: false,
           width: 200,
           listeners: {
-            'select': function() {
+            'select': function(me, record) {
+              console.log('Planning Region Selected', record[0]);
+              Ext.getCmp('clearRegionBtn').enable();
+              return null;
+            },
+            'change': function(me, newVal, oldVal) {
+              if (newVal === '') {
+                console.log('Planning Region cleared');
+              }
               return null;
             }
           }
@@ -31,7 +40,14 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           xtype: 'button',
           iconCls: 'icon-remove',
           text: null,
-          id: 'clearRegionBtn'
+          id: 'clearRegionBtn',
+          disabled: true,
+          tooltip: 'Clear Region Selection',
+          handler: function() {
+            Ext.getCmp('regionCombo').select('');
+            this.disable();
+            return null;
+          }
         }, "&raquo; ", {
           xtype: 'combobox',
           id: 'countyCombo',
@@ -49,24 +65,50 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           xtype: 'button',
           iconCls: 'icon-remove',
           text: null,
-          id: 'clearCountyBtn'
-        }, "&raquo; ", {
-          xtype: 'combobox',
-          id: 'wugCombo',
-          store: 'Entity',
-          displayField: 'Name',
-          valueField: 'SqlId',
-          queryMode: 'local',
-          emptyText: 'Select a Water  User Group',
-          editable: false,
-          width: 200
+          id: 'clearCountyBtn',
+          disabled: true,
+          tooltip: 'Clear County Selection'
         }
       ]
     });
     me.add(topPanel);
-    me.add(Ext.create('Ext.panel.Panel', {
+    wugGrid = Ext.create('ISWP.view.theme.WUGGrid', {
+      store: me.wugStore,
+      emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade.",
       region: 'center'
-    }));
+    });
+    me.add(wugGrid);
+    /*
+            #TODO: Add Editors to comboboxes
+            html: '<div id="textToEdit">Hi James</div>'
+    
+            listeners:
+                afterrender: () ->
+                    editzor = Ext.create('Ext.Editor', {
+                        updateEl: true
+                        autoSize:
+                            width: 'field'
+    
+                        field: 
+                            xtype: 'combobox'
+                            store: 'Entity'
+                            displayField: 'Name'
+                            valueField: 'Name'
+                            queryMode: 'local'
+                            editable: false
+                            width: 200
+    
+                    })
+    
+                    Ext.get("textToEdit").on('dblclick', (e, t) ->
+                        console.log(e, t)
+                        editzor.startEdit(t)
+                        return null
+                    )
+    
+                    return null
+    */
+
     return null;
   }
 });

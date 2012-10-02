@@ -7,6 +7,9 @@ Ext.define('ISWP.controller.Main', {
         'map.MapComponent'
         'map.ThemeYearMapPanel'
         'theme.RecommendedReservoirsPanel'
+        'theme.ExistingSupplyPanel'
+        #'theme.RelatedWUGPanel'
+        #'theme.WUGGrid'
     ]
 
     stores: [

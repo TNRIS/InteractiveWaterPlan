@@ -4,6 +4,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
     alias: 'widget.existingsupplypanel'
 
     layout: 'border'
+
+    wugStore: null
        
     initialize: () ->
         me = this
@@ -30,9 +32,14 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     emptyText: 'Select a Planning Region'
                     editable: false
                     width: 200
-                    #flex: 1
                     listeners:
-                        'select': ()->
+                        'select': (me, record) ->
+                            console.log('Planning Region Selected', record[0])
+                            Ext.getCmp('clearRegionBtn').enable()
+                            return null
+                        'change': (me, newVal, oldVal) ->
+                            if newVal == ''
+                                console.log('Planning Region cleared')
                             return null
 
                 }
@@ -41,6 +48,12 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     iconCls: 'icon-remove'
                     text: null
                     id: 'clearRegionBtn'
+                    disabled: true
+                    tooltip: 'Clear Region Selection'
+                    handler: () ->
+                        Ext.getCmp('regionCombo').select('')
+                        this.disable()
+                        return null
                 }
                 "&raquo; "
                 {
@@ -53,7 +66,6 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     emptyText: 'Select a County'
                     editable: false
                     width: 200
-                    #flex: 1
                     listConfig:
                         #Group into 'Counties in Selected Planning Region' and 'All Counties'
                         tpl: [
@@ -71,34 +83,54 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     iconCls: 'icon-remove'
                     text: null
                     id: 'clearCountyBtn'
-                }
-                "&raquo; "
-                {
-                    xtype: 'combobox'
-                    id: 'wugCombo'
-                    store: 'Entity' #TODO: Modify/create store to get WUGs IN CountyId
-                    displayField: 'Name'
-                    valueField: 'SqlId'
-                    queryMode: 'local'
-                    emptyText: 'Select a Water  User Group'
-                    editable: false
-                    width: 200
-                    #flex: 1
-                }
+                    disabled: true
+                    tooltip: 'Clear County Selection'
+                } 
             ]
+
+           
         })
         
-        
-        #TODO: Add 'Editor's to combobox+removeBtns
-
         me.add(topPanel)
 
-        me.add(Ext.create('Ext.panel.Panel', {
-                region: 'center'
+        wugGrid = Ext.create('ISWP.view.theme.WUGGrid', {
+            store: me.wugStore
+            emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade."
+            region: 'center'
+        })
 
+        me.add(wugGrid)
+        ###
+        #TODO: Add Editors to comboboxes
+        html: '<div id="textToEdit">Hi James</div>'
 
-            })
-        )
+        listeners:
+            afterrender: () ->
+                editzor = Ext.create('Ext.Editor', {
+                    updateEl: true
+                    autoSize:
+                        width: 'field'
+
+                    field: 
+                        xtype: 'combobox'
+                        store: 'Entity'
+                        displayField: 'Name'
+                        valueField: 'Name'
+                        queryMode: 'local'
+                        editable: false
+                        width: 200
+
+                })
+
+                Ext.get("textToEdit").on('dblclick', (e, t) ->
+                    console.log(e, t)
+                    editzor.startEdit(t)
+                    return null
+                )
+
+                return null
+        ###
+
 
         return null
 })
