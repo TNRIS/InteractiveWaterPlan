@@ -28,7 +28,7 @@ Ext.require('TNRIS.proxy.ParameterProxy');
 
 Ext.require('TNRIS.theme.InteractiveTheme');
 
-Ext.require('TNRIS.theme.WaterUsageTheme');
+Ext.require('TNRIS.theme.ExistingSupplyTheme');
 
 Ext.require('TNRIS.theme.RecommendedReservoirsTheme');
 

@@ -628,9 +628,9 @@
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
+    <Content Include="Scripts\Compiled\TNRIS\theme\ExistingSupplyTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\InteractiveTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\RecommendedReservoirsTheme.js" />
-    <Content Include="Scripts\Compiled\TNRIS\theme\WaterUsageTheme.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -678,9 +678,9 @@
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
+    <None Include="Scripts\Coffee\TNRIS\theme\ExistingSupplyTheme.coffee" />
     <None Include="Scripts\Coffee\TNRIS\theme\InteractiveTheme.coffee" />
     <None Include="Scripts\Coffee\TNRIS\theme\RecommendedReservoirsTheme.coffee" />
-    <None Include="Scripts\Coffee\TNRIS\theme\WaterUsageTheme.coffee" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

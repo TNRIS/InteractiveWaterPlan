@@ -1,4 +1,4 @@
-Ext.define('TNRIS.theme.WaterUsageTheme', {
+Ext.define('TNRIS.theme.ExistingSupplyTheme', {
     
     extend: 'TNRIS.theme.InteractiveTheme'
    

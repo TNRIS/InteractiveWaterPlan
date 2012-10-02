@@ -3,7 +3,7 @@
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
   views: ['data.MainContainer', 'map.MapComponent', 'map.ThemeYearMapPanel', 'theme.RecommendedReservoirsPanel'],
-  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData'],
+  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData', 'RWP', 'County'],
   refs: [
     {
       ref: 'mainContainer',
@@ -30,7 +30,7 @@ Ext.define('ISWP.controller.Main', {
           mapComp.initializeMap();
           this.selectedTheme = this.getThemeYearMapPanel().getSelectedTheme();
           this.selectedYear = this.getThemeYearMapPanel().getSelectedYear();
-          this.loadThemeIntoMap(this.selectedTheme);
+          this._loadThemeIntoMap(this.selectedTheme);
           return null;
         }
       },
@@ -44,7 +44,7 @@ Ext.define('ISWP.controller.Main', {
       'button[toggleGroup=themeButtons]': {
         click: function(btn, evt) {
           this.selectedTheme = btn.theme;
-          this.loadThemeIntoMap(btn.theme);
+          this._loadThemeIntoMap(btn.theme);
           return null;
         }
       },
@@ -93,12 +93,12 @@ Ext.define('ISWP.controller.Main', {
       }
     });
   },
-  loadThemeIntoMap: function(themeName) {
+  _loadThemeIntoMap: function(themeName) {
     if (this.interactiveTheme != null) {
       this.interactiveTheme.unload();
     }
-    if (themeName === 'water-use') {
-      this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
+    if (themeName === 'existing-supply') {
+      this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme({
         mapComp: this.getMapComponent(),
         themeStore: this.getThemeStore(),
         selectedYear: this.selectedYear,

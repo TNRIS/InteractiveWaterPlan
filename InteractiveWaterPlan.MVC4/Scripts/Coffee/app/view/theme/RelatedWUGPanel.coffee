@@ -44,7 +44,7 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
 
                 columns: [
                     { text: "Name", width: 120, dataIndex: "Name", hideable: false, draggable: false, resizable: false}
-                    { text: "Supply (acre-feet)", width: 60, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
+                    { text: "Supply (acre-feet/year)", width: 60, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
                     { text: "Planning Area", width: 50, dataIndex: "RWP", hideable: false, draggable: false, resizable: false}
                     { text: "County", width: 60, dataIndex: "County", hideable: false, draggable: false, resizable: false}
                     { text: "Basin", width: 50, dataIndex: "Basin", hideable: false, draggable: false, resizable: false}

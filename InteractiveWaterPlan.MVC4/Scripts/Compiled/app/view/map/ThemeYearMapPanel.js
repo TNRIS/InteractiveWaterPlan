@@ -98,14 +98,14 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
         "Theme: ", {
           xtype: 'button',
           text: 'Existing Supply',
-          theme: 'water-use',
+          theme: 'existing-supply',
+          pressed: true,
           allowDepress: false,
           toggleGroup: 'themeButtons'
         }, {
           xtype: 'button',
           text: 'Recommended Reservoirs',
           theme: 'recommended-reservoirs',
-          pressed: true,
           allowDepress: false,
           toggleGroup: 'themeButtons'
         }

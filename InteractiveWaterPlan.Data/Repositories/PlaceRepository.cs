@@ -22,7 +22,7 @@ namespace InteractiveWaterPlan.Data
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        public IEnumerable<Place> GetPlacesByCategory(int categoryId)
+        public IEnumerable<Place> GetPlaces(int categoryId)
         {
             return Session.GetNamedQuery("GetPlacesByCategory")
                 .SetParameter("var_CategoryID", categoryId)
@@ -31,6 +31,17 @@ namespace InteractiveWaterPlan.Data
                 .Select(p => { p.Name = p.Name.Trim(); return p; })
                 .ToList<Place>();
         }
+
+        /// <summary>
+        /// Returns a list of Places contained
+        /// </summary>
+        /// <param name="parentPlaceId"></param>
+        /// <returns></returns>
+        //TODO: Need stored procedure to support this
+        //public IEnumerable<Place> GetPlacesInParentPlace(int parentPlaceId)
+        //{
+        //
+        //}
 
         /// <summary>
         /// Returns a list of Places that have names starting with the input namePart. 

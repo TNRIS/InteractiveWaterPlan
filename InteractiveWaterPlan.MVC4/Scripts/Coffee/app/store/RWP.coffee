@@ -1,16 +1,20 @@
-Ext.define('ISWP.store.Place', {
+Ext.define('ISWP.store.RWP', {
     
     extend: 'Ext.data.Store'
 
     model: 'ISWP.model.Place'
 
-    storeId: 'placeStore'
+    storeId: 'rwpStore'
 
-    autoLoad: false
+    autoLoad: true
 
+    
     proxy:
         type: 'ajax'
         
+        extraParams:
+            'category': 5
+
         url: 'api/place'
 
         reader:

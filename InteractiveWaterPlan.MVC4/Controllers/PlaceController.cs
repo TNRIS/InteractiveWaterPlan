@@ -2,6 +2,7 @@
 using System.Web.Http;
 using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
+using System.Linq;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
@@ -12,8 +13,21 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         public IEnumerable<Place> GetPlacesByCategory(int category)
         {
             var repo = new PlaceRepository();
-            return repo.GetPlacesByCategory(category);
+            return repo.GetPlaces(category);
         }
+
+        //api/place/all
+        [NHibernateSession]
+        public IEnumerable<Place> GetAllPlaces()
+        {
+            //TODO: Remove - just for testing
+            var repo = new PlaceRepository();
+            var x = repo.GetPlaces(1).OrderBy(p => p.Name);
+            var y = repo.GetPlaces(5).OrderBy(p => p.Name);
+            return x.Union(y).ToList<Place>();
+            
+        }
+        
 
         //api/place/categories
         [NHibernateSession]

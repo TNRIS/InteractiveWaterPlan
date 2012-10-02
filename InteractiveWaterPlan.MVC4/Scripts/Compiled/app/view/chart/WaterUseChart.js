@@ -62,13 +62,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
         }
       }
     }
-  ],
-  listeners: {
-    refresh: function(chart) {
-      console.log(chart.store.data);
-      return null;
-    }
-  }
+  ]
 });
 
 Ext.define('Ext.chart.theme.ISWP', {
@@ -77,10 +71,10 @@ Ext.define('Ext.chart.theme.ISWP', {
     return this.callParent([
       Ext.apply({
         axisTitleLeft: {
-          font: '16px Arial bold'
+          font: 'bold 14px Helvetica, sans-serif'
         },
         axisTitleBottom: {
-          font: '16px Arial bold'
+          font: 'bold 14px Helvetica, sans-serif'
         }
       }, config)
     ]);

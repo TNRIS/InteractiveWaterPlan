@@ -18,6 +18,8 @@ Ext.define('ISWP.controller.Main', {
         'PlaceFeature'
         'ReservoirFeature'
         'ReservoirSupplyData'
+        'RWP'
+        'County'
     ]
 
     refs: [
@@ -61,7 +63,7 @@ Ext.define('ISWP.controller.Main', {
                     #set the default selectedYear
                     this.selectedYear = this.getThemeYearMapPanel().getSelectedYear()
 
-                    this.loadThemeIntoMap(this.selectedTheme)
+                    this._loadThemeIntoMap(this.selectedTheme)
                     
                     return null
 
@@ -75,7 +77,7 @@ Ext.define('ISWP.controller.Main', {
             'button[toggleGroup=themeButtons]':
                 click: (btn, evt) ->
                     this.selectedTheme = btn.theme
-                    this.loadThemeIntoMap(btn.theme)
+                    this._loadThemeIntoMap(btn.theme)
                     return null
 
             '#resetExtentButton':
@@ -125,13 +127,13 @@ Ext.define('ISWP.controller.Main', {
                     return null
         })
         
-    loadThemeIntoMap: (themeName) ->
+    _loadThemeIntoMap: (themeName) ->
         
         #First unload the them
         this.interactiveTheme.unload() if this.interactiveTheme?
         
-        if themeName == 'water-use'
-            this.interactiveTheme = new TNRIS.theme.WaterUsageTheme({
+        if themeName == 'existing-supply'
+            this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme({
                 mapComp: this.getMapComponent()
                 themeStore: this.getThemeStore()
                 selectedYear: this.selectedYear

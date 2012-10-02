@@ -42,7 +42,7 @@ Ext.define("ISWP.view.theme.RelatedWUGPanel", {
           draggable: false,
           resizable: false
         }, {
-          text: "Supply (acre-feet)",
+          text: "Supply (acre-feet/year)",
           width: 60,
           dataIndex: "SourceSupply",
           hideable: false,

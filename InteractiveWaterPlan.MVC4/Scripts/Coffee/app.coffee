@@ -25,7 +25,7 @@ Ext.Loader.setPath('TNRIS', "#{Ext.get("scripts_path").dom.value}/Compiled/TNRIS
 #not sure why these don't just get loaded, but they don't
 Ext.require('TNRIS.proxy.ParameterProxy')
 Ext.require('TNRIS.theme.InteractiveTheme')
-Ext.require('TNRIS.theme.WaterUsageTheme')
+Ext.require('TNRIS.theme.ExistingSupplyTheme')
 Ext.require('TNRIS.theme.RecommendedReservoirsTheme')
 
 Ext.create('Ext.app.Application', {

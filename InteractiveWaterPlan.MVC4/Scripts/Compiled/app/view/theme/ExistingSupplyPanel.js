@@ -5,11 +5,67 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
   alias: 'widget.existingsupplypanel',
   layout: 'border',
   initialize: function() {
-    var me;
+    var me, topPanel;
     me = this;
+    topPanel = Ext.create('Ext.panel.Panel', {
+      region: 'north',
+      height: 100,
+      html: "<h3>Existing Supply</h3>\n<p>Click on a dot to view the information for that water user group.</p>",
+      tbar: [
+        "TEXAS &raquo; ", {
+          xtype: 'combobox',
+          id: 'regionCombo',
+          store: 'RWP',
+          displayField: 'Name',
+          valueField: 'SqlId',
+          queryMode: 'local',
+          emptyText: 'Select a Planning Region',
+          editable: false,
+          width: 200,
+          listeners: {
+            'select': function() {
+              return null;
+            }
+          }
+        }, {
+          xtype: 'button',
+          iconCls: 'icon-remove',
+          text: null,
+          id: 'clearRegionBtn'
+        }, "&raquo; ", {
+          xtype: 'combobox',
+          id: 'countyCombo',
+          store: 'County',
+          displayField: 'Name',
+          valueField: 'SqlId',
+          queryMode: 'local',
+          emptyText: 'Select a County',
+          editable: false,
+          width: 200,
+          listConfig: {
+            tpl: ['<ul class=\'x-grouped-combo\'>', '<tpl for=".">', '{[xindex === 1 || parent[xindex - 2].CategoryId !== values.CategoryId ? "<li class=\'x-boundlist-group\'>" + values.CategoryName + "</li>" : ""]}', '<li role="option" class="x-boundlist-item">{Name}</li>', '</tpl>', '</ul>']
+          }
+        }, {
+          xtype: 'button',
+          iconCls: 'icon-remove',
+          text: null,
+          id: 'clearCountyBtn'
+        }, "&raquo; ", {
+          xtype: 'combobox',
+          id: 'wugCombo',
+          store: 'Entity',
+          displayField: 'Name',
+          valueField: 'SqlId',
+          queryMode: 'local',
+          emptyText: 'Select a Water  User Group',
+          editable: false,
+          width: 200
+        }
+      ]
+    });
+    me.add(topPanel);
     me.add(Ext.create('Ext.panel.Panel', {
-      region: 'center',
-      html: "<h3>Existing Supply</h3>\n<p>Click on a dot to view the information for that water user group.</p>"
+      region: 'center'
     }));
     return null;
   }

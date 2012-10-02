@@ -9,6 +9,12 @@ namespace InteractiveWaterPlan.MVC4
 
             #region Place Routes
             config.Routes.MapHttpRoute(
+                "GetAllPlaces",
+                "api/place/all",
+                new { controller = "Place", action = "GetAllPlaces" }
+            );
+
+            config.Routes.MapHttpRoute(
                 "GetAllPlaceCategoriesRoute",
                 "api/place/categories",
                 new { controller = "Place", action = "GetAllPlaceCategories" }
