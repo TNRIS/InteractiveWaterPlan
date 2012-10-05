@@ -603,11 +603,10 @@
     <Content Include="Scripts\Compiled\app\controller\Main.js" />
     <Content Include="Scripts\Compiled\app\model\Entity.js" />
     <Content Include="Scripts\Compiled\app\model\LayerInfo.js" />
+    <Content Include="Scripts\Compiled\app\model\Place.js" />
     <Content Include="Scripts\Compiled\app\model\ReservoirFeature.js" />
-    <Content Include="Scripts\Compiled\app\model\ReservoirSupplyData.js" />
     <Content Include="Scripts\Compiled\app\model\Theme.js" />
     <Content Include="Scripts\Compiled\app\model\WaterSourceSupplyData.js" />
-    <Content Include="Scripts\Compiled\app\model\WaterUseData.js" />
     <Content Include="Scripts\Compiled\app\model\WaterUseEntity.js" />
     <Content Include="Scripts\Compiled\app\store\Entity.js" />
     <Content Include="Scripts\Compiled\app\store\Place.js" />
@@ -657,6 +656,7 @@
     <None Include="Scripts\Coffee\app\controller\Main.coffee" />
     <None Include="Scripts\Coffee\app\model\Entity.coffee" />
     <None Include="Scripts\Coffee\app\model\LayerInfo.coffee" />
+    <None Include="Scripts\Coffee\app\model\Place.coffee" />
     <None Include="Scripts\Coffee\app\model\ReservoirFeature.coffee" />
     <None Include="Scripts\Coffee\app\model\Theme.coffee" />
     <None Include="Scripts\Coffee\app\model\WaterSourceSupplyData.coffee" />
