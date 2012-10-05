@@ -36,10 +36,7 @@ Ext.create('Ext.app.Application', {
   name: 'ISWP',
   autoCreateViewport: true,
   appFolder: "" + (Ext.get("scripts_path").dom.value) + "/Compiled/app",
-  controllers: ['Main'],
-  launch: function() {
-    return null;
-  }
+  controllers: ['Main']
 });
 
 Ext.define("Ext.view.AbstractView.LoadMask", {
