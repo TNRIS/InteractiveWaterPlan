@@ -36,6 +36,7 @@ Ext.create('Ext.app.Application', {
     controllers: ['Main']
 })
 
+#Binds a loadMask to all AbstractView components
 Ext.define("Ext.view.AbstractView.LoadMask", {
     override: "Ext.view.AbstractView",
     onRender: () -> 
