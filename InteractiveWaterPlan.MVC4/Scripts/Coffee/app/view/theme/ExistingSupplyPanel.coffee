@@ -95,7 +95,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
 
         wugGrid = Ext.create('ISWP.view.theme.WUGGrid', {
             store: me.wugStore
-            emptyText: "There are no related water user groups for the chosen reservoir and decade. Try selecting a different planning decade."
+            emptyText: "There are no Water User Groups in the selected area."
             region: 'center'
         })
 
