@@ -8,7 +8,7 @@ Ext.define('ISWP.controller.Main', {
         'map.ThemeYearMapPanel'
         'theme.RecommendedReservoirsPanel'
         'theme.ExistingSupplyPanel'
-        #'theme.RelatedWUGPanel'
+        #'theme.WUGPanel'
         #'theme.WUGGrid'
     ]
 

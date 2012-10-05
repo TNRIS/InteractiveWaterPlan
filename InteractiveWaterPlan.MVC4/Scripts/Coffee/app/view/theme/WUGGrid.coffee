@@ -30,14 +30,25 @@ Ext.define('ISWP.view.theme.WUGGrid', {
                 {
                     iconCls: 'icon-zoom-in'
                     tooltip: 'Zoom To'
-                    handler: (grid, rowIndex, colIndex) =>
-                        me.fireEvent("zoomtoclick", grid, rowIndex)
+                    handler: (grid, rowIndex, colIndex) ->
+                        console.log("sup")
+                        this.fireEvent("zoomtoclick", grid, rowIndex)
                         return null
                 }
             ]
         }
     ]
     bubbleEvents: ['itemdblclick']
+
+    ###
+    bbar: Ext.create('Ext.PagingToolbar', {
+        store: store,
+        displayInfo: true,
+        displayMsg: 'Displaying topics {0} - {1} of {2}',
+        emptyMsg: "No topics to display",
+        
+    }),
+    ###
     
 })
         

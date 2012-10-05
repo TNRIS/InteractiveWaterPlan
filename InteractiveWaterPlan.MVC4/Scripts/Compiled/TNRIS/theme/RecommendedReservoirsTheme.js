@@ -141,7 +141,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     var wugPanel,
       _this = this;
     this.mainContainer.removeAll(true);
-    wugPanel = Ext.create('ISWP.view.theme.RelatedWUGPanel', {
+    wugPanel = Ext.create('ISWP.view.theme.WUGPanel', {
       supplyStore: this.supplyStore,
       relatedWUGLayer: this.relatedWUGLayer,
       relatedWUGStore: this.relatedWUGStore,

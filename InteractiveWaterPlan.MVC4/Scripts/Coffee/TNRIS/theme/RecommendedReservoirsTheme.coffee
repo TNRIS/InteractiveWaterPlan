@@ -169,16 +169,18 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     _changeToRelatedEntitiesLayout: () ->
         this.mainContainer.removeAll(true)      
 
-
-        wugPanel = Ext.create('ISWP.view.theme.RelatedWUGPanel', {
+        
+        wugPanel = Ext.create('ISWP.view.theme.WUGPanel', {
                 supplyStore: this.supplyStore
                 relatedWUGLayer: this.relatedWUGLayer
                 relatedWUGStore: this.relatedWUGStore
                 curr_reservoir: this.curr_reservoir
                 mapComp: this.mapComp
             })
+        
 
         this.mainContainer.add(wugPanel)
+        
         wugPanel.initialize()
 
         wugPanel.on("itemdblclick", (grid, record) =>
@@ -214,6 +216,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
             return null
         )
+        
 
         return null
 
