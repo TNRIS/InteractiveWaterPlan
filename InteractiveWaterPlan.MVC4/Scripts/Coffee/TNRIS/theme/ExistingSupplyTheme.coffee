@@ -8,6 +8,8 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
 
     selectWUGControl: null
 
+    supplyPanel: null
+
     showFeatureResult: (features, clickedPoint, year) ->
         popupText = ""
         popupText += ("#{prop}: #{features[prop]}<br/>") for prop of features
@@ -25,86 +27,18 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
         return null
 
     loadTheme: () ->
-        map = this.mapComp.map
-        
-        #TODO: Make this panel
-        temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
+        this.supplyPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
                 wugStore: this.entityStore
             })
-        this.mainContainer.add(temporaryPanel)
-        temporaryPanel.initialize()
-
-        
+        this.mainContainer.add(this.supplyPanel)
+        this.supplyPanel.initialize()
 
         this.entityStore.load({
             scope: this
             callback: (records, operation, success) ->
                 unless success then return false
-
-                #create a new vector layer
-                this.WUGLayer = new OpenLayers.Layer.Vector(
-                    "Water Users", 
-                    {
-                        styleMap: this._wugStyleMap
-                    }
-                )
-
-                wktFormat = new OpenLayers.Format.WKT()
-                bounds = null
-                entity_features = []
-                for rec in records
-                    data = rec.data
-                    new_feat = wktFormat.read(rec.data.WKTGeog)
-                    new_feat.data = data
-                    new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
-                    new_feat.attributes['label'] = data['Name']
-
-                    if not bounds?
-                        bounds = new_feat.geometry.getBounds()
-                    else
-                        bounds.extend(new_feat.geometry.getBounds())
-
-                    entity_features.push(new_feat)
-
-                this.WUGLayer.addFeatures(entity_features)
-                map.addLayer(this.WUGLayer)
-                #map.zoomToExtent(bounds)
-
-                #Create a new select feature control and add it to the map.
-                select = new OpenLayers.Control.SelectFeature(this.WUGLayer, {
-                    hover: false #listen to clicks
-                    onSelect: (feature) ->    
-                        popup = new OpenLayers.Popup.FramedCloud("featurepopup", 
-                            feature.geometry.getBounds().getCenterLonLat(), 
-                            null,
-                            """
-                            <h3>#{feature.data.Name}</h3>
-                            Planning Region: #{feature.data.RWP}<br/>
-                            County: #{feature.data.County}<br/>
-                            Basin: #{feature.data.Basin}<br/>
-                            """,
-                            null,
-                            true,
-                            () ->
-                                select.unselect(feature)
-                                return null
-                        )
-                        feature.popup = popup
-                        map.addPopup(popup)
-                    onUnselect: (feature) ->
-                        map.removePopup(feature.popup)
-                        feature.popup.destroy()
-                        feature.popup = null
-                        return null
-                });
-
-                #save a reference to the control
-                this.selectWUGControl = select
-
-                map.addControl(select);                
-                select.activate();
-
-                return null
+                this._displaySupplyEntities(records)
+                return null        
         })
 
         return null
@@ -118,11 +52,78 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
         this.mainContainer.removeAll(true)
         return null
 
-
     _removeSelectWUGControl: () ->
         if this.selectWUGControl?
             this.mapComp.map.removeControl(this.selectWUGControl)
             this.selectWUGControl.destroy()
+
+        return null
+
+    _displaySupplyEntities: (records) ->
+        map = this.mapComp.map
+
+        #create a new vector layer
+        this.WUGLayer = new OpenLayers.Layer.Vector(
+            "Water Users", 
+            {
+                styleMap: this._wugStyleMap
+            }
+        )
+
+        wktFormat = new OpenLayers.Format.WKT()
+        bounds = null
+        entity_features = []
+        for rec in records
+            data = rec.data
+            new_feat = wktFormat.read(rec.data.WKTGeog)
+            new_feat.data = data
+            new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
+            new_feat.attributes['label'] = data['Name']
+
+            if not bounds?
+                bounds = new_feat.geometry.getBounds()
+            else
+                bounds.extend(new_feat.geometry.getBounds())
+
+            entity_features.push(new_feat)
+
+        this.WUGLayer.addFeatures(entity_features)
+        map.addLayer(this.WUGLayer)
+        #map.zoomToExtent(bounds)
+
+        #Create a new select feature control and add it to the map.
+        select = new OpenLayers.Control.SelectFeature(this.WUGLayer, {
+            hover: false #listen to clicks
+            onSelect: (feature) ->    
+                popup = new OpenLayers.Popup.FramedCloud("featurepopup", 
+                    feature.geometry.getBounds().getCenterLonLat(), 
+                    null,
+                    """
+                    <h3>#{feature.data.Name}</h3>
+                    Planning Region: #{feature.data.RWP}<br/>
+                    County: #{feature.data.County}<br/>
+                    Basin: #{feature.data.Basin}<br/>
+                    """,
+                    null,
+                    true,
+                    () ->
+                        select.unselect(feature)
+                        return null
+                )
+                feature.popup = popup
+                map.addPopup(popup)
+            onUnselect: (feature) ->
+                map.removePopup(feature.popup)
+                feature.popup.destroy()
+                feature.popup = null
+                return null
+        });
+
+        #save a reference to the control
+        this.selectWUGControl = select
+
+        map.addControl(select);                
+        select.activate();
 
         return null
 

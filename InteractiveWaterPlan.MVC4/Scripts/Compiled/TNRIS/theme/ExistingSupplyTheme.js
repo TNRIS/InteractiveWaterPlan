@@ -5,6 +5,7 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
   WUGLayer: null,
   selectedYear: null,
   selectWUGControl: null,
+  supplyPanel: null,
   showFeatureResult: function(features, clickedPoint, year) {
     var popupText, prop;
     popupText = "";
@@ -15,63 +16,18 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
     return null;
   },
   loadTheme: function() {
-    var map, temporaryPanel;
-    map = this.mapComp.map;
-    temporaryPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
+    this.supplyPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
       wugStore: this.entityStore
     });
-    this.mainContainer.add(temporaryPanel);
-    temporaryPanel.initialize();
+    this.mainContainer.add(this.supplyPanel);
+    this.supplyPanel.initialize();
     this.entityStore.load({
       scope: this,
       callback: function(records, operation, success) {
-        var bounds, data, entity_features, new_feat, rec, select, wktFormat, _i, _len;
         if (!success) {
           return false;
         }
-        this.WUGLayer = new OpenLayers.Layer.Vector("Water Users", {
-          styleMap: this._wugStyleMap
-        });
-        wktFormat = new OpenLayers.Format.WKT();
-        bounds = null;
-        entity_features = [];
-        for (_i = 0, _len = records.length; _i < _len; _i++) {
-          rec = records[_i];
-          data = rec.data;
-          new_feat = wktFormat.read(rec.data.WKTGeog);
-          new_feat.data = data;
-          new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);
-          new_feat.attributes['label'] = data['Name'];
-          if (!(bounds != null)) {
-            bounds = new_feat.geometry.getBounds();
-          } else {
-            bounds.extend(new_feat.geometry.getBounds());
-          }
-          entity_features.push(new_feat);
-        }
-        this.WUGLayer.addFeatures(entity_features);
-        map.addLayer(this.WUGLayer);
-        select = new OpenLayers.Control.SelectFeature(this.WUGLayer, {
-          hover: false,
-          onSelect: function(feature) {
-            var popup;
-            popup = new OpenLayers.Popup.FramedCloud("featurepopup", feature.geometry.getBounds().getCenterLonLat(), null, "<h3>" + feature.data.Name + "</h3>\nPlanning Region: " + feature.data.RWP + "<br/>\nCounty: " + feature.data.County + "<br/>\nBasin: " + feature.data.Basin + "<br/>", null, true, function() {
-              select.unselect(feature);
-              return null;
-            });
-            feature.popup = popup;
-            return map.addPopup(popup);
-          },
-          onUnselect: function(feature) {
-            map.removePopup(feature.popup);
-            feature.popup.destroy();
-            feature.popup = null;
-            return null;
-          }
-        });
-        this.selectWUGControl = select;
-        map.addControl(select);
-        select.activate();
+        this._displaySupplyEntities(records);
         return null;
       }
     });
@@ -91,6 +47,54 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
       this.mapComp.map.removeControl(this.selectWUGControl);
       this.selectWUGControl.destroy();
     }
+    return null;
+  },
+  _displaySupplyEntities: function(records) {
+    var bounds, data, entity_features, map, new_feat, rec, select, wktFormat, _i, _len;
+    map = this.mapComp.map;
+    this.WUGLayer = new OpenLayers.Layer.Vector("Water Users", {
+      styleMap: this._wugStyleMap
+    });
+    wktFormat = new OpenLayers.Format.WKT();
+    bounds = null;
+    entity_features = [];
+    for (_i = 0, _len = records.length; _i < _len; _i++) {
+      rec = records[_i];
+      data = rec.data;
+      new_feat = wktFormat.read(rec.data.WKTGeog);
+      new_feat.data = data;
+      new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);
+      new_feat.attributes['label'] = data['Name'];
+      if (!(bounds != null)) {
+        bounds = new_feat.geometry.getBounds();
+      } else {
+        bounds.extend(new_feat.geometry.getBounds());
+      }
+      entity_features.push(new_feat);
+    }
+    this.WUGLayer.addFeatures(entity_features);
+    map.addLayer(this.WUGLayer);
+    select = new OpenLayers.Control.SelectFeature(this.WUGLayer, {
+      hover: false,
+      onSelect: function(feature) {
+        var popup;
+        popup = new OpenLayers.Popup.FramedCloud("featurepopup", feature.geometry.getBounds().getCenterLonLat(), null, "<h3>" + feature.data.Name + "</h3>\nPlanning Region: " + feature.data.RWP + "<br/>\nCounty: " + feature.data.County + "<br/>\nBasin: " + feature.data.Basin + "<br/>", null, true, function() {
+          select.unselect(feature);
+          return null;
+        });
+        feature.popup = popup;
+        return map.addPopup(popup);
+      },
+      onUnselect: function(feature) {
+        map.removePopup(feature.popup);
+        feature.popup.destroy();
+        feature.popup = null;
+        return null;
+      }
+    });
+    this.selectWUGControl = select;
+    map.addControl(select);
+    select.activate();
     return null;
   },
   _wugStyleMap: new OpenLayers.StyleMap({
