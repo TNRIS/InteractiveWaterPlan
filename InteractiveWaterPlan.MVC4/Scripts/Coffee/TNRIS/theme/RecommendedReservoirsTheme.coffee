@@ -198,6 +198,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         )
 
         wugPanel.on("zoomtoclick", (grid, rowIndex) =>
+
             rec = grid.getStore().getAt(rowIndex)
 
             #find the matching reservoir in the feature layer

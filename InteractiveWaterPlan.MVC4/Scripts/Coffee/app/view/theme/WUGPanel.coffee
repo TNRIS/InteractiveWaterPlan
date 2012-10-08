@@ -10,7 +10,7 @@ Ext.define("ISWP.view.theme.WUGPanel", {
     relatedWUGLayer: null
     curr_reservoir: null
     mapComp: null
-       
+
     initialize: () ->
         me = this
         me.add(Ext.create('Ext.panel.Panel', {

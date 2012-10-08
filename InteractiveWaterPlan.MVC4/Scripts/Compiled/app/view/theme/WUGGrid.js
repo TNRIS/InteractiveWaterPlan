@@ -57,24 +57,13 @@ Ext.define('ISWP.view.theme.WUGGrid', {
         {
           iconCls: 'icon-zoom-in',
           tooltip: 'Zoom To',
-          handler: function(grid, rowIndex, colIndex) {
-            console.log("sup");
-            this.fireEvent("zoomtoclick", grid, rowIndex);
+          handler: function(view, rowIndex, colIndex) {
+            view.ownerCt.fireEvent("zoomtoclick", view, rowIndex);
             return null;
           }
         }
       ]
     }
   ],
-  bubbleEvents: ['itemdblclick']
-  /*
-      bbar: Ext.create('Ext.PagingToolbar', {
-          store: store,
-          displayInfo: true,
-          displayMsg: 'Displaying topics {0} - {1} of {2}',
-          emptyMsg: "No topics to display",
-          
-      }),
-  */
-
+  bubbleEvents: ['itemdblclick', 'zoomtoclick']
 });
