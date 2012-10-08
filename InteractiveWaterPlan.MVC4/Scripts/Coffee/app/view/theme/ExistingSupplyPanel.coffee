@@ -18,6 +18,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     <p>Click on a dot to view the information for that water user group.</p>
                   """
         
+            #TODO: maybe a WUG autocomplete so they can be found by name if already known
+
             tbar: [
                 
                 "TEXAS &raquo; "
