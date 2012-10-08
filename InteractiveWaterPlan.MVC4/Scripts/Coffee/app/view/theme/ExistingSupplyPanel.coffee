@@ -33,14 +33,11 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     editable: false
                     width: 200
                     listeners:
-                        'select': (me, record) ->
-                            console.log('Planning Region Selected', record[0])
+                        'select': (me, record) =>
+                            this.fireEvent('regionselect', record)
                             Ext.getCmp('clearRegionBtn').enable()
                             return null
-                        'change': (me, newVal, oldVal) ->
-                            if newVal == ''
-                                console.log('Planning Region cleared')
-                            return null
+                        
 
                 }
                 {
@@ -50,9 +47,10 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     id: 'clearRegionBtn'
                     disabled: true
                     tooltip: 'Clear Region Selection'
-                    handler: () ->
+                    handler: (me) =>
+                        this.fireEvent('regionclear')
                         Ext.getCmp('regionCombo').select('')
-                        this.disable()
+                        me.disable()
                         return null
                 }
                 "&raquo; "
@@ -76,7 +74,11 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                                 '</tpl>',
                             '</ul>'
                         ]
-                    
+                    listeners:
+                        'select': (me, record) =>
+                            this.fireEvent('countyselect', record)
+                            Ext.getCmp('clearCountyBtn').enable()
+                            return null
                 }
                 {
                     xtype: 'button'
@@ -85,6 +87,11 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     id: 'clearCountyBtn'
                     disabled: true
                     tooltip: 'Clear County Selection'
+                    handler: (me) =>
+                        this.fireEvent('countyclear')
+                        Ext.getCmp('countyCombo').select('')
+                        me.disable()
+                        return null
                 } 
             ]
 
@@ -100,6 +107,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
         })
 
         me.add(wugGrid)
+
         ###
         #TODO: Add Editors to comboboxes
         html: '<div id="textToEdit">Hi James</div>'

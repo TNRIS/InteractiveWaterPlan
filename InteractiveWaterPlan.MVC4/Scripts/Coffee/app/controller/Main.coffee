@@ -53,7 +53,6 @@ Ext.define('ISWP.controller.Main', {
 
     init: () ->
         
-
         this.control({
             'mapcomponent': 
                 boxready: (mapComp) ->
@@ -95,7 +94,6 @@ Ext.define('ISWP.controller.Main', {
                     return null
 
             '#placeCombo':
-                
                 select: (combo, records) ->
                     unless records.length == 1 then return null
 
@@ -132,7 +130,7 @@ Ext.define('ISWP.controller.Main', {
         
     _loadThemeIntoMap: (themeName) ->
         
-        #First unload the them
+        #First unload the current theme
         this.interactiveTheme.unload() if this.interactiveTheme?
         
         if themeName == 'existing-supply'
@@ -156,8 +154,8 @@ Ext.define('ISWP.controller.Main', {
                 supplyStore: this.getReservoirSupplyDataStore()
             })
 
-        this.interactiveTheme.loadTheme()
-
+        this.interactiveTheme.load()
+        
         return null  
 
 })

@@ -27,19 +27,77 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
         return null
 
     loadTheme: () ->
-        this.supplyPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
+
+        this.supplyPanel = Ext.create(
+            'ISWP.view.theme.ExistingSupplyPanel', {
                 wugStore: this.entityStore
             })
+
         this.mainContainer.add(this.supplyPanel)
         this.supplyPanel.initialize()
 
+        this.supplyPanel.on('zoomtoclick', (grid, rowIndex) =>
+            rec = grid.getStore().getAt(rowIndex)
+
+           #find the matching reservoir in the feature layer
+            for wug_feat in this.WUGLayer.features
+                if rec.data.Id == wug_feat.data.Id
+                    #found it - grab the bounds and zoom to it
+                    bounds = wug_feat.geometry.getBounds()
+                    this.mapComp.map.zoomToExtent(bounds)
+
+                    #unselect the previous WUG
+                    this.selectWUGControl.unselectAll()
+
+                    #and select the new one
+                    this.selectWUGControl.select(wug_feat)
+                    break
+
+            return null
+        )
+
+        this.supplyPanel.on('regionselect', (record) =>
+            console.log('region selected')
+            #TODO: zoom to and highlight the selected region
+
+            #TODO: show WUGs in region
+
+            #TODO: reload the county combo's store
+            # displaying the counties in the region first
+            # and then all counties
+            return null
+        )
+
+        this.supplyPanel.on('regionclear', () =>
+            console.log('region cleared')
+            #TODO: 
+            return null
+        )
+
+        this.supplyPanel.on('countyselect', (record) =>
+            console.log('county selected', record)
+            #TODO: mostly the same as region select
+            return null
+        )
+
+        this.supplyPanel.on('countyclear', () =>
+            console.log('county cleared')
+            #TODO
+            return null
+        )
+
+        ###
+        TODO: Don't load entities on load. Only after a region or county is selected
         this.entityStore.load({
             scope: this
             callback: (records, operation, success) ->
                 unless success then return false
                 this._displaySupplyEntities(records)
+
+                
                 return null        
         })
+        ###
 
         return null
 

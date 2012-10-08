@@ -6,7 +6,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
   layout: 'border',
   wugStore: null,
   initialize: function() {
-    var me, topPanel, wugGrid;
+    var me, topPanel, wugGrid,
+      _this = this;
     me = this;
     topPanel = Ext.create('Ext.panel.Panel', {
       region: 'north',
@@ -25,14 +26,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           width: 200,
           listeners: {
             'select': function(me, record) {
-              console.log('Planning Region Selected', record[0]);
+              _this.fireEvent('regionselect', record);
               Ext.getCmp('clearRegionBtn').enable();
-              return null;
-            },
-            'change': function(me, newVal, oldVal) {
-              if (newVal === '') {
-                console.log('Planning Region cleared');
-              }
               return null;
             }
           }
@@ -43,9 +38,10 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           id: 'clearRegionBtn',
           disabled: true,
           tooltip: 'Clear Region Selection',
-          handler: function() {
+          handler: function(me) {
+            _this.fireEvent('regionclear');
             Ext.getCmp('regionCombo').select('');
-            this.disable();
+            me.disable();
             return null;
           }
         }, "&raquo; ", {
@@ -60,6 +56,13 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           width: 200,
           listConfig: {
             tpl: ['<ul class=\'x-grouped-combo\'>', '<tpl for=".">', '{[xindex === 1 || parent[xindex - 2].CategoryId !== values.CategoryId ? "<li class=\'x-boundlist-group\'>" + values.CategoryName + "</li>" : ""]}', '<li role="option" class="x-boundlist-item">{Name}</li>', '</tpl>', '</ul>']
+          },
+          listeners: {
+            'select': function(me, record) {
+              _this.fireEvent('countyselect', record);
+              Ext.getCmp('clearCountyBtn').enable();
+              return null;
+            }
           }
         }, {
           xtype: 'button',
@@ -67,7 +70,13 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           text: null,
           id: 'clearCountyBtn',
           disabled: true,
-          tooltip: 'Clear County Selection'
+          tooltip: 'Clear County Selection',
+          handler: function(me) {
+            _this.fireEvent('countyclear');
+            Ext.getCmp('countyCombo').select('');
+            me.disable();
+            return null;
+          }
         }
       ]
     });

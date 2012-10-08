@@ -22,6 +22,10 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     loadTheme: null #must define this method
     unloadTheme: null #must define this method
 
+
+    #TODO: The events aren't really useful since so many async loads happen in each theme
+    # Either figure out something better, or remove them
+
     constructor: (config) ->
         this.mixins.observable.constructor.call(this, config)
 
@@ -53,6 +57,7 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
         this.loadTheme()
 
         this.fireEvent("themeload", this.theme)
+
         return null
 
     updateYear: (year) ->

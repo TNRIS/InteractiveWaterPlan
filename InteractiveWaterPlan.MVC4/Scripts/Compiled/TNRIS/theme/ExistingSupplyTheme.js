@@ -16,21 +16,57 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
     return null;
   },
   loadTheme: function() {
+    var _this = this;
     this.supplyPanel = Ext.create('ISWP.view.theme.ExistingSupplyPanel', {
       wugStore: this.entityStore
     });
     this.mainContainer.add(this.supplyPanel);
     this.supplyPanel.initialize();
-    this.entityStore.load({
-      scope: this,
-      callback: function(records, operation, success) {
-        if (!success) {
-          return false;
+    this.supplyPanel.on('zoomtoclick', function(grid, rowIndex) {
+      var bounds, rec, wug_feat, _i, _len, _ref;
+      rec = grid.getStore().getAt(rowIndex);
+      _ref = _this.WUGLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wug_feat = _ref[_i];
+        if (rec.data.Id === wug_feat.data.Id) {
+          bounds = wug_feat.geometry.getBounds();
+          _this.mapComp.map.zoomToExtent(bounds);
+          _this.selectWUGControl.unselectAll();
+          _this.selectWUGControl.select(wug_feat);
+          break;
         }
-        this._displaySupplyEntities(records);
-        return null;
       }
+      return null;
     });
+    this.supplyPanel.on('regionselect', function(record) {
+      console.log('region selected');
+      return null;
+    });
+    this.supplyPanel.on('regionclear', function() {
+      console.log('region cleared');
+      return null;
+    });
+    this.supplyPanel.on('countyselect', function(record) {
+      console.log('county selected', record);
+      return null;
+    });
+    this.supplyPanel.on('countyclear', function() {
+      console.log('county cleared');
+      return null;
+    });
+    /*
+            TODO: Don't load entities on load. Only after a region or county is selected
+            this.entityStore.load({
+                scope: this
+                callback: (records, operation, success) ->
+                    unless success then return false
+                    this._displaySupplyEntities(records)
+    
+                    
+                    return null        
+            })
+    */
+
     return null;
   },
   unloadTheme: function() {

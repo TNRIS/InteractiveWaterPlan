@@ -116,7 +116,7 @@ Ext.define('ISWP.controller.Main', {
         supplyStore: this.getReservoirSupplyDataStore()
       });
     }
-    this.interactiveTheme.loadTheme();
+    this.interactiveTheme.load();
     return null;
   }
 });
