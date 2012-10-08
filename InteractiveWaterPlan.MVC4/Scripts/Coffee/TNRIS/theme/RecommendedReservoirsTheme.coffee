@@ -18,8 +18,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
     selectReservoirControl: null
 
-    #TODO: Separate the 2 views into different components
-
     loadTheme: () ->
         this.reservoirStore.load({
             scope: this
@@ -54,7 +52,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
                 this.reservoirLayer.addFeatures(res_features)
                 this.mapComp.map.addLayer(this.reservoirLayer)
-
 
                 this._setupSelectReservoirControl()
                 this._changeToReservoirsLayout()
@@ -169,7 +166,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     _changeToRelatedEntitiesLayout: () ->
         this.mainContainer.removeAll(true)      
 
-        
         wugPanel = Ext.create('ISWP.view.theme.WUGPanel', {
                 supplyStore: this.supplyStore
                 relatedWUGLayer: this.relatedWUGLayer
@@ -198,7 +194,6 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         )
 
         wugPanel.on("zoomtoclick", (grid, rowIndex) =>
-
             rec = grid.getStore().getAt(rowIndex)
 
             #find the matching reservoir in the feature layer
