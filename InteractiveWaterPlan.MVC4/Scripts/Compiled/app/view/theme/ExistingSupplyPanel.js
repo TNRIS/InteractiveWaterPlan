@@ -26,7 +26,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           width: 200,
           listeners: {
             'select': function(me, record) {
-              _this.fireEvent('regionselect', record);
+              _this.fireEvent('regionselect', record[0].data);
               Ext.getCmp('clearRegionBtn').enable();
               return null;
             }
@@ -59,7 +59,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           },
           listeners: {
             'select': function(me, record) {
-              _this.fireEvent('countyselect', record);
+              _this.fireEvent('countyselect', record[0].data);
               Ext.getCmp('clearCountyBtn').enable();
               return null;
             }

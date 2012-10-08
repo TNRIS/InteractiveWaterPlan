@@ -56,8 +56,8 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
             return null
         )
 
-        this.supplyPanel.on('regionselect', (record) =>
-            console.log('region selected')
+        this.supplyPanel.on('regionselect', (place) =>
+            console.log('region selected', place)
             #TODO: zoom to and highlight the selected region
 
             #TODO: show WUGs in region
@@ -74,8 +74,8 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
             return null
         )
 
-        this.supplyPanel.on('countyselect', (record) =>
-            console.log('county selected', record)
+        this.supplyPanel.on('countyselect', (place) =>
+            console.log('county selected', place)
             #TODO: mostly the same as region select
             return null
         )

@@ -36,7 +36,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     width: 200
                     listeners:
                         'select': (me, record) =>
-                            this.fireEvent('regionselect', record)
+                            this.fireEvent('regionselect', record[0].data)
                             Ext.getCmp('clearRegionBtn').enable()
                             return null
                         
@@ -78,7 +78,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                         ]
                     listeners:
                         'select': (me, record) =>
-                            this.fireEvent('countyselect', record)
+                            this.fireEvent('countyselect', record[0].data)
                             Ext.getCmp('clearCountyBtn').enable()
                             return null
                 }

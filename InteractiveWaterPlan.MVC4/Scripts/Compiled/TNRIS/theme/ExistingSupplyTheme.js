@@ -38,16 +38,16 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
       }
       return null;
     });
-    this.supplyPanel.on('regionselect', function(record) {
-      console.log('region selected');
+    this.supplyPanel.on('regionselect', function(place) {
+      console.log('region selected', place);
       return null;
     });
     this.supplyPanel.on('regionclear', function() {
       console.log('region cleared');
       return null;
     });
-    this.supplyPanel.on('countyselect', function(record) {
-      console.log('county selected', record);
+    this.supplyPanel.on('countyselect', function(place) {
+      console.log('county selected', place);
       return null;
     });
     this.supplyPanel.on('countyclear', function() {
