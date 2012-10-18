@@ -2,8 +2,8 @@
 
 Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
   extend: 'TNRIS.theme.InteractiveTheme',
-  max_radius: 12,
-  min_radius: 6,
+  max_radius: 18,
+  min_radius: 4,
   curr_reservoir: null,
   reservoirStore: null,
   reservoirLayer: null,
