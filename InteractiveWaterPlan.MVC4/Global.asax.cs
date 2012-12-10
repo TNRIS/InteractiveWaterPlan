@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
-
 using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4
@@ -17,6 +17,7 @@ namespace InteractiveWaterPlan.MVC4
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
         }
