@@ -11,7 +11,7 @@ Ext.define('ISWP.view.map.MapComponent', {
     placeLayer: null
 
     #TODO: read this from app config
-    bingApiKey:'Aq7OR-oOdjT5kHB1zKYF7O55CZsiZHai_UnX3blamGr2l94e1b9YyAWOrz9NcX9N'
+    bingApiKey:'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o'
     
     origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(
         new OpenLayers.Projection("EPSG:4326"), #geographic wgs-84
