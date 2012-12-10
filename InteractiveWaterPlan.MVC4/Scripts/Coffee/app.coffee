@@ -27,6 +27,7 @@ Ext.require('TNRIS.proxy.ParameterProxy')
 Ext.require('TNRIS.theme.InteractiveTheme')
 Ext.require('TNRIS.theme.ExistingSupplyTheme')
 Ext.require('TNRIS.theme.RecommendedReservoirsTheme')
+Ext.require('TNRIS.theme.StrategiesTheme')
 
 Ext.create('Ext.app.Application', {
     name: 'ISWP'

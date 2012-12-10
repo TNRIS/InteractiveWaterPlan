@@ -32,6 +32,8 @@ Ext.require('TNRIS.theme.ExistingSupplyTheme');
 
 Ext.require('TNRIS.theme.RecommendedReservoirsTheme');
 
+Ext.require('TNRIS.theme.StrategiesTheme');
+
 Ext.create('Ext.app.Application', {
   name: 'ISWP',
   autoCreateViewport: true,

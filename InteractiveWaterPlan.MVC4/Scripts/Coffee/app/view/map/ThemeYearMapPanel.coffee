@@ -119,7 +119,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     xtype: 'button'
                     text: 'Existing Supply'
                     theme: 'existing-supply'
-                    pressed: true
+                    #pressed: true
                     allowDepress: false
                     toggleGroup: 'themeButtons'
                 }
@@ -128,6 +128,14 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
                     text: 'Recommended Reservoirs'
                     theme: 'recommended-reservoirs'
                     #pressed: true
+                    allowDepress: false
+                    toggleGroup: 'themeButtons'
+                }
+                {
+                    xtype: 'button'
+                    text: 'Recommended Strategies'
+                    theme: 'strategies'
+                    pressed: true
                     allowDepress: false
                     toggleGroup: 'themeButtons'
                 }

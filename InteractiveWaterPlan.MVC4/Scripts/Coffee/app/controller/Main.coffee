@@ -133,26 +133,33 @@ Ext.define('ISWP.controller.Main', {
         #First unload the current theme
         this.interactiveTheme.unload() if this.interactiveTheme?
         
-        if themeName == 'existing-supply'
-            this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme({
-                mapComp: this.getMapComponent()
-                themeStore: this.getThemeStore()
-                selectedYear: this.selectedYear
-                mainContainer: this.getMainContainer()
+        switch themeName
+            when 'existing-supply'
+                this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme(
+                    mapComp: this.getMapComponent()
+                    themeStore: this.getThemeStore()
+                    selectedYear: this.selectedYear
+                    mainContainer: this.getMainContainer()
+                    entityStore: this.getEntityStore()
+                )
+            when 'recommended-reservoirs'
+                this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme(
+                    mapComp: this.getMapComponent()
+                    themeStore: this.getThemeStore()
+                    selectedYear: this.selectedYear
+                    mainContainer: this.getMainContainer()
 
-                entityStore: this.getEntityStore()
-            })
-        else if themeName == 'recommended-reservoirs'
-            this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme({
-                mapComp: this.getMapComponent()
-                themeStore: this.getThemeStore()
-                selectedYear: this.selectedYear
-                mainContainer: this.getMainContainer()
-
-                relatedWUGStore: this.getWaterUseEntityStore()
-                reservoirStore: this.getReservoirFeatureStore()
-                supplyStore: this.getReservoirSupplyDataStore()
-            })
+                    relatedWUGStore: this.getWaterUseEntityStore()
+                    reservoirStore: this.getReservoirFeatureStore()
+                    supplyStore: this.getReservoirSupplyDataStore()
+                )
+            when 'strategies'
+                this.interactiveTheme = new TNRIS.theme.StrategiesTheme(
+                    mapComp: this.getMapComponent()
+                    themeStore: this.getThemeStore()
+                    selectedYear: this.selectedYear
+                    mainContainer: this.getMainContainer()
+                )
 
         this.interactiveTheme.load()
         

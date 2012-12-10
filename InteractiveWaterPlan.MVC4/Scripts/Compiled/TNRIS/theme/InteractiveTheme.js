@@ -18,24 +18,19 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
   unloadTheme: null,
   constructor: function(config) {
     this.mixins.observable.constructor.call(this, config);
-    this.addEvents('beforethemeload', 'themeload', 'beforethemeunload', 'themeunload');
     return null;
   },
   unload: function() {
     var _this = this;
-    this.fireEvent("beforethemeunload");
     this.themeStore.each(function(rec) {
       _this.mapComp.removeLayersFromMap(rec.data.Layers);
       return true;
     });
     this.unloadTheme();
-    this.fireEvent("themeunload");
     return null;
   },
   load: function() {
-    this.fireEvent("beforethemeload", this.theme);
     this.loadTheme();
-    this.fireEvent("themeload", this.theme);
     return null;
   },
   updateYear: function(year) {

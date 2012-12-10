@@ -97,24 +97,34 @@ Ext.define('ISWP.controller.Main', {
     if (this.interactiveTheme != null) {
       this.interactiveTheme.unload();
     }
-    if (themeName === 'existing-supply') {
-      this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme({
-        mapComp: this.getMapComponent(),
-        themeStore: this.getThemeStore(),
-        selectedYear: this.selectedYear,
-        mainContainer: this.getMainContainer(),
-        entityStore: this.getEntityStore()
-      });
-    } else if (themeName === 'recommended-reservoirs') {
-      this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme({
-        mapComp: this.getMapComponent(),
-        themeStore: this.getThemeStore(),
-        selectedYear: this.selectedYear,
-        mainContainer: this.getMainContainer(),
-        relatedWUGStore: this.getWaterUseEntityStore(),
-        reservoirStore: this.getReservoirFeatureStore(),
-        supplyStore: this.getReservoirSupplyDataStore()
-      });
+    switch (themeName) {
+      case 'existing-supply':
+        this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme({
+          mapComp: this.getMapComponent(),
+          themeStore: this.getThemeStore(),
+          selectedYear: this.selectedYear,
+          mainContainer: this.getMainContainer(),
+          entityStore: this.getEntityStore()
+        });
+        break;
+      case 'recommended-reservoirs':
+        this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme({
+          mapComp: this.getMapComponent(),
+          themeStore: this.getThemeStore(),
+          selectedYear: this.selectedYear,
+          mainContainer: this.getMainContainer(),
+          relatedWUGStore: this.getWaterUseEntityStore(),
+          reservoirStore: this.getReservoirFeatureStore(),
+          supplyStore: this.getReservoirSupplyDataStore()
+        });
+        break;
+      case 'strategies':
+        this.interactiveTheme = new TNRIS.theme.StrategiesTheme({
+          mapComp: this.getMapComponent(),
+          themeStore: this.getThemeStore(),
+          selectedYear: this.selectedYear,
+          mainContainer: this.getMainContainer()
+        });
     }
     this.interactiveTheme.load();
     return null;
