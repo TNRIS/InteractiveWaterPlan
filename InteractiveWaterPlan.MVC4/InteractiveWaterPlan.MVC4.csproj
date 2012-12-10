@@ -634,6 +634,7 @@
     <Content Include="Scripts\Compiled\TNRIS\theme\ExistingSupplyTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\InteractiveTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\RecommendedReservoirsTheme.js" />
+    <Content Include="Scripts\Compiled\TNRIS\theme\StrategiesTheme.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -693,6 +694,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <None Include="Scripts\Coffee\TNRIS\theme\StrategiesTheme.coffee" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj">
