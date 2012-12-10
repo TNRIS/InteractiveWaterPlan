@@ -1,5 +1,5 @@
 packages
-InteractiveWaterPlan/Scripts/Compiled/
+InteractiveWaterPlan.MVC4/App_Data/
 *.Publish.xml
 *.sublime-workspace
 ConnectionStrings.config
