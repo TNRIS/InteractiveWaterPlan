@@ -29,18 +29,9 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     constructor: (config) ->
         this.mixins.observable.constructor.call(this, config)
 
-        this.addEvents(
-            'beforethemeload'
-            'themeload'
-            'beforethemeunload'
-            'themeunload'
-        )
-
         return null
 
     unload: () ->
-        this.fireEvent("beforethemeunload")
-
         this.themeStore.each((rec) =>
             this.mapComp.removeLayersFromMap(rec.data.Layers)
             return true
@@ -48,15 +39,10 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
 
         this.unloadTheme()
 
-        this.fireEvent("themeunload")
         return null
 
-    load: () ->
-        this.fireEvent("beforethemeload", this.theme)
-
+    load: () ->   
         this.loadTheme()
-
-        this.fireEvent("themeload", this.theme)
 
         return null
 
