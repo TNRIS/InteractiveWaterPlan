@@ -19,12 +19,15 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
 
     contentPanel: null
 
-    loadTheme: null #must define this method
-    unloadTheme: null #must define this method
+    #child classes must define this method
+    loadTheme: () ->
+        throw new error("Must define loadTheme()")
+        return null 
 
-
-    #TODO: The events aren't really useful since so many async loads happen in each theme
-    # Either figure out something better, or remove them
+    #child classes must define this method
+    unloadTheme: () ->
+        throw new error("Must define unloadTheme()")
+        return null 
 
     constructor: (config) ->
         this.mixins.observable.constructor.call(this, config)
@@ -38,12 +41,10 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
         )
 
         this.unloadTheme()
-
         return null
 
     load: () ->   
         this.loadTheme()
-
         return null
 
     updateYear: (year) ->

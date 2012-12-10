@@ -14,8 +14,14 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
   mapComp: null,
   mainContainer: null,
   contentPanel: null,
-  loadTheme: null,
-  unloadTheme: null,
+  loadTheme: function() {
+    throw new error("Must define loadTheme()");
+    return null;
+  },
+  unloadTheme: function() {
+    throw new error("Must define unloadTheme()");
+    return null;
+  },
   constructor: function(config) {
     this.mixins.observable.constructor.call(this, config);
     return null;
