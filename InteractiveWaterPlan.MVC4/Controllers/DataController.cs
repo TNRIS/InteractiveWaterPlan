@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
 
-
-
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class DataController : ApiController
@@ -38,7 +36,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                     case 2010:
                         return new List<WaterSourceSupplyData> ()
                         {
-                            new WaterSourceSupplyData { Name="Muncipal", Value=4851201}, 
+                            new WaterSourceSupplyData { Name="Municipal", Value=4851201}, 
                             new WaterSourceSupplyData { Name="Manufacturing", Value=1727808},
                             new WaterSourceSupplyData { Name="Mining", Value=296230},
                             new WaterSourceSupplyData { Name="Steam-electric", Value=733179},
@@ -49,7 +47,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                     case 2020:
                         return new List<WaterSourceSupplyData>()
                         {
-                            new WaterSourceSupplyData { Name="Muncipal", Value=5580979}, 
+                            new WaterSourceSupplyData { Name="Municipal", Value=5580979}, 
                             new WaterSourceSupplyData { Name="Manufacturing", Value=2153551},
                             new WaterSourceSupplyData { Name="Mining", Value=313327},
                             new WaterSourceSupplyData { Name="Steam-electric", Value=1010555},
@@ -60,7 +58,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                     case 2030:
                         return new List<WaterSourceSupplyData>() 
                         {
-                            new WaterSourceSupplyData { Name="Muncipal", Value=6254784}, 
+                            new WaterSourceSupplyData { Name="Municipal", Value=6254784}, 
                             new WaterSourceSupplyData { Name="Manufacturing", Value=2465789},
                             new WaterSourceSupplyData { Name="Mining", Value=296472},
                             new WaterSourceSupplyData { Name="Steam-electric", Value=1160401},
@@ -71,7 +69,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                     case 2040:
                         return new List<WaterSourceSupplyData>()
                         {
-                            new WaterSourceSupplyData { Name="Muncipal", Value=6917722}, 
+                            new WaterSourceSupplyData { Name="Municipal", Value=6917722}, 
                             new WaterSourceSupplyData { Name="Manufacturing", Value=2621183},
                             new WaterSourceSupplyData { Name="Mining", Value=285002},
                             new WaterSourceSupplyData { Name="Steam-electric", Value=1316577},
@@ -82,7 +80,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                     case 2050:
                         return new List<WaterSourceSupplyData>() 
                         {
-                            new WaterSourceSupplyData { Name="Muncipal", Value=7630808}, 
+                            new WaterSourceSupplyData { Name="Municipal", Value=7630808}, 
                             new WaterSourceSupplyData { Name="Manufacturing", Value=2755335},
                             new WaterSourceSupplyData { Name="Mining", Value=284640},
                             new WaterSourceSupplyData { Name="Steam-electric", Value=1460483},
@@ -93,7 +91,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                     case 2060:
                         return new List<WaterSourceSupplyData>() 
                         {
-                            new WaterSourceSupplyData { Name="Muncipal", Value=8414492}, 
+                            new WaterSourceSupplyData { Name="Municipal", Value=8414492}, 
                             new WaterSourceSupplyData { Name="Manufacturing", Value=2882524},
                             new WaterSourceSupplyData { Name="Mining", Value=292294},
                             new WaterSourceSupplyData { Name="Steam-electric", Value=1620411},
