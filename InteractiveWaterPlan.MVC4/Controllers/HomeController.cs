@@ -13,7 +13,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Bootstrap");
         }
 
         public ActionResult Bootstrap()

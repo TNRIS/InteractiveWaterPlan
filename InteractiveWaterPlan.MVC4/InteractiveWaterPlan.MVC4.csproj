@@ -655,6 +655,7 @@
     <Content Include="Scripts\Compiled\app\view\theme\WUGGrid.js" />
     <Content Include="Scripts\Compiled\app\view\theme\WUGPanel.js" />
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
+    <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
@@ -704,6 +705,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
