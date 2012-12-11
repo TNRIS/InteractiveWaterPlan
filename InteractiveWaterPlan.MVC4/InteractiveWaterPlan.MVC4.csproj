@@ -156,8 +156,12 @@
     <Content Include="App_Readme\Spring.Rest.txt" />
     <Content Include="Content\bootstrap\css\bootstrap.css" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\css\cosmo.bootstrap.css" />
+    <Content Include="Content\bootstrap\css\cosmo.bootstrap.min.css" />
     <Content Include="Content\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Content\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\bootstrap\js\bootstrap.min.js" />
     <Content Include="Content\ExtJS\ext-all-debug.js" />
     <Content Include="Content\ExtJS\ext-all.js" />
     <Content Include="Content\ExtJS\resources\css\ext-all-gray-debug.css" />
@@ -544,6 +548,9 @@
     <Content Include="Content\ExtJS\resources\themes\images\gray\window\icon-warning.gif" />
     <Content Include="Content\ExtJS\resources\themes\images\gray\window\window-default-corners.gif" />
     <Content Include="Content\ExtJS\resources\themes\images\gray\window\window-default-sides.gif" />
+    <Content Include="Content\FontAwesome\css\font-awesome-ie7.css" />
+    <Content Include="Content\FontAwesome\css\font-awesome.css" />
+    <Content Include="Content\FontAwesome\font\fontawesome-webfont.svg" />
     <Content Include="Content\jquery.min.js" />
     <Content Include="Content\OpenLayers\img\blank.gif" />
     <Content Include="Content\OpenLayers\img\cloud-popup-relative.png" />
@@ -614,8 +621,11 @@
     <Content Include="Content\OpenLayers\theme\default\style.tidy.css" />
     <Content Include="Content\OpenLayers\tile.stamen.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\SiteNew.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\backbone.js" />
+    <Content Include="Scripts\backbone.min.js" />
     <Content Include="Scripts\Compiled\app.js" />
     <Content Include="Scripts\Compiled\app\controller\Main.js" />
     <Content Include="Scripts\Compiled\app\model\Entity.js" />
@@ -652,6 +662,34 @@
     <Content Include="Scripts\Compiled\TNRIS\theme\InteractiveTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\RecommendedReservoirsTheme.js" />
     <Content Include="Scripts\Compiled\TNRIS\theme\StrategiesTheme.js" />
+    <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.2.js" />
+    <Content Include="Scripts\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\knockback-core-stack.js" />
+    <Content Include="Scripts\knockback-core-stack.min.js" />
+    <Content Include="Scripts\knockback-core.js" />
+    <Content Include="Scripts\knockback-core.min.js" />
+    <Content Include="Scripts\knockback-full-stack.js" />
+    <Content Include="Scripts\knockback-full-stack.min.js" />
+    <Content Include="Scripts\knockback.js" />
+    <Content Include="Scripts\knockback.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\lib\knockback-defaults.js" />
+    <Content Include="Scripts\lib\knockback-defaults.min.js" />
+    <Content Include="Scripts\lib\knockback-formatting.js" />
+    <Content Include="Scripts\lib\knockback-formatting.min.js" />
+    <Content Include="Scripts\lib\knockback-localization.js" />
+    <Content Include="Scripts\lib\knockback-localization.min.js" />
+    <Content Include="Scripts\lib\knockback-statistics.js" />
+    <Content Include="Scripts\lib\knockback-statistics.min.js" />
+    <Content Include="Scripts\lib\knockback-triggering.js" />
+    <Content Include="Scripts\lib\knockback-triggering.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -672,6 +710,9 @@
   <ItemGroup>
     <None Include="ConnectionStrings.config.sample" />
     <Content Include="Hibernate.config" />
+    <None Include="Content\FontAwesome\font\fontawesome-webfont.eot" />
+    <None Include="Content\FontAwesome\font\fontawesome-webfont.ttf" />
+    <None Include="Content\FontAwesome\font\fontawesome-webfont.woff" />
     <None Include="Scripts\Coffee\app.coffee" />
     <None Include="Scripts\Coffee\app\controller\Main.coffee" />
     <None Include="Scripts\Coffee\app\model\Entity.coffee" />
@@ -701,6 +742,7 @@
     <None Include="Scripts\Coffee\app\view\theme\WUGGrid.coffee" />
     <None Include="Scripts\Coffee\app\view\theme\WUGPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
@@ -712,6 +754,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Scripts\Coffee\TNRIS\theme\StrategiesTheme.coffee" />
+    <Content Include="Views\Home\Bootstrap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InteractiveWaterPlan.Core\InteractiveWaterPlan.Core.csproj">

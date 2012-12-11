@@ -16,5 +16,9 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return View();
         }
 
+        public ActionResult Bootstrap()
+        {
+            return View();
+        }
     }
 }

@@ -17,6 +17,22 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/Compiled/app.js"
             ));
 
+            bundles.Add(new ScriptBundle("~/bundles/js/modernizr").Include(
+                "~/Scripts/modernizr-{version}.js"
+            ));
+
+            bundles.Add(new ScriptBundle("~/bundles/js/app").Include(
+                "~/Content/OpenLayers/tile.stamen.js",
+                "~/Scripts/Compiled/OpenLayers/OpenLayers.Layer.QuadKey.js",
+                "~/Scripts/Compiled/OpenLayers/OpenLayers.Control.GetFeature.js",
+                "~/Scripts/jquery-{version}.js",
+                "~/Content/bootstrap/js/bootstrap.js",
+                "~/Scripts/underscore.js",
+                "~/Scripts/backbone.js",
+                "~/Scripts/knockout-{version}.js",
+                "~/Scripts/knockback.js"
+            ));
+
             //TODO: Set to true for Release -- any way to set this based on compile flag??
             //automatically uses *.min.js versions of files
             // also overwrites the <system.web><compilation debug="true" />...</system.web> settings

@@ -22,11 +22,11 @@
  
     @if (HttpContext.Current.IsDebuggingEnabled)
     {
-        <script src="@Url.Content("~/Content/OpenLayers/OpenLayers.debug.js")" type="text/javascript"></script>
+        @Scripts.Render("/Content/OpenLayers/OpenLayers.debug.js")
     }
     else
     {
-        <script src="@Url.Content("~/Content/OpenLayers/OpenLayers.js")" type="text/javascript"></script>
+        @Scripts.Render("/Content/OpenLayers/OpenLayers.js")
     }
     
     <input type="hidden" id="scripts_path" value="@Url.Content("~/Scripts")" />
