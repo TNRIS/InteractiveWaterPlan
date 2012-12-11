@@ -104,16 +104,16 @@
         <div class="row">
             <div class="span5">
               <ul class="breadcrumb">
-                <li><a href="#">Home</a> <span class="divider">/</span></li>
-                <li><a href="#">Library</a> <span class="divider">/</span></li>
-                <li class="active">Data</li>
+                <li><a href="#">Texas</a> <span class="divider">/</span></li>
+                <li><a href="#">Region G</a> <span class="divider">/</span></li>
+                <li class="active">Select County</li>
               </ul>
             </div>
         </div>
 
         <div class="row">
             <div class="span12" id="tableContainer">
-                <table class="table table-bordered table-striped table-hover">
+                <table class="table table-bordered table-striped table-hover table-condensed">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -157,7 +157,7 @@
         @Scripts.Render("/Content/OpenLayers/OpenLayers.js")
     }
     
-    <input type="hidden" id="scripts_path" value="@Url.Content("~/Scripts")" />
+    <input type="hidden" id="base_path" value="@Url.Content("~/Scripts")" />
 
     @Scripts.Render("~/bundles/js/app")
     <script data-main="@Url.Content("~/Scripts/Compiled/backbone_app/app.js")" src="@Url.Content("~/Scripts/require.js")" type="text/javascript"></script>
