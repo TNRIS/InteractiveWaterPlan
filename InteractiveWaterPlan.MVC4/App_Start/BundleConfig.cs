@@ -26,6 +26,7 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/Compiled/OpenLayers/OpenLayers.Layer.QuadKey.js",
                 "~/Scripts/Compiled/OpenLayers/OpenLayers.Control.GetFeature.js",
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/stupidtable.js",
                 "~/Content/bootstrap/js/bootstrap.js",
                 "~/Scripts/underscore.js",
                 "~/Scripts/backbone.js",
