@@ -3,23 +3,11 @@
 
 var BASE_API_PATH, console;
 
-try {
-  console.log("Console is defined");
-} catch (e) {
-  console = {};
-  console.log = function() {
-    return null;
-  };
-}
+console = console || {};
 
-try {
-  console.log("Console is defined");
-} catch (e) {
-  console = {};
-  console.log = function() {
-    return null;
-  };
-}
+console.log = console.log || function() {
+  return null;
+};
 
 _.extend(_.templateSettings, {
   interpolate: /\{\{(.+?)\}\}/g
@@ -38,7 +26,6 @@ require.config({
 $(function() {
   var bingApiKey, bing_aerial, bing_hybrid, bing_road, esri_gray, map, mapquest_aerial, mapquest_open, origCenter, origZoom, toner, watercolor;
   BASE_API_PATH = $("#base_path").val();
-  console.log(BASE_API_PATH);
   mapquest_open = new OpenLayers.Layer.XYZ("MapQuest Open Street", ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"], {
     attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
     transitionEffect: "resize"

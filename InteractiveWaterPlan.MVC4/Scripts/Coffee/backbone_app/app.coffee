@@ -1,13 +1,4 @@
-﻿#This is to prevent errors in IE when a console statement
-# is in the remaining code
-try
-    console.log("Console is defined")
-catch e
-    console = {}
-    console.log = () ->
-        return null
-
-
+﻿
 
 #Note: jquery, underscore.js, and backbone.js are loaded on the page and registered globally
 # so we do not need to load them via requirejs define statements
@@ -16,13 +7,9 @@ catch e
 
 #This is to prevent errors in IE when a console statement
 # is in the remaining code
-try
-    console.log("Console is defined")
-catch e
-    console = {}
-    console.log = () ->
-        return null
-  
+console = console || {}
+console.log = console.log || () ->
+                                return null
 
 #Setup underscore to use mustache style template tags {{ like.this }}
 _.extend(

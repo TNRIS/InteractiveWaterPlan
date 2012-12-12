@@ -3,14 +3,11 @@
 
 var BASE_API_PATH, BASE_SCRIPT_PATH, console;
 
-try {
-  console.log("Console is defined");
-} catch (e) {
-  console = {};
-  console.log = function() {
-    return null;
-  };
-}
+console = console || {};
+
+console.log = console.log || function() {
+  return null;
+};
 
 Ext.Ajax.defaultHeaders = {
   'Accept': 'application/json, application/xml',
