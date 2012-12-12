@@ -72,16 +72,6 @@ namespace InteractiveWaterPlan.MVC4
 
             #endregion
 
-            #region Theme Routes
-
-            config.Routes.MapHttpRoute(
-                "GetThemeRoute",
-                "api/theme/{ThemeName}",
-                new { controller = "Theme", action = "GetTheme" }
-            );
-
-            #endregion
-
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
