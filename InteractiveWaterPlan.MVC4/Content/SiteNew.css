@@ -1,6 +1,5 @@
 ﻿
 
-
 /* Page Styles */
 body 
 {
@@ -84,7 +83,7 @@ ul.nav > li.nav-label
 
 .olControlAttribution 
 {
-    bottom: 4px;
+    bottom: 0.5em !important;
 }
 
 .olControlLayerSwitcher label 
