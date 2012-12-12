@@ -654,6 +654,11 @@
     <Content Include="Scripts\Compiled\app\view\theme\WUGPanel.js" />
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
+    <Content Include="Scripts\Compiled\backbone_app\collections\StrategyCollection.js" />
+    <Content Include="Scripts\Compiled\backbone_app\models\Strategy.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\MapView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavViewModel.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\YearNavViewModel.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
@@ -688,6 +693,9 @@
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\stupidtable.js" />
+    <Content Include="Scripts\templates\mainView.html" />
+    <Content Include="Scripts\templates\themeNav.html" />
+    <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
@@ -705,7 +713,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Scripts\templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -744,6 +751,11 @@
     <None Include="Scripts\Coffee\app\view\theme\WUGPanel.coffee" />
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\collections\StrategyCollection.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\models\Strategy.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\MapView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\ThemeNavViewModel.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\YearNavViewModel.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
     <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
