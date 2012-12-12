@@ -21,6 +21,14 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return "value";
         }
 
+
+        public string GetStrategiesInPlace(int placeId)
+        {
+            //More-generic version, just get by universal placeId
+
+            return "placeId";
+        }
+
         public string GetStrategiesInRegion(int regionId)
         {
             return "regionId";
