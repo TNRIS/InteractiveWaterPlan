@@ -6,7 +6,7 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void Register(HttpConfiguration config)
         {
-
+            //TODO: Remove this method - just for testing
             #region Place Routes
             config.Routes.MapHttpRoute(
                 "GetAllPlaces",
@@ -22,14 +22,27 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                 "GetPlaceFeatureRoute",
-                "api/place/feature",
+                "api/place/feature/{placeId}",
                 new { controller = "Place", action = "GetPlaceFeature" }
+            );
+
+
+            #endregion
+
+            #region Stretegy Routes
+
+            config.Routes.MapHttpRoute(
+                "GetStrategiesRoute",
+                "api/strategies",
+                new { controller = "Strategy" }
             );
 
             #endregion
 
 
+
             #region Feature Routes
+
             config.Routes.MapHttpRoute(
                 "GetAllEntitiesRoute",
                 "api/feature/entity/all",

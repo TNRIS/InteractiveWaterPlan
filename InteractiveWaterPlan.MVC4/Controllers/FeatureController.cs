@@ -12,8 +12,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 {
     public class FeatureController : ApiController
     {
-        private readonly int[] _validYears = new int[] { 2010, 2020, 2030, 2040, 2050, 2060 };
-
+        
         //api/feature/reservoir/recommended/all
         [NHibernateSession]
         public IEnumerable<Reservoir> GetAllRecommendedReservoirs()
@@ -43,12 +42,12 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         [NHibernateSession]
         public IEnumerable<WaterUseEntity> GetEntitiesOfReservoir(int Year, int forReservoirId=-1)
         {
-            if (!_validYears.Contains(Year))
+            if (!CommonConstants.VALID_YEARS.Contains(Year))
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
                     Content = new StringContent(
-                        "Invalid Year: " + Year + ". Valid Years are " + String.Join(", ", _validYears))
+                        "Invalid Year: " + Year + ". Valid Years are " + String.Join(", ", CommonConstants.VALID_YEARS))
                 };
                 throw new HttpResponseException(resp);
             }

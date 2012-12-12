@@ -1,52 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
-using System.Linq;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
+    [NHibernateSession]
     public class PlaceController : ApiController
     {
-        //api/place?category={category}
-        [NHibernateSession]
-        public IEnumerable<Place> GetPlacesByCategory(int category)
+        //api/place?categoryId={categoryId}
+        public IList<Place> GetPlacesByCategory(int categoryId)
         {
             var repo = new PlaceRepository();
-            return repo.GetPlaces(category);
+            return repo.GetPlaces(categoryId);
         }
 
+        //TODO: Remove this method - just for testing
         //api/place/all
-        [NHibernateSession]
-        public IEnumerable<Place> GetAllPlaces()
+        public IList<Place> GetAllPlaces()
         {
-            //TODO: Remove - just for testing
             var repo = new PlaceRepository();
             var x = repo.GetPlaces(1).OrderBy(p => p.Name);
             var y = repo.GetPlaces(5).OrderBy(p => p.Name);
-            return x.Union(y).ToList<Place>();
-            
+            return x.Union(y).ToList<Place>(); 
         }
-        
 
+        //api/place/{id}
+        public Place GetPlace(int id)
+        {
+            //TODO: Need stored proc to support get place by id
+            throw new NotImplementedException();
+        }
+       
         //api/place/categories
-        [NHibernateSession]
-        public IEnumerable<PlaceCategory> GetAllPlaceCategories()
+        public IList<PlaceCategory> GetAllPlaceCategories()
         {
             var repo = new PlaceRepository();
             return repo.GetAllPlaceCategories();
         }
 
         //api/place?name={name}
-        [NHibernateSession]
-        public IEnumerable<Place> GetPlacesByNamePart(string name)
+        public IList<Place> GetPlacesByNamePart(string name)
         {
             var repo = new PlaceRepository();
             return repo.GetPlacesByNamePart(name);
         }
 
-        //api/place/feature
-        [NHibernateSession]
+        //api/place/feature/{placeId}
         public PlaceFeature GetPlaceFeature(int placeId)
         {
             var repo = new PlaceRepository();

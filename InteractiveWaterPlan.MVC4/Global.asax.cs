@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using InteractiveWaterPlan.Data;
+using Newtonsoft.Json.Serialization;
 
 namespace InteractiveWaterPlan.MVC4
 {
@@ -20,6 +21,14 @@ namespace InteractiveWaterPlan.MVC4
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
+
+            //Use the built-in camelCase contractResolver
+            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            //Turn off XML serialization - don't need it.
+            var config = GlobalConfiguration.Configuration;
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
         }
     }
 }

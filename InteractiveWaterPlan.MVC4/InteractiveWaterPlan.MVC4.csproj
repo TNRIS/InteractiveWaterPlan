@@ -137,10 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\FeatureController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

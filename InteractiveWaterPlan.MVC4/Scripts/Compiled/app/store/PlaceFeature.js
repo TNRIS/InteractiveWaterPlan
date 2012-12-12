@@ -6,8 +6,8 @@ Ext.define('ISWP.store.PlaceFeature', {
   storeId: 'placeFeatureStore',
   autoLoad: false,
   proxy: {
-    type: 'ajax',
-    url: 'api/place/feature',
+    type: 'parameterproxy',
+    url: 'api/place/feature/{placeId}',
     reader: {
       type: 'json'
     }
