@@ -20,7 +20,7 @@
 
     @Scripts.Render("~/bundles/js/modernizr")
 </head>
-<body>
+<body lang="en">
     <div class="container">
         <div class="page-header">
             <h1>
@@ -41,24 +41,7 @@
         </div>
 
         <div class="row">
-            <div class="span12">
-                <ul class="nav nav-pills" id="themeNav">
-                    <li class="nav-label">THEME:</li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Water Management Strategies
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Strategies by Region</a></li>
-                            <li><a href="#">Strategies by County</a></li>
-                            <li><a href="#">Strategies by District</a></li>
-                            <li><a href="#">Strategies by Type</a></li>
-                        </ul>
-                    </li>
-                    <li class="disabled"><a href="#">Water Use</a></li>
-                    <li class="disabled"><a href="#">Sources</a></li>
-                </ul>
+            <div class="span12" id="themeNavContainer">
             </div>
         </div>
 
@@ -70,17 +53,7 @@
 
         <div class="row toolbar">
             <div class="span12">
-                <div class="pull-left">
-                    <ul class="nav nav-pills" id="yearNav">
-                        <li class="nav-label">YEAR:</li>
-                        <li class="active"><a href="#">2010</a></li>
-                        <li class=""><a href="#">2020</a></li>
-                        <li class=""><a href="#">2030</a></li>
-                        <li class=""><a href="#">2040</a></li>
-                        <li class=""><a href="#">2050</a></li>
-                        <li class=""><a href="#">2060</a></li>
-                    </ul>
-                </div>
+                <div class="pull-left" id="yearNavContainer"></div>
                 
                 <div class="pull-right">
 
