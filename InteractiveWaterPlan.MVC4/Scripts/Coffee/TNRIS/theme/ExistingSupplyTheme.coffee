@@ -133,7 +133,7 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
         entity_features = []
         for rec in records
             data = rec.data
-            new_feat = wktFormat.read(rec.data.WKTGeog)
+            new_feat = wktFormat.read(rec.data.WktGeog)
             new_feat.data = data
             new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
             new_feat.attributes['label'] = data['Name']
@@ -158,7 +158,7 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
                     null,
                     """
                     <h3>#{feature.data.Name}</h3>
-                    Planning Region: #{feature.data.RWP}<br/>
+                    Planning Region: #{feature.data.RegionName}<br/>
                     County: #{feature.data.County}<br/>
                     Basin: #{feature.data.Basin}<br/>
                     """,

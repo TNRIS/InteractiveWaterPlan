@@ -6,7 +6,7 @@ Ext.define('ISWP.model.ReservoirFeature', {
         'Id'
         'SqlId'
         'Name'
-        'WKTGeog'
+        'WktGeog'
         'RecommendationCode'
     ]
 

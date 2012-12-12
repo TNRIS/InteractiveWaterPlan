@@ -9,11 +9,11 @@ using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
+    [NHibernateSession]
     public class DataController : ApiController
     {
         
         //api/data/wateruse/{LocationType}/{LocationName}/{Year}
-        [NHibernateSession]
         public IEnumerable<WaterSourceSupplyData> GetWaterUseData(string LocationType, string LocationName, int Year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(Year))
@@ -107,7 +107,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // api/data/reservoir/{ReservoirId}/{Year}
-        [NHibernateSession]
         public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyData(int ReservoirId, int Year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(Year))

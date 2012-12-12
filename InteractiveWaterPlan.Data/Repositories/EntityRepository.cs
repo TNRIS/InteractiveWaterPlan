@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Data;
-using Microsoft.SqlServer.Types;
-
-using NHibernate;
-using NHibernate.Spatial;
-
 using InteractiveWaterPlan.Core;
+using Microsoft.SqlServer.Types;
+using NHibernate;
 
 namespace InteractiveWaterPlan.Data
 {
@@ -47,7 +39,7 @@ namespace InteractiveWaterPlan.Data
         /// Returns a list of all DB12 Entities.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Entity> GetAllEntities()
+        public IList<Entity> GetAllEntities()
         {
             return Session.GetNamedQuery("GetAllEntities")
                 .List<Entity>();
@@ -58,7 +50,7 @@ namespace InteractiveWaterPlan.Data
         /// </summary>
         /// <param name="poly"></param>
         /// <returns></returns>
-        public IEnumerable<Entity> GetEntitiesInGeography(SqlGeography poly)
+        public IList<Entity> GetEntitiesInGeography(SqlGeography poly)
         {
             return Session.GetNamedQuery("GetEntitiesInGeography")
                 .SetParameter("var_SelectPoly", poly)
@@ -96,7 +88,7 @@ namespace InteractiveWaterPlan.Data
         /// Returns a list of all recommended Reservoirs.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Reservoir> GetAllRecommendedReservoirs()
+        public IList<Reservoir> GetAllRecommendedReservoirs()
         {
             return Session.GetNamedQuery("GetAllRecommendedReservoirs")
                 .SetParameter("var_SimplifyTolerance", 100)
@@ -108,7 +100,7 @@ namespace InteractiveWaterPlan.Data
 
         //TODO: Make Entity and WaterUseEntity the same.  Will need the stored proc to be updated to 
         // return the same fields/info.
-        public IEnumerable<WaterUseEntity> GetEntitiesServedByReservoir(int recommendedReservoirId, int year)
+        public IList<WaterUseEntity> GetEntitiesServedByReservoir(int recommendedReservoirId, int year)
         {
             return Session.GetNamedQuery("GetEntitiesForReservoir")
                 .SetParameter("var_DB12_ID", recommendedReservoirId)

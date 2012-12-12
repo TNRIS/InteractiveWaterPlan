@@ -36,15 +36,15 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                 
                 for rec in records
                     data = rec.data
-                    new_feat = wktFormat.read(data.WKTGeog)
+                    new_feat = wktFormat.read(data.WktGeog)
 
                     #TODO: This is in here because of the GeometryCollection issue with Ralph Hall and Turkey Peak
                     unless new_feat.geometry? then continue
 
                     this.mapComp.transformToWebMerc(new_feat.geometry)
                     
-                    #remove WKTGeog -- don't need to carry it around since the geometry provides it
-                    delete data.WKTGeog
+                    #remove WktGeog -- don't need to carry it around since the geometry provides it
+                    delete data.WktGeog
 
                     new_feat.data = data
                     new_feat.attributes['label'] = data['Name']
@@ -282,7 +282,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
                 for rec in records
                     data = rec.data
-                    new_feat = wktFormat.read(rec.data.WKTGeog)
+                    new_feat = wktFormat.read(rec.data.WktGeog)
                     new_feat.data = data
                     new_feat.attributes['type'] = 'entity'
                     new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)

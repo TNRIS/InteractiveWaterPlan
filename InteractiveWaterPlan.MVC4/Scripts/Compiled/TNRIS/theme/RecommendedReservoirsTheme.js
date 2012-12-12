@@ -27,12 +27,12 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         for (_i = 0, _len = records.length; _i < _len; _i++) {
           rec = records[_i];
           data = rec.data;
-          new_feat = wktFormat.read(data.WKTGeog);
+          new_feat = wktFormat.read(data.WktGeog);
           if (new_feat.geometry == null) {
             continue;
           }
           this.mapComp.transformToWebMerc(new_feat.geometry);
-          delete data.WKTGeog;
+          delete data.WktGeog;
           new_feat.data = data;
           new_feat.attributes['label'] = data['Name'];
           res_features.push(new_feat);
@@ -235,7 +235,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         for (_j = 0, _len1 = records.length; _j < _len1; _j++) {
           rec = records[_j];
           data = rec.data;
-          new_feat = wktFormat.read(rec.data.WKTGeog);
+          new_feat = wktFormat.read(rec.data.WktGeog);
           new_feat.data = data;
           new_feat.attributes['type'] = 'entity';
           new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);

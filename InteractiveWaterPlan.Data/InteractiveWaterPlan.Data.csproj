@@ -67,6 +67,9 @@
       <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\Microsoft.SqlServer.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
@@ -87,6 +90,7 @@
     <Compile Include="Repositories\EntityRepository.cs" />
     <Compile Include="Repositories\PixelBufferRepository.cs" />
     <Compile Include="Repositories\PlaceRepository.cs" />
+    <Compile Include="Repositories\StrategyRepository.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Type\SqlGeographyType.cs" />
     <Compile Include="Type\SqlGeometryType.cs" />

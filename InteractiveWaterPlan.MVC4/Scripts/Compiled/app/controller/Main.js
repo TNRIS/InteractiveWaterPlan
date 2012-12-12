@@ -3,7 +3,7 @@
 Ext.define('ISWP.controller.Main', {
   extend: 'Ext.app.Controller',
   views: ['data.MainContainer', 'map.MapComponent', 'map.ThemeYearMapPanel', 'theme.RecommendedReservoirsPanel', 'theme.ExistingSupplyPanel'],
-  stores: ['WaterUseData', 'Theme', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData', 'RWP', 'County'],
+  stores: ['WaterUseData', 'WaterUseEntity', 'Entity', 'Place', 'PlaceFeature', 'ReservoirFeature', 'ReservoirSupplyData', 'RWP', 'County'],
   refs: [
     {
       ref: 'mainContainer',
@@ -80,7 +80,7 @@ Ext.define('ISWP.controller.Main', {
               }
               mapComp = this.getMapComponent();
               wktFormat = new OpenLayers.Format.WKT();
-              placeFeature = wktFormat.read(records[0].data.WKTGeog);
+              placeFeature = wktFormat.read(records[0].data.WktGeog);
               mapComp.transformToWebMerc(placeFeature.geometry);
               bounds = placeFeature.geometry.getBounds();
               mapComp.zoomToExtent(bounds);

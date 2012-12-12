@@ -4,49 +4,58 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
+    [NHibernateSession]
     public class StrategyController : ApiController
     {
-        // GET api/strategy
-        public IEnumerable<string> Get()
+        private StrategyRepository _repo;
+
+        public StrategyController()
         {
-            return new string[] { "value1", "value2" };
+            _repo = new StrategyRepository();
         }
 
-        // GET api/strategy/5
-        public string Get(int id)
+        // GET api/strategy/all
+        public IList<Strategy> GetAll()
         {
-            return "value";
+            return _repo.GetAllStrategies();
+        }
+
+        // GET api/strategy/{id}
+        public Strategy Get(int id)
+        {
+            return _repo.GetStrategy(id);
         }
 
 
-        public string GetStrategiesInPlace(int placeId)
+        public IList<Strategy> GetStrategiesInPlace(int placeId)
         {
             //More-generic version, just get by universal placeId
-
-            return "placeId";
+            return _repo.GetStrategiesInPlace(placeId);
         }
 
-        public string GetStrategiesInRegion(int regionId)
+        public IList<Strategy> GetStrategiesInRegion(int regionId)
         {
-            return "regionId";
+            return _repo.GetStrategiesInRegion(regionId);
         }
 
-        public string GetStrategiesInCounty(int countyId)
+        public IList<Strategy> GetStrategiesInCounty(int countyId)
         {
-            return "countyId";
+            return _repo.GetStrategiesInCounty(countyId);
         }
 
-        public string GetStrategiesInDistrict(int districtId)
+        public IList<Strategy> GetStrategiesInDistrict(int districtId)
         {
-            return "districtId";
+            return _repo.GetStrategiesInDistrict(districtId);
         }
 
-        public string GetStrategiesByType(int typeId)
+        public IList<Strategy> GetStrategiesByType(int typeId)
         {
-            return "typeId";
+            return _repo.GetStrategiesByType(typeId);
         }
 
         

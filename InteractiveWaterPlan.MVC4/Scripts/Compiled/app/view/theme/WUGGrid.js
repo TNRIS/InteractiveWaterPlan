@@ -28,7 +28,7 @@ Ext.define('ISWP.view.theme.WUGGrid', {
     }, {
       text: "Planning Area",
       width: 50,
-      dataIndex: "RWP",
+      dataIndex: "RegionName",
       hideable: false,
       draggable: false,
       resizable: false

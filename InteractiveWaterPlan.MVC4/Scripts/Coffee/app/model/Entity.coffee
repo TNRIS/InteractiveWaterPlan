@@ -6,9 +6,9 @@ Ext.define('ISWP.model.Entity', {
         'Id'
         'SqlId'
         'Name'
-        'WKTGeog'
+        'WktGeog'
         'Type'
-        'RWP'
+        'RegionName'
         'County'
         'Basin'
     ]

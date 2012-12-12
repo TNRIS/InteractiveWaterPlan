@@ -9,7 +9,7 @@
     <property column="DB12_Id" name="Id" />
     <property column="Reservoir_Name" name="Name" />
     <property column="Recommendation_Code" name="RecommendationCode" />
-    <property column="SQL_GEOG" name="WKTGeog" />
+    <property column="SQL_GEOG" name="WktGeog" />
 
   </class>
 

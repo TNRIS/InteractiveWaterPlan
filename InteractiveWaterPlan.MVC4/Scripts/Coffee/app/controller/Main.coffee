@@ -14,7 +14,6 @@ Ext.define('ISWP.controller.Main', {
 
     stores: [
         'WaterUseData'
-        'Theme'
         'WaterUseEntity'
         'Entity'
         'Place'
@@ -111,7 +110,7 @@ Ext.define('ISWP.controller.Main', {
                             mapComp = this.getMapComponent()
 
                             wktFormat = new OpenLayers.Format.WKT()
-                            placeFeature = wktFormat.read(records[0].data.WKTGeog)
+                            placeFeature = wktFormat.read(records[0].data.WktGeog)
                             
                             #convert geometry to web mercator
                             mapComp.transformToWebMerc(placeFeature.geometry)

@@ -21,7 +21,7 @@
     <id name="SqlId">
       <column name="SQL_ID" />
     </id>
-    <property column="PlaceName_Geog" name="WKTGeog" />
+    <property column="PlaceName_Geog" name="WktGeog" />
     <property column="PlaceName" name="Name" />
   </class>
   

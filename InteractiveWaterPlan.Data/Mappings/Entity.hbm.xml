@@ -9,10 +9,10 @@
     <property column="Entity_ID" name="Id" />
     <property column="Entity_Name" name="Name" />
     <property column="Entity_Type" name="Type" />
-    <property column="Entity_RWP" name="RWP" />
+    <property column="Entity_RWP" name="RegionName" />
     <property column="Entity_County" name="County" />
     <property column="Entity_Basin" name="Basin" />
-    <property column="SQL_GEOG" name="WKTGeog" />
+    <property column="SQL_GEOG" name="WktGeog" />
 
   </class>
 
@@ -24,10 +24,10 @@
     <property column="Entity_ID" name="Id" />
     <property column="Entity_Name" name="Name" />
     <property column="Entity_Type" name="Type" />
-    <property column="Entity_RWP" name="RWP" />
+    <property column="Entity_RWP" name="RegionName" />
     <property column="Entity_County" name="County" />
     <property column="Entity_Basin" name="Basin" />
-    <property column="SQL_GEOG" name="WKTGeog" />
+    <property column="SQL_GEOG" name="WktGeog" />
 
     <property column="S_Supply" name="SourceSupply" />
     <property column="Redundant_Water" name="IsRedundantSupply" />

@@ -32,8 +32,14 @@ namespace InteractiveWaterPlan.MVC4
             #region Stretegy Routes
 
             config.Routes.MapHttpRoute(
+                "GetAllStrategiesRoute",
+                "api/strategy/all",
+                new { controller = "Strategy", action="GetAll" }
+            );
+
+            config.Routes.MapHttpRoute(
                 "GetStrategiesRoute",
-                "api/strategies",
+                "api/strategy",
                 new { controller = "Strategy" }
             );
 
