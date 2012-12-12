@@ -14,35 +14,35 @@ Ext.define('ISWP.view.theme.WUGGrid', {
     {
       text: "Name",
       width: 120,
-      dataIndex: "Name",
+      dataIndex: "name",
       hideable: false,
       draggable: false,
       resizable: false
     }, {
       text: "Supply (acre-feet/year)",
       width: 60,
-      dataIndex: "SourceSupply",
+      dataIndex: "sourceSupply",
       hideable: false,
       draggable: false,
       resizable: false
     }, {
       text: "Planning Area",
       width: 50,
-      dataIndex: "RegionName",
+      dataIndex: "regionName",
       hideable: false,
       draggable: false,
       resizable: false
     }, {
       text: "County",
       width: 60,
-      dataIndex: "County",
+      dataIndex: "county",
       hideable: false,
       draggable: false,
       resizable: false
     }, {
       text: "Basin",
       width: 50,
-      dataIndex: "Basin",
+      dataIndex: "basin",
       hideable: false,
       draggable: false,
       resizable: false

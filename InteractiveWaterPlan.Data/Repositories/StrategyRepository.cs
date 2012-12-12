@@ -28,7 +28,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = new Random().Next(),
                     Description = "Strategy 1",
-                    Type = "Reservoir",
+                    TypeName = "Reservoir",
                     TypeId = 1
                 }
             };
@@ -41,7 +41,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = id,
                     Description = "Strategy "+id,
-                    Type = "Reservoir",
+                    TypeName = "Reservoir",
                     TypeId = 1
                 };
         }
@@ -54,7 +54,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = new Random().Next(),
                     Description = "Strategy in place "+placeId,
-                    Type = "Reservoir",
+                    TypeName = "Reservoir",
                     TypeId = 1
                 }
             };
@@ -68,7 +68,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = new Random().Next(),
                     Description = "Strategy in region "+regionId,
-                    Type = "Reservoir",
+                    TypeName = "Reservoir",
                     TypeId = 1
                 }
             };
@@ -82,7 +82,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = new Random().Next(),
                     Description = "Strategy in county "+countyId,
-                    Type = "Reservoir",
+                    TypeName = "Reservoir",
                     TypeId = 1
                 }
             };
@@ -96,7 +96,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = new Random().Next(),
                     Description = "Strategy in district "+districtId,
-                    Type = "Reservoir",
+                    TypeName = "Reservoir",
                     TypeId = 1
                 }
             };
@@ -110,7 +110,7 @@ namespace InteractiveWaterPlan.Data
                 {
                     Id = new Random().Next(),
                     Description = "Strategy of type "+strategyTypeId,
-                    Type = "Type "+strategyTypeId,
+                    TypeName = "Type "+strategyTypeId,
                     TypeId = strategyTypeId
                 }
             };

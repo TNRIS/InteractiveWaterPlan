@@ -13,7 +13,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
     {
       type: 'Numeric',
       position: 'left',
-      fields: ['Value'],
+      fields: ['value'],
       label: {
         renderer: Ext.util.Format.numberRenderer('0,0')
       },
@@ -23,7 +23,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
     }, {
       type: 'Category',
       position: 'bottom',
-      fields: ['Name'],
+      fields: ['name'],
       title: 'Supply Category'
     }
   ],
@@ -32,8 +32,8 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
       type: 'column',
       axis: 'left',
       highlight: true,
-      xField: 'Name',
-      yField: 'Value',
+      xField: 'name',
+      yField: 'value',
       renderer: function(sprite, storeItem, barAttr, i, store) {
         var colors;
         colors = ['#7eae29', '#fdbe2a', '#910019', '#27b4bc', '#d74dbc'];
@@ -42,7 +42,7 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
       },
       label: {
         display: 'outsideEnd',
-        field: 'Value',
+        field: 'value',
         renderer: Ext.util.Format.numberRenderer('0,0'),
         orientation: 'horizontal',
         'text-anchor': 'middle'
@@ -55,9 +55,9 @@ Ext.define('ISWP.view.chart.WaterUseChart', {
           var total;
           total = 0;
           storeItem.store.each(function(rec) {
-            return total += rec.get('Value');
+            return total += rec.get('value');
           });
-          this.setTitle("" + storeItem.data.Name + "<br/>                        " + (Ext.util.Format.number(storeItem.get('Value'), '0,0')) + " ac-ft                         (" + (Ext.util.Format.number(storeItem.get('Value') / total * 100, '0.00%')) + ")");
+          this.setTitle("" + storeItem.data.name + "<br/>                        " + (Ext.util.Format.number(storeItem.get('value'), '0,0')) + " ac-ft                         (" + (Ext.util.Format.number(storeItem.get('value') / total * 100, '0.00%')) + ")");
           return null;
         }
       }

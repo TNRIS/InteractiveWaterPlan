@@ -26,7 +26,7 @@ Ext.define("ISWP.view.theme.RecommendedReservoirsPanel", {
         {
           text: "Name",
           width: 120,
-          dataIndex: 'Name',
+          dataIndex: 'name',
           sortable: true,
           hideable: false,
           draggable: false,
@@ -48,7 +48,7 @@ Ext.define("ISWP.view.theme.RecommendedReservoirsPanel", {
                 _ref = me.reservoirLayer.features;
                 for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                   res_feat = _ref[_i];
-                  if (rec.data.Id === res_feat.data.Id) {
+                  if (rec.data.id === res_feat.data.id) {
                     bounds = res_feat.geometry.getBounds();
                     me.mapComp.map.zoomToExtent(bounds);
                     break;

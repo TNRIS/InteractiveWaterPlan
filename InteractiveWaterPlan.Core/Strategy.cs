@@ -18,7 +18,7 @@ namespace InteractiveWaterPlan.Core
     {
         public virtual int Id { get; set; }
         public virtual string Description { get; set; }
-        public virtual string Type { get; set; }
+        public virtual string TypeName { get; set; }
         public virtual int TypeId { get; set; }
     }
 }

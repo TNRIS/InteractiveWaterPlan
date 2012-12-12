@@ -15,7 +15,7 @@ Ext.define("ISWP.view.theme.WUGPanel", {
     me.add(Ext.create('Ext.panel.Panel', {
       region: 'north',
       height: 60,
-      html: "<h3>" + me.curr_reservoir.data.Name + "</h3>\n<p>Descriptive text. Clear Selection button. Animate button.</p>"
+      html: "<h3>" + me.curr_reservoir.data.name + "</h3>\n<p>Descriptive text. Clear Selection button. Animate button.</p>"
     }));
     me.add(Ext.create('ISWP.view.chart.WaterUseChart', {
       store: me.supplyStore,

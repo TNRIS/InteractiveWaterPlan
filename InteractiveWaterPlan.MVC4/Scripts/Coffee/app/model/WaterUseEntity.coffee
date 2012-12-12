@@ -3,19 +3,19 @@ Ext.define('ISWP.model.WaterUseEntity', {
     extend: 'Ext.data.Model'
 
     fields: [
-        'Id'
-        'SqlId'
-        'Name'
-        'WktGeog'
-        'Type'
-        'RegionName'
-        'County'
-        'Basin'
+        'id'
+        'sqlId'
+        'name'
+        'wktGeog'
+        'type'
+        'regionName'
+        'county'
+        'basin'
         
-        'SourceSupply'
-        'IsRedundantSupply'
-        'SourceName'
-        'SourceId'
+        'sourceSupply'
+        'isRedundantSupply'
+        'sourceName'
+        'sourceId'
     ]
 
 })

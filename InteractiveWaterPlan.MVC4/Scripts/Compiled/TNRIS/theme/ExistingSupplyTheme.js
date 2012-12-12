@@ -28,7 +28,7 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
       _ref = _this.WUGLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wug_feat = _ref[_i];
-        if (rec.data.Id === wug_feat.data.Id) {
+        if (rec.data.id === wug_feat.data.id) {
           bounds = wug_feat.geometry.getBounds();
           _this.mapComp.map.zoomToExtent(bounds);
           _this.selectWUGControl.unselectAll();
@@ -97,10 +97,10 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
     for (_i = 0, _len = records.length; _i < _len; _i++) {
       rec = records[_i];
       data = rec.data;
-      new_feat = wktFormat.read(rec.data.WktGeog);
+      new_feat = wktFormat.read(rec.data.wktGeog);
       new_feat.data = data;
       new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);
-      new_feat.attributes['label'] = data['Name'];
+      new_feat.attributes['label'] = data['name'];
       if (!(bounds != null)) {
         bounds = new_feat.geometry.getBounds();
       } else {
@@ -114,7 +114,7 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
       hover: false,
       onSelect: function(feature) {
         var popup;
-        popup = new OpenLayers.Popup.FramedCloud("featurepopup", feature.geometry.getBounds().getCenterLonLat(), null, "<h3>" + feature.data.Name + "</h3>\nPlanning Region: " + feature.data.RegionName + "<br/>\nCounty: " + feature.data.County + "<br/>\nBasin: " + feature.data.Basin + "<br/>", null, true, function() {
+        popup = new OpenLayers.Popup.FramedCloud("featurepopup", feature.geometry.getBounds().getCenterLonLat(), null, "<h3>" + feature.data.name + "</h3>\nPlanning Region: " + feature.data.regionName + "<br/>\nCounty: " + feature.data.county + "<br/>\nBasin: " + feature.data.basin + "<br/>", null, true, function() {
           select.unselect(feature);
           return null;
         });

@@ -70,7 +70,7 @@ Ext.define('ISWP.controller.Main', {
           selectedPlace = records[0].data;
           this.getPlaceFeatureStore().load({
             params: {
-              placeId: selectedPlace.SqlId
+              placeId: selectedPlace.sqlId
             },
             scope: this,
             callback: function(records, operation, success) {
@@ -80,7 +80,7 @@ Ext.define('ISWP.controller.Main', {
               }
               mapComp = this.getMapComponent();
               wktFormat = new OpenLayers.Format.WKT();
-              placeFeature = wktFormat.read(records[0].data.WktGeog);
+              placeFeature = wktFormat.read(records[0].data.wktGeog);
               mapComp.transformToWebMerc(placeFeature.geometry);
               bounds = placeFeature.geometry.getBounds();
               mapComp.zoomToExtent(bounds);

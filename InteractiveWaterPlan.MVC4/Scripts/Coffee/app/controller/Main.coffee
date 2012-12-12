@@ -98,11 +98,11 @@ Ext.define('ISWP.controller.Main', {
 
                     selectedPlace = records[0].data
 
-                    #Use the selectedPlace.SqlId as a parameter to 
+                    #Use the selectedPlace.sqlId as a parameter to 
                     # the PlaceFeature store
                     this.getPlaceFeatureStore().load({
                         params:
-                            placeId: selectedPlace.SqlId
+                            placeId: selectedPlace.sqlId
                         scope: this
                         callback: (records, operation, success) ->
                             unless success and records.length == 1 then return null
@@ -110,7 +110,7 @@ Ext.define('ISWP.controller.Main', {
                             mapComp = this.getMapComponent()
 
                             wktFormat = new OpenLayers.Format.WKT()
-                            placeFeature = wktFormat.read(records[0].data.WktGeog)
+                            placeFeature = wktFormat.read(records[0].data.wktGeog)
                             
                             #convert geometry to web mercator
                             mapComp.transformToWebMerc(placeFeature.geometry)

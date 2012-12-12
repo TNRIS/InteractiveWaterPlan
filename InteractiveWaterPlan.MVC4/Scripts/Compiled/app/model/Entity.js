@@ -2,5 +2,5 @@
 
 Ext.define('ISWP.model.Entity', {
   extend: 'Ext.data.Model',
-  fields: ['Id', 'SqlId', 'Name', 'WktGeog', 'Type', 'RegionName', 'County', 'Basin']
+  fields: ['id', 'sqlId', 'name', 'wktGeog', 'type', 'regionName', 'county', 'basin']
 });

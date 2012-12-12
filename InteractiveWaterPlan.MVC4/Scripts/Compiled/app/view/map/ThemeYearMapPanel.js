@@ -74,13 +74,13 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           typeAheadDelay: 200,
           minChars: 2,
           hideTrigger: true,
-          valueField: 'SqlId',
-          displayField: 'Name',
+          valueField: 'sqlId',
+          displayField: 'name',
           emptyText: 'Go to Location',
           width: 240,
           listConfig: {
             getInnerTpl: function() {
-              return '<div data-qtip="{Name} ({CategoryName})">{Name} <span class="catName">{CategoryName}</span></div>';
+              return '<div data-qtip="{name} ({categoryName})">{name} <span class="catName">{categoryName}</span></div>';
             }
           }
         }, {

@@ -18,8 +18,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           xtype: 'combobox',
           id: 'regionCombo',
           store: 'RWP',
-          displayField: 'Name',
-          valueField: 'SqlId',
+          displayField: 'name',
+          valueField: 'sqlId',
           queryMode: 'local',
           emptyText: 'Select a Planning Region',
           editable: false,
@@ -48,8 +48,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
           xtype: 'combobox',
           id: 'countyCombo',
           store: 'County',
-          displayField: 'Name',
-          valueField: 'SqlId',
+          displayField: 'name',
+          valueField: 'sqlId',
           queryMode: 'local',
           emptyText: 'Select a County',
           editable: false,
@@ -101,8 +101,8 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                         field: 
                             xtype: 'combobox'
                             store: 'Entity'
-                            displayField: 'Name'
-                            valueField: 'Name'
+                            displayField: 'name'
+                            valueField: 'name'
                             queryMode: 'local'
                             editable: false
                             width: 200

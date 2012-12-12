@@ -32,7 +32,7 @@ Ext.define("ISWP.view.theme.RecommendedReservoirsPanel", {
                 region: 'center'
                 store: me.reservoirStore
                 columns: [
-                    { text: "Name", width: 120, dataIndex: 'Name', sortable: true, hideable: false, draggable: false, resizable: false }
+                    { text: "Name", width: 120, dataIndex: 'name', sortable: true, hideable: false, draggable: false, resizable: false }
                     {
                         xtype: 'actioncolumn'
                         width: 6
@@ -50,7 +50,7 @@ Ext.define("ISWP.view.theme.RecommendedReservoirsPanel", {
 
                                     #find the matching reservoir in the feature layer
                                     for res_feat in me.reservoirLayer.features
-                                        if rec.data.Id == res_feat.data.Id
+                                        if rec.data.id == res_feat.data.id
                                             #found it - grab the bounds and zoom to it
                                             bounds = res_feat.geometry.getBounds()
                                             me.mapComp.map.zoomToExtent(bounds)

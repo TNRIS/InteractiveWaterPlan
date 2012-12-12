@@ -2,7 +2,7 @@
 
 Ext.define('ISWP.store.PlaceFeature', {
   extend: 'Ext.data.Store',
-  fields: ['SqlId', 'Name', 'WktGeog'],
+  fields: ['sqlId', 'name', 'wktGeog'],
   storeId: 'placeFeatureStore',
   autoLoad: false,
   proxy: {

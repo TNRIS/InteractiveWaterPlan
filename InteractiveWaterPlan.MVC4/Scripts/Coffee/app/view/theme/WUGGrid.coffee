@@ -13,11 +13,11 @@ Ext.define('ISWP.view.theme.WUGGrid', {
     autoScroll: true
     
     columns: [
-        { text: "Name", width: 120, dataIndex: "Name", hideable: false, draggable: false, resizable: false}
-        { text: "Supply (acre-feet/year)", width: 60, dataIndex: "SourceSupply", hideable: false, draggable: false, resizable: false}
-        { text: "Planning Area", width: 50, dataIndex: "RegionName", hideable: false, draggable: false, resizable: false}
-        { text: "County", width: 60, dataIndex: "County", hideable: false, draggable: false, resizable: false}
-        { text: "Basin", width: 50, dataIndex: "Basin", hideable: false, draggable: false, resizable: false}
+        { text: "Name", width: 120, dataIndex: "name", hideable: false, draggable: false, resizable: false}
+        { text: "Supply (acre-feet/year)", width: 60, dataIndex: "sourceSupply", hideable: false, draggable: false, resizable: false}
+        { text: "Planning Area", width: 50, dataIndex: "regionName", hideable: false, draggable: false, resizable: false}
+        { text: "County", width: 60, dataIndex: "county", hideable: false, draggable: false, resizable: false}
+        { text: "Basin", width: 50, dataIndex: "basin", hideable: false, draggable: false, resizable: false}
 
         {
             xtype: 'actioncolumn'

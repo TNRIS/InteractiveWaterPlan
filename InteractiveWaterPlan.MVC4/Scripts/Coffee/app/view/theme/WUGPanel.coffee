@@ -17,7 +17,7 @@ Ext.define("ISWP.view.theme.WUGPanel", {
                 region: 'north'
                 height: 60
                 html:   """
-                        <h3>#{me.curr_reservoir.data.Name}</h3>
+                        <h3>#{me.curr_reservoir.data.name}</h3>
                         <p>Descriptive text. Clear Selection button. Animate button.</p>
                         """
             })

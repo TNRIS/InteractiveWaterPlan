@@ -27,14 +27,14 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         for (_i = 0, _len = records.length; _i < _len; _i++) {
           rec = records[_i];
           data = rec.data;
-          new_feat = wktFormat.read(data.WktGeog);
+          new_feat = wktFormat.read(data.wktGeog);
           if (new_feat.geometry == null) {
             continue;
           }
           this.mapComp.transformToWebMerc(new_feat.geometry);
-          delete data.WktGeog;
+          delete data.wktGeog;
           new_feat.data = data;
-          new_feat.attributes['label'] = data['Name'];
+          new_feat.attributes['label'] = data['name'];
           res_features.push(new_feat);
         }
         this.reservoirLayer.addFeatures(res_features);
@@ -66,7 +66,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       this._showRelatedEntities();
       this.supplyStore.load({
         params: {
-          ReservoirId: this.curr_reservoir.data.Id,
+          ReservoirId: this.curr_reservoir.data.id,
           Year: this.selectedYear
         }
       });
@@ -127,7 +127,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       _ref = _this.reservoirLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         res_feat = _ref[_i];
-        if (record.data.Id === res_feat.data.Id) {
+        if (record.data.id === res_feat.data.id) {
           _this.curr_reservoir = res_feat;
           break;
         }
@@ -156,7 +156,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       _ref = _this.relatedWUGLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wug_feat = _ref[_i];
-        if (record.data.Id === wug_feat.data.Id) {
+        if (record.data.id === wug_feat.data.id) {
           _this.selectWUGControl.select(wug_feat);
           break;
         }
@@ -169,7 +169,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       _ref = _this.relatedWUGLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wug_feat = _ref[_i];
-        if (rec.data.Id === wug_feat.data.Id) {
+        if (rec.data.id === wug_feat.data.id) {
           bounds = wug_feat.geometry.getBounds();
           _this.mapComp.map.zoomToExtent(bounds);
           _this.selectWUGControl.unselectAll();
@@ -184,7 +184,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
   _updateSupplyStore: function() {
     this.supplyStore.load({
       params: {
-        ReservoirId: this.curr_reservoir.data.Id,
+        ReservoirId: this.curr_reservoir.data.id,
         Year: this.selectedYear
       }
     });
@@ -208,7 +208,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     this.relatedWUGStore.load({
       params: {
         Year: this.selectedYear,
-        forReservoirId: this.curr_reservoir.data.Id
+        forReservoirId: this.curr_reservoir.data.id
       },
       scope: this,
       callback: function(records, operation, success) {
@@ -223,11 +223,11 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         min_supply = null;
         for (_i = 0, _len = records.length; _i < _len; _i++) {
           rec = records[_i];
-          if (!(max_supply != null) || max_supply < rec.data.SourceSupply) {
-            max_supply = rec.data.SourceSupply;
+          if (!(max_supply != null) || max_supply < rec.data.sourceSupply) {
+            max_supply = rec.data.sourceSupply;
           }
-          if (!(min_supply != null) || min_supply > rec.data.SourceSupply) {
-            min_supply = rec.data.SourceSupply;
+          if (!(min_supply != null) || min_supply > rec.data.sourceSupply) {
+            min_supply = rec.data.sourceSupply;
           }
         }
         res_feat_centroid = this.curr_reservoir.geometry.getCentroid(true);
@@ -235,11 +235,11 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         for (_j = 0, _len1 = records.length; _j < _len1; _j++) {
           rec = records[_j];
           data = rec.data;
-          new_feat = wktFormat.read(rec.data.WktGeog);
+          new_feat = wktFormat.read(rec.data.wktGeog);
           new_feat.data = data;
           new_feat.attributes['type'] = 'entity';
           new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection);
-          new_feat.size = this._calculateScaledValue(max_supply, min_supply, this.max_radius, this.min_radius, new_feat.data.SourceSupply);
+          new_feat.size = this._calculateScaledValue(max_supply, min_supply, this.max_radius, this.min_radius, new_feat.data.sourceSupply);
           line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([new OpenLayers.Geometry.Point(res_feat_centroid.x, res_feat_centroid.y), new OpenLayers.Geometry.Point(new_feat.geometry.x, new_feat.geometry.y)]));
           line.attributes['type'] = 'line';
           connector_lines.push(line);
@@ -252,12 +252,12 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
           onSelect: function(feature) {
             var point, popup, _ref;
-            if (!feature.data.Name) {
+            if (!feature.data.name) {
               return false;
             }
             point = {};
             _ref = [feature.geometry.getCentroid().x, feature.geometry.getCentroid().y], point.lon = _ref[0], point.lat = _ref[1];
-            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.Name + "</h3>\nSupply: " + feature.data.SourceSupply + " acre-ft<br/>", null, true, function() {
+            popup = new OpenLayers.Popup.FramedCloud("featurepopup", point, null, "<h3>" + feature.data.name + "</h3>\nSupply: " + feature.data.sourceSupply + " acre-ft<br/>", null, true, function() {
               select.unselect(feature);
               return null;
             });

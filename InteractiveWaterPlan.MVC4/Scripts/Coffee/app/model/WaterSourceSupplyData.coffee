@@ -4,8 +4,8 @@ Ext.define('ISWP.model.WaterSourceSupplyData', {
 
     #TODO: better field names
     fields: [
-        'Name'
-        'Value'
+        'name'
+        'value'
     ]
 
 })

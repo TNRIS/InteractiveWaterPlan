@@ -36,18 +36,18 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                 
                 for rec in records
                     data = rec.data
-                    new_feat = wktFormat.read(data.WktGeog)
+                    new_feat = wktFormat.read(data.wktGeog)
 
                     #TODO: This is in here because of the GeometryCollection issue with Ralph Hall and Turkey Peak
                     unless new_feat.geometry? then continue
 
                     this.mapComp.transformToWebMerc(new_feat.geometry)
                     
-                    #remove WktGeog -- don't need to carry it around since the geometry provides it
-                    delete data.WktGeog
+                    #remove wktGeog -- don't need to carry it around since the geometry provides it
+                    delete data.wktGeog
 
                     new_feat.data = data
-                    new_feat.attributes['label'] = data['Name']
+                    new_feat.attributes['label'] = data['name']
                     res_features.push(new_feat)
 
                 this.reservoirLayer.addFeatures(res_features)
@@ -83,7 +83,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
             #load the supply data store
             this.supplyStore.load({
                 params:
-                    ReservoirId: this.curr_reservoir.data.Id
+                    ReservoirId: this.curr_reservoir.data.id
                     Year: this.selectedYear
             })
 
@@ -151,7 +151,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
             #find the matching reservoir in the feature layer
             for res_feat in this.reservoirLayer.features
-                if record.data.Id == res_feat.data.Id
+                if record.data.id == res_feat.data.id
                     #found it - set curr_reservoir to the matching feature
                     this.curr_reservoir = res_feat
                     break
@@ -185,7 +185,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
             #find the matching WUG in the feature layer
             for wug_feat in this.relatedWUGLayer.features
-                if record.data.Id == wug_feat.data.Id
+                if record.data.id == wug_feat.data.id
                     #found it - selectthe matching WUG feature
                     this.selectWUGControl.select(wug_feat)
                     break  
@@ -198,7 +198,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
             #find the matching reservoir in the feature layer
             for wug_feat in this.relatedWUGLayer.features
-                if rec.data.Id == wug_feat.data.Id
+                if rec.data.id == wug_feat.data.id
                     #found it - grab the bounds and zoom to it
                     bounds = wug_feat.geometry.getBounds()
                     this.mapComp.map.zoomToExtent(bounds)
@@ -219,7 +219,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     _updateSupplyStore: () ->
         this.supplyStore.load(
             params:
-                ReservoirId: this.curr_reservoir.data.Id
+                ReservoirId: this.curr_reservoir.data.id
                 Year: this.selectedYear
         )
 
@@ -251,7 +251,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
         this.relatedWUGStore.load({
             params:
                 Year: this.selectedYear
-                forReservoirId: this.curr_reservoir.data.Id
+                forReservoirId: this.curr_reservoir.data.id
             
             scope: this
             callback: (records, operation, success) ->
@@ -267,11 +267,11 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                 max_supply = null
                 min_supply = null
                 for rec in records
-                    if not max_supply? or max_supply < rec.data.SourceSupply
-                        max_supply = rec.data.SourceSupply
+                    if not max_supply? or max_supply < rec.data.sourceSupply
+                        max_supply = rec.data.sourceSupply
                     
-                    if not min_supply? or min_supply > rec.data.SourceSupply
-                        min_supply = rec.data.SourceSupply
+                    if not min_supply? or min_supply > rec.data.sourceSupply
+                        min_supply = rec.data.sourceSupply
 
                 
                 #calculate the centroid - pass true to specify that it is a weighted calculation
@@ -282,14 +282,14 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
 
                 for rec in records
                     data = rec.data
-                    new_feat = wktFormat.read(rec.data.WktGeog)
+                    new_feat = wktFormat.read(rec.data.wktGeog)
                     new_feat.data = data
                     new_feat.attributes['type'] = 'entity'
                     new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
                     
                     new_feat.size = this._calculateScaledValue(
                         max_supply, min_supply, this.max_radius, this.min_radius, 
-                        new_feat.data.SourceSupply)
+                        new_feat.data.sourceSupply)
 
                     
                     #Use the reservoir's centroid and the new_feat point to construct a line
@@ -315,7 +315,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                 select = new OpenLayers.Control.SelectFeature(this.relatedWUGLayer, {
                     
                     onSelect: (feature) ->    
-                        if not feature.data.Name then return false
+                        if not feature.data.name then return false
 
                         point = {}
                         [point.lon, point.lat] = [feature.geometry.getCentroid().x, feature.geometry.getCentroid().y]
@@ -324,8 +324,8 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
                             point,
                             null,
                             """
-                            <h3>#{feature.data.Name}</h3>
-                            Supply: #{feature.data.SourceSupply} acre-ft<br/>
+                            <h3>#{feature.data.name}</h3>
+                            Supply: #{feature.data.sourceSupply} acre-ft<br/>
                             """,
                             null,
                             true,

@@ -41,7 +41,7 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
 
            #find the matching reservoir in the feature layer
             for wug_feat in this.WUGLayer.features
-                if rec.data.Id == wug_feat.data.Id
+                if rec.data.id == wug_feat.data.id
                     #found it - grab the bounds and zoom to it
                     bounds = wug_feat.geometry.getBounds()
                     this.mapComp.map.zoomToExtent(bounds)
@@ -133,10 +133,10 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
         entity_features = []
         for rec in records
             data = rec.data
-            new_feat = wktFormat.read(rec.data.WktGeog)
+            new_feat = wktFormat.read(rec.data.wktGeog)
             new_feat.data = data
             new_feat.geometry = new_feat.geometry.transform(map.displayProjection, map.projection)
-            new_feat.attributes['label'] = data['Name']
+            new_feat.attributes['label'] = data['name']
 
             if not bounds?
                 bounds = new_feat.geometry.getBounds()
@@ -157,10 +157,10 @@ Ext.define('TNRIS.theme.ExistingSupplyTheme', {
                     feature.geometry.getBounds().getCenterLonLat(), 
                     null,
                     """
-                    <h3>#{feature.data.Name}</h3>
-                    Planning Region: #{feature.data.RegionName}<br/>
-                    County: #{feature.data.County}<br/>
-                    Basin: #{feature.data.Basin}<br/>
+                    <h3>#{feature.data.name}</h3>
+                    Planning Region: #{feature.data.regionName}<br/>
+                    County: #{feature.data.county}<br/>
+                    Basin: #{feature.data.basin}<br/>
                     """,
                     null,
                     true,

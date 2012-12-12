@@ -23,8 +23,8 @@ namespace InteractiveWaterPlan.MVC4
             NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
 
             //Use the built-in camelCase contractResolver
-            //var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-            //json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             //Turn off XML serialization - don't need it.
             var config = GlobalConfiguration.Configuration;
