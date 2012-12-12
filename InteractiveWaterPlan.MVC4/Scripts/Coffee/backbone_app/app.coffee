@@ -32,7 +32,7 @@ _.extend(
     })
 
 
-BASE_SCRIPT_PATH = "/"
+BASE_API_PATH = "/"
 
 #Config
 require.config(
@@ -46,7 +46,7 @@ require.config(
 
 
 $(()->
-    BASE_SCRIPT_PATH = $("#base_path").val()
+    BASE_API_PATH = $("#base_path").val()
 
     #Application starts here
     #define([
