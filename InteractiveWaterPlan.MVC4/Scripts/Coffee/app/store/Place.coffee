@@ -11,7 +11,7 @@ Ext.define('ISWP.store.Place', {
     proxy:
         type: 'ajax'
         
-        url: 'api/place'
+        url: "#{BASE_API_PATH}api/place"
 
         reader:
             type: 'json'

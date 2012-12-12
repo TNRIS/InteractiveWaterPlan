@@ -35,10 +35,10 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
         return null
 
     unload: () ->
-        this.themeStore.each((rec) =>
-            this.mapComp.removeLayersFromMap(rec.data.Layers)
-            return true
-        )
+        #this.themeStore.each((rec) =>
+        #    this.mapComp.removeLayersFromMap(rec.data.Layers)
+        #    return true
+        #)
 
         this.unloadTheme()
         return null

@@ -11,7 +11,7 @@ Ext.define('ISWP.store.ReservoirSupplyData', {
     proxy:
         type: 'parameterproxy'
         
-        url: 'api/data/reservoir/{ReservoirId}/{Year}'
+        url: "#{BASE_API_PATH}api/data/reservoir/{ReservoirId}/{Year}"
 
         reader:
             type: 'json'

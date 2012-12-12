@@ -8,9 +8,9 @@ Ext.define('ISWP.store.RWP', {
   proxy: {
     type: 'ajax',
     extraParams: {
-      'category': 5
+      'categoryId': 5
     },
-    url: 'api/place',
+    url: "" + BASE_API_PATH + "api/place",
     reader: {
       type: 'json'
     }

@@ -29,7 +29,9 @@
         @Scripts.Render("~/Content/OpenLayers/OpenLayers.js")
     }
     
-    <input type="hidden" id="scripts_path" value="@Url.Content("~/Scripts")" />
+    <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
+    <input type="hidden" id="base_path" value="@Url.Content("~/")" />
+
     @Scripts.Render("~/bundles/js/scripts")
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->

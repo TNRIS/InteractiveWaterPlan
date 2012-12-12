@@ -11,7 +11,7 @@ Ext.define('ISWP.store.Entity', {
     proxy:
         type: 'ajax'
         
-        url: 'api/feature/entity/all'
+        url: "#{BASE_API_PATH}api/feature/entity/all"
 
         reader:
             type: 'json'

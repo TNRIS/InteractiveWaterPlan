@@ -19,8 +19,13 @@ Ext.Loader.setConfig({
     disableCaching: true
 })
 
+BASE_SCRIPT_PATH = Ext.get("base_script_path").dom.value
+BASE_API_PATH = Ext.get("base_path").dom.value
+
+console.log "API PATH", BASE_API_PATH
+
 #need to add path for TNRIS custom widgets
-Ext.Loader.setPath('TNRIS', "#{Ext.get("scripts_path").dom.value}/Compiled/TNRIS") 
+Ext.Loader.setPath('TNRIS', "#{BASE_SCRIPT_PATH}/Compiled/TNRIS") 
 
 #not sure why these don't just get loaded, but they don't
 Ext.require('TNRIS.proxy.ParameterProxy')
@@ -32,7 +37,7 @@ Ext.require('TNRIS.theme.StrategiesTheme')
 Ext.create('Ext.app.Application', {
     name: 'ISWP'
     autoCreateViewport: true
-    appFolder: "#{Ext.get("scripts_path").dom.value}/Compiled/app"
+    appFolder: "#{BASE_SCRIPT_PATH}/Compiled/app"
 
     controllers: ['Main']
 })

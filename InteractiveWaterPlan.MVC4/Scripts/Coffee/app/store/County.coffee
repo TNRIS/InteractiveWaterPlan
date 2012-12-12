@@ -12,9 +12,9 @@ Ext.define('ISWP.store.County', {
         type: 'ajax'
         
         #extraParams:
-        #    'category': 1 
+        #    'categoryId': 1 
 
-        url: 'api/place/all'
+        url: "#{BASE_API_PATH}api/place/all"
 
         reader:
             type: 'json'

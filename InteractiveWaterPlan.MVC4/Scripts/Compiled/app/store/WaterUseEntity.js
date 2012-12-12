@@ -7,7 +7,7 @@ Ext.define('ISWP.store.WaterUseEntity', {
   autoLoad: false,
   proxy: {
     type: 'parameterproxy',
-    url: 'api/feature/entity/{Year}',
+    url: "" + BASE_API_PATH + "api/feature/entity/{Year}",
     reader: {
       type: 'json'
     }

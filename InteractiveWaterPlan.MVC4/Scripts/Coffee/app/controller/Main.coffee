@@ -137,7 +137,7 @@ Ext.define('ISWP.controller.Main', {
             when 'existing-supply'
                 this.interactiveTheme = new TNRIS.theme.ExistingSupplyTheme(
                     mapComp: this.getMapComponent()
-                    themeStore: this.getThemeStore()
+                    #themeStore: this.getThemeStore()
                     selectedYear: this.selectedYear
                     mainContainer: this.getMainContainer()
                     entityStore: this.getEntityStore()
@@ -145,7 +145,7 @@ Ext.define('ISWP.controller.Main', {
             when 'recommended-reservoirs'
                 this.interactiveTheme = new TNRIS.theme.RecommendedReservoirsTheme(
                     mapComp: this.getMapComponent()
-                    themeStore: this.getThemeStore()
+                    #themeStore: this.getThemeStore()
                     selectedYear: this.selectedYear
                     mainContainer: this.getMainContainer()
 
@@ -156,7 +156,7 @@ Ext.define('ISWP.controller.Main', {
             when 'strategies'
                 this.interactiveTheme = new TNRIS.theme.StrategiesTheme(
                     mapComp: this.getMapComponent()
-                    themeStore: this.getThemeStore()
+                    #themeStore: this.getThemeStore()
                     selectedYear: this.selectedYear
                     mainContainer: this.getMainContainer()
                 )

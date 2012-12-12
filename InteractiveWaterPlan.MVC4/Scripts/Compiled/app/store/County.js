@@ -7,7 +7,7 @@ Ext.define('ISWP.store.County', {
   autoLoad: true,
   proxy: {
     type: 'ajax',
-    url: 'api/place/all',
+    url: "" + BASE_API_PATH + "api/place/all",
     reader: {
       type: 'json'
     }

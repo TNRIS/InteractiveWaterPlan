@@ -27,11 +27,6 @@ Ext.define('TNRIS.theme.InteractiveTheme', {
     return null;
   },
   unload: function() {
-    var _this = this;
-    this.themeStore.each(function(rec) {
-      _this.mapComp.removeLayersFromMap(rec.data.Layers);
-      return true;
-    });
     this.unloadTheme();
     return null;
   },
