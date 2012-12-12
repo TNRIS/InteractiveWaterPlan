@@ -656,7 +656,9 @@
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\Strategy.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavViewModel.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
@@ -693,7 +695,10 @@
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\stupidtable.js" />
+    <Content Include="Scripts\templates\breadcrumbList.html" />
+    <Content Include="Scripts\templates\dataTable.html" />
     <Content Include="Scripts\templates\mainView.html" />
+    <Content Include="Scripts\templates\strategyRow.html" />
     <Content Include="Scripts\templates\themeNav.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
@@ -753,7 +758,9 @@
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\Strategy.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\BreadcrumbViewModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyViewModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavViewModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\YearNavViewModel.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />

@@ -48,9 +48,12 @@ $(()->
         'views/MapView'
         'views/ThemeNavViewModel'
         'views/YearNavViewModel'
+        'views/BreadcrumbViewModel'
+        'views/StrategyViewModel'
         'scripts/text!templates/mainView.html'
     ],
-    (MapView, ThemeNavViewModel, YearNavViewModel, tpl) ->
+    (MapView, ThemeNavViewModel, YearNavViewModel, BreadcrumbViewModel, 
+        StrategyViewModel, tpl) ->
 
         @mapView = new MapView('mapContainer')
         @mapView.render()
@@ -60,6 +63,12 @@ $(()->
 
         yearNavView = new YearNavViewModel()
         $('#yearNavContainer').html(yearNavView.render().el)
+
+        breadcrumbList = new BreadcrumbViewModel()
+        $('#breadcrumbContainer').html(breadcrumbList.render().el)
+
+        #strategyView = new StrategyViewModel()
+
 
         return null
     )  
