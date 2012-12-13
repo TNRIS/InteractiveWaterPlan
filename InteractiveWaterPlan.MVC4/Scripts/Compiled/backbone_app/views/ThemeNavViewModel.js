@@ -22,6 +22,7 @@ define(['scripts/text!templates/themeNav.html'], function(tpl) {
     };
 
     ThemeNavViewModel.prototype.unrender = function() {
+      kb.release(this);
       this.$el.remove();
       return null;
     };

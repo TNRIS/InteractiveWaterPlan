@@ -22,6 +22,7 @@ define([
             return this
 
         unrender: () ->
+            kb.release(this)
             @$el.remove()
             return null
 

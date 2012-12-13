@@ -25,6 +25,7 @@ define(['scripts/text!templates/yearNav.html'], function(tpl) {
     };
 
     YearNavViewModel.prototype.unrender = function() {
+      kb.release(this);
       this.$el.remove();
       return null;
     };
