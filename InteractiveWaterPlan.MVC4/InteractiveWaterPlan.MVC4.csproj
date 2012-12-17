@@ -659,7 +659,8 @@
     <Content Include="Scripts\Compiled\backbone_app\models\Strategy.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\StrategyViewModel.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavViewModel.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
@@ -700,6 +701,7 @@
     <Content Include="Scripts\templates\dataTable.html" />
     <Content Include="Scripts\templates\mainView.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
+    <Content Include="Scripts\templates\strategyTable.html" />
     <Content Include="Scripts\templates\themeNav.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
@@ -761,7 +763,8 @@
     <None Include="Scripts\Coffee\backbone_app\models\Strategy.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BreadcrumbViewModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapView.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\StrategyViewModel.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavViewModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\YearNavViewModel.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
