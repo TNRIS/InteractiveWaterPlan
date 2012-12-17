@@ -28,7 +28,6 @@ define(['scripts/text!templates/themeNav.html'], function(tpl) {
     };
 
     ThemeNavViewModel.prototype.initialize = function() {
-      this.$el = $(this.el);
       _.bindAll(this, 'render', 'unrender', 'changeStrategyView');
       return null;
     };

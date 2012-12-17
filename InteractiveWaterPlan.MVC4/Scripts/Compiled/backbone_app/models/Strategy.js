@@ -14,10 +14,6 @@ define([], function() {
 
     Strategy.prototype.urlRoot = "" + BASE_API_PATH + "api/strategy";
 
-    Strategy.prototype.initialize = function() {
-      return null;
-    };
-
     return Strategy;
 
   })(Backbone.Model);

@@ -27,7 +27,6 @@ define(['scripts/text!templates/breadcrumbList.html'], function(tpl) {
     };
 
     BreadcrumbViewModel.prototype.initialize = function() {
-      this.$el = $(this.el);
       _.bindAll(this, 'render', 'unrender');
       return null;
     };

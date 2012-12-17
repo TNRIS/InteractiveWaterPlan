@@ -20,7 +20,7 @@ define(['scripts/text!templates/yearNav.html'], function(tpl) {
       this.$el.empty();
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
-      $("a[data-value='" + this.activeYear + "']", this.$el).parent().addClass('active');
+      this.$("a[data-value='" + this.activeYear + "']").parent().addClass('active');
       return this;
     };
 
@@ -31,7 +31,6 @@ define(['scripts/text!templates/yearNav.html'], function(tpl) {
     };
 
     YearNavViewModel.prototype.initialize = function() {
-      this.$el = $(this.el);
       _.bindAll(this, 'render', 'unrender', 'changeYear');
       return null;
     };

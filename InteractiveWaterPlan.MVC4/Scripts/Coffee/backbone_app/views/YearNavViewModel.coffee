@@ -17,7 +17,7 @@ define([
             ko.applyBindings(this, @el)
 
             #Use the one marked active as the default year to start on
-            $("a[data-value='#{@activeYear}']", @$el).parent().addClass('active')
+            this.$("a[data-value='#{@activeYear}']").parent().addClass('active')
 
             return this
 
@@ -27,8 +27,6 @@ define([
             return null
 
         initialize: () ->
-            @$el = $(@el)
-
             _.bindAll(this, 'render', 'unrender', 'changeYear')
             
             return null

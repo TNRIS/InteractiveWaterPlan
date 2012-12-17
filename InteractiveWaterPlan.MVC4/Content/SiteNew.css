@@ -98,3 +98,27 @@ ul.nav > li.nav-label
     /* when OL encounters a 404, don't display the pink image */
     display: none !important;
 } 
+
+.modelTable th 
+{
+    min-width:40px;
+}
+
+.modelTable th[data-sort]
+{
+    cursor:pointer;
+}
+
+.loading.loading-large 
+{
+    background: url('images/loading-36.gif') no-repeat;
+    width: 80px;
+    margin: auto;
+    height: 80px;
+}
+
+ul.breadcrumb 
+{
+    font-size: 12px;
+    padding: 4px 8px;
+}

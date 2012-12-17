@@ -22,7 +22,6 @@ define([
             return null
 
         initialize: () ->
-            @$el = $(@el)
 
             _.bindAll(this, 'render', 'unrender', 'changeStrategyView')
             

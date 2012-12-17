@@ -25,8 +25,8 @@ require.config({
 
 $(function() {
   BASE_API_PATH = $("#base_path").val();
-  return define(['views/MapView', 'views/ThemeNavViewModel', 'views/YearNavViewModel', 'views/BreadcrumbViewModel', 'views/StrategyViewModel', 'scripts/text!templates/mainView.html'], function(MapView, ThemeNavViewModel, YearNavViewModel, BreadcrumbViewModel, StrategyViewModel, tpl) {
-    var breadcrumbList, themeNavView, yearNavView;
+  return define(['views/MapView', 'views/ThemeNavViewModel', 'views/YearNavViewModel', 'views/BreadcrumbViewModel', 'views/StrategyCollectionView'], function(MapView, ThemeNavViewModel, YearNavViewModel, BreadcrumbViewModel, StrategyCollectionView) {
+    var breadcrumbList, strategyTable, themeNavView, yearNavView;
     this.mapView = new MapView('mapContainer');
     this.mapView.render();
     themeNavView = new ThemeNavViewModel();
@@ -35,6 +35,8 @@ $(function() {
     $('#yearNavContainer').html(yearNavView.render().el);
     breadcrumbList = new BreadcrumbViewModel();
     $('#breadcrumbContainer').html(breadcrumbList.render().el);
+    strategyTable = new StrategyCollectionView();
+    $('#tableContainer').html(strategyTable.render().el);
     return null;
   });
 });

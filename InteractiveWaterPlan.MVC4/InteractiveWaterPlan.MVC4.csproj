@@ -552,6 +552,7 @@
     <Content Include="Content\FontAwesome\css\font-awesome.css" />
     <Content Include="Content\FontAwesome\font\fontawesome-webfont.svg" />
     <Content Include="Content\jquery.min.js" />
+    <Content Include="Content\images\loading-36.gif" />
     <Content Include="Content\OpenLayers\img\blank.gif" />
     <Content Include="Content\OpenLayers\img\cloud-popup-relative.png" />
     <Content Include="Content\OpenLayers\img\drag-rectangle-off.png" />

@@ -34,26 +34,15 @@ require.config(
 $(()->
     BASE_API_PATH = $("#base_path").val()
 
-    #Application starts here
-    #define([
-    #    'views/MainView'
-    #], 
-    #(MainView) ->
-    #    mainView = new MainView()
-    #    $('#backboneAppContainer').html(mainView.render().el)
-    #
-    #)
-
     define([
         'views/MapView'
         'views/ThemeNavViewModel'
         'views/YearNavViewModel'
         'views/BreadcrumbViewModel'
-        'views/StrategyViewModel'
-        'scripts/text!templates/mainView.html'
+        'views/StrategyCollectionView'
+        #'scripts/text!templates/mainView.html'
     ],
-    (MapView, ThemeNavViewModel, YearNavViewModel, BreadcrumbViewModel, 
-        StrategyViewModel, tpl) ->
+    (MapView, ThemeNavViewModel, YearNavViewModel, BreadcrumbViewModel, StrategyCollectionView) ->
 
         @mapView = new MapView('mapContainer')
         @mapView.render()
@@ -67,7 +56,8 @@ $(()->
         breadcrumbList = new BreadcrumbViewModel()
         $('#breadcrumbContainer').html(breadcrumbList.render().el)
 
-        #strategyView = new StrategyViewModel()
+        strategyTable = new StrategyCollectionView()
+        $('#tableContainer').html(strategyTable.render().el)
 
 
         return null
