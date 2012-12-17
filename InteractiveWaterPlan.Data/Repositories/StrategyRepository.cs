@@ -23,6 +23,21 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetAllStrategies()
         {
+            //TODO
+            return new List<Strategy>(){
+                new Strategy()
+                {
+                    Id = new Random().Next(),
+                    Description = "Strategy 1",
+                    TypeName = "Reservoir",
+                    TypeId = 1
+                }
+            };
+        }
+
+        public IList<Strategy> GetAllStrategies(string year)
+        {
+            //TODO
             return new List<Strategy>(){
                 new Strategy()
                 {
@@ -46,7 +61,33 @@ namespace InteractiveWaterPlan.Data
                 };
         }
 
+        public Strategy GetStrategy(int id, string year)
+        {
+            //TODO
+            return new Strategy()
+            {
+                Id = id,
+                Description = "Strategy " + id,
+                TypeName = "Reservoir",
+                TypeId = 1
+            };
+        }
+
         public IList<Strategy> GetStrategiesInPlace(int placeId)
+        {
+            //TODO
+            return new List<Strategy>(){
+                new Strategy()
+                {
+                    Id = new Random().Next(),
+                    Description = "Strategy in place "+placeId,
+                    TypeName = "Reservoir",
+                    TypeId = 1
+                }
+            };
+        }
+
+        public IList<Strategy> GetStrategiesInPlace(int placeId, string year)
         {
             //TODO
             return new List<Strategy>(){
@@ -74,7 +115,35 @@ namespace InteractiveWaterPlan.Data
             };
         }
 
+        public IList<Strategy> GetStrategiesInRegion(int regionId, string year)
+        {
+            //TODO
+            return new List<Strategy>(){
+                new Strategy()
+                {
+                    Id = new Random().Next(),
+                    Description = "Strategy in region "+regionId,
+                    TypeName = "Reservoir",
+                    TypeId = 1
+                }
+            };
+        }
+
         public IList<Strategy> GetStrategiesInCounty(int countyId)
+        {
+            //TODO
+            return new List<Strategy>(){
+                new Strategy()
+                {
+                    Id = new Random().Next(),
+                    Description = "Strategy in county "+countyId,
+                    TypeName = "Reservoir",
+                    TypeId = 1
+                }
+            };
+        }
+
+        public IList<Strategy> GetStrategiesInCounty(int countyId, string year)
         {
             //TODO
             return new List<Strategy>(){
@@ -102,7 +171,35 @@ namespace InteractiveWaterPlan.Data
             };
         }
 
+        public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
+        {
+            //TODO
+            return new List<Strategy>(){
+                new Strategy()
+                {
+                    Id = new Random().Next(),
+                    Description = "Strategy in district "+districtId,
+                    TypeName = "Reservoir",
+                    TypeId = 1
+                }
+            };
+        }
+
         public IList<Strategy> GetStrategiesByType(int strategyTypeId)
+        {
+            //TODO
+            return new List<Strategy>(){
+                new Strategy()
+                {
+                    Id = new Random().Next(),
+                    Description = "Strategy of type "+strategyTypeId,
+                    TypeName = "Type "+strategyTypeId,
+                    TypeId = strategyTypeId
+                }
+            };
+        }
+
+        public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year)
         {
             //TODO
             return new List<Strategy>(){

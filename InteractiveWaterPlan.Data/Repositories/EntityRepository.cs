@@ -100,7 +100,7 @@ namespace InteractiveWaterPlan.Data
 
         //TODO: Make Entity and WaterUseEntity the same.  Will need the stored proc to be updated to 
         // return the same fields/info.
-        public IList<WaterUseEntity> GetEntitiesServedByReservoir(int recommendedReservoirId, int year)
+        public IList<WaterUseEntity> GetEntitiesServedByReservoir(int recommendedReservoirId, string year)
         {
             return Session.GetNamedQuery("GetEntitiesForReservoir")
                 .SetParameter("var_DB12_ID", recommendedReservoirId)

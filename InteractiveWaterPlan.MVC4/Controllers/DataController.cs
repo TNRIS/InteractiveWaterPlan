@@ -14,7 +14,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
     {
         
         //api/data/wateruse/{LocationType}/{LocationName}/{Year}
-        public IEnumerable<WaterSourceSupplyData> GetWaterUseData(string LocationType, string LocationName, int Year)
+        public IEnumerable<WaterSourceSupplyData> GetWaterUseData(string LocationType, string LocationName, string Year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(Year))
             {
@@ -32,7 +32,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             {
                 switch (Year)
                 {
-                    case 2010:
+                    case "2010":
                         return new List<WaterSourceSupplyData> ()
                         {
                             new WaterSourceSupplyData { Name="Municipal", Value=4851201}, 
@@ -43,7 +43,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                             new WaterSourceSupplyData { Name="Irrigation", Value=10079215}
                         };
                         
-                    case 2020:
+                    case "2020":
                         return new List<WaterSourceSupplyData>()
                         {
                             new WaterSourceSupplyData { Name="Municipal", Value=5580979}, 
@@ -54,7 +54,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                             new WaterSourceSupplyData { Name="Irrigation", Value=9643908}
                         };
                         
-                    case 2030:
+                    case "2030":
                         return new List<WaterSourceSupplyData>() 
                         {
                             new WaterSourceSupplyData { Name="Municipal", Value=6254784}, 
@@ -65,7 +65,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                             new WaterSourceSupplyData { Name="Irrigation", Value=9299464}
                         };
                         
-                    case 2040:
+                    case "2040":
                         return new List<WaterSourceSupplyData>()
                         {
                             new WaterSourceSupplyData { Name="Municipal", Value=6917722}, 
@@ -76,7 +76,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                             new WaterSourceSupplyData { Name="Irrigation", Value=9024866}
                         };
                         
-                    case 2050:
+                    case "2050":
                         return new List<WaterSourceSupplyData>() 
                         {
                             new WaterSourceSupplyData { Name="Municipal", Value=7630808}, 
@@ -87,7 +87,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
                             new WaterSourceSupplyData { Name="Irrigation", Value=8697560}
                         };
                         
-                    case 2060:
+                    case "2060":
                         return new List<WaterSourceSupplyData>() 
                         {
                             new WaterSourceSupplyData { Name="Municipal", Value=8414492}, 
@@ -107,7 +107,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // api/data/reservoir/{ReservoirId}/{Year}
-        public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyData(int ReservoirId, int Year)
+        public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyData(int ReservoirId, string Year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(Year))
             {

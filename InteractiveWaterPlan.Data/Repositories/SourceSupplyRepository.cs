@@ -23,7 +23,7 @@ namespace InteractiveWaterPlan.Data
         /// <param name="reservoirId"></param>
         /// <param name="year"></param>
         /// <returns></returns>
-        public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyTotals(int reservoirId, int year)
+        public IEnumerable<WaterSourceSupplyData> GetReservoirSupplyTotals(int reservoirId, string year)
         {
             return Session.GetNamedQuery("GetReservoirSupplyTotals")
                 .SetParameter("var_Source_ID", reservoirId)

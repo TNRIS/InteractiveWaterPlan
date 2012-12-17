@@ -40,7 +40,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
 
         //api/feature/entity/{Year}?forReservoir={ReservoirId}
         [NHibernateSession]
-        public IEnumerable<WaterUseEntity> GetEntitiesOfReservoir(int Year, int forReservoirId=-1)
+        public IEnumerable<WaterUseEntity> GetEntitiesOfReservoir(string Year, int forReservoirId=-1)
         {
             if (!CommonConstants.VALID_YEARS.Contains(Year))
             {
