@@ -3,7 +3,7 @@ define([
 ],
 (tpl) ->
 
-    class BreadcrumbViewModel extends Backbone.View
+    class BreadcrumbView extends Backbone.View
 
         template: _.template(tpl)
 

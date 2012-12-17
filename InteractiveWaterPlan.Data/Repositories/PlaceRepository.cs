@@ -19,6 +19,8 @@ namespace InteractiveWaterPlan.Data
         #endregion
 
 
+
+
         /// <summary>
         /// Returns a Place specified by id
         /// </summary>
@@ -39,6 +41,21 @@ namespace InteractiveWaterPlan.Data
         {
             return Session.GetNamedQuery("GetPlacesByCategory")
                 .SetParameter("var_CategoryID", categoryId)
+                .List<Place>()
+                .OrderBy(p => p.SqlId)
+                .Select(p => { p.Name = p.Name.Trim(); return p; })
+                .ToList<Place>();
+        }
+
+        /// <summary>
+        /// Returns a list of all Places in the specified PlaceCategory
+        /// </summary>
+        /// <param name="categoryCode"></param>
+        /// <returns></returns>
+        public IList<Place> GetPlaces(PlaceCategoryCode categoryCode)
+        {
+            return Session.GetNamedQuery("GetPlacesByCategory")
+                .SetParameter("var_CategoryID", categoryCode)
                 .List<Place>()
                 .OrderBy(p => p.SqlId)
                 .Select(p => { p.Name = p.Name.Trim(); return p; })

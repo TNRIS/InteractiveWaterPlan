@@ -5,6 +5,5 @@ define([
 
     class StrategyCollection extends Backbone.Collection
         model: Strategy    
-        url: "#{BASE_API_PATH}api/strategy/all"
-        
+        url: "#{BASE_API_PATH}api/strategy/all"   
 )

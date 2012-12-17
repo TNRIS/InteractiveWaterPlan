@@ -31,35 +31,16 @@ require.config(
 )
 
 
+#Launch-point for the application
 $(()->
     BASE_API_PATH = $("#base_path").val()
 
     define([
-        'views/MapView'
-        'views/ThemeNavViewModel'
-        'views/YearNavViewModel'
-        'views/BreadcrumbViewModel'
-        'views/StrategyCollectionView'
-        #'scripts/text!templates/mainView.html'
+        'views/AppView'
     ],
-    (MapView, ThemeNavViewModel, YearNavViewModel, BreadcrumbViewModel, StrategyCollectionView) ->
-
-        @mapView = new MapView('mapContainer')
-        @mapView.render()
-
-        themeNavView = new ThemeNavViewModel()
-        $('#themeNavContainer').html(themeNavView.render().el)
-
-        yearNavView = new YearNavViewModel()
-        $('#yearNavContainer').html(yearNavView.render().el)
-
-        breadcrumbList = new BreadcrumbViewModel()
-        $('#breadcrumbContainer').html(breadcrumbList.render().el)
-
-        strategyTable = new StrategyCollectionView()
-        $('#tableContainer').html(strategyTable.render().el)
-
-
-        return null
+    (AppView) ->
+        appView = new AppView({el: $('#appContainer')[0]})
+        appView.render()
+        return
     )  
 )

@@ -3,7 +3,7 @@ define([
 ],
 (tpl) ->
     
-    class YearNavViewModel extends Backbone.View
+    class YearNavView extends Backbone.View
 
         activeYear: '2040'
 
@@ -35,9 +35,10 @@ define([
             $target = $(event.target)
             newYear = $target.attr('data-value')
 
+            #TODO: ko.observable for this
+
             $target.parent().siblings().removeClass('active')
             $target.parent().addClass('active')
-            console.log "Switching to year #{newYear}"
             return null
 
 )

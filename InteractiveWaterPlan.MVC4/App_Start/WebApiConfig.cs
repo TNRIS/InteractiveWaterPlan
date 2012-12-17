@@ -15,6 +15,12 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
+                "GetRegionalWaterPlanningAreas",
+                "api/place/rwpa",
+                new { controller = "Place", action = "GetRegionalPlanningAreas" }
+            );
+
+            config.Routes.MapHttpRoute(
                 "GetAllPlaceCategoriesRoute",
                 "api/place/categories",
                 new { controller = "Place", action = "GetAllPlaceCategories" }
@@ -29,12 +35,18 @@ namespace InteractiveWaterPlan.MVC4
 
             #endregion
 
-            #region Stretegy Routes
+            #region Strategy Routes
 
             config.Routes.MapHttpRoute(
                 "GetAllStrategiesRoute",
                 "api/strategy/all",
                 new { controller = "Strategy", action="GetAll" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetCountyNetSuppliesRoute",
+                "api/strategy/county/net/all",
+                new { controller = "Strategy", action = "GetCountyNetSupplies" }
             );
 
             config.Routes.MapHttpRoute(

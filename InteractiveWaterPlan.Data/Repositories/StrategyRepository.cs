@@ -24,15 +24,20 @@ namespace InteractiveWaterPlan.Data
         public IList<Strategy> GetAllStrategies(string year = null)
         {
             //TODO
-            return new List<Strategy>(){
-                new Strategy()
-                {
-                    Id = new Random().Next(),
-                    Description = "Strategy 1",
-                    TypeName = "Reservoir",
-                    TypeId = 1
-                }
-            };
+            var x = new List<Strategy>();
+            var rand = new Random();
+            for (int i = 0; i < 20; i++)
+            {   
+                x.Add(new Strategy()
+                    {
+                        Id = rand.Next(),
+                        Description = "Strategy "+i,
+                        TypeName = "Reservoir",
+                        TypeId = 1
+                    });
+            }
+
+            return x;
         }
 
         public Strategy GetStrategy(int id, string year = null)

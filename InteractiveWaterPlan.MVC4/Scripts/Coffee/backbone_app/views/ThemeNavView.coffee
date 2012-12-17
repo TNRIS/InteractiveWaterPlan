@@ -3,7 +3,7 @@ define([
 ],
 (tpl) ->
     
-    class ThemeNavViewModel extends Backbone.View
+    class ThemeNavView extends Backbone.View
 
         template: _.template(tpl)
 

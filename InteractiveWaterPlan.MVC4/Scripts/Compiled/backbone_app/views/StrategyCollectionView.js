@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['collections/StrategyCollection', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(StrategyCollection, StrategyView, tpl) {
+define(['views/BaseTableCollectionView', 'views/StrategyView', 'collections/StrategyCollection', 'scripts/text!templates/strategyTable.html'], function(BaseTableCollectionView, StrategyView, StrategyCollection, tpl) {
   var StrategyCollectionView;
   return StrategyCollectionView = (function(_super) {
 
@@ -13,71 +13,11 @@ define(['collections/StrategyCollection', 'views/StrategyView', 'scripts/text!te
     }
 
     StrategyCollectionView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading');
-      this.template = _.template(tpl);
-      this.collection = new StrategyCollection();
-      return null;
-    };
-
-    StrategyCollectionView.prototype.render = function() {
-      var sortTable;
-      this.$el.html(this.template());
-      this.fetchCollection();
-      sortTable = this.$('table').stupidtable();
-      sortTable.on('aftertablesort', function(evt, data) {
-        var $th, iconClass;
-        $th = $('th', this);
-        $('i', $th).remove();
-        iconClass = data.direction === "asc" ? 'icon-caret-up' : 'icon-caret-down';
-        $th.eq(data.column).prepend("<i class='" + iconClass + "'></i> ");
-        return null;
-      });
-      return this;
-    };
-
-    StrategyCollectionView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
-
-    StrategyCollectionView.prototype.fetchCollection = function() {
-      var _this = this;
-      this.showLoading();
-      this.collection.fetch({
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          _ref = collection.models;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            m = _ref[_i];
-            _this.appendModel(m);
-          }
-          _this.hideLoading();
-          return null;
-        }
-      });
-      return null;
-    };
-
-    StrategyCollectionView.prototype.appendModel = function(model) {
-      var modelView;
-      modelView = new StrategyView({
-        model: model
-      });
-      this.$('tbody').append(modelView.render().el);
-      return null;
-    };
-
-    StrategyCollectionView.prototype.showLoading = function() {
-      this.$('.loading').show();
-      return null;
-    };
-
-    StrategyCollectionView.prototype.hideLoading = function() {
-      this.$('.loading').hide();
+      StrategyCollectionView.__super__.initialize.call(this, StrategyView, StrategyCollection, tpl);
       return null;
     };
 
     return StrategyCollectionView;
 
-  })(Backbone.View);
+  })(BaseTableCollectionView);
 });

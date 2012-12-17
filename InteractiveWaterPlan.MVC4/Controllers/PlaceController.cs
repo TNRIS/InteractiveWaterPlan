@@ -10,12 +10,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
     [NHibernateSession]
     public class PlaceController : ApiController
     {
-        //api/place?categoryId={categoryId}
-        public IList<Place> GetPlacesByCategory(int categoryId)
-        {
-            var repo = new PlaceRepository();
-            return repo.GetPlaces(categoryId);
-        }
+        
 
         //TODO: Remove this method - just for testing
         //api/place/all
@@ -25,6 +20,20 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             var x = repo.GetPlaces(1).OrderBy(p => p.Name);
             var y = repo.GetPlaces(5).OrderBy(p => p.Name);
             return x.Union(y).ToList<Place>(); 
+        }
+
+        //api/place?categoryId={categoryId}
+        public IList<Place> GetPlacesByCategory(int categoryId)
+        {
+            var repo = new PlaceRepository();
+            return repo.GetPlaces(categoryId);
+        }
+
+        //api/place/rwpa
+        public IList<Place> GetRegionalPlanningAreas()
+        {
+            var repo = new PlaceRepository();
+            return repo.GetPlaces(PlaceCategoryCode.RWPA);
         }
 
         //api/place/{id}
