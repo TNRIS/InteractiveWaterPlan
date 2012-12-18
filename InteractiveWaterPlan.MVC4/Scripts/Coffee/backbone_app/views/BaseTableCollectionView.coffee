@@ -3,9 +3,13 @@ define([
 () ->
     class BaseTableCollectionView extends Backbone.View
 
-        initialize: (ModelView, Collection, tpl) ->
+        currYear: null #reference to the currently selected year
+
+        initialize: (startingYear, ModelView, Collection, tpl) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading')
+                'hideLoading', 'showLoading', 'changeToYear')
+
+            @currYear = startingYear
 
             @template = _.template(tpl)
 
@@ -13,7 +17,7 @@ define([
 
             @ModelView = ModelView
 
-            #Apply knockback
+            #Apply KO bindings
             ko.applyBindings(this, @el)
 
             return null
@@ -43,11 +47,13 @@ define([
 
         fetchCollection: () ->
             this.showLoading()
+            
+            this.$('tbody').empty() #clear the table contents
 
             @collection.fetch(
-                #TODO: grab the year from somewhere other than a jquery query
                 data:
-                   year: $('#yearNav li.active a').attr('data-value')
+                   year: @currYear #use the currently selected year
+
                 success: (collection) =>
                     for m in collection.models
                         this.appendModel(m)
@@ -66,6 +72,11 @@ define([
             this.$('tbody').append(modelView.render().el)
 
             return null
+
+        changeToYear: (newYear) ->
+            @currYear = newYear
+            this.fetchCollection()
+            return
 
         showLoading: () ->
             this.$('.loading').show()

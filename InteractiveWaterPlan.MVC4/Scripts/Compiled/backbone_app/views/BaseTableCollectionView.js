@@ -12,8 +12,11 @@ define([], function() {
       return BaseTableCollectionView.__super__.constructor.apply(this, arguments);
     }
 
-    BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading');
+    BaseTableCollectionView.prototype.currYear = null;
+
+    BaseTableCollectionView.prototype.initialize = function(startingYear, ModelView, Collection, tpl) {
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear');
+      this.currYear = startingYear;
       this.template = _.template(tpl);
       this.collection = new Collection();
       this.ModelView = ModelView;
@@ -45,9 +48,10 @@ define([], function() {
     BaseTableCollectionView.prototype.fetchCollection = function() {
       var _this = this;
       this.showLoading();
+      this.$('tbody').empty();
       this.collection.fetch({
         data: {
-          year: $('#yearNav li.active a').attr('data-value')
+          year: this.currYear
         },
         success: function(collection) {
           var m, _i, _len, _ref;
@@ -70,6 +74,11 @@ define([], function() {
       });
       this.$('tbody').append(modelView.render().el);
       return null;
+    };
+
+    BaseTableCollectionView.prototype.changeToYear = function(newYear) {
+      this.currYear = newYear;
+      this.fetchCollection();
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {

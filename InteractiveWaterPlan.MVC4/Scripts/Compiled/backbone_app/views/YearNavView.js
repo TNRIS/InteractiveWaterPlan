@@ -12,15 +12,19 @@ define(['scripts/text!templates/yearNav.html'], function(tpl) {
       return YearNavView.__super__.constructor.apply(this, arguments);
     }
 
-    YearNavView.prototype.activeYear = '2040';
-
     YearNavView.prototype.template = _.template(tpl);
+
+    YearNavView.prototype.initialize = function(options) {
+      _.bindAll(this, 'render', 'unrender', 'changeYear');
+      this.currentYear = ko.observable(options.startingYear);
+      return null;
+    };
 
     YearNavView.prototype.render = function() {
       this.$el.empty();
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
-      this.$("a[data-value='" + this.activeYear + "']").parent().addClass('active');
+      this.$("a[data-value='" + (this.currentYear()) + "']").parent().addClass('active');
       return this;
     };
 
@@ -30,15 +34,10 @@ define(['scripts/text!templates/yearNav.html'], function(tpl) {
       return null;
     };
 
-    YearNavView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'changeYear');
-      return null;
-    };
-
     YearNavView.prototype.changeYear = function(data, event) {
-      var $target, newYear;
+      var $target;
       $target = $(event.target);
-      newYear = $target.attr('data-value');
+      this.currentYear($target.attr('data-value'));
       $target.parent().siblings().removeClass('active');
       $target.parent().addClass('active');
       return null;

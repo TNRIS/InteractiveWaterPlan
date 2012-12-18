@@ -12,8 +12,10 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
+    AppView.prototype.startingYear = "2010";
+
     AppView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender');
+      _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear');
       this.template = _.template(tpl);
     };
 
@@ -26,14 +28,17 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
       });
       this.themeNavView.render();
       this.yearNavView = new YearNavView({
+        startingYear: this.startingYear,
         el: $('#yearNavContainer')[0]
       });
       this.yearNavView.render();
+      this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
       this.breadcrumbList = new BreadcrumbView({
         el: $('#breadcrumbContainer')[0]
       });
       this.breadcrumbList.render();
       this.currTableView = new CountyNetSupplyCollectionView({
+        startingYear: this.startingYear,
         el: $('#tableContainer')[0]
       });
       this.currTableView.render();
@@ -43,6 +48,11 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
     AppView.prototype.unrender = function() {
       this.el.remove();
       return null;
+    };
+
+    AppView.prototype.updateViewsToNewYear = function(newYear) {
+      console.log("changed year to " + newYear);
+      this.currTableView.changeToYear(newYear);
     };
 
     return AppView;

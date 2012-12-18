@@ -8,8 +8,9 @@ define([
 
     class CountyNetSupplyCollectionView extends BaseTableCollectionView
 
-        initialize: () ->
-            super CountyNetSupplyView, CountyNetSupplyCollection, tpl
-            return null
+        initialize: (options) ->
 
+            super options.startingYear, CountyNetSupplyView, CountyNetSupplyCollection, tpl
+           
+            return null
 )
