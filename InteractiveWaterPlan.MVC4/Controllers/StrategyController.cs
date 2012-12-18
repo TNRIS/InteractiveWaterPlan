@@ -69,6 +69,27 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return netSupplyList;
         }
 
+        public IList<StrategyType> GetStrategyTypes()
+        {
+            var list = new List<StrategyType>();
+
+            list.Add(new StrategyType()
+                {
+                    Id = 1,
+                    Name = "WMS Type 1"
+                });
+
+            list.Add(new StrategyType()
+                {
+                    Id = 2,
+                    Name = "WMS Type 2"
+                });
+
+            //_repo.GetStrategyTypes
+
+            return list;
+        }
+
 
         public IList<Strategy> GetStrategiesInPlace(int placeId, string year)
         {

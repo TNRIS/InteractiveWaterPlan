@@ -35,8 +35,8 @@ define([
             #save reference to the tableContainer dom element
             @tableContainer = $('#tableContainer')[0]
 
-            #@mapView = new MapView('mapContainer')
-            #@mapView.render()
+            @mapView = new MapView('mapContainer')
+            @mapView.render()
 
             @themeNavView = new ThemeNavView({ el: $('#themeNavContainer')[0] })
             @themeNavView.render()
@@ -114,7 +114,7 @@ define([
                         regionId: options.regionId
                         regionName: options.regionName
                     )
-                    
+
                     @currTableView.render()
 
                     return

@@ -52,6 +52,14 @@ namespace InteractiveWaterPlan.Data
             };
         }
 
+        
+        public IList<StrategyType> GetStrategyTypes()
+        {
+            //TODO: Get list of Strategy Types (TypeId, TypeName, maybe CountOfWMS)
+            throw new NotImplementedException();
+        }
+
+
         public IList<Strategy> GetStrategiesInPlace(int placeId, string year = null)
         {
             //TODO

@@ -22,6 +22,8 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
     AppView.prototype.render = function() {
       this.$el.html(this.template());
       this.tableContainer = $('#tableContainer')[0];
+      this.mapView = new MapView('mapContainer');
+      this.mapView.render();
       this.themeNavView = new ThemeNavView({
         el: $('#themeNavContainer')[0]
       });

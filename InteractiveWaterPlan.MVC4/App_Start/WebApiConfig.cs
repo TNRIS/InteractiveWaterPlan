@@ -44,6 +44,12 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
+                "GetStrategyTypesRyoute",
+                "api/strategy/type/all",
+                new { controller = "Strategy", action = "GetStrategyTypes" }
+            );
+
+            config.Routes.MapHttpRoute(
                 "GetCountyNetSuppliesRoute",
                 "api/strategy/county/net/all",
                 new { controller = "Strategy", action = "GetCountyNetSupplies" }

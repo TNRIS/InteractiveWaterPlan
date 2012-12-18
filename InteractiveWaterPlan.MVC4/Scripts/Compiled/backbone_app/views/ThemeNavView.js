@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/themeNav.html'], function(tpl) {
+define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/themeNav.html'], function(strategyTypeListItemTpl, tpl) {
   var ThemeNavView;
   return ThemeNavView = (function(_super) {
 
@@ -14,21 +14,40 @@ define(['scripts/text!templates/themeNav.html'], function(tpl) {
 
     ThemeNavView.prototype.template = _.template(tpl);
 
+    ThemeNavView.prototype.initialize = function() {
+      _.bindAll(this, 'render', 'unrender', 'changeStrategyView');
+      return null;
+    };
+
     ThemeNavView.prototype.render = function() {
+      var TypeCollection, stratTypeLiTemplate, typeCollection,
+        _this = this;
       this.$el.empty();
       this.$el.html(this.template());
+      stratTypeLiTemplate = _.template(strategyTypeListItemTpl);
+      TypeCollection = Backbone.Collection.extend({
+        url: "" + BASE_API_PATH + "api/strategy/type/all"
+      });
+      typeCollection = new TypeCollection();
+      typeCollection.fetch({
+        success: function(collection) {
+          var strategyType, _i, _len, _ref;
+          _ref = collection.models;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            strategyType = _ref[_i];
+            _this.$('#strategyTypeList').append(stratTypeLiTemplate({
+              m: strategyType.toJSON()
+            }));
+          }
+          ko.applyBindings(_this, _this.el);
+        }
+      });
       ko.applyBindings(this, this.el);
       return this;
     };
 
     ThemeNavView.prototype.unrender = function() {
-      kb.release(this);
       this.$el.remove();
-      return null;
-    };
-
-    ThemeNavView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'changeStrategyView');
       return null;
     };
 

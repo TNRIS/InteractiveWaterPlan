@@ -1,30 +1,51 @@
 define([
+    'scripts/text!templates/strategyTypeListItem.html'
     'scripts/text!templates/themeNav.html'
 ],
-(tpl) ->
+(strategyTypeListItemTpl, tpl) ->
     
     class ThemeNavView extends Backbone.View
 
         template: _.template(tpl)
 
+        initialize: () ->
+
+            _.bindAll(this, 'render', 'unrender', 'changeStrategyView')
+            
+
+            return null
+
         render: () ->
             @$el.empty()
-
             @$el.html(@template())
+
+            stratTypeLiTemplate = _.template(strategyTypeListItemTpl)
+
+            TypeCollection = Backbone.Collection.extend(
+                url: "#{BASE_API_PATH}api/strategy/type/all"
+            )
+
+            typeCollection = new TypeCollection()
+            typeCollection.fetch(
+                success: (collection) =>
+                    for strategyType in collection.models
+                        
+                        this.$('#strategyTypeList').append(
+                            stratTypeLiTemplate(
+                                m: strategyType.toJSON()
+                            )
+                        )
+                        
+                    ko.applyBindings(this, @el)
+                    return
+            )
 
             ko.applyBindings(this, @el)
 
             return this
 
         unrender: () ->
-            kb.release(this)
             @$el.remove()
-            return null
-
-        initialize: () ->
-
-            _.bindAll(this, 'render', 'unrender', 'changeStrategyView')
-            
             return null
 
         changeStrategyView: (data, event) ->

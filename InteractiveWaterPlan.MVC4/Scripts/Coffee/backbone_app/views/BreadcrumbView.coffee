@@ -3,6 +3,7 @@ define([
 ],
 (tpl) ->
 
+    #TODO: Transform into lists to select region or county name
     class BreadcrumbView extends Backbone.View
 
         template: _.template(tpl)
