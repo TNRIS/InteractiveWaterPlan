@@ -8,6 +8,13 @@ define([
 
         template: _.template(tpl)
 
+        initialize: () ->
+            _.bindAll(this, 'render', 'unrender', 'selectNetCounty')
+            
+            @selectedStrategyView = ko.observable()
+
+            return null
+
         render: () ->
             @$el.empty()
 
@@ -21,9 +28,8 @@ define([
             @$el.remove()
             return null
 
-        initialize: () ->
-            _.bindAll(this, 'render', 'unrender')
-            
-            return null
+        selectNetCounty: () ->
+            @selectedStrategyView.notifySubscribers('net-supplies')
+            return
 
 )

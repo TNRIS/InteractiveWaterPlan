@@ -14,6 +14,12 @@ define(['scripts/text!templates/breadcrumbList.html'], function(tpl) {
 
     BreadcrumbView.prototype.template = _.template(tpl);
 
+    BreadcrumbView.prototype.initialize = function() {
+      _.bindAll(this, 'render', 'unrender', 'selectNetCounty');
+      this.selectedStrategyView = ko.observable();
+      return null;
+    };
+
     BreadcrumbView.prototype.render = function() {
       this.$el.empty();
       this.$el.html(this.template());
@@ -26,9 +32,8 @@ define(['scripts/text!templates/breadcrumbList.html'], function(tpl) {
       return null;
     };
 
-    BreadcrumbView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender');
-      return null;
+    BreadcrumbView.prototype.selectNetCounty = function() {
+      this.selectedStrategyView.notifySubscribers('net-supplies');
     };
 
     return BreadcrumbView;

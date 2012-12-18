@@ -52,6 +52,9 @@ define([
 
             @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
             @breadcrumbList.render()
+            @breadcrumbList.selectedStrategyView.subscribe((viewName) =>
+                this.switchStrategyThemeView(viewName)
+            )
 
             #Start the currTableView with the CountyNetSupply table
             this.switchStrategyThemeView('net-supplies')

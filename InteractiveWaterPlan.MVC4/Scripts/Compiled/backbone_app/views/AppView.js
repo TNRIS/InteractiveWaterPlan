@@ -20,6 +20,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
     };
 
     AppView.prototype.render = function() {
+      var _this = this;
       this.$el.html(this.template());
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView('mapContainer');
@@ -38,6 +39,9 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
         el: $('#breadcrumbContainer')[0]
       });
       this.breadcrumbList.render();
+      this.breadcrumbList.selectedStrategyView.subscribe(function(viewName) {
+        return _this.switchStrategyThemeView(viewName);
+      });
       this.switchStrategyThemeView('net-supplies');
       return this;
     };
