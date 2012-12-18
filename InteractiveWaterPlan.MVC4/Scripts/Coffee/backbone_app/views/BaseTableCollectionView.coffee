@@ -7,7 +7,7 @@ define([
 
         initialize: (startingYear, ModelView, Collection, tpl) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'changeToYear')
+                'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable')
 
             @currYear = startingYear
 
@@ -17,9 +17,6 @@ define([
 
             @ModelView = ModelView
 
-            #Apply KO bindings
-            ko.applyBindings(this, @el)
-
             return null
 
         render: () ->
@@ -28,16 +25,8 @@ define([
             this.fetchCollection()
 
             #make sortable
-            sortTable = this.$('table').stupidtable()
-
-            #Add a listener to show FontAwesome up/down icons based on direction of sort
-            sortTable.on('aftertablesort', (evt, data) ->
-                $th = $('th',this)
-                $('i', $th).remove()
-                iconClass = if data.direction == "asc" then 'icon-caret-up' else 'icon-caret-down'
-                $th.eq(data.column).prepend("<i class='#{iconClass}'></i> ")
-                return null
-            )
+            this._makeTableSortable()
+            
 
             return this
 
@@ -60,9 +49,13 @@ define([
 
                     this.hideLoading()
 
-                    return null   
+                    #apply KO bindings after rendering all the collection model views
+                    ko.applyBindings(this, @el) 
+
+                    return   
             )
-            return null
+
+            return
 
         appendModel: (model) ->
             modelView = new @ModelView(
@@ -85,5 +78,43 @@ define([
         hideLoading: () ->
             this.$('.loading').hide()
             return null
+
+        selectCounty: (data, event) ->
+            $target = $(event.target)
+
+            console.log "selected county ##{$target.attr('data-value')}"
+
+            #TODO: set the observable to the newly selected county id
+            return null
+
+        selectRegion: (data, event) ->
+            $target = $(event.target)
+
+            console.log "selected region ##{$target.attr('data-value')}"
+            
+            #TODO: set the observable to the newly selected county id
+            return null
+
+        _makeTableSortable: () ->
+            sortTable = this.$('table').stupidtable(
+                #special sort method for formatted numbers (ie, they have commas)
+                "formatted-int": (a, b) -> 
+                    a = parseInt(a.replace(",",""))
+                    b = parseInt(b.replace(",",""))
+                    if a < b then return -1
+                    if a > b then return 1
+                    return 0
+            )
+
+            #Add a listener to show FontAwesome up/down icons based on direction of sort
+            sortTable.on('aftertablesort', (evt, data) ->
+                $th = $('th',this)
+                $('i', $th).remove()
+                iconClass = if data.direction == "asc" then 'icon-caret-up' else 'icon-caret-down'
+                $th.eq(data.column).prepend("<i class='#{iconClass}'></i> ")
+                return null
+            )
+
+            return
 
 )

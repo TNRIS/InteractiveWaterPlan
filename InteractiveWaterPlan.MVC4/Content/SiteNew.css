@@ -35,6 +35,11 @@ ul.nav > li.nav-label
     color: black;
 }
 
+.nav-pills .dropdown-menu li > a 
+{
+    color: #444;
+}
+
 .nav-pills .dropdown-menu {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;

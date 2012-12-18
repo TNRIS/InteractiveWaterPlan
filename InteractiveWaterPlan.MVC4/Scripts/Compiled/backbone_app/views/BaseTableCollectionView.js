@@ -15,28 +15,18 @@ define([], function() {
     BaseTableCollectionView.prototype.currYear = null;
 
     BaseTableCollectionView.prototype.initialize = function(startingYear, ModelView, Collection, tpl) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable');
       this.currYear = startingYear;
       this.template = _.template(tpl);
       this.collection = new Collection();
       this.ModelView = ModelView;
-      ko.applyBindings(this, this.el);
       return null;
     };
 
     BaseTableCollectionView.prototype.render = function() {
-      var sortTable;
       this.$el.html(this.template());
       this.fetchCollection();
-      sortTable = this.$('table').stupidtable();
-      sortTable.on('aftertablesort', function(evt, data) {
-        var $th, iconClass;
-        $th = $('th', this);
-        $('i', $th).remove();
-        iconClass = data.direction === "asc" ? 'icon-caret-up' : 'icon-caret-down';
-        $th.eq(data.column).prepend("<i class='" + iconClass + "'></i> ");
-        return null;
-      });
+      this._makeTableSortable();
       return this;
     };
 
@@ -61,10 +51,9 @@ define([], function() {
             _this.appendModel(m);
           }
           _this.hideLoading();
-          return null;
+          ko.applyBindings(_this, _this.el);
         }
       });
-      return null;
     };
 
     BaseTableCollectionView.prototype.appendModel = function(model) {
@@ -89,6 +78,45 @@ define([], function() {
     BaseTableCollectionView.prototype.hideLoading = function() {
       this.$('.loading').hide();
       return null;
+    };
+
+    BaseTableCollectionView.prototype.selectCounty = function(data, event) {
+      var $target;
+      $target = $(event.target);
+      console.log("selected county #" + ($target.attr('data-value')));
+      return null;
+    };
+
+    BaseTableCollectionView.prototype.selectRegion = function(data, event) {
+      var $target;
+      $target = $(event.target);
+      console.log("selected region #" + ($target.attr('data-value')));
+      return null;
+    };
+
+    BaseTableCollectionView.prototype._makeTableSortable = function() {
+      var sortTable;
+      sortTable = this.$('table').stupidtable({
+        "formatted-int": function(a, b) {
+          a = parseInt(a.replace(",", ""));
+          b = parseInt(b.replace(",", ""));
+          if (a < b) {
+            return -1;
+          }
+          if (a > b) {
+            return 1;
+          }
+          return 0;
+        }
+      });
+      sortTable.on('aftertablesort', function(evt, data) {
+        var $th, iconClass;
+        $th = $('th', this);
+        $('i', $th).remove();
+        iconClass = data.direction === "asc" ? 'icon-caret-up' : 'icon-caret-down';
+        $th.eq(data.column).prepend("<i class='" + iconClass + "'></i> ");
+        return null;
+      });
     };
 
     return BaseTableCollectionView;

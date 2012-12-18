@@ -1,10 +1,18 @@
 
-<td>{{m.countyName}}</td>
-<td>{{m.regionName}}</td>
-<td>{{m.netMunicipal}}</td>
-<td>{{m.netIrrigation}}</td>
-<td>{{m.netManufacturing}}</td>
-<td>{{m.netLivestock}}</td>
-<td>{{m.netSteamElectric}}</td>
-<td>{{m.netMining}}</td>
-<td>{{m.netSupplyTotal}}</td>
+<td>
+    <a href="#" data-bind="click: selectCounty" data-value="{{m.countyId}}">
+        {{m.countyName}}
+    </a>
+</td>
+<td>
+    <a href="#" data-bind="click: selectRegion" data-value="{{m.regionId}}">
+        {{m.regionName}}
+    </a>
+</td>
+<td>{{ $.number(m.netMunicipal) }}</td>
+<td>{{ $.number(m.netIrrigation) }}</td>
+<td>{{ $.number(m.netManufacturing) }}</td>
+<td>{{ $.number(m.netLivestock) }}</td>
+<td>{{ $.number(m.netSteamElectric) }}</td>
+<td>{{ $.number(m.netMining) }}</td>
+<td><b>{{ $.number(m.netSupplyTotal) }}</b></td>

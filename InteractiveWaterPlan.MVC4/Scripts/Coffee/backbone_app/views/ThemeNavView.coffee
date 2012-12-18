@@ -31,7 +31,10 @@ define([
             $target = $(event.target)
             newStrategyName = $target.attr('data-value')
             
-            #TODO: fire some event?
+            #TODO: Really, this needs to load a list of all Strategy types
+            # and generate links to view all the strategies by that type
+
+            #TODO: Shoul dit change based on year?
 
             $target.parents('li.dropdown').addClass('active')
             $target.parents('li.dropdown')

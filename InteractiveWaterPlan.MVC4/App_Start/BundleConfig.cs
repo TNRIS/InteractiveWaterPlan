@@ -23,6 +23,7 @@ namespace InteractiveWaterPlan.MVC4
 
             bundles.Add(new ScriptBundle("~/bundles/js/app").Include(
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/jquery.number.js",
                 "~/Content/OpenLayers/tile.stamen.js",
                 "~/Scripts/Compiled/OpenLayers/OpenLayers.Layer.QuadKey.js",
                 "~/Scripts/Compiled/OpenLayers/OpenLayers.Control.GetFeature.js",
