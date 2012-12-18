@@ -112,9 +112,9 @@ ul.nav > li.nav-label
 .loading.loading-large 
 {
     background: url('images/loading-36.gif') no-repeat;
-    width: 80px;
+    width: 130px;
     margin: auto;
-    height: 80px;
+    height: 20px;
 }
 
 ul.breadcrumb 
