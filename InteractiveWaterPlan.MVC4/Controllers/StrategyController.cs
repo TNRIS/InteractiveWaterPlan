@@ -70,30 +70,50 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
 
-        public IList<Strategy> GetStrategiesInPlace(int placeId)
+        public IList<Strategy> GetStrategiesInPlace(int placeId, string year)
         {
+            //TODO: Why does this give a stack trace? need to turn that off...
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
             //More-generic version, just get by universal placeId
-            return _repo.GetStrategiesInPlace(placeId);
+            return _repo.GetStrategiesInPlace(placeId, year);
         }
 
-        public IList<Strategy> GetStrategiesInRegion(int regionId)
+        public IList<Strategy> GetStrategiesInRegion(int regionId, string year)
         {
-            return _repo.GetStrategiesInRegion(regionId);
+            //TODO: Why does this give a stack trace? need to turn that off...
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesInRegion(regionId, year);
         }
 
-        public IList<Strategy> GetStrategiesInCounty(int countyId)
+        public IList<Strategy> GetStrategiesInCounty(int countyId, string year)
         {
-            return _repo.GetStrategiesInCounty(countyId);
+            //TODO: Why does this give a stack trace? need to turn that off...
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesInCounty(countyId, year);
         }
 
-        public IList<Strategy> GetStrategiesInDistrict(int districtId)
+        public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
         {
-            return _repo.GetStrategiesInDistrict(districtId);
+            //TODO: Why does this give a stack trace? need to turn that off...
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesInDistrict(districtId, year);
         }
 
-        public IList<Strategy> GetStrategiesByType(int typeId)
+        public IList<Strategy> GetStrategiesByType(int typeId, string year)
         {
-            return _repo.GetStrategiesByType(typeId);
+            //TODO: Why does this give a stack trace? need to turn that off...
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesByType(typeId, year);
         }
 
         

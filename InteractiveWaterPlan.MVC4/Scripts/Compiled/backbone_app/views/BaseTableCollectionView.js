@@ -14,9 +14,14 @@ define([], function() {
 
     BaseTableCollectionView.prototype.currYear = null;
 
-    BaseTableCollectionView.prototype.initialize = function(startingYear, ModelView, Collection, tpl) {
+    BaseTableCollectionView.prototype.initialize = function(currYear, ModelView, Collection, tpl, options) {
       _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable');
-      this.currYear = startingYear;
+      this.currYear = currYear;
+      options = options || {};
+      this.fetchParams = options.fetchParams || {};
+      this.fetchParams = _.extend({
+        year: this.currYear
+      }, this.fetchParams);
       this.template = _.template(tpl);
       this.collection = new Collection();
       this.ModelView = ModelView;
@@ -31,7 +36,7 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.unrender = function() {
-      this.$el.remove();
+      this.$el.html();
       return null;
     };
 
@@ -40,9 +45,7 @@ define([], function() {
       this.showLoading();
       this.$('tbody').empty();
       this.collection.fetch({
-        data: {
-          year: this.currYear
-        },
+        data: this.fetchParams,
         success: function(collection) {
           var m, _i, _len, _ref;
           _ref = collection.models;
@@ -65,11 +68,6 @@ define([], function() {
       return null;
     };
 
-    BaseTableCollectionView.prototype.changeToYear = function(newYear) {
-      this.currYear = newYear;
-      this.fetchCollection();
-    };
-
     BaseTableCollectionView.prototype.showLoading = function() {
       this.$('.scrollTableContainer').hide();
       this.$('.loading').show();
@@ -82,18 +80,9 @@ define([], function() {
       return null;
     };
 
-    BaseTableCollectionView.prototype.selectCounty = function(data, event) {
-      var $target;
-      $target = $(event.target);
-      console.log("selected county #" + ($target.attr('data-value')));
-      return null;
-    };
-
-    BaseTableCollectionView.prototype.selectRegion = function(data, event) {
-      var $target;
-      $target = $(event.target);
-      console.log("selected region #" + ($target.attr('data-value')));
-      return null;
+    BaseTableCollectionView.prototype.changeToYear = function(newYear) {
+      this.currYear = newYear;
+      this.fetchCollection();
     };
 
     BaseTableCollectionView.prototype._makeTableSortable = function() {

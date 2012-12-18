@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['models/Strategy', 'scripts/text!templates/strategyRow.html'], function(Strategy, tpl) {
+define(['scripts/text!templates/strategyRow.html'], function(tpl) {
   var StrategyView;
   return StrategyView = (function(_super) {
 

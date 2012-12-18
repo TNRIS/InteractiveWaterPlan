@@ -24,7 +24,11 @@ require.config({
 });
 
 $(function() {
+  var Workspace;
   BASE_API_PATH = $("#base_path").val();
+  Workspace = new Backbone.Router({
+    routes: {}
+  });
   return define(['views/AppView'], function(AppView) {
     var appView;
     appView = new AppView({

@@ -13,7 +13,34 @@ define(['views/BaseTableCollectionView', 'views/CountyNetSupplyView', 'collectio
     }
 
     CountyNetSupplyCollectionView.prototype.initialize = function(options) {
-      CountyNetSupplyCollectionView.__super__.initialize.call(this, options.startingYear, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
+      _.bindAll(this, 'selectCounty', 'selectRegion');
+      CountyNetSupplyCollectionView.__super__.initialize.call(this, options.currYear, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
+      this.selectedCounty = ko.observable();
+      this.selectedRegion = ko.observable();
+      return null;
+    };
+
+    CountyNetSupplyCollectionView.prototype.selectCounty = function(data, event) {
+      var $target, countyId, countyName;
+      $target = $(event.target);
+      countyId = $target.attr('data-value');
+      countyName = $target.attr('data-name');
+      this.selectedCounty({
+        countyId: countyId,
+        countyName: countyName
+      });
+      return null;
+    };
+
+    CountyNetSupplyCollectionView.prototype.selectRegion = function(data, event) {
+      var $target, regionId, regionName;
+      $target = $(event.target);
+      regionId = $target.attr('data-value');
+      regionName = $target.attr('data-name');
+      this.selectedRegion({
+        regionId: regionId,
+        regionName: regionName
+      });
       return null;
     };
 

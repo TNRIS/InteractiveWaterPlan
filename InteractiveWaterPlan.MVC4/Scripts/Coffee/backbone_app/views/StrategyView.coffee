@@ -1,8 +1,7 @@
 define([
-    'models/Strategy'
     'scripts/text!templates/strategyRow.html'
 ],
-(Strategy, tpl) ->
+(tpl) ->
 
     class StrategyView extends Backbone.View
 

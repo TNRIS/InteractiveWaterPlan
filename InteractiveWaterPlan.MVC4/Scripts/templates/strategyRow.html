@@ -1,5 +1,10 @@
 
-<td>{{m.typeName}}</td>
+<td>
+    <a href="#" data-bind="click: selectType" data-value="{{m.typeId}}" data-name="{{m.typeName}}">
+        {{m.typeName}}
+    </a>
+</td>
+
 <td>{{m.description}}</td>
 <td>{{m.sourceName}}</td>
 <td>{{m.entityName}}</td>

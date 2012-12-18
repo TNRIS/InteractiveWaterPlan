@@ -35,12 +35,22 @@ require.config(
 $(()->
     BASE_API_PATH = $("#base_path").val()
 
+    #TODO: history/routing
+    Workspace = new Backbone.Router(
+        routes: {}
+    )
+
     define([
         'views/AppView'
     ],
     (AppView) ->
         appView = new AppView({el: $('#appContainer')[0]})
         appView.render()
+
+        #Backbone.history.start(
+        #    pushState: true
+        #)
+
         return
     )  
 )

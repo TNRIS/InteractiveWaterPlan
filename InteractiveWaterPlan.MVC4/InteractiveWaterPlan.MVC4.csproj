@@ -657,21 +657,17 @@
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
-    <Content Include="Scripts\Compiled\backbone_app\collections\StrategyCollection.js" />
-    <Content Include="Scripts\Compiled\backbone_app\models\Strategy.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\AppView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseTableCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\StrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavViewModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\YearNavViewModel.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
@@ -709,9 +705,9 @@
     <Content Include="Scripts\stupidtable.js" />
     <Content Include="Scripts\templates\appContainer.html" />
     <Content Include="Scripts\templates\breadcrumbList.html" />
+    <Content Include="Scripts\templates\breadcrumbListItem.html" />
     <Content Include="Scripts\templates\countyNetSupplyRow.html" />
     <Content Include="Scripts\templates\countyNetSupplyTable.html" />
-    <Content Include="Scripts\templates\mainView.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
     <Content Include="Scripts\templates\strategyTable.html" />
     <Content Include="Scripts\templates\themeNav.html" />
@@ -732,6 +728,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\Coffee\backbone_app\models\" />
+    <Folder Include="Scripts\Compiled\backbone_app\models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -771,15 +769,14 @@
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\collections\StrategyCollection.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\models\Strategy.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\AppView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BaseTableCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BreadcrumbView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapView.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\StrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\YearNavView.coffee" />

@@ -112,7 +112,7 @@ ul.nav > li.nav-label
 .scrollTableContainer
 {
     max-height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-top: 1px solid #ccc;
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;

@@ -4,11 +4,14 @@ define([
     'views/YearNavView'
     'views/BreadcrumbView'
     'views/CountyNetSupplyCollectionView'
-    'views/StrategyCollectionView'
+    'views/RegionStrategyCollectionView'
+    'views/CountyStrategyCollectionView'
     'scripts/text!templates/appContainer.html'
 ],
 (MapView, ThemeNavView, YearNavView, BreadcrumbView, 
-    CountyNetSupplyCollectionView, StrategyCollectionView, tpl) ->
+    CountyNetSupplyCollectionView, 
+    RegionStrategyCollectionView, CountyStrategyCollectionView,
+    tpl) ->
 
     class AppView extends Backbone.View
 
@@ -17,27 +20,29 @@ define([
 
         #TODO setup observables for year and theme selection
         # then other views can subscribe to changes
+        currYear: "2010"
 
-        startingYear: "2010"
-
-        initialize: () ->
-            _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear')
+        initialize: (options) ->
+            _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear', 
+                'switchStrategyThemeView')
 
             @template = _.template(tpl)
-
             return
 
         render: () ->
             @$el.html(this.template())
 
-            @mapView = new MapView('mapContainer')
-            @mapView.render()
+            #save reference to the tableContainer dom element
+            @tableContainer = $('#tableContainer')[0]
+
+            #@mapView = new MapView('mapContainer')
+            #@mapView.render()
 
             @themeNavView = new ThemeNavView({ el: $('#themeNavContainer')[0] })
             @themeNavView.render()
 
             @yearNavView = new YearNavView(
-                startingYear: @startingYear
+                startingYear: @currYear
                 el: $('#yearNavContainer')[0] 
             )
             @yearNavView.render()
@@ -49,11 +54,7 @@ define([
             @breadcrumbList.render()
 
             #Start the currTableView with the CountyNetSupply table
-            @currTableView = new CountyNetSupplyCollectionView(
-                startingYear: @startingYear
-                el: $('#tableContainer')[0]
-            )
-            @currTableView.render()
+            this.switchStrategyThemeView('net-supplies')
 
             return this
 
@@ -61,13 +62,67 @@ define([
             @el.remove()
             return null
 
-
         updateViewsToNewYear: (newYear) ->
-            
-            console.log "changed year to #{newYear}"
-            
+            @currYear = newYear
             @currTableView.changeToYear(newYear)
-
             return
+
+        switchStrategyThemeView: (type, options) ->
+            #TODO: will have to do some map stuff as well
+
+            #unrender the currTableView first
+            if @currTableView? then @currTableView = @currTableView.unrender()
+
+            switch type
+                when 'net-supplies'
+                    @currTableView = new CountyNetSupplyCollectionView(
+                        currYear: @currYear
+                        el: @tableContainer
+                    )
+                    @currTableView.render()
+
+                    #Subscripe to selectedCounty and selectedRegion observables
+                    @currTableView.selectedCounty.subscribe((val) =>
+                        this.switchStrategyThemeView("county", {
+                            countyId: val.countyId
+                            countyName: val.countyName
+                        })
+                    )
+
+                    @currTableView.selectedRegion.subscribe((val) =>
+                        this.switchStrategyThemeView("region", {
+                            regionId: val.regionId
+                            regionName: val.regionName
+                        })
+                    )
+                when 'county'
+                    @currTableView = new CountyStrategyCollectionView(
+                        el: @tableContainer
+
+                        currYear: @currYear
+                        countyId: options.countyId
+                        countyName: options.countyName
+                    )
+
+                    @currTableView.render()
+                    return
+                when 'region'
+                    @currTableView = new RegionStrategyCollectionView(
+                        el: @tableContainer
+
+                        currYear: @currYear
+                        regionId: options.regionId
+                        regionName: options.regionName
+                    )
+                    
+                    @currTableView.render()
+
+                    return
+                when 'type'
+                    #TODO
+                    return
+            
+            return
+
 
 )

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/StrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, BreadcrumbView, CountyNetSupplyCollectionView, StrategyCollectionView, tpl) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, tpl) {
   var AppView;
   return AppView = (function(_super) {
 
@@ -12,23 +12,22 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.startingYear = "2010";
+    AppView.prototype.currYear = "2010";
 
-    AppView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear');
+    AppView.prototype.initialize = function(options) {
+      _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear', 'switchStrategyThemeView');
       this.template = _.template(tpl);
     };
 
     AppView.prototype.render = function() {
       this.$el.html(this.template());
-      this.mapView = new MapView('mapContainer');
-      this.mapView.render();
+      this.tableContainer = $('#tableContainer')[0];
       this.themeNavView = new ThemeNavView({
         el: $('#themeNavContainer')[0]
       });
       this.themeNavView.render();
       this.yearNavView = new YearNavView({
-        startingYear: this.startingYear,
+        startingYear: this.currYear,
         el: $('#yearNavContainer')[0]
       });
       this.yearNavView.render();
@@ -37,11 +36,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
         el: $('#breadcrumbContainer')[0]
       });
       this.breadcrumbList.render();
-      this.currTableView = new CountyNetSupplyCollectionView({
-        startingYear: this.startingYear,
-        el: $('#tableContainer')[0]
-      });
-      this.currTableView.render();
+      this.switchStrategyThemeView('net-supplies');
       return this;
     };
 
@@ -51,8 +46,56 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
     };
 
     AppView.prototype.updateViewsToNewYear = function(newYear) {
-      console.log("changed year to " + newYear);
+      this.currYear = newYear;
       this.currTableView.changeToYear(newYear);
+    };
+
+    AppView.prototype.switchStrategyThemeView = function(type, options) {
+      var _this = this;
+      if (this.currTableView != null) {
+        this.currTableView = this.currTableView.unrender();
+      }
+      switch (type) {
+        case 'net-supplies':
+          this.currTableView = new CountyNetSupplyCollectionView({
+            currYear: this.currYear,
+            el: this.tableContainer
+          });
+          this.currTableView.render();
+          this.currTableView.selectedCounty.subscribe(function(val) {
+            return _this.switchStrategyThemeView("county", {
+              countyId: val.countyId,
+              countyName: val.countyName
+            });
+          });
+          this.currTableView.selectedRegion.subscribe(function(val) {
+            return _this.switchStrategyThemeView("region", {
+              regionId: val.regionId,
+              regionName: val.regionName
+            });
+          });
+          break;
+        case 'county':
+          this.currTableView = new CountyStrategyCollectionView({
+            el: this.tableContainer,
+            currYear: this.currYear,
+            countyId: options.countyId,
+            countyName: options.countyName
+          });
+          this.currTableView.render();
+          return;
+        case 'region':
+          this.currTableView = new RegionStrategyCollectionView({
+            el: this.tableContainer,
+            currYear: this.currYear,
+            regionId: options.regionId,
+            regionName: options.regionName
+          });
+          this.currTableView.render();
+          return;
+        case 'type':
+          return;
+      }
     };
 
     return AppView;

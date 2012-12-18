@@ -5,11 +5,15 @@ define([
 
         currYear: null #reference to the currently selected year
 
-        initialize: (startingYear, ModelView, Collection, tpl) ->
+        initialize: (currYear, ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable')
 
-            @currYear = startingYear
+            @currYear = currYear
+
+            options = options || {}
+            @fetchParams = options.fetchParams || {}
+            @fetchParams = _.extend({year: @currYear}, @fetchParams)
 
             @template = _.template(tpl)
 
@@ -27,11 +31,10 @@ define([
             #make sortable
             this._makeTableSortable()
             
-
             return this
 
         unrender: () ->
-            @$el.remove()
+            @$el.html()
             return null
 
         fetchCollection: () ->
@@ -40,9 +43,8 @@ define([
             this.$('tbody').empty() #clear the table contents
 
             @collection.fetch(
-                data:
-                   year: @currYear #use the currently selected year
-
+                data: @fetchParams
+                
                 success: (collection) =>
                     for m in collection.models
                         this.appendModel(m)
@@ -66,11 +68,6 @@ define([
 
             return null
 
-        changeToYear: (newYear) ->
-            @currYear = newYear
-            this.fetchCollection()
-            return
-
         showLoading: () ->
             this.$('.scrollTableContainer').hide()
             this.$('.loading').show()
@@ -81,21 +78,10 @@ define([
             this.$('.loading').hide()
             return null
 
-        selectCounty: (data, event) ->
-            $target = $(event.target)
-
-            console.log "selected county ##{$target.attr('data-value')}"
-
-            #TODO: set the observable to the newly selected county id
-            return null
-
-        selectRegion: (data, event) ->
-            $target = $(event.target)
-
-            console.log "selected region ##{$target.attr('data-value')}"
-            
-            #TODO: set the observable to the newly selected county id
-            return null
+        changeToYear: (newYear) ->
+            @currYear = newYear
+            this.fetchCollection()
+            return
 
         _makeTableSortable: () ->
             sortTable = this.$('table').stupidtable(
