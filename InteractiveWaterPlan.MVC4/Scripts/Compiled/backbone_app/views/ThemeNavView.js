@@ -15,15 +15,21 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     ThemeNavView.prototype.template = _.template(tpl);
 
     ThemeNavView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'changeStrategyView');
+      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 'changeStrategyView');
       return null;
     };
 
     ThemeNavView.prototype.render = function() {
-      var TypeCollection, stratTypeLiTemplate, typeCollection,
-        _this = this;
       this.$el.empty();
       this.$el.html(this.template());
+      this.renderStrategyTypeList();
+      ko.applyBindings(this, this.el);
+      return this;
+    };
+
+    ThemeNavView.prototype.renderStrategyTypeList = function() {
+      var TypeCollection, stratTypeLiTemplate, typeCollection,
+        _this = this;
       stratTypeLiTemplate = _.template(strategyTypeListItemTpl);
       TypeCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategy/type/all"
@@ -42,8 +48,6 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
           ko.applyBindings(_this, $('#strategyTypeList')[0]);
         }
       });
-      ko.applyBindings(this, this.el);
-      return this;
     };
 
     ThemeNavView.prototype.unrender = function() {

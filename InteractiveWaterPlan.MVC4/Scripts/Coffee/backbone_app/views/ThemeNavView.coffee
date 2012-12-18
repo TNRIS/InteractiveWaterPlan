@@ -10,7 +10,8 @@ define([
 
         initialize: () ->
 
-            _.bindAll(this, 'render', 'unrender', 'toggleMap', 'changeStrategyView')
+            _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 
+                'changeStrategyView')
             
 
             return null
@@ -19,8 +20,14 @@ define([
             @$el.empty()
             @$el.html(@template())
 
-            stratTypeLiTemplate = _.template(strategyTypeListItemTpl)
+            this.renderStrategyTypeList()
 
+            ko.applyBindings(this, @el)
+
+            return this
+
+        renderStrategyTypeList: () ->
+            stratTypeLiTemplate = _.template(strategyTypeListItemTpl)
             TypeCollection = Backbone.Collection.extend(
                 url: "#{BASE_API_PATH}api/strategy/type/all"
             )
@@ -40,9 +47,7 @@ define([
                     return
             )
 
-            ko.applyBindings(this, @el)
-
-            return this
+            return
 
         unrender: () ->
             @$el.remove()
