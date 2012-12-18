@@ -10,7 +10,7 @@ define([
 
         initialize: () ->
 
-            _.bindAll(this, 'render', 'unrender', 'changeStrategyView')
+            _.bindAll(this, 'render', 'unrender', 'toggleMap', 'changeStrategyView')
             
 
             return null
@@ -35,8 +35,8 @@ define([
                                 m: strategyType.toJSON()
                             )
                         )
-                        
-                    ko.applyBindings(this, @el)
+
+                    ko.applyBindings(this, $('#strategyTypeList')[0])
                     return
             )
 
@@ -48,20 +48,38 @@ define([
             @$el.remove()
             return null
 
+        toggleMap: (data, target) ->
+            $target = $(event.target)
+            console.log "toggle"
+
+            if $target.hasClass('off')
+                $target.html('Hide Map')
+                $('#mapContainer').show()
+                $('#mapTools').show()
+                $target.removeClass('off')
+
+            else
+                $target.addClass('off')
+                $('#mapContainer').hide()
+                $('#mapTools').hide()
+                $target.html('Show Map')
+
+            return
+
         changeStrategyView: (data, event) ->
             $target = $(event.target)
             newStrategyName = $target.attr('data-value')
-            
-            #TODO: Really, this needs to load a list of all Strategy types
-            # and generate links to view all the strategies by that type
-
-            #TODO: Should it change based on year?
 
             $target.parents('li.dropdown').addClass('active')
+            
+            txt = 'Water Management Strategies'
+            if newStrategyName != 'all'
+                txt = $target.html()
+            
             $target.parents('li.dropdown')
                 .children('a.dropdown-toggle')
                 .children('span')
-                .html($target.html())
+                .html(txt)
 
             return null
 

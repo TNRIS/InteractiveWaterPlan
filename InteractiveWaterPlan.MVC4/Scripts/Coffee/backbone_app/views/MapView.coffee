@@ -57,6 +57,17 @@ define([
         _setupBaseLayers: () ->
             baseLayers = []
 
+            esri_gray = new OpenLayers.Layer.XYZ(
+                'ESRI Gray',
+                [
+                    'http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'
+                ],
+                {
+                    attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
+                }
+
+            )
+            baseLayers.push(esri_gray)
             
             mapquest_open = new OpenLayers.Layer.XYZ(
                 "MapQuest Open Street", 
@@ -72,18 +83,6 @@ define([
                 }
             )
             baseLayers.push(mapquest_open)
-
-            esri_gray = new OpenLayers.Layer.XYZ(
-                'ESRI Gray',
-                [
-                    'http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'
-                ],
-                {
-                    attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
-                }
-
-            )
-            baseLayers.push(esri_gray)
 
 
             mapquest_aerial = new OpenLayers.Layer.XYZ(

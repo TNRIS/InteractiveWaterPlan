@@ -15,7 +15,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     ThemeNavView.prototype.template = _.template(tpl);
 
     ThemeNavView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'changeStrategyView');
+      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'changeStrategyView');
       return null;
     };
 
@@ -39,7 +39,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
               m: strategyType.toJSON()
             }));
           }
-          ko.applyBindings(_this, _this.el);
+          ko.applyBindings(_this, $('#strategyTypeList')[0]);
         }
       });
       ko.applyBindings(this, this.el);
@@ -51,12 +51,33 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
       return null;
     };
 
+    ThemeNavView.prototype.toggleMap = function(data, target) {
+      var $target;
+      $target = $(event.target);
+      console.log("toggle");
+      if ($target.hasClass('off')) {
+        $target.html('Hide Map');
+        $('#mapContainer').show();
+        $('#mapTools').show();
+        $target.removeClass('off');
+      } else {
+        $target.addClass('off');
+        $('#mapContainer').hide();
+        $('#mapTools').hide();
+        $target.html('Show Map');
+      }
+    };
+
     ThemeNavView.prototype.changeStrategyView = function(data, event) {
-      var $target, newStrategyName;
+      var $target, newStrategyName, txt;
       $target = $(event.target);
       newStrategyName = $target.attr('data-value');
       $target.parents('li.dropdown').addClass('active');
-      $target.parents('li.dropdown').children('a.dropdown-toggle').children('span').html($target.html());
+      txt = 'Water Management Strategies';
+      if (newStrategyName !== 'all') {
+        txt = $target.html();
+      }
+      $target.parents('li.dropdown').children('a.dropdown-toggle').children('span').html(txt);
       return null;
     };
 

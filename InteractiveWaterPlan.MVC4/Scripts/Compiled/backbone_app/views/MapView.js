@@ -50,15 +50,15 @@ define([], function() {
     MapView.prototype._setupBaseLayers = function() {
       var baseLayers, bing_aerial, bing_hybrid, bing_road, esri_gray, mapquest_aerial, mapquest_open, toner, watercolor;
       baseLayers = [];
+      esri_gray = new OpenLayers.Layer.XYZ('ESRI Gray', ['http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'], {
+        attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
+      });
+      baseLayers.push(esri_gray);
       mapquest_open = new OpenLayers.Layer.XYZ("MapQuest Open Street", ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"], {
         attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
         transitionEffect: "resize"
       });
       baseLayers.push(mapquest_open);
-      esri_gray = new OpenLayers.Layer.XYZ('ESRI Gray', ['http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'], {
-        attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
-      });
-      baseLayers.push(esri_gray);
       mapquest_aerial = new OpenLayers.Layer.XYZ("MapQuest Open Aerial", ["http://oatile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png", "http://oatile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png", "http://oatile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png", "http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png"], {
         attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
         transitionEffect: "resize"
