@@ -71,11 +71,13 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {
+      this.$('.scrollTableContainer').hide();
       this.$('.loading').show();
       return null;
     };
 
     BaseTableCollectionView.prototype.hideLoading = function() {
+      this.$('.scrollTableContainer').fadeIn();
       this.$('.loading').hide();
       return null;
     };
