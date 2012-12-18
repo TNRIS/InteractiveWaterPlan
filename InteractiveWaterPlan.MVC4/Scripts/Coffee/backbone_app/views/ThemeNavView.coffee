@@ -50,7 +50,6 @@ define([
 
         toggleMap: (data, target) ->
             $target = $(event.target)
-            console.log "toggle"
 
             if $target.hasClass('off')
                 $target.html('Hide Map')

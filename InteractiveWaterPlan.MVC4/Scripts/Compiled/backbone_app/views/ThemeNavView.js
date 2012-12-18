@@ -54,7 +54,6 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     ThemeNavView.prototype.toggleMap = function(data, target) {
       var $target;
       $target = $(event.target);
-      console.log("toggle");
       if ($target.hasClass('off')) {
         $target.html('Hide Map');
         $('#mapContainer').show();
