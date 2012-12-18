@@ -52,7 +52,7 @@ define([
                     this.hideLoading()
 
                     #apply KO bindings after rendering all the collection model views
-                    ko.applyBindings(this, @el) 
+                    ko.applyBindings(this, this.$('tbody')[0]) 
 
                     return   
             )

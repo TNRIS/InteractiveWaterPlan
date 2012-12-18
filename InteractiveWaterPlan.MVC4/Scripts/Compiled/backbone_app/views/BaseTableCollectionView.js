@@ -54,7 +54,7 @@ define([], function() {
             _this.appendModel(m);
           }
           _this.hideLoading();
-          ko.applyBindings(_this, _this.el);
+          ko.applyBindings(_this, _this.$('tbody')[0]);
         }
       });
     };

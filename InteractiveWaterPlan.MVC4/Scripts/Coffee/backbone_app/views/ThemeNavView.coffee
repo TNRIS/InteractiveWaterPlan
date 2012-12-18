@@ -72,7 +72,7 @@ define([
             $target.parents('li.dropdown').addClass('active')
             
             txt = 'Water Management Strategies'
-            if newStrategyName != 'all'
+            if newStrategyName != 'net-county'
                 txt = $target.html()
             
             $target.parents('li.dropdown')
