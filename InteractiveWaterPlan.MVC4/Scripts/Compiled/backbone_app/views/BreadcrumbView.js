@@ -59,7 +59,6 @@ define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!template
     };
 
     BreadcrumbView.prototype.pop = function() {
-      this.$('ul li:last').remove();
       return this.$('ul li:last').remove();
     };
 

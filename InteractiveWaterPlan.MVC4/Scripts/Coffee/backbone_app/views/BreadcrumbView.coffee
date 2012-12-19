@@ -7,8 +7,6 @@ define([
     #TODO: Transform into lists to select region or county name
     class BreadcrumbView extends Backbone.View
 
-        
-
         initialize: () ->
             _.bindAll(this, 'render', 'unrender', 'selectBreadcrumb', 'push', 'pop')
             
@@ -56,7 +54,6 @@ define([
             return
 
         pop: () ->
-            this.$('ul li:last').remove()
             return this.$('ul li:last').remove()
 
         selectBreadcrumb: (data, event) ->
