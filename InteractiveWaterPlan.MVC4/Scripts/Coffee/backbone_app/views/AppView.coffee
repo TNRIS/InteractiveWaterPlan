@@ -44,7 +44,8 @@ define([
             @yearNavView = new YearNavView(
                 startingYear: @currYear
                 el: $('#yearNavContainer')[0] 
-            )
+            ) 
+
             @yearNavView.render()
 
             #Subscribe to the currentYear observable
@@ -52,8 +53,8 @@ define([
 
             @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
             @breadcrumbList.render()
-            @breadcrumbList.selectedStrategyView.subscribe((viewName) =>
-                this.switchStrategyThemeView(viewName)
+            @breadcrumbList.selectedStrategyView.subscribe(
+                this.switchStrategyThemeView
             )
 
             #Start the currTableView with the CountyNetSupply table
