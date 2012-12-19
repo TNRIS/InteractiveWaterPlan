@@ -58,12 +58,9 @@ define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!template
       ko.applyBindings(this, $("a:last", res)[0]);
     };
 
-    BreadcrumbView.prototype.pop = function(times) {
-      if (times == null) {
-        times = 1;
-      }
-      console.log("popping bottles in the club");
+    BreadcrumbView.prototype.pop = function() {
       this.$('ul li:last').remove();
+      return this.$('ul li:last').remove();
     };
 
     BreadcrumbView.prototype.selectBreadcrumb = function(data, event) {
@@ -75,7 +72,6 @@ define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!template
         name: $target.data('name')
       };
       nextCrumbs = $target.parent().nextAll();
-      console.log(nextCrumbs);
       for (i = _i = 0, _ref = nextCrumbs.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
         this.pop();
       }

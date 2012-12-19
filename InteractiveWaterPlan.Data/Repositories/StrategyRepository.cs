@@ -81,7 +81,7 @@ namespace InteractiveWaterPlan.Data
                 new Strategy()
                 {
                     Id = new Random().Next(),
-                    Description = "Strategy in region "+regionId,
+                    Description = "Strategy in region " + regionId + " " + year,
                     TypeName = "Reservoir",
                     TypeId = 1
                 }
@@ -95,7 +95,7 @@ namespace InteractiveWaterPlan.Data
                 new Strategy()
                 {
                     Id = new Random().Next(),
-                    Description = "Strategy in county "+countyId,
+                    Description = "Strategy in county " + countyId + " " + year,
                     TypeName = "Reservoir",
                     TypeId = 1
                 }

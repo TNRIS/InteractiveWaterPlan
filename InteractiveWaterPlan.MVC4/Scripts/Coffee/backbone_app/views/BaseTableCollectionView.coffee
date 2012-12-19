@@ -13,8 +13,7 @@ define([
 
             options = options || {}
             @fetchParams = options.fetchParams || {}
-            @fetchParams = _.extend({year: @currYear}, @fetchParams)
-
+            
             @template = _.template(tpl)
 
             @collection = new Collection()
@@ -42,8 +41,10 @@ define([
             
             this.$('tbody').empty() #clear the table contents
 
+            params = _.extend({year: @currYear}, @fetchParams)
+
             @collection.fetch(
-                data: @fetchParams
+                data: params
                 
                 success: (collection) =>
                     for m in collection.models
@@ -79,6 +80,7 @@ define([
             return null
 
         changeToYear: (newYear) ->
+            console.log "changetoyear"+newYear
             @currYear = newYear
             this.fetchCollection()
             return

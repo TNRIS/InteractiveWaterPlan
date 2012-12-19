@@ -19,9 +19,6 @@ define([], function() {
       this.currYear = currYear;
       options = options || {};
       this.fetchParams = options.fetchParams || {};
-      this.fetchParams = _.extend({
-        year: this.currYear
-      }, this.fetchParams);
       this.template = _.template(tpl);
       this.collection = new Collection();
       this.ModelView = ModelView;
@@ -41,11 +38,15 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.fetchCollection = function() {
-      var _this = this;
+      var params,
+        _this = this;
       this.showLoading();
       this.$('tbody').empty();
+      params = _.extend({
+        year: this.currYear
+      }, this.fetchParams);
       this.collection.fetch({
-        data: this.fetchParams,
+        data: params,
         success: function(collection) {
           var m, _i, _len, _ref;
           _ref = collection.models;
@@ -81,6 +82,7 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.changeToYear = function(newYear) {
+      console.log("changetoyear" + newYear);
       this.currYear = newYear;
       this.fetchCollection();
     };
