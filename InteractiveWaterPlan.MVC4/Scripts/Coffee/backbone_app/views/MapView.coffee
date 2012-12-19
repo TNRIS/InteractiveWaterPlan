@@ -13,6 +13,7 @@ define([
 
         map: null
 
+        #TODO: Read from config somewhere
         bingApiKey: 'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o'
 
         baseLayers: ['mapquest_open', 'esri_gray', 'mapquest_aerial', 

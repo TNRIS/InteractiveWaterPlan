@@ -33,14 +33,12 @@ define([
             @$el.remove()
             return null
 
-
-
         #called via KO bindings in the template
         changeYear: (data, event) ->
             $target = $(event.target)
 
             #set the observable to the newly selected year
-            @currentYear($target.attr('data-value'))
+            @currentYear($target.data('value'))
 
             $target.parent().siblings().removeClass('active')
             $target.parent().addClass('active')

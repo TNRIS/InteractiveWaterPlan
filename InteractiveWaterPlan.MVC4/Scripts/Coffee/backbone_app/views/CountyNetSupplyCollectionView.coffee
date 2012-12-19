@@ -11,7 +11,8 @@ define([
         initialize: (options) ->
             _.bindAll(this, 'selectCounty', 'selectRegion')
 
-            super options.currYear, CountyNetSupplyView, CountyNetSupplyCollection, tpl
+            super options.currYear, CountyNetSupplyView, 
+                CountyNetSupplyCollection, tpl
            
             #create KO observable properties for the selecting county and region
             @selectedCounty = ko.observable()
@@ -23,11 +24,11 @@ define([
             $target = $(event.target)
 
             #set the observable to the selected county id and name
-            countyId = $target.attr('data-value')
-            countyName = $target.attr('data-name')
+            countyId = $target.data('value')
+            countyName = $target.data('name')
             @selectedCounty({
-                countyId: countyId
-                countyName: countyName
+                id: countyId
+                name: countyName
             })
 
             return null
@@ -36,11 +37,11 @@ define([
             $target = $(event.target)
 
             #set the observable to the selected region id and name
-            regionId = $target.attr('data-value')
-            regionName = $target.attr('data-name')
+            regionId = $target.data('value')
+            regionName = $target.data('name')
             @selectedRegion({
-                regionId: regionId
-                regionName: regionName
+                id: regionId
+                name: regionName
             })
             
             return null

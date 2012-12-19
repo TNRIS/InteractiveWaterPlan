@@ -13,7 +13,6 @@ define([
             _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 
                 'changeStrategyView')
             
-
             return null
 
         render: () ->
@@ -72,7 +71,7 @@ define([
 
         changeStrategyView: (data, event) ->
             $target = $(event.target)
-            newStrategyName = $target.attr('data-value')
+            newStrategyName = $target.data('value')
 
             $target.parents('li.dropdown').addClass('active')
             

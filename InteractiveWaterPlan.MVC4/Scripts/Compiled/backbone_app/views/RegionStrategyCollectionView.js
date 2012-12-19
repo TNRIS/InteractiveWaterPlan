@@ -14,8 +14,8 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     RegionStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      this.regionId = options.regionId;
-      this.regionName = options.regionName;
+      this.regionId = options.id;
+      this.regionName = options.name;
       this.viewName = "Region " + this.regionName;
       fetchParams = {
         regionId: this.regionId
@@ -39,8 +39,8 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       var $target, typeId, typeName;
       $target = $(event.target);
       console.log("TODO: Select Strategy Type");
-      typeId = $target.attr('data-value');
-      typeName = $target.attr('data-name');
+      typeId = $target.data('value');
+      typeName = $target.data('name');
     };
 
     return RegionStrategyCollectionView;

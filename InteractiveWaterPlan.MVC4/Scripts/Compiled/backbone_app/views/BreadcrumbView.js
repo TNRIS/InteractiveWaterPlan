@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/breadcrumbList.html'], function(tpl) {
+define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!templates/breadcrumbList.html'], function(breadcrumbListItemTpl, breadcrumbListTpl) {
   var BreadcrumbView;
   return BreadcrumbView = (function(_super) {
 
@@ -12,18 +12,17 @@ define(['scripts/text!templates/breadcrumbList.html'], function(tpl) {
       return BreadcrumbView.__super__.constructor.apply(this, arguments);
     }
 
-    BreadcrumbView.prototype.template = _.template(tpl);
-
     BreadcrumbView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'selectNetCounty');
-      this.selectedStrategyView = ko.observable();
+      _.bindAll(this, 'render', 'unrender', 'selectBreadcrumb', 'push', 'pop');
+      this.selectedBreadcrumb = ko.observable();
+      this.template = _.template(breadcrumbListTpl);
+      this.bcItemTemplate = _.template(breadcrumbListItemTpl);
       return null;
     };
 
     BreadcrumbView.prototype.render = function() {
       this.$el.empty();
       this.$el.html(this.template());
-      ko.applyBindings(this, this.el);
       return this;
     };
 
@@ -32,8 +31,55 @@ define(['scripts/text!templates/breadcrumbList.html'], function(tpl) {
       return null;
     };
 
-    BreadcrumbView.prototype.selectNetCounty = function() {
-      this.selectedStrategyView.notifySubscribers('net-supplies');
+    BreadcrumbView.prototype.push = function(name, type, id, displayName) {
+      var bcModel, html, res;
+      if (!(displayName != null)) {
+        switch (type) {
+          case 'county':
+            displayName = "" + name + " County";
+            break;
+          case 'region':
+            displayName = "Region " + name;
+            break;
+          default:
+            displayName = name;
+        }
+      }
+      bcModel = {
+        name: name,
+        type: type,
+        id: id,
+        displayName: displayName
+      };
+      html = this.bcItemTemplate({
+        m: bcModel
+      });
+      res = this.$('ul').append(html);
+      ko.applyBindings(this, $("a:last", res)[0]);
+    };
+
+    BreadcrumbView.prototype.pop = function(times) {
+      if (times == null) {
+        times = 1;
+      }
+      console.log("popping bottles in the club");
+      this.$('ul li:last').remove();
+    };
+
+    BreadcrumbView.prototype.selectBreadcrumb = function(data, event) {
+      var $target, i, nextCrumbs, selectedBreadcrumbOpts, _i, _ref;
+      $target = $(event.target);
+      selectedBreadcrumbOpts = {
+        type: $target.data('type'),
+        id: $target.data('id'),
+        name: $target.data('name')
+      };
+      nextCrumbs = $target.parent().nextAll();
+      console.log(nextCrumbs);
+      for (i = _i = 0, _ref = nextCrumbs.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        this.pop();
+      }
+      this.selectedBreadcrumb.notifySubscribers(selectedBreadcrumbOpts);
     };
 
     return BreadcrumbView;

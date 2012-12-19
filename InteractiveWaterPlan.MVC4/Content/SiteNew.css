@@ -144,6 +144,15 @@ ul.nav > li.nav-label
 ul.breadcrumb 
 {
     font-size: 12px;
-    padding: 4px 8px;
+    padding: 0;
     margin-bottom: 0;
+    background-color: White;
+}
+
+ul.breadcrumb li:last-child > a,
+ul.breadcrumb li:last-child > a:hover
+{
+    pointer-events: none;
+    cursor: default;
+    color: #aaa;
 }

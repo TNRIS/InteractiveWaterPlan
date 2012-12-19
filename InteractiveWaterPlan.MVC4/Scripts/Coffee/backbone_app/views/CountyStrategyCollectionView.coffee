@@ -8,8 +8,8 @@ define([
     class CountyStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            @countyId = options.countyId
-            @countyName = options.countyName
+            @countyId = options.id
+            @countyName = options.name
 
             @viewName = "#{@countyName} County"
 
@@ -38,13 +38,13 @@ define([
             console.log "TODO: Select Strategy Type"
 
             #set the observable to the selected county id and name
-            typeId = $target.attr('data-value')
-            typeName = $target.attr('data-name')
+            typeId = $target.data('value')
+            typeName = $target.data('name')
             
             #TODO: set observable
             #@selectedCounty({
-            #    countyId: countyId
-            #    countyName: countyName
+            #    id: countyId
+            #    name: countyName
             #})
 
             return

@@ -74,7 +74,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     ThemeNavView.prototype.changeStrategyView = function(data, event) {
       var $target, newStrategyName, txt;
       $target = $(event.target);
-      newStrategyName = $target.attr('data-value');
+      newStrategyName = $target.data('value');
       $target.parents('li.dropdown').addClass('active');
       txt = 'Water Management Strategies';
       if (newStrategyName !== 'net-county') {

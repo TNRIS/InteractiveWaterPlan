@@ -14,8 +14,8 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     CountyStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      this.countyId = options.countyId;
-      this.countyName = options.countyName;
+      this.countyId = options.id;
+      this.countyName = options.name;
       this.viewName = "" + this.countyName + " County";
       fetchParams = {
         countyId: this.countyId
@@ -39,8 +39,8 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       var $target, typeId, typeName;
       $target = $(event.target);
       console.log("TODO: Select Strategy Type");
-      typeId = $target.attr('data-value');
-      typeName = $target.attr('data-name');
+      typeId = $target.data('value');
+      typeName = $target.data('name');
     };
 
     return CountyStrategyCollectionView;

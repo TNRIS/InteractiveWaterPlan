@@ -53,12 +53,13 @@ define([
 
             @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
             @breadcrumbList.render()
-            @breadcrumbList.selectedStrategyView.subscribe(
-                this.switchStrategyThemeView
+            @breadcrumbList.selectedBreadcrumb.subscribe((options) =>
+                options.id = options.id || null
+                this.switchStrategyThemeView(options.name, options.type, options.id)
             )
 
             #Start the currTableView with the CountyNetSupply table
-            this.switchStrategyThemeView('net-supplies')
+            this.switchStrategyThemeView("County Net Supplies", 'net-supplies')
 
             return this
 
@@ -71,11 +72,15 @@ define([
             @currTableView.changeToYear(newYear)
             return
 
-        switchStrategyThemeView: (type, options) ->
+        switchStrategyThemeView: (name, type, id=null) ->
+            #type can be 'net-supplies', 'county', 'region', 'district'
             #TODO: will have to do some map stuff as well
 
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
+
+            #Add a new item to the breadcrumb list
+            @breadcrumbList.push(name, type, id)
 
             switch type
                 when 'net-supplies'
@@ -86,26 +91,20 @@ define([
                     @currTableView.render()
 
                     #Subscripe to selectedCounty and selectedRegion observables
-                    @currTableView.selectedCounty.subscribe((val) =>
-                        this.switchStrategyThemeView("county", {
-                            countyId: val.countyId
-                            countyName: val.countyName
-                        })
+                    @currTableView.selectedCounty.subscribe((options) =>
+                        this.switchStrategyThemeView(options.name, 'county', options.id)
                     )
 
-                    @currTableView.selectedRegion.subscribe((val) =>
-                        this.switchStrategyThemeView("region", {
-                            regionId: val.regionId
-                            regionName: val.regionName
-                        })
+                    @currTableView.selectedRegion.subscribe((options) =>
+                        this.switchStrategyThemeView(options.name, 'region', options.id)
                     )
                 when 'county'
                     @currTableView = new CountyStrategyCollectionView(
                         el: @tableContainer
 
                         currYear: @currYear
-                        countyId: options.countyId
-                        countyName: options.countyName
+                        id: id
+                        name: name
                     )
 
                     @currTableView.render()
@@ -115,16 +114,21 @@ define([
                         el: @tableContainer
 
                         currYear: @currYear
-                        regionId: options.regionId
-                        regionName: options.regionName
+                        id: id
+                        name: name
                     )
 
                     @currTableView.render()
 
                     return
+                when 'district'
+                    #TODO
+                    return
+
                 when 'type'
                     #TODO
                     return
+
             
             return
 
