@@ -4,7 +4,8 @@ define([
 ],
 (breadcrumbListItemTpl, breadcrumbListTpl) ->
 
-    #TODO: Transform into lists to select region or county name
+    #TODO: Would probably be better to use a collection instead
+    # of using the DOM
     class BreadcrumbView extends Backbone.View
 
         initialize: () ->
