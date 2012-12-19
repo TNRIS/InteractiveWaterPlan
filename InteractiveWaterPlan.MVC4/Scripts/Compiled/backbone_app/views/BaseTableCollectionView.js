@@ -82,7 +82,6 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.changeToYear = function(newYear) {
-      console.log("changetoyear" + newYear);
       this.currYear = newYear;
       this.fetchCollection();
     };

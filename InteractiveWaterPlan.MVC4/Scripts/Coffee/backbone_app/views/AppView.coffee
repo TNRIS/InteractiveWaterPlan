@@ -2,13 +2,14 @@ define([
     'views/MapView'
     'views/ThemeNavView'
     'views/YearNavView'
+    'views/MapToolsView'
     'views/BreadcrumbView'
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
     'scripts/text!templates/appContainer.html'
 ],
-(MapView, ThemeNavView, YearNavView, BreadcrumbView, 
+(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, 
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, CountyStrategyCollectionView,
     tpl) ->
@@ -37,6 +38,13 @@ define([
 
             @mapView = new MapView('mapContainer')
             @mapView.render()
+
+            @mapToolsView = new MapToolsView({ 
+                el: $('#mapTools')[0]
+                mapView: @mapView
+            })
+            @mapToolsView.render()
+
 
             @themeNavView = new ThemeNavView({ el: $('#themeNavContainer')[0] })
             @themeNavView.render()

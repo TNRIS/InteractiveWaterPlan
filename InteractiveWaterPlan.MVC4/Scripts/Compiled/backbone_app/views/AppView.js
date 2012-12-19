@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, tpl) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, tpl) {
   var AppView;
   return AppView = (function(_super) {
 
@@ -25,6 +25,11 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/Bread
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView('mapContainer');
       this.mapView.render();
+      this.mapToolsView = new MapToolsView({
+        el: $('#mapTools')[0],
+        mapView: this.mapView
+      });
+      this.mapToolsView.render();
       this.themeNavView = new ThemeNavView({
         el: $('#themeNavContainer')[0]
       });

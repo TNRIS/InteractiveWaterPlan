@@ -23,7 +23,6 @@ define([
         render: () ->
             @$el.empty()
 
-
             @map = new OpenLayers.Map(
                 div: @$el.attr('id')
                 projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
@@ -54,9 +53,13 @@ define([
             @$el = $("##{mapContainerId}")
             @el = @$el[0]
 
-            _.bindAll(this, 'render', 'unrender')
+            _.bindAll(this, 'render', 'unrender', 'resetExtent')
             
             return null
+
+        resetExtent: () ->
+            @map.setCenter(@origCenter, @origZoom);
+            return
 
         #returns array of base layers
         _setupBaseLayers: (baseLayers) ->

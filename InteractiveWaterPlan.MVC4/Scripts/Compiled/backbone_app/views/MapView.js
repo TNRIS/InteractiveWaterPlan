@@ -45,8 +45,12 @@ define([], function() {
     MapView.prototype.initialize = function(mapContainerId) {
       this.$el = $("#" + mapContainerId);
       this.el = this.$el[0];
-      _.bindAll(this, 'render', 'unrender');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent');
       return null;
+    };
+
+    MapView.prototype.resetExtent = function() {
+      this.map.setCenter(this.origCenter, this.origZoom);
     };
 
     MapView.prototype._setupBaseLayers = function(baseLayers) {
