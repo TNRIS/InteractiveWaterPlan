@@ -66,7 +66,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
       this._showRelatedEntities();
       this.supplyStore.load({
         params: {
-          ReservoirId: this.curr_reservoir.data.id,
+          ReservoirId: this.curr_reservoir.data.reservoirId,
           Year: this.selectedYear
         }
       });
@@ -208,7 +208,7 @@ Ext.define('TNRIS.theme.RecommendedReservoirsTheme', {
     this.relatedWUGStore.load({
       params: {
         Year: this.selectedYear,
-        forReservoirId: this.curr_reservoir.data.id
+        forReservoirId: this.curr_reservoir.data.reservoirId
       },
       scope: this,
       callback: function(records, operation, success) {

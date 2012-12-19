@@ -16,9 +16,9 @@ define([
         #TODO: Read from config somewhere
         bingApiKey: 'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o'
 
-        baseLayers: ['bing_road', 'mapquest_open', 'esri_gray', 'mapquest_aerial', 
+        baseLayers: ['mapquest_open', 'mapquest_aerial', 'esri_gray', 
             'stamen_toner', 'stamen_watercolor',
-            'bing_hybrid', 'bing_aerial']
+            'bing_road', 'bing_hybrid', 'bing_aerial']
 
         render: () ->
             @$el.empty()
@@ -63,7 +63,7 @@ define([
             #Fix for Bing baseLayer - there is a bug in OpenLayers
             if @map.baseLayer instanceof OpenLayers.Layer.Bing
                 zoom = @origZoom-1
-                
+
             @map.setCenter(@origCenter, zoom);
             return
 

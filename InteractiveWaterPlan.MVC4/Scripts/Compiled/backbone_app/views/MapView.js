@@ -20,7 +20,7 @@ define([], function() {
 
     MapView.prototype.bingApiKey = 'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o';
 
-    MapView.prototype.baseLayers = ['bing_road', 'mapquest_open', 'esri_gray', 'mapquest_aerial', 'stamen_toner', 'stamen_watercolor', 'bing_hybrid', 'bing_aerial'];
+    MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'stamen_toner', 'stamen_watercolor', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
     MapView.prototype.render = function() {
       this.$el.empty();

@@ -3,7 +3,7 @@ Ext.define('ISWP.model.Place', {
     extend: 'Ext.data.Model'
 
     fields: [
-        'sqlId', 
+        'id', 
         'name', 
         'categoryName', 
         'categoryId'

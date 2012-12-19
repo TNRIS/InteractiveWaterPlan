@@ -29,7 +29,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     id: 'regionCombo'
                     store: 'RWP'
                     displayField: 'name'
-                    valueField: 'sqlId'
+                    valueField: 'id'
                     queryMode: 'local'
                     emptyText: 'Select a Planning Region'
                     editable: false
@@ -61,7 +61,7 @@ Ext.define("ISWP.view.theme.ExistingSupplyPanel", {
                     id: 'countyCombo'
                     store: 'County' #TODO: Modify store to get Counties IN RegionId
                     displayField: 'name'
-                    valueField: 'sqlId'
+                    valueField: 'id'
                     queryMode: 'local'
                     emptyText: 'Select a County'
                     editable: false

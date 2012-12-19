@@ -21,7 +21,30 @@ define([
 
             ko.applyBindings(this, @el)
 
+            #TODO: this is a little too simplistic...
+            # would like to render a span or something that has
+            # data for the categoryName and placeId
+            this.$('#goToPlaceInput').typeahead(
+                minLength: 2
+                source: (query, process) ->
+                    return $.get("#{BASE_API_PATH}api/place", 
+                        {name: query},
+                        (data) ->
+                            #catNamesArr = _.pluck(data, 'name')
+                            #return process(catNamesArr)
+                            
+                            return process(data)
+                    )
+                process: (data) ->
+                    console.log "in process", data
+                    return ['james']
+
+
+            )
+
             return this
+
+
 
         unrender: () ->
             @$el.remove()

@@ -24,6 +24,20 @@ define(['scripts/text!templates/mapTools.html'], function(tpl) {
     MapToolsView.prototype.render = function() {
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
+      this.$('#goToPlaceInput').typeahead({
+        minLength: 2,
+        source: function(query, process) {
+          return $.get("" + BASE_API_PATH + "api/place", {
+            name: query
+          }, function(data) {
+            return process(data);
+          });
+        },
+        process: function(data) {
+          console.log("in process", data);
+          return ['james'];
+        }
+      });
       return this;
     };
 

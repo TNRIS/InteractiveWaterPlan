@@ -98,11 +98,11 @@ Ext.define('ISWP.controller.Main', {
 
                     selectedPlace = records[0].data
 
-                    #Use the selectedPlace.sqlId as a parameter to 
+                    #Use the selectedPlace.id as a parameter to 
                     # the PlaceFeature store
                     this.getPlaceFeatureStore().load({
                         params:
-                            placeId: selectedPlace.sqlId
+                            placeId: selectedPlace.id
                         scope: this
                         callback: (records, operation, success) ->
                             unless success and records.length == 1 then return null

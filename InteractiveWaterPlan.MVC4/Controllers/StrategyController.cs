@@ -49,7 +49,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             {
                 var supply = new CountyNetSupply()
                     {
-                        CountyId = county.SqlId,
+                        CountyId = county.Id,
                         CountyName = county.Name,
                         RegionId = 123,
                         RegionName = "A",

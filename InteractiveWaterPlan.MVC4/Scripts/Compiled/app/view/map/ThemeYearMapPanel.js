@@ -74,7 +74,7 @@ Ext.define('ISWP.view.map.ThemeYearMapPanel', {
           typeAheadDelay: 200,
           minChars: 2,
           hideTrigger: true,
-          valueField: 'sqlId',
+          valueField: 'id',
           displayField: 'name',
           emptyText: 'Go to Location',
           width: 240,

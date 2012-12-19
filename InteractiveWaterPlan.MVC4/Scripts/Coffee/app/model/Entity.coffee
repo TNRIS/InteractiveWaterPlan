@@ -4,7 +4,7 @@ Ext.define('ISWP.model.Entity', {
 
     fields: [
         'id'
-        'sqlId'
+        'entityId'
         'name'
         'wktGeog'
         'type'

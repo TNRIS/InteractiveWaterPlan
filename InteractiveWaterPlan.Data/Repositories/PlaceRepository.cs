@@ -42,7 +42,7 @@ namespace InteractiveWaterPlan.Data
             return Session.GetNamedQuery("GetPlacesByCategory")
                 .SetParameter("var_CategoryID", categoryId)
                 .List<Place>()
-                .OrderBy(p => p.SqlId)
+                .OrderBy(p => p.Id)
                 .Select(p => { p.Name = p.Name.Trim(); return p; })
                 .ToList<Place>();
         }
@@ -57,7 +57,7 @@ namespace InteractiveWaterPlan.Data
             return Session.GetNamedQuery("GetPlacesByCategory")
                 .SetParameter("var_CategoryID", categoryCode)
                 .List<Place>()
-                .OrderBy(p => p.SqlId)
+                .OrderBy(p => p.Id)
                 .Select(p => { p.Name = p.Name.Trim(); return p; })
                 .ToList<Place>();
         }

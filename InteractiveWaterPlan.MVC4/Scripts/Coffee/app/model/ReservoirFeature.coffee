@@ -4,7 +4,7 @@ Ext.define('ISWP.model.ReservoirFeature', {
 
     fields: [
         'id'
-        'sqlId'
+        'reservoirId'
         'name'
         'wktGeog'
         'recommendationCode'

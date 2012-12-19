@@ -70,7 +70,7 @@ Ext.define('ISWP.controller.Main', {
           selectedPlace = records[0].data;
           this.getPlaceFeatureStore().load({
             params: {
-              placeId: selectedPlace.sqlId
+              placeId: selectedPlace.id
             },
             scope: this,
             callback: function(records, operation, success) {

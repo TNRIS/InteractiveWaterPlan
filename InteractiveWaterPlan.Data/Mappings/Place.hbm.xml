@@ -2,7 +2,7 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
   
   <class name="Place" mutable="false">
-    <id name="SqlId">
+    <id name="Id">
       <column name="SQL_ID"/>
     </id>
     <property column="PlaceName" name="Name" />
@@ -18,7 +18,7 @@
   </class>
 
   <class name="PlaceFeature" mutable="false">
-    <id name="SqlId">
+    <id name="Id">
       <column name="SQL_ID" />
     </id>
     <property column="PlaceName_Geog" name="WktGeog" />
