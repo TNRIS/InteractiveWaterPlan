@@ -22,20 +22,21 @@ define(['scripts/text!templates/mapTools.html'], function(tpl) {
     };
 
     MapToolsView.prototype.render = function() {
+      var _this = this;
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
-      this.$('#goToPlaceInput').typeahead({
+      this.$('#goToPlaceInput').place_typeahead({
         minLength: 2,
         source: function(query, process) {
           return $.get("" + BASE_API_PATH + "api/place", {
             name: query
-          }, function(data) {
-            return process(data);
+          }, function(places) {
+            return process(places);
           });
         },
-        process: function(data) {
-          console.log("in process", data);
-          return ['james'];
+        updater: function(item) {
+          console.log("TODO: Zoom to ", item);
+          return item.name;
         }
       });
       return this;

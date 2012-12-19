@@ -21,25 +21,26 @@ define([
 
             ko.applyBindings(this, @el)
 
-            #TODO: this is a little too simplistic...
-            # would like to render a span or something that has
-            # data for the categoryName and placeId
-            this.$('#goToPlaceInput').typeahead(
+            #TODO: clear the value if it is not a valid placename
+            #TODO: only enable GO button if valid
+            this.$('#goToPlaceInput').place_typeahead(
                 minLength: 2
-                source: (query, process) ->
+                source: (query, process) =>
+                    #this.$('#goToPlaceInput').next('button').attr("disabled", "true")
                     return $.get("#{BASE_API_PATH}api/place", 
                         {name: query},
-                        (data) ->
+                        (places) ->
                             #catNamesArr = _.pluck(data, 'name')
                             #return process(catNamesArr)
-                            
-                            return process(data)
+                            return process(places)
                     )
-                process: (data) ->
-                    console.log "in process", data
-                    return ['james']
-
-
+                updater: (item) =>
+                    #TODO: Zoom to selected place
+                    #placeId = item.id
+                    #placeName = item.name
+                    console.log "TODO: Zoom to ", item
+                    #this.$('#goToPlaceInput').next('button').removeAttr("disabled")
+                    return item.name
             )
 
             return this

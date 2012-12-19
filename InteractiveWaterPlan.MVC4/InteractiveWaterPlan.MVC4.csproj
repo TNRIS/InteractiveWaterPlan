@@ -716,6 +716,7 @@
     <Content Include="Scripts\templates\themeNav.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
+    <Content Include="Scripts\tnris.place_typeahead.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Web.config">

@@ -83,6 +83,11 @@ ul.nav > li.nav-label
     color: black;
 }
 
+ul.typeahead .catName
+{
+    font-size:11px;
+}    
+
 /* OpenLayers */
 .olFramedCloudPopupContent h3 
 {
