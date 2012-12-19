@@ -20,7 +20,7 @@ define([], function() {
 
     MapView.prototype.bingApiKey = 'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o';
 
-    MapView.prototype.baseLayers = ['mapquest_open', 'esri_gray', 'mapquest_aerial', 'stamen_toner', 'stamen_watercolor', 'bing_road', 'bing_hybrid', 'bing_aerial'];
+    MapView.prototype.baseLayers = ['bing_road', 'mapquest_open', 'esri_gray', 'mapquest_aerial', 'stamen_toner', 'stamen_watercolor', 'bing_hybrid', 'bing_aerial'];
 
     MapView.prototype.render = function() {
       this.$el.empty();
@@ -50,7 +50,12 @@ define([], function() {
     };
 
     MapView.prototype.resetExtent = function() {
-      this.map.setCenter(this.origCenter, this.origZoom);
+      var zoom;
+      zoom = this.origZoom;
+      if (this.map.baseLayer instanceof OpenLayers.Layer.Bing) {
+        zoom = this.origZoom - 1;
+      }
+      this.map.setCenter(this.origCenter, zoom);
     };
 
     MapView.prototype._setupBaseLayers = function(baseLayers) {
