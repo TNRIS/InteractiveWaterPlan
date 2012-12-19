@@ -80,7 +80,6 @@ define([
             return null
 
         changeToYear: (newYear) ->
-            console.log "changetoyear"+newYear
             @currYear = newYear
             this.fetchCollection()
             return
