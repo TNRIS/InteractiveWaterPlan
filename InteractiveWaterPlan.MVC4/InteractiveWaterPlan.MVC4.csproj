@@ -666,8 +666,10 @@
     <Content Include="Scripts\Compiled\backbone_app\views\MapToolsView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyTypeView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\TypeStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
@@ -713,6 +715,8 @@
     <Content Include="Scripts\templates\strategyRow.html" />
     <Content Include="Scripts\templates\strategyTable.html" />
     <Content Include="Scripts\templates\strategyTypeListItem.html" />
+    <Content Include="Scripts\templates\strategyTypeRow.html" />
+    <Content Include="Scripts\templates\strategyTypeTable.html" />
     <Content Include="Scripts\templates\themeNav.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
@@ -782,8 +786,10 @@
     <None Include="Scripts\Coffee\backbone_app\views\MapToolsView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyTypeView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\TypeStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\YearNavView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />

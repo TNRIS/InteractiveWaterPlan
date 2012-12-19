@@ -20,5 +20,10 @@ namespace InteractiveWaterPlan.Core
         public virtual string Description { get; set; }
         public virtual string TypeName { get; set; }
         public virtual int TypeId { get; set; }
+
+        public virtual string RegionName { get; set; }
+        public virtual int RegionId { get; set; }
+        public virtual string CountyName { get; set; }
+        public virtual int CountyId { get; set; }
     }
 }

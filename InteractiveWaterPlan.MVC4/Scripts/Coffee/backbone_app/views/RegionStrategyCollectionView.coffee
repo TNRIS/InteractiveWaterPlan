@@ -8,6 +8,9 @@ define([
     class RegionStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
+
+            _.bindAll(this, 'selectType')
+
             @regionId = options.id
             @regionName = options.name
 
@@ -22,30 +25,28 @@ define([
             super options.currYear, StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
-
+            @selectedType = ko.observable()
+            
             return null
 
         render: () ->
             super
 
-            #TODO: render based on year etc
             this.$('#strategyPlaceName').html(@viewName)
 
             return this
             
         selectType: (data, target) ->
             $target = $(event.target)
-            console.log "TODO: Select Strategy Type"
 
             #set the observable to the selected county id and name
             typeId = $target.data('value')
             typeName = $target.data('name')
             
-            #TODO: set observable
-            #@selectedCounty({
-            #    countyId: countyId
-            #    countyName: countyName
-            #})
+            @selectedType(
+                id: typeId
+                name: typeName
+            )
 
             return
 )

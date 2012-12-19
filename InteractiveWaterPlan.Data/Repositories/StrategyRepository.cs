@@ -125,7 +125,11 @@ namespace InteractiveWaterPlan.Data
                     Id = new Random().Next(),
                     Description = "Strategy of type "+strategyTypeId,
                     TypeName = "Type "+strategyTypeId,
-                    TypeId = strategyTypeId
+                    TypeId = strategyTypeId,
+                    RegionId = 1,
+                    RegionName = "A",
+                    CountyId = 123,
+                    CountyName = "County Name"
                 }
             };
         }

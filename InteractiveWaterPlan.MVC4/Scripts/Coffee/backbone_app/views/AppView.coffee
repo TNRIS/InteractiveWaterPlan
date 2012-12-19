@@ -7,11 +7,13 @@ define([
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
+    'views/TypeStrategyCollectionView'
     'scripts/text!templates/appContainer.html'
 ],
 (MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, 
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, CountyStrategyCollectionView,
+    TypeStrategyCollectionView,
     tpl) ->
 
     class AppView extends Backbone.View
@@ -106,6 +108,7 @@ define([
                     @currTableView.selectedRegion.subscribe((options) =>
                         this.switchStrategyThemeView(options.name, 'region', options.id)
                     )
+
                 when 'county'
                     @currTableView = new CountyStrategyCollectionView(
                         el: @tableContainer
@@ -116,7 +119,11 @@ define([
                     )
 
                     @currTableView.render()
-                    return
+
+                    @currTableView.selectedType.subscribe((options) =>
+                        this.switchStrategyThemeView(options.name, 'type', options.id)
+                    )
+
                 when 'region'
                     @currTableView = new RegionStrategyCollectionView(
                         el: @tableContainer
@@ -128,17 +135,31 @@ define([
 
                     @currTableView.render()
 
-                    return
-                when 'district'
-                    #TODO
-                    return
-
+                    @currTableView.selectedType.subscribe((options) =>
+                        this.switchStrategyThemeView(options.name, 'type', options.id)
+                    )
+                
                 when 'type'
+                    #TODO
+                    @currTableView = new TypeStrategyCollectionView(
+                        el: @tableContainer
+
+                        currYear: @currYear
+                        id: id
+                        name: name
+                    )
+
+                    @currTableView.render()
+
+                    @currTableView.selectedRegion.subscribe((options) =>
+                        this.switchStrategyThemeView(options.name, 'region', options.id)
+                    )
+                    #TODO: subscribe to any observables (selectedRegion)
+
+                when 'district'
                     #TODO
                     return
 
             
             return
-
-
 )

@@ -14,6 +14,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     CountyStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
+      _.bindAll(this, 'selectType');
       this.countyId = options.id;
       this.countyName = options.name;
       this.viewName = "" + this.countyName + " County";
@@ -26,6 +27,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       CountyStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
+      this.selectedType = ko.observable();
       return null;
     };
 
@@ -38,9 +40,12 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
     CountyStrategyCollectionView.prototype.selectType = function(data, target) {
       var $target, typeId, typeName;
       $target = $(event.target);
-      console.log("TODO: Select Strategy Type");
       typeId = $target.data('value');
       typeName = $target.data('name');
+      this.selectedType({
+        id: typeId,
+        name: typeName
+      });
     };
 
     return CountyStrategyCollectionView;

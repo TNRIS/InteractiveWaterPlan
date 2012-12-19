@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, tpl) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, tpl) {
   var AppView;
   return AppView = (function(_super) {
 
@@ -93,7 +93,10 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
             name: name
           });
           this.currTableView.render();
-          return;
+          this.currTableView.selectedType.subscribe(function(options) {
+            return _this.switchStrategyThemeView(options.name, 'type', options.id);
+          });
+          break;
         case 'region':
           this.currTableView = new RegionStrategyCollectionView({
             el: this.tableContainer,
@@ -102,10 +105,23 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
             name: name
           });
           this.currTableView.render();
-          return;
-        case 'district':
-          return;
+          this.currTableView.selectedType.subscribe(function(options) {
+            return _this.switchStrategyThemeView(options.name, 'type', options.id);
+          });
+          break;
         case 'type':
+          this.currTableView = new TypeStrategyCollectionView({
+            el: this.tableContainer,
+            currYear: this.currYear,
+            id: id,
+            name: name
+          });
+          this.currTableView.render();
+          this.currTableView.selectedRegion.subscribe(function(options) {
+            return _this.switchStrategyThemeView(options.name, 'region', options.id);
+          });
+          break;
+        case 'district':
           return;
       }
     };
