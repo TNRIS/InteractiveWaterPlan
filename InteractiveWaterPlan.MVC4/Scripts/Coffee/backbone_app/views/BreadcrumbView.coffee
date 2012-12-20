@@ -4,8 +4,6 @@ define([
 ],
 (breadcrumbListItemTpl, breadcrumbListTpl) ->
 
-    #TODO: Would probably be better to use a collection instead
-    # of using the DOM
     class BreadcrumbView extends Backbone.View
 
         initialize: () ->

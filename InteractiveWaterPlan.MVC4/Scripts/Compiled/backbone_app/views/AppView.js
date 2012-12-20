@@ -15,7 +15,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
     AppView.prototype.currYear = "2010";
 
     AppView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear', 'switchStrategyThemeView');
+      _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear', 'switchStrategyThemeView', '_setupCountyNetSuppliesView', '_setupStrategyTypeView', '_setupCountyStrategyView', '_setupRegionStrategyView');
       this.template = _.template(tpl);
     };
 
@@ -63,7 +63,6 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
     };
 
     AppView.prototype.switchStrategyThemeView = function(name, type, id) {
-      var _this = this;
       if (id == null) {
         id = null;
       }
@@ -73,57 +72,77 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.breadcrumbList.push(name, type, id);
       switch (type) {
         case 'net-supplies':
-          this.currTableView = new CountyNetSupplyCollectionView({
-            currYear: this.currYear,
-            el: this.tableContainer
-          });
-          this.currTableView.render();
-          this.currTableView.selectedCounty.subscribe(function(options) {
-            return _this.switchStrategyThemeView(options.name, 'county', options.id);
-          });
-          this.currTableView.selectedRegion.subscribe(function(options) {
-            return _this.switchStrategyThemeView(options.name, 'region', options.id);
-          });
+          this._setupCountyNetSuppliesView();
           break;
         case 'county':
-          this.currTableView = new CountyStrategyCollectionView({
-            el: this.tableContainer,
-            currYear: this.currYear,
-            id: id,
-            name: name
-          });
-          this.currTableView.render();
-          this.currTableView.selectedType.subscribe(function(options) {
-            return _this.switchStrategyThemeView(options.name, 'type', options.id);
-          });
+          this._setupCountyStrategyView(name, id);
           break;
         case 'region':
-          this.currTableView = new RegionStrategyCollectionView({
-            el: this.tableContainer,
-            currYear: this.currYear,
-            id: id,
-            name: name
-          });
-          this.currTableView.render();
-          this.currTableView.selectedType.subscribe(function(options) {
-            return _this.switchStrategyThemeView(options.name, 'type', options.id);
-          });
+          this._setupRegionStrategyView(name, id);
           break;
         case 'type':
-          this.currTableView = new TypeStrategyCollectionView({
-            el: this.tableContainer,
-            currYear: this.currYear,
-            id: id,
-            name: name
-          });
-          this.currTableView.render();
-          this.currTableView.selectedRegion.subscribe(function(options) {
-            return _this.switchStrategyThemeView(options.name, 'region', options.id);
-          });
+          this._setupStrategyTypeView(name, id);
           break;
         case 'district':
           return;
       }
+    };
+
+    AppView.prototype._setupCountyNetSuppliesView = function() {
+      var _this = this;
+      this.currTableView = new CountyNetSupplyCollectionView({
+        currYear: this.currYear,
+        el: this.tableContainer
+      });
+      this.currTableView.render();
+      this.currTableView.selectedCounty.subscribe(function(options) {
+        return _this.switchStrategyThemeView(options.name, 'county', options.id);
+      });
+      this.currTableView.selectedRegion.subscribe(function(options) {
+        return _this.switchStrategyThemeView(options.name, 'region', options.id);
+      });
+    };
+
+    AppView.prototype._setupCountyStrategyView = function(name, id) {
+      var _this = this;
+      this.currTableView = new CountyStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: id,
+        name: name
+      });
+      this.currTableView.render();
+      this.currTableView.selectedType.subscribe(function(options) {
+        return _this.switchStrategyThemeView(options.name, 'type', options.id);
+      });
+    };
+
+    AppView.prototype._setupRegionStrategyView = function(name, id) {
+      var _this = this;
+      this.currTableView = new RegionStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: id,
+        name: name
+      });
+      this.currTableView.render();
+      this.currTableView.selectedType.subscribe(function(options) {
+        return _this.switchStrategyThemeView(options.name, 'type', options.id);
+      });
+    };
+
+    AppView.prototype._setupStrategyTypeView = function(name, id) {
+      var _this = this;
+      this.currTableView = new TypeStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: id,
+        name: name
+      });
+      this.currTableView.render();
+      this.currTableView.selectedRegion.subscribe(function(options) {
+        return _this.switchStrategyThemeView(options.name, 'region', options.id);
+      });
     };
 
     return AppView;

@@ -27,7 +27,9 @@ define([
 
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 'updateViewsToNewYear', 
-                'switchStrategyThemeView')
+                'switchStrategyThemeView', '_setupCountyNetSuppliesView', 
+                '_setupStrategyTypeView', '_setupCountyStrategyView', 
+                '_setupRegionStrategyView')
 
             @template = _.template(tpl)
             return
@@ -93,73 +95,88 @@ define([
             @breadcrumbList.push(name, type, id)
 
             switch type
-                when 'net-supplies'
-                    @currTableView = new CountyNetSupplyCollectionView(
-                        currYear: @currYear
-                        el: @tableContainer
-                    )
-                    @currTableView.render()
-
-                    #Subscripe to selectedCounty and selectedRegion observables
-                    @currTableView.selectedCounty.subscribe((options) =>
-                        this.switchStrategyThemeView(options.name, 'county', options.id)
-                    )
-
-                    @currTableView.selectedRegion.subscribe((options) =>
-                        this.switchStrategyThemeView(options.name, 'region', options.id)
-                    )
-
-                when 'county'
-                    @currTableView = new CountyStrategyCollectionView(
-                        el: @tableContainer
-
-                        currYear: @currYear
-                        id: id
-                        name: name
-                    )
-
-                    @currTableView.render()
-
-                    @currTableView.selectedType.subscribe((options) =>
-                        this.switchStrategyThemeView(options.name, 'type', options.id)
-                    )
-
-                when 'region'
-                    @currTableView = new RegionStrategyCollectionView(
-                        el: @tableContainer
-
-                        currYear: @currYear
-                        id: id
-                        name: name
-                    )
-
-                    @currTableView.render()
-
-                    @currTableView.selectedType.subscribe((options) =>
-                        this.switchStrategyThemeView(options.name, 'type', options.id)
-                    )
-                
-                when 'type'
-                    #TODO
-                    @currTableView = new TypeStrategyCollectionView(
-                        el: @tableContainer
-
-                        currYear: @currYear
-                        id: id
-                        name: name
-                    )
-
-                    @currTableView.render()
-
-                    @currTableView.selectedRegion.subscribe((options) =>
-                        this.switchStrategyThemeView(options.name, 'region', options.id)
-                    )
-                    #TODO: subscribe to any observables (selectedRegion)
-
+                when 'net-supplies' then this._setupCountyNetSuppliesView()
+                    
+                when 'county' then this._setupCountyStrategyView(name, id)
+                    
+                when 'region' then this._setupRegionStrategyView(name, id)
+                    
+                when 'type' then this._setupStrategyTypeView(name, id)
+                    
                 when 'district'
                     #TODO
                     return
-
             
             return
+
+        _setupCountyNetSuppliesView: () ->
+            @currTableView = new CountyNetSupplyCollectionView(
+                currYear: @currYear
+                el: @tableContainer
+            )
+            @currTableView.render()
+
+            #Subscripe to selectedCounty and selectedRegion observables
+            @currTableView.selectedCounty.subscribe((options) =>
+                this.switchStrategyThemeView(options.name, 'county', options.id)
+            )
+
+            @currTableView.selectedRegion.subscribe((options) =>
+                this.switchStrategyThemeView(options.name, 'region', options.id)
+            )
+
+            return
+
+        _setupCountyStrategyView: (name, id) ->
+            @currTableView = new CountyStrategyCollectionView(
+                el: @tableContainer
+
+                currYear: @currYear
+                id: id
+                name: name
+            )
+
+            @currTableView.render()
+
+            @currTableView.selectedType.subscribe((options) =>
+                this.switchStrategyThemeView(options.name, 'type', options.id)
+            )
+
+            return
+
+
+        _setupRegionStrategyView: (name, id) ->
+            @currTableView = new RegionStrategyCollectionView(
+                el: @tableContainer
+
+                currYear: @currYear
+                id: id
+                name: name
+            )
+
+            @currTableView.render()
+
+            @currTableView.selectedType.subscribe((options) =>
+                this.switchStrategyThemeView(options.name, 'type', options.id)
+            )
+
+            return
+
+        _setupStrategyTypeView: (name, id) ->
+            @currTableView = new TypeStrategyCollectionView(
+                el: @tableContainer
+
+                currYear: @currYear
+                id: id
+                name: name
+            )
+
+            @currTableView.render()
+
+            @currTableView.selectedRegion.subscribe((options) =>
+                this.switchStrategyThemeView(options.name, 'region', options.id)
+            )
+
+            return
+
 )

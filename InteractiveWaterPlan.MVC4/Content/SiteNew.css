@@ -88,37 +88,6 @@ ul.typeahead .catName
     font-size:11px;
 }    
 
-/* OpenLayers */
-.olFramedCloudPopupContent h3 
-{
-    font-size: 14px;
-    line-height: 14px;
-    margin: 2px 0;
-}
-
-.olMapViewport img
-{
-    max-width:none;
-}
-
-.olControlAttribution 
-{
-    bottom: 0.5em !important;
-}
-
-.olControlLayerSwitcher label 
-{
-    display: inline;   
-    margin-left: 6px;
-}
-
-.olImageLoadError 
-{ 
-    background-color: transparent !important; 
-    /* when OL encounters a 404, don't display the pink image */
-    display: none !important;
-} 
-
 .scrollTableContainer
 {
     max-height: 400px;
@@ -161,3 +130,39 @@ ul.breadcrumb li:last-child > a:hover
     cursor: default;
     color: #aaa;
 }
+
+[class^="icon-"], [class*=" icon-"]
+{
+    vertical-align: 0px;
+}
+
+/* OpenLayers */
+.olFramedCloudPopupContent h3 
+{
+    font-size: 14px;
+    line-height: 14px;
+    margin: 2px 0;
+}
+
+.olMapViewport img
+{
+    max-width:none;
+}
+
+.olControlAttribution 
+{
+    bottom: 0.5em !important;
+}
+
+.olControlLayerSwitcher label 
+{
+    display: inline;   
+    margin-left: 6px;
+}
+
+.olImageLoadError 
+{ 
+    background-color: transparent !important; 
+    /* when OL encounters a 404, don't display the pink image */
+    display: none !important;
+} 
