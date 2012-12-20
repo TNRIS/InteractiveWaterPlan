@@ -114,6 +114,7 @@ define([
                 currYear: @currYear
                 el: @tableContainer
             )
+            
             @currTableView.render()
 
             #Subscripe to selectedCounty and selectedRegion observables
