@@ -97,6 +97,11 @@ ul.typeahead .catName
     border-bottom: 1px solid #ccc;
 }
 
+.modelTable
+{
+    width: 100%;
+}
+
 .modelTable th 
 {
     min-width:40px;
