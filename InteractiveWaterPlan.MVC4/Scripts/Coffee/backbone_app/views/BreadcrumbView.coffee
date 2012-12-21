@@ -35,6 +35,7 @@ define([
                 switch type
                     when 'county' then displayName = "#{name} County"
                     when 'region' then displayName = "Region #{name}"
+                    when 'type' then displayName = "\"#{name}\" Type"
                     else displayName = name
 
             bcModel = 

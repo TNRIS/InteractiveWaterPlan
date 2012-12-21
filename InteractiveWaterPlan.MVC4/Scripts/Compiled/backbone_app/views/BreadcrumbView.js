@@ -41,6 +41,9 @@ define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!template
           case 'region':
             displayName = "Region " + name;
             break;
+          case 'type':
+            displayName = "\"" + name + "\" Type";
+            break;
           default:
             displayName = name;
         }
