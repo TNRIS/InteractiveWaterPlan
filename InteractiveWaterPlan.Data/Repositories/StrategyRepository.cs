@@ -91,15 +91,20 @@ namespace InteractiveWaterPlan.Data
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year = null)
         {
             //TODO
-            return new List<Strategy>(){
-                new Strategy()
+            var list = new List<Strategy>();
+            var rand = new Random();
+            for (int i = 0; i < 15; i++)
+            {
+                list.Add(new Strategy()
                 {
-                    Id = new Random().Next(),
+                    Id = rand.Next(),
                     Description = "Strategy in county " + countyId + " " + year,
                     TypeName = "Reservoir",
                     TypeId = 1
-                }
-            };
+                });
+            }
+
+            return list;
         }
 
         public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
