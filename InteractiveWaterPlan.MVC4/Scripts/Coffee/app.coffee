@@ -19,8 +19,6 @@ Ext.Loader.setConfig({
 BASE_SCRIPT_PATH = Ext.get("base_script_path").dom.value
 BASE_API_PATH = Ext.get("base_path").dom.value
 
-console.log "API PATH", BASE_API_PATH
-
 #need to add path for TNRIS custom widgets
 Ext.Loader.setPath('TNRIS', "#{BASE_SCRIPT_PATH}/Compiled/TNRIS") 
 
