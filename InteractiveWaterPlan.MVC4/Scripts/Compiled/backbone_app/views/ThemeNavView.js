@@ -16,6 +16,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
 
     ThemeNavView.prototype.initialize = function() {
       _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 'changeStrategyView');
+      this.selectedType = ko.observable();
       return null;
     };
 
@@ -37,15 +38,15 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
       typeCollection = new TypeCollection();
       typeCollection.fetch({
         success: function(collection) {
-          var strategyType, _i, _len, _ref;
+          var res, strategyType, _i, _len, _ref;
           _ref = collection.models;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             strategyType = _ref[_i];
-            _this.$('#strategyTypeList').append(stratTypeLiTemplate({
+            res = _this.$('#strategyTypeList').append(stratTypeLiTemplate({
               m: strategyType.toJSON()
             }));
+            ko.applyBindings(_this, $('a:last', res)[0]);
           }
-          ko.applyBindings(_this, $('#strategyTypeList')[0]);
         }
       });
     };
@@ -72,15 +73,20 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     };
 
     ThemeNavView.prototype.changeStrategyView = function(data, event) {
-      var $target, newStrategyName, txt;
+      var $target, newStrategyType, txt;
       $target = $(event.target);
-      newStrategyName = $target.data('value');
+      newStrategyType = $target.data('type');
       $target.parents('li.dropdown').addClass('active');
       txt = 'Water Management Strategies';
-      if (newStrategyName !== 'net-county') {
+      if (newStrategyType !== 'net-supplies') {
         txt = $target.html();
       }
       $target.parents('li.dropdown').children('a.dropdown-toggle').children('span').html(txt);
+      this.selectedType({
+        type: $target.data('type'),
+        id: $target.data('id'),
+        name: $target.data('name')
+      });
       return null;
     };
 

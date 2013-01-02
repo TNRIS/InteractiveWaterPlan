@@ -37,6 +37,14 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
         el: $('#themeNavContainer')[0]
       });
       this.themeNavView.render();
+      this.themeNavView.selectedType.subscribe(function(options) {
+        options.id = options.id || null;
+        options.name = options.name || null;
+        if (options.type === 'net-supplies') {
+          options.name = "County Net Supplies";
+        }
+        return _this.switchStrategyThemeView(options.name, options.type, options.id, true);
+      });
       this.yearNavView = new YearNavView({
         startingYear: this.currYear,
         el: $('#yearNavContainer')[0]
@@ -65,12 +73,18 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.changeToYear(newYear);
     };
 
-    AppView.prototype.switchStrategyThemeView = function(name, type, id) {
+    AppView.prototype.switchStrategyThemeView = function(name, type, id, resetBreadcrumbs) {
       if (id == null) {
         id = null;
       }
+      if (resetBreadcrumbs == null) {
+        resetBreadcrumbs = false;
+      }
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
+      }
+      if (resetBreadcrumbs) {
+        this.breadcrumbList.render();
       }
       this.breadcrumbList.push(name, type, id);
       switch (type) {

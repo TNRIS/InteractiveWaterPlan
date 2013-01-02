@@ -55,6 +55,14 @@ define([
 
             @themeNavView = new ThemeNavView({ el: $('#themeNavContainer')[0] })
             @themeNavView.render()
+            @themeNavView.selectedType.subscribe((options) =>
+                options.id = options.id || null
+                options.name = options.name || null
+ 
+                if options.type == 'net-supplies' then options.name = "County Net Supplies"
+
+                this.switchStrategyThemeView(options.name, options.type, options.id, true)
+            )
 
             @yearNavView = new YearNavView(
                 startingYear: @currYear
@@ -87,12 +95,14 @@ define([
             @currTableView.changeToYear(newYear)
             return
 
-        switchStrategyThemeView: (name, type, id=null) ->
+        switchStrategyThemeView: (name, type, id=null, resetBreadcrumbs=false) ->
             #type can be 'net-supplies', 'county', 'region', 'district'
             #TODO: will have to do some map stuff as well
 
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
+
+            if resetBreadcrumbs then @breadcrumbList.render()
 
             #Add a new item to the breadcrumb list
             @breadcrumbList.push(name, type, id)

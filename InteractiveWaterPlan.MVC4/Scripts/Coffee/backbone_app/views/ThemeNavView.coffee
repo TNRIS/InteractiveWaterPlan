@@ -13,6 +13,8 @@ define([
             _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 
                 'changeStrategyView')
             
+            @selectedType = ko.observable()
+
             return null
 
         render: () ->
@@ -36,13 +38,14 @@ define([
                 success: (collection) =>
                     for strategyType in collection.models
                         
-                        this.$('#strategyTypeList').append(
+                        res = this.$('#strategyTypeList').append(
                             stratTypeLiTemplate(
                                 m: strategyType.toJSON()
                             )
                         )
 
-                    ko.applyBindings(this, $('#strategyTypeList')[0])
+                        #bind events to the most recently added a element
+                        ko.applyBindings(this, $('a:last', res)[0])
                     return
             )
 
@@ -71,18 +74,25 @@ define([
 
         changeStrategyView: (data, event) ->
             $target = $(event.target)
-            newStrategyName = $target.data('value')
+            newStrategyType = $target.data('type')
 
             $target.parents('li.dropdown').addClass('active')
             
             txt = 'Water Management Strategies'
-            if newStrategyName != 'net-county'
+            if newStrategyType != 'net-supplies'
                 txt = $target.html()
             
             $target.parents('li.dropdown')
                 .children('a.dropdown-toggle')
                 .children('span')
                 .html(txt)
+
+            #Change the observable to notify the app that the view must change
+            @selectedType(
+                type: $target.data('type')
+                id: $target.data('id')
+                name: $target.data('name')
+            )
 
             return null
 
