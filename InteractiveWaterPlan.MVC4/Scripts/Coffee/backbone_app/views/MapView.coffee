@@ -19,6 +19,17 @@ define([
             'stamen_toner', 'stamen_watercolor',
             'bing_road', 'bing_hybrid', 'bing_aerial']
 
+        initialize: (config) ->
+
+            @$el = $("##{config.mapContainerId}")
+            @el = @$el[0]
+
+            @bingApiKey = config.bingApiKey
+
+            _.bindAll(this, 'render', 'unrender', 'resetExtent')
+            
+            return null
+
         render: () ->
             @$el.empty()
 
@@ -45,17 +56,6 @@ define([
 
         unrender: () ->
             @$el.remove()
-            return null
-
-        initialize: (mapContainerId) ->
-        
-            @$el = $("##{mapContainerId}")
-            @el = @$el[0]
-
-            @bingApiKey = $('#bing_maps_key').val()
-
-            _.bindAll(this, 'render', 'unrender', 'resetExtent')
-            
             return null
 
         resetExtent: () ->

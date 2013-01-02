@@ -23,7 +23,10 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       var _this = this;
       this.$el.html(this.template());
       this.tableContainer = $('#tableContainer')[0];
-      this.mapView = new MapView('mapContainer');
+      this.mapView = new MapView({
+        mapContainerId: 'mapContainer',
+        bingApiKey: $('#bing_maps_key').val()
+      });
       this.mapView.render();
       this.mapToolsView = new MapToolsView({
         el: $('#mapTools')[0],

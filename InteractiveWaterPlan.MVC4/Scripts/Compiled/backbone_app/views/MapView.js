@@ -22,6 +22,14 @@ define([], function() {
 
     MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'stamen_toner', 'stamen_watercolor', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
+    MapView.prototype.initialize = function(config) {
+      this.$el = $("#" + config.mapContainerId);
+      this.el = this.$el[0];
+      this.bingApiKey = config.bingApiKey;
+      _.bindAll(this, 'render', 'unrender', 'resetExtent');
+      return null;
+    };
+
     MapView.prototype.render = function() {
       this.$el.empty();
       this.map = new OpenLayers.Map({
@@ -39,14 +47,6 @@ define([], function() {
 
     MapView.prototype.unrender = function() {
       this.$el.remove();
-      return null;
-    };
-
-    MapView.prototype.initialize = function(mapContainerId) {
-      this.$el = $("#" + mapContainerId);
-      this.el = this.$el[0];
-      this.bingApiKey = $('#bing_maps_key').val();
-      _.bindAll(this, 'render', 'unrender', 'resetExtent');
       return null;
     };
 

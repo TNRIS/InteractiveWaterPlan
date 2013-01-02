@@ -40,7 +40,10 @@ define([
             #save reference to the tableContainer dom element
             @tableContainer = $('#tableContainer')[0]
 
-            @mapView = new MapView('mapContainer')
+            @mapView = new MapView(
+                mapContainerId: 'mapContainer'
+                bingApiKey: $('#bing_maps_key').val()
+            )
             @mapView.render()
 
             @mapToolsView = new MapToolsView({ 
