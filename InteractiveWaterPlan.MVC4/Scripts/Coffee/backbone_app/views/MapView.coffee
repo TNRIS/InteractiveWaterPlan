@@ -13,8 +13,7 @@ define([
 
         map: null
 
-        #TODO: Read from config somewhere
-        bingApiKey: 'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o'
+        bingApiKey: ''
 
         baseLayers: ['mapquest_open', 'mapquest_aerial', 'esri_gray', 
             'stamen_toner', 'stamen_watercolor',
@@ -52,6 +51,8 @@ define([
         
             @$el = $("##{mapContainerId}")
             @el = @$el[0]
+
+            @bingApiKey = $('#bing_maps_key').val()
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent')
             

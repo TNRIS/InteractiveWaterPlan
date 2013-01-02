@@ -3,6 +3,7 @@
 }
 
 @using System.Web.Optimization
+@using System.Web.Configuration
 
 <!DOCTYPE html>
 
@@ -44,6 +45,7 @@
     
     <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
     <input type="hidden" id="base_path" value="@Url.Content("~/")" />
+    <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["bing_maps_key"]" />
 
     @Scripts.Render("~/bundles/js/app")
     <script data-main="@Url.Content("~/Scripts/Compiled/backbone_app/app.js")" src="@Url.Content("~/Scripts/require.js")" type="text/javascript"></script>

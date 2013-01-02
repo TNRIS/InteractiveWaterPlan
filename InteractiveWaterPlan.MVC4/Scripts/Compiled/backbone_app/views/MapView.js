@@ -18,7 +18,7 @@ define([], function() {
 
     MapView.prototype.map = null;
 
-    MapView.prototype.bingApiKey = 'AkcIEknNDXOC-auGjTFai2j6vXuUeC6vT2-i7_JusAghlLEOwoM1gVC0vz1AcS5o';
+    MapView.prototype.bingApiKey = '';
 
     MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'stamen_toner', 'stamen_watercolor', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
@@ -45,6 +45,7 @@ define([], function() {
     MapView.prototype.initialize = function(mapContainerId) {
       this.$el = $("#" + mapContainerId);
       this.el = this.$el[0];
+      this.bingApiKey = $('#bing_maps_key').val();
       _.bindAll(this, 'render', 'unrender', 'resetExtent');
       return null;
     };
