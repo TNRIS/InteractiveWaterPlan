@@ -58,13 +58,13 @@ define([
             if $target.hasClass('off')
                 $target.html('Hide Map')
                 $('#mapContainer').show()
-                $('#mapTools').show()
+                $('.map-stuff').show()
                 $target.removeClass('off')
 
             else
                 $target.addClass('off')
                 $('#mapContainer').hide()
-                $('#mapTools').hide()
+                $('.map-stuff').hide()
                 $target.html('Show Map')
 
             return
