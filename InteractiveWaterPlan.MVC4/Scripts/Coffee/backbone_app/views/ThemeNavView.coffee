@@ -60,13 +60,13 @@ define([
 
             if $target.hasClass('off')
                 $target.html('Hide Map')
-                $('#mapContainer').show()
+                $('#mapContainer').slideDown()
                 $('.map-stuff').show()
                 $target.removeClass('off')
 
             else
                 $target.addClass('off')
-                $('#mapContainer').hide()
+                $('#mapContainer').slideUp()
                 $('.map-stuff').hide()
                 $target.html('Show Map')
 
