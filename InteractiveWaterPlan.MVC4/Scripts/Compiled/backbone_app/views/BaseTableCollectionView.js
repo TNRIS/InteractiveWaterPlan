@@ -76,8 +76,8 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.hideLoading = function() {
-      this.$('.scrollTableContainer').fadeIn();
       this.$('.loading').hide();
+      this.$('.scrollTableContainer').fadeIn();
       return null;
     };
 

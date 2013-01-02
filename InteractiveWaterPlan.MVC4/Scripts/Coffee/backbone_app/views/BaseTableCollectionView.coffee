@@ -54,7 +54,6 @@ define([
 
                     #apply KO bindings after rendering all the collection model views
                     ko.applyBindings(this, this.$('tbody')[0]) 
-
                     return   
             )
 
@@ -75,8 +74,8 @@ define([
             return null
 
         hideLoading: () ->
-            this.$('.scrollTableContainer').fadeIn()
             this.$('.loading').hide()
+            this.$('.scrollTableContainer').fadeIn()
             return null
 
         changeToYear: (newYear) ->
