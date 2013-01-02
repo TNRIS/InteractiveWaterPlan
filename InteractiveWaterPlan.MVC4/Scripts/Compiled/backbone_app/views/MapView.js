@@ -26,7 +26,7 @@ define([], function() {
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc');
       return null;
     };
 
@@ -41,6 +41,10 @@ define([], function() {
         zoom: this.origZoom,
         eventListeners: {}
       });
+      this.placeLayer = new OpenLayers.Layer.Vector("Place Layer", {
+        displayInLayerSwitcher: false
+      });
+      this.map.addLayer(this.placeLayer);
       this.map.addControl(new OpenLayers.Control.LayerSwitcher());
       return this;
     };
@@ -57,6 +61,21 @@ define([], function() {
         zoom = this.origZoom - 1;
       }
       this.map.setCenter(this.origCenter, zoom);
+    };
+
+    MapView.prototype.showPlaceFeature = function(placeFeature) {
+      var bounds, feature, wktFormat;
+      wktFormat = new OpenLayers.Format.WKT();
+      feature = wktFormat.read(placeFeature.get('wktGeog'));
+      this.transformToWebMerc(feature.geometry);
+      bounds = feature.geometry.getBounds();
+      this.map.zoomToExtent(bounds);
+      this.placeLayer.removeAllFeatures();
+      this.placeLayer.addFeatures(feature);
+    };
+
+    MapView.prototype.transformToWebMerc = function(geometry) {
+      return geometry.transform(this.map.displayProjection, this.map.projection);
     };
 
     MapView.prototype._setupBaseLayers = function(baseLayers) {

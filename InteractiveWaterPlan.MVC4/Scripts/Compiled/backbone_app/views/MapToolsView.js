@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/mapTools.html'], function(tpl) {
+define(['models/PlaceFeatureModel', 'scripts/text!templates/mapTools.html'], function(PlaceFeature, tpl) {
   var MapToolsView;
   return MapToolsView = (function(_super) {
 
@@ -17,27 +17,24 @@ define(['scripts/text!templates/mapTools.html'], function(tpl) {
     MapToolsView.prototype.mapView = null;
 
     MapToolsView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'zoomToTexas');
+      _.bindAll(this, 'render', 'unrender', 'zoomToTexas', 'showPlaceFeature');
       this.mapView = options.mapView;
     };
 
     MapToolsView.prototype.render = function() {
-      var _this = this;
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
       this.$('#goToPlaceInput').place_typeahead({
         minLength: 2,
         source: function(query, process) {
+          this.$element.data('selected-place-id', null);
           return $.get("" + BASE_API_PATH + "api/place", {
             name: query
           }, function(places) {
             return process(places);
           });
         },
-        updater: function(item) {
-          console.log("TODO: Zoom to ", item);
-          return item.name;
-        }
+        buttonClick: this.showPlaceFeature
       });
       return this;
     };
@@ -45,6 +42,21 @@ define(['scripts/text!templates/mapTools.html'], function(tpl) {
     MapToolsView.prototype.unrender = function() {
       this.$el.remove();
       return null;
+    };
+
+    MapToolsView.prototype.showPlaceFeature = function() {
+      var placeFeature, selectedPlaceId,
+        _this = this;
+      selectedPlaceId = this.$('#goToPlaceInput').data('selected-place-id');
+      placeFeature = new PlaceFeature();
+      placeFeature.fetch({
+        data: {
+          placeId: selectedPlaceId
+        },
+        success: function(model) {
+          return _this.mapView.showPlaceFeature(model);
+        }
+      });
     };
 
     MapToolsView.prototype.zoomToTexas = function() {

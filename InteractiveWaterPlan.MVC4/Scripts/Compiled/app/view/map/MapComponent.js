@@ -58,7 +58,7 @@ Ext.define('ISWP.view.map.MapComponent', {
         zoomend: this.handleMapEvent
       }
     });
-    this.placeLayer = this.placeLayer = new OpenLayers.Layer.Vector("Place Layer", {
+    this.placeLayer = new OpenLayers.Layer.Vector("Place Layer", {
       displayInLayerSwitcher: false
     });
     this.map.addLayer(this.placeLayer);
@@ -72,9 +72,6 @@ Ext.define('ISWP.view.map.MapComponent', {
   resetExtent: function() {
     this.map.setCenter(this.origCenter, this.origZoom);
     return null;
-  },
-  transformToWebMerc: function(geometry) {
-    return geometry.transform(this.map.displayProjection, this.map.projection);
   },
   removePopupsFromMap: function() {
     var p, _i, _len, _ref;

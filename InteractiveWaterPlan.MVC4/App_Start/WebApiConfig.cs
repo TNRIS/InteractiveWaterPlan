@@ -28,7 +28,7 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                 "GetPlaceFeatureRoute",
-                "api/place/feature/{placeId}",
+                "api/place/feature",
                 new { controller = "Place", action = "GetPlaceFeature" }
             );
 

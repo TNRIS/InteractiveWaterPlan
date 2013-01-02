@@ -23,7 +23,10 @@
 
   var Typeahead = function (element, options) {
     this.$element = $(element)
+    this.$goButton = this.$element.next('button')
+    this.$goButton.attr("disabled", true)
     this.options = $.extend({}, $.fn.typeahead.defaults, options)
+    this.$goButton.click(this.options.buttonClick)
     this.matcher = this.options.matcher || this.matcher
     this.sorter = this.options.sorter || this.sorter
     this.highlighter = this.options.highlighter || this.highlighter
@@ -41,8 +44,9 @@
 
   , select: function () {
       var val = { 
-        name: this.$menu.find('.active').attr('data-value'),
-        id: this.$menu.find('.active').attr('data-place-id')
+        name: this.$menu.find('.active').data('value'),
+        id: this.$menu.find('.active').data('place-id'),
+        categoryName: this.$menu.find('.active').data('category-name')
       }
       this.$element
         .val(this.updater(val))
@@ -51,7 +55,14 @@
     }
 
   , updater: function (item) {
-      return item
+      //set the data-place-id on the element
+      this.$element.data('selected-place-id', item.id)
+
+      //enable the goButton
+      this.$goButton.removeAttr("disabled")
+      
+      //Use the name attribute for display
+      return item.name + " (" + item.categoryName +")"
     }
 
   , show: function () {
@@ -77,7 +88,8 @@
 
   , lookup: function (event) {
       var items
-
+      this.$goButton.attr("disabled", true)
+      
       this.query = this.$element.val()
 
       if (!this.query || this.query.length < this.options.minLength) {
@@ -135,7 +147,10 @@
       var that = this
 
       items = $(items).map(function (i, place) {
-        i = $(that.options.item).attr('data-value', place.name).attr('data-place-id', place.id)
+        i = $(that.options.item)
+          .data('value', place.name)
+          .data('place-id', place.id)
+          .data('category-name', place.categoryName)
         i.find('a').html(that.highlighter(place.name))
           .append(" <span class='catName'>(" + place.categoryName +")</span>")
         return i[0]
@@ -292,6 +307,7 @@
   , menu: '<ul class="typeahead dropdown-menu"></ul>'
   , item: '<li><a href="#"></a></li>'
   , minLength: 2
+  , buttonClick: function() { return false; }
   }
 
   $.fn.typeahead.Constructor = Typeahead

@@ -657,6 +657,7 @@
     <Content Include="Scripts\Compiled\app\view\Viewport.js" />
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
+    <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\AppView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseTableCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbView.js" />
@@ -736,8 +737,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\Coffee\backbone_app\models\" />
-    <Folder Include="Scripts\Compiled\backbone_app\models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -777,6 +776,7 @@
     <None Include="Scripts\Coffee\app\view\Viewport.coffee" />
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\AppView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BaseTableCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BreadcrumbView.coffee" />

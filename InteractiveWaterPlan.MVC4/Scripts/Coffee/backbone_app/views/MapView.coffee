@@ -26,7 +26,8 @@ define([
 
             @bingApiKey = config.bingApiKey
 
-            _.bindAll(this, 'render', 'unrender', 'resetExtent')
+            _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
+                'transformToWebMerc')
             
             return null
 
@@ -44,11 +45,10 @@ define([
                     #zoomend: this.handleMapEvent
             )
 
-            #@placeLayer = @placeLayer = new OpenLayers.Layer.Vector("Place Layer",
-            #    {
-            #        displayInLayerSwitcher: false
-            #    })
-            #@map.addLayer(@placeLayer)
+            @placeLayer = new OpenLayers.Layer.Vector("Place Layer",
+                displayInLayerSwitcher: false)
+            @map.addLayer(@placeLayer)
+
             
             @map.addControl(new OpenLayers.Control.LayerSwitcher());
 
@@ -67,6 +67,24 @@ define([
 
             @map.setCenter(@origCenter, zoom);
             return
+
+        showPlaceFeature: (placeFeature) ->
+            wktFormat = new OpenLayers.Format.WKT()
+            feature = wktFormat.read(placeFeature.get('wktGeog'))
+            
+            #convert geometry to web mercator
+            this.transformToWebMerc(feature.geometry)
+
+            bounds = feature.geometry.getBounds()
+            
+            @map.zoomToExtent(bounds)
+
+            @placeLayer.removeAllFeatures()
+            @placeLayer.addFeatures(feature)
+            return
+
+        transformToWebMerc: (geometry) ->
+            return geometry.transform(@map.displayProjection, @map.projection)
 
         #returns array of base layers
         _setupBaseLayers: (baseLayers) ->

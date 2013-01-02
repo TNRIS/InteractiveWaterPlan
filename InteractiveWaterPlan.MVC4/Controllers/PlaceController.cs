@@ -22,6 +22,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return x.Union(y).ToList<Place>(); 
         }
 
+        //api/place/feature?placeId={placeId}
+        public PlaceFeature GetPlaceFeature(int placeId)
+        {
+            var repo = new PlaceRepository();
+            return repo.GetPlaceFeature(placeId);
+        }
+
         //api/place?categoryId={categoryId}
         public IList<Place> GetPlacesByCategory(int categoryId)
         {
@@ -57,12 +64,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return repo.GetPlacesByNamePart(name);
         }
 
-        //api/place/feature/{placeId}
-        public PlaceFeature GetPlaceFeature(int placeId)
-        {
-            var repo = new PlaceRepository();
-            return repo.GetPlaceFeature(placeId);
-        }
+        
 
     }
 }
