@@ -31,6 +31,7 @@ define([], function() {
     };
 
     MapView.prototype.render = function() {
+      var swp_boundaries;
       this.$el.empty();
       this.map = new OpenLayers.Map({
         div: this.$el.attr('id'),
@@ -41,6 +42,15 @@ define([], function() {
         zoom: this.origZoom,
         eventListeners: {}
       });
+      swp_boundaries = new OpenLayers.Layer.WMS("Water Plan Boundaries", "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer", {
+        layers: '0',
+        transparent: true
+      }, {
+        isBaseLayer: false,
+        visibility: false,
+        opacity: 0.7
+      });
+      this.map.addLayer(swp_boundaries);
       this.placeLayer = new OpenLayers.Layer.Vector("Place Layer", {
         displayInLayerSwitcher: false
       });

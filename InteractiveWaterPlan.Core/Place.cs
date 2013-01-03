@@ -30,7 +30,7 @@ namespace InteractiveWaterPlan.Core
 
     public class PlaceFeature : AbstractFeature
     {
-
+        public virtual string Name { get; set; }
     }
 
     public class PlaceCategory

@@ -45,6 +45,20 @@ define([
                     #zoomend: this.handleMapEvent
             )
 
+            #State Water Plan Boundary Layer
+            swp_boundaries = new OpenLayers.Layer.WMS( "Water Plan Boundaries",
+                    "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer", 
+                    {
+                        layers: '0'
+                        transparent: true
+                    }
+                    {
+                        isBaseLayer: false
+                        visibility: false
+                        opacity: 0.7
+                    })
+            @map.addLayer(swp_boundaries);
+
             @placeLayer = new OpenLayers.Layer.Vector("Place Layer",
                 displayInLayerSwitcher: false)
             @map.addLayer(@placeLayer)

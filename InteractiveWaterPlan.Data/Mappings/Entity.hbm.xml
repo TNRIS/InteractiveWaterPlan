@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
-  
+
   <class name="Entity" mutable="false">
     <id name="Id">
       <column name="SQL_ID"/>
@@ -33,10 +33,10 @@
     <property column="Redundant_Water" name="IsRedundantSupply" />
     <property column="Source_Name" name="SourceName" />
     <property column="Source_ID" name="SourceId" />
-    
+
     <!--//TODO: SSYEAR entries? -->
   </class>
-  
+
   <sql-query name="GetAllEntities">
     <return class="Entity"/>
     exec dbo.usp_Select_ALL_tbl_GEMSS_Vector_TWDB_DB12_Water_Entities
@@ -53,5 +53,5 @@
     <return class="WaterUseEntity"/>
     exec dbo.usp_Select_WaterEntityUsage_By_ProposedReservoir_and_Year :var_DB12_ID, :var_EstYear
   </sql-query>
-  
+
 </hibernate-mapping>

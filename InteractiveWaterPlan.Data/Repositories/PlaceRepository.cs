@@ -19,8 +19,6 @@ namespace InteractiveWaterPlan.Data
         #endregion
 
 
-
-
         /// <summary>
         /// Returns a Place specified by id
         /// </summary>

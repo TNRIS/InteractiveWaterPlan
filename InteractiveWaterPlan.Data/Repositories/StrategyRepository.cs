@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using InteractiveWaterPlan.Core;
 using Microsoft.SqlServer.Types;
 using NHibernate;
@@ -21,122 +22,66 @@ namespace InteractiveWaterPlan.Data
 
         #endregion
 
-        public IList<Strategy> GetAllStrategies(string year = null)
-        {
-            //TODO
-            var x = new List<Strategy>();
-            var rand = new Random();
-            for (int i = 0; i < 20; i++)
-            {   
-                x.Add(new Strategy()
-                    {
-                        Id = rand.Next(),
-                        Description = "Strategy "+i,
-                        TypeName = "Reservoir",
-                        TypeId = 1
-                    });
-            }
-
-            return x;
-        }
-
-        public Strategy GetStrategy(int id, string year = null)
-        {
-            //TODO
-            return new Strategy()
-            {
-                Id = id,
-                Description = "Strategy " + id,
-                TypeName = "Reservoir",
-                TypeId = 1
-            };
-        }
-
         
         public IList<StrategyType> GetStrategyTypes()
         {
-            //TODO: Get list of Strategy Types (TypeId, TypeName, maybe CountOfWMS)
-            throw new NotImplementedException();
-        }
-
-
-        public IList<Strategy> GetStrategiesInPlace(int placeId, string year = null)
-        {
-            //TODO
-            return new List<Strategy>(){
-                new Strategy()
-                {
-                    Id = new Random().Next(),
-                    Description = "Strategy in place "+placeId,
-                    TypeName = "Reservoir",
-                    TypeId = 1
-                }
-            };
+            return Session.GetNamedQuery("GetAllStrategyTypes")
+                .List<StrategyType>()
+                .OrderBy(x => x.Id)
+                .ToList<StrategyType>();
         }
 
         public IList<Strategy> GetStrategiesInRegion(int regionId, string year = null)
         {
-            //TODO
-            return new List<Strategy>(){
-                new Strategy()
+            //first need to figure out the regionLetter of the given regionId
+            var regionLetter = Session.GetNamedQuery("GetAllPlanningRegions")
+                .List<PlanningRegion>()
+                .Where(x => x.Id == regionId)
+                .Select<PlanningRegion, char>(x => x.Letter)
+                .First();
+
+            return GetStrategiesInRegion(regionLetter, year);
+        }
+
+        public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year = null)
+        {
+            var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")
+                .SetParameter("var_Region", regionLetter)
+                .List<Strategy>()
+                .OrderBy(x => x.Id)
+                .ToList<Strategy>();
+
+            if (year == null || year.Length == 0)
+            {
+                return allStrategiesInRegion;
+            }
+            
+            //else only return those that have non-null value in SupplyYEAR
+            return allStrategiesInRegion
+                .Where(x =>
                 {
-                    Id = new Random().Next(),
-                    Description = "Strategy in region " + regionId + " " + year,
-                    TypeName = "Reservoir",
-                    TypeId = 1
-                }
-            };
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
+                })
+                .ToList<Strategy>();
         }
 
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year = null)
         {
             //TODO
-            var list = new List<Strategy>();
-            var rand = new Random();
-            for (int i = 0; i < 15; i++)
-            {
-                list.Add(new Strategy()
-                {
-                    Id = rand.Next(),
-                    Description = "Strategy in county " + countyId + " " + year,
-                    TypeName = "Reservoir",
-                    TypeId = 1
-                });
-            }
-
-            return list;
+            throw new NotImplementedException();
         }
 
         public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
         {
             //TODO
-            return new List<Strategy>(){
-                new Strategy()
-                {
-                    Id = new Random().Next(),
-                    Description = "Strategy in district "+districtId,
-                    TypeName = "Reservoir",
-                    TypeId = 1
-                }
-            };
+            throw new NotImplementedException();
         }
 
         public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year = null)
         {
             //TODO
-            return new List<Strategy>(){
-                new Strategy()
-                {
-                    Id = new Random().Next(),
-                    Description = "Strategy of type "+strategyTypeId,
-                    TypeName = "Type "+strategyTypeId,
-                    TypeId = strategyTypeId,
-                    RegionId = 1,
-                    RegionName = "A",
-                    CountyId = 123,
-                    CountyName = "County Name"
-                }
-            };
+            throw new NotImplementedException();
         }
 
     }

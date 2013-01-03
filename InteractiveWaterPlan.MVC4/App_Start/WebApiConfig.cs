@@ -38,35 +38,69 @@ namespace InteractiveWaterPlan.MVC4
             #region Strategy Routes
 
             config.Routes.MapHttpRoute(
-                "GetAllStrategiesRoute",
-                "api/strategy/all",
-                new { controller = "Strategy", action="GetAll" }
+                "GetStrategiesInRegion",
+                "api/strategies/region",
+                new { controller = "Strategy", action = "GetStrategiesInRegion" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetStrategiesInCounty",
+                "api/strategies/county",
+                new { controller = "Strategy", action = "GetStrategiesInCounty" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetStrategiesInDistrict",
+                "api/strategies/region",
+                new { controller = "Strategy", action = "GetStrategiesInDistrict" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetStrategiesByType",
+                "api/strategies/type",
+                new { controller = "Strategy", action = "GetStrategiesByType" }
             );
 
             config.Routes.MapHttpRoute(
                 "GetStrategyTypesRyoute",
-                "api/strategy/type/all",
+                "api/strategy/types",
                 new { controller = "Strategy", action = "GetStrategyTypes" }
             );
 
             config.Routes.MapHttpRoute(
                 "GetCountyNetSuppliesRoute",
-                "api/strategy/county/net/all",
+                "api/strategies/county-net",
                 new { controller = "Strategy", action = "GetCountyNetSupplies" }
             );
 
-            config.Routes.MapHttpRoute(
-                "GetStrategiesRoute",
-                "api/strategy",
-                new { controller = "Strategy" }
-            );
+            
 
             #endregion
 
+            #region Boundary Routes
+            config.Routes.MapHttpRoute(
+                "GetAllCounties",
+                "api/boundary/counties/all",
+                new { controller = "Boundary", action = "GetAllCounties" }
+            );
 
+            config.Routes.MapHttpRoute(
+                "GetAllPlanningRegions",
+                "api/boundary/planningregions/all",
+                new { controller = "Boundary", action = "GetAllPlanningRegions" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetAllLegeDistricts",
+                "api/boundary/legedistricts/all",
+                new { controller = "Boundary", action = "GetAllLegeDistricts" }
+            );
+
+
+            #endregion
 
             #region Feature Routes
-
+            /*
             config.Routes.MapHttpRoute(
                 "GetAllEntitiesRoute",
                 "api/feature/entity/all",
@@ -90,11 +124,11 @@ namespace InteractiveWaterPlan.MVC4
                 "api/feature/entity/{Year}",
                 new { controller = "Feature", action = "GetEntitiesOfReservoir" }
             );
-
+            */
             #endregion
 
             #region Data Routes
-
+            /*
             config.Routes.MapHttpRoute(
                 "GetWaterUseDataRoute",
                 "api/data/wateruse/{LocationType}/{LocationName}/{Year}",
@@ -106,14 +140,14 @@ namespace InteractiveWaterPlan.MVC4
                 "api/data/reservoir/{ReservoirId}/{Year}",
                 new { controller = "Data", action = "GetReservoirSupplyData" }
             );
-
+            */
             #endregion
 
-            config.Routes.MapHttpRoute(
+            /*config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
-            );
+            );*/
         }
     }
 }

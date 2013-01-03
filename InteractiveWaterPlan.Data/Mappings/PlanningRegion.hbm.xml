@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
+
+  <class name="PlanningRegion" mutable="false">
+    <id name="Id">
+      <column name="SQL_ID"/>
+    </id>
+
+    <property column="REG_NAME" name="Name" />
+    <property column="LETTER" name="Letter" />
+    <property column="SQL_GEOG" name="WktGeog" />
+  </class>
+
+  <sql-query name="GetAllPlanningRegions">
+    <return class="PlanningRegion"/>
+    exec dbo.usp_Select_ALL_tbl_Bndry_TWDB_Regions
+  </sql-query>
+
+</hibernate-mapping>
