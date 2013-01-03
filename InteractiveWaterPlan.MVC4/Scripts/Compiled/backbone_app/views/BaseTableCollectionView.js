@@ -14,6 +14,8 @@ define([], function() {
 
     BaseTableCollectionView.prototype.currYear = null;
 
+    BaseTableCollectionView.prototype.fetchCallback = null;
+
     BaseTableCollectionView.prototype.initialize = function(currYear, ModelView, Collection, tpl, options) {
       _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable');
       this.currYear = ko.observable(currYear);
@@ -57,6 +59,9 @@ define([], function() {
           }
           _this.hideLoading();
           ko.applyBindings(_this, _this.$('tbody')[0]);
+          if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
+            _this.fetchCallback(collection.models);
+          }
         }
       });
     };

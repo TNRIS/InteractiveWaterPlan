@@ -8,7 +8,7 @@ define([
     class CountyStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            _.bindAll(this, 'selectType')
+            _.bindAll(this, 'selectType', 'fetchCallback')
 
             @countyId = options.id
             @countyName = options.name
@@ -25,8 +25,27 @@ define([
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
             @selectedType = ko.observable()
+            @wugArray = ko.observableArray()
 
             return null
+
+        fetchCallback: (models) ->
+            #TODO: Use underscore to map WUG properties to new WUG object
+            # and then add them all to the @wugArray observable array
+            newWugList = _.map(models, (m) ->
+                return {
+                    id: m.get("recipientEntityId")
+                    name: m.get("recipientEntityName")
+                    wktGeog: m.get("recipientEntityWktGeog")
+                }
+            )
+
+            _.each(newWugList, (m) ->
+                @wugArray.push(m)
+                return
+            )
+            return
+
 
         render: () ->
             super

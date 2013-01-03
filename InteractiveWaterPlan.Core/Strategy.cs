@@ -37,5 +37,6 @@
 
         public virtual int RecipientEntityId { get; set; }
         public virtual string RecipientEntityName { get; set; }
+        public virtual string RecipientEntityWktGeog { get; set; }
     }
 }

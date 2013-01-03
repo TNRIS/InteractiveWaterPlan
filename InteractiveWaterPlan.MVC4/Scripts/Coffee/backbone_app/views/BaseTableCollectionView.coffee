@@ -5,13 +5,15 @@ define([
 
         currYear: null #reference to the currently selected year
 
+        fetchCallback: null #optional holder for callback after collection fetch has completed successfully
+
         initialize: (currYear, ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'changeToYear', 
                 '_makeTableSortable')
 
             @currYear = ko.observable(currYear)
-           
+            
             options = options || {}
             @fetchParams = options.fetchParams || {}
             
@@ -57,6 +59,9 @@ define([
 
                     #apply KO bindings after rendering all the collection model views
                     ko.applyBindings(this, this.$('tbody')[0]) 
+
+                    if this.fetchCallback? and _.isFunction(this.fetchCallback)
+                        this.fetchCallback(collection.models)
 
                     return   
             )
