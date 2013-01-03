@@ -16,7 +16,7 @@ define([
             fetchParams = {typeId: @typeId}
             
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategy" 
+                url: "#{BASE_API_PATH}api/strategies/type" 
             )
 
             super options.currYear, StrategyTypeView, 
@@ -37,11 +37,11 @@ define([
             $target = $(event.target)
 
             #set the observable to the selected region id and name
-            regionId = $target.data('value')
-            regionName = $target.data('name')
+            regionLetter = $target.data('value')
+            
             @selectedRegion({
-                id: regionId
-                name: regionName
+                id: regionLetter
+                name: regionLetter
             })
             
             return null

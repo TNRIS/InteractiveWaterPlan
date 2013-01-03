@@ -33,13 +33,12 @@ define(['views/BaseTableCollectionView', 'views/CountyNetSupplyView', 'collectio
     };
 
     CountyNetSupplyCollectionView.prototype.selectRegion = function(data, event) {
-      var $target, regionId, regionName;
+      var $target, regionLetter;
       $target = $(event.target);
-      regionId = $target.data('value');
-      regionName = $target.data('name');
+      regionLetter = $target.data('value');
       this.selectedRegion({
-        id: regionId,
-        name: regionName
+        id: regionLetter,
+        name: regionLetter
       });
       return null;
     };

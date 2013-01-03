@@ -15,14 +15,13 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
     RegionStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
       _.bindAll(this, 'selectType');
-      this.regionId = options.id;
-      this.regionName = options.name;
-      this.viewName = "Region " + this.regionName;
+      this.regionLetter = options.id;
+      this.viewName = "Region " + this.regionLetter;
       fetchParams = {
-        regionId: this.regionId
+        regionLetter: this.regionLetter
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategy"
+        url: "" + BASE_API_PATH + "api/strategies/region"
       });
       RegionStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams

@@ -7,7 +7,11 @@ define([
 
         tagName: 'tr'
 
-        initialize: () ->
+        initialize: (options) ->
+            super options
+
+            @currYear = options.currYear
+
             _.bindAll(this, 'render', 'unrender')
 
             @template = _.template(tpl)
@@ -15,9 +19,11 @@ define([
             return null
 
         render: () ->
+
             @$el.html(
                 @template(
                     m: @model.toJSON()
+                    currYear: @currYear
                 )
             )
 

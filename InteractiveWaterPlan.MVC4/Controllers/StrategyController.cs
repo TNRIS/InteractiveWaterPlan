@@ -29,17 +29,24 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         // GET api/strategies/region
         public IList<Strategy> GetStrategiesInRegion(int regionId, string year = null)
         {
-            //TODO: Why does this give a stack trace? need to turn that off...
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
             return _repo.GetStrategiesInRegion(regionId, year);
         }
 
+        // GET api/strategies/region
+        public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year = null)
+        {
+            if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesInRegion(regionLetter, year);
+        }
+
         // GET api/strategies/county
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year)
         {
-            //TODO: Why does this give a stack trace? need to turn that off...
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
@@ -49,7 +56,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         // GET api/strategies/district
         public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
         {
-            //TODO: Why does this give a stack trace? need to turn that off...
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
@@ -59,7 +65,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         // GET api/strategies/type
         public IList<Strategy> GetStrategiesByType(int typeId, string year)
         {
-            //TODO: Why does this give a stack trace? need to turn that off...
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
@@ -69,7 +74,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         // GET api/strategies/county-net
         public IList<CountyNetSupply> GetCountyNetSupplies(string year)
         {
-            //TODO: Why does this give a stack trace? need to turn that off...
+            //TODO
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 

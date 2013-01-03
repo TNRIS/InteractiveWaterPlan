@@ -22,7 +22,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
         countyId: this.countyId
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategy"
+        url: "" + BASE_API_PATH + "api/strategies/county"
       });
       CountyStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams

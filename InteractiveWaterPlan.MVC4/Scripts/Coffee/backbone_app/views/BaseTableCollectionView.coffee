@@ -9,8 +9,8 @@ define([
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable')
 
-            @currYear = currYear
-
+            @currYear = ko.observable(currYear)
+           
             options = options || {}
             @fetchParams = options.fetchParams || {}
             
@@ -30,6 +30,8 @@ define([
             #make sortable
             this._makeTableSortable()
             
+            ko.applyBindings(this, @el)
+            
             return this
 
         unrender: () ->
@@ -41,7 +43,7 @@ define([
             
             this.$('tbody').empty() #clear the table contents
 
-            params = _.extend({year: @currYear}, @fetchParams)
+            params = _.extend({year: @currYear() }, @fetchParams)
 
             @collection.fetch(
                 data: params
@@ -54,14 +56,17 @@ define([
 
                     #apply KO bindings after rendering all the collection model views
                     ko.applyBindings(this, this.$('tbody')[0]) 
+
                     return   
             )
 
             return
 
         appendModel: (model) ->
+
             modelView = new @ModelView(
                 model: model
+                currYear: @currYear()
             )
 
             this.$('tbody').append(modelView.render().el)
@@ -79,7 +84,7 @@ define([
             return null
 
         changeToYear: (newYear) ->
-            @currYear = newYear
+            @currYear(newYear)
             this.fetchCollection()
             return
 

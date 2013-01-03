@@ -1,12 +1,12 @@
 
 <td>
-    <a href="#" data-bind="click: selectRegion" data-value="{{m.regionId}}" data-name="{{m.regionName}}">
-        {{m.regionName}}
+    <a href="#" data-bind="click: selectRegion" data-value="{{m.regionLetter}}">
+        {{m.regionLetter}}
     </a>
 </td>
 
 <td>{{m.description}}</td>
 <td>{{m.sourceName}}</td>
-<td>{{m.entityName}}</td>
-<td>{{m.supplyVolume}}</td>
-<td>{{m.onlineDecade}}</td>
+<td>{{m.recipientEntityName}}</td>
+<td>{{m["supply"+currYear]}}</td>
+<td>{{m.onlineYear}}</td>

@@ -30,7 +30,7 @@ define([
         renderStrategyTypeList: () ->
             stratTypeLiTemplate = _.template(strategyTypeListItemTpl)
             TypeCollection = Backbone.Collection.extend(
-                url: "#{BASE_API_PATH}api/strategy/type/all"
+                url: "#{BASE_API_PATH}api/strategy/types"
             )
 
             typeCollection = new TypeCollection()

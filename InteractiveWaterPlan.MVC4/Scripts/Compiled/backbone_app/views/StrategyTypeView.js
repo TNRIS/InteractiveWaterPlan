@@ -14,7 +14,9 @@ define(['scripts/text!templates/strategyTypeRow.html'], function(tpl) {
 
     StrategyTypeView.prototype.tagName = 'tr';
 
-    StrategyTypeView.prototype.initialize = function() {
+    StrategyTypeView.prototype.initialize = function(options) {
+      StrategyTypeView.__super__.initialize.call(this, options);
+      this.currYear = options.currYear;
       _.bindAll(this, 'render', 'unrender');
       this.template = _.template(tpl);
       return null;
@@ -22,7 +24,8 @@ define(['scripts/text!templates/strategyTypeRow.html'], function(tpl) {
 
     StrategyTypeView.prototype.render = function() {
       this.$el.html(this.template({
-        m: this.model.toJSON()
+        m: this.model.toJSON(),
+        currYear: this.currYear
       }));
       return this;
     };

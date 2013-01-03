@@ -33,7 +33,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
         _this = this;
       stratTypeLiTemplate = _.template(strategyTypeListItemTpl);
       TypeCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategy/type/all"
+        url: "" + BASE_API_PATH + "api/strategy/types"
       });
       typeCollection = new TypeCollection();
       typeCollection.fetch({

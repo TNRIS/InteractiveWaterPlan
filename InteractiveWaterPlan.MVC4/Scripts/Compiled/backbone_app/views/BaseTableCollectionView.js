@@ -16,7 +16,7 @@ define([], function() {
 
     BaseTableCollectionView.prototype.initialize = function(currYear, ModelView, Collection, tpl, options) {
       _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable');
-      this.currYear = currYear;
+      this.currYear = ko.observable(currYear);
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.template = _.template(tpl);
@@ -29,6 +29,7 @@ define([], function() {
       this.$el.html(this.template());
       this.fetchCollection();
       this._makeTableSortable();
+      ko.applyBindings(this, this.el);
       return this;
     };
 
@@ -43,7 +44,7 @@ define([], function() {
       this.showLoading();
       this.$('tbody').empty();
       params = _.extend({
-        year: this.currYear
+        year: this.currYear()
       }, this.fetchParams);
       this.collection.fetch({
         data: params,
@@ -63,7 +64,8 @@ define([], function() {
     BaseTableCollectionView.prototype.appendModel = function(model) {
       var modelView;
       modelView = new this.ModelView({
-        model: model
+        model: model,
+        currYear: this.currYear()
       });
       this.$('tbody').append(modelView.render().el);
       return null;
@@ -82,7 +84,7 @@ define([], function() {
     };
 
     BaseTableCollectionView.prototype.changeToYear = function(newYear) {
-      this.currYear = newYear;
+      this.currYear(newYear);
       this.fetchCollection();
     };
 

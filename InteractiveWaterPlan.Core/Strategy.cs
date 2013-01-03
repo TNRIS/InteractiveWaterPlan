@@ -38,6 +38,9 @@ namespace InteractiveWaterPlan.Core
 
         public virtual string OnlineYear { get; set; }
 
+        public virtual string SourceName { get; set; }
+        public virtual int SourceId { get; set; } //TODO: Check Strategy.hbm.xml to make sure property SourceID column is being used
+
         public virtual int RecipientEntityId { get; set; }
         public virtual string RecipientEntityName { get; set; }
     }

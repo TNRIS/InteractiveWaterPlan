@@ -21,7 +21,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text
         typeId: this.typeId
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategy"
+        url: "" + BASE_API_PATH + "api/strategies/type"
       });
       TypeStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyTypeView, StrategyCollection, tpl, {
         fetchParams: fetchParams
@@ -37,13 +37,12 @@ define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text
     };
 
     TypeStrategyCollectionView.prototype.selectRegion = function(data, event) {
-      var $target, regionId, regionName;
+      var $target, regionLetter;
       $target = $(event.target);
-      regionId = $target.data('value');
-      regionName = $target.data('name');
+      regionLetter = $target.data('value');
       this.selectedRegion({
-        id: regionId,
-        name: regionName
+        id: regionLetter,
+        name: regionLetter
       });
       return null;
     };

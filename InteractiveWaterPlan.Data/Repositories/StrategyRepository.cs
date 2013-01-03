@@ -68,20 +68,71 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year = null)
         {
-            //TODO
-            throw new NotImplementedException();
+            var allStrategiesInCounty = Session.GetNamedQuery("GetStrategiesInCounty")
+                .SetParameter("var_CountyId", countyId)
+                .List<Strategy>()
+                .OrderBy(x => x.Id)
+                .ToList<Strategy>();
+
+            if (year == null || year.Length == 0)
+            {
+                return allStrategiesInCounty;
+            }
+
+            //else only return those that have non-null value in SupplyYEAR
+            return allStrategiesInCounty
+                .Where(x =>
+                {
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
+                })
+                .ToList<Strategy>();
         }
 
         public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
         {
-            //TODO
-            throw new NotImplementedException();
+            var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesInDistrict")
+                .SetParameter("var_LegDistrictID", districtId)
+                .List<Strategy>()
+                .OrderBy(x => x.Id)
+                .ToList<Strategy>();
+
+            if (year == null || year.Length == 0)
+            {
+                return allStrategiesInDistrict;
+            }
+
+            //else only return those that have non-null value in SupplyYEAR
+            return allStrategiesInDistrict
+                .Where(x =>
+                {
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
+                })
+                .ToList<Strategy>();
         }
 
         public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year = null)
         {
-            //TODO
-            throw new NotImplementedException();
+            var allStrategiesOfType = Session.GetNamedQuery("GetStrategiesByType")
+                .SetParameter("var_StrategyTypeID", strategyTypeId)
+                .List<Strategy>()
+                .OrderBy(x => x.Id)
+                .ToList<Strategy>();
+
+            if (year == null || year.Length == 0)
+            {
+                return allStrategiesOfType;
+            }
+
+            //else only return those that have non-null value in SupplyYEAR
+            return allStrategiesOfType
+                .Where(x =>
+                {
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
+                })
+                .ToList<Strategy>();
         }
 
     }

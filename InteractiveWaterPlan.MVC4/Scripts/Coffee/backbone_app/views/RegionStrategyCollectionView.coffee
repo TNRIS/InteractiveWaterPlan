@@ -11,15 +11,14 @@ define([
 
             _.bindAll(this, 'selectType')
 
-            @regionId = options.id
-            @regionName = options.name
+            @regionLetter = options.id
+            
+            @viewName = "Region #{@regionLetter}"
 
-            @viewName = "Region #{@regionName}"
-
-            fetchParams = {regionId: @regionId}
+            fetchParams = {regionLetter: @regionLetter}
             
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategy" 
+                url: "#{BASE_API_PATH}api/strategies/region" 
             )
 
             super options.currYear, StrategyView, 
