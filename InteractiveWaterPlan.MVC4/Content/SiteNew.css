@@ -90,7 +90,7 @@ ul.typeahead .catName
 
 .scrollTableContainer
 {
-    max-height: 400px;
+    max-height: 600px;
     overflow-y: auto;
     border-top: 1px solid #ccc;
     border-right: 1px solid #ccc;

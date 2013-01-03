@@ -46,7 +46,7 @@ namespace InteractiveWaterPlan.Data
         public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year = null)
         {
             var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")
-                .SetParameter("var_Region", regionLetter)
+                .SetParameter("regionLetter", regionLetter)
                 .List<Strategy>()
                 .OrderBy(x => x.Id)
                 .ToList<Strategy>();
@@ -69,7 +69,7 @@ namespace InteractiveWaterPlan.Data
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year = null)
         {
             var allStrategiesInCounty = Session.GetNamedQuery("GetStrategiesInCounty")
-                .SetParameter("var_CountyId", countyId)
+                .SetParameter("countyId", countyId)
                 .List<Strategy>()
                 .OrderBy(x => x.Id)
                 .ToList<Strategy>();
@@ -92,7 +92,7 @@ namespace InteractiveWaterPlan.Data
         public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
         {
             var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesInDistrict")
-                .SetParameter("var_LegDistrictID", districtId)
+                .SetParameter("districtId", districtId)
                 .List<Strategy>()
                 .OrderBy(x => x.Id)
                 .ToList<Strategy>();
@@ -115,7 +115,7 @@ namespace InteractiveWaterPlan.Data
         public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year = null)
         {
             var allStrategiesOfType = Session.GetNamedQuery("GetStrategiesByType")
-                .SetParameter("var_StrategyTypeID", strategyTypeId)
+                .SetParameter("typeId", strategyTypeId)
                 .List<Strategy>()
                 .OrderBy(x => x.Id)
                 .ToList<Strategy>();
