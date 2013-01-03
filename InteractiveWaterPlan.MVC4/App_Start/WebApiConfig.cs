@@ -6,14 +6,7 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void Register(HttpConfiguration config)
         {
-            //TODO: Remove this method - just for testing
             #region Place Routes
-            config.Routes.MapHttpRoute(
-                "GetAllPlaces",
-                "api/place/all",
-                new { controller = "Place", action = "GetAllPlaces" }
-            );
-
             config.Routes.MapHttpRoute(
                 "GetRegionalWaterPlanningAreas",
                 "api/place/rwpa",

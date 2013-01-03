@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Strategy.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace InteractiveWaterPlan.Core
+﻿namespace InteractiveWaterPlan.Core
 {
     using System;
     using System.Collections.Generic;

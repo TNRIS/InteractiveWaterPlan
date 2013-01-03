@@ -74,7 +74,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         // GET api/strategies/county-net
         public IList<CountyNetSupply> GetCountyNetSupplies(string year)
         {
-            //TODO
+            //TODO - need stored procedure that does this
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
