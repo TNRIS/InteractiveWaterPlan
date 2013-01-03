@@ -103,11 +103,8 @@ define([], function() {
           return 0;
         },
         "formatted-currency": function(a, b) {
-          console.log(a, b);
           a = parseInt(a.replace(/,/g, "").replace("$", ""));
           b = parseInt(b.replace(/,/g, "").replace("$", ""));
-          console.log(a, b);
-          console.log("------------------");
           if (a < b) {
             return -1;
           }

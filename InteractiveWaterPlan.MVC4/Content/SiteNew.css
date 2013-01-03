@@ -100,11 +100,13 @@ ul.typeahead .catName
 .modelTable
 {
     width: 100%;
+    font-size: 12px;
+    line-height: 14px;
 }
 
 .modelTable th 
 {
-    min-width:40px;
+    font-size: 14px;
 }
 
 .modelTable th[data-sort]
