@@ -7,7 +7,8 @@ define([
 
         initialize: (currYear, ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable')
+                'hideLoading', 'showLoading', 'changeToYear', 
+                '_makeTableSortable')
 
             @currYear = ko.observable(currYear)
            
@@ -92,8 +93,15 @@ define([
             sortTable = this.$('table').stupidtable(
                 #special sort method for formatted numbers (ie, they have commas)
                 "formatted-int": (a, b) -> 
-                    a = parseInt(a.replace(",",""))
-                    b = parseInt(b.replace(",",""))
+                    a = parseInt(a.replace(/,/g,""))
+                    b = parseInt(b.replace(/,/g,""))
+                    if a < b then return -1
+                    if a > b then return 1
+                    return 0
+
+                "formatted-currency": (a, b) ->
+                    a = parseInt(a.replace(/,/g,"").replace("$", ""))
+                    b = parseInt(b.replace(/,/g,"").replace("$", ""))
                     if a < b then return -1
                     if a > b then return 1
                     return 0

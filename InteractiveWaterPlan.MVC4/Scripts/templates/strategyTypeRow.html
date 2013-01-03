@@ -8,5 +8,5 @@
 <td>{{m.description}}</td>
 <td>{{m.sourceName}}</td>
 <td>{{m.recipientEntityName}}</td>
-<td>{{m["supply"+currYear]}}</td>
+<td>{{ $.number(m["supply"+currYear]) }}</td>
 <td>{{m.onlineYear}}</td>
