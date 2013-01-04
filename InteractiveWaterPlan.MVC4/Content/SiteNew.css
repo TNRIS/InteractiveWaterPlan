@@ -126,6 +126,7 @@ ul.typeahead .catName
     line-height: 14px;
 }
 
+.modelTable th,
 .modelTable td 
 {
     text-align: center;
