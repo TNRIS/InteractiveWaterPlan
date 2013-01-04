@@ -122,8 +122,10 @@ ul.typeahead .catName
 
 .tableLoading
 {
-    color: #007FFF;
-    text-align: center;
+    background: url('images/loading-36.gif') no-repeat;
+    width: 130px;
+    margin: auto;
+    height: 20px;
 }
 
 ul.breadcrumb 
