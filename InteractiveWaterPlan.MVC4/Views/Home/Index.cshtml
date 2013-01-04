@@ -1,32 +1,55 @@
 ﻿@{
-    ViewBag.Title = "Texas State Water Plan 2012 | TWDB";
+    Layout = null;
 }
 
+@using System.Web.Optimization
+@using System.Web.Configuration
 
-<div class="container">
-    
+<!DOCTYPE html>
 
-    <div class="page-header">
-        <h1>
-            Texas State Water Plan 2012
-            <small>Texas Water Development Board</small>
-        </h1>
-    </div>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Interactive State Water Plan 2012 | TWDB</title>
 
-    <div class="row">
-        <div class="alert alert-block span12">
-            <h4>Warning!</h4>
-            This site is currently in alpha testing and is undergoing extensive QA/QC.
-            In some cases, the data are known to be wrong. Do not rely on these data.<br />
-            For definitive 2011 Regional Water Plan data please go to: <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
+    <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
+
+    @Styles.Render("~/Content/bootstrap/css/cosmo.bootstrap.css",
+        "~/Content/FontAwesome/css/font-awesome.css",
+        "~/Content/SiteNew.css"
+    )
+
+    @Scripts.Render("~/bundles/js/modernizr")
+</head>
+<body lang="en">
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                Texas State Water Plan 2012
+            </h1>
+            <p class="lead">Texas Water Development Board</p>
         </div>
+
+        <div id="appContainer"></div>
+
     </div>
 
-    <div class="row">
+    @if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        @Scripts.Render("~/Content/OpenLayers/OpenLayers.debug.js")
+    }
+    else
+    {
+        @Scripts.Render("~/Content/OpenLayers/OpenLayers.js")
+    }
     
-        <div class="span12" id="appContainer">
-        
-        </div>
-    </div>
+    <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
+    <input type="hidden" id="base_path" value="@Url.Content("~/")" />
+    <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["bing_maps_key"]" />
 
-</div>
+    @Scripts.Render("~/bundles/js/app")
+    <script data-main="@Url.Content("~/Scripts/Compiled/backbone_app/app.js")" src="@Url.Content("~/Scripts/require.js")" type="text/javascript"></script>
+
+
+</body>
+</html>

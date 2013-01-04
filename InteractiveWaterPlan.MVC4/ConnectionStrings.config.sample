@@ -1,3 +1,4 @@
 <connectionStrings>
-    <add name="WaterPlanDB" connectionString=""/>
+  <add name="PlacesDB"  connectionString=""/>
+  <add name="WaterPlanDB" connectionString=""/>
 </connectionStrings>

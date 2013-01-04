@@ -9,14 +9,6 @@ namespace InteractiveWaterPlan.MVC4
         {
             //Openlayers has to be included separately because of how it loads its css
             
-            bundles.Add(new ScriptBundle("~/bundles/js/scripts").Include(
-                "~/Content/OpenLayers/tile.stamen.js",
-                "~/Scripts/Compiled/OpenLayers/OpenLayers.Layer.QuadKey.js",
-                "~/Scripts/Compiled/OpenLayers/OpenLayers.Control.GetFeature.js",
-                "~/Content/ExtJS/ext-all.js",
-                "~/Scripts/Compiled/app.js"
-            ));
-
             bundles.Add(new ScriptBundle("~/bundles/js/modernizr").Include(
                 "~/Scripts/modernizr-{version}.js"
             ));
