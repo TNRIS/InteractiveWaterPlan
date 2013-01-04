@@ -9,107 +9,122 @@ using NHibernate.Cfg;
 
 namespace InteractiveWaterPlan.Data
 {
+    public class HibernateConnection
+    {
+        public string Name { get; set; }
+        public string ConnectionString { get; set; }
+        
+        public HibernateConnection(string name, string connectionString)
+        {
+            this.Name = name;
+            this.ConnectionString = connectionString;
+        }
+    }
+
     public static class NHibernateSessionManager
     {
         private static readonly object _factorySyncRoot = new object();
-        private static ISessionFactory _sessionFactory;
-        public static string HibernateCfgPath;
-
-        public static ISessionFactory ConfigureFromFile(string hibernateCfgPath)
+        //private static ISessionFactory _sessionFactory;
+        //public static string HibernateCfgPath;
+        public static IDictionary<string, ISessionFactory> SessionFactoryDictionary;
+        
+        public static IDictionary<string, ISessionFactory> ConfigureFromFiles(HibernateConnection[] hibernateConnections)
         {
-            if (hibernateCfgPath == null)
-                throw new ArgumentNullException("hibernateCfgPath");
+            SessionFactoryDictionary = new Dictionary<string, ISessionFactory>();
 
-            if (_sessionFactory != null)
+            foreach (var connection in hibernateConnections)
             {
-                _sessionFactory.Dispose();
+                ConfigureSession(connection);
+            }
+
+            return SessionFactoryDictionary;
+        }
+
+        private static ISessionFactory ConfigureSession(HibernateConnection hibernateConnection)
+        {
+            if (hibernateConnection == null)
+                throw new ArgumentNullException("hibernateConnection");
+
+            if (SessionFactoryDictionary != null 
+                && SessionFactoryDictionary.ContainsKey(hibernateConnection.Name))
+            {
+                SessionFactoryDictionary[hibernateConnection.Name].Dispose();
             }
 
             lock (_factorySyncRoot)
-                if (_sessionFactory == null)
+                if (!SessionFactoryDictionary.ContainsKey(hibernateConnection.Name))
                 {
-                    HibernateCfgPath = hibernateCfgPath;
-
-                    var cfg = new Configuration();
                     
-                    cfg.Configure(hibernateCfgPath);
+                    var cfg = new Configuration();
+
+                    cfg.Configure(hibernateConnection.ConnectionString);
                     cfg.AddAssembly(typeof(IRepository).Assembly);
                     //var export = new SchemaExport(cfg);
                     //export.Execute(false, true, false);
                     
-                    _sessionFactory = cfg.BuildSessionFactory();
+                    SessionFactoryDictionary[hibernateConnection.Name] = cfg.BuildSessionFactory();
                 }
 
-            return _sessionFactory;
+            return SessionFactoryDictionary[hibernateConnection.Name];
         }
 
-        public static ISessionFactory GetSessionFactory()
+        public static ISessionFactory GetSessionFactory(string name)
         {
-            if (_sessionFactory == null)
-                lock (_factorySyncRoot)
-                    if (_sessionFactory == null)
-                    {
-                        var cfg = new Configuration();
-                        if (!string.IsNullOrWhiteSpace(HibernateCfgPath))
-                        {
-                            cfg.Configure(HibernateCfgPath);
-                        }
-                        cfg.AddAssembly("GEMSS2.DataAccess");
-                        
-                        _sessionFactory = cfg.BuildSessionFactory();
-                    }
-            return _sessionFactory;
+            return SessionFactoryDictionary[name];
         }
 
-        public static IStatelessSession OpenStatelessSession()
+        public static IStatelessSession OpenStatelessSession(string name)
         {
-            return GetSessionFactory().OpenStatelessSession();
+            return GetSessionFactory(name).OpenStatelessSession();
         }
 
-        public static ISession OpenSession()
+        public static ISession OpenSession(string name)
         {
-            return GetSessionFactory().OpenSession();
+            if (!SessionFactoryDictionary.ContainsKey(name))
+                throw new Exception(String.Format("Session identified by \"{0}\" does not exist", name));
+            
+            return GetSessionFactory(name).OpenSession();
         }
 
-        public static ISession OpenSessionTransaction()
+        public static ISession OpenSessionTransaction(string name)
         {
-            var session = GetSessionFactory().OpenSession();
+            var session = GetSessionFactory(name).OpenSession();
             session.BeginTransaction();
             return session;
         }
 
-        public static ISession GetCurrentSession()
+        public static ISession GetCurrentSession(string name)
         {
-            if (!CurrentSessionContext.HasBind(_sessionFactory))
+            if (!CurrentSessionContext.HasBind(SessionFactoryDictionary[name]))
             {
-                return BindSession();
+                return BindSession(name);
             }
             else
             {
-                return GetSessionFactory().GetCurrentSession();
+                return GetSessionFactory(name).GetCurrentSession();
             }
         }
 
-        public static ISession BindSession()
+        public static ISession BindSession(string name)
         {
-            var session = OpenSession();
+            var session = OpenSession(name);
             CurrentSessionContext.Bind(session);
             return session;
         }
 
-        public static ITransaction BeginTransaction()
+        public static ITransaction BeginTransaction(string name)
         {
-            return GetCurrentSession().BeginTransaction();
+            return GetCurrentSession(name).BeginTransaction();
         }
 
-        public static ITransaction GetCurrentTransaction()
+        public static ITransaction GetCurrentTransaction(string name)
         {
-            return GetCurrentSession().Transaction;
+            return GetCurrentSession(name).Transaction;
         }
 
-        public static void UnbindSession(bool forceTransactionRollback)
+        public static void UnbindSession(string name, bool forceTransactionRollback)
         {
-            var session = CurrentSessionContext.Unbind(_sessionFactory);
+            var session = CurrentSessionContext.Unbind(SessionFactoryDictionary[name]);
             if (session != null)
             {
                 var tx = session.Transaction;
@@ -152,9 +167,9 @@ namespace InteractiveWaterPlan.Data
             }
         }
 
-        public static void UnbindSession()
+        public static void UnbindSession(string name)
         {
-            UnbindSession(false);
+            UnbindSession(name, false);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace InteractiveWaterPlan.Data
 
         #region Constructors
 
-        public StrategyRepository() : base(typeof(StrategyRepository)) { }
+        public StrategyRepository(string sessionName) : base(sessionName, typeof(StrategyRepository)) { }
 
         public StrategyRepository(ISession session) : base(session, typeof(StrategyRepository)) { }
 

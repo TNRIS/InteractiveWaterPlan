@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using InteractiveWaterPlan.Data;
 using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
-    [NHibernateSession]
+    [NHibernateSession(CommonConstants.SWP_SESSION_NAME)]
     public class CountyNetSupplyController : ApiController
     {
         private CountyNetSupplyRepository _repo;
 
         public CountyNetSupplyController()
         {
-            _repo = new CountyNetSupplyRepository();
+            _repo = new CountyNetSupplyRepository(CommonConstants.SWP_SESSION_NAME);
         }
 
         // GET api/supply/county-net

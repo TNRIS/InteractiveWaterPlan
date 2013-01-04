@@ -12,7 +12,7 @@ namespace InteractiveWaterPlan.Data
 
         #region Constructors
 
-        public PlaceRepository() : base(typeof(PlaceRepository)) { }
+        public PlaceRepository(string sessionName) : base(sessionName, typeof(PlaceRepository)) { }
 
         public PlaceRepository(ISession session) : base(session, typeof(PlaceRepository)) { }
 

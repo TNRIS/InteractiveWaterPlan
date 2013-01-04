@@ -11,7 +11,7 @@ namespace InteractiveWaterPlan.Data
 
         #region Constructors
 
-        public BoundaryRepository() : base(typeof(BoundaryRepository)) { }
+        public BoundaryRepository(string sessionName) : base(sessionName, typeof(BoundaryRepository)) { }
 
         public BoundaryRepository(ISession session) : base(session, typeof(BoundaryRepository)) { }
 

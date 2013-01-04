@@ -3,7 +3,9 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using InteractiveWaterPlan.Data;
+using InteractiveWaterPlan.Core;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
 namespace InteractiveWaterPlan.MVC4
 {
@@ -20,7 +22,11 @@ namespace InteractiveWaterPlan.MVC4
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            NHibernateSessionManager.ConfigureFromFile(Server.MapPath("~/Hibernate.config"));
+            List<HibernateConnection> hibernateConnections = new List<HibernateConnection>();
+            hibernateConnections.Add(new HibernateConnection(CommonConstants.PLACES_SESSION_NAME, Server.MapPath("~/PlacesDB_Hibernate.config")));
+            hibernateConnections.Add(new HibernateConnection(CommonConstants.SWP_SESSION_NAME, Server.MapPath("~/WaterPlanDB_Hibernate.config")));
+            
+            NHibernateSessionManager.ConfigureFromFiles(hibernateConnections.ToArray());
 
             //Use the built-in camelCase contractResolver
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;

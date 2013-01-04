@@ -12,9 +12,11 @@ namespace InteractiveWaterPlan.Data
         public bool RollbackOnModelStateError { get; set; }
         public ISession Session { get; private set; }
         public ITransaction Transaction { get; private set; }
+        public string SessionName { get; private set; }
 
-        public NHibernateSessionAttribute()
+        public NHibernateSessionAttribute(string sessionName)
         {
+            this.SessionName = sessionName;
             this.Order = 10;
             this.RollbackOnModelStateError = false;
         }
@@ -23,8 +25,8 @@ namespace InteractiveWaterPlan.Data
         {
             // this code also performs a check if the session is already bound, 
             // ... and if not it binds it to the CurrentSessionContext
-            NHibernateSessionManager.BindSession();
-            this.Session = NHibernateSessionManager.GetCurrentSession();
+            NHibernateSessionManager.BindSession(SessionName);
+            this.Session = NHibernateSessionManager.GetCurrentSession(SessionName);
             this.Transaction = this.Session.BeginTransaction();
 
             base.OnActionExecuting(filterContext);
@@ -35,7 +37,7 @@ namespace InteractiveWaterPlan.Data
             base.OnActionExecuted(filterContext);
 
             var forceTransactionRollback = ShouldRollback(filterContext) || UnhandledExeption(filterContext);
-            NHibernateSessionManager.UnbindSession(forceTransactionRollback);
+            NHibernateSessionManager.UnbindSession(SessionName, forceTransactionRollback);
         }
 
         private bool ShouldRollback(ControllerContext context)

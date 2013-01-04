@@ -7,40 +7,33 @@ using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
-    [NHibernateSession]
+    [NHibernateSession(CommonConstants.PLACES_SESSION_NAME)]
     public class PlaceController : ApiController
     {
-        
+        private PlaceRepository _repo; 
 
-        //TODO: Remove this method - just for testing
-        //api/place/all
-        public IList<Place> GetAllPlaces()
+        public PlaceController()
         {
-            var repo = new PlaceRepository();
-            var x = repo.GetPlaces(1).OrderBy(p => p.Name);
-            var y = repo.GetPlaces(5).OrderBy(p => p.Name);
-            return x.Union(y).ToList<Place>(); 
+            _repo = new PlaceRepository(CommonConstants.PLACES_SESSION_NAME);
         }
+
 
         //api/place/feature?placeId={placeId}
         public PlaceFeature GetPlaceFeature(int placeId)
         {
-            var repo = new PlaceRepository();
-            return repo.GetPlaceFeature(placeId);
+            return _repo.GetPlaceFeature(placeId);
         }
 
         //api/place?categoryId={categoryId}
         public IList<Place> GetPlacesByCategory(int categoryId)
         {
-            var repo = new PlaceRepository();
-            return repo.GetPlaces(categoryId);
+            return _repo.GetPlaces(categoryId);
         }
 
         //api/place/rwpa
         public IList<Place> GetRegionalPlanningAreas()
         {
-            var repo = new PlaceRepository();
-            return repo.GetPlaces(PlaceCategoryCode.RWPA);
+            return _repo.GetPlaces(PlaceCategoryCode.RWPA);
         }
 
         //api/place/{id}
@@ -53,15 +46,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         //api/place/categories
         public IList<PlaceCategory> GetAllPlaceCategories()
         {
-            var repo = new PlaceRepository();
-            return repo.GetAllPlaceCategories();
+            return _repo.GetAllPlaceCategories();
         }
 
         //api/place?name={name}
         public IList<Place> GetPlacesByNamePart(string name)
         {
-            var repo = new PlaceRepository();
-            return repo.GetPlacesByNamePart(name);
+            return _repo.GetPlacesByNamePart(name);
         }
 
         

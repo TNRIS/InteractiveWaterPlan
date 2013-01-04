@@ -137,12 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Controllers\BoundaryController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\CountyNetSupplyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -331,11 +331,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ConnectionStrings.config.sample" />
-    <Content Include="Hibernate.config" />
+    <Content Include="WaterPlanDB_Hibernate.config" />
     <None Include="Content\FontAwesome\font\fontawesome-webfont.eot" />
     <None Include="Content\FontAwesome\font\fontawesome-webfont.ttf" />
     <None Include="Content\FontAwesome\font\fontawesome-webfont.woff" />
     <None Include="Content\FontAwesome\font\FontAwesome.otf" />
+    <Content Include="PlacesDB_Hibernate.config" />
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />

@@ -11,7 +11,7 @@ namespace InteractiveWaterPlan.Data
 
         #region Constructors
 
-        public CountyNetSupplyRepository() : base(typeof(CountyNetSupplyRepository)) { }
+        public CountyNetSupplyRepository(string sessionName) : base(sessionName, typeof(CountyNetSupplyRepository)) { }
 
         public CountyNetSupplyRepository(ISession session) : base(session, typeof(CountyNetSupplyRepository)) { }
 

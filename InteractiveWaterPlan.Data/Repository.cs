@@ -38,9 +38,9 @@ namespace InteractiveWaterPlan.Data
 
         public Repository(ISession session) : this(session, typeof(Repository<int, string>)) { }
 
-        public Repository(Type logType) : this(NHibernateSessionManager.GetCurrentSession(), logType) { }
+        public Repository(string sessionName, Type logType) : this(NHibernateSessionManager.GetCurrentSession(sessionName), typeof(Repository<int, string>)) { }
 
-        public Repository() : this(NHibernateSessionManager.GetCurrentSession(), typeof(Repository<int, string>)) { }
+        public Repository(string sessionName) : this(NHibernateSessionManager.GetCurrentSession(sessionName), typeof(Repository<int, string>)) { }
 
         ~Repository()
         {

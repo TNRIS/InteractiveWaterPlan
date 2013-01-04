@@ -10,15 +10,21 @@ using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
-    [NHibernateSession]
+    [NHibernateSession(CommonConstants.SWP_SESSION_NAME)]
     public class BoundaryController : ApiController
     {
-        
+
+        private BoundaryRepository _repo;
+
+        public BoundaryController()
+        {
+            _repo = new BoundaryRepository(CommonConstants.SWP_SESSION_NAME);
+        }
+
         //api/boundary/counties/all
         public IEnumerable<County> GetAllCountyFeatures()
         {      
-            var repo = new BoundaryRepository();
-            return repo.GetCounties();
+            return _repo.GetCounties();
         }
 
         /*
@@ -35,15 +41,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         //api/boundary/planningregions/all
         public IEnumerable<PlanningRegion> GetAllPlanningRegionFeatures()
         {
-            var repo = new BoundaryRepository();
-            return repo.GetPlanningRegions();
+            return _repo.GetPlanningRegions();
         }
 
         //api/boundary/legedistricts/all
         public IEnumerable<LegeDistrict> GetAllLegeDistrictFeatures()
         {
-            var repo = new BoundaryRepository();
-            return repo.GetLegeDistricts();
+            return _repo.GetLegeDistricts();
         }
 
         

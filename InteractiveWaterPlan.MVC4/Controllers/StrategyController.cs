@@ -7,14 +7,14 @@ using InteractiveWaterPlan.Data;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
-    [NHibernateSession]
+    [NHibernateSession(CommonConstants.SWP_SESSION_NAME)]
     public class StrategyController : ApiController
     {
         private StrategyRepository _repo;
 
         public StrategyController()
         {
-            _repo = new StrategyRepository();
+            _repo = new StrategyRepository(CommonConstants.SWP_SESSION_NAME);
         }
 
         // GET api/strategy/types
