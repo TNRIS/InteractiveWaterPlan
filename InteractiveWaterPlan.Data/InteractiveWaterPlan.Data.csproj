@@ -100,7 +100,7 @@
     <Compile Include="Repositories\CountyNetSupplyRepository.cs" />
     <Compile Include="Repositories\PlaceRepository.cs" />
     <Compile Include="Repositories\StrategyRepository.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="AbstractHibernateRepository.cs" />
     <Compile Include="Type\SqlGeographyType.cs" />
     <Compile Include="Type\SqlGeometryType.cs" />
   </ItemGroup>
