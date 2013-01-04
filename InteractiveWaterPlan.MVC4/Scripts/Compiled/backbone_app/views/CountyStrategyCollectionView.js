@@ -33,7 +33,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
     };
 
     CountyStrategyCollectionView.prototype.fetchCallback = function(models) {
-      var newWugList;
+      var m, newWugList, _i, _len;
       newWugList = _.map(models, function(m) {
         return {
           id: m.get("recipientEntityId"),
@@ -41,9 +41,10 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
           wktGeog: m.get("recipientEntityWktGeog")
         };
       });
-      _.each(newWugList, function(m) {
+      for (_i = 0, _len = newWugList.length; _i < _len; _i++) {
+        m = newWugList[_i];
         this.wugArray.push(m);
-      });
+      }
     };
 
     CountyStrategyCollectionView.prototype.render = function() {
@@ -52,7 +53,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       return this;
     };
 
-    CountyStrategyCollectionView.prototype.selectType = function(data, target) {
+    CountyStrategyCollectionView.prototype.selectType = function(data, event) {
       var $target, typeId, typeName;
       $target = $(event.target);
       typeId = $target.data('value');

@@ -36,7 +36,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       return this;
     };
 
-    RegionStrategyCollectionView.prototype.selectType = function(data, target) {
+    RegionStrategyCollectionView.prototype.selectType = function(data, event) {
       var $target, typeId, typeName;
       $target = $(event.target);
       typeId = $target.data('value');

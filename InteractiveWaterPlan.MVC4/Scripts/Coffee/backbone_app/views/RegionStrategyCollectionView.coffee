@@ -35,7 +35,7 @@ define([
 
             return this
             
-        selectType: (data, target) ->
+        selectType: (data, event) ->
             $target = $(event.target)
 
             #set the observable to the selected county id and name

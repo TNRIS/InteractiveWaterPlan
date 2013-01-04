@@ -156,6 +156,12 @@ define([
                 this.switchStrategyThemeView(options.name, 'type', options.id)
             )
 
+
+            @currTableView.wugArray.subscribe((arr, x) =>
+                #TODO show WUG features
+                #console.log arr
+            )
+
             return
 
 

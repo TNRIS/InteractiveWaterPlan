@@ -55,7 +55,7 @@ define([
             @$el.remove()
             return null
 
-        toggleMap: (data, target) ->
+        toggleMap: (data, event, x) ->
             $target = $(event.target)
 
             if $target.hasClass('off')

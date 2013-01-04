@@ -132,6 +132,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.selectedType.subscribe(function(options) {
         return _this.switchStrategyThemeView(options.name, 'type', options.id);
       });
+      this.currTableView.wugArray.subscribe(function(arr, x) {});
     };
 
     AppView.prototype._setupRegionStrategyView = function(name, id) {

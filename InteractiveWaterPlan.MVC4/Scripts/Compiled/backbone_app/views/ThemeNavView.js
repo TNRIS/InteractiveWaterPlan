@@ -56,7 +56,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
       return null;
     };
 
-    ThemeNavView.prototype.toggleMap = function(data, target) {
+    ThemeNavView.prototype.toggleMap = function(data, event, x) {
       var $target;
       $target = $(event.target);
       if ($target.hasClass('off')) {
