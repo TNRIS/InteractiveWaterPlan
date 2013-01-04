@@ -92,8 +92,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRepository.cs" />
-    <Compile Include="IRepository.Generic.cs" />
     <Compile Include="NHibernateSessionAttribute.cs" />
     <Compile Include="NHibernateSessionManager.cs" />
     <Compile Include="Repositories\BoundaryRepository.cs">

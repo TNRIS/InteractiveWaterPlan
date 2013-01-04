@@ -6,14 +6,14 @@ using NHibernate;
 namespace InteractiveWaterPlan.Data
 {
 
-    public class BoundaryRepository : Repository<int, AbstractFeature>
+    public class BoundaryRepository : Repository
     {
 
         #region Constructors
 
-        public BoundaryRepository(string sessionName) : base(sessionName, typeof(BoundaryRepository)) { }
+        public BoundaryRepository(string sessionName) : base(sessionName) { }
 
-        public BoundaryRepository(ISession session) : base(session, typeof(BoundaryRepository)) { }
+        public BoundaryRepository(ISession session) : base(session) { }
 
         #endregion
 

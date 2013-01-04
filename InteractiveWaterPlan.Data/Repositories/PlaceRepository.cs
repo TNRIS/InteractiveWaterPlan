@@ -7,14 +7,14 @@ using NHibernate;
 namespace InteractiveWaterPlan.Data
 {
 
-    public class PlaceRepository : Repository<int, Entity>
+    public class PlaceRepository : Repository
     {
 
         #region Constructors
 
-        public PlaceRepository(string sessionName) : base(sessionName, typeof(PlaceRepository)) { }
+        public PlaceRepository(string sessionName) : base(sessionName) { }
 
-        public PlaceRepository(ISession session) : base(session, typeof(PlaceRepository)) { }
+        public PlaceRepository(ISession session) : base(session) { }
 
         #endregion
 

@@ -58,7 +58,7 @@ namespace InteractiveWaterPlan.Data
                     var cfg = new Configuration();
 
                     cfg.Configure(hibernateConnection.ConnectionString);
-                    cfg.AddAssembly(typeof(IRepository).Assembly);
+                    cfg.AddAssembly(typeof(Repository).Assembly);
                     //var export = new SchemaExport(cfg);
                     //export.Execute(false, true, false);
                     
