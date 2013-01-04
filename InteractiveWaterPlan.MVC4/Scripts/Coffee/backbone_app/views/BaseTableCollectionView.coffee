@@ -35,6 +35,11 @@ define([
             
             ko.applyBindings(this, @el)
             
+            this.$('.has-popover').popover(
+                trigger: 'hover'
+                placement: 'top'
+            )
+
             return this
 
         unrender: () ->

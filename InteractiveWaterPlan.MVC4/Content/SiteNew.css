@@ -99,7 +99,6 @@ ul.typeahead .catName
 
 .modelTable
 {
-    width: 100%;
     font-size: 12px;
     line-height: 14px;
 }
@@ -112,6 +111,13 @@ ul.typeahead .catName
 .modelTable th[data-sort]
 {
     cursor:pointer;
+}
+
+.modelTable .popover
+{
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
 }
 
 .loading.loading-large 

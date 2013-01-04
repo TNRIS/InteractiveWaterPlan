@@ -32,6 +32,10 @@ define([], function() {
       this.fetchCollection();
       this._makeTableSortable();
       ko.applyBindings(this, this.el);
+      this.$('.has-popover').popover({
+        trigger: 'hover',
+        placement: 'top'
+      });
       return this;
     };
 

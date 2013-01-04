@@ -40,16 +40,16 @@ define([
                 }
             )
 
-            _.each(newWugList, (m) ->
+            for m in newWugList
                 @wugArray.push(m)
-                return
-            )
+
             return
 
 
         render: () ->
             super
 
+            #TODO: put in an observable instead
             this.$('#strategyPlaceName').html(@viewName)
 
             return this

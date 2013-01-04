@@ -4,12 +4,32 @@
     <table class="table-hover table-striped table-bordered table-condensed modelTable">
         <thead>
             <tr>
-                <th data-sort="string">Region</th>
+                <th data-sort="string">
+                    <span class="has-popover" data-content="State Water Plan Planning Region">
+                        Region
+                    </span>
+                </th>
                 <th data-sort="string">Description</th>
-                <th data-sort="string">Source</th>
-                <th data-sort="string">Entity</th>
-                <th data-sort="formatted-int">Supply Volume</th>
-                <th data-sort="int">Decade Online</th>
+                <th data-sort="string">
+                    <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">
+                        Source
+                    </span>
+                </th>
+                <th data-sort="string">
+                    <span class="has-popover" data-content="Water User Group impacted by the Water Management Strategy">
+                        Entity
+                    </span>
+                </th>
+                <th data-sort="formatted-int" >
+                    <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">
+                        Supply Volume <span data-bind="text: currYear"></span>
+                    </span>
+                </th>
+                <th data-sort="int">
+                    <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">
+                        Decade Online
+                    </span>
+                </th>
             </tr>
         </thead>
         <tbody>
