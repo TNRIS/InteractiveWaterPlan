@@ -7,7 +7,7 @@ using NHibernate;
 namespace InteractiveWaterPlan.Data
 {
 
-    public class PlaceRepository : Repository
+    public class PlaceRepository : AbstractHibernateRepository
     {
 
         #region Constructors

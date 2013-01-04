@@ -1,33 +1,27 @@
 ﻿
 namespace InteractiveWaterPlan.Data
 {
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
     using NHibernate;
-    using NHibernate.Linq;
 
     /// <summary>
     /// Abstract class for NHibernate-based repositories
     /// </summary>
-    /// <typeparam name="TKey">Key Type</typeparam>
-    /// <typeparam name="TEntity">Entity Type</typeparam>
-    public abstract class Repository
+    public abstract class AbstractHibernateRepository
     {
         protected ISession Session;
 
         #region Constructor
 
-        public Repository() { }
+        public AbstractHibernateRepository() { }
 
-        public Repository(ISession session)
+        public AbstractHibernateRepository(ISession session)
         {
             this.Session = session;
         }
 
-        public Repository(string sessionName) : this(NHibernateSessionManager.GetCurrentSession(sessionName)) { }
+        public AbstractHibernateRepository(string sessionName) : this(NHibernateSessionManager.GetCurrentSession(sessionName)) { }
 
-        ~Repository()
+        ~AbstractHibernateRepository()
         {
 
         }

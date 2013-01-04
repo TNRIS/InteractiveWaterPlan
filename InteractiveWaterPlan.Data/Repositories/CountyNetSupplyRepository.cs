@@ -6,7 +6,7 @@ using NHibernate;
 namespace InteractiveWaterPlan.Data
 {
 
-    public class CountyNetSupplyRepository : Repository
+    public class CountyNetSupplyRepository : AbstractHibernateRepository
     {
 
         #region Constructors
