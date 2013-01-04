@@ -13,7 +13,7 @@ define([
 
             @regionLetter = options.id
             
-            @viewName = "Region #{@regionLetter}"
+            @viewName = ko.observable("Region #{@regionLetter}")
 
             fetchParams = {regionLetter: @regionLetter}
             
@@ -31,7 +31,8 @@ define([
         render: () ->
             super
 
-            this.$('#strategyPlaceName').html(@viewName)
+            #TODO: make this use an observable
+            this.$('#strategyPlaceName').html(@viewName())
 
             return this
             

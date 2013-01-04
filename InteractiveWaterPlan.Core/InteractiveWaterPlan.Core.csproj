@@ -43,6 +43,7 @@
     <Compile Include="AbstractFeature.cs" />
     <Compile Include="BaseLayerInfo.cs" />
     <Compile Include="County.cs" />
+    <Compile Include="CountyNetSupply.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="LegeDistrict.cs" />
     <Compile Include="PixelBuffer.cs" />

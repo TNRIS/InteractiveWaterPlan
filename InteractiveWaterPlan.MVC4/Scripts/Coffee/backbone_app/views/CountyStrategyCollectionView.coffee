@@ -13,7 +13,7 @@ define([
             @countyId = options.id
             @countyName = options.name
 
-            @viewName = "#{@countyName} County"
+            @viewName = ko.observable("#{@countyName} County")
 
             fetchParams = {countyId: @countyId}
             
@@ -50,7 +50,7 @@ define([
             super
 
             #TODO: put in an observable instead
-            this.$('#strategyPlaceName').html(@viewName)
+            this.$('#strategyPlaceName').html(@viewName())
 
             return this
 

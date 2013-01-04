@@ -141,12 +141,12 @@
     <Compile Include="Controllers\BoundaryController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\CountyNetSupplyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CountyNetSupply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\WMSService.cs" />
   </ItemGroup>
@@ -737,6 +737,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

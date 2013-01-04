@@ -60,13 +60,16 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Strategy", action = "GetStrategyTypes" }
             );
 
+            
+            #endregion
+
+            #region Supply Routes
+
             config.Routes.MapHttpRoute(
                 "GetCountyNetSuppliesRoute",
-                "api/strategies/county-net",
-                new { controller = "Strategy", action = "GetCountyNetSupplies" }
+                "api/supply/county-net",
+                new { controller = "CountyNetSupply", action = "GetCountyNetSupplies" }
             );
-
-            
 
             #endregion
 

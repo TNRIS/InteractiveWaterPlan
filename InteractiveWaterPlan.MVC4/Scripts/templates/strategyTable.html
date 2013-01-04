@@ -1,4 +1,4 @@
-<h2>Water Management Strategies in <span id="strategyPlaceName"></span></h2>
+<h2>Water Management Strategies in <span data-bind="text: viewName"></span></h2>
 <p>All supply amounts are in units of acre-feet/year.</p>
 <div class="scrollTableContainer">
     <table class="table-hover table-striped table-bordered table-condensed modelTable">
@@ -12,21 +12,21 @@
                     </span>
                 </th>
                 <th data-sort="string">
-                    <span class="has-popover" data-content="Water User Group impacted by the Water Management Strategy">
+                    <span class="has-popover" data-content="Water User Group supplied by the Water Management Strategy">
                         Entity
                     </span>
                 </th>
-                <th data-sort="formatted-int" >
+                <th data-sort="formatted-int" width="15%">
                     <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">
                         Supply Volume <span data-bind="text: currYear"></span>
                     </span>
                 </th>
-                <th data-sort="formatted-currency">
+                <th data-sort="formatted-currency" width="15%">
                     <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">
                         Capital Cost
                     </span>
                 </th>
-                <th data-sort="int">
+                <th data-sort="int" width="15%">
                     <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">
                         Decade Online
                     </span>

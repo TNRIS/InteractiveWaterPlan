@@ -16,7 +16,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       var StrategyCollection, fetchParams;
       _.bindAll(this, 'selectType');
       this.regionLetter = options.id;
-      this.viewName = "Region " + this.regionLetter;
+      this.viewName = ko.observable("Region " + this.regionLetter);
       fetchParams = {
         regionLetter: this.regionLetter
       };
@@ -32,7 +32,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     RegionStrategyCollectionView.prototype.render = function() {
       RegionStrategyCollectionView.__super__.render.apply(this, arguments);
-      this.$('#strategyPlaceName').html(this.viewName);
+      this.$('#strategyPlaceName').html(this.viewName());
       return this;
     };
 

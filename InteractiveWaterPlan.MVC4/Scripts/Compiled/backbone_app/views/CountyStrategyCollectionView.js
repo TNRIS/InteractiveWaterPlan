@@ -17,7 +17,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       _.bindAll(this, 'selectType', 'fetchCallback');
       this.countyId = options.id;
       this.countyName = options.name;
-      this.viewName = "" + this.countyName + " County";
+      this.viewName = ko.observable("" + this.countyName + " County");
       fetchParams = {
         countyId: this.countyId
       };
@@ -49,7 +49,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     CountyStrategyCollectionView.prototype.render = function() {
       CountyStrategyCollectionView.__super__.render.apply(this, arguments);
-      this.$('#strategyPlaceName').html(this.viewName);
+      this.$('#strategyPlaceName').html(this.viewName());
       return this;
     };
 
