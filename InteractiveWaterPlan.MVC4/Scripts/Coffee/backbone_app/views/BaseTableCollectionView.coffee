@@ -86,11 +86,11 @@ define([
 
         showLoading: () ->
             this.$('.scrollTableContainer').hide()
-            this.$('.loading').show()
+            $('.tableLoading').show()
             return null
 
         hideLoading: () ->
-            this.$('.loading').hide()
+            $('.tableLoading').hide()
             this.$('.scrollTableContainer').fadeIn()
             return null
 

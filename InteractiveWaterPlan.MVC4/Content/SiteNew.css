@@ -120,12 +120,11 @@ ul.typeahead .catName
     line-height: 14px;
 }
 
-.loading.loading-large 
+.tableLoading
 {
-    background: url('images/loading-36.gif') no-repeat;
-    width: 130px;
-    margin: auto;
-    height: 20px;
+    font-size: 46px;
+    color: #007FFF;
+    text-align: center;
 }
 
 ul.breadcrumb 

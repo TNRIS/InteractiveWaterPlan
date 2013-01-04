@@ -82,12 +82,12 @@ define([], function() {
 
     BaseTableCollectionView.prototype.showLoading = function() {
       this.$('.scrollTableContainer').hide();
-      this.$('.loading').show();
+      $('.tableLoading').show();
       return null;
     };
 
     BaseTableCollectionView.prototype.hideLoading = function() {
-      this.$('.loading').hide();
+      $('.tableLoading').hide();
       this.$('.scrollTableContainer').fadeIn();
       return null;
     };
