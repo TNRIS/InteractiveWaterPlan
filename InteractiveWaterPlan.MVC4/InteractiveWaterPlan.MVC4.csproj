@@ -549,9 +549,9 @@
     <Content Include="Content\ExtJS\resources\themes\images\gray\window\icon-warning.gif" />
     <Content Include="Content\ExtJS\resources\themes\images\gray\window\window-default-corners.gif" />
     <Content Include="Content\ExtJS\resources\themes\images\gray\window\window-default-sides.gif" />
-    <Content Include="Content\FontAwesome\css\font-awesome-ie7.css" />
+    <Content Include="Content\FontAwesome\css\font-awesome-ie7.min.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.css" />
-    <Content Include="Content\FontAwesome\font\fontawesome-webfont.svg" />
+    <Content Include="Content\FontAwesome\css\font-awesome.min.css" />
     <Content Include="Content\jquery.min.js" />
     <Content Include="Content\images\loading-36.gif" />
     <Content Include="Content\OpenLayers\img\blank.gif" />
@@ -747,6 +747,7 @@
     <None Include="Content\FontAwesome\font\fontawesome-webfont.eot" />
     <None Include="Content\FontAwesome\font\fontawesome-webfont.ttf" />
     <None Include="Content\FontAwesome\font\fontawesome-webfont.woff" />
+    <None Include="Content\FontAwesome\font\FontAwesome.otf" />
     <None Include="Scripts\Coffee\app.coffee" />
     <None Include="Scripts\Coffee\app\controller\Main.coffee" />
     <None Include="Scripts\Coffee\app\model\Entity.coffee" />
