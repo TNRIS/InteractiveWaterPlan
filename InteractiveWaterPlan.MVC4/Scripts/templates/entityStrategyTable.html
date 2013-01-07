@@ -1,0 +1,35 @@
+<h2>Water Management Strategies for <span data-bind="text: viewName"></span></h2>
+<p>All supply amounts are in units of acre-feet/year.</p>
+<div class="scrollTableContainer">
+    <table class="table-hover table-striped table-bordered table-condensed modelTable">
+        <thead>
+            <tr>
+                <th data-sort="string">Type</th>
+                <th data-sort="string">Description</th>
+                <th data-sort="string">
+                    <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">
+                        Source
+                    </span>
+                </th>
+                <th data-sort="formatted-int" width="15%">
+                    <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">
+                        Supply Volume <span data-bind="text: currYear"></span>
+                    </span>
+                </th>
+                <th data-sort="formatted-currency" width="15%">
+                    <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">
+                        Capital Cost
+                    </span>
+                </th>
+                <th data-sort="int" width="15%">
+                    <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">
+                        Decade Online
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>

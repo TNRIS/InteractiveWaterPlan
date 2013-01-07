@@ -61,7 +61,13 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
-                "GetStrategyTypesRyoute",
+                "GetStrategiesForEntity",
+                "api/strategies/entity",
+                new { controller = "Strategy", action = "GetStrategiesForEntity" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetStrategyTypesRoute",
                 "api/strategy/types",
                 new { controller = "Strategy", action = "GetStrategyTypes" }
             );

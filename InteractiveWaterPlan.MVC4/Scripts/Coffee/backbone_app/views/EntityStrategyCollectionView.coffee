@@ -1,34 +1,35 @@
 define([
     'views/BaseTableCollectionView'
     'views/StrategyView'
-    'scripts/text!templates/strategyTable.html'
+    'scripts/text!templates/entityStrategyTable.html'
 ],
 (BaseTableCollectionView, StrategyView, tpl) ->
 
-    class RegionStrategyCollectionView extends BaseTableCollectionView
+    class EntityStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
+            _.bindAll(this)
 
-            @regionLetter = options.id
-            
-            @viewName = ko.observable("Region #{@regionLetter}")
+            @entityId = options.id
+            @entityName = options.name
 
-            fetchParams = {regionLetter: @regionLetter}
+            @viewName = ko.observable("#{@entityName}")
+
+            fetchParams = {entityId: @entityId}
             
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategies/region" 
+                url: "#{BASE_API_PATH}api/strategies/entity" 
             )
 
             super options.currYear, StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
-            
+
             return null
+
 
         render: () ->
             super
 
-
             return this
-
 )

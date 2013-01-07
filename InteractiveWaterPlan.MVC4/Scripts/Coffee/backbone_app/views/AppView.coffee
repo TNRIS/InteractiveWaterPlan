@@ -16,6 +16,8 @@ define([
     TypeStrategyCollectionView,
     tpl) ->
 
+    # ---------- DEPRECATED ----------------
+
     class AppView extends Backbone.View
 
         #this is the main view-controller of the application

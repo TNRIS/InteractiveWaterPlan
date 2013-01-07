@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'views/EntityStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, EntityStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
   var ISWPWorkspace;
   return ISWPWorkspace = (function(_super) {
 
@@ -50,7 +50,8 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       "wms": "wmsNetCountySupplies",
       "wms/region/:regionLetter": "wmsRegion",
       "wms/county/:countyId": "wmsCounty",
-      "wms/type/:typeId": "wmsType"
+      "wms/type/:typeId": "wmsType",
+      "wms/entity/:entityId": "wmsEntity"
     };
 
     ISWPWorkspace.prototype.wmsNetCountySupplies = function() {
@@ -103,6 +104,19 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
         currYear: this.currYear,
         id: typeId,
         name: typeName
+      });
+      this.currTableView.render();
+    };
+
+    ISWPWorkspace.prototype.wmsEntity = function(entityId) {
+      if (this.currTableView != null) {
+        this.currTableView = this.currTableView.unrender();
+      }
+      this.currTableView = new EntityStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: entityId,
+        name: entityId
       });
       this.currTableView.render();
     };

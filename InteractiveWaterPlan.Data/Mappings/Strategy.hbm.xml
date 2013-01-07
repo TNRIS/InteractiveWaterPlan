@@ -38,27 +38,33 @@
   </class>
 
   <sql-query name="GetStrategiesInRegion">
-    <query-param name="regionLetter" type="char"/>
+    <query-param name="regionLetter" type="char" />
     <return class="Strategy"/>
     exec dbo.usp_Select_Strategies_By_Region_Year__tbl_SWP_Final :regionLetter
   </sql-query>
 
   <sql-query name="GetStrategiesInCounty">
-    <query-param name="countyId" type="int"/>
+    <query-param name="countyId" type="int" />
     <return class="Strategy"/>
     exec dbo.usp_Select_Strategies_By_County_Year__tbl_SWP_Final :countyId
   </sql-query>
 
   <sql-query name="GetStrategiesInDistrict">
-    <query-param name="districtId" type="int"/>
+    <query-param name="districtId" type="int" />
     <return class="Strategy"/>
     exec dbo.usp_SpatialSelect_Strategies_By_LegDistrict_Year__tbl_SWP_Final :districtId
   </sql-query>
 
   <sql-query name="GetStrategiesByType">
-    <query-param name="typeId" type="int"/>
+    <query-param name="typeId" type="int" />
     <return class="Strategy"/>
     exec dbo.usp_Select_tbl_SWP_Final_By_StrategyTypeID :typeId
+  </sql-query>
+
+  <sql-query name="GetStrategiesForEntity">
+    <query-param name="entityId" type="int" />
+    <return class="Strategy" />
+    exec dbo.usp_Select_Strategies_By_Entity_Year__tbl_SWP_Final :entityId
   </sql-query>
 
 </hibernate-mapping>

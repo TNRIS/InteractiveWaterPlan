@@ -48,7 +48,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     CountyStrategyCollectionView.prototype.render = function() {
       CountyStrategyCollectionView.__super__.render.apply(this, arguments);
-      this.$('#strategyPlaceName').html(this.viewName());
       return this;
     };
 

@@ -42,7 +42,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/county
-        public IList<Strategy> GetStrategiesInCounty(int countyId, string year)
+        public IList<Strategy> GetStrategiesInCounty(int countyId, string year = null)
         {
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
@@ -51,7 +51,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/district
-        public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
+        public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
         {
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
@@ -60,12 +60,21 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/type
-        public IList<Strategy> GetStrategiesByType(int typeId, string year)
+        public IList<Strategy> GetStrategiesByType(int typeId, string year = null)
         {
             if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
             return _repo.GetStrategiesByType(typeId, year);
+        }
+
+        // GET api/strategies/entity
+        public IList<Strategy> GetStrategiesForEntity(int entityId, string year = null)
+        {
+            if (year != null && !CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesForEntity(entityId, year);
         }
 
     }

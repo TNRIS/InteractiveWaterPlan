@@ -8,6 +8,7 @@ define([
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
     'views/TypeStrategyCollectionView'
+    'views/EntityStrategyCollectionView'
     'collections/StrategyTypeCollection'
     'collections/CountyCollection'
 ],
@@ -16,6 +17,7 @@ define([
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
     TypeStrategyCollectionView,
+    EntityStrategyCollectionView,
     StrategyTypeCollection,
     CountyCollection) ->
 
@@ -69,7 +71,7 @@ define([
             "wms/region/:regionLetter":     "wmsRegion"
             "wms/county/:countyId":         "wmsCounty"
             "wms/type/:typeId":             "wmsType"
-            #TODO: wms/entity/:entityId
+            "wms/entity/:entityId":         "wmsEntity"
             #TODO: wms/source/:sourceId
 
         wmsNetCountySupplies: () ->
@@ -112,7 +114,7 @@ define([
 
                 currYear: @currYear
                 id: countyId
-                name: countyName #TODO: get county name somehow
+                name: countyName
             )
 
             @currTableView.render()
@@ -130,10 +132,31 @@ define([
 
                 currYear: @currYear
                 id: typeId
-                name: typeName #TODO: get the name of the StrategyType
+                name: typeName
             )
 
             @currTableView.render()
+
+            return
+
+        wmsEntity: (entityId) ->
+            #unrender the currTableView first
+            if @currTableView? then @currTableView = @currTableView.unrender()
+
+
+            #TODO: get the entity name from an API call
+            # and put this in success callback
+
+            @currTableView = new EntityStrategyCollectionView(
+                el: @tableContainer
+
+                currYear: @currYear
+                id: entityId
+                name: entityId #TODO: get entity name somehow
+            )
+
+            @currTableView.render()
+
 
             return
 )

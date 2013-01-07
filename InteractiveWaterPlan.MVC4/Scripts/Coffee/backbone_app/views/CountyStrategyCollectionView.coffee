@@ -48,8 +48,5 @@ define([
         render: () ->
             super
 
-            #TODO: put in an observable instead
-            this.$('#strategyPlaceName').html(@viewName())
-
             return this
 )

@@ -130,5 +130,28 @@ namespace InteractiveWaterPlan.Data
                 .ToList<Strategy>();
         }
 
+        public IList<Strategy> GetStrategiesForEntity(int entityId, string year = null)
+        {
+            var strategiesForEntity = Session.GetNamedQuery("GetStrategiesForEntity")
+                .SetParameter("entityId", entityId)
+                .List<Strategy>()
+                .OrderBy(x => x.Id)
+                .ToList<Strategy>();
+
+            if (year == null || year.Length == 0)
+            {
+                return strategiesForEntity;
+            }
+
+            //else only return those that have non-null value in SupplyYEAR
+            return strategiesForEntity
+                .Where(x =>
+                {
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
+                })
+                .ToList<Strategy>();
+        }
+
     }
 }

@@ -7,6 +7,10 @@
 
 <td class="aligned-left">{{m.description}}</td>
 <td>{{m.sourceName}}</td>
-<td>{{m.recipientEntityName}}</td>
+<td>
+    <a href="#/wms/entity/{{m.recipientEntityId}}">    
+        {{m.recipientEntityName}}
+    </a>
+</td>
 <td>{{ $.number(m["supply"+currYear]) }}</td>
 <td>{{m.onlineYear}}</td>
