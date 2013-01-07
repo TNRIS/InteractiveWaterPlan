@@ -14,7 +14,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     RegionStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      _.bindAll(this, 'selectType');
       this.regionLetter = options.id;
       this.viewName = ko.observable("Region " + this.regionLetter);
       fetchParams = {
@@ -26,7 +25,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       RegionStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
-      this.selectedType = ko.observable();
       return null;
     };
 
@@ -34,17 +32,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       RegionStrategyCollectionView.__super__.render.apply(this, arguments);
       this.$('#strategyPlaceName').html(this.viewName());
       return this;
-    };
-
-    RegionStrategyCollectionView.prototype.selectType = function(data, event) {
-      var $target, typeId, typeName;
-      $target = $(event.target);
-      typeId = $target.data('value');
-      typeName = $target.data('name');
-      this.selectedType({
-        id: typeId,
-        name: typeName
-      });
     };
 
     return RegionStrategyCollectionView;

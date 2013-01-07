@@ -9,8 +9,6 @@ define([
         
         initialize: (options) ->
 
-            _.bindAll(this, 'selectType')
-
             @regionLetter = options.id
             
             @viewName = ko.observable("Region #{@regionLetter}")
@@ -24,7 +22,6 @@ define([
             super options.currYear, StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
-            @selectedType = ko.observable()
             
             return null
 
@@ -35,18 +32,5 @@ define([
             this.$('#strategyPlaceName').html(@viewName())
 
             return this
-            
-        selectType: (data, event) ->
-            $target = $(event.target)
 
-            #set the observable to the selected county id and name
-            typeId = $target.data('value')
-            typeName = $target.data('name')
-            
-            @selectedType(
-                id: typeId
-                name: typeName
-            )
-
-            return
 )

@@ -14,7 +14,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     CountyStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      _.bindAll(this, 'selectType', 'fetchCallback');
+      _.bindAll(this, 'fetchCallback');
       this.countyId = options.id;
       this.countyName = options.name;
       this.viewName = ko.observable("" + this.countyName + " County");
@@ -27,7 +27,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       CountyStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
-      this.selectedType = ko.observable();
       this.wugArray = ko.observableArray();
       return null;
     };
@@ -51,17 +50,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       CountyStrategyCollectionView.__super__.render.apply(this, arguments);
       this.$('#strategyPlaceName').html(this.viewName());
       return this;
-    };
-
-    CountyStrategyCollectionView.prototype.selectType = function(data, event) {
-      var $target, typeId, typeName;
-      $target = $(event.target);
-      typeId = $target.data('value');
-      typeName = $target.data('name');
-      this.selectedType({
-        id: typeId,
-        name: typeName
-      });
     };
 
     return CountyStrategyCollectionView;

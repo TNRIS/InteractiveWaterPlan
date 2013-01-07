@@ -22,8 +22,6 @@ define([
             super options.currYear, StrategyTypeView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
-            @selectedRegion = ko.observable()
-
             return null
 
         render: () ->
@@ -33,16 +31,4 @@ define([
 
             return this
             
-        selectRegion: (data, event) ->
-            $target = $(event.target)
-
-            #set the observable to the selected region id and name
-            regionLetter = $target.data('value')
-            
-            @selectedRegion({
-                id: regionLetter
-                name: regionLetter
-            })
-            
-            return null
 )

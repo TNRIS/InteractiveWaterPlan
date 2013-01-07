@@ -8,7 +8,7 @@ define([
     class CountyStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            _.bindAll(this, 'selectType', 'fetchCallback')
+            _.bindAll(this, 'fetchCallback')
 
             @countyId = options.id
             @countyName = options.name
@@ -24,7 +24,6 @@ define([
             super options.currYear, StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
-            @selectedType = ko.observable()
             @wugArray = ko.observableArray()
 
             return null
@@ -53,18 +52,4 @@ define([
             this.$('#strategyPlaceName').html(@viewName())
 
             return this
-
-        selectType: (data, event) ->
-            $target = $(event.target)
-
-            #set the observable to the selected county id and name
-            typeId = $target.data('value')
-            typeName = $target.data('name')
-            
-            @selectedType(
-                id: typeId
-                name: typeName
-            )
-
-            return
 )

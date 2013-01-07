@@ -26,7 +26,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text
       TypeStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyTypeView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
-      this.selectedRegion = ko.observable();
       return null;
     };
 
@@ -34,17 +33,6 @@ define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text
       TypeStrategyCollectionView.__super__.render.apply(this, arguments);
       this.$('#strategyTypeName').html(this.viewName);
       return this;
-    };
-
-    TypeStrategyCollectionView.prototype.selectRegion = function(data, event) {
-      var $target, regionLetter;
-      $target = $(event.target);
-      regionLetter = $target.data('value');
-      this.selectedRegion({
-        id: regionLetter,
-        name: regionLetter
-      });
-      return null;
     };
 
     return TypeStrategyCollectionView;
