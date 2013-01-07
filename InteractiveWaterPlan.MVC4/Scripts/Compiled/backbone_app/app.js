@@ -26,14 +26,28 @@ require.config({
 $(function() {
   var Workspace;
   BASE_API_PATH = $("#base_path").val();
-  Workspace = new Backbone.Router({
-    routes: {}
+  Workspace = Backbone.Router.extend({
+    initialize: function(options) {},
+    routes: {
+      "": "index",
+      "wms": "index",
+      "wms/region/:regionLetter": "showRegion",
+      "wms/county/:countyId": "",
+      "wms/type/:typeId": ""
+    },
+    index: function() {
+      define(['views/AppView'], function(AppView) {
+        var appView;
+        appView = new AppView({
+          el: $('#appContainer')[0]
+        });
+        appView.render();
+      });
+    },
+    showRegion: function(regionLetter) {
+      console.log(regionLetter);
+    }
   });
-  return define(['views/AppView'], function(AppView) {
-    var appView;
-    appView = new AppView({
-      el: $('#appContainer')[0]
-    });
-    appView.render();
-  });
+  this.workspace = new Workspace();
+  return Backbone.history.start();
 });
