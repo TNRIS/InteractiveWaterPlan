@@ -14,11 +14,14 @@ define([
             _.bindAll(this, 'render', 'unrender', 'toggleMap', 
                 'renderStrategyTypeList')
             
+
+
             return null
 
         render: () ->
             @$el.empty()
             @$el.html(@template())
+            ko.applyBindings(this, @el)
 
             this.renderStrategyTypeList()
             return this

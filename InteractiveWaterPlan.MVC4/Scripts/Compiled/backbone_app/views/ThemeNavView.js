@@ -22,6 +22,7 @@ define(['collections/StrategyTypeCollection', 'scripts/text!templates/strategyTy
     ThemeNavView.prototype.render = function() {
       this.$el.empty();
       this.$el.html(this.template());
+      ko.applyBindings(this, this.el);
       this.renderStrategyTypeList();
       return this;
     };

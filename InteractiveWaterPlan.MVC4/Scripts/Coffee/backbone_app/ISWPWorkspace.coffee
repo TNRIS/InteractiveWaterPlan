@@ -53,6 +53,7 @@ define([
             ) 
             @yearNavView.render()
             @yearNavView.currentYear.subscribe(this.updateViewsToNewYear)
+            #TODO: year in backbone routes?
 
             @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
             @breadcrumbList.render()
