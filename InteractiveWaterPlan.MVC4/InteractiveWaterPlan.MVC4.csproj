@@ -254,6 +254,8 @@
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\EntityStrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\EntityStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapToolsView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyCollectionView.js" />
@@ -301,6 +303,8 @@
     <Content Include="Scripts\templates\breadcrumbListItem.html" />
     <Content Include="Scripts\templates\countyNetSupplyRow.html" />
     <Content Include="Scripts\templates\countyNetSupplyTable.html" />
+    <Content Include="Scripts\templates\entityStrategyRow.html" />
+    <Content Include="Scripts\templates\entityStrategyTable.html" />
     <Content Include="Scripts\templates\mapTools.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
     <Content Include="Scripts\templates\strategyTable.html" />
@@ -351,6 +355,8 @@
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\EntityStrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\EntityStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapToolsView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyCollectionView.coffee" />

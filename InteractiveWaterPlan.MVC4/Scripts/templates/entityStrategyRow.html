@@ -1,0 +1,12 @@
+
+<td>
+    <a href="#/wms/type/{{m.typeId}}">
+        {{m.typeName}}
+    </a>
+</td>
+
+<td>{{m.description}}</td>
+<td>{{m.sourceName}}</td>
+<td>{{ $.number(m["supply"+currYear]) }}</td>
+<td>${{ $.number(m.capitalCost) }}</td>
+<td>{{m.onlineYear}}</td>

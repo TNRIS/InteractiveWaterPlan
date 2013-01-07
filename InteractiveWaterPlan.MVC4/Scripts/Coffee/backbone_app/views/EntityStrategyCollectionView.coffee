@@ -1,9 +1,9 @@
 define([
     'views/BaseTableCollectionView'
-    'views/StrategyView'
+    'views/EntityStrategyView'
     'scripts/text!templates/entityStrategyTable.html'
 ],
-(BaseTableCollectionView, StrategyView, tpl) ->
+(BaseTableCollectionView, EntityStrategyView, tpl) ->
 
     class EntityStrategyCollectionView extends BaseTableCollectionView
         
@@ -21,7 +21,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/entity" 
             )
 
-            super options.currYear, StrategyView, 
+            super options.currYear, EntityStrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
 

@@ -13,6 +13,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
     }
 
     ISWPWorkspace.prototype.initialize = function(options) {
+      _.bindAll(this, 'updateViewsToNewYear');
       this.currTableView = null;
       this.currYear = "2010";
       this.tableContainer = $('#tableContainer')[0];
@@ -35,6 +36,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
         el: $('#yearNavContainer')[0]
       });
       this.yearNavView.render();
+      this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
       this.breadcrumbList = new BreadcrumbView({
         el: $('#breadcrumbContainer')[0]
       });
@@ -43,6 +45,11 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.strategyTypes.reset(initStrategyTypes);
       this.countyNames = new CountyCollection();
       this.countyNames.reset(initCountyNames);
+    };
+
+    ISWPWorkspace.prototype.updateViewsToNewYear = function(newYear) {
+      this.currYear = newYear;
+      this.currTableView.changeToYear(newYear);
     };
 
     ISWPWorkspace.prototype.routes = {

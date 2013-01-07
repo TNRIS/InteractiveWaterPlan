@@ -24,7 +24,8 @@ define([
     class ISWPWorkspace extends Backbone.Router
        
         initialize: (options) ->
-            
+            _.bindAll(this, 'updateViewsToNewYear')
+
             @currTableView = null
             @currYear = "2010"
 
@@ -51,6 +52,7 @@ define([
                 el: $('#yearNavContainer')[0] 
             ) 
             @yearNavView.render()
+            @yearNavView.currentYear.subscribe(this.updateViewsToNewYear)
 
             @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
             @breadcrumbList.render()
@@ -63,6 +65,11 @@ define([
             @countyNames.reset(initCountyNames)
 
 
+            return
+
+        updateViewsToNewYear: (newYear) ->
+            @currYear = newYear
+            @currTableView.changeToYear(newYear)
             return
 
         routes:

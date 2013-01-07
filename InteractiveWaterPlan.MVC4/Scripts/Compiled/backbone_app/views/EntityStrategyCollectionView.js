@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(BaseTableCollectionView, StrategyView, tpl) {
+define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(BaseTableCollectionView, EntityStrategyView, tpl) {
   var EntityStrategyCollectionView;
   return EntityStrategyCollectionView = (function(_super) {
 
@@ -24,7 +24,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/entity"
       });
-      EntityStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
+      EntityStrategyCollectionView.__super__.initialize.call(this, options.currYear, EntityStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;
