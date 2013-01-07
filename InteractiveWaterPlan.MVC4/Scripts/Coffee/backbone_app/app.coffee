@@ -35,45 +35,13 @@ require.config(
 $(()->
     BASE_API_PATH = $("#base_path").val()
 
-    #TODO: history/routing
-    Workspace = Backbone.Router.extend(
-        initialize: (options) ->
-            #setup the main views here instead of in AppView ?
-            #need to setup the MapView here
-
-            return
-
-        routes:
-            "":                             "index" #default route, for now it is the same as wms
-            "wms":                          "index"
-            "wms/region/:regionLetter":     "showRegion"
-            "wms/county/:countyId":         ""
-            "wms/type/:typeId":             ""
-            #wms/entity/:entityId
-            #wms/source/:sourceId
-
-        index: () ->
-            define([
-                'views/AppView'
-            ],
-            (AppView) ->
-                appView = new AppView({el: $('#appContainer')[0]})
-                appView.render()
-
-                #Backbone.history.start(
-                #    pushState: true
-                #)
-
-                return
-            )  
-            return
-
-        showRegion: (regionLetter) ->
-            console.log regionLetter
-            return
-
+    define([
+        'ISWPWorkspace'
+    ],
+    (ISWPWorkspace) ->
+        
+        #Create a workspace instance and start it up
+        @workspace = new ISWPWorkspace()
+        Backbone.history.start()
     )
-
-    @workspace = new Workspace()
-    Backbone.history.start()
 )
