@@ -332,10 +332,10 @@
   <ItemGroup>
     <None Include="ConnectionStrings.config.sample" />
     <Content Include="WaterPlanDB_Hibernate.config" />
-    <None Include="Content\FontAwesome\font\fontawesome-webfont.eot" />
-    <None Include="Content\FontAwesome\font\fontawesome-webfont.ttf" />
-    <None Include="Content\FontAwesome\font\fontawesome-webfont.woff" />
-    <None Include="Content\FontAwesome\font\FontAwesome.otf" />
+    <Content Include="Content\FontAwesome\font\fontawesome-webfont.eot" />
+    <Content Include="Content\FontAwesome\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\FontAwesome\font\fontawesome-webfont.woff" />
+    <Content Include="Content\FontAwesome\font\FontAwesome.otf" />
     <Content Include="PlacesDB_Hibernate.config" />
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
