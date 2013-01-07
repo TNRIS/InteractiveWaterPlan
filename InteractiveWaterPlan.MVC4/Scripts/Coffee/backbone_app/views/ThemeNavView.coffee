@@ -1,8 +1,9 @@
 define([
+    'collections/StrategyTypeCollection'
     'scripts/text!templates/strategyTypeListItem.html'
     'scripts/text!templates/themeNav.html'
 ],
-(strategyTypeListItemTpl, tpl) ->
+(StrategyTypeCollection, strategyTypeListItemTpl, tpl) ->
     
     class ThemeNavView extends Backbone.View
 
@@ -24,11 +25,8 @@ define([
 
         renderStrategyTypeList: () ->
             stratTypeLiTemplate = _.template(strategyTypeListItemTpl)
-            TypeCollection = Backbone.Collection.extend(
-                url: "#{BASE_API_PATH}api/strategy/types"
-            )
 
-            typeCollection = new TypeCollection()
+            typeCollection = new StrategyTypeCollection()
             typeCollection.fetch(
                 success: (collection) =>
                     for strategyType in collection.models

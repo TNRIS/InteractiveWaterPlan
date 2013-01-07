@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
@@ -10,9 +10,19 @@ namespace InteractiveWaterPlan.MVC4.Controllers
     {
         //
         // GET: /Home/
-
         public ActionResult Index()
         {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            var boundaryController = new BoundaryController();
+            ViewData["CountyNames"] = JsonConvert.SerializeObject(
+                boundaryController.GetAllCountyNames(), Formatting.None, settings);
+
+            var strategyController = new StrategyController();
+            ViewData["StrategyTypes"] = JsonConvert.SerializeObject(
+                strategyController.GetStrategyTypes(), Formatting.None, settings);
+
             return View();
         }
     }

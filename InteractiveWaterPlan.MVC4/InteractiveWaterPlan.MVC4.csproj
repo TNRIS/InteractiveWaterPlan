@@ -243,7 +243,9 @@
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
+    <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
+    <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\ISWPWorkspace.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\AppView.js" />
@@ -338,7 +340,9 @@
     <Content Include="Content\FontAwesome\font\FontAwesome.otf" />
     <Content Include="PlacesDB_Hibernate.config" />
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\collections\CountyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\ISWPWorkspace.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\AppView.coffee" />

@@ -22,23 +22,19 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         //api/boundary/counties/all
-        public IEnumerable<County> GetAllCountyFeatures()
+        public IEnumerable<County> GetAllCounties()
         {      
             return _repo.GetCounties();
         }
 
-        /*
-        public IEnumerable<object> GetAllCounties()
+        
+        //api/boundary/counties/names
+        public IEnumerable<object> GetAllCountyNames()
         {
-            var repo = new BoundaryRepository();
-            var countyFeatures = repo.GetCounties();
+            return _repo.GetCountyNames();
+        }
 
-            return countyFeatures
-                .Select(x => new { id = x.Id, name = x.Name })
-                .ToList();
-        }*/
-
-        //api/boundary/planningregions/all
+        //api/boundary/regions/all
         public IEnumerable<PlanningRegion> GetAllPlanningRegionFeatures()
         {
             return _repo.GetPlanningRegions();

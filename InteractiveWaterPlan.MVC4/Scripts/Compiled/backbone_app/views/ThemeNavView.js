@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/themeNav.html'], function(strategyTypeListItemTpl, tpl) {
+define(['collections/StrategyTypeCollection', 'scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/themeNav.html'], function(StrategyTypeCollection, strategyTypeListItemTpl, tpl) {
   var ThemeNavView;
   return ThemeNavView = (function(_super) {
 
@@ -27,13 +27,10 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     };
 
     ThemeNavView.prototype.renderStrategyTypeList = function() {
-      var TypeCollection, stratTypeLiTemplate, typeCollection,
+      var stratTypeLiTemplate, typeCollection,
         _this = this;
       stratTypeLiTemplate = _.template(strategyTypeListItemTpl);
-      TypeCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategy/types"
-      });
-      typeCollection = new TypeCollection();
+      typeCollection = new StrategyTypeCollection();
       typeCollection.fetch({
         success: function(collection) {
           var res, strategyType, _i, _len, _ref;

@@ -17,6 +17,14 @@ namespace InteractiveWaterPlan.Data
 
         #endregion
 
+        public IEnumerable<object> GetCountyNames()
+        {
+            return Session.GetNamedQuery("GetAllCounties")
+                .List<County>()
+                .OrderBy(x => x.Id)
+                .Select(x => new { id = x.Id, name = x.Name })
+                .ToList();
+        }
 
         public IList<County> GetCounties()
         {

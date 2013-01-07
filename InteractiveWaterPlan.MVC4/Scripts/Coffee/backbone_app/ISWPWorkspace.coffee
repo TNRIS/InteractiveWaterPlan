@@ -8,12 +8,16 @@ define([
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
     'views/TypeStrategyCollectionView'
+    'collections/StrategyTypeCollection'
+    'collections/CountyCollection'
 ],
 (MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, 
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
-    TypeStrategyCollectionView) ->
+    TypeStrategyCollectionView,
+    StrategyTypeCollection,
+    CountyCollection) ->
 
     class ISWPWorkspace extends Backbone.Router
        
@@ -49,6 +53,14 @@ define([
             @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
             @breadcrumbList.render()
 
+            #Load the boostrapped arrays (defined in Index.cshtml)
+            @strategyTypes = new StrategyTypeCollection()
+            @strategyTypes.reset(initStrategyTypes)
+
+            @countyNames = new CountyCollection()
+            @countyNames.reset(initCountyNames)
+
+
             return
 
         routes:
@@ -82,7 +94,7 @@ define([
 
                 currYear: @currYear
                 id: regionLetter
-                name: regionLetter #TODO
+                name: regionLetter
             )
 
             @currTableView.render()
@@ -93,12 +105,14 @@ define([
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
+            countyName = @countyNames.get(countyId).get('name')
+
             @currTableView = new CountyStrategyCollectionView(
                 el: @tableContainer
 
                 currYear: @currYear
                 id: countyId
-                name: countyId #TODO: get county name somehow
+                name: countyName #TODO: get county name somehow
             )
 
             @currTableView.render()
@@ -109,12 +123,14 @@ define([
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
+            typeName = @strategyTypes.get(typeId).get('name')
+
             @currTableView = new TypeStrategyCollectionView(
                 el: @tableContainer
 
                 currYear: @currYear
                 id: typeId
-                name: typeId #TODO: get the name of the StrategyType
+                name: typeName #TODO: get the name of the StrategyType
             )
 
             @currTableView.render()

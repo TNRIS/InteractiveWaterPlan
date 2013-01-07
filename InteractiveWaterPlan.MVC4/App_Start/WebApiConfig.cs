@@ -80,6 +80,13 @@ namespace InteractiveWaterPlan.MVC4
             #endregion
 
             #region Boundary Routes
+
+            config.Routes.MapHttpRoute(
+                "GetAllCountyNames",
+                "api/boundary/counties/names",
+                new { controller = "Boundary", action = "GetAllCountyNames" }
+            );
+
             config.Routes.MapHttpRoute(
                 "GetAllCounties",
                 "api/boundary/counties/all",
@@ -88,7 +95,7 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                 "GetAllPlanningRegions",
-                "api/boundary/planningregions/all",
+                "api/boundary/regions/all",
                 new { controller = "Boundary", action = "GetAllPlanningRegions" }
             );
 

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
   var ISWPWorkspace;
   return ISWPWorkspace = (function(_super) {
 
@@ -39,6 +39,10 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
         el: $('#breadcrumbContainer')[0]
       });
       this.breadcrumbList.render();
+      this.strategyTypes = new StrategyTypeCollection();
+      this.strategyTypes.reset(initStrategyTypes);
+      this.countyNames = new CountyCollection();
+      this.countyNames.reset(initCountyNames);
     };
 
     ISWPWorkspace.prototype.routes = {
@@ -74,27 +78,31 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
     };
 
     ISWPWorkspace.prototype.wmsCounty = function(countyId) {
+      var countyName;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
+      countyName = this.countyNames.get(countyId).get('name');
       this.currTableView = new CountyStrategyCollectionView({
         el: this.tableContainer,
         currYear: this.currYear,
         id: countyId,
-        name: countyId
+        name: countyName
       });
       this.currTableView.render();
     };
 
     ISWPWorkspace.prototype.wmsType = function(typeId) {
+      var typeName;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
+      typeName = this.strategyTypes.get(typeId).get('name');
       this.currTableView = new TypeStrategyCollectionView({
         el: this.tableContainer,
         currYear: this.currYear,
         id: typeId,
-        name: typeId
+        name: typeName
       });
       this.currTableView.render();
     };

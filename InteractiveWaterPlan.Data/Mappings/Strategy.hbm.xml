@@ -11,7 +11,7 @@
     <property column="wmsTypeNameSWP" name="TypeName" />
     <property column="wmsTypeId" name="TypeId" />
 
-    <property column="wmsRecipientEntityPrimaryRegion" name="RegionLetter" />
+    <property column="wmsRecipientEntityRegion" name="RegionLetter" />
     
     <property column="wmsRecipientEntityCounty" name="CountyName" />
     <property column="wmsRecipientEntityCountyId" name="CountyId" />
