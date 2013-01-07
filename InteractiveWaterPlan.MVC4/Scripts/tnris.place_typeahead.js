@@ -51,6 +51,8 @@
       this.$element
         .val(this.updater(val))
         .change()
+
+      this.$goButton.focus()
       return this.hide()
     }
 
