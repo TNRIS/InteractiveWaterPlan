@@ -30,6 +30,7 @@ require.config(
     urlArgs: "bust=" +  (new Date()).getTime() #busts the cache on each RequireJS request.
 )
 
+workspace = null
 
 #Launch-point for the application
 $(()->
@@ -41,7 +42,7 @@ $(()->
     (ISWPWorkspace) ->
         
         #Create a workspace instance and start it up
-        @workspace = new ISWPWorkspace()
+        workspace = new ISWPWorkspace()
         Backbone.history.start()
     )
 )

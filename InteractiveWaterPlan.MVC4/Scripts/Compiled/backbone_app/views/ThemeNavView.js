@@ -73,7 +73,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     };
 
     ThemeNavView.prototype.changeStrategyView = function(data, event) {
-      var $target, newStrategyType, txt;
+      var $target, newStrategyType, txt, wmsTypeId;
       $target = $(event.target);
       newStrategyType = $target.data('type');
       $target.parents('li.dropdown').addClass('active');
@@ -82,12 +82,16 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
         txt = $target.html();
       }
       $target.parents('li.dropdown').children('a.dropdown-toggle').children('span').html(txt);
-      this.selectedType({
-        type: $target.data('type'),
-        id: $target.data('id'),
-        name: $target.data('name')
+      if (newStrategyType === 'net-supplies') {
+        workspace.navigate("#/wms", {
+          trigger: true
+        });
+        return;
+      }
+      wmsTypeId = $target.data('id');
+      workspace.navigate("#/wms/type/" + wmsTypeId, {
+        trigger: true
       });
-      return null;
     };
 
     return ThemeNavView;

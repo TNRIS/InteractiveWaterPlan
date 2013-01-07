@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/AppView'], function(AppView) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView) {
   var ISWPWorkspace;
   return ISWPWorkspace = (function(_super) {
 
@@ -12,34 +12,91 @@ define(['views/AppView'], function(AppView) {
       return ISWPWorkspace.__super__.constructor.apply(this, arguments);
     }
 
-    ISWPWorkspace.prototype.initialize = function(options) {};
+    ISWPWorkspace.prototype.initialize = function(options) {
+      this.currTableView = null;
+      this.currYear = "2010";
+      this.tableContainer = $('#tableContainer')[0];
+      this.mapView = new MapView({
+        mapContainerId: 'mapContainer',
+        bingApiKey: $('#bing_maps_key').val()
+      });
+      this.mapView.render();
+      this.mapToolsView = new MapToolsView({
+        el: $('#mapTools')[0],
+        mapView: this.mapView
+      });
+      this.mapToolsView.render();
+      this.themeNavView = new ThemeNavView({
+        el: $('#themeNavContainer')[0]
+      });
+      this.themeNavView.render();
+      this.yearNavView = new YearNavView({
+        startingYear: this.currYear,
+        el: $('#yearNavContainer')[0]
+      });
+      this.yearNavView.render();
+      this.breadcrumbList = new BreadcrumbView({
+        el: $('#breadcrumbContainer')[0]
+      });
+      this.breadcrumbList.render();
+    };
 
     ISWPWorkspace.prototype.routes = {
-      "": "index",
-      "wms": "index",
+      "": "wmsNetCountySupplies",
+      "wms": "wmsNetCountySupplies",
       "wms/region/:regionLetter": "wmsRegion",
       "wms/county/:countyId": "wmsCounty",
       "wms/type/:typeId": "wmsType"
     };
 
-    ISWPWorkspace.prototype.index = function() {
-      var appView;
-      appView = new AppView({
-        el: $('#appContainer')[0]
+    ISWPWorkspace.prototype.wmsNetCountySupplies = function() {
+      if (this.currTableView != null) {
+        this.currTableView = this.currTableView.unrender();
+      }
+      this.currTableView = new CountyNetSupplyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear
       });
-      appView.render();
+      this.currTableView.render();
     };
 
     ISWPWorkspace.prototype.wmsRegion = function(regionLetter) {
-      console.log(regionLetter);
+      if (this.currTableView != null) {
+        this.currTableView = this.currTableView.unrender();
+      }
+      this.currTableView = new RegionStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: regionLetter,
+        name: regionLetter
+      });
+      this.currTableView.render();
     };
 
     ISWPWorkspace.prototype.wmsCounty = function(countyId) {
-      console.log(countyId);
+      if (this.currTableView != null) {
+        this.currTableView = this.currTableView.unrender();
+      }
+      this.currTableView = new CountyStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: countyId,
+        name: countyId
+      });
+      this.currTableView.render();
     };
 
     ISWPWorkspace.prototype.wmsType = function(typeId) {
-      console.log(typeId);
+      if (this.currTableView != null) {
+        this.currTableView = this.currTableView.unrender();
+      }
+      this.currTableView = new TypeStrategyCollectionView({
+        el: this.tableContainer,
+        currYear: this.currYear,
+        id: typeId,
+        name: typeId
+      });
+      this.currTableView.render();
     };
 
     return ISWPWorkspace;

@@ -88,14 +88,20 @@ define([
                 .html(txt)
 
             #Change the observable to notify the app that the view must change
-            @selectedType(
-                type: $target.data('type')
-                id: $target.data('id')
-                name: $target.data('name')
-            )
+            #@selectedType(
+            #    type: $target.data('type')
+            #    id: $target.data('id')
+            #    name: $target.data('name')
+            #)
+            
+            #if net-supplies, route to the CountyNetSupply (default view)
+            if (newStrategyType == 'net-supplies')
+                workspace.navigate("#/wms", {trigger: true})
+                return
 
-            return null
+            #else navigate to the WMS Type view for the selected type
+            wmsTypeId = $target.data('id')
+            workspace.navigate("#/wms/type/#{wmsTypeId}", {trigger: true})
 
-
-
+            return
 )

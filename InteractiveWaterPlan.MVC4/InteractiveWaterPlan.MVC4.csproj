@@ -295,7 +295,6 @@
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\stupidtable.js" />
-    <Content Include="Scripts\templates\appContainer.html" />
     <Content Include="Scripts\templates\breadcrumbList.html" />
     <Content Include="Scripts\templates\breadcrumbListItem.html" />
     <Content Include="Scripts\templates\countyNetSupplyRow.html" />
