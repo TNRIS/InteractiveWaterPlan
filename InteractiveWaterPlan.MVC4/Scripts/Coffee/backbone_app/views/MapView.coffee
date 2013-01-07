@@ -87,6 +87,7 @@ define([
             feature = wktFormat.read(placeFeature.get('wktGeog'))
             
             #convert geometry to web mercator
+            console.log feature.geometry
             this.transformToWebMerc(feature.geometry)
 
             bounds = feature.geometry.getBounds()

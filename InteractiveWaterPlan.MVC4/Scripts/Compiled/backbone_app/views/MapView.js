@@ -77,6 +77,7 @@ define([], function() {
       var bounds, feature, wktFormat;
       wktFormat = new OpenLayers.Format.WKT();
       feature = wktFormat.read(placeFeature.get('wktGeog'));
+      console.log(feature.geometry);
       this.transformToWebMerc(feature.geometry);
       bounds = feature.geometry.getBounds();
       this.map.zoomToExtent(bounds);

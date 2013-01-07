@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using InteractiveWaterPlan.Core;
 using NHibernate;
+using Microsoft.SqlServer.Types;
+using System.Data.SqlTypes;
 
 namespace InteractiveWaterPlan.Data
 {
@@ -99,12 +101,58 @@ namespace InteractiveWaterPlan.Data
                 .ToList<PlaceCategory>();
         }
 
-        public PlaceFeature GetPlaceFeature(int placeId)
+        /// <summary>
+        /// Returns the PlaceFeature for the given placeId.  The Geography of the 
+        /// returned PlaceFeature will be reduced by reduceFactor.
+        /// </summary>
+        /// <param name="placeId"></param>
+        /// <param name="reduceFactor"></param>
+        /// <returns></returns>
+        public PlaceFeature GetPlaceFeature(int placeId, int reduceFactor = 200)
         {
-            return Session.GetNamedQuery("GetPlaceFeature")
+            var placeFeature = Session.GetNamedQuery("GetPlaceFeature")
                 .SetParameter("var_PlaceID", placeId)
                 .UniqueResult<PlaceFeature>();
+
+            SqlGeography geog = SqlGeography.Parse(placeFeature.WktGeog);
+            SqlGeography reducedGeog = geog.Reduce(reduceFactor);
+
+            //TODO: Would be better to have this in the Database.
+            //Sometimes reducing the geometry of a complex polygon will leave artifacts
+            //such as points and linestrings.  This is a problem for drawing.
+            //So, remove those artifacts if the original was of type MultiPolygon.
+            if (geog.STGeometryType().Value.Equals("MultiPolygon"))
+            {
+                reducedGeog = cleanUpPolygonGeography(reducedGeog);
+            }
+            
+            placeFeature.WktGeog = reducedGeog.ToString();
+
+            return placeFeature;
+        }
+
+        /// <summary>
+        /// Removes points and lines from originalGeography and returns a MultiPolygon SqlGeography.
+        /// </summary>
+        /// <param name="originalGeography"></param>
+        /// <returns></returns>
+        private SqlGeography cleanUpPolygonGeography(SqlGeography originalGeography)
+        {
+            var cleanedGeog = SqlGeography.STGeomFromText(
+                    new SqlChars(new SqlString("POINT EMPTY")), (int)originalGeography.STSrid);
+
+            //STGeometryN is 1-based not 0-based index
+            for (int i = 1; i <= originalGeography.STNumGeometries(); i++)
+            {
+                if (originalGeography.STGeometryN(i).STDimension() == 2) //only include polygons
+                {
+                    cleanedGeog = cleanedGeog.STUnion(originalGeography.STGeometryN(i));
+                }
+            }
+            return cleanedGeog;
         }
 
     }
+
+
 }

@@ -188,6 +188,7 @@
         .on('blur',     $.proxy(this.blur, this))
         .on('keypress', $.proxy(this.keypress, this))
         .on('keyup',    $.proxy(this.keyup, this))
+        .on('click',    $.proxy(this.clickInput, this))
 
       if (this.eventSupported('keydown')) {
         this.$element.on('keydown', $.proxy(this.keydown, this))
@@ -197,6 +198,10 @@
         .on('click', $.proxy(this.click, this))
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
     }
+
+  , clickInput: function(e) {
+    this.$element.select();
+  }
 
   , eventSupported: function(eventName) {
       var isSupported = eventName in this.$element
