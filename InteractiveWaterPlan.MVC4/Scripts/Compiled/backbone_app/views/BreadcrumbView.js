@@ -13,8 +13,7 @@ define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!template
     }
 
     BreadcrumbView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'selectBreadcrumb', 'push', 'pop');
-      this.selectedBreadcrumb = ko.observable();
+      _.bindAll(this, 'render', 'unrender', 'push', 'pop');
       this.template = _.template(breadcrumbListTpl);
       this.bcItemTemplate = _.template(breadcrumbListItemTpl);
       return null;
@@ -55,26 +54,10 @@ define(['scripts/text!templates/breadcrumbListItem.html', 'scripts/text!template
         m: bcModel
       });
       res = this.$('ul').append(html);
-      ko.applyBindings(this, $("a:last", res)[0]);
     };
 
     BreadcrumbView.prototype.pop = function() {
       return this.$('ul li:last').remove();
-    };
-
-    BreadcrumbView.prototype.selectBreadcrumb = function(data, event) {
-      var $target, i, nextCrumbs, selectedBreadcrumbOpts, _i, _ref;
-      $target = $(event.target);
-      selectedBreadcrumbOpts = {
-        type: $target.data('type'),
-        id: $target.data('id'),
-        name: $target.data('name')
-      };
-      nextCrumbs = $target.parent().nextAll();
-      for (i = _i = 0, _ref = nextCrumbs.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
-        this.pop();
-      }
-      this.selectedBreadcrumb.notifySubscribers(selectedBreadcrumbOpts);
     };
 
     return BreadcrumbView;

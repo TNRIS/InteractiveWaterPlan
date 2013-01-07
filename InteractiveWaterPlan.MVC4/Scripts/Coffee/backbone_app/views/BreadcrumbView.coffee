@@ -7,10 +7,8 @@ define([
     class BreadcrumbView extends Backbone.View
 
         initialize: () ->
-            _.bindAll(this, 'render', 'unrender', 'selectBreadcrumb', 'push', 'pop')
+            _.bindAll(this, 'render', 'unrender', 'push', 'pop')
             
-            @selectedBreadcrumb = ko.observable()
-
             @template = _.template(breadcrumbListTpl)
             @bcItemTemplate = _.template(breadcrumbListItemTpl)
 
@@ -48,25 +46,10 @@ define([
  
             #append it to the breadcrumbList
             res = this.$('ul').append(html)
-            ko.applyBindings(this, $("a:last", res)[0])
-
+            
             return
 
         pop: () ->
             return this.$('ul li:last').remove()
 
-        selectBreadcrumb: (data, event) ->
-            $target = $(event.target)
-            selectedBreadcrumbOpts = 
-                type: $target.data('type')
-                id: $target.data('id')
-                name: $target.data('name')
-
-            #pop off the breadcrumbs up to and including this one
-            nextCrumbs = $target.parent().nextAll()
-            this.pop() for i in [0..nextCrumbs.length]
-
-            @selectedBreadcrumb.notifySubscribers(selectedBreadcrumbOpts)
-
-            return
 )

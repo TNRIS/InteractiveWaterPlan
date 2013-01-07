@@ -10,11 +10,9 @@ define([
 
         initialize: () ->
 
-            _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 
-                'changeStrategyView')
+            _.bindAll(this, 'render', 'unrender', 'toggleMap', 
+                'renderStrategyTypeList')
             
-            @selectedType = ko.observable()
-
             return null
 
         render: () ->
@@ -22,9 +20,6 @@ define([
             @$el.html(@template())
 
             this.renderStrategyTypeList()
-
-            ko.applyBindings(this, @el)
-
             return this
 
         renderStrategyTypeList: () ->
@@ -44,8 +39,6 @@ define([
                             )
                         )
 
-                        #bind events to the most recently added a element
-                        ko.applyBindings(this, $('a:last', res)[0])
                     return
             )
 
@@ -69,39 +62,6 @@ define([
                 $('#mapContainer').slideUp()
                 $('.map-stuff').hide()
                 $target.html('Show Map')
-
-            return
-
-        changeStrategyView: (data, event) ->
-            $target = $(event.target)
-            newStrategyType = $target.data('type')
-
-            $target.parents('li.dropdown').addClass('active')
-            
-            txt = 'Water Management Strategies'
-            if newStrategyType != 'net-supplies'
-                txt = $target.html()
-            
-            $target.parents('li.dropdown')
-                .children('a.dropdown-toggle')
-                .children('span')
-                .html(txt)
-
-            #Change the observable to notify the app that the view must change
-            #@selectedType(
-            #    type: $target.data('type')
-            #    id: $target.data('id')
-            #    name: $target.data('name')
-            #)
-            
-            #if net-supplies, route to the CountyNetSupply (default view)
-            if (newStrategyType == 'net-supplies')
-                workspace.navigate("#/wms", {trigger: true})
-                return
-
-            #else navigate to the WMS Type view for the selected type
-            wmsTypeId = $target.data('id')
-            workspace.navigate("#/wms/type/#{wmsTypeId}", {trigger: true})
 
             return
 )

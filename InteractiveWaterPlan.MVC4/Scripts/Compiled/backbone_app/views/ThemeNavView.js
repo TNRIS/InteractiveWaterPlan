@@ -15,8 +15,7 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
     ThemeNavView.prototype.template = _.template(tpl);
 
     ThemeNavView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 'changeStrategyView');
-      this.selectedType = ko.observable();
+      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList');
       return null;
     };
 
@@ -24,7 +23,6 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
       this.$el.empty();
       this.$el.html(this.template());
       this.renderStrategyTypeList();
-      ko.applyBindings(this, this.el);
       return this;
     };
 
@@ -45,7 +43,6 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
             res = _this.$('#strategyTypeList').append(stratTypeLiTemplate({
               m: strategyType.toJSON()
             }));
-            ko.applyBindings(_this, $('a:last', res)[0]);
           }
         }
       });
@@ -70,28 +67,6 @@ define(['scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templa
         $('.map-stuff').hide();
         $target.html('Show Map');
       }
-    };
-
-    ThemeNavView.prototype.changeStrategyView = function(data, event) {
-      var $target, newStrategyType, txt, wmsTypeId;
-      $target = $(event.target);
-      newStrategyType = $target.data('type');
-      $target.parents('li.dropdown').addClass('active');
-      txt = 'Water Management Strategies';
-      if (newStrategyType !== 'net-supplies') {
-        txt = $target.html();
-      }
-      $target.parents('li.dropdown').children('a.dropdown-toggle').children('span').html(txt);
-      if (newStrategyType === 'net-supplies') {
-        workspace.navigate("#/wms", {
-          trigger: true
-        });
-        return;
-      }
-      wmsTypeId = $target.data('id');
-      workspace.navigate("#/wms/type/" + wmsTypeId, {
-        trigger: true
-      });
     };
 
     return ThemeNavView;
