@@ -38,7 +38,7 @@ define(['namespace'], function(namespace) {
         if ($this.val() === "-1") {
           return;
         }
-        router.navigate("wms/region/" + ($this.val()), {
+        router.navigate("#/wms/region/" + ($this.val()), {
           trigger: true
         });
       });
@@ -57,7 +57,7 @@ define(['namespace'], function(namespace) {
         if ($this.val() === "-1") {
           return;
         }
-        router.navigate("wms/county/" + ($this.val()), {
+        router.navigate("#/wms/county/" + ($this.val()), {
           trigger: true
         });
       });
