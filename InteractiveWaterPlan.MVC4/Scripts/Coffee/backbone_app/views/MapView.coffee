@@ -9,7 +9,7 @@ define([
                 new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
             )
 
-        origZoom: 6
+        origZoom: 5
 
         map: null
 
@@ -246,7 +246,7 @@ define([
 
         _wugStyleMap: new OpenLayers.StyleMap(
             "default" : new OpenLayers.Style(
-                pointRadius: 8
+                pointRadius: 6
                 strokeColor: 'yellow'
                 strokeWidth: 1
                 fillColor: 'blue'
@@ -255,7 +255,7 @@ define([
                     rules: [
                         new OpenLayers.Rule({
                             symbolizer: {
-                                pointRadius: 4,
+                                pointRadius: 6,
                             }
                         }),
                         new OpenLayers.Rule({

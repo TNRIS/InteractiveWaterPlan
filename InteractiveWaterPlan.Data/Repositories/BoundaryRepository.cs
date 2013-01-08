@@ -21,7 +21,7 @@ namespace InteractiveWaterPlan.Data
         {
             return Session.GetNamedQuery("GetAllCounties")
                 .List<County>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.Name)
                 .Select(x => new { id = x.Id, name = x.Name })
                 .ToList();
         }
@@ -30,15 +30,24 @@ namespace InteractiveWaterPlan.Data
         {
             return Session.GetNamedQuery("GetAllCounties")
                 .List<County>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.Name)
                 .ToList<County>();
+        }
+
+        public IEnumerable<object> GetPlanningRegionNames()
+        {
+            return Session.GetNamedQuery("GetAllPlanningRegions")
+                .List<PlanningRegion>()
+                .OrderBy(x => x.Letter)
+                .Select(x => new { letter = x.Letter, name = x.Name })
+                .ToList();
         }
 
         public IList<PlanningRegion> GetPlanningRegions()
         {
             return Session.GetNamedQuery("GetAllPlanningRegions")
                 .List<PlanningRegion>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.Letter)
                 .ToList<PlanningRegion>();
         }
 

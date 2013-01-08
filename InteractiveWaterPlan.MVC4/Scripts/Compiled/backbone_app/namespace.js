@@ -4,6 +4,5 @@ define(['collections/WugFeatureCollection'], function(WugFeatureCollection) {
   var namespace;
   namespace = {};
   namespace.wugFeatureCollection = new WugFeatureCollection();
-  console.log("in namespace");
   return namespace;
 });

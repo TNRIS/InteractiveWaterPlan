@@ -19,9 +19,14 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             ViewData["CountyNames"] = JsonConvert.SerializeObject(
                 boundaryController.GetAllCountyNames(), Formatting.None, settings);
 
+            ViewData["RegionNames"] = JsonConvert.SerializeObject(
+                boundaryController.GetAllPlanningRegionNames(), Formatting.None, settings);
+
             var strategyController = new StrategyController();
             ViewData["StrategyTypes"] = JsonConvert.SerializeObject(
                 strategyController.GetStrategyTypes(), Formatting.None, settings);
+
+
 
             return View();
         }

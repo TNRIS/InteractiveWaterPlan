@@ -141,6 +141,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\CountyNetSupplyController.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
@@ -163,10 +164,12 @@
     <Content Include="Content\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Content\bootstrap\js\bootstrap.js" />
     <Content Include="Content\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.cosmo.css" />
     <Content Include="Content\FontAwesome\css\font-awesome-ie7.min.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.min.css" />
-    <Content Include="Content\jquery.min.js" />
+    <Content Include="Content\images\layer-switcher-maximize.png" />
     <Content Include="Content\images\loading-36.gif" />
     <Content Include="Content\OpenLayers\img\blank.gif" />
     <Content Include="Content\OpenLayers\img\cloud-popup-relative.png" />
@@ -242,9 +245,12 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
+    <Content Include="Scripts\Compiled\backbone_app\collections\RegionCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\ISWPRouter.js" />
@@ -255,6 +261,7 @@
     <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\CountyRegionSelectView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\EntityStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\EntityStrategyView.js" />
@@ -348,6 +355,7 @@
     <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\collections\RegionCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\WugFeatureCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\ISWPRouter.coffee" />
@@ -358,6 +366,7 @@
     <None Include="Scripts\Coffee\backbone_app\views\BreadcrumbView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\CountyRegionSelectView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\EntityStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\EntityStrategyView.coffee" />

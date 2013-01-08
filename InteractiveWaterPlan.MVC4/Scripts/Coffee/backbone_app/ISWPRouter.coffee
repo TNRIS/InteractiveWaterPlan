@@ -1,4 +1,5 @@
 define([
+    'namespace'
     'views/MapView'
     'views/ThemeNavView'
     'views/YearNavView'
@@ -9,17 +10,26 @@ define([
     'views/CountyStrategyCollectionView'
     'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
+    'views/CountyRegionSelectView'
     'collections/StrategyTypeCollection'
     'collections/CountyCollection'
+    'collections/RegionCollection'
 ],
-(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, 
+(   namespace, 
+    MapView, 
+    ThemeNavView, 
+    YearNavView, 
+    MapToolsView, 
+    BreadcrumbView, 
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
     StrategyTypeCollectionView,
     EntityStrategyCollectionView,
+    CountyRegionSelectView
     StrategyTypeCollection,
-    CountyCollection) ->
+    CountyCollection,
+    RegionCollection) ->
 
     class ISWPRouter extends Backbone.Router
        
@@ -27,7 +37,7 @@ define([
             _.bindAll(this, 'updateViewsToNewYear')
 
             @currTableView = null
-            @currYear = "2010"
+            @currYear = "2010" #TODO: make year a namespace variable
 
             #save reference to the tableContainer dom element
             @tableContainer = $('#tableContainer')[0]
@@ -59,11 +69,21 @@ define([
             @breadcrumbList.render()
 
             #Load the boostrapped arrays (defined in Index.cshtml)
-            @strategyTypes = new StrategyTypeCollection()
-            @strategyTypes.reset(initStrategyTypes)
+            namespace.strategyTypes = new StrategyTypeCollection()
+            namespace.strategyTypes.reset(initStrategyTypes)
 
-            @countyNames = new CountyCollection()
-            @countyNames.reset(initCountyNames)
+            namespace.countyNames = new CountyCollection()
+            namespace.countyNames.reset(initCountyNames)
+
+            namespace.regionNames = new RegionCollection()
+            namespace.regionNames.reset(initRegionNames)
+
+            @countyRegionSelect = new CountyRegionSelectView(
+                el: $('#regionCountySelectContainer')[0]
+                counties: namespace.countyNames
+                regions: namespace.regionNames
+            )
+            @countyRegionSelect.render()
 
             return
 
@@ -117,7 +137,7 @@ define([
             if @currTableView? then @currTableView = @currTableView.unrender()
 
             #TODO: If invalid countyId, then show error
-            countyName = @countyNames.get(countyId).get('name')
+            countyName = namespace.countyNames.get(countyId).get('name')
 
             @currTableView = new CountyStrategyCollectionView(
                 el: @tableContainer
@@ -136,7 +156,7 @@ define([
             if @currTableView? then @currTableView = @currTableView.unrender()
 
             #TODO: If invalid typeId, then show error
-            typeName = @strategyTypes.get(typeId).get('name')
+            typeName = namespace.strategyTypes.get(typeId).get('name')
 
             @currTableView = new StrategyTypeCollectionView(
                 el: @tableContainer
@@ -154,20 +174,29 @@ define([
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
-
-            #TODO: get the entity name from an API call
-            # and put this in success callback
-            #TODO: If invalid entityId, then show error
-            @currTableView = new EntityStrategyCollectionView(
-                el: @tableContainer
-
-                currYear: @currYear
-                id: entityId
-                name: entityId #TODO: get entity name somehow
+            #get the entity name from an API call
+            EntityModel = Backbone.Model.extend(
+                url: "#{BASE_API_PATH}api/entity/#{entityId}" 
             )
 
-            @currTableView.render()
+            entity = new EntityModel()
 
+            entity.fetch(
+                success: (model) =>
+                    #TODO: If invalid entityId, then show error
+                    console.log model
+
+                    @currTableView = new EntityStrategyCollectionView(
+                        el: @tableContainer
+
+                        currYear: @currYear
+                        id: entityId
+                        name: model.get("name") #TODO: get entity name somehow
+                    )
+
+                    @currTableView.render()
+                    return
+            )
 
             return
 )

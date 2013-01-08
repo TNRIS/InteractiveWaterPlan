@@ -63,6 +63,9 @@
     <EmbeddedResource Include="Mappings\Place.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Mappings\Entity.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Mappings\README.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +101,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Repositories\CountyNetSupplyRepository.cs" />
+    <Compile Include="Repositories\EntityRepository.cs" />
     <Compile Include="Repositories\PlaceRepository.cs" />
     <Compile Include="Repositories\StrategyRepository.cs" />
     <Compile Include="AbstractHibernateRepository.cs" />

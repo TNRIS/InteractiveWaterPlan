@@ -10,7 +10,5 @@ define([
 
     namespace.wugFeatureCollection = new WugFeatureCollection()
 
-    console.log "in namespace"
-
     return namespace
 )

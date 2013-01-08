@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
+define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/CountyRegionSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, CountyRegionSelectView, StrategyTypeCollection, CountyCollection, RegionCollection) {
   var ISWPRouter;
   return ISWPRouter = (function(_super) {
 
@@ -41,10 +41,18 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
         el: $('#breadcrumbContainer')[0]
       });
       this.breadcrumbList.render();
-      this.strategyTypes = new StrategyTypeCollection();
-      this.strategyTypes.reset(initStrategyTypes);
-      this.countyNames = new CountyCollection();
-      this.countyNames.reset(initCountyNames);
+      namespace.strategyTypes = new StrategyTypeCollection();
+      namespace.strategyTypes.reset(initStrategyTypes);
+      namespace.countyNames = new CountyCollection();
+      namespace.countyNames.reset(initCountyNames);
+      namespace.regionNames = new RegionCollection();
+      namespace.regionNames.reset(initRegionNames);
+      this.countyRegionSelect = new CountyRegionSelectView({
+        el: $('#regionCountySelectContainer')[0],
+        counties: namespace.countyNames,
+        regions: namespace.regionNames
+      });
+      this.countyRegionSelect.render();
     };
 
     ISWPRouter.prototype.updateViewsToNewYear = function(newYear) {
@@ -90,7 +98,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
-      countyName = this.countyNames.get(countyId).get('name');
+      countyName = namespace.countyNames.get(countyId).get('name');
       this.currTableView = new CountyStrategyCollectionView({
         el: this.tableContainer,
         currYear: this.currYear,
@@ -105,7 +113,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
-      typeName = this.strategyTypes.get(typeId).get('name');
+      typeName = namespace.strategyTypes.get(typeId).get('name');
       this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         currYear: this.currYear,
@@ -116,16 +124,27 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
     };
 
     ISWPRouter.prototype.wmsEntity = function(entityId) {
+      var EntityModel, entity,
+        _this = this;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
-      this.currTableView = new EntityStrategyCollectionView({
-        el: this.tableContainer,
-        currYear: this.currYear,
-        id: entityId,
-        name: entityId
+      EntityModel = Backbone.Model.extend({
+        url: "" + BASE_API_PATH + "api/entity/" + entityId
       });
-      this.currTableView.render();
+      entity = new EntityModel();
+      entity.fetch({
+        success: function(model) {
+          console.log(model);
+          _this.currTableView = new EntityStrategyCollectionView({
+            el: _this.tableContainer,
+            currYear: _this.currYear,
+            id: entityId,
+            name: model.get("name")
+          });
+          _this.currTableView.render();
+        }
+      });
     };
 
     return ISWPRouter;

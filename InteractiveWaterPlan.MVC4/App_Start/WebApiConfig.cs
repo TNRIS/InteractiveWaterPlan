@@ -93,12 +93,16 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Boundary", action = "GetAllCountyNames" }
             );
 
-            //TODO: route to get entity details
-
             config.Routes.MapHttpRoute(
                 "GetAllCounties",
                 "api/boundary/counties/all",
                 new { controller = "Boundary", action = "GetAllCounties" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetAllPlanningRegionNames",
+                "api/boundary/regions/names",
+                new { controller = "Boundary", action = "GetAllPlanningRegionNames" }
             );
 
             config.Routes.MapHttpRoute(
@@ -116,48 +120,15 @@ namespace InteractiveWaterPlan.MVC4
 
             #endregion
 
-            #region Feature Routes
-            /*
+            #region Entity Routes
+            
             config.Routes.MapHttpRoute(
-                "GetAllEntitiesRoute",
-                "api/feature/entity/all",
-                new { controller = "Feature", action = "GetAllEntities" }
+                "GetEntityRoute",
+                "api/entity/{entityId}",
+                new { controller = "Entity", action = "GetEntity" }
             );
 
-            config.Routes.MapHttpRoute(
-                "GetAllRecommendedReservoirsRoute",
-                "api/feature/reservoir/recommended/all",
-                new { controller = "Feature", action = "GetAllRecommendedReservoirs" }
-            );
 
-            config.Routes.MapHttpRoute(
-                "GetRecommendedReservoirByLatLonRoute",
-                "api/feature/reservoir/recommended",
-                new { controller = "Feature", action = "GetRecommendedReservoir" }
-            );
-
-            config.Routes.MapHttpRoute(
-                "GetRecommendedReservoirEntitiesRoute",
-                "api/feature/entity/{Year}",
-                new { controller = "Feature", action = "GetEntitiesOfReservoir" }
-            );
-            */
-            #endregion
-
-            #region Data Routes
-            /*
-            config.Routes.MapHttpRoute(
-                "GetWaterUseDataRoute",
-                "api/data/wateruse/{LocationType}/{LocationName}/{Year}",
-                new { controller = "Data", action = "GetWaterUseData" }
-            );
-
-            config.Routes.MapHttpRoute(
-                "GetReservoirSupplyDataRoute",
-                "api/data/reservoir/{ReservoirId}/{Year}",
-                new { controller = "Data", action = "GetReservoirSupplyData" }
-            );
-            */
             #endregion
 
             /*config.Routes.MapHttpRoute(

@@ -16,6 +16,7 @@
 
     @Styles.Render("~/Content/bootstrap/css/cosmo.bootstrap.css",
         "~/Content/FontAwesome/css/font-awesome.css",
+        "~/Content/chosen.cosmo.css",
         "~/Content/SiteNew.css"
     )
 
@@ -69,6 +70,11 @@
                 <div class="span12" id="breadcrumbContainer"></div>
             </div>
 
+            <div class="row" id="regionCountySelectContainer">
+                <div class="span3" id="regionSelectContainer"></div>
+                <div class="span3" id="countySelectContainer"></div>
+            </div>
+
             <div class="row">
                 <div class="span12" id="tableContainer"></div>
             </div>
@@ -99,6 +105,8 @@
 
     <script type="text/javascript">
         var initCountyNames = @Html.Raw(ViewData["CountyNames"]);
+
+        var initRegionNames = @Html.Raw(ViewData["RegionNames"]);
     
         var initStrategyTypes = @Html.Raw(ViewData["StrategyTypes"]);
     </script>

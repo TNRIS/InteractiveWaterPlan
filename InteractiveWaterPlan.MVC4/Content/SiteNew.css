@@ -94,6 +94,11 @@ ul.typeahead .catName
     font-size:11px;
 }    
 
+#countyRegionSelectContainer .selectContainer
+{
+    margin-right: 30px;
+}
+
 .scrollTableContainer
 {
     max-height: 600px;
@@ -168,6 +173,21 @@ ul.breadcrumb li:last-child > a:hover
 }
 
 /* OpenLayers */
+.olControlLayerSwitcher .layersDiv 
+{
+    background-color: #dfdfdf !important;
+    color: black !important;
+    font-family: "Open Sans", Calibri, Candara, Arial, sans-serif !important;
+    border-left: 2px solid white !important;
+    border-top: 2px solid white !important;
+    border-bottom: 2px solid white !important;
+}
+
+.olControlLayerSwitcher .layersDiv input
+{
+    margin-top: -4px !important;
+}
+
 .olFramedCloudPopupContent h3 
 {
     font-size: 14px;

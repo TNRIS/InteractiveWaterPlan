@@ -14,7 +14,7 @@ define(['namespace'], function(namespace) {
 
     MapView.prototype.origCenter = new OpenLayers.LonLat(-99.294317, 31.348335).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:3857"));
 
-    MapView.prototype.origZoom = 6;
+    MapView.prototype.origZoom = 5;
 
     MapView.prototype.map = null;
 
@@ -204,7 +204,7 @@ define(['namespace'], function(namespace) {
 
     MapView.prototype._wugStyleMap = new OpenLayers.StyleMap({
       "default": new OpenLayers.Style({
-        pointRadius: 8,
+        pointRadius: 6,
         strokeColor: 'yellow',
         strokeWidth: 1,
         fillColor: 'blue',
@@ -213,7 +213,7 @@ define(['namespace'], function(namespace) {
         rules: [
           new OpenLayers.Rule({
             symbolizer: {
-              pointRadius: 4
+              pointRadius: 6
             }
           }), new OpenLayers.Rule({
             maxScaleDenominator: 866688,
