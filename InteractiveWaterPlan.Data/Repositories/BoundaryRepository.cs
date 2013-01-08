@@ -2,6 +2,7 @@
 using System.Linq;
 using InteractiveWaterPlan.Core;
 using NHibernate;
+using Microsoft.SqlServer.Types;
 
 namespace InteractiveWaterPlan.Data
 {
@@ -43,12 +44,22 @@ namespace InteractiveWaterPlan.Data
                 .ToList();
         }
 
-        public IList<PlanningRegion> GetPlanningRegions()
+        public IList<PlanningRegion> GetPlanningRegions(int reduceFactor = 400)
         {
-            return Session.GetNamedQuery("GetAllPlanningRegions")
+            var planningRegions = Session.GetNamedQuery("GetAllPlanningRegions")
                 .List<PlanningRegion>()
                 .OrderBy(x => x.Letter)
                 .ToList<PlanningRegion>();
+
+            foreach (var planningRegion in planningRegions)
+            {
+                SqlGeography geog = SqlGeography.Parse(planningRegion.WktGeog);
+                SqlGeography reducedGeog = geog.Reduce(reduceFactor);
+                planningRegion.WktGeog = reducedGeog.ToString();
+            }
+
+            return planningRegions.ToList();
+            
         }
 
         public IList<LegeDistrict> GetLegeDistricts()
