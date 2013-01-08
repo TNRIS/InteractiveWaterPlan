@@ -30,19 +30,19 @@ require.config(
     urlArgs: "bust=" +  (new Date()).getTime() #busts the cache on each RequireJS request.
 )
 
-workspace = null
+router = null
 
 #Launch-point for the application
 $(()->
     BASE_API_PATH = $("#base_path").val()
 
     define([
-        'ISWPWorkspace'
+        'ISWPRouter'
     ],
-    (ISWPWorkspace) ->
+    (ISWPRouter) ->
         
-        #Create a workspace instance and start it up
-        workspace = new ISWPWorkspace()
+        #Create a router instance and start it up
+        router = new ISWPRouter()
         Backbone.history.start()
     )
 )

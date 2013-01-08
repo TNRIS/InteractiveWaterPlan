@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(BaseTableCollectionView, StrategyView, tpl) {
+define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(namespace, BaseTableCollectionView, StrategyView, tpl) {
   var CountyStrategyCollectionView;
   return CountyStrategyCollectionView = (function(_super) {
 
@@ -27,12 +27,11 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
       CountyStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
-      this.wugArray = ko.observableArray();
       return null;
     };
 
     CountyStrategyCollectionView.prototype.fetchCallback = function(models) {
-      var m, newWugList, _i, _len;
+      var newWugList;
       newWugList = _.map(models, function(m) {
         return {
           id: m.get("recipientEntityId"),
@@ -40,10 +39,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
           wktGeog: m.get("recipientEntityWktGeog")
         };
       });
-      for (_i = 0, _len = newWugList.length; _i < _len; _i++) {
-        m = newWugList[_i];
-        this.wugArray.push(m);
-      }
+      namespace.wugFeatureCollection.reset(newWugList);
     };
 
     CountyStrategyCollectionView.prototype.render = function() {

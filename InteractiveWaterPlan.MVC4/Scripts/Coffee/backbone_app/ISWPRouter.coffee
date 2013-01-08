@@ -21,7 +21,7 @@ define([
     StrategyTypeCollection,
     CountyCollection) ->
 
-    class ISWPWorkspace extends Backbone.Router
+    class ISWPRouter extends Backbone.Router
        
         initialize: (options) ->
             _.bindAll(this, 'updateViewsToNewYear')

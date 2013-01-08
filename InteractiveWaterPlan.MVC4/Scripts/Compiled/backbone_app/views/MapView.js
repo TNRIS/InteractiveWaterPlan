@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define([], function() {
+define(['namespace'], function(namespace) {
   var MapView;
   return MapView = (function(_super) {
 
@@ -26,7 +26,8 @@ define([], function() {
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures');
+      namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
 
@@ -64,6 +65,43 @@ define([], function() {
       return null;
     };
 
+    MapView.prototype.resetWugFeatures = function(featureCollection) {
+      var bounds, m, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
+      this.clearWugFeatures();
+      if (featureCollection.models.length < 1) {
+        return;
+      }
+      this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
+        styleMap: this._wugStyleMap
+      });
+      wktFormat = new OpenLayers.Format.WKT();
+      bounds = null;
+      wugFeatures = [];
+      _ref = featureCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        newFeature = wktFormat.read(m.get('wktGeog'));
+        newFeature.attributes = m.attributes;
+        delete newFeature.attributes.wktGeog;
+        newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
+        if (!(bounds != null)) {
+          bounds = newFeature.geometry.getBounds();
+        } else {
+          bounds.extend(newFeature.geometry.getBounds());
+        }
+        wugFeatures.push(newFeature);
+      }
+      this.wugLayer.addFeatures(wugFeatures);
+      this.map.addLayer(this.wugLayer);
+      this.map.zoomToExtent(bounds);
+    };
+
+    MapView.prototype.clearWugFeatures = function() {
+      if (this.wugLayer != null) {
+        this.wugLayer.destroy();
+      }
+    };
+
     MapView.prototype.resetExtent = function() {
       var zoom;
       zoom = this.origZoom;
@@ -77,7 +115,6 @@ define([], function() {
       var bounds, feature, wktFormat;
       wktFormat = new OpenLayers.Format.WKT();
       feature = wktFormat.read(placeFeature.get('wktGeog'));
-      console.log(feature.geometry);
       this.transformToWebMerc(feature.geometry);
       bounds = feature.geometry.getBounds();
       this.map.zoomToExtent(bounds);
@@ -164,6 +201,39 @@ define([], function() {
       }
       return layers;
     };
+
+    MapView.prototype._wugStyleMap = new OpenLayers.StyleMap({
+      "default": new OpenLayers.Style({
+        pointRadius: 8,
+        strokeColor: 'yellow',
+        strokeWidth: 1,
+        fillColor: 'blue',
+        fillOpacity: 0.8
+      }, {
+        rules: [
+          new OpenLayers.Rule({
+            symbolizer: {
+              pointRadius: 4
+            }
+          }), new OpenLayers.Rule({
+            maxScaleDenominator: 866688,
+            symbolizer: {
+              fontSize: "12px",
+              labelAlign: 'cb',
+              labelOutlineColor: "yellow",
+              labelOutlineWidth: 2,
+              labelYOffset: 8,
+              label: "${name}"
+            }
+          })
+        ]
+      }),
+      "select": new OpenLayers.Style({
+        fillColor: 'yellow',
+        strokeColor: 'blue',
+        fillOpacity: 1
+      })
+    });
 
     return MapView;
 

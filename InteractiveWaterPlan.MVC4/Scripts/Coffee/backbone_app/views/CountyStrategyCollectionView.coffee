@@ -1,9 +1,10 @@
 define([
+    'namespace'
     'views/BaseTableCollectionView'
     'views/StrategyView'
     'scripts/text!templates/strategyTable.html'
 ],
-(BaseTableCollectionView, StrategyView, tpl) ->
+(namespace, BaseTableCollectionView, StrategyView, tpl) ->
 
     class CountyStrategyCollectionView extends BaseTableCollectionView
         
@@ -24,13 +25,12 @@ define([
             super options.currYear, StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
-            @wugArray = ko.observableArray()
-
+            
             return null
 
         fetchCallback: (models) ->
-            #TODO: Use underscore to map WUG properties to new WUG object
-            # and then add them all to the @wugArray observable array
+            #Use underscore to map WUG properties to new WUG object
+            # and then add them all to the namespace.wugFeatureCollection
             newWugList = _.map(models, (m) ->
                 return {
                     id: m.get("recipientEntityId")
@@ -39,8 +39,7 @@ define([
                 }
             )
 
-            for m in newWugList
-                @wugArray.push(m)
+            namespace.wugFeatureCollection.reset(newWugList)
 
             return
 

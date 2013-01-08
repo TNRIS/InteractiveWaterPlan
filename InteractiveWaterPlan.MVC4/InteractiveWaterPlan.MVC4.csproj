@@ -246,8 +246,9 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
-    <Content Include="Scripts\Compiled\backbone_app\ISWPWorkspace.js" />
+    <Content Include="Scripts\Compiled\backbone_app\ISWPRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
+    <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\AppView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseTableCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BreadcrumbView.js" />
@@ -347,8 +348,9 @@
     <None Include="Scripts\Coffee\backbone_app\collections\CountyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\ISWPWorkspace.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\ISWPRouter.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\namespace.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\AppView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BaseTableCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BreadcrumbView.coffee" />

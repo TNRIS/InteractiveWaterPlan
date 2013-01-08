@@ -3,16 +3,16 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'views/EntityStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, EntityStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
-  var ISWPWorkspace;
-  return ISWPWorkspace = (function(_super) {
+  var ISWPRouter;
+  return ISWPRouter = (function(_super) {
 
-    __extends(ISWPWorkspace, _super);
+    __extends(ISWPRouter, _super);
 
-    function ISWPWorkspace() {
-      return ISWPWorkspace.__super__.constructor.apply(this, arguments);
+    function ISWPRouter() {
+      return ISWPRouter.__super__.constructor.apply(this, arguments);
     }
 
-    ISWPWorkspace.prototype.initialize = function(options) {
+    ISWPRouter.prototype.initialize = function(options) {
       _.bindAll(this, 'updateViewsToNewYear');
       this.currTableView = null;
       this.currYear = "2010";
@@ -47,12 +47,12 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.countyNames.reset(initCountyNames);
     };
 
-    ISWPWorkspace.prototype.updateViewsToNewYear = function(newYear) {
+    ISWPRouter.prototype.updateViewsToNewYear = function(newYear) {
       this.currYear = newYear;
       this.currTableView.changeToYear(newYear);
     };
 
-    ISWPWorkspace.prototype.routes = {
+    ISWPRouter.prototype.routes = {
       "": "wmsNetCountySupplies",
       "wms": "wmsNetCountySupplies",
       "wms/region/:regionLetter": "wmsRegion",
@@ -61,7 +61,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       "wms/entity/:entityId": "wmsEntity"
     };
 
-    ISWPWorkspace.prototype.wmsNetCountySupplies = function() {
+    ISWPRouter.prototype.wmsNetCountySupplies = function() {
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
@@ -72,7 +72,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.render();
     };
 
-    ISWPWorkspace.prototype.wmsRegion = function(regionLetter) {
+    ISWPRouter.prototype.wmsRegion = function(regionLetter) {
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
@@ -85,7 +85,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.render();
     };
 
-    ISWPWorkspace.prototype.wmsCounty = function(countyId) {
+    ISWPRouter.prototype.wmsCounty = function(countyId) {
       var countyName;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
@@ -100,7 +100,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.render();
     };
 
-    ISWPWorkspace.prototype.wmsType = function(typeId) {
+    ISWPRouter.prototype.wmsType = function(typeId) {
       var typeName;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
@@ -115,7 +115,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.render();
     };
 
-    ISWPWorkspace.prototype.wmsEntity = function(entityId) {
+    ISWPRouter.prototype.wmsEntity = function(entityId) {
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
@@ -128,7 +128,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
       this.currTableView.render();
     };
 
-    return ISWPWorkspace;
+    return ISWPRouter;
 
   })(Backbone.Router);
 });

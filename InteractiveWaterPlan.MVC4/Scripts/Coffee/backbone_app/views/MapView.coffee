@@ -1,7 +1,7 @@
 define([
-
+    'namespace'
 ],
-() ->
+(namespace) ->
     class MapView extends Backbone.View
 
         origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(
@@ -27,8 +27,10 @@ define([
             @bingApiKey = config.bingApiKey
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
-                'transformToWebMerc')
+                'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures')
             
+            namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
+
             return null
 
         render: () ->
@@ -72,6 +74,45 @@ define([
             @$el.remove()
             return null
 
+        resetWugFeatures: (featureCollection) ->
+            this.clearWugFeatures()
+
+            if featureCollection.models.length < 1 then return
+
+            @wugLayer = new OpenLayers.Layer.Vector(
+                "Water User Groups",
+                {
+                    styleMap: this._wugStyleMap
+                })
+
+            wktFormat = new OpenLayers.Format.WKT()
+            bounds = null
+            wugFeatures = []
+            for m in featureCollection.models
+                newFeature = wktFormat.read(m.get('wktGeog'))
+                newFeature.attributes = m.attributes
+                delete newFeature.attributes.wktGeog
+                newFeature.geometry = newFeature.geometry.transform(
+                    @map.displayProjection, @map.projection)
+                if not bounds?
+                    bounds = newFeature.geometry.getBounds()
+                else
+                    bounds.extend(newFeature.geometry.getBounds())
+
+                wugFeatures.push(newFeature)
+
+            @wugLayer.addFeatures(wugFeatures)
+            @map.addLayer(@wugLayer)
+            @map.zoomToExtent(bounds)
+            return
+
+
+        clearWugFeatures: () ->
+            
+            if @wugLayer? then @wugLayer.destroy()
+
+            return
+
         resetExtent: () ->
             zoom = @origZoom
 
@@ -87,7 +128,6 @@ define([
             feature = wktFormat.read(placeFeature.get('wktGeog'))
             
             #convert geometry to web mercator
-            console.log feature.geometry
             this.transformToWebMerc(feature.geometry)
 
             bounds = feature.geometry.getBounds()
@@ -203,5 +243,40 @@ define([
 
 
             return layers
+
+        _wugStyleMap: new OpenLayers.StyleMap(
+            "default" : new OpenLayers.Style(
+                pointRadius: 8
+                strokeColor: 'yellow'
+                strokeWidth: 1
+                fillColor: 'blue'
+                fillOpacity: 0.8
+                {
+                    rules: [
+                        new OpenLayers.Rule({
+                            symbolizer: {
+                                pointRadius: 4,
+                            }
+                        }),
+                        new OpenLayers.Rule({
+                            maxScaleDenominator: 866688,
+                            symbolizer: {
+                                fontSize: "12px"
+                                labelAlign: 'cb'
+                                labelOutlineColor: "yellow"
+                                labelOutlineWidth: 2
+                                labelYOffset: 8
+                                label: "${name}"
+                            }        
+                        })
+                    ]
+                }
+            )
+            "select" : new OpenLayers.Style(
+                fillColor: 'yellow'
+                strokeColor: 'blue'
+                fillOpacity: 1
+            )
+        )
 
 )
