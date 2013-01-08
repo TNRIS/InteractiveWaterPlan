@@ -93,6 +93,8 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Boundary", action = "GetAllCountyNames" }
             );
 
+            //TODO: route to get entity details
+
             config.Routes.MapHttpRoute(
                 "GetAllCounties",
                 "api/boundary/counties/all",
