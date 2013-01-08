@@ -47,6 +47,7 @@ define([], function() {
     BaseTableCollectionView.prototype.fetchCollection = function() {
       var params,
         _this = this;
+      this.hideNothingFound();
       this.showLoading();
       this.$('tbody').empty();
       params = _.extend({
@@ -56,13 +57,18 @@ define([], function() {
         data: params,
         success: function(collection) {
           var m, _i, _len, _ref;
-          _ref = collection.models;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            m = _ref[_i];
-            _this.appendModel(m);
+          if (collection.models.length > 0) {
+            _ref = collection.models;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              m = _ref[_i];
+              _this.appendModel(m);
+            }
+            _this.hideLoading();
+            ko.applyBindings(_this, _this.$('tbody')[0]);
+          } else {
+            _this.hideLoading();
+            _this.showNothingFound();
           }
-          _this.hideLoading();
-          ko.applyBindings(_this, _this.$('tbody')[0]);
           if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
             _this.fetchCallback(collection.models);
           }
@@ -77,19 +83,25 @@ define([], function() {
         currYear: this.currYear()
       });
       this.$('tbody').append(modelView.render().el);
-      return null;
+    };
+
+    BaseTableCollectionView.prototype.showNothingFound = function() {
+      $('#nothingFound').fadeIn();
+      $('.scrollTableContainer').hide();
+    };
+
+    BaseTableCollectionView.prototype.hideNothingFound = function() {
+      $('#nothingFound').hide();
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {
       this.$('.scrollTableContainer').hide();
       $('.tableLoading').show();
-      return null;
     };
 
     BaseTableCollectionView.prototype.hideLoading = function() {
       $('.tableLoading').hide();
       this.$('.scrollTableContainer').fadeIn();
-      return null;
     };
 
     BaseTableCollectionView.prototype.changeToYear = function(newYear) {

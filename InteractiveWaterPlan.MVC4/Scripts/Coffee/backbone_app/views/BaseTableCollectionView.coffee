@@ -47,6 +47,8 @@ define([
             return null
 
         fetchCollection: () ->
+
+            this.hideNothingFound()
             this.showLoading()
             
             this.$('tbody').empty() #clear the table contents
@@ -57,13 +59,20 @@ define([
                 data: params
                 
                 success: (collection) =>
-                    for m in collection.models
-                        this.appendModel(m)
+                    
+                    if collection.models.length > 0
+                        for m in collection.models
+                            this.appendModel(m)
 
-                    this.hideLoading()
+                        this.hideLoading()
 
-                    #apply KO bindings after rendering all the collection model views
-                    ko.applyBindings(this, this.$('tbody')[0]) 
+                        #apply KO bindings after rendering all the collection model views
+                        ko.applyBindings(this, this.$('tbody')[0]) 
+
+                    else
+                        this.hideLoading()
+                        this.showNothingFound()
+                        
 
                     if this.fetchCallback? and _.isFunction(this.fetchCallback)
                         this.fetchCallback(collection.models)
@@ -82,17 +91,27 @@ define([
 
             this.$('tbody').append(modelView.render().el)
 
-            return null
+            return
+
+        showNothingFound: () ->
+            $('#nothingFound').fadeIn()
+            $('.scrollTableContainer').hide()
+            return
+
+        hideNothingFound: () ->
+            $('#nothingFound').hide()
+
+            return
 
         showLoading: () ->
             this.$('.scrollTableContainer').hide()
             $('.tableLoading').show()
-            return null
+            return
 
         hideLoading: () ->
             $('.tableLoading').hide()
             this.$('.scrollTableContainer').fadeIn()
-            return null
+            return
 
         changeToYear: (newYear) ->
             @currYear(newYear)
