@@ -108,7 +108,7 @@ define([
 
 
         clearWugFeatures: () ->
-            
+
             if @wugLayer? then @wugLayer.destroy()
 
             return

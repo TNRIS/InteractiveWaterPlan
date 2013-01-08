@@ -7,13 +7,13 @@ define([
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
-    'views/TypeStrategyCollectionView'
+    'views/StrategyTypeCollectionView'
     'scripts/text!templates/appContainer.html'
 ],
 (MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, 
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, CountyStrategyCollectionView,
-    TypeStrategyCollectionView,
+    StrategyTypeCollectionView,
     tpl) ->
 
     # ---------- DEPRECATED ----------------
@@ -185,7 +185,7 @@ define([
             return
 
         _setupStrategyTypeView: (name, id) ->
-            @currTableView = new TypeStrategyCollectionView(
+            @currTableView = new StrategyTypeCollectionView(
                 el: @tableContainer
 
                 currYear: @currYear

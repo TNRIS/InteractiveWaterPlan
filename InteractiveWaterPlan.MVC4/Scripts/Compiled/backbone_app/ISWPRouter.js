@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'views/EntityStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, EntityStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'collections/StrategyTypeCollection', 'collections/CountyCollection'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyTypeCollection, CountyCollection) {
   var ISWPRouter;
   return ISWPRouter = (function(_super) {
 
@@ -106,7 +106,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
         this.currTableView = this.currTableView.unrender();
       }
       typeName = this.strategyTypes.get(typeId).get('name');
-      this.currTableView = new TypeStrategyCollectionView({
+      this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         currYear: this.currYear,
         id: typeId,

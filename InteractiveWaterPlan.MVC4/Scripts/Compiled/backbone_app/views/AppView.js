@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/TypeStrategyCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, TypeStrategyCollectionView, tpl) {
+define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'scripts/text!templates/appContainer.html'], function(MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, tpl) {
   var AppView;
   return AppView = (function(_super) {
 
@@ -151,7 +151,7 @@ define(['views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapTo
 
     AppView.prototype._setupStrategyTypeView = function(name, id) {
       var _this = this;
-      this.currTableView = new TypeStrategyCollectionView({
+      this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         currYear: this.currYear,
         id: id,

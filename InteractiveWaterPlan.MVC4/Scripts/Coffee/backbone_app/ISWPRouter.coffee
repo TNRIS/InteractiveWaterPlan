@@ -7,7 +7,7 @@ define([
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
-    'views/TypeStrategyCollectionView'
+    'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
     'collections/StrategyTypeCollection'
     'collections/CountyCollection'
@@ -16,7 +16,7 @@ define([
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
-    TypeStrategyCollectionView,
+    StrategyTypeCollectionView,
     EntityStrategyCollectionView,
     StrategyTypeCollection,
     CountyCollection) ->
@@ -138,7 +138,7 @@ define([
             #TODO: If invalid typeId, then show error
             typeName = @strategyTypes.get(typeId).get('name')
 
-            @currTableView = new TypeStrategyCollectionView(
+            @currTableView = new StrategyTypeCollectionView(
                 el: @tableContainer
 
                 currYear: @currYear

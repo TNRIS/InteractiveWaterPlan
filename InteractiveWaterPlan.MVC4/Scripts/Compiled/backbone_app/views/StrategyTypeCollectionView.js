@@ -3,16 +3,16 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text!templates/strategyTypeTable.html'], function(BaseTableCollectionView, StrategyTypeView, tpl) {
-  var TypeStrategyCollectionView;
-  return TypeStrategyCollectionView = (function(_super) {
+  var StrategyTypeCollectionView;
+  return StrategyTypeCollectionView = (function(_super) {
 
-    __extends(TypeStrategyCollectionView, _super);
+    __extends(StrategyTypeCollectionView, _super);
 
-    function TypeStrategyCollectionView() {
-      return TypeStrategyCollectionView.__super__.constructor.apply(this, arguments);
+    function StrategyTypeCollectionView() {
+      return StrategyTypeCollectionView.__super__.constructor.apply(this, arguments);
     }
 
-    TypeStrategyCollectionView.prototype.initialize = function(options) {
+    StrategyTypeCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
       this.typeId = options.id;
       this.typeName = options.name;
@@ -23,19 +23,19 @@ define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/type"
       });
-      TypeStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyTypeView, StrategyCollection, tpl, {
+      StrategyTypeCollectionView.__super__.initialize.call(this, options.currYear, StrategyTypeView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;
     };
 
-    TypeStrategyCollectionView.prototype.render = function() {
-      TypeStrategyCollectionView.__super__.render.apply(this, arguments);
+    StrategyTypeCollectionView.prototype.render = function() {
+      StrategyTypeCollectionView.__super__.render.apply(this, arguments);
       this.$('#strategyTypeName').html(this.viewName);
       return this;
     };
 
-    return TypeStrategyCollectionView;
+    return StrategyTypeCollectionView;
 
   })(BaseTableCollectionView);
 });

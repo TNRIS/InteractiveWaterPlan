@@ -1,13 +1,15 @@
 define([
+    'namespace'
     'views/BaseTableCollectionView'
     'views/StrategyView'
     'scripts/text!templates/strategyTable.html'
 ],
-(BaseTableCollectionView, StrategyView, tpl) ->
+(namespace, BaseTableCollectionView, StrategyView, tpl) ->
 
     class RegionStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
+            _.bindAll(this, 'fetchCallback')
 
             @regionLetter = options.id
             
@@ -24,6 +26,20 @@ define([
 
             
             return null
+
+        fetchCallback: (models) ->
+            #Use underscore to map WUG properties to new WUG object
+            # and then add them all to the namespace.wugFeatureCollection
+            newWugList = _.map(models, (m) ->
+                return {
+                    id: m.get("recipientEntityId")
+                    name: m.get("recipientEntityName")
+                    wktGeog: m.get("recipientEntityWktGeog")
+                }
+            )
+
+            namespace.wugFeatureCollection.reset(newWugList)
+
 
         render: () ->
             super

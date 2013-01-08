@@ -264,7 +264,7 @@
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyTypeView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\TypeStrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyTypeCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
@@ -367,7 +367,7 @@
     <None Include="Scripts\Coffee\backbone_app\views\StrategyTypeView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavView.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\TypeStrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyTypeCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\YearNavView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />

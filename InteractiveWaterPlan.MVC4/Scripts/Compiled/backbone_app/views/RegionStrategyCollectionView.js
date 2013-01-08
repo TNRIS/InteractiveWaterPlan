@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(BaseTableCollectionView, StrategyView, tpl) {
+define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(namespace, BaseTableCollectionView, StrategyView, tpl) {
   var RegionStrategyCollectionView;
   return RegionStrategyCollectionView = (function(_super) {
 
@@ -14,6 +14,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
 
     RegionStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
+      _.bindAll(this, 'fetchCallback');
       this.regionLetter = options.id;
       this.viewName = ko.observable("Region " + this.regionLetter);
       fetchParams = {
@@ -26,6 +27,18 @@ define(['views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!tem
         fetchParams: fetchParams
       });
       return null;
+    };
+
+    RegionStrategyCollectionView.prototype.fetchCallback = function(models) {
+      var newWugList;
+      newWugList = _.map(models, function(m) {
+        return {
+          id: m.get("recipientEntityId"),
+          name: m.get("recipientEntityName"),
+          wktGeog: m.get("recipientEntityWktGeog")
+        };
+      });
+      return namespace.wugFeatureCollection.reset(newWugList);
     };
 
     RegionStrategyCollectionView.prototype.render = function() {

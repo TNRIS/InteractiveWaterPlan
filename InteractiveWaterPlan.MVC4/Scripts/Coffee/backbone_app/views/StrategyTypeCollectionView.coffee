@@ -5,7 +5,7 @@ define([
 ],
 (BaseTableCollectionView, StrategyTypeView, tpl) ->
 
-    class TypeStrategyCollectionView extends BaseTableCollectionView
+    class StrategyTypeCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
             @typeId = options.id
