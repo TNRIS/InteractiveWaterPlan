@@ -99,6 +99,7 @@ define([
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
+            #TODO: If invalid regionLetter, then show error
             @currTableView = new RegionStrategyCollectionView(
                 el: @tableContainer
 
@@ -115,6 +116,7 @@ define([
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
+            #TODO: If invalid countyId, then show error
             countyName = @countyNames.get(countyId).get('name')
 
             @currTableView = new CountyStrategyCollectionView(
@@ -133,6 +135,7 @@ define([
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
+            #TODO: If invalid typeId, then show error
             typeName = @strategyTypes.get(typeId).get('name')
 
             @currTableView = new TypeStrategyCollectionView(
@@ -154,7 +157,7 @@ define([
 
             #TODO: get the entity name from an API call
             # and put this in success callback
-
+            #TODO: If invalid entityId, then show error
             @currTableView = new EntityStrategyCollectionView(
                 el: @tableContainer
 
