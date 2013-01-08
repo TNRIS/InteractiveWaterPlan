@@ -6,9 +6,15 @@ body
     padding-top: 8px;
 }
 
+h2, h3 
+{
+    font-size: 22px;
+    line-height: 22px;
+}
+
 #mapContainer
 {
-    height: 600px;
+    height: 400px;
 }
 
 .page-header 
