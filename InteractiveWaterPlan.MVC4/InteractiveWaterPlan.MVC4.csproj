@@ -246,6 +246,7 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
+    <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\ISWPRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
@@ -348,6 +349,7 @@
     <None Include="Scripts\Coffee\backbone_app\collections\CountyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\collections\WugFeatureCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\ISWPRouter.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\namespace.coffee" />
