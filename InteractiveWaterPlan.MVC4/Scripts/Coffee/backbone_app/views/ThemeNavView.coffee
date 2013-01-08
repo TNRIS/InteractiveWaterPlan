@@ -5,6 +5,8 @@ define([
 ],
 (StrategyTypeCollection, strategyTypeListItemTpl, tpl) ->
     
+    #TODO: The dropdown no longer changes on selection
+    # do we care?
     class ThemeNavView extends Backbone.View
 
         template: _.template(tpl)
@@ -13,15 +15,13 @@ define([
 
             _.bindAll(this, 'render', 'unrender', 'toggleMap', 
                 'renderStrategyTypeList')
-            
-
 
             return null
 
         render: () ->
             @$el.empty()
             @$el.html(@template())
-            ko.applyBindings(this, @el)
+            ko.applyBindings(this, @el) #need for the hide/show map button
 
             this.renderStrategyTypeList()
             return this

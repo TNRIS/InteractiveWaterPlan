@@ -65,7 +65,6 @@ define([
             @countyNames = new CountyCollection()
             @countyNames.reset(initCountyNames)
 
-
             return
 
         updateViewsToNewYear: (newYear) ->
@@ -73,6 +72,7 @@ define([
             @currTableView.changeToYear(newYear)
             return
 
+        #TODO: include :year at start of routes and update logic accordingly
         routes:
             "":                             "wmsNetCountySupplies" #default route, for now it is the same as wms
             "wms":                          "wmsNetCountySupplies"
