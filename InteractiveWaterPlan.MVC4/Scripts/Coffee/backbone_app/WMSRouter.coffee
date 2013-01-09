@@ -9,10 +9,12 @@ define([
     'views/CountyStrategyCollectionView'
     'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
-    'views/CountyRegionSelectView'
+    'views/WmsAreaSelectView'
     'collections/StrategyTypeCollection'
     'collections/CountyCollection'
     'collections/RegionCollection'
+    'collections/HouseCollection'
+    'collections/SenateCollection'
 ],
 (   namespace, 
     MapView, 
@@ -24,10 +26,12 @@ define([
     CountyStrategyCollectionView,
     StrategyTypeCollectionView,
     EntityStrategyCollectionView,
-    CountyRegionSelectView
+    WmsAreaSelectView
     StrategyTypeCollection,
     CountyCollection,
-    RegionCollection) ->
+    RegionCollection,
+    HouseCollection,
+    SenateCollection) ->
 
     class WMSRouter extends Backbone.Router
         
@@ -70,10 +74,14 @@ define([
             namespace.regionNames = new RegionCollection()
             namespace.regionNames.reset(initRegionNames)
 
-            @countyRegionSelect = new CountyRegionSelectView(
+            namespace.houseNames = new HouseCollection()
+            namespace.houseNames.reset(initHouseNames)
+
+            namespace.senateNames = new SenateCollection()
+            namespace.senateNames.reset(initSenateNames)
+
+            @countyRegionSelect = new WmsAreaSelectView(
                 el: $('#regionCountySelectContainer')[0]
-                counties: namespace.countyNames
-                regions: namespace.regionNames
             )
             @countyRegionSelect.render()
 
@@ -111,7 +119,6 @@ define([
             #TODO: wms/source/:sourceId
 
         #before filter from backbone.routefilter
-        #TODO: better route filter plugin
         before:
             '': (year) ->
                 #unrender the currTableView first

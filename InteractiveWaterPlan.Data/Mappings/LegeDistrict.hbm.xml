@@ -1,7 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
 
-  <class name="LegeDistrict" mutable="false">
+  <class name="HouseDistrict" mutable="false">
+    <id name="Id">
+      <column name="SQL_ID"/>
+    </id>
+
+    <property column="District_Type" name="DistrictType" />
+    <property column="SQL_GEOG" name="WktGeog" />
+  </class>
+
+  <class name="SenateDistrict" mutable="false">
     <id name="Id">
       <column name="SQL_ID"/>
     </id>
@@ -11,12 +20,12 @@
   </class>
 
   <sql-query name="GetAllHouseDistricts">
-    <return class="LegeDistrict"/>
+    <return class="HouseDistrict"/>
     exec dbo.usp_Select_ALL_TX_House_Districts
   </sql-query>
 
   <sql-query name="GetAllSenateDistricts">
-    <return class="LegeDistrict"/>
+    <return class="SenateDistrict"/>
     exec dbo.usp_Select_ALL_TX_Senate_Districts
   </sql-query>
 

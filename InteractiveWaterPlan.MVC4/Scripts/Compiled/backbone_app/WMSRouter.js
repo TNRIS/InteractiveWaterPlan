@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/CountyRegionSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, CountyRegionSelectView, StrategyTypeCollection, CountyCollection, RegionCollection) {
+define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/WmsAreaSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection', 'collections/HouseCollection', 'collections/SenateCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, WmsAreaSelectView, StrategyTypeCollection, CountyCollection, RegionCollection, HouseCollection, SenateCollection) {
   var WMSRouter;
   return WMSRouter = (function(_super) {
 
@@ -39,10 +39,12 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       namespace.countyNames.reset(initCountyNames);
       namespace.regionNames = new RegionCollection();
       namespace.regionNames.reset(initRegionNames);
-      this.countyRegionSelect = new CountyRegionSelectView({
-        el: $('#regionCountySelectContainer')[0],
-        counties: namespace.countyNames,
-        regions: namespace.regionNames
+      namespace.houseNames = new HouseCollection();
+      namespace.houseNames.reset(initHouseNames);
+      namespace.senateNames = new SenateCollection();
+      namespace.senateNames.reset(initSenateNames);
+      this.countyRegionSelect = new WmsAreaSelectView({
+        el: $('#regionCountySelectContainer')[0]
       });
       this.countyRegionSelect.render();
     };

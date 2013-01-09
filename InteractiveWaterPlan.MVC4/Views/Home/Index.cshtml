@@ -69,6 +69,8 @@
             <div class="row" id="regionCountySelectContainer">
                 <div class="span3" id="regionSelectContainer"></div>
                 <div class="span3" id="countySelectContainer"></div>
+                <div class="span3" id="houseSelectContainer"></div>
+                <div class="span3" id="senateSelectContainer"></div>
             </div>
 
             <div class="row">
@@ -103,6 +105,10 @@
         var initCountyNames = @Html.Raw(ViewData["CountyNames"]);
 
         var initRegionNames = @Html.Raw(ViewData["RegionNames"]);
+
+        var initHouseNames = @Html.Raw(ViewData["HouseNames"]);
+
+        var initSenateNames = @Html.Raw(ViewData["SenateNames"]);
     
         var initStrategyTypes = @Html.Raw(ViewData["StrategyTypes"]);
     </script>
