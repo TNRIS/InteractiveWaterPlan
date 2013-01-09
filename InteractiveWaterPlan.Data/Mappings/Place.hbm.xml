@@ -24,6 +24,14 @@
     <property column="PlaceName_Geog" name="WktGeog" />
     <property column="PlaceName" name="Name" />
   </class>
+
+  <class name="PlaceFeatureHull" mutable="false">
+    <id name="Id">
+      <column name="SQL_ID" />
+    </id>
+    <property column="CH_ConvexHull" name="WktGeog" />
+    <property column="PlaceName" name="Name" />
+  </class>
   
   <!-- Queries -->
   
@@ -45,6 +53,11 @@
   <sql-query name="GetPlaceFeature">
     <return class="PlaceFeature" />
     exec dbo.usp_Select_GEOG_by_PlaceID_tbl_GEMSS_Vector_PlaceNames :var_PlaceID
+  </sql-query>
+
+  <sql-query name="GetPlaceFeatureHull">
+    <return class="PlaceFeatureHull" />
+    exec dbo.usp_Select_GEOG_ConvexHull_by_PlaceID_tbl_GEMSS_Vector_PlaceNames :var_PlaceID
   </sql-query>
   
 </hibernate-mapping>

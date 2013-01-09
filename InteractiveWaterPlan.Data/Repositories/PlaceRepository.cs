@@ -160,19 +160,11 @@ namespace InteractiveWaterPlan.Data
         /// </summary>
         /// <param name="placeId"></param>
         /// <returns></returns>
-        public PlaceFeature GetPlaceEnvelope(int placeId)
+        public PlaceFeature GetPlaceFeatureHull(int placeId)
         {
-            var placeFeature = Session.GetNamedQuery("GetPlaceFeature")
+            return Session.GetNamedQuery("GetPlaceFeatureHull")
                 .SetParameter("var_PlaceID", placeId)
                 .UniqueResult<PlaceFeature>();
-
-            //Convert to a SqlGeometry so we can use STEnvelope
-            var geometry = SqlGeometry.STGeomFromText(
-                new SqlChars(new SqlString(placeFeature.WktGeog)), 4326);
-
-            placeFeature.WktGeog = geometry.STEnvelope().ToString();
-
-            return placeFeature;
         }
 
 

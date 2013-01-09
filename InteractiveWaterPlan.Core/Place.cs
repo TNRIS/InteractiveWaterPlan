@@ -33,6 +33,10 @@ namespace InteractiveWaterPlan.Core
         public virtual string Name { get; set; }
     }
 
+    public class PlaceFeatureHull : PlaceFeature
+    {
+    }
+
     public class PlaceCategory
     {
         public virtual int Id { get; set; }
