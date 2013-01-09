@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(BaseTableCollectionView, EntityStrategyView, tpl) {
+define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(namespace, BaseTableCollectionView, EntityStrategyView, tpl) {
   var EntityStrategyCollectionView;
   return EntityStrategyCollectionView = (function(_super) {
 
@@ -15,7 +15,7 @@ define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/te
     EntityStrategyCollectionView.prototype.initialize = function(options) {
       var EntityModel, StrategyCollection, entity, fetchParams,
         _this = this;
-      _.bindAll(this);
+      _.bindAll(this, 'fetchCallback');
       this.entityId = options.id;
       this.viewName = ko.observable();
       fetchParams = {
@@ -33,15 +33,23 @@ define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/te
       entity = new EntityModel();
       entity.fetch({
         success: function(model) {
+          console.log(model);
           _this.viewName(model.get("name"));
         }
       });
       return null;
     };
 
-    EntityStrategyCollectionView.prototype.render = function() {
-      EntityStrategyCollectionView.__super__.render.apply(this, arguments);
-      return this;
+    EntityStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
+      var newWugList, wug;
+      newWugList = [];
+      wug = strategyModels[0];
+      newWugList.push({
+        id: wug.get("recipientEntityId"),
+        name: wug.get("recipientEntityName"),
+        wktGeog: wug.get("recipientEntityWktGeog")
+      });
+      namespace.wugFeatureCollection.reset(newWugList);
     };
 
     return EntityStrategyCollectionView;

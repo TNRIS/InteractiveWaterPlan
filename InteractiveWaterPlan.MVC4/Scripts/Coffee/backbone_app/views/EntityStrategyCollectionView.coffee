@@ -1,14 +1,15 @@
 define([
+    'namespace'
     'views/BaseTableCollectionView'
     'views/EntityStrategyView'
     'scripts/text!templates/entityStrategyTable.html'
 ],
-(BaseTableCollectionView, EntityStrategyView, tpl) ->
+(namespace, BaseTableCollectionView, EntityStrategyView, tpl) ->
 
     class EntityStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            _.bindAll(this)
+            _.bindAll(this, 'fetchCallback')
 
             @entityId = options.id
             
@@ -38,9 +39,21 @@ define([
 
             return null
 
+        fetchCallback: (strategyModels) ->
+            #While there may be multiple Strategies in the models collection
+            # they should all have the same entity at this point
 
-        render: () ->
-            super
+            newWugList = []
 
-            return this
+            wug = strategyModels[0]
+
+            newWugList.push(
+                id: wug.get("recipientEntityId")
+                name: wug.get("recipientEntityName")
+                wktGeog: wug.get("recipientEntityWktGeog")
+            )
+
+            namespace.wugFeatureCollection.reset(newWugList)
+            return
+
 )

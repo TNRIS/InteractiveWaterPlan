@@ -62,7 +62,6 @@ define(['namespace'], function(namespace) {
               _this.appendModel(m);
             }
             _this.hideLoading();
-            ko.applyBindings(_this, _this.$('tbody')[0]);
           } else {
             _this.hideLoading();
             _this.showNothingFound();

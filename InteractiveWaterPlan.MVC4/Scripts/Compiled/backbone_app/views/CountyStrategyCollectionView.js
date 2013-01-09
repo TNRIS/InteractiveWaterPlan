@@ -30,9 +30,9 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
       return null;
     };
 
-    CountyStrategyCollectionView.prototype.fetchCallback = function(models) {
+    CountyStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
       var newWugList;
-      newWugList = _.map(models, function(m) {
+      newWugList = _.map(strategyModels, function(m) {
         return {
           id: m.get("recipientEntityId"),
           name: m.get("recipientEntityName"),

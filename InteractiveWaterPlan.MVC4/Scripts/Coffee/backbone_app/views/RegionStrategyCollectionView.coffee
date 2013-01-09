@@ -27,10 +27,10 @@ define([
             
             return null
 
-        fetchCallback: (models) ->
+        fetchCallback: (strategyModels) ->
             #Use underscore to map WUG properties to new WUG object
             # and then add them all to the namespace.wugFeatureCollection
-            newWugList = _.map(models, (m) ->
+            newWugList = _.map(strategyModels, (m) ->
                 return {
                     id: m.get("recipientEntityId")
                     name: m.get("recipientEntityName")
@@ -39,12 +39,7 @@ define([
             )
 
             namespace.wugFeatureCollection.reset(newWugList)
+            return
 
-
-        render: () ->
-            super
-
-
-            return this
 
 )

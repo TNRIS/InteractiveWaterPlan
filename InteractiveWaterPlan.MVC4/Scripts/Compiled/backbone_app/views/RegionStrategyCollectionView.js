@@ -29,21 +29,16 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
       return null;
     };
 
-    RegionStrategyCollectionView.prototype.fetchCallback = function(models) {
+    RegionStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
       var newWugList;
-      newWugList = _.map(models, function(m) {
+      newWugList = _.map(strategyModels, function(m) {
         return {
           id: m.get("recipientEntityId"),
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog")
         };
       });
-      return namespace.wugFeatureCollection.reset(newWugList);
-    };
-
-    RegionStrategyCollectionView.prototype.render = function() {
-      RegionStrategyCollectionView.__super__.render.apply(this, arguments);
-      return this;
+      namespace.wugFeatureCollection.reset(newWugList);
     };
 
     return RegionStrategyCollectionView;
