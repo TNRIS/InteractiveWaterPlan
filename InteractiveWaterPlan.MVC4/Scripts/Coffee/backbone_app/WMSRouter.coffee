@@ -56,14 +56,13 @@ define([
             @mapToolsView.render()
 
             @themeNavView = new ThemeNavView({ el: $('#themeNavContainer')[0] })
-            @themeNavView.render()
+            #render in 'after' filter
 
             @yearNavView = new YearNavView(
                 el: $('#yearNavContainer')[0] 
             ) 
-            #@yearNavView.render()
-            #@yearNavView.currentYear.subscribe(this.updateViewsToNewYear)
-
+            #render in 'after' filter
+            
             #Load the boostrapped arrays (defined in Index.cshtml)
             namespace.strategyTypes = new StrategyTypeCollection()
             namespace.strategyTypes.reset(initStrategyTypes)
