@@ -25,6 +25,7 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/tnris.place_typeahead.js",
                 "~/Scripts/underscore.js",
                 "~/Scripts/backbone.js",
+                "~/Scripts/backbone.routefilter.min.js",
                 "~/Scripts/knockout-{version}.js",
                 "~/Scripts/knockback.js"
             ));

@@ -10,9 +10,14 @@
     <property column="SQL_GEOG" name="WktGeog" />
   </class>
 
-  <sql-query name="GetAllLegeDistricts">
+  <sql-query name="GetAllHouseDistricts">
     <return class="LegeDistrict"/>
-    exec dbo.usp_Select_ALL_TX_House_Senate_Districts
+    exec dbo.usp_Select_ALL_TX_House_Districts
+  </sql-query>
+
+  <sql-query name="GetAllSenateDistricts">
+    <return class="LegeDistrict"/>
+    exec dbo.usp_Select_ALL_TX_Senate_Districts
   </sql-query>
 
 </hibernate-mapping>

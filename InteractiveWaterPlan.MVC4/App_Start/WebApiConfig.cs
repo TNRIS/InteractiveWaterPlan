@@ -124,15 +124,27 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
-                "GetAllLegeDistricts",
-                "api/boundary/legedistricts/all",
-                new { controller = "Boundary", action = "GetAllLegeDistrictFeatures" }
+                "GetAllHouseDistricts",
+                "api/boundary/districts/house/all",
+                new { controller = "Boundary", action = "GetAllHouseDistrictFeatures" }
             );
 
             config.Routes.MapHttpRoute(
-                "GetAllLegeDistrictNames",
-                "api/boundary/legedistricts/names",
-                new { controller = "Boundary", action = "GetAllLegeDistrictNames" }
+                "GetAllSenateDistricts",
+                "api/boundary/districts/senate/all",
+                new { controller = "Boundary", action = "GetAllSenateDistrictFeatures" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetAllHouseDistrictNames",
+                "api/boundary/districts/house/names",
+                new { controller = "Boundary", action = "GetAllHouseDistrictNames" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetAllSenateDistrictNames",
+                "api/boundary/districts/senate/names",
+                new { controller = "Boundary", action = "GetAllSenateDistrictNames" }
             );
 
 

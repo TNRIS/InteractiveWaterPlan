@@ -62,20 +62,44 @@ namespace InteractiveWaterPlan.Data
             
         }
 
-        public IEnumerable<object> GetLegeDistrictNames()
+        public IEnumerable<object> GetHouseDistrictNames()
         {
-            return Session.GetNamedQuery("GetAllLegeDistricts")
+            return Session.GetNamedQuery("GetAllHouseDistricts")
                 .List<LegeDistrict>()
-                .OrderBy(x => x.DistrictType)
-                .ThenBy(x => x.Id)
-                .Select(x => new { id = x.Id, districtType = x.DistrictType})
+                .OrderBy(x => x.Id)
+                .Select(x => new { 
+                    id = x.Id, 
+                    districtType = x.DistrictType, 
+                    name = x.Name
+                })
                 .ToList();
         }
 
-
-        public IList<LegeDistrict> GetLegeDistricts()
+        public IEnumerable<object> GetSenateDistrictNames()
         {
-            return Session.GetNamedQuery("GetAllLegeDistricts")
+            return Session.GetNamedQuery("GetAllSenateDistricts")
+                .List<LegeDistrict>()
+                .OrderBy(x => x.Id)
+                .Select(x => new
+                {
+                    id = x.Id,
+                    districtType = x.DistrictType,
+                    name = x.Name
+                })
+                .ToList();
+        }
+
+        public IList<LegeDistrict> GetHouseDistricts()
+        {
+            return Session.GetNamedQuery("GetAllHouseDistricts")
+                .List<LegeDistrict>()
+                .OrderBy(x => x.Id)
+                .ToList<LegeDistrict>();
+        }
+
+        public IList<LegeDistrict> GetSenateDistricts()
+        {
+            return Session.GetNamedQuery("GetAllSenateDistricts")
                 .List<LegeDistrict>()
                 .OrderBy(x => x.Id)
                 .ToList<LegeDistrict>();

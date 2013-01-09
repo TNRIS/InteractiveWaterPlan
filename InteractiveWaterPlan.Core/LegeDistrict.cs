@@ -8,5 +8,13 @@
     public class LegeDistrict : AbstractFeature
     {
         public virtual string DistrictType { get; set; }
+
+        public virtual string Name
+        {
+            get
+            {
+                return this.DistrictType + " District " + this.Id;
+            }
+        }
     }
 }

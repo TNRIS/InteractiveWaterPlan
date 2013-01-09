@@ -41,16 +41,28 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetPlanningRegions();
         }
 
-        //api/boundary/legedistricts/all
-        public IEnumerable<LegeDistrict> GetAllLegeDistrictFeatures()
+        //api/boundary/districts/house/all
+        public IEnumerable<LegeDistrict> GetAllHouseDistrictFeatures()
         {
-            return _repo.GetLegeDistricts();
+            return _repo.GetHouseDistricts();
         }
 
-        //api/boundary/legedistricts/names
-        public IEnumerable<object> GetAllLegeDistrictNames()
+        //api/boundary/districts/senate/all
+        public IEnumerable<LegeDistrict> GetAllSenateDistrictFeatures()
         {
-            return _repo.GetLegeDistrictNames();
+            return _repo.GetSenateDistricts();
+        }
+
+        //api/boundary/districts/house/names
+        public IEnumerable<object> GetAllHouseDistrictNames()
+        {
+            return _repo.GetHouseDistrictNames();
+        }
+
+        //api/boundary/districts/senate/names
+        public IEnumerable<object> GetAllSenateDistrictNames()
+        {
+            return _repo.GetSenateDistrictNames();
         }
 
         
