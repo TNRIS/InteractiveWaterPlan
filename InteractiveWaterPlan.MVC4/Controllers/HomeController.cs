@@ -15,6 +15,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
+            //Setup 'bootstrapped' data for the backbone app
             var boundaryController = new BoundaryController();
             ViewData["CountyNames"] = JsonConvert.SerializeObject(
                 boundaryController.GetAllCountyNames(), Formatting.None, settings);
@@ -31,8 +32,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             var strategyController = new StrategyController();
             ViewData["StrategyTypes"] = JsonConvert.SerializeObject(
                 strategyController.GetStrategyTypes(), Formatting.None, settings);
-
-
 
             return View();
         }
