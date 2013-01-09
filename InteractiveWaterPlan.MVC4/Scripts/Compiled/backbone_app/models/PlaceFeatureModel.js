@@ -12,7 +12,7 @@ define([], function() {
       return PlaceFeature.__super__.constructor.apply(this, arguments);
     }
 
-    PlaceFeature.prototype.url = "" + BASE_API_PATH + "api/place/feature";
+    PlaceFeature.prototype.url = "" + BASE_API_PATH + "api/place/feature/envelope";
 
     return PlaceFeature;
 

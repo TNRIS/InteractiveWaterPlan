@@ -52,10 +52,6 @@ define(['namespace'], function(namespace) {
         opacity: 0.7
       });
       this.map.addLayer(swp_boundaries);
-      this.placeLayer = new OpenLayers.Layer.Vector("Place Layer", {
-        displayInLayerSwitcher: false
-      });
-      this.map.addLayer(this.placeLayer);
       this.map.addControl(new OpenLayers.Control.LayerSwitcher());
       return this;
     };
@@ -118,8 +114,6 @@ define(['namespace'], function(namespace) {
       this.transformToWebMerc(feature.geometry);
       bounds = feature.geometry.getBounds();
       this.map.zoomToExtent(bounds);
-      this.placeLayer.removeAllFeatures();
-      this.placeLayer.addFeatures(feature);
     };
 
     MapView.prototype.transformToWebMerc = function(geometry) {

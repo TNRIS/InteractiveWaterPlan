@@ -61,9 +61,9 @@ define([
                     })
             @map.addLayer(swp_boundaries);
 
-            @placeLayer = new OpenLayers.Layer.Vector("Place Layer",
-                displayInLayerSwitcher: false)
-            @map.addLayer(@placeLayer)
+            #@placeLayer = new OpenLayers.Layer.Vector("Place Layer",
+            #    displayInLayerSwitcher: false)
+            #@map.addLayer(@placeLayer)
 
             
             @map.addControl(new OpenLayers.Control.LayerSwitcher());
@@ -134,8 +134,8 @@ define([
             
             @map.zoomToExtent(bounds)
 
-            @placeLayer.removeAllFeatures()
-            @placeLayer.addFeatures(feature)
+            #@placeLayer.removeAllFeatures()
+            #@placeLayer.addFeatures(feature)
             return
 
         transformToWebMerc: (geometry) ->
