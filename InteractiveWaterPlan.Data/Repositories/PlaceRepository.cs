@@ -117,7 +117,8 @@ namespace InteractiveWaterPlan.Data
             SqlGeography geog = SqlGeography.Parse(placeFeature.WktGeog);
             SqlGeography reducedGeog = geog.Reduce(reduceFactor);
 
-            //TODO: Would be better to have this in the Database.
+            //TODO: Would be better to have this reduction done in the Database.
+            
             //Sometimes reducing the geometry of a complex polygon will leave artifacts
             //such as points and linestrings.  This is a problem for drawing.
             //So, remove those artifacts if the original was of type MultiPolygon.
@@ -127,6 +128,27 @@ namespace InteractiveWaterPlan.Data
             }
             
             placeFeature.WktGeog = reducedGeog.ToString();
+
+            return placeFeature;
+        }
+
+
+        /// <summary>
+        /// Returns the PlaceFeature for the given placeId.  The Geography of the 
+        /// returned PlaceFeature will be the center point of the actual PlaceFeature.
+        /// </summary>
+        /// <param name="placeId"></param>
+        /// <returns></returns>
+        public PlaceFeature GetPlaceCenter(int placeId)
+        {
+            var placeFeature = Session.GetNamedQuery("GetPlaceFeature")
+                .SetParameter("var_PlaceID", placeId)
+                .UniqueResult<PlaceFeature>();
+
+            SqlGeography geog = SqlGeography.Parse(placeFeature.WktGeog);
+            var centerGeog = geog.EnvelopeCenter();
+
+            placeFeature.WktGeog = centerGeog.ToString();
 
             return placeFeature;
         }
