@@ -24,10 +24,16 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetPlaceFeature(placeId);
         }
 
-        //api/place/featurecenter?placeId={placeId}
+        //api/place/feature/center?placeId={placeId}
         public PlaceFeature GetPlaceCenter(int placeId)
         {
             return _repo.GetPlaceCenter(placeId);
+        }
+
+        //api/place/feature/envelope?placeId={placeId}
+        public PlaceFeature GetPlaceEnvelope(int placeId)
+        {
+            return _repo.GetPlaceEnvelope(placeId);
         }
 
         //api/place?categoryId={categoryId}

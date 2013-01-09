@@ -27,9 +27,15 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                "GetPlaceFeatureCenterRoute",
-               "api/place/featurecenter",
+               "api/place/feature/center",
                new { controller = "Place", action = "GetPlaceCenter" }
-           );
+            );
+
+            config.Routes.MapHttpRoute(
+               "GetPlaceFeatureEnvelopeRoute",
+               "api/place/feature/envelope",
+               new { controller = "Place", action = "GetPlaceEnvelope" }
+            );
 
             config.Routes.MapHttpRoute(
                 "GetPlacesByNamePart",

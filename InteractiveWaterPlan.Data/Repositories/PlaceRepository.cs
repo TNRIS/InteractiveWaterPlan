@@ -153,6 +153,29 @@ namespace InteractiveWaterPlan.Data
             return placeFeature;
         }
 
+
+        /// <summary>
+        /// Returns the PlaceFeature for the given placeId.  The Geography of the 
+        /// returned PlaceFeature will be the center point of the actual PlaceFeature.
+        /// </summary>
+        /// <param name="placeId"></param>
+        /// <returns></returns>
+        public PlaceFeature GetPlaceEnvelope(int placeId)
+        {
+            var placeFeature = Session.GetNamedQuery("GetPlaceFeature")
+                .SetParameter("var_PlaceID", placeId)
+                .UniqueResult<PlaceFeature>();
+
+            //Convert to a SqlGeometry so we can use STEnvelope
+            var geometry = SqlGeometry.STGeomFromText(
+                new SqlChars(new SqlString(placeFeature.WktGeog)), 4326);
+
+            placeFeature.WktGeog = geometry.STEnvelope().ToString();
+
+            return placeFeature;
+        }
+
+
         /// <summary>
         /// Removes points and lines from originalGeography and returns a MultiPolygon SqlGeography.
         /// </summary>
