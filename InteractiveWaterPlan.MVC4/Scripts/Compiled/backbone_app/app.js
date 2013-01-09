@@ -25,9 +25,9 @@ require.config({
 
 $(function() {
   BASE_API_PATH = $("#base_path").val();
-  return define(['ISWPRouter'], function(ISWPRouter) {
-    var router;
-    router = new ISWPRouter();
+  return define(['WMSRouter'], function(WMSRouter) {
+    var wmsRouter;
+    wmsRouter = new WMSRouter();
     return Backbone.history.start();
   });
 });

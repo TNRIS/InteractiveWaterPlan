@@ -11,9 +11,8 @@ define([
             _.bindAll(this)
 
             @entityId = options.id
-            @entityName = options.name
-
-            @viewName = ko.observable("#{@entityName}")
+            
+            @viewName = ko.observable()
 
             fetchParams = {entityId: @entityId}
             
@@ -24,6 +23,18 @@ define([
             super EntityStrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
+            #get the entity name from an API call
+            EntityModel = Backbone.Model.extend(
+                url: "#{BASE_API_PATH}api/entity/#{@entityId}" 
+            )
+
+            entity = new EntityModel()
+
+            entity.fetch(
+                success: (model) =>
+                    @viewName(model.get("name"))
+                    return
+            )
 
             return null
 

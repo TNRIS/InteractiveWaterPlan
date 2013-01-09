@@ -3,16 +3,16 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/CountyRegionSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, CountyRegionSelectView, StrategyTypeCollection, CountyCollection, RegionCollection) {
-  var ISWPRouter;
-  return ISWPRouter = (function(_super) {
+  var WMSRouter;
+  return WMSRouter = (function(_super) {
 
-    __extends(ISWPRouter, _super);
+    __extends(WMSRouter, _super);
 
-    function ISWPRouter() {
-      return ISWPRouter.__super__.constructor.apply(this, arguments);
+    function WMSRouter() {
+      return WMSRouter.__super__.constructor.apply(this, arguments);
     }
 
-    ISWPRouter.prototype.initialize = function(options) {
+    WMSRouter.prototype.initialize = function(options) {
       _.bindAll(this, 'updateViewsToNewYear');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
@@ -47,7 +47,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       this.countyRegionSelect.render();
     };
 
-    ISWPRouter.prototype.updateViewsToNewYear = function(newYear) {
+    WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
       var currRoute, newRoute, oldYear, y, _i, _len, _ref;
       currRoute = Backbone.history.fragment;
       oldYear = "";
@@ -69,7 +69,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       });
     };
 
-    ISWPRouter.prototype.routes = {
+    WMSRouter.prototype.routes = {
       "": "default",
       ":year/wms": "wmsNetCountySupplies",
       ":year/wms/region/:regionLetter": "wmsRegion",
@@ -78,100 +78,83 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       ":year/wms/entity/:entityId": "wmsEntity"
     };
 
-    ISWPRouter.prototype["default"] = function() {
+    WMSRouter.prototype.before = {
+      '': function(year) {
+        if (this.currTableView != null) {
+          this.currTableView = this.currTableView.unrender();
+        }
+        if (year != null) {
+          if (_.contains(namespace.VALID_YEARS, year)) {
+            namespace.currYear = year;
+          } else {
+            throw "Invalid Year.";
+            return false;
+          }
+        }
+      }
+    };
+
+    WMSRouter.prototype.after = {
+      '': function(year) {
+        if (year != null) {
+          this.currTableView.render();
+          this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+          return this.themeNavView.render();
+        }
+      }
+    };
+
+    WMSRouter.prototype["default"] = function() {
       Backbone.history.navigate("#/" + namespace.currYear + "/wms", {
         trigger: true
       });
     };
 
-    ISWPRouter.prototype.wmsNetCountySupplies = function(year) {
-      namespace.currYear = year;
+    WMSRouter.prototype.wmsNetCountySupplies = function(year) {
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
       this.currTableView = new CountyNetSupplyCollectionView({
         el: this.tableContainer
       });
-      this.currTableView.render();
-      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
-      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsRegion = function(year, regionLetter) {
-      namespace.currYear = year;
-      if (this.currTableView != null) {
-        this.currTableView = this.currTableView.unrender();
-      }
+    WMSRouter.prototype.wmsRegion = function(year, regionLetter) {
       this.currTableView = new RegionStrategyCollectionView({
         el: this.tableContainer,
         id: regionLetter,
         name: regionLetter
       });
-      this.currTableView.render();
-      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
-      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsCounty = function(year, countyId) {
+    WMSRouter.prototype.wmsCounty = function(year, countyId) {
       var countyName;
-      namespace.currYear = year;
-      if (this.currTableView != null) {
-        this.currTableView = this.currTableView.unrender();
-      }
       countyName = namespace.countyNames.get(countyId).get('name');
       this.currTableView = new CountyStrategyCollectionView({
         el: this.tableContainer,
         id: countyId,
         name: countyName
       });
-      this.currTableView.render();
-      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
-      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsType = function(year, typeId) {
+    WMSRouter.prototype.wmsType = function(year, typeId) {
       var typeName;
-      namespace.currYear = year;
-      if (this.currTableView != null) {
-        this.currTableView = this.currTableView.unrender();
-      }
       typeName = namespace.strategyTypes.get(typeId).get('name');
       this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         id: typeId,
         name: typeName
       });
-      this.currTableView.render();
-      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
-      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsEntity = function(year, entityId) {
-      var EntityModel, entity,
-        _this = this;
-      namespace.currYear = year;
-      if (this.currTableView != null) {
-        this.currTableView = this.currTableView.unrender();
-      }
-      EntityModel = Backbone.Model.extend({
-        url: "" + BASE_API_PATH + "api/entity/" + entityId
-      });
-      entity = new EntityModel();
-      entity.fetch({
-        success: function(model) {
-          _this.currTableView = new EntityStrategyCollectionView({
-            el: _this.tableContainer,
-            id: entityId,
-            name: model.get("name")
-          });
-          _this.currTableView.render();
-          _this.yearNavView.render().currentYear.subscribe(_this.updateViewsToNewYear);
-          _this.themeNavView.render();
-        }
+    WMSRouter.prototype.wmsEntity = function(year, entityId) {
+      this.currTableView = new EntityStrategyCollectionView({
+        el: this.tableContainer,
+        id: entityId
       });
     };
 
-    return ISWPRouter;
+    return WMSRouter;
 
   })(Backbone.Router);
 });

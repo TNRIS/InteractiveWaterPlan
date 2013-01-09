@@ -29,8 +29,7 @@ define([
     CountyCollection,
     RegionCollection) ->
 
-    class ISWPRouter extends Backbone.Router
-        
+    class WMSRouter extends Backbone.Router
         
         initialize: (options) ->
             _.bindAll(this, 'updateViewsToNewYear')
@@ -111,35 +110,49 @@ define([
             ":year/wms/entity/:entityId":         "wmsEntity"
             #TODO: wms/source/:sourceId
 
+        #before filter from backbone.routefilter
+        #TODO: better route filter plugin
+        before:
+            '': (year) ->
+                #unrender the currTableView first
+                if @currTableView?
+                    @currTableView = @currTableView.unrender()
+                
+                if year?
+                    if _.contains(namespace.VALID_YEARS, year)
+                        namespace.currYear = year
+                    else
+                        throw "Invalid Year."
+                        return false
+                return
+
+        after:
+            '': (year) ->
+                if year?
+                    @currTableView.render()
+                    @yearNavView.render().currentYear.subscribe(
+                        this.updateViewsToNewYear) 
+                    @themeNavView.render()
+       
+
         default: () ->
             #for now, redirect to the wms net-county view
-
-            Backbone.history.navigate("#/#{namespace.currYear}/wms", {trigger: true})
+            Backbone.history.navigate("#/#{namespace.currYear}/wms", 
+                {trigger: true})
             return
 
         wmsNetCountySupplies: (year) ->
-            namespace.currYear = year #TODO: Validate year
 
-            #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
             @currTableView = new CountyNetSupplyCollectionView(
                 el: @tableContainer
             )
             
-            @currTableView.render()
-            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
-            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
-            @themeNavView.render()
-
             return
 
         wmsRegion: (year, regionLetter) ->
-            namespace.currYear = year #TODO: Validate year
-
-            #unrender the currTableView first
-            if @currTableView? then @currTableView = @currTableView.unrender()
-
+          
             #TODO: If invalid regionLetter, then show error
             @currTableView = new RegionStrategyCollectionView(
                 el: @tableContainer
@@ -147,18 +160,10 @@ define([
                 name: regionLetter
             )
 
-            @currTableView.render()
-            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
-            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
-            @themeNavView.render()
             return
         
         wmsCounty: (year, countyId) ->
-            namespace.currYear = year #TODO: Validate year
-
-            #unrender the currTableView first
-            if @currTableView? then @currTableView = @currTableView.unrender()
-
+          
             #TODO: If invalid countyId, then show error
             countyName = namespace.countyNames.get(countyId).get('name')
 
@@ -167,19 +172,11 @@ define([
                 id: countyId
                 name: countyName
             )
-
-            @currTableView.render()
-            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
-            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
-            @themeNavView.render()
+            
             return
 
         wmsType: (year, typeId) ->
-            namespace.currYear = year #TODO: Validate year
-
-            #unrender the currTableView first
-            if @currTableView? then @currTableView = @currTableView.unrender()
-
+           
             #TODO: If invalid typeId, then show error
             typeName = namespace.strategyTypes.get(typeId).get('name')
 
@@ -188,42 +185,18 @@ define([
                 id: typeId
                 name: typeName
             )
-
-            @currTableView.render()
-            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
-            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
-            @themeNavView.render()
+            
             return
 
         wmsEntity: (year, entityId) ->
-            namespace.currYear = year #TODO: Validate year
-
-            #unrender the currTableView first
-            if @currTableView? then @currTableView = @currTableView.unrender()
-
-            #get the entity name from an API call
-            EntityModel = Backbone.Model.extend(
-                url: "#{BASE_API_PATH}api/entity/#{entityId}" 
-            )
-
-            entity = new EntityModel()
-
-            entity.fetch(
-                success: (model) =>
-                    #TODO: If invalid entityId, then show error
+            
+            #TODO: If invalid entityId, then show error
                     
-                    @currTableView = new EntityStrategyCollectionView(
-                        el: @tableContainer
-                        id: entityId
-                        name: model.get("name")
-                    )
-
-                    @currTableView.render()
-                    #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
-                    @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
-                    @themeNavView.render()
-                    return
+            @currTableView = new EntityStrategyCollectionView(
+                el: @tableContainer
+                id: entityId
             )
 
             return
+
 )

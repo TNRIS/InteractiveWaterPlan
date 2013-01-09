@@ -35,12 +35,12 @@ $(()->
     BASE_API_PATH = $("#base_path").val()
 
     define([
-        'ISWPRouter'
+        'WMSRouter'
     ],
-    (ISWPRouter) ->
+    (WMSRouter) ->
         
         #Create a router instance and start it up
-        router = new ISWPRouter()
+        wmsRouter = new WMSRouter()
         Backbone.history.start()
     )
 )

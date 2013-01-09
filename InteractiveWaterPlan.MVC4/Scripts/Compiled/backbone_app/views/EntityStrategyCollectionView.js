@@ -13,11 +13,11 @@ define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/te
     }
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
-      var StrategyCollection, fetchParams;
+      var EntityModel, StrategyCollection, entity, fetchParams,
+        _this = this;
       _.bindAll(this);
       this.entityId = options.id;
-      this.entityName = options.name;
-      this.viewName = ko.observable("" + this.entityName);
+      this.viewName = ko.observable();
       fetchParams = {
         entityId: this.entityId
       };
@@ -26,6 +26,15 @@ define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/te
       });
       EntityStrategyCollectionView.__super__.initialize.call(this, EntityStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
+      });
+      EntityModel = Backbone.Model.extend({
+        url: "" + BASE_API_PATH + "api/entity/" + this.entityId
+      });
+      entity = new EntityModel();
+      entity.fetch({
+        success: function(model) {
+          _this.viewName(model.get("name"));
+        }
       });
       return null;
     };
