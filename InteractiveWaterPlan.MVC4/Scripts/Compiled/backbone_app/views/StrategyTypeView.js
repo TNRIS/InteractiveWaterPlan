@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/strategyTypeRow.html'], function(tpl) {
+define(['namespace', 'scripts/text!templates/strategyTypeRow.html'], function(namespace, tpl) {
   var StrategyTypeView;
   return StrategyTypeView = (function(_super) {
 
@@ -16,7 +16,6 @@ define(['scripts/text!templates/strategyTypeRow.html'], function(tpl) {
 
     StrategyTypeView.prototype.initialize = function(options) {
       StrategyTypeView.__super__.initialize.call(this, options);
-      this.currYear = options.currYear;
       _.bindAll(this, 'render', 'unrender');
       this.template = _.template(tpl);
       return null;
@@ -25,7 +24,7 @@ define(['scripts/text!templates/strategyTypeRow.html'], function(tpl) {
     StrategyTypeView.prototype.render = function() {
       this.$el.html(this.template({
         m: this.model.toJSON(),
-        currYear: this.currYear
+        currYear: namespace.currYear
       }));
       return this;
     };

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/BreadcrumbView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/CountyRegionSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, BreadcrumbView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, CountyRegionSelectView, StrategyTypeCollection, CountyCollection, RegionCollection) {
+define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/CountyRegionSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, CountyRegionSelectView, StrategyTypeCollection, CountyCollection, RegionCollection) {
   var ISWPRouter;
   return ISWPRouter = (function(_super) {
 
@@ -15,7 +15,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
     ISWPRouter.prototype.initialize = function(options) {
       _.bindAll(this, 'updateViewsToNewYear');
       this.currTableView = null;
-      this.currYear = "2010";
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
         mapContainerId: 'mapContainer',
@@ -32,15 +31,8 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       });
       this.themeNavView.render();
       this.yearNavView = new YearNavView({
-        startingYear: this.currYear,
         el: $('#yearNavContainer')[0]
       });
-      this.yearNavView.render();
-      this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
-      this.breadcrumbList = new BreadcrumbView({
-        el: $('#breadcrumbContainer')[0]
-      });
-      this.breadcrumbList.render();
       namespace.strategyTypes = new StrategyTypeCollection();
       namespace.strategyTypes.reset(initStrategyTypes);
       namespace.countyNames = new CountyCollection();
@@ -56,76 +48,108 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
     };
 
     ISWPRouter.prototype.updateViewsToNewYear = function(newYear) {
-      this.currYear = newYear;
-      this.currTableView.changeToYear(newYear);
+      var currRoute, newRoute, oldYear, y, _i, _len, _ref;
+      currRoute = Backbone.history.fragment;
+      oldYear = "";
+      _ref = namespace.VALID_YEARS;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        y = _ref[_i];
+        if (currRoute.indexOf(y + "/") !== -1) {
+          oldYear = y;
+          break;
+        }
+      }
+      if (oldYear === "") {
+        throw "Year invalid.";
+        Backbone.history.navigate("");
+      }
+      newRoute = currRoute.replace(oldYear, newYear);
+      Backbone.history.navigate("#/" + newRoute, {
+        trigger: true
+      });
     };
 
     ISWPRouter.prototype.routes = {
-      "": "wmsNetCountySupplies",
-      "wms": "wmsNetCountySupplies",
-      "wms/region/:regionLetter": "wmsRegion",
-      "wms/county/:countyId": "wmsCounty",
-      "wms/type/:typeId": "wmsType",
-      "wms/entity/:entityId": "wmsEntity"
+      "": "default",
+      ":year/wms": "wmsNetCountySupplies",
+      ":year/wms/region/:regionLetter": "wmsRegion",
+      ":year/wms/county/:countyId": "wmsCounty",
+      ":year/wms/type/:typeId": "wmsType",
+      ":year/wms/entity/:entityId": "wmsEntity"
     };
 
-    ISWPRouter.prototype.wmsNetCountySupplies = function() {
+    ISWPRouter.prototype["default"] = function() {
+      Backbone.history.navigate("#/" + namespace.currYear + "/wms", {
+        trigger: true
+      });
+    };
+
+    ISWPRouter.prototype.wmsNetCountySupplies = function(year) {
+      namespace.currYear = year;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
       this.currTableView = new CountyNetSupplyCollectionView({
-        el: this.tableContainer,
-        currYear: this.currYear
+        el: this.tableContainer
       });
       this.currTableView.render();
+      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsRegion = function(regionLetter) {
+    ISWPRouter.prototype.wmsRegion = function(year, regionLetter) {
+      namespace.currYear = year;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
       this.currTableView = new RegionStrategyCollectionView({
         el: this.tableContainer,
-        currYear: this.currYear,
         id: regionLetter,
         name: regionLetter
       });
       this.currTableView.render();
+      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsCounty = function(countyId) {
+    ISWPRouter.prototype.wmsCounty = function(year, countyId) {
       var countyName;
+      namespace.currYear = year;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
       countyName = namespace.countyNames.get(countyId).get('name');
       this.currTableView = new CountyStrategyCollectionView({
         el: this.tableContainer,
-        currYear: this.currYear,
         id: countyId,
         name: countyName
       });
       this.currTableView.render();
+      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsType = function(typeId) {
+    ISWPRouter.prototype.wmsType = function(year, typeId) {
       var typeName;
+      namespace.currYear = year;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
       typeName = namespace.strategyTypes.get(typeId).get('name');
       this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
-        currYear: this.currYear,
         id: typeId,
         name: typeName
       });
       this.currTableView.render();
+      this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+      this.themeNavView.render();
     };
 
-    ISWPRouter.prototype.wmsEntity = function(entityId) {
+    ISWPRouter.prototype.wmsEntity = function(year, entityId) {
       var EntityModel, entity,
         _this = this;
+      namespace.currYear = year;
       if (this.currTableView != null) {
         this.currTableView = this.currTableView.unrender();
       }
@@ -135,14 +159,14 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       entity = new EntityModel();
       entity.fetch({
         success: function(model) {
-          console.log(model);
           _this.currTableView = new EntityStrategyCollectionView({
             el: _this.tableContainer,
-            currYear: _this.currYear,
             id: entityId,
             name: model.get("name")
           });
           _this.currTableView.render();
+          _this.yearNavView.render().currentYear.subscribe(_this.updateViewsToNewYear);
+          _this.themeNavView.render();
         }
       });
     };

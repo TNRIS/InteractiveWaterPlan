@@ -30,8 +30,6 @@ require.config(
     urlArgs: "bust=" +  (new Date()).getTime() #busts the cache on each RequireJS request.
 )
 
-router = null
-
 #Launch-point for the application
 $(()->
     BASE_API_PATH = $("#base_path").val()

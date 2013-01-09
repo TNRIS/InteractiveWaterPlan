@@ -36,7 +36,7 @@ define([
             @$regionSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
-                router.navigate("#/wms/region/#{$this.val()}", {trigger: true})
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/region/#{$this.val()}", {trigger: true})
                 return
             )
 
@@ -54,7 +54,7 @@ define([
             @$countySelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
-                router.navigate("#/wms/county/#{$this.val()}", {trigger: true})
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/county/#{$this.val()}", {trigger: true})
                 return
             )
 

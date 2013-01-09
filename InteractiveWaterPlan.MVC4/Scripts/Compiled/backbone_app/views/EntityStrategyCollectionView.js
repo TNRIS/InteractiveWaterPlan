@@ -24,7 +24,7 @@ define(['views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/te
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/entity"
       });
-      EntityStrategyCollectionView.__super__.initialize.call(this, options.currYear, EntityStrategyView, StrategyCollection, tpl, {
+      EntityStrategyCollectionView.__super__.initialize.call(this, EntityStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;

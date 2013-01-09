@@ -21,7 +21,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/region" 
             )
 
-            super options.currYear, StrategyView, 
+            super StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
             

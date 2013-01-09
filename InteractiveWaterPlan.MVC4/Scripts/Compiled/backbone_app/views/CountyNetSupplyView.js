@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/countyNetSupplyRow.html'], function(tpl) {
+define(['namespace', 'scripts/text!templates/countyNetSupplyRow.html'], function(namespace, tpl) {
   var CountyNetSupplyView;
   return CountyNetSupplyView = (function(_super) {
 
@@ -22,7 +22,8 @@ define(['scripts/text!templates/countyNetSupplyRow.html'], function(tpl) {
 
     CountyNetSupplyView.prototype.render = function() {
       this.$el.html(this.template({
-        m: this.model.toJSON()
+        m: this.model.toJSON(),
+        currYear: namespace.currYear
       }));
       return this;
     };

@@ -62,6 +62,17 @@ namespace InteractiveWaterPlan.Data
             
         }
 
+        public IEnumerable<object> GetLegeDistrictNames()
+        {
+            return Session.GetNamedQuery("GetAllLegeDistricts")
+                .List<LegeDistrict>()
+                .OrderBy(x => x.DistrictType)
+                .ThenBy(x => x.Id)
+                .Select(x => new { id = x.Id, districtType = x.DistrictType})
+                .ToList();
+        }
+
+
         public IList<LegeDistrict> GetLegeDistricts()
         {
             return Session.GetNamedQuery("GetAllLegeDistricts")

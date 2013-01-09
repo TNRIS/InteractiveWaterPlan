@@ -23,7 +23,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/region"
       });
-      RegionStrategyCollectionView.__super__.initialize.call(this, options.currYear, StrategyView, StrategyCollection, tpl, {
+      RegionStrategyCollectionView.__super__.initialize.call(this, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;

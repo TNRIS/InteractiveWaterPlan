@@ -23,7 +23,7 @@ define(['views/BaseTableCollectionView', 'views/StrategyTypeView', 'scripts/text
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/type"
       });
-      StrategyTypeCollectionView.__super__.initialize.call(this, options.currYear, StrategyTypeView, StrategyCollection, tpl, {
+      StrategyTypeCollectionView.__super__.initialize.call(this, StrategyTypeView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;

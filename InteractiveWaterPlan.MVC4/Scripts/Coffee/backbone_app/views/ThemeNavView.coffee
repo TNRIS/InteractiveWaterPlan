@@ -1,12 +1,12 @@
 define([
+    'namespace'
     'collections/StrategyTypeCollection'
     'scripts/text!templates/strategyTypeListItem.html'
     'scripts/text!templates/themeNav.html'
 ],
-(StrategyTypeCollection, strategyTypeListItemTpl, tpl) ->
+(namespace, StrategyTypeCollection, strategyTypeListItemTpl, tpl) ->
     
-    #TODO: The dropdown no longer changes on selection
-    # do we care?
+    #TODO: The dropdown no longer changes on selection - do we care?
     class ThemeNavView extends Backbone.View
 
         template: _.template(tpl)
@@ -20,7 +20,9 @@ define([
 
         render: () ->
             @$el.empty()
-            @$el.html(@template())
+            @$el.html(@template(
+                currYear: namespace.currYear
+            ))
             ko.applyBindings(this, @el) #need for the hide/show map button
 
             this.renderStrategyTypeList()
@@ -37,6 +39,7 @@ define([
                         res = this.$('#strategyTypeList').append(
                             stratTypeLiTemplate(
                                 m: strategyType.toJSON()
+                                currYear: namespace.currYear
                             )
                         )
 

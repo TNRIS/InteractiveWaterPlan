@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['collections/StrategyTypeCollection', 'scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/themeNav.html'], function(StrategyTypeCollection, strategyTypeListItemTpl, tpl) {
+define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/themeNav.html'], function(namespace, StrategyTypeCollection, strategyTypeListItemTpl, tpl) {
   var ThemeNavView;
   return ThemeNavView = (function(_super) {
 
@@ -21,7 +21,9 @@ define(['collections/StrategyTypeCollection', 'scripts/text!templates/strategyTy
 
     ThemeNavView.prototype.render = function() {
       this.$el.empty();
-      this.$el.html(this.template());
+      this.$el.html(this.template({
+        currYear: namespace.currYear
+      }));
       ko.applyBindings(this, this.el);
       this.renderStrategyTypeList();
       return this;
@@ -39,7 +41,8 @@ define(['collections/StrategyTypeCollection', 'scripts/text!templates/strategyTy
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             strategyType = _ref[_i];
             res = _this.$('#strategyTypeList').append(stratTypeLiTemplate({
-              m: strategyType.toJSON()
+              m: strategyType.toJSON(),
+              currYear: namespace.currYear
             }));
           }
         }

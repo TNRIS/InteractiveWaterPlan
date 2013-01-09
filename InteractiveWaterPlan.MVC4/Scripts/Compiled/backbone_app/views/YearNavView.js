@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/yearNav.html'], function(tpl) {
+define(['namespace', 'scripts/text!templates/yearNav.html'], function(namespace, tpl) {
   var YearNavView;
   return YearNavView = (function(_super) {
 
@@ -16,15 +16,15 @@ define(['scripts/text!templates/yearNav.html'], function(tpl) {
 
     YearNavView.prototype.initialize = function(options) {
       _.bindAll(this, 'render', 'unrender', 'changeYear');
-      this.currentYear = ko.observable(options.startingYear);
       return null;
     };
 
     YearNavView.prototype.render = function() {
       this.$el.empty();
+      this.currentYear = ko.observable(namespace.currYear);
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
-      this.$("a[data-value='" + (this.currentYear()) + "']").parent().addClass('active');
+      this.$("a[data-value='" + namespace.currYear + "']").parent().addClass('active');
       return this;
     };
 

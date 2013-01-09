@@ -4,7 +4,6 @@ define([
     'views/ThemeNavView'
     'views/YearNavView'
     'views/MapToolsView'
-    'views/BreadcrumbView'
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
@@ -19,8 +18,7 @@ define([
     MapView, 
     ThemeNavView, 
     YearNavView, 
-    MapToolsView, 
-    BreadcrumbView, 
+    MapToolsView,
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
@@ -32,13 +30,13 @@ define([
     RegionCollection) ->
 
     class ISWPRouter extends Backbone.Router
-       
+        
+        
         initialize: (options) ->
             _.bindAll(this, 'updateViewsToNewYear')
 
             @currTableView = null
-            @currYear = "2010" #TODO: make year a namespace variable
-
+            
             #save reference to the tableContainer dom element
             @tableContainer = $('#tableContainer')[0]
 
@@ -58,15 +56,10 @@ define([
             @themeNavView.render()
 
             @yearNavView = new YearNavView(
-                startingYear: @currYear
                 el: $('#yearNavContainer')[0] 
             ) 
-            @yearNavView.render()
-            @yearNavView.currentYear.subscribe(this.updateViewsToNewYear)
-            #TODO: year in backbone routes?
-
-            @breadcrumbList = new BreadcrumbView({ el: $('#breadcrumbContainer')[0] })
-            @breadcrumbList.render()
+            #@yearNavView.render()
+            #@yearNavView.currentYear.subscribe(this.updateViewsToNewYear)
 
             #Load the boostrapped arrays (defined in Index.cshtml)
             namespace.strategyTypes = new StrategyTypeCollection()
@@ -88,51 +81,81 @@ define([
             return
 
         updateViewsToNewYear: (newYear) ->
-            @currYear = newYear
-            @currTableView.changeToYear(newYear)
+            currRoute = Backbone.history.fragment
+            oldYear = ""
+
+            for y in namespace.VALID_YEARS
+                if currRoute.indexOf(y+"/") != -1
+                    oldYear = y
+                    break
+
+            if oldYear == ""
+                throw "Year invalid." #TODO: show error to user?
+                Backbone.history.navigate("") #just redirect to default
+
+            
+            newRoute = currRoute.replace(oldYear, newYear)
+
+            Backbone.history.navigate("#/"+newRoute, { trigger: true })
             return
 
-        #TODO: include :year at start of routes and update logic accordingly
+        #TODO: validate year (use namespace.VALID_YEARS)
+        # and see http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
+        # for possible way to wrap each route to check for valid year
         routes:
-            "":                             "wmsNetCountySupplies" #default route, for now it is the same as wms
-            "wms":                          "wmsNetCountySupplies"
-            "wms/region/:regionLetter":     "wmsRegion"
-            "wms/county/:countyId":         "wmsCounty"
-            "wms/type/:typeId":             "wmsType"
-            "wms/entity/:entityId":         "wmsEntity"
+            "":                                   "default" #default route, for now it is the same as wms
+            ":year/wms":                          "wmsNetCountySupplies"
+            ":year/wms/region/:regionLetter":     "wmsRegion"
+            ":year/wms/county/:countyId":         "wmsCounty"
+            ":year/wms/type/:typeId":             "wmsType"
+            ":year/wms/entity/:entityId":         "wmsEntity"
             #TODO: wms/source/:sourceId
 
-        wmsNetCountySupplies: () ->
+        default: () ->
+            #for now, redirect to the wms net-county view
+
+            Backbone.history.navigate("#/#{namespace.currYear}/wms", {trigger: true})
+            return
+
+        wmsNetCountySupplies: (year) ->
+            namespace.currYear = year #TODO: Validate year
+
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
             @currTableView = new CountyNetSupplyCollectionView(
                 el: @tableContainer
-                currYear: @currYear
             )
             
             @currTableView.render()
+            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
+            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
+            @themeNavView.render()
 
             return
 
-        wmsRegion: (regionLetter) ->
+        wmsRegion: (year, regionLetter) ->
+            namespace.currYear = year #TODO: Validate year
+
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
             #TODO: If invalid regionLetter, then show error
             @currTableView = new RegionStrategyCollectionView(
                 el: @tableContainer
-
-                currYear: @currYear
                 id: regionLetter
                 name: regionLetter
             )
 
             @currTableView.render()
-
+            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
+            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
+            @themeNavView.render()
             return
         
-        wmsCounty: (countyId) ->
+        wmsCounty: (year, countyId) ->
+            namespace.currYear = year #TODO: Validate year
+
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
@@ -141,17 +164,19 @@ define([
 
             @currTableView = new CountyStrategyCollectionView(
                 el: @tableContainer
-
-                currYear: @currYear
                 id: countyId
                 name: countyName
             )
 
             @currTableView.render()
-
+            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
+            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
+            @themeNavView.render()
             return
 
-        wmsType: (typeId) ->
+        wmsType: (year, typeId) ->
+            namespace.currYear = year #TODO: Validate year
+
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
@@ -160,17 +185,19 @@ define([
 
             @currTableView = new StrategyTypeCollectionView(
                 el: @tableContainer
-
-                currYear: @currYear
                 id: typeId
                 name: typeName
             )
 
             @currTableView.render()
-
+            #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
+            @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
+            @themeNavView.render()
             return
 
-        wmsEntity: (entityId) ->
+        wmsEntity: (year, entityId) ->
+            namespace.currYear = year #TODO: Validate year
+
             #unrender the currTableView first
             if @currTableView? then @currTableView = @currTableView.unrender()
 
@@ -184,17 +211,17 @@ define([
             entity.fetch(
                 success: (model) =>
                     #TODO: If invalid entityId, then show error
-                    console.log model
-
+                    
                     @currTableView = new EntityStrategyCollectionView(
                         el: @tableContainer
-
-                        currYear: @currYear
                         id: entityId
-                        name: model.get("name") #TODO: get entity name somehow
+                        name: model.get("name")
                     )
 
                     @currTableView.render()
+                    #TODO: maybe put this in route:after as in http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
+                    @yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear) 
+                    @themeNavView.render()
                     return
             )
 

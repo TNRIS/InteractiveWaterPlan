@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define([], function() {
+define(['namespace'], function(namespace) {
   var BaseTableCollectionView;
   return BaseTableCollectionView = (function(_super) {
 
@@ -12,15 +12,13 @@ define([], function() {
       return BaseTableCollectionView.__super__.constructor.apply(this, arguments);
     }
 
-    BaseTableCollectionView.prototype.currYear = null;
-
     BaseTableCollectionView.prototype.fetchCallback = null;
 
-    BaseTableCollectionView.prototype.initialize = function(currYear, ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'changeToYear', '_makeTableSortable');
-      this.currYear = ko.observable(currYear);
+    BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', '_makeTableSortable');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
+      this.currYear = ko.observable(namespace.currYear);
       this.template = _.template(tpl);
       this.collection = new Collection();
       this.ModelView = ModelView;
@@ -51,7 +49,7 @@ define([], function() {
       this.showLoading();
       this.$('tbody').empty();
       params = _.extend({
-        year: this.currYear()
+        year: namespace.currYear
       }, this.fetchParams);
       this.collection.fetch({
         data: params,
@@ -80,7 +78,7 @@ define([], function() {
       var modelView;
       modelView = new this.ModelView({
         model: model,
-        currYear: this.currYear()
+        currYear: namespace.currYear
       });
       this.$('tbody').append(modelView.render().el);
     };
@@ -102,11 +100,6 @@ define([], function() {
     BaseTableCollectionView.prototype.hideLoading = function() {
       $('.tableLoading').hide();
       this.$('.scrollTableContainer').fadeIn();
-    };
-
-    BaseTableCollectionView.prototype.changeToYear = function(newYear) {
-      this.currYear(newYear);
-      this.fetchCollection();
     };
 
     BaseTableCollectionView.prototype._makeTableSortable = function() {

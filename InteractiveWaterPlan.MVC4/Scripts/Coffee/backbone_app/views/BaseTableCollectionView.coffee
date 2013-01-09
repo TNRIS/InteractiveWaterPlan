@@ -1,22 +1,21 @@
 define([
+    'namespace'
 ],
-() ->
+(namespace) ->
     class BaseTableCollectionView extends Backbone.View
-
-        currYear: null #reference to the currently selected year
 
         fetchCallback: null #optional holder for callback after collection fetch has completed successfully
 
-        initialize: (currYear, ModelView, Collection, tpl, options) ->
+        initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'changeToYear', 
+                'hideLoading', 'showLoading', 
                 '_makeTableSortable')
 
-            @currYear = ko.observable(currYear)
-            
             options = options || {}
             @fetchParams = options.fetchParams || {}
             
+            @currYear = ko.observable(namespace.currYear)
+
             @template = _.template(tpl)
 
             @collection = new Collection()
@@ -53,7 +52,7 @@ define([
             
             this.$('tbody').empty() #clear the table contents
 
-            params = _.extend({year: @currYear() }, @fetchParams)
+            params = _.extend({year: namespace.currYear }, @fetchParams)
 
             @collection.fetch(
                 data: params
@@ -86,7 +85,7 @@ define([
 
             modelView = new @ModelView(
                 model: model
-                currYear: @currYear()
+                currYear: namespace.currYear
             )
 
             this.$('tbody').append(modelView.render().el)
@@ -111,11 +110,6 @@ define([
         hideLoading: () ->
             $('.tableLoading').hide()
             this.$('.scrollTableContainer').fadeIn()
-            return
-
-        changeToYear: (newYear) ->
-            @currYear(newYear)
-            this.fetchCollection()
             return
 
         _makeTableSortable: () ->

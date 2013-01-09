@@ -1,7 +1,8 @@
 define([
+    'namespace'
     'scripts/text!templates/entityStrategyRow.html'
 ],
-(tpl) ->
+(namespace, tpl) ->
 
     class EntityStrategyView extends Backbone.View
 
@@ -9,8 +10,6 @@ define([
 
         initialize: (options) ->
             super options
-
-            @currYear = options.currYear
 
             _.bindAll(this, 'render', 'unrender')
 
@@ -23,7 +22,7 @@ define([
             @$el.html(
                 @template(
                     m: @model.toJSON()
-                    currYear: @currYear
+                    currYear: namespace.currYear
                 )
             )
 

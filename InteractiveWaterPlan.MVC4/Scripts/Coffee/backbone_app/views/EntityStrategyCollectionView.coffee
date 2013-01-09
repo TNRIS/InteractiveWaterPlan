@@ -21,7 +21,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/entity" 
             )
 
-            super options.currYear, EntityStrategyView, 
+            super EntityStrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
 

@@ -1,30 +1,29 @@
 define([
+    'namespace'
     'scripts/text!templates/yearNav.html'
 ],
-(tpl) ->
+(namespace, tpl) ->
     
     class YearNavView extends Backbone.View
 
-        
         template: _.template(tpl)
 
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 'changeYear')
-            
-            #create an KO observable property for the currently selected year
-            @currentYear = ko.observable(options.startingYear)
             
             return null
 
         render: () ->
             @$el.empty()
 
+            @currentYear = ko.observable(namespace.currYear)
+
             @$el.html(@template())
 
             ko.applyBindings(this, @el)
 
             #Use the one marked active as the default year to start on
-            this.$("a[data-value='#{@currentYear()}']").parent().addClass('active')
+            this.$("a[data-value='#{namespace.currYear}']").parent().addClass('active')
 
             return this
 

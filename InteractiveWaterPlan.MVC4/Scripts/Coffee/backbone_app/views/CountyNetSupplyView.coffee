@@ -1,7 +1,8 @@
 define([
+    'namespace'
     'scripts/text!templates/countyNetSupplyRow.html'
 ],
-(tpl) ->
+(namespace, tpl) ->
 
     class CountyNetSupplyView extends Backbone.View
 
@@ -18,6 +19,7 @@ define([
             @$el.html(
                 @template(
                     m: @model.toJSON()
+                    currYear: namespace.currYear
                 )
             )
 

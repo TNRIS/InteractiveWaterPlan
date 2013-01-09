@@ -126,7 +126,13 @@ namespace InteractiveWaterPlan.MVC4
             config.Routes.MapHttpRoute(
                 "GetAllLegeDistricts",
                 "api/boundary/legedistricts/all",
-                new { controller = "Boundary", action = "GetAllLegeDistricts" }
+                new { controller = "Boundary", action = "GetAllLegeDistrictFeatures" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetAllLegeDistrictNames",
+                "api/boundary/legedistricts/names",
+                new { controller = "Boundary", action = "GetAllLegeDistrictNames" }
             );
 
 

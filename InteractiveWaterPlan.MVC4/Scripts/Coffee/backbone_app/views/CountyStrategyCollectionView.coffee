@@ -22,7 +22,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/county" 
             )
 
-            super options.currYear, StrategyView, 
+            super StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
             

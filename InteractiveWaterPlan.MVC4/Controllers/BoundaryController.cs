@@ -47,6 +47,12 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetLegeDistricts();
         }
 
+        //api/boundary/legedistricts/names
+        public IEnumerable<object> GetAllLegeDistrictNames()
+        {
+            return _repo.GetLegeDistrictNames();
+        }
+
         
         
     }

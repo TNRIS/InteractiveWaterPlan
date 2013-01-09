@@ -19,7 +19,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/type" 
             )
 
-            super options.currYear, StrategyTypeView, 
+            super StrategyTypeView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
             return null

@@ -11,7 +11,7 @@ define([
         initialize: (options) ->
             _.bindAll(this)
 
-            super options.currYear, CountyNetSupplyView, 
+            super CountyNetSupplyView, 
                 CountyNetSupplyCollection, tpl
            
 )

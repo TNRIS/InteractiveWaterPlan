@@ -14,7 +14,7 @@ define(['views/BaseTableCollectionView', 'views/CountyNetSupplyView', 'collectio
 
     CountyNetSupplyCollectionView.prototype.initialize = function(options) {
       _.bindAll(this);
-      return CountyNetSupplyCollectionView.__super__.initialize.call(this, options.currYear, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
+      return CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
     };
 
     return CountyNetSupplyCollectionView;
