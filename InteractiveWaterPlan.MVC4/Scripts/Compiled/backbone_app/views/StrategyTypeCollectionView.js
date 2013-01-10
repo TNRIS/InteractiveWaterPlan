@@ -17,7 +17,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyTypeView', 
       _.bindAll(this, 'fetchCallback');
       this.typeId = options.id;
       this.typeName = options.name;
-      this.viewName = "" + this.typeName + " Strategies";
+      this.viewName = ko.observable("" + this.typeName);
       fetchParams = {
         typeId: this.typeId
       };
@@ -44,7 +44,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyTypeView', 
 
     StrategyTypeCollectionView.prototype.render = function() {
       StrategyTypeCollectionView.__super__.render.apply(this, arguments);
-      this.$('#strategyTypeName').html(this.viewName);
       return this;
     };
 

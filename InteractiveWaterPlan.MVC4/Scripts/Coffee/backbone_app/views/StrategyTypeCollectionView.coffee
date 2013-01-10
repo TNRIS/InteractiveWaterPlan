@@ -14,7 +14,7 @@ define([
             @typeId = options.id
             @typeName = options.name
 
-            @viewName = "#{@typeName} Strategies"
+            @viewName = ko.observable("#{@typeName}")
 
             fetchParams = {typeId: @typeId}
             
@@ -43,8 +43,6 @@ define([
 
         render: () ->
             super
-
-            this.$('#strategyTypeName').html(@viewName)
 
             return this
             
