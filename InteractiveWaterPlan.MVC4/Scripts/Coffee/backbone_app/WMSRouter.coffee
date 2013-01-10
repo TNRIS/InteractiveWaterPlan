@@ -49,13 +49,16 @@ define([
             )
             @mapView.render()
 
-            @mapToolsView = new MapToolsView({ 
+            @mapToolsView = new MapToolsView(
                 el: $('#mapTools')[0]
                 mapView: @mapView
-            })
+            )
             @mapToolsView.render()
 
-            @themeNavView = new ThemeNavView({ el: $('#themeNavContainer')[0] })
+            @themeNavView = new ThemeNavView(
+                el: $('#themeNavContainer')[0]
+                mapView: @mapView
+            )
             #render in 'after' filter
 
             @yearNavView = new YearNavView(

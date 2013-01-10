@@ -14,8 +14,11 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
 
     ThemeNavView.prototype.template = _.template(tpl);
 
-    ThemeNavView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList');
+    ThemeNavView.prototype.mapView = null;
+
+    ThemeNavView.prototype.initialize = function(options) {
+      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 'zoomToTexas');
+      this.mapView = options.mapView;
       return null;
     };
 
@@ -52,6 +55,10 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
     ThemeNavView.prototype.unrender = function() {
       this.$el.remove();
       return null;
+    };
+
+    ThemeNavView.prototype.zoomToTexas = function() {
+      this.mapView.resetExtent();
     };
 
     ThemeNavView.prototype.toggleMap = function(data, event, x) {

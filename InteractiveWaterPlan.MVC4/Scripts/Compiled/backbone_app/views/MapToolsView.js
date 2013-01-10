@@ -17,7 +17,7 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapTools.html'], fun
     MapToolsView.prototype.mapView = null;
 
     MapToolsView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'zoomToTexas', 'showPlaceFeature');
+      _.bindAll(this, 'render', 'unrender', 'showPlaceFeature');
       this.mapView = options.mapView;
     };
 
@@ -57,10 +57,6 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapTools.html'], fun
           return _this.mapView.showPlaceFeature(model);
         }
       });
-    };
-
-    MapToolsView.prototype.zoomToTexas = function() {
-      this.mapView.resetExtent();
     };
 
     return MapToolsView;

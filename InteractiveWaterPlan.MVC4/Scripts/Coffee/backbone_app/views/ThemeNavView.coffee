@@ -10,11 +10,13 @@ define([
     class ThemeNavView extends Backbone.View
 
         template: _.template(tpl)
+        mapView: null #must specify in options argument to constructor
 
-        initialize: () ->
-
+        initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 'toggleMap', 
-                'renderStrategyTypeList')
+                'renderStrategyTypeList', 'zoomToTexas')
+
+            @mapView = options.mapView
 
             return null
 
@@ -51,6 +53,10 @@ define([
         unrender: () ->
             @$el.remove()
             return null
+
+        zoomToTexas: () ->
+            @mapView.resetExtent()
+            return
 
         toggleMap: (data, event, x) ->
             $target = $(event.target)

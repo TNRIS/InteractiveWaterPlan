@@ -10,7 +10,7 @@ define([
         mapView: null #must specify in options argument to constructor
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender', 'zoomToTexas', 'showPlaceFeature')
+            _.bindAll(this, 'render', 'unrender', 'showPlaceFeature')
 
             @mapView = options.mapView
 
@@ -55,7 +55,5 @@ define([
             
             return
 
-        zoomToTexas: () ->
-            @mapView.resetExtent()
-            return
+        
 )

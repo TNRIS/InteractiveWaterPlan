@@ -27,7 +27,8 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
       });
       this.mapToolsView.render();
       this.themeNavView = new ThemeNavView({
-        el: $('#themeNavContainer')[0]
+        el: $('#themeNavContainer')[0],
+        mapView: this.mapView
       });
       this.yearNavView = new YearNavView({
         el: $('#yearNavContainer')[0]
