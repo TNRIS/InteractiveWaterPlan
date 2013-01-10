@@ -144,7 +144,8 @@ define([
             #Add a listener to show FontAwesome up/down icons based on direction of sort
             sortTable.on('aftertablesort', (evt, data) ->
                 $th = $('th',this)
-                $('i', $th).remove()
+                $('i.icon-caret-up', $th).remove()
+                $('i.icon-caret-down', $th).remove()
                 iconClass = if data.direction == "asc" then 'icon-caret-up' else 'icon-caret-down'
                 $th.eq(data.column).prepend("<i class='#{iconClass}'></i> ")
                 return null

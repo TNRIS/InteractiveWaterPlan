@@ -141,7 +141,8 @@ define(['namespace'], function(namespace) {
       sortTable.on('aftertablesort', function(evt, data) {
         var $th, iconClass;
         $th = $('th', this);
-        $('i', $th).remove();
+        $('i.icon-caret-up', $th).remove();
+        $('i.icon-caret-down', $th).remove();
         iconClass = data.direction === "asc" ? 'icon-caret-up' : 'icon-caret-down';
         $th.eq(data.column).prepend("<i class='" + iconClass + "'></i> ");
         return null;
