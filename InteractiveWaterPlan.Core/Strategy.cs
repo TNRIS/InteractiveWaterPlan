@@ -13,6 +13,8 @@
         public virtual int Id { get; set; }
         public virtual string Description { get; set; }
 
+        public virtual int ProjectId { get; set; }
+
         public virtual string TypeName { get; set; }
         public virtual int TypeId { get; set; }
 
