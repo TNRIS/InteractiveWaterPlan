@@ -19,6 +19,9 @@ define([
             'stamen_toner', 'stamen_watercolor',
             'bing_road', 'bing_hybrid', 'bing_aerial']
 
+        MAX_WUG_RADIUS: 18
+        MIN_WUG_RADIUS: 6
+
         initialize: (config) ->
 
             @$el = $("##{config.mapContainerId}")
@@ -86,11 +89,23 @@ define([
                 })
 
             wktFormat = new OpenLayers.Format.WKT()
+
+            #TODO: Size based on source supply (need to pass source supply to model)
+            max_supply = _.max(featureCollection.models, (m) ->
+                return m.get("sourceSupply")
+            ).get("sourceSupply")
+            
+            min_supply = _.min(featureCollection.models, (m) ->
+                return m.get("sourceSupply")
+            ).get("sourceSupply")
+ 
             bounds = null
             wugFeatures = []
             for m in featureCollection.models
                 newFeature = wktFormat.read(m.get('wktGeog'))
                 newFeature.attributes = m.attributes
+                newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
+                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, m.get("sourceSupply"))
                 delete newFeature.attributes.wktGeog
                 newFeature.geometry = newFeature.geometry.transform(
                     @map.displayProjection, @map.projection)
@@ -108,10 +123,16 @@ define([
 
 
         clearWugFeatures: () ->
-
             if @wugLayer? then @wugLayer.destroy()
-
             return
+
+        _calculateScaledValue: (max, min, scale_max, scale_min, val) ->
+            if max == min then return scale_min
+
+            #linearly scale the input value
+            scaled_val = (scale_max - scale_min)*(val - min)/(max-min) + scale_min
+            
+            return scaled_val
 
         resetExtent: () ->
             zoom = @origZoom
@@ -245,36 +266,21 @@ define([
             return layers
 
         _wugStyleMap: new OpenLayers.StyleMap(
-            "default" : new OpenLayers.Style(
-                pointRadius: 6
+            "default" : new OpenLayers.Style( 
+                pointRadius: '${getPointRadius}'
                 strokeColor: 'yellow'
-                strokeWidth: 1
-                fillColor: 'blue'
+                strokeWidth: '1'
+                fillColor: 'green'
                 fillOpacity: 0.8
                 {
-                    rules: [
-                        new OpenLayers.Rule({
-                            symbolizer: {
-                                pointRadius: 6,
-                            }
-                        }),
-                        new OpenLayers.Rule({
-                            maxScaleDenominator: 866688,
-                            symbolizer: {
-                                fontSize: "12px"
-                                labelAlign: 'cb'
-                                labelOutlineColor: "yellow"
-                                labelOutlineWidth: 2
-                                labelYOffset: 8
-                                label: "${name}"
-                            }        
-                        })
-                    ]
+                    context:
+                        getPointRadius: (feature) ->
+                            if feature.size? then return feature.size
+                            return 6
                 }
             )
             "select" : new OpenLayers.Style(
-                fillColor: 'yellow'
-                strokeColor: 'blue'
+                fillColor: "yellow"
                 fillOpacity: 1
             )
         )

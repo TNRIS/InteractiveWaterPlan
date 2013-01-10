@@ -22,6 +22,10 @@ define(['namespace'], function(namespace) {
 
     MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'stamen_toner', 'stamen_watercolor', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
+    MapView.prototype.MAX_WUG_RADIUS = 18;
+
+    MapView.prototype.MIN_WUG_RADIUS = 6;
+
     MapView.prototype.initialize = function(config) {
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
@@ -62,7 +66,7 @@ define(['namespace'], function(namespace) {
     };
 
     MapView.prototype.resetWugFeatures = function(featureCollection) {
-      var bounds, m, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
+      var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
       this.clearWugFeatures();
       if (featureCollection.models.length < 1) {
         return;
@@ -71,6 +75,12 @@ define(['namespace'], function(namespace) {
         styleMap: this._wugStyleMap
       });
       wktFormat = new OpenLayers.Format.WKT();
+      max_supply = _.max(featureCollection.models, function(m) {
+        return m.get("sourceSupply");
+      }).get("sourceSupply");
+      min_supply = _.min(featureCollection.models, function(m) {
+        return m.get("sourceSupply");
+      }).get("sourceSupply");
       bounds = null;
       wugFeatures = [];
       _ref = featureCollection.models;
@@ -78,6 +88,7 @@ define(['namespace'], function(namespace) {
         m = _ref[_i];
         newFeature = wktFormat.read(m.get('wktGeog'));
         newFeature.attributes = m.attributes;
+        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("sourceSupply"));
         delete newFeature.attributes.wktGeog;
         newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
         if (!(bounds != null)) {
@@ -96,6 +107,15 @@ define(['namespace'], function(namespace) {
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
       }
+    };
+
+    MapView.prototype._calculateScaledValue = function(max, min, scale_max, scale_min, val) {
+      var scaled_val;
+      if (max === min) {
+        return scale_min;
+      }
+      scaled_val = (scale_max - scale_min) * (val - min) / (max - min) + scale_min;
+      return scaled_val;
     };
 
     MapView.prototype.resetExtent = function() {
@@ -198,33 +218,23 @@ define(['namespace'], function(namespace) {
 
     MapView.prototype._wugStyleMap = new OpenLayers.StyleMap({
       "default": new OpenLayers.Style({
-        pointRadius: 6,
+        pointRadius: '${getPointRadius}',
         strokeColor: 'yellow',
-        strokeWidth: 1,
-        fillColor: 'blue',
+        strokeWidth: '1',
+        fillColor: 'green',
         fillOpacity: 0.8
       }, {
-        rules: [
-          new OpenLayers.Rule({
-            symbolizer: {
-              pointRadius: 6
+        context: {
+          getPointRadius: function(feature) {
+            if (feature.size != null) {
+              return feature.size;
             }
-          }), new OpenLayers.Rule({
-            maxScaleDenominator: 866688,
-            symbolizer: {
-              fontSize: "12px",
-              labelAlign: 'cb',
-              labelOutlineColor: "yellow",
-              labelOutlineWidth: 2,
-              labelYOffset: 8,
-              label: "${name}"
-            }
-          })
-        ]
+            return 6;
+          }
+        }
       }),
       "select": new OpenLayers.Style({
-        fillColor: 'yellow',
-        strokeColor: 'blue',
+        fillColor: "yellow",
         fillOpacity: 1
       })
     });

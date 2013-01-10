@@ -36,7 +36,8 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyTypeView', 
         return {
           id: m.get("recipientEntityId"),
           name: m.get("recipientEntityName"),
-          wktGeog: m.get("recipientEntityWktGeog")
+          wktGeog: m.get("recipientEntityWktGeog"),
+          sourceSupply: m.get("supply" + namespace.currYear)
         };
       });
       return namespace.wugFeatureCollection.reset(newWugList);

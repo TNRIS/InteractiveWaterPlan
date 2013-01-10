@@ -35,6 +35,7 @@ define([
                     id: m.get("recipientEntityId")
                     name: m.get("recipientEntityName")
                     wktGeog: m.get("recipientEntityWktGeog")
+                    sourceSupply: m.get("supply#{namespace.currYear}")
                 }
             )
 
