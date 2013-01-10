@@ -33,7 +33,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
       entity = new EntityModel();
       entity.fetch({
         success: function(model) {
-          console.log(model);
           _this.viewName(model.get("name"));
         }
       });
