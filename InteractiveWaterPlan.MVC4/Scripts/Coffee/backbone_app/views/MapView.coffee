@@ -269,12 +269,15 @@ define([
                 strokeWidth: '1'
                 fillColor: 'green'
                 fillOpacity: 0.8
+
+
                 {
                     context:
                         getPointRadius: (feature) ->
                             if feature.size? then return feature.size
                             return 6
-
+                    
+                    #TODO: THIS BREAKS WHEN DOING REGION FOR SOME REASON
                     rules: [
                         new OpenLayers.Rule({
                             maxScaleDenominator: 866688,
@@ -287,7 +290,14 @@ define([
                                 label: "${name}"
                             }        
                         })
+                        new OpenLayers.Rule({
+                            minScaleDenominator: 866688,
+                            symbolizer: {
+                                
+                            }        
+                        })
                     ]
+                    
 
                 }
             )

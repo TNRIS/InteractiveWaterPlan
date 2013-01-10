@@ -41,7 +41,7 @@
 
   <sql-query name="GetStrategiesInRegion">
     <query-param name="regionLetter" type="char" />
-    <return class="Strategy"/>
+    <return class="Strategy" />
     exec dbo.usp_Select_Strategies_By_Region_Year__tbl_SWP_Final :regionLetter
   </sql-query>
 

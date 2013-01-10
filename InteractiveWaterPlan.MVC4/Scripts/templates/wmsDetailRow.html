@@ -1,0 +1,19 @@
+<td>
+    <a href="#/{{currYear}}/wms/region/{{m.regionLetter}}">
+        {{m.regionLetter}}
+    </a>
+</td>
+<td>
+    <a href="#/{{currYear}}/wms/type/{{m.typeId}}">
+        {{m.typeName}}
+    </a>
+</td>
+<td>{{m.sourceName}}</td>
+<td>
+    <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    
+        {{m.recipientEntityName}}
+    </a>
+</td>
+<td>{{ $.number(m["supply"+currYear]) }}</td>
+<td>${{ $.number(m.capitalCost) }}</td>
+<td>{{m.onlineYear}}</td>

@@ -2,6 +2,7 @@
 using System.Linq;
 using InteractiveWaterPlan.Core;
 using NHibernate;
+using System;
 
 namespace InteractiveWaterPlan.Data
 {
@@ -151,6 +152,23 @@ namespace InteractiveWaterPlan.Data
                     return supplyVal != 0;
                 })
                 .ToList<Strategy>();
+        }
+
+        public IList<StrategyDetails> GetStrategiesByProjectId(int projectId, string year)
+        {
+            //TODO: need columns from database - created issue
+            throw new NotImplementedException();
+            /*
+            var strategiesByProject = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
+                .SetParameter("projectId", projectId)
+                .List<StrategyDetails>()
+                .OrderBy(x => x.Id)
+                .Where(x =>
+                {
+
+                })
+                .ToList();
+             * */
         }
 
     }

@@ -246,6 +246,9 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
               labelYOffset: 8,
               label: "${name}"
             }
+          }), new OpenLayers.Rule({
+            minScaleDenominator: 866688,
+            symbolizer: {}
           })
         ]
       }),

@@ -322,6 +322,8 @@
     <Content Include="Scripts\templates\strategyTypeRow.html" />
     <Content Include="Scripts\templates\strategyTypeTable.html" />
     <Content Include="Scripts\templates\mapTopToolbar.html" />
+    <Content Include="Scripts\templates\wmsDetailRow.html" />
+    <Content Include="Scripts\templates\wmsDetailTable.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\tnris.place_typeahead.js" />

@@ -354,6 +354,9 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
               labelYOffset: 8,
               label: "${name}"
             }
+          }), new OpenLayers.Rule({
+            minScaleDenominator: 866688,
+            symbolizer: {}
           })
         ]
       }),
