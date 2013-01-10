@@ -231,7 +231,20 @@ define(['namespace'], function(namespace) {
             }
             return 6;
           }
-        }
+        },
+        rules: [
+          new OpenLayers.Rule({
+            maxScaleDenominator: 866688,
+            symbolizer: {
+              fontSize: "11px",
+              labelAlign: 'cb',
+              labelOutlineColor: "yellow",
+              labelOutlineWidth: 2,
+              labelYOffset: 8,
+              label: "${name}"
+            }
+          })
+        ]
       }),
       "select": new OpenLayers.Style({
         fillColor: "yellow",
