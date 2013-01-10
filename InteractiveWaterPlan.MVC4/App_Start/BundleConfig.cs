@@ -9,11 +9,11 @@ namespace InteractiveWaterPlan.MVC4
         {
             //Openlayers has to be included separately because of how it loads its css
             
-            bundles.Add(new ScriptBundle("~/bundles/js/modernizr").Include(
+            bundles.Add(new ScriptBundle("~/bundles/js/modernizr.js").Include(
                 "~/Scripts/modernizr-{version}.js"
             ));
 
-            bundles.Add(new ScriptBundle("~/bundles/js/app").Include(
+            bundles.Add(new ScriptBundle("~/bundles/js/app.js").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/jquery.number.js",
                 "~/Content/OpenLayers/tile.stamen.js",
@@ -32,10 +32,6 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/iswp-app.js"
             ));
 
-            //TODO: Set to true for Release -- any way to set this based on compile flag??
-            //automatically uses *.min.js versions of files
-            // also overwrites the <system.web><compilation debug="true" />...</system.web> settings
-            BundleTable.EnableOptimizations = false;
         }
     }
 }
