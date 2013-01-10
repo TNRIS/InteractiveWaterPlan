@@ -1,7 +1,8 @@
 define([
     'namespace'
+    'config/WmsThemeConfig'
 ],
-(namespace) ->
+(namespace, WmsThemeConfig) ->
     class MapView extends Backbone.View
 
         origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(
@@ -16,7 +17,6 @@ define([
         bingApiKey: ''
 
         baseLayers: ['mapquest_open', 'mapquest_aerial', 'esri_gray', 
-            'stamen_toner', 'stamen_watercolor',
             'bing_road', 'bing_hybrid', 'bing_aerial']
 
         MAX_WUG_RADIUS: 18
@@ -50,19 +50,18 @@ define([
                     #zoomend: this.handleMapEvent
             )
 
-            #State Water Plan Boundary Layer
-            swp_boundaries = new OpenLayers.Layer.WMS( "Water Plan Boundaries",
-                    "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer", 
-                    {
-                        layers: '0'
-                        transparent: true
-                    }
-                    {
-                        isBaseLayer: false
-                        visibility: false
-                        opacity: 0.7
-                    })
-            @map.addLayer(swp_boundaries);
+            #Load Overlay layers from WmsThemeConfig.Layers
+            for layerConfig in WmsThemeConfig.Layers
+                switch layerConfig.type
+                    when "WMS"
+                        overlay = new OpenLayers.Layer.WMS(layerConfig.name, layerConfig.url,
+                            layerConfig.service_params, layerConfig.layer_params)
+                            
+                        @map.addLayer(overlay);
+                    else
+                        throw "Unsupported Layer Type" 
+
+               
 
             #@placeLayer = new OpenLayers.Layer.Vector("Place Layer",
             #    displayInLayerSwitcher: false)

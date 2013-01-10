@@ -178,6 +178,11 @@ ul.breadcrumb li:last-child > a:hover
 }
 
 /* OpenLayers */
+.olControlLayerSwitcher 
+{
+    width: 23em !important;
+}
+
 .olControlLayerSwitcher .layersDiv 
 {
     background-color: #dfdfdf !important;

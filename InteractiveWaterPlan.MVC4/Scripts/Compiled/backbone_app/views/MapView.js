@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace'], function(namespace) {
+define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfig) {
   var MapView;
   return MapView = (function(_super) {
 
@@ -20,7 +20,7 @@ define(['namespace'], function(namespace) {
 
     MapView.prototype.bingApiKey = '';
 
-    MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'stamen_toner', 'stamen_watercolor', 'bing_road', 'bing_hybrid', 'bing_aerial'];
+    MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
     MapView.prototype.MAX_WUG_RADIUS = 18;
 
@@ -36,7 +36,7 @@ define(['namespace'], function(namespace) {
     };
 
     MapView.prototype.render = function() {
-      var swp_boundaries;
+      var layerConfig, overlay, _i, _len, _ref;
       this.$el.empty();
       this.map = new OpenLayers.Map({
         div: this.$el.attr('id'),
@@ -47,15 +47,18 @@ define(['namespace'], function(namespace) {
         zoom: this.origZoom,
         eventListeners: {}
       });
-      swp_boundaries = new OpenLayers.Layer.WMS("Water Plan Boundaries", "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer", {
-        layers: '0',
-        transparent: true
-      }, {
-        isBaseLayer: false,
-        visibility: false,
-        opacity: 0.7
-      });
-      this.map.addLayer(swp_boundaries);
+      _ref = WmsThemeConfig.Layers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        layerConfig = _ref[_i];
+        switch (layerConfig.type) {
+          case "WMS":
+            overlay = new OpenLayers.Layer.WMS(layerConfig.name, layerConfig.url, layerConfig.service_params, layerConfig.layer_params);
+            this.map.addLayer(overlay);
+            break;
+          default:
+            throw "Unsupported Layer Type";
+        }
+      }
       this.map.addControl(new OpenLayers.Control.LayerSwitcher());
       return this;
     };
