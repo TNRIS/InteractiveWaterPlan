@@ -99,7 +99,7 @@
     <input type="hidden" id="base_path" value="@Url.Content("~/")" />
     <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["bing_maps_key"]" />
 
-    @Scripts.Render("~/bundles/js/app")
+    
 
     <script type="text/javascript">
         var initCountyNames = @Html.Raw(ViewData["CountyNames"]);
@@ -113,7 +113,7 @@
         var initStrategyTypes = @Html.Raw(ViewData["StrategyTypes"]);
     </script>
 
-    <script data-main="@Url.Content("~/Scripts/Compiled/backbone_app/app.js")" src="@Url.Content("~/Scripts/require.js")" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/js/app")
 
 
 </body>

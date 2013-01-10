@@ -1861,9 +1861,10 @@ require.config({
 
 $(function() {
   BASE_API_PATH = $("#base_path").val();
-  return define('app.js',['WMSRouter'], function(WMSRouter) {
+  define('app.js', ['WMSRouter'], function(WMSRouter) {
     var wmsRouter;
     wmsRouter = new WMSRouter();
-    return Backbone.history.start();
+    Backbone.history.start();
   });
+  require(['app.js']);
 });

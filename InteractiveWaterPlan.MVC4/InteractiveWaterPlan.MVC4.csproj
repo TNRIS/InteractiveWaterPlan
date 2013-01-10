@@ -259,7 +259,6 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
-    <Content Include="Scripts\Compiled\backbone_app\iswp-app.js" />
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
@@ -281,10 +280,13 @@
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
+    <Content Include="Scripts\iswp-app.js" />
+    <Content Include="Scripts\iswp-app.min.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery.number.js" />
+    <Content Include="Scripts\jquery.tableToCsv.js" />
     <Content Include="Scripts\knockback-core-stack.js" />
     <Content Include="Scripts\knockback-core-stack.min.js" />
     <Content Include="Scripts\knockback-core.js" />

@@ -34,13 +34,17 @@ require.config(
 $(()->
     BASE_API_PATH = $("#base_path").val()
 
-    define([
-        'WMSRouter'
-    ],
-    (WMSRouter) ->
-        
-        #Create a router instance and start it up
-        wmsRouter = new WMSRouter()
-        Backbone.history.start()
-    )
+    define(
+        'app.js', 
+        ['WMSRouter'],
+        (WMSRouter) ->
+            #Create a router instance and start it up
+            wmsRouter = new WMSRouter()
+            Backbone.history.start()
+            return
+        )
+    require(['app.js'])
+
+    return
+
 )

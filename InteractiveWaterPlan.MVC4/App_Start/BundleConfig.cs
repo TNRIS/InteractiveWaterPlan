@@ -27,7 +27,9 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/backbone.js",
                 "~/Scripts/backbone.routefilter.js",
                 "~/Scripts/knockout-{version}.js",
-                "~/Scripts/knockback.js"
+                "~/Scripts/knockback.js",
+                "~/Scripts/require.js",
+                "~/Scripts/iswp-app.js"
             ));
 
             //TODO: Set to true for Release -- any way to set this based on compile flag??
