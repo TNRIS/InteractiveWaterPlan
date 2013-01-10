@@ -22,12 +22,12 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
       });
       this.mapView.render();
       this.mapBottomToolbarView = new MapBottomToolbarView({
-        el: $('#mapTools')[0],
+        el: $('#mapBottomToolsContainer')[0],
         mapView: this.mapView
       });
       this.mapBottomToolbarView.render();
       this.mapTopToolbarView = new MapTopToolbarView({
-        el: $('#themeNavContainer')[0],
+        el: $('#mapTopToolbarContainer')[0],
         mapView: this.mapView
       });
       this.yearNavView = new YearNavView({

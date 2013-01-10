@@ -50,13 +50,13 @@ define([
             @mapView.render()
 
             @mapBottomToolbarView = new MapBottomToolbarView(
-                el: $('#mapTools')[0]
+                el: $('#mapBottomToolsContainer')[0]
                 mapView: @mapView
             )
             @mapBottomToolbarView.render()
 
             @mapTopToolbarView = new MapTopToolbarView(
-                el: $('#themeNavContainer')[0]
+                el: $('#mapTopToolbarContainer')[0]
                 mapView: @mapView
             )
             #render in 'after' filter
