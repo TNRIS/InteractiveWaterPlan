@@ -61,12 +61,10 @@ define([
                     else
                         throw "Unsupported Layer Type" 
 
-               
 
             #@placeLayer = new OpenLayers.Layer.Vector("Place Layer",
             #    displayInLayerSwitcher: false)
             #@map.addLayer(@placeLayer)
-
             
             @map.addControl(new OpenLayers.Control.LayerSwitcher());
 

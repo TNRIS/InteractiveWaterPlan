@@ -248,6 +248,7 @@
     <Content Include="Scripts\backbone.routefilter.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
+    <None Include="Scripts\build-iswp-app.bat" />
     <None Include="Scripts\Coffee\backbone_app\config\WmsThemeConfig.coffee" />
     <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
@@ -258,6 +259,7 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
+    <Content Include="Scripts\Compiled\backbone_app\iswp-app.js" />
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
@@ -421,9 +423,14 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>coffee.cmd -o $(ProjectDir)\Scripts\Compiled\ -bc $(ProjectDir)\Scripts\Coffee</PostBuildEvent>
+    <PostBuildEvent>call coffee.cmd -o $(ProjectDir)Scripts\Compiled\ -bc $(ProjectDir)Scripts\Coffee
+call $(ProjectDir)Scripts\build-iswp-app.bat $(ProjectDir)</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
