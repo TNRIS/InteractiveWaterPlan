@@ -113,6 +113,11 @@ ul.typeahead .catName
     text-align: left !important;
 }
 
+i.wugIcon 
+{
+    color: Green;
+}
+
 .modelTable
 {
     font-size: 12px;

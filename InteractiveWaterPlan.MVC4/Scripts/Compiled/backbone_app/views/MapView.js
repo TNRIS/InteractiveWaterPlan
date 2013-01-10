@@ -75,7 +75,6 @@ define(['namespace'], function(namespace) {
         styleMap: this._wugStyleMap
       });
       wktFormat = new OpenLayers.Format.WKT();
-      console.log(featureCollection);
       max_supply = featureCollection.max(function(m) {
         return m.get("sourceSupply");
       }).get("sourceSupply");
