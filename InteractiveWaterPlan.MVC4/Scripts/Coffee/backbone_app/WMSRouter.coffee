@@ -1,9 +1,9 @@
 define([
     'namespace'
     'views/MapView'
-    'views/ThemeNavView'
+    'views/MapTopToolbarView'
     'views/YearNavView'
-    'views/MapToolsView'
+    'views/MapBottomToolbarView'
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
@@ -18,9 +18,9 @@ define([
 ],
 (   namespace, 
     MapView, 
-    ThemeNavView, 
+    MapTopToolbarView, 
     YearNavView, 
-    MapToolsView,
+    MapBottomToolbarView,
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
@@ -49,13 +49,13 @@ define([
             )
             @mapView.render()
 
-            @mapToolsView = new MapToolsView(
+            @mapBottomToolbarView = new MapBottomToolbarView(
                 el: $('#mapTools')[0]
                 mapView: @mapView
             )
-            @mapToolsView.render()
+            @mapBottomToolbarView.render()
 
-            @themeNavView = new ThemeNavView(
+            @mapTopToolbarView = new MapTopToolbarView(
                 el: $('#themeNavContainer')[0]
                 mapView: @mapView
             )
@@ -141,7 +141,7 @@ define([
                     @currTableView.render()
                     @yearNavView.render().currentYear.subscribe(
                         this.updateViewsToNewYear) 
-                    @themeNavView.render()
+                    @mapTopToolbarView.render()
        
 
         default: () ->

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView', 'views/MapToolsView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/WmsAreaSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection', 'collections/HouseCollection', 'collections/SenateCollection'], function(namespace, MapView, ThemeNavView, YearNavView, MapToolsView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, WmsAreaSelectView, StrategyTypeCollection, CountyCollection, RegionCollection, HouseCollection, SenateCollection) {
+define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/WmsAreaSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection', 'collections/HouseCollection', 'collections/SenateCollection'], function(namespace, MapView, MapTopToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, WmsAreaSelectView, StrategyTypeCollection, CountyCollection, RegionCollection, HouseCollection, SenateCollection) {
   var WMSRouter;
   return WMSRouter = (function(_super) {
 
@@ -21,12 +21,12 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
         bingApiKey: $('#bing_maps_key').val()
       });
       this.mapView.render();
-      this.mapToolsView = new MapToolsView({
+      this.mapBottomToolbarView = new MapBottomToolbarView({
         el: $('#mapTools')[0],
         mapView: this.mapView
       });
-      this.mapToolsView.render();
-      this.themeNavView = new ThemeNavView({
+      this.mapBottomToolbarView.render();
+      this.mapTopToolbarView = new MapTopToolbarView({
         el: $('#themeNavContainer')[0],
         mapView: this.mapView
       });
@@ -101,7 +101,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavView', 'views/YearNavView',
         if (year != null) {
           this.currTableView.render();
           this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
-          return this.themeNavView.render();
+          return this.mapTopToolbarView.render();
         }
       }
     };

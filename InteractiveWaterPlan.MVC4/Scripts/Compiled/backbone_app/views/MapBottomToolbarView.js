@@ -2,26 +2,26 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['models/PlaceFeatureModel', 'scripts/text!templates/mapTools.html'], function(PlaceFeature, tpl) {
-  var MapToolsView;
-  return MapToolsView = (function(_super) {
+define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.html'], function(PlaceFeature, tpl) {
+  var MapBottomToolbarView;
+  return MapBottomToolbarView = (function(_super) {
 
-    __extends(MapToolsView, _super);
+    __extends(MapBottomToolbarView, _super);
 
-    function MapToolsView() {
-      return MapToolsView.__super__.constructor.apply(this, arguments);
+    function MapBottomToolbarView() {
+      return MapBottomToolbarView.__super__.constructor.apply(this, arguments);
     }
 
-    MapToolsView.prototype.template = _.template(tpl);
+    MapBottomToolbarView.prototype.template = _.template(tpl);
 
-    MapToolsView.prototype.mapView = null;
+    MapBottomToolbarView.prototype.mapView = null;
 
-    MapToolsView.prototype.initialize = function(options) {
+    MapBottomToolbarView.prototype.initialize = function(options) {
       _.bindAll(this, 'render', 'unrender', 'showPlaceFeature');
       this.mapView = options.mapView;
     };
 
-    MapToolsView.prototype.render = function() {
+    MapBottomToolbarView.prototype.render = function() {
       this.$el.html(this.template());
       ko.applyBindings(this, this.el);
       this.$('#goToPlaceInput').place_typeahead({
@@ -39,12 +39,12 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapTools.html'], fun
       return this;
     };
 
-    MapToolsView.prototype.unrender = function() {
+    MapBottomToolbarView.prototype.unrender = function() {
       this.$el.remove();
       return null;
     };
 
-    MapToolsView.prototype.showPlaceFeature = function() {
+    MapBottomToolbarView.prototype.showPlaceFeature = function() {
       var placeFeature, selectedPlaceId,
         _this = this;
       selectedPlaceId = this.$('#goToPlaceInput').data('selected-place-id');
@@ -59,7 +59,7 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapTools.html'], fun
       });
     };
 
-    return MapToolsView;
+    return MapBottomToolbarView;
 
   })(Backbone.View);
 });

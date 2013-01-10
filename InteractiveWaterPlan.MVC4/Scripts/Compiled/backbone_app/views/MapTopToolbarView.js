@@ -2,27 +2,27 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/themeNav.html'], function(namespace, StrategyTypeCollection, strategyTypeListItemTpl, tpl) {
-  var ThemeNavView;
-  return ThemeNavView = (function(_super) {
+define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templates/strategyTypeListItem.html', 'scripts/text!templates/mapTopToolbar.html'], function(namespace, StrategyTypeCollection, strategyTypeListItemTpl, tpl) {
+  var MapTopToolbarView;
+  return MapTopToolbarView = (function(_super) {
 
-    __extends(ThemeNavView, _super);
+    __extends(MapTopToolbarView, _super);
 
-    function ThemeNavView() {
-      return ThemeNavView.__super__.constructor.apply(this, arguments);
+    function MapTopToolbarView() {
+      return MapTopToolbarView.__super__.constructor.apply(this, arguments);
     }
 
-    ThemeNavView.prototype.template = _.template(tpl);
+    MapTopToolbarView.prototype.template = _.template(tpl);
 
-    ThemeNavView.prototype.mapView = null;
+    MapTopToolbarView.prototype.mapView = null;
 
-    ThemeNavView.prototype.initialize = function(options) {
+    MapTopToolbarView.prototype.initialize = function(options) {
       _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 'zoomToTexas');
       this.mapView = options.mapView;
       return null;
     };
 
-    ThemeNavView.prototype.render = function() {
+    MapTopToolbarView.prototype.render = function() {
       this.$el.empty();
       this.$el.html(this.template({
         currYear: namespace.currYear
@@ -32,7 +32,7 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
       return this;
     };
 
-    ThemeNavView.prototype.renderStrategyTypeList = function() {
+    MapTopToolbarView.prototype.renderStrategyTypeList = function() {
       var stratTypeLiTemplate, typeCollection,
         _this = this;
       stratTypeLiTemplate = _.template(strategyTypeListItemTpl);
@@ -52,16 +52,16 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
       });
     };
 
-    ThemeNavView.prototype.unrender = function() {
+    MapTopToolbarView.prototype.unrender = function() {
       this.$el.remove();
       return null;
     };
 
-    ThemeNavView.prototype.zoomToTexas = function() {
+    MapTopToolbarView.prototype.zoomToTexas = function() {
       this.mapView.resetExtent();
     };
 
-    ThemeNavView.prototype.toggleMap = function(data, event, x) {
+    MapTopToolbarView.prototype.toggleMap = function(data, event, x) {
       var $target;
       $target = $(event.target);
       if ($target.hasClass('off')) {
@@ -77,7 +77,7 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
       }
     };
 
-    return ThemeNavView;
+    return MapTopToolbarView;
 
   })(Backbone.View);
 });

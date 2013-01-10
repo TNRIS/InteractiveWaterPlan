@@ -2,12 +2,11 @@ define([
     'namespace'
     'collections/StrategyTypeCollection'
     'scripts/text!templates/strategyTypeListItem.html'
-    'scripts/text!templates/themeNav.html'
+    'scripts/text!templates/mapTopToolbar.html'
 ],
 (namespace, StrategyTypeCollection, strategyTypeListItemTpl, tpl) ->
     
-    #TODO: The dropdown no longer changes on selection - do we care?
-    class ThemeNavView extends Backbone.View
+    class MapTopToolbarView extends Backbone.View
 
         template: _.template(tpl)
         mapView: null #must specify in options argument to constructor

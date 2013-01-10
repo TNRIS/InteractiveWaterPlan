@@ -1,10 +1,10 @@
 define([
     'models/PlaceFeatureModel'
-    'scripts/text!templates/mapTools.html'
+    'scripts/text!templates/mapBottomRightTools.html'
 ],
 (PlaceFeature, tpl) ->
 
-    class MapToolsView extends Backbone.View
+    class MapBottomToolbarView extends Backbone.View
 
         template: _.template(tpl)
         mapView: null #must specify in options argument to constructor
