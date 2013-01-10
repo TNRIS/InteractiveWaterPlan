@@ -90,12 +90,14 @@ define([
 
             wktFormat = new OpenLayers.Format.WKT()
 
-            #TODO: Size based on source supply (need to pass source supply to model)
-            max_supply = _.max(featureCollection.models, (m) ->
+            console.log featureCollection
+
+            #Size based on source supply (need to pass source supply to model)
+            max_supply = featureCollection.max((m) ->
                 return m.get("sourceSupply")
             ).get("sourceSupply")
             
-            min_supply = _.min(featureCollection.models, (m) ->
+            min_supply = featureCollection.min((m) ->
                 return m.get("sourceSupply")
             ).get("sourceSupply")
  

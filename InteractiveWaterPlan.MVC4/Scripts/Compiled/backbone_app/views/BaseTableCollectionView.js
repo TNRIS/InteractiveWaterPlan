@@ -12,10 +12,8 @@ define(['namespace'], function(namespace) {
       return BaseTableCollectionView.__super__.constructor.apply(this, arguments);
     }
 
-    BaseTableCollectionView.prototype.fetchCallback = null;
-
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', '_makeTableSortable');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_makeTableSortable');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -71,6 +69,19 @@ define(['namespace'], function(namespace) {
           }
         }
       });
+    };
+
+    BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
+      var newWugList;
+      newWugList = _.map(strategyModels, function(m) {
+        return {
+          id: m.get("recipientEntityId"),
+          name: m.get("recipientEntityName"),
+          wktGeog: m.get("recipientEntityWktGeog"),
+          sourceSupply: m.get("supply" + namespace.currYear)
+        };
+      });
+      namespace.wugFeatureCollection.reset(newWugList);
     };
 
     BaseTableCollectionView.prototype.appendModel = function(model) {

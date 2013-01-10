@@ -9,7 +9,6 @@ define([
     class CountyStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            _.bindAll(this, 'fetchCallback')
 
             @countyId = options.id
             @countyName = options.name
@@ -28,25 +27,5 @@ define([
             
             return null
 
-        fetchCallback: (strategyModels) ->
-            #Use underscore to map WUG properties to new WUG object
-            # and then add them all to the namespace.wugFeatureCollection
-            newWugList = _.map(strategyModels, (m) ->
-                return {
-                    id: m.get("recipientEntityId")
-                    name: m.get("recipientEntityName")
-                    wktGeog: m.get("recipientEntityWktGeog")
-                    sourceSupply: m.get("supply#{namespace.currYear}")
-                }
-            )
-
-            namespace.wugFeatureCollection.reset(newWugList)
-
-            return
-
-
-        render: () ->
-            super
-
-            return this
+        
 )

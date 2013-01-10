@@ -14,7 +14,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyTypeView', 
 
     StrategyTypeCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback');
       this.typeId = options.id;
       this.typeName = options.name;
       this.viewName = ko.observable("" + this.typeName);
@@ -28,24 +27,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyTypeView', 
         fetchParams: fetchParams
       });
       return null;
-    };
-
-    StrategyTypeCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList;
-      newWugList = _.map(strategyModels, function(m) {
-        return {
-          id: m.get("recipientEntityId"),
-          name: m.get("recipientEntityName"),
-          wktGeog: m.get("recipientEntityWktGeog"),
-          sourceSupply: m.get("supply" + namespace.currYear)
-        };
-      });
-      return namespace.wugFeatureCollection.reset(newWugList);
-    };
-
-    StrategyTypeCollectionView.prototype.render = function() {
-      StrategyTypeCollectionView.__super__.render.apply(this, arguments);
-      return this;
     };
 
     return StrategyTypeCollectionView;

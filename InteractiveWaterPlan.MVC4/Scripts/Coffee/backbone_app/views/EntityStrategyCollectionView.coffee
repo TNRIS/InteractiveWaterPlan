@@ -39,6 +39,7 @@ define([
 
             return null
 
+        #override the BaseTableCollectionView.fetchCallback
         fetchCallback: (strategyModels) ->
             #While there may be multiple Strategies in the models collection
             # they should all have the same entity at this point
@@ -51,6 +52,7 @@ define([
                 id: wug.get("recipientEntityId")
                 name: wug.get("recipientEntityName")
                 wktGeog: wug.get("recipientEntityWktGeog")
+                sourceSupply: wug.get("supply#{namespace.currYear}")
             )
 
             namespace.wugFeatureCollection.reset(newWugList)

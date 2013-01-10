@@ -14,7 +14,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
 
     RegionStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback');
       this.regionLetter = options.id;
       this.viewName = ko.observable("Region " + this.regionLetter);
       fetchParams = {
@@ -27,19 +26,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
         fetchParams: fetchParams
       });
       return null;
-    };
-
-    RegionStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList;
-      newWugList = _.map(strategyModels, function(m) {
-        return {
-          id: m.get("recipientEntityId"),
-          name: m.get("recipientEntityName"),
-          wktGeog: m.get("recipientEntityWktGeog"),
-          sourceSupply: m.get("supply" + namespace.currYear)
-        };
-      });
-      namespace.wugFeatureCollection.reset(newWugList);
     };
 
     return RegionStrategyCollectionView;

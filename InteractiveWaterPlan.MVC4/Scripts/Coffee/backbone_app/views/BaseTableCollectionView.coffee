@@ -4,11 +4,10 @@ define([
 (namespace) ->
     class BaseTableCollectionView extends Backbone.View
 
-        fetchCallback: null #optional holder for callback after collection fetch has completed successfully
-
+        
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 
+                'hideLoading', 'showLoading', 'fetchCallback'
                 '_makeTableSortable')
 
             options = options || {}
@@ -76,6 +75,21 @@ define([
                     return   
             )
 
+            return
+
+        fetchCallback: (strategyModels) ->
+            #Use underscore to map WUG properties to new WUG object
+            # and then add them all to the namespace.wugFeatureCollection
+            newWugList = _.map(strategyModels, (m) ->
+                return {
+                    id: m.get("recipientEntityId")
+                    name: m.get("recipientEntityName")
+                    wktGeog: m.get("recipientEntityWktGeog")
+                    sourceSupply: m.get("supply#{namespace.currYear}")
+                }
+            )
+
+            namespace.wugFeatureCollection.reset(newWugList)
             return
 
         appendModel: (model) ->

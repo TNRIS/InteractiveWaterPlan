@@ -9,8 +9,7 @@ define([
     class RegionStrategyCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            _.bindAll(this, 'fetchCallback')
-
+            
             @regionLetter = options.id
             
             @viewName = ko.observable("Region #{@regionLetter}")
@@ -26,21 +25,5 @@ define([
 
             
             return null
-
-        fetchCallback: (strategyModels) ->
-            #Use underscore to map WUG properties to new WUG object
-            # and then add them all to the namespace.wugFeatureCollection
-            newWugList = _.map(strategyModels, (m) ->
-                return {
-                    id: m.get("recipientEntityId")
-                    name: m.get("recipientEntityName")
-                    wktGeog: m.get("recipientEntityWktGeog")
-                    sourceSupply: m.get("supply#{namespace.currYear}")
-                }
-            )
-
-            namespace.wugFeatureCollection.reset(newWugList)
-            return
-
 
 )

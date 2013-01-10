@@ -14,7 +14,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
 
     CountyStrategyCollectionView.prototype.initialize = function(options) {
       var StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback');
       this.countyId = options.id;
       this.countyName = options.name;
       this.viewName = ko.observable("" + this.countyName + " County");
@@ -28,24 +27,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
         fetchParams: fetchParams
       });
       return null;
-    };
-
-    CountyStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList;
-      newWugList = _.map(strategyModels, function(m) {
-        return {
-          id: m.get("recipientEntityId"),
-          name: m.get("recipientEntityName"),
-          wktGeog: m.get("recipientEntityWktGeog"),
-          sourceSupply: m.get("supply" + namespace.currYear)
-        };
-      });
-      namespace.wugFeatureCollection.reset(newWugList);
-    };
-
-    CountyStrategyCollectionView.prototype.render = function() {
-      CountyStrategyCollectionView.__super__.render.apply(this, arguments);
-      return this;
     };
 
     return CountyStrategyCollectionView;

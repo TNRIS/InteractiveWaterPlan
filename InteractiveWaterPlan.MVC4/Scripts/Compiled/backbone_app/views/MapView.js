@@ -75,10 +75,11 @@ define(['namespace'], function(namespace) {
         styleMap: this._wugStyleMap
       });
       wktFormat = new OpenLayers.Format.WKT();
-      max_supply = _.max(featureCollection.models, function(m) {
+      console.log(featureCollection);
+      max_supply = featureCollection.max(function(m) {
         return m.get("sourceSupply");
       }).get("sourceSupply");
-      min_supply = _.min(featureCollection.models, function(m) {
+      min_supply = featureCollection.min(function(m) {
         return m.get("sourceSupply");
       }).get("sourceSupply");
       bounds = null;
