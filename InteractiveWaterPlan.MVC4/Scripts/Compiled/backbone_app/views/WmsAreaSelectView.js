@@ -13,7 +13,7 @@ define(['namespace'], function(namespace) {
     }
 
     WmsAreaSelectView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender');
+      _.bindAll(this, 'render', 'unrender', '_createRegionSelect', '_createCountySelect', '_createHouseSelect', '_createSenateSelect');
       if (!(namespace.countyNames != null) || !(namespace.regionNames != null) || !(namespace.houseNames != null) || !(namespace.senateNames != null)) {
         throw "Must specify namespace.counties, namespace.regions, namespace.house,and namespace.senate";
       }
@@ -24,7 +24,13 @@ define(['namespace'], function(namespace) {
     };
 
     WmsAreaSelectView.prototype.render = function() {
-      var county, district, opt, region, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+      this._createRegionSelect().chosen();
+      this._createCountySelect().chosen();
+      return this;
+    };
+
+    WmsAreaSelectView.prototype._createRegionSelect = function() {
+      var opt, region, _i, _len, _ref;
       this.$regionSelect = $("<select></select>");
       this.$regionSelect.append($("<option value='-1'>Select a Region</option>"));
       _ref = this.regionNamesCollection.models;
@@ -44,11 +50,16 @@ define(['namespace'], function(namespace) {
           trigger: true
         });
       });
+      return this.$regionSelect;
+    };
+
+    WmsAreaSelectView.prototype._createCountySelect = function() {
+      var county, opt, _i, _len, _ref;
       this.$countySelect = $("<select></select>");
       this.$countySelect.append($("<option value='-1'>Select a County</option>"));
-      _ref1 = this.countyNamesCollection.models;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        county = _ref1[_j];
+      _ref = this.countyNamesCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        county = _ref[_i];
         opt = $("<option value='" + (county.get("id")) + "'>" + (county.get("name")) + "</option>");
         this.$countySelect.append(opt);
       }
@@ -63,11 +74,16 @@ define(['namespace'], function(namespace) {
           trigger: true
         });
       });
+      return this.$countySelect;
+    };
+
+    WmsAreaSelectView.prototype._createHouseSelect = function() {
+      var district, opt, _i, _len, _ref;
       this.$houseSelect = $("<select></select>");
       this.$houseSelect.append($("<option value='-1'>Select a State House District</option>"));
-      _ref2 = this.houseNamesCollection.models;
-      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-        district = _ref2[_k];
+      _ref = this.houseNamesCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        district = _ref[_i];
         opt = $("<option value='" + (district.get("id")) + "'>" + (district.get("name")) + "</option>");
         this.$houseSelect.append(opt);
       }
@@ -79,11 +95,16 @@ define(['namespace'], function(namespace) {
           return;
         }
       });
+      return this.$houseSelect;
+    };
+
+    WmsAreaSelectView.prototype._createSenateSelect = function() {
+      var district, opt, _i, _len, _ref;
       this.$senateSelect = $("<select></select>");
       this.$senateSelect.append($("<option value='-1'>Select a State Senate District</option>"));
-      _ref3 = this.senateNamesCollection.models;
-      for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-        district = _ref3[_l];
+      _ref = this.senateNamesCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        district = _ref[_i];
         opt = $("<option value='" + (district.get("id")) + "'>" + (district.get("name")) + "</option>");
         this.$senateSelect.append(opt);
       }
@@ -95,11 +116,7 @@ define(['namespace'], function(namespace) {
           return;
         }
       });
-      this.$countySelect.chosen();
-      this.$regionSelect.chosen();
-      this.$houseSelect.chosen();
-      this.$senateSelect.chosen();
-      return this;
+      return this.$senateSelect;
     };
 
     WmsAreaSelectView.prototype.unrender = function() {

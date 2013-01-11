@@ -8,7 +8,9 @@ define([
         #TODO: Add methods to reset selects (ie, choose the "Select a Region") option
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender')
+            _.bindAll(this, 'render', 'unrender', 
+                '_createRegionSelect', '_createCountySelect', 
+                '_createHouseSelect', '_createSenateSelect')
 
             if (not namespace.countyNames? or not namespace.regionNames? or 
                 not namespace.houseNames? or not namespace.senateNames?)
@@ -22,10 +24,23 @@ define([
 
             return
 
-
         render: () ->
-            #--------------------------
             #create the regionSelect
+            this._createRegionSelect().chosen()
+
+            #create the countySelect
+            this._createCountySelect().chosen()
+
+            #create the houseSelect
+            #TODO: include this when ready: this._createHouseSelect().chosen() 
+
+            #create the senateSelect
+            #TODO: include this when ready: this._createSenateSelect().chosen()
+
+            return this
+
+
+        _createRegionSelect: () ->
             @$regionSelect = $("<select></select>")
             @$regionSelect.append($("<option value='-1'>Select a Region</option>"))
             for region in @regionNamesCollection.models
@@ -42,9 +57,9 @@ define([
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/region/#{$this.val()}", {trigger: true})
                 return
             )
+            return @$regionSelect
 
-            #--------------------------
-            #create the countySelect
+        _createCountySelect: () ->
             @$countySelect = $("<select></select>")
             @$countySelect.append($("<option value='-1'>Select a County</option>"))
             for county in @countyNamesCollection.models
@@ -61,9 +76,9 @@ define([
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/county/#{$this.val()}", {trigger: true})
                 return
             )
+            return @$countySelect
 
-            #--------------------------
-            #create the houseSelect
+        _createHouseSelect: () ->
             @$houseSelect = $("<select></select>")
             @$houseSelect.append($("<option value='-1'>Select a State House District</option>"))
             for district in @houseNamesCollection.models
@@ -81,9 +96,10 @@ define([
                 #Backbone.history.navigate("#/#{namespace.currYear}/wms/district/house/#{$this.val()}", {trigger: true})
                 return
             )
+            return @$houseSelect
 
-            #--------------------------
-            #create the senateSelect
+
+        _createSenateSelect: () ->
             @$senateSelect = $("<select></select>")
             @$senateSelect.append($("<option value='-1'>Select a State Senate District</option>"))
             for district in @senateNamesCollection.models
@@ -101,14 +117,7 @@ define([
                 #Backbone.history.navigate("#/#{namespace.currYear}/wms/district/senate/#{$this.val()}", {trigger: true})
                 return
             )
-
-            #turn them into chosen.js boxes
-            @$countySelect.chosen()
-            @$regionSelect.chosen()
-            @$houseSelect.chosen()
-            @$senateSelect.chosen()
-
-            return this
+            return @$senateSelect
 
         unrender: () ->
             @$el.remove();
