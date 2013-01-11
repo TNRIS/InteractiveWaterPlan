@@ -85,7 +85,7 @@ namespace InteractiveWaterPlan.Data
                 .ToList<Strategy>();
         }
 
-        public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
+        /*public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
         {
             var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesInDistrict")
                 .SetParameter("districtId", districtId)
@@ -106,7 +106,7 @@ namespace InteractiveWaterPlan.Data
                     return supplyVal != 0;
                 })
                 .ToList<Strategy>();
-        }
+        }*/
 
         public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year = null)
         {

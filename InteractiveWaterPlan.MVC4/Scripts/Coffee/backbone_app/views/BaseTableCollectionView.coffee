@@ -7,7 +7,7 @@ define([
         
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'fetchCallback'
+                'hideLoading', 'showLoading', 'fetchCallback', 'connectTableRowsToWugFeatures'
                 '_makeTableSortable')
 
             options = options || {}
@@ -27,6 +27,9 @@ define([
             @$el.html(this.template())
 
             this.fetchCollection()
+
+            #This observable is used to let the MapView to select a WUG
+            @selectedWug = ko.observable()
 
             #make sortable
             this._makeTableSortable()
@@ -70,8 +73,11 @@ define([
                         this.showNothingFound()
                         
 
+                    this.connectTableRowsToWugFeatures()
+
                     if this.fetchCallback? and _.isFunction(this.fetchCallback)
                         this.fetchCallback(collection.models)
+
 
                     return   
             )
@@ -91,6 +97,26 @@ define([
             )
 
             namespace.wugFeatureCollection.reset(newWugList)
+            return
+
+
+        connectTableRowsToWugFeatures: () ->
+
+            this.$('table td').hover(
+                (event) => #Hover In - Select the WUG Feature
+                    $target = $(event.target) #it is a td
+
+                    #grab entity-id from the parent tr
+                    wugId = $target.parent('tr').data('entity-id')
+                    
+                    #update the observable to trigger the event
+                    @selectedWug(wugId)
+                    return
+                (event) => #Hover Out - Deselect the WUG Feature
+                    @selectedWug(null)
+                    return
+            )
+
             return
 
         appendModel: (model) ->

@@ -30,7 +30,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', '_setupWugHoverControl');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -103,21 +103,44 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.map.addLayer(this.wugLayer);
-      this.wugHoverControl = this._setupWugHoverControl();
-      this.map.addControl(this.wugHoverControl);
+      this.wugSelectControl = this._setupWugSelectControl();
+      this.map.addControl(this.wugSelectControl);
       this.map.zoomToExtent(bounds);
     };
 
     MapView.prototype.clearWugFeatures = function() {
-      if (this.wugHoverControl != null) {
-        this.wugHoverControl.destroy();
+      this.unselectWugFeatures();
+      if (this.wugSelectControl != null) {
+        this.wugSelectControl.destroy();
       }
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
       }
     };
 
-    MapView.prototype._setupWugHoverControl = function() {
+    MapView.prototype.selectWugFeature = function(wugId) {
+      var wugFeature, _i, _len, _ref;
+      if (!(this.wugSelectControl != null)) {
+        return;
+      }
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        if (wugFeature.attributes.id === wugId) {
+          this.wugSelectControl.select(wugFeature);
+          return;
+        }
+      }
+    };
+
+    MapView.prototype.unselectWugFeatures = function() {
+      if (!(this.wugSelectControl != null)) {
+        return;
+      }
+      this.wugSelectControl.unselectAll();
+    };
+
+    MapView.prototype._setupWugSelectControl = function() {
       var control, timer,
         _this = this;
       timer = null;
@@ -147,6 +170,11 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         },
         onUnselect: function(wugFeature) {
           clearTimeout(timer);
+          if (wugFeature.popup != null) {
+            _this.map.removePopup(wugFeature.popup);
+            wugFeature.popup.destroy();
+            wugFeature.popup = null;
+          }
         }
       });
       return control;

@@ -1,32 +1,12 @@
 define([
     'namespace'
+    'views/BaseStrategyView'
     'scripts/text!templates/countyNetSupplyRow.html'
 ],
-(namespace, tpl) ->
+(namespace, BaseStrategyView, tpl) ->
 
-    class CountyNetSupplyView extends Backbone.View
+    class CountyNetSupplyView extends BaseStrategyView
 
-        tagName: 'tr'
-
-        initialize: () ->
-            _.bindAll(this, 'render', 'unrender')
-
-            @template = _.template(tpl)
-
-            return null
-
-        render: () ->
-            @$el.html(
-                @template(
-                    m: @model.toJSON()
-                    currYear: namespace.currYear
-                )
-            )
-
-            return this
-
-        unrender: () ->
-            @$el.remove()
-            return null
+        template: tpl
 
 )

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'scripts/text!templates/countyNetSupplyRow.html'], function(namespace, tpl) {
+define(['namespace', 'views/BaseStrategyView', 'scripts/text!templates/countyNetSupplyRow.html'], function(namespace, BaseStrategyView, tpl) {
   var CountyNetSupplyView;
   return CountyNetSupplyView = (function(_super) {
 
@@ -12,28 +12,9 @@ define(['namespace', 'scripts/text!templates/countyNetSupplyRow.html'], function
       return CountyNetSupplyView.__super__.constructor.apply(this, arguments);
     }
 
-    CountyNetSupplyView.prototype.tagName = 'tr';
-
-    CountyNetSupplyView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    CountyNetSupplyView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    CountyNetSupplyView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    CountyNetSupplyView.prototype.template = tpl;
 
     return CountyNetSupplyView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });

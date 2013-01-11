@@ -38,7 +38,7 @@ define([
     class WMSRouter extends Backbone.Router
         
         initialize: (options) ->
-            _.bindAll(this, 'updateViewsToNewYear')
+            _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug')
 
             @currTableView = null
             
@@ -110,6 +110,13 @@ define([
             Backbone.history.navigate("#/"+newRoute, { trigger: true })
             return
 
+        updateSelectedWug: (wugId) ->
+            if not wugId
+                @mapView.unselectWugFeatures()
+            else
+                @mapView.selectWugFeature(wugId)
+            return
+
         #TODO: validate year (use namespace.VALID_YEARS)
         # and see http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
         # for possible way to wrap each route to check for valid year
@@ -142,8 +149,15 @@ define([
             '': (year) ->
                 if year?
                     @currTableView.render()
-                    @yearNavView.render().currentYear.subscribe(
-                        this.updateViewsToNewYear) 
+
+                    #subscribe to table row select (by hover)
+                    @currTableView.selectedWug.subscribe(this.updateSelectedWug)
+
+                    @yearNavView.render()
+
+                    #subscribe to currentYear changes
+                    @yearNavView.currentYear.subscribe(this.updateViewsToNewYear) 
+                    
                     @mapTopToolbarView.render()
        
 

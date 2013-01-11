@@ -13,7 +13,7 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -71,6 +71,14 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
       });
     };
 
+    WMSRouter.prototype.updateSelectedWug = function(wugId) {
+      if (!wugId) {
+        this.mapView.unselectWugFeatures();
+      } else {
+        this.mapView.selectWugFeature(wugId);
+      }
+    };
+
     WMSRouter.prototype.routes = {
       "": "default",
       ":year/wms": "wmsNetCountySupplies",
@@ -101,7 +109,9 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
       '': function(year) {
         if (year != null) {
           this.currTableView.render();
-          this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+          this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
+          this.yearNavView.render();
+          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
           return this.mapTopToolbarView.render();
         }
       }

@@ -1,35 +1,12 @@
 define([
     'namespace'
+    'views/BaseStrategyView'
     'scripts/text!templates/entityStrategyRow.html'
 ],
-(namespace, tpl) ->
+(namespace, BaseStrategyView, tpl) ->
 
-    class EntityStrategyView extends Backbone.View
+    class EntityStrategyView extends BaseStrategyView
 
-        tagName: 'tr'
-
-        initialize: (options) ->
-            super options
-
-            _.bindAll(this, 'render', 'unrender')
-
-            @template = _.template(tpl)
-
-            return null
-
-        render: () ->
-
-            @$el.html(
-                @template(
-                    m: @model.toJSON()
-                    currYear: namespace.currYear
-                )
-            )
-
-            return this
-
-        unrender: () ->
-            @$el.remove()
-            return null
+        template: tpl
 
 )

@@ -13,7 +13,7 @@ define(['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_makeTableSortable');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', 'connectTableRowsToWugFeatures', '_makeTableSortable');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -26,6 +26,7 @@ define(['namespace'], function(namespace) {
     BaseTableCollectionView.prototype.render = function() {
       this.$el.html(this.template());
       this.fetchCollection();
+      this.selectedWug = ko.observable();
       this._makeTableSortable();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
@@ -64,6 +65,7 @@ define(['namespace'], function(namespace) {
             _this.hideLoading();
             _this.showNothingFound();
           }
+          _this.connectTableRowsToWugFeatures();
           if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
             _this.fetchCallback(collection.models);
           }
@@ -82,6 +84,18 @@ define(['namespace'], function(namespace) {
         };
       });
       namespace.wugFeatureCollection.reset(newWugList);
+    };
+
+    BaseTableCollectionView.prototype.connectTableRowsToWugFeatures = function() {
+      var _this = this;
+      this.$('table td').hover(function(event) {
+        var $target, wugId;
+        $target = $(event.target);
+        wugId = $target.parent('tr').data('entity-id');
+        _this.selectedWug(wugId);
+      }, function(event) {
+        _this.selectedWug(null);
+      });
     };
 
     BaseTableCollectionView.prototype.appendModel = function(model) {

@@ -138,7 +138,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', '_setupWugHoverControl');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -211,21 +211,44 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.map.addLayer(this.wugLayer);
-      this.wugHoverControl = this._setupWugHoverControl();
-      this.map.addControl(this.wugHoverControl);
+      this.wugSelectControl = this._setupWugSelectControl();
+      this.map.addControl(this.wugSelectControl);
       this.map.zoomToExtent(bounds);
     };
 
     MapView.prototype.clearWugFeatures = function() {
-      if (this.wugHoverControl != null) {
-        this.wugHoverControl.destroy();
+      this.unselectWugFeatures();
+      if (this.wugSelectControl != null) {
+        this.wugSelectControl.destroy();
       }
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
       }
     };
 
-    MapView.prototype._setupWugHoverControl = function() {
+    MapView.prototype.selectWugFeature = function(wugId) {
+      var wugFeature, _i, _len, _ref;
+      if (!(this.wugSelectControl != null)) {
+        return;
+      }
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        if (wugFeature.attributes.id === wugId) {
+          this.wugSelectControl.select(wugFeature);
+          return;
+        }
+      }
+    };
+
+    MapView.prototype.unselectWugFeatures = function() {
+      if (!(this.wugSelectControl != null)) {
+        return;
+      }
+      this.wugSelectControl.unselectAll();
+    };
+
+    MapView.prototype._setupWugSelectControl = function() {
       var control, timer,
         _this = this;
       timer = null;
@@ -255,6 +278,11 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         },
         onUnselect: function(wugFeature) {
           clearTimeout(timer);
+          if (wugFeature.popup != null) {
+            _this.map.removePopup(wugFeature.popup);
+            wugFeature.popup.destroy();
+            wugFeature.popup = null;
+          }
         }
       });
       return control;
@@ -993,7 +1021,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_makeTableSortable');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', 'connectTableRowsToWugFeatures', '_makeTableSortable');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -1006,6 +1034,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     BaseTableCollectionView.prototype.render = function() {
       this.$el.html(this.template());
       this.fetchCollection();
+      this.selectedWug = ko.observable();
       this._makeTableSortable();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
@@ -1044,6 +1073,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
             _this.hideLoading();
             _this.showNothingFound();
           }
+          _this.connectTableRowsToWugFeatures();
           if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
             _this.fetchCallback(collection.models);
           }
@@ -1062,6 +1092,18 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
         };
       });
       namespace.wugFeatureCollection.reset(newWugList);
+    };
+
+    BaseTableCollectionView.prototype.connectTableRowsToWugFeatures = function() {
+      var _this = this;
+      this.$('table td').hover(function(event) {
+        var $target, wugId;
+        $target = $(event.target);
+        wugId = $target.parent('tr').data('entity-id');
+        _this.selectedWug(wugId);
+      }, function(event) {
+        _this.selectedWug(null);
+      });
     };
 
     BaseTableCollectionView.prototype.appendModel = function(model) {
@@ -1134,13 +1176,61 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
   })(Backbone.View);
 });
 
+// Generated by CoffeeScript 1.3.3
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+define('views/BaseStrategyView',['namespace'], function(namespace) {
+  var BaseStrategyView;
+  return BaseStrategyView = (function(_super) {
+
+    __extends(BaseStrategyView, _super);
+
+    function BaseStrategyView() {
+      return BaseStrategyView.__super__.constructor.apply(this, arguments);
+    }
+
+    BaseStrategyView.prototype.tagName = 'tr';
+
+    BaseStrategyView.prototype.initialize = function(options) {
+      if (!(this.template != null) && !(options.template != null)) {
+        throw "Must specify template";
+      }
+      if (options.template != null) {
+        this.template = options.template;
+      }
+      BaseStrategyView.__super__.initialize.call(this, options);
+      _.bindAll(this, 'render', 'unrender');
+      this.template = _.template(this.template);
+      return null;
+    };
+
+    BaseStrategyView.prototype.render = function() {
+      this.$el.html(this.template({
+        m: this.model.toJSON(),
+        currYear: namespace.currYear
+      }));
+      this.$el.attr('data-entity-id', this.model.get("recipientEntityId"));
+      return this;
+    };
+
+    BaseStrategyView.prototype.unrender = function() {
+      this.$el.remove();
+      return null;
+    };
+
+    return BaseStrategyView;
+
+  })(Backbone.View);
+});
+
 define('scripts/text!templates/countyNetSupplyRow.html',[],function () { return '\r\n<td>\r\n    <a href="#/{{currYear}}/wms/county/{{m.countyId}}">\r\n        {{m.countyName}}\r\n    </a>\r\n</td>\r\n<td>\r\n    <a href="#/{{currYear}}/wms/region/{{m.regionLetter}}">\r\n        {{m.regionLetter}}\r\n    </a>\r\n</td>\r\n<td>{{ $.number(m.netMunicipal) }}</td>\r\n<td>{{ $.number(m.netIrrigation) }}</td>\r\n<td>{{ $.number(m.netManufacturing) }}</td>\r\n<td>{{ $.number(m.netLivestock) }}</td>\r\n<td>{{ $.number(m.netSteamElectric) }}</td>\r\n<td>{{ $.number(m.netMining) }}</td>\r\n<td><b>{{ $.number(m.netSupplyTotal) }}</b></td>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/CountyNetSupplyView',['namespace', 'scripts/text!templates/countyNetSupplyRow.html'], function(namespace, tpl) {
+define('views/CountyNetSupplyView',['namespace', 'views/BaseStrategyView', 'scripts/text!templates/countyNetSupplyRow.html'], function(namespace, BaseStrategyView, tpl) {
   var CountyNetSupplyView;
   return CountyNetSupplyView = (function(_super) {
 
@@ -1150,30 +1240,11 @@ define('views/CountyNetSupplyView',['namespace', 'scripts/text!templates/countyN
       return CountyNetSupplyView.__super__.constructor.apply(this, arguments);
     }
 
-    CountyNetSupplyView.prototype.tagName = 'tr';
-
-    CountyNetSupplyView.prototype.initialize = function() {
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    CountyNetSupplyView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    CountyNetSupplyView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    CountyNetSupplyView.prototype.template = tpl;
 
     return CountyNetSupplyView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });
 
 // Generated by CoffeeScript 1.3.3
@@ -1233,7 +1304,7 @@ define('scripts/text!templates/strategyRow.html',[],function () { return '\r\n<t
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/StrategyView',['namespace', 'scripts/text!templates/strategyRow.html'], function(namespace, tpl) {
+define('views/StrategyView',['namespace', 'views/BaseStrategyView', 'scripts/text!templates/strategyRow.html'], function(namespace, BaseStrategyView, tpl) {
   var StrategyView;
   return StrategyView = (function(_super) {
 
@@ -1243,31 +1314,11 @@ define('views/StrategyView',['namespace', 'scripts/text!templates/strategyRow.ht
       return StrategyView.__super__.constructor.apply(this, arguments);
     }
 
-    StrategyView.prototype.tagName = 'tr';
-
-    StrategyView.prototype.initialize = function(options) {
-      StrategyView.__super__.initialize.call(this, options);
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    StrategyView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    StrategyView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    StrategyView.prototype.template = tpl;
 
     return StrategyView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });
 
 define('scripts/text!templates/strategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n<div class="scrollTableContainer">\r\n    <table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n        <thead>\r\n            <tr>\r\n                <th data-sort="string">Type</th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                        Description\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                        Source\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                        Entity\r\n                    </span>\r\n                    <i class="wugIcon icon-circle"></i> \r\n                </th>\r\n                <th data-sort="formatted-int" width="15%">\r\n                    <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                        Supply Volume <span data-bind="text: currYear"></span>\r\n                    </span>\r\n                </th>\r\n                <th data-sort="formatted-currency" width="15%">\r\n                    <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                        Capital Cost\r\n                    </span>\r\n                </th>\r\n                <th data-sort="int" width="15%">\r\n                    <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">\r\n                        Decade Online\r\n                    </span>\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n\r\n        </tbody>\r\n    </table>\r\n</div>';});
@@ -1349,7 +1400,7 @@ define('scripts/text!templates/strategyTypeRow.html',[],function () { return '\r
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/StrategyTypeView',['namespace', 'scripts/text!templates/strategyTypeRow.html'], function(namespace, tpl) {
+define('views/StrategyTypeView',['namespace', 'views/BaseStrategyView', 'scripts/text!templates/strategyTypeRow.html'], function(namespace, BaseStrategyView, tpl) {
   var StrategyTypeView;
   return StrategyTypeView = (function(_super) {
 
@@ -1359,31 +1410,11 @@ define('views/StrategyTypeView',['namespace', 'scripts/text!templates/strategyTy
       return StrategyTypeView.__super__.constructor.apply(this, arguments);
     }
 
-    StrategyTypeView.prototype.tagName = 'tr';
-
-    StrategyTypeView.prototype.initialize = function(options) {
-      StrategyTypeView.__super__.initialize.call(this, options);
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    StrategyTypeView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    StrategyTypeView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    StrategyTypeView.prototype.template = tpl;
 
     return StrategyTypeView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });
 
 define('scripts/text!templates/strategyTypeTable.html',[],function () { return '<h2>\r\n   <span data-bind="text: viewName"></span> STRATEGIES - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n<div class="scrollTableContainer">\r\n    <table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n        <thead>\r\n            <tr>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="State Water Plan Planning Region">\r\n                        Region\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                        Description\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                        Source\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Water User Group supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                        Entity\r\n                    </span>\r\n                    <i class="wugIcon icon-circle"></i>\r\n                </th>\r\n                <th data-sort="formatted-int" width="15%">\r\n                    <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                        Supply Volume <span data-bind="text: currYear"></span>\r\n                    </span>\r\n                </th>\r\n                <th data-sort="int" width="15%">\r\n                    <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">\r\n                        Decade Online\r\n                    </span>\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n\r\n        </tbody>\r\n    </table>\r\n</div>';});
@@ -1430,7 +1461,7 @@ define('scripts/text!templates/entityStrategyRow.html',[],function () { return '
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/EntityStrategyView',['namespace', 'scripts/text!templates/entityStrategyRow.html'], function(namespace, tpl) {
+define('views/EntityStrategyView',['namespace', 'views/BaseStrategyView', 'scripts/text!templates/entityStrategyRow.html'], function(namespace, BaseStrategyView, tpl) {
   var EntityStrategyView;
   return EntityStrategyView = (function(_super) {
 
@@ -1440,31 +1471,11 @@ define('views/EntityStrategyView',['namespace', 'scripts/text!templates/entitySt
       return EntityStrategyView.__super__.constructor.apply(this, arguments);
     }
 
-    EntityStrategyView.prototype.tagName = 'tr';
-
-    EntityStrategyView.prototype.initialize = function(options) {
-      EntityStrategyView.__super__.initialize.call(this, options);
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    EntityStrategyView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    EntityStrategyView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    EntityStrategyView.prototype.template = tpl;
 
     return EntityStrategyView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });
 
 define('scripts/text!templates/entityStrategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies for \r\n    <span data-bind="text: viewName"></span> <i class="wugIcon icon-circle icon-large"></i> - \r\n    <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n<div class="scrollTableContainer">\r\n    <table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n        <thead>\r\n            <tr>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Water Management Strategy Type">\r\n                        Type\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                        Description\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                        Source\r\n                    </span>\r\n                </th>\r\n                <th data-sort="formatted-int" width="15%">\r\n                    <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                        Supply Volume <span data-bind="text: currYear"></span>\r\n                    </span>\r\n                </th>\r\n                <th data-sort="formatted-currency" width="15%">\r\n                    <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                        Capital Cost\r\n                    </span>\r\n                </th>\r\n                <th data-sort="int" width="15%">\r\n                    <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">\r\n                        Decade Online\r\n                    </span>\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n\r\n        </tbody>\r\n    </table>\r\n</div>';});
@@ -1525,7 +1536,7 @@ define('scripts/text!templates/strategyDetailRow.html',[],function () { return '
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/StrategyDetailView',['namespace', 'scripts/text!templates/strategyDetailRow.html'], function(namespace, tpl) {
+define('views/StrategyDetailView',['namespace', 'views/BaseStrategyView', 'scripts/text!templates/strategyDetailRow.html'], function(namespace, BaseStrategyView, tpl) {
   var StrategyDetailView;
   return StrategyDetailView = (function(_super) {
 
@@ -1535,31 +1546,11 @@ define('views/StrategyDetailView',['namespace', 'scripts/text!templates/strategy
       return StrategyDetailView.__super__.constructor.apply(this, arguments);
     }
 
-    StrategyDetailView.prototype.tagName = 'tr';
-
-    StrategyDetailView.prototype.initialize = function(options) {
-      StrategyDetailView.__super__.initialize.call(this, options);
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    StrategyDetailView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    StrategyDetailView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    StrategyDetailView.prototype.template = tpl;
 
     return StrategyDetailView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });
 
 define('scripts/text!templates/strategyDetailTable.html',[],function () { return '<h2>\r\n    <span data-bind="text: viewName"></span> - \r\n    <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n<div class="scrollTableContainer">\r\n    <table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n        <thead>\r\n            <tr>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="State Water Plan Planning Region">\r\n                        Region\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Water Management Strategy Type">\r\n                        Type\r\n                    </span>\r\n                </th>\r\n                <th data-sort="string">\r\n                    <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                        Source\r\n                    </span>\r\n                </th>\r\n                 <th data-sort="string">\r\n                    <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                        Entity\r\n                    </span>\r\n                    <i class="wugIcon icon-circle"></i> \r\n                </th>\r\n                <th data-sort="formatted-int" width="15%">\r\n                    <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                        Supply Volume <span data-bind="text: currYear"></span>\r\n                    </span>\r\n                </th>\r\n                <th data-sort="formatted-currency" width="15%">\r\n                    <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                        Capital Cost\r\n                    </span>\r\n                </th>\r\n                <th data-sort="int" width="15%">\r\n                    <span class="has-popover" data-content="Decade during which the Water Management Strategy is expected to be implmented.">\r\n                        Decade Online\r\n                    </span>\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n\r\n        </tbody>\r\n    </table>\r\n</div>';});
@@ -1835,7 +1826,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/MapTopToolbarView', 'vi
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -1893,6 +1884,14 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/MapTopToolbarView', 'vi
       });
     };
 
+    WMSRouter.prototype.updateSelectedWug = function(wugId) {
+      if (!wugId) {
+        this.mapView.unselectWugFeatures();
+      } else {
+        this.mapView.selectWugFeature(wugId);
+      }
+    };
+
     WMSRouter.prototype.routes = {
       "": "default",
       ":year/wms": "wmsNetCountySupplies",
@@ -1923,7 +1922,9 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/MapTopToolbarView', 'vi
       '': function(year) {
         if (year != null) {
           this.currTableView.render();
-          this.yearNavView.render().currentYear.subscribe(this.updateViewsToNewYear);
+          this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
+          this.yearNavView.render();
+          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
           return this.mapTopToolbarView.render();
         }
       }

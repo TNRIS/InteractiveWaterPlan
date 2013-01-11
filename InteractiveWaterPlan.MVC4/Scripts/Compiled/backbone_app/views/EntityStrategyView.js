@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'scripts/text!templates/entityStrategyRow.html'], function(namespace, tpl) {
+define(['namespace', 'views/BaseStrategyView', 'scripts/text!templates/entityStrategyRow.html'], function(namespace, BaseStrategyView, tpl) {
   var EntityStrategyView;
   return EntityStrategyView = (function(_super) {
 
@@ -12,29 +12,9 @@ define(['namespace', 'scripts/text!templates/entityStrategyRow.html'], function(
       return EntityStrategyView.__super__.constructor.apply(this, arguments);
     }
 
-    EntityStrategyView.prototype.tagName = 'tr';
-
-    EntityStrategyView.prototype.initialize = function(options) {
-      EntityStrategyView.__super__.initialize.call(this, options);
-      _.bindAll(this, 'render', 'unrender');
-      this.template = _.template(tpl);
-      return null;
-    };
-
-    EntityStrategyView.prototype.render = function() {
-      this.$el.html(this.template({
-        m: this.model.toJSON(),
-        currYear: namespace.currYear
-      }));
-      return this;
-    };
-
-    EntityStrategyView.prototype.unrender = function() {
-      this.$el.remove();
-      return null;
-    };
+    EntityStrategyView.prototype.template = tpl;
 
     return EntityStrategyView;
 
-  })(Backbone.View);
+  })(BaseStrategyView);
 });

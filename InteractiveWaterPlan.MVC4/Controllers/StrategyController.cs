@@ -51,13 +51,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/district
-        public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
+        /*public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
             return _repo.GetStrategiesInDistrict(districtId, year);
-        }
+        }*/
 
         // GET api/strategies/type
         public IList<Strategy> GetStrategiesByType(int typeId, string year)

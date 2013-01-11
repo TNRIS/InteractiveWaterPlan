@@ -32,7 +32,7 @@ define([
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
                 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures',
-                '_setupWugHoverControl')
+                'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -119,19 +119,37 @@ define([
             @map.addLayer(@wugLayer)
             
             #Add a select feature on hover control
-            @wugHoverControl = this._setupWugHoverControl()
-            @map.addControl(@wugHoverControl)
+            @wugSelectControl = this._setupWugSelectControl()
+            @map.addControl(@wugSelectControl)
 
             @map.zoomToExtent(bounds)
             return
 
 
         clearWugFeatures: () ->
-            if @wugHoverControl? then @wugHoverControl.destroy()
+            this.unselectWugFeatures() 
+            if @wugSelectControl? then @wugSelectControl.destroy()
             if @wugLayer? then @wugLayer.destroy()
             return
 
-        _setupWugHoverControl: () ->
+        selectWugFeature: (wugId) ->
+            if not @wugSelectControl? then return
+
+            for wugFeature in @wugLayer.features
+                if wugFeature.attributes.id == wugId
+                    @wugSelectControl.select(wugFeature)
+                    return
+
+            return
+
+        unselectWugFeatures: () ->
+            if not @wugSelectControl? then return
+
+            @wugSelectControl.unselectAll()
+
+            return
+
+        _setupWugSelectControl: () ->
             timer = null
             control = new OpenLayers.Control.SelectFeature(
                 @wugLayer,
@@ -159,7 +177,7 @@ define([
                                 #{namespace.currYear} Supply: #{wugFeature.attributes.sourceSupply} ac-ft/yr
                             ",
                             null, #anchor
-                            false, #closeBock
+                            false, #closeBox
                             ) #closeBoxCallback
 
                         wugFeature.popup = popup
@@ -168,10 +186,10 @@ define([
 
                     onUnselect: (wugFeature) =>
                         clearTimeout(timer)
-                        #if wugFeature.popup?
-                            #@map.removePopup(wugFeature.popup)
-                            #wugFeature.popup.destroy()
-                            #wugFeature.popup = null
+                        if wugFeature.popup?
+                            @map.removePopup(wugFeature.popup)
+                            wugFeature.popup.destroy()
+                            wugFeature.popup = null
                         return
                 }
             )
