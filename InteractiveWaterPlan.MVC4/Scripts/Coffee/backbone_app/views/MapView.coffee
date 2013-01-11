@@ -108,8 +108,11 @@ define([
                 delete newFeature.attributes.wktGeog
                 newFeature.geometry = newFeature.geometry.transform(
                     @map.displayProjection, @map.projection)
+                
                 if not bounds?
-                    bounds = newFeature.geometry.getBounds()
+                    #must create a new bounds, otherwise the feature's bounds
+                    # will get modified by subsequent extends in the else condition
+                    bounds = new OpenLayers.Bounds(newFeature.geometry.getBounds())
                 else
                     bounds.extend(newFeature.geometry.getBounds())
 

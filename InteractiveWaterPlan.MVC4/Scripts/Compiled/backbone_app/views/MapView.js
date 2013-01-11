@@ -95,7 +95,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         delete newFeature.attributes.wktGeog;
         newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
         if (!(bounds != null)) {
-          bounds = newFeature.geometry.getBounds();
+          bounds = new OpenLayers.Bounds(newFeature.geometry.getBounds());
         } else {
           bounds.extend(newFeature.geometry.getBounds());
         }
