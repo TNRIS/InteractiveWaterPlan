@@ -14,12 +14,7 @@
 
     <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
 
-    @Styles.Render("~/Content/bootstrap/css/cosmo.bootstrap.css",
-        "~/Content/FontAwesome/css/font-awesome.css",
-        "~/Content/chosen.cosmo.css",
-        "~/Content/SiteNew.css"
-    )
-
+    @Styles.Render("~/bundles/css/iswp.css")
     @Scripts.Render("~/bundles/js/modernizr.js")
 
 </head>
@@ -86,6 +81,11 @@
 
     </div>
 
+    
+    <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
+    <input type="hidden" id="base_path" value="@Url.Content("~/")" />
+    <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["bing_maps_key"]" />
+
     @if (HttpContext.Current.IsDebuggingEnabled)
     {
         @Scripts.Render("~/Content/OpenLayers/OpenLayers.debug.js")
@@ -95,11 +95,7 @@
         @Scripts.Render("~/Content/OpenLayers/OpenLayers.js")
     }
     
-    <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
-    <input type="hidden" id="base_path" value="@Url.Content("~/")" />
-    <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["bing_maps_key"]" />
-
-    
+    @Scripts.Render("~/bundles/js/lib.js")
 
     <script type="text/javascript">
         var initCountyNames = @Html.Raw(ViewData["CountyNames"]);
@@ -113,8 +109,21 @@
         var initStrategyTypes = @Html.Raw(ViewData["StrategyTypes"]);
     </script>
 
-    @Scripts.Render("~/bundles/js/app.js")
+    
+    @if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        
+        
+        @Scripts.Render("~/bundles/js/iswp-app.js")
+    }
+    else
+    {
+        @Scripts.Render("~/bundles/js/iswp-app.js")
+        <script>
+            require(['app.js']);
+        </script>
+    }
 
-
+    
 </body>
 </html>

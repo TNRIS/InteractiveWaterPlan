@@ -7,13 +7,14 @@ namespace InteractiveWaterPlan.MVC4
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            //Openlayers has to be included separately because of how it loads its css
+            
             
             bundles.Add(new ScriptBundle("~/bundles/js/modernizr.js").Include(
                 "~/Scripts/modernizr-{version}.js"
             ));
 
-            bundles.Add(new ScriptBundle("~/bundles/js/app.js").Include(
+            //Note: Openlayers has to be included separately because of how it loads its css
+            bundles.Add(new ScriptBundle("~/bundles/js/lib.js").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/jquery.number.js",
                 "~/Content/OpenLayers/tile.stamen.js",
@@ -28,8 +29,18 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/backbone.routefilter.js",
                 "~/Scripts/knockout-{version}.js",
                 "~/Scripts/knockback.js",
-                "~/Scripts/require.js",
-                "~/Scripts/iswp-app.js"
+                "~/Scripts/require.js"
+            ));
+
+            bundles.Add(new ScriptBundle("~/bundles/js/iswp-app.js").Include(
+              "~/Scripts/iswp-app.js"
+            ));
+
+            bundles.Add(new StyleBundle("~/bundles/css/iswp.css").Include(
+                "~/Content/bootstrap/css/cosmo.bootstrap.css",
+                "~/Content/FontAwesome/css/font-awesome.css",
+                "~/Content/chosen.cosmo.css",
+                "~/Content/Site.css"
             ));
 
         }

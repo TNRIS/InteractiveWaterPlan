@@ -1,9 +1,26 @@
+﻿
 
 /* Page Styles */
 body 
 {
-    padding-top: 2px;
-    line-height: 12px;
+    padding-top: 8px;
+}
+
+h2, h3 
+{
+    font-size: 22px;
+    line-height: 22px;
+}
+
+#mapContainer
+{
+    height: 400px;
+}
+
+.page-header 
+{
+    padding-bottom: 0px;
+    margin-bottom: 10px;    
 }
 
 .container 
@@ -11,18 +28,176 @@ body
     padding-bottom: 40px;
 }
 
-.app-footer
+.btn 
 {
-    padding: 10px 0;
+    line-height: 22px;
+}
+
+ul.nav > li.nav-label
+{
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    color: black;
+}
+
+.nav-pills .dropdown-menu li > a 
+{
+    color: #444;
+}
+
+.nav-pills .dropdown-menu li > a:hover
+{
+    color: white;
+}
+
+.nav-pills .dropdown-menu {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 2px solid black;
+}
+
+#themeNav
+{
+    margin-bottom: 4px;
+}
+
+.row.toolbar
+{
+    margin-top: 4px;
+}
+
+#dataContainer
+{
+    min-height: 500px;
+}
+
+.alert.alert-warning-border 
+{
+    border: 4px solid #FF7501;
+    padding: 5px;
+    background: white;
+    color: #555; 
+}
+
+.alert.alert-warning-border h4
+{
+    color: black;
+}
+
+ul.typeahead .catName
+{
+    font-size:11px;
+}    
+
+#countyRegionSelectContainer .selectContainer
+{
+    margin-right: 30px;
+}
+
+.scrollTableContainer
+{
+    max-height: 600px;
+    overflow-y: auto;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.aligned-left 
+{
+    text-align: left !important;
+}
+
+i.wugIcon 
+{
+    color: Green;
+}
+
+.modelTable
+{
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+}
+
+.modelTable th 
+{
+    font-size: 14px;
+}
+
+.modelTable th[data-sort]
+{
+    cursor:pointer;
+}
+
+.modelTable thead .popover
+{
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.modelTable th,
+.modelTable td 
+{
     text-align: center;
 }
 
-.page-header 
+.tableLoading
 {
-    margin: 20px 0 10px;
+    background: url('images/loading-36.gif') no-repeat;
+    width: 130px;
+    margin: auto;
+    height: 20px;
+}
+
+ul.breadcrumb 
+{
+    font-size: 12px;
+    padding: 0;
+    margin-bottom: 0;
+    background-color: White;
+}
+
+ul.breadcrumb li:last-child > a,
+ul.breadcrumb li:last-child > a:hover
+{
+    pointer-events: none;
+    cursor: default;
+    color: #aaa;
+}
+
+[class^="icon-"], [class*=" icon-"]
+{
+    vertical-align: 0px;
 }
 
 /* OpenLayers */
+.olControlLayerSwitcher 
+{
+    width: 23em !important;
+}
+
+.olControlLayerSwitcher .layersDiv 
+{
+    background-color: #dfdfdf !important;
+    color: black !important;
+    font-family: "Open Sans", Calibri, Candara, Arial, sans-serif !important;
+    border-left: 2px solid white !important;
+    border-top: 2px solid white !important;
+    border-bottom: 2px solid white !important;
+}
+
+.olControlLayerSwitcher .layersDiv input
+{
+    margin-top: -4px !important;
+}
+
 .olFramedCloudPopupContent h3 
 {
     font-size: 14px;
@@ -37,7 +212,7 @@ body
 
 .olControlAttribution 
 {
-    bottom: 4px;
+    bottom: 0.5em !important;
 }
 
 .olControlLayerSwitcher label 
@@ -52,69 +227,3 @@ body
     /* when OL encounters a 404, don't display the pink image */
     display: none !important;
 } 
-
-/* Ext Stuff */
-.x-panel h3 
-{
-    line-height: 24px;
-}
-
-.x-grouped-combo li.x-boundlist-item
-{
-    padding-left:6px;
-}
-
-.x-grouped-combo li.x-boundlist-group
-{
-    font-weight: bold;
-    margin-left: 2px;
-}
-
-.x-boundlist ul
-{
-    margin: 0;   
-}
-
-.x-boundlist-item .catName
-{
-    font-size:10px;
-    color: #666;
-}
-
-.x-action-col-icon
-{
-    height:14px;
-}
-
-/* Bootstrap Icons */
-.icon-fullscreen
-{
-    background-position: -456px -144px !important;
-    background-image: url("bootstrap/img/glyphicons-halflings.png");
-    background-repeat: no-repeat !important;
-    margin-top: 1px;
-}
-
-.icon-remove
-{
-    background-position: -312px 0 !important;
-    background-image: url("bootstrap/img/glyphicons-halflings.png");
-    background-repeat: no-repeat !important;
-    margin-top: 1px;
-}
-
-.icon-play
-{
-    background-position: -264px -72px !important;
-    background-image: url("bootstrap/img/glyphicons-halflings.png");
-    background-repeat: no-repeat !important;
-    margin-top: 1px;
-}
-
-.icon-zoom-in 
-{
-    background-position: -336px 0 !important;
-    background-image: url("bootstrap/img/glyphicons-halflings.png");
-    background-repeat: no-repeat !important;
-    margin-top: 1px;
-}

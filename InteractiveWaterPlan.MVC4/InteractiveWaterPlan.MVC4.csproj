@@ -240,7 +240,6 @@
     <Content Include="Content\OpenLayers\theme\default\style.tidy.css" />
     <Content Include="Content\OpenLayers\tile.stamen.js" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\SiteNew.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\backbone.js" />
