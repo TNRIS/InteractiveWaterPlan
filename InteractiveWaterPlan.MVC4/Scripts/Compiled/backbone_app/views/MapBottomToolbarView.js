@@ -17,7 +17,7 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.
     MapBottomToolbarView.prototype.mapView = null;
 
     MapBottomToolbarView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'showPlaceFeature');
+      _.bindAll(this, 'render', 'unrender', 'toggleAreaSelects', 'showPlaceFeature');
       this.mapView = options.mapView;
     };
 
@@ -42,6 +42,23 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.
     MapBottomToolbarView.prototype.unrender = function() {
       this.$el.remove();
       return null;
+    };
+
+    MapBottomToolbarView.prototype.toggleAreaSelects = function(data, event) {
+      var $target, toggleSelector;
+      $target = $(event.target);
+      toggleSelector = $target.data('toggle');
+      $(toggleSelector).slideToggle(300, function() {
+        var $i;
+        $i = $('i', $target);
+        if ($i.hasClass('icon-caret-up')) {
+          $i.removeClass('icon-caret-up');
+          return $i.addClass('icon-caret-down');
+        } else {
+          $i.addClass('icon-caret-up');
+          return $i.removeClass('icon-caret-down');
+        }
+      });
     };
 
     MapBottomToolbarView.prototype.showPlaceFeature = function() {

@@ -12,7 +12,7 @@
                     transparent: true
                 layer_params:
                     isBaseLayer: false
-                    visibility: false
+                    visibility: true
                     opacity: 0.6
             }
             {

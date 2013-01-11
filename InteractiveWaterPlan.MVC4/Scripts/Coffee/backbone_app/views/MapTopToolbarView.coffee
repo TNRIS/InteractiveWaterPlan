@@ -57,7 +57,7 @@ define([
             @mapView.resetExtent()
             return
 
-        toggleMap: (data, event, x) ->
+        toggleMap: (data, event) ->
             $target = $(event.target)
 
             if $target.hasClass('off')

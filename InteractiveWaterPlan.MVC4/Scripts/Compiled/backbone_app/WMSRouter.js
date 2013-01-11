@@ -44,7 +44,7 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
       namespace.senateNames = new SenateCollection();
       namespace.senateNames.reset(initSenateNames);
       this.countyRegionSelect = new WmsAreaSelectView({
-        el: $('#regionCountySelectContainer')[0]
+        el: $('#areaSelectContainer')[0]
       });
       this.countyRegionSelect.render();
     };

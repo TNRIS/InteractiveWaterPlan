@@ -85,7 +85,7 @@ define([
             namespace.senateNames.reset(initSenateNames)
 
             @countyRegionSelect = new WmsAreaSelectView(
-                el: $('#regionCountySelectContainer')[0]
+                el: $('#areaSelectContainer')[0]
             )
             @countyRegionSelect.render()
 

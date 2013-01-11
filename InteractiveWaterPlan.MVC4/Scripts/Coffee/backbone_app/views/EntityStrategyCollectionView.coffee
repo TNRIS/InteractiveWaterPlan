@@ -37,7 +37,7 @@ define([
             wug = strategyModels[0]
 
             #Set the viewName from the returned wug
-            @viewName(wug.get("name"))
+            @viewName(wug.get("recipientEntityName"))
 
             newWugList.push(
                 id: wug.get("recipientEntityId")

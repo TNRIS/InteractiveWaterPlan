@@ -61,7 +61,7 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
       this.mapView.resetExtent();
     };
 
-    MapTopToolbarView.prototype.toggleMap = function(data, event, x) {
+    MapTopToolbarView.prototype.toggleMap = function(data, event) {
       var $target;
       $target = $(event.target);
       if ($target.hasClass('off')) {

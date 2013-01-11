@@ -33,7 +33,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
       var newWugList, wug;
       newWugList = [];
       wug = strategyModels[0];
-      this.viewName(wug.get("name"));
+      this.viewName(wug.get("recipientEntityName"));
       newWugList.push({
         id: wug.get("recipientEntityId"),
         name: wug.get("recipientEntityName"),

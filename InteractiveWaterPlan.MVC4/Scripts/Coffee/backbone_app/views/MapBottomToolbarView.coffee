@@ -10,7 +10,7 @@ define([
         mapView: null #must specify in options argument to constructor
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender', 'showPlaceFeature')
+            _.bindAll(this, 'render', 'unrender', 'toggleAreaSelects', 'showPlaceFeature')
 
             @mapView = options.mapView
 
@@ -41,6 +41,23 @@ define([
         unrender: () ->
             @$el.remove()
             return null
+
+        toggleAreaSelects: (data, event) ->
+            $target = $(event.target)
+
+            toggleSelector = $target.data('toggle')
+
+            $(toggleSelector).slideToggle(300, () ->
+                $i = $('i', $target)
+                if $i.hasClass('icon-caret-up')
+                    $i.removeClass('icon-caret-up')
+                    $i.addClass('icon-caret-down')
+                else
+                    $i.addClass('icon-caret-up')
+                    $i.removeClass('icon-caret-down')
+            )
+           
+            return
 
         showPlaceFeature: () ->
             selectedPlaceId = this.$('#goToPlaceInput').data('selected-place-id')
