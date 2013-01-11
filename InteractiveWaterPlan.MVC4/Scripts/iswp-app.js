@@ -1170,6 +1170,10 @@ define('views/CountyNetSupplyCollectionView',['views/BaseTableCollectionView', '
       return CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
     };
 
+    CountyNetSupplyCollectionView.prototype.fetchCallback = function() {
+      return null;
+    };
+
     return CountyNetSupplyCollectionView;
 
   })(BaseTableCollectionView);

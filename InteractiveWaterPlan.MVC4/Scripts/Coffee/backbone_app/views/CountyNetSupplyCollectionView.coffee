@@ -14,4 +14,7 @@ define([
             super CountyNetSupplyView, 
                 CountyNetSupplyCollection, tpl
            
+        fetchCallback: () ->
+            #TODO: Maybe tell the MapView to turn on the Regions Layer
+            return null
 )
