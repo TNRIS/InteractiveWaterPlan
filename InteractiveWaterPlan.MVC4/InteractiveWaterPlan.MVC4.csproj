@@ -248,8 +248,8 @@
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <None Include="Scripts\build-iswp-app.bat" />
+    <None Include="Scripts\Coffee\backbone_app\ISWPApp.coffee" />
     <None Include="Scripts\Coffee\backbone_app\config\WmsThemeConfig.coffee" />
-    <Content Include="Scripts\Compiled\backbone_app\app.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\HouseCollection.js" />
@@ -258,6 +258,8 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
+    <Content Include="Scripts\Compiled\backbone_app\ISWPApp.js" />
+    <Content Include="Scripts\Compiled\backbone_app\main.js" />
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
@@ -278,7 +280,6 @@
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
-    <Content Include="Scripts\Compiled\TNRIS\proxy\ParameterProxy.js" />
     <Content Include="Scripts\iswp-app.js" />
     <Content Include="Scripts\iswp-app.min.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
@@ -354,7 +355,6 @@
     <Content Include="Content\FontAwesome\font\fontawesome-webfont.woff" />
     <Content Include="Content\FontAwesome\font\FontAwesome.otf" />
     <Content Include="PlacesDB_Hibernate.config" />
-    <None Include="Scripts\Coffee\backbone_app\app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\HouseCollection.coffee" />
@@ -362,6 +362,7 @@
     <None Include="Scripts\Coffee\backbone_app\collections\SenateCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\WugFeatureCollection.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\main.coffee" />
     <None Include="Scripts\Coffee\backbone_app\WMSRouter.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\namespace.coffee" />
@@ -382,7 +383,6 @@
     <None Include="Scripts\Coffee\backbone_app\views\YearNavView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
-    <None Include="Scripts\Coffee\TNRIS\proxy\ParameterProxy.coffee" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />

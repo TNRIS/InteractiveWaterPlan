@@ -14,7 +14,12 @@
 
     <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
 
-    @Styles.Render("~/bundles/css/iswp.css")
+    @Styles.Render("~/Content/bootstrap/css/cosmo.bootstrap.css",
+        "~/Content/FontAwesome/css/font-awesome.css",
+        "~/Content/chosen.cosmo.css",
+        "~/Content/Site.css"
+    )
+
     @Scripts.Render("~/bundles/js/modernizr.js")
 
 </head>
@@ -112,16 +117,14 @@
     
     @if (HttpContext.Current.IsDebuggingEnabled)
     {
-        
-        
-        @Scripts.Render("~/bundles/js/iswp-app.js")
+        @* only load the bootstrap file, and require.js will load modules as needed *@
+        @Scripts.Render("~/Scripts/Compiled/backbone_app/main.js")
     }
     else
     {
+        @* Preload the optimized module file *@
         @Scripts.Render("~/bundles/js/iswp-app.js")
-        <script>
-            require(['app.js']);
-        </script>
+        @Scripts.Render("~/Scripts/Compiled/backbone_app/main.js")
     }
 
     
