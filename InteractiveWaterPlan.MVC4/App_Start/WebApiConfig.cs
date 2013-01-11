@@ -77,6 +77,12 @@ namespace InteractiveWaterPlan.MVC4
                 "api/strategies/entity",
                 new { controller = "Strategy", action = "GetStrategiesForEntity" }
             );
+            
+            config.Routes.MapHttpRoute(
+                "GetStrategiesByProjectIdRoute",
+                "api/strategies/project",
+                new { controller = "Strategy", action = "GetStrategiesByProjectId" }
+            );
 
             config.Routes.MapHttpRoute(
                 "GetStrategyTypesRoute",
@@ -84,7 +90,6 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Strategy", action = "GetStrategyTypes" }
             );
 
-            
             #endregion
 
             #region Supply Routes

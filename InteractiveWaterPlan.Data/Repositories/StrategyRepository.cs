@@ -156,19 +156,16 @@ namespace InteractiveWaterPlan.Data
 
         public IList<StrategyDetails> GetStrategiesByProjectId(int projectId, string year)
         {
-            //TODO: need columns from database - created issue
-            throw new NotImplementedException();
-            /*
-            var strategiesByProject = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
+            return Session.GetNamedQuery("GetStrategyDetailsByProjectId")
                 .SetParameter("projectId", projectId)
                 .List<StrategyDetails>()
                 .OrderBy(x => x.Id)
                 .Where(x =>
                 {
-
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
                 })
                 .ToList();
-             * */
         }
 
     }

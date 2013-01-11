@@ -9,22 +9,33 @@ define([
     class StrategyDetailCollectionView extends BaseTableCollectionView
         
         initialize: (options) ->
-            
-            @projectId = options.id
-            @projectName = options.name
+            _.bindAll(this, 'fetchCallback')
 
-            @viewName = ko.observable("#{@projectName}")
+            @projectId = options.id
+            
+            #TODO: Get the project name (actually the description)
+
+            @viewName = ko.observable()
 
             fetchParams = {projectId: @projectId}
             
             StrategyDetailCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategies/type" 
+                url: "#{BASE_API_PATH}api/strategies/project" 
             )
 
             super StrategyDetailView, 
                 StrategyDetailCollection, tpl, {fetchParams: fetchParams}
 
             return null
+
+        fetchCallback: (strategyModels) ->
+            #all models have the same description from this api call
+            # so just grab from the first one
+            @viewName(strategyModels[0].get("description"))
+
+            super strategyModels
+
+            return
 
             
 )

@@ -51,6 +51,7 @@ define([
             
             this.$('tbody').empty() #clear the table contents
 
+            #always include the current year in the fetch parameters
             params = _.extend({year: namespace.currYear }, @fetchParams)
 
             @collection.fetch(

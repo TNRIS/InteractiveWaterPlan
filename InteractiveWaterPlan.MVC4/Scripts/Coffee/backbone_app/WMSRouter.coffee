@@ -9,6 +9,7 @@ define([
     'views/CountyStrategyCollectionView'
     'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
+    'views/StrategyDetailCollectionView'
     'views/WmsAreaSelectView'
     'collections/StrategyTypeCollection'
     'collections/CountyCollection'
@@ -26,7 +27,8 @@ define([
     CountyStrategyCollectionView,
     StrategyTypeCollectionView,
     EntityStrategyCollectionView,
-    WmsAreaSelectView
+    StrategyDetailCollectionView,
+    WmsAreaSelectView,
     StrategyTypeCollection,
     CountyCollection,
     RegionCollection,
@@ -118,6 +120,7 @@ define([
             ":year/wms/county/:countyId":         "wmsCounty"
             ":year/wms/type/:typeId":             "wmsType"
             ":year/wms/entity/:entityId":         "wmsEntity"
+            ":year/wms/project/:projectId":       "wmsProjectDetail"
             #TODO: wms/source/:sourceId
 
         #before filter from backbone.routefilter
@@ -204,6 +207,16 @@ define([
             @currTableView = new EntityStrategyCollectionView(
                 el: @tableContainer
                 id: entityId
+            )
+
+            return
+
+        wmsProjectDetail: (year, projectId) ->
+            #TODO: If invalid projectId, then show error
+                    
+            @currTableView = new StrategyDetailCollectionView(
+                el: @tableContainer
+                id: projectId
             )
 
             return

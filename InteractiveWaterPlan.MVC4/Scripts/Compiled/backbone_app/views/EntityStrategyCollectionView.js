@@ -13,8 +13,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
     }
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
-      var EntityModel, StrategyCollection, entity, fetchParams,
-        _this = this;
+      var StrategyCollection, fetchParams;
       _.bindAll(this, 'fetchCallback');
       this.entityId = options.id;
       this.viewName = ko.observable();
@@ -27,15 +26,6 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
       EntityStrategyCollectionView.__super__.initialize.call(this, EntityStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
-      EntityModel = Backbone.Model.extend({
-        url: "" + BASE_API_PATH + "api/entity/" + this.entityId
-      });
-      entity = new EntityModel();
-      entity.fetch({
-        success: function(model) {
-          _this.viewName(model.get("name"));
-        }
-      });
       return null;
     };
 
@@ -43,6 +33,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
       var newWugList, wug;
       newWugList = [];
       wug = strategyModels[0];
+      this.viewName(wug.get("name"));
       newWugList.push({
         id: wug.get("recipientEntityId"),
         name: wug.get("recipientEntityName"),

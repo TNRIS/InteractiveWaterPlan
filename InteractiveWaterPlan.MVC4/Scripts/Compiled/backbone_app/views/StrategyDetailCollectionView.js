@@ -14,19 +14,24 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyDetailView'
 
     StrategyDetailCollectionView.prototype.initialize = function(options) {
       var StrategyDetailCollection, fetchParams;
+      _.bindAll(this, 'fetchCallback');
       this.projectId = options.id;
-      this.projectName = options.name;
-      this.viewName = ko.observable("" + this.projectName);
+      this.viewName = ko.observable();
       fetchParams = {
         projectId: this.projectId
       };
       StrategyDetailCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategies/type"
+        url: "" + BASE_API_PATH + "api/strategies/project"
       });
       StrategyDetailCollectionView.__super__.initialize.call(this, StrategyDetailView, StrategyDetailCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;
+    };
+
+    StrategyDetailCollectionView.prototype.fetchCallback = function(strategyModels) {
+      this.viewName(strategyModels[0].get("description"));
+      StrategyDetailCollectionView.__super__.fetchCallback.call(this, strategyModels);
     };
 
     return StrategyDetailCollectionView;
