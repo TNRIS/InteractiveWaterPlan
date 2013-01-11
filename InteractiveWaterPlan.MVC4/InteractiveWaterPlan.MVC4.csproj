@@ -260,6 +260,8 @@
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
     <Content Include="Scripts\Compiled\backbone_app\ISWPApp.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailView.js" />
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
@@ -316,14 +318,14 @@
     <Content Include="Scripts\templates\entityStrategyRow.html" />
     <Content Include="Scripts\templates\entityStrategyTable.html" />
     <Content Include="Scripts\templates\mapBottomRightTools.html" />
+    <Content Include="Scripts\templates\strategyDetailRow.html" />
+    <Content Include="Scripts\templates\strategyDetailTable.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
     <Content Include="Scripts\templates\strategyTable.html" />
     <Content Include="Scripts\templates\strategyTypeListItem.html" />
     <Content Include="Scripts\templates\strategyTypeRow.html" />
     <Content Include="Scripts\templates\strategyTypeTable.html" />
     <Content Include="Scripts\templates\mapTopToolbar.html" />
-    <Content Include="Scripts\templates\wmsDetailRow.html" />
-    <Content Include="Scripts\templates\wmsDetailTable.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\tnris.place_typeahead.js" />
@@ -363,6 +365,8 @@
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\WugFeatureCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\main.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyDetailCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\StrategyDetailView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\WMSRouter.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\namespace.coffee" />
