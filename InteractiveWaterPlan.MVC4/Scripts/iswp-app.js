@@ -138,7 +138,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', '_setupWugHoverControl');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -211,13 +211,53 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.map.addLayer(this.wugLayer);
+      this.wugHoverControl = this._setupWugHoverControl();
+      this.map.addControl(this.wugHoverControl);
       this.map.zoomToExtent(bounds);
     };
 
     MapView.prototype.clearWugFeatures = function() {
+      if (this.wugHoverControl != null) {
+        this.wugHoverControl.destroy();
+      }
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
       }
+    };
+
+    MapView.prototype._setupWugHoverControl = function() {
+      var control, timer,
+        _this = this;
+      timer = null;
+      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
+        multiple: false,
+        hover: true,
+        autoActivate: true,
+        overFeature: function(feature) {
+          var layer,
+            _this = this;
+          layer = feature.layer;
+          if (this.hover) {
+            if (this.highlightOnly) {
+              this.highlight(feature);
+            } else if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) === -1) {
+              timer = _.delay(function() {
+                return _this.select(feature);
+              }, 400);
+            }
+          }
+        },
+        onSelect: function(wugFeature) {
+          var popup;
+          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                " + namespace.currYear + " Supply: " + wugFeature.attributes.sourceSupply + " ac-ft/yr                            ", null, false);
+          wugFeature.popup = popup;
+          _this.map.addPopup(popup);
+        },
+        onUnselect: function(wugFeature) {
+          clearTimeout(timer);
+        }
+      });
+      return control;
     };
 
     MapView.prototype._calculateScaledValue = function(max, min, scale_max, scale_min, val) {
@@ -265,16 +305,6 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
               attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
               transitionEffect: "resize",
               isBaseLayer: true
-              /* how to do listeners on the layers: 
-              eventListeners: 
-                  'loadstart': (evt) ->
-                      console.log 'load start'
-              
-                  'loadend': (evt) ->
-                      console.log 'ol loadend', evt
-                      return null
-              */
-
             }));
             break;
           case 'mapquest_aerial':
@@ -330,9 +360,9 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
     MapView.prototype._wugStyleMap = new OpenLayers.StyleMap({
       "default": new OpenLayers.Style({
         pointRadius: '${getPointRadius}',
-        strokeColor: 'yellow',
-        strokeWidth: '1',
-        fillColor: 'green',
+        strokeColor: "yellow",
+        strokeWidth: 1,
+        fillColor: "green",
         fillOpacity: 0.8
       }, {
         context: {
@@ -362,6 +392,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       }),
       "select": new OpenLayers.Style({
         fillColor: "yellow",
+        strokeColor: "green",
         fillOpacity: 1
       })
     });
@@ -862,7 +893,7 @@ define('models/PlaceFeatureModel',[], function() {
   })(Backbone.Model);
 });
 
-define('scripts/text!templates/mapBottomRightTools.html',[],function () { return '<div class="pull-right">\r\n\r\n    <div class="input-append map-stuff">\r\n        <input id="goToPlaceInput" type="text" placeholder="Go to Location" />\r\n        <button class="btn btn-primary" type="button" data-loading-text="...">Go</button>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div class="pull-right">\r\n    <button class="btn" type="button" data-bind="click: toggleAreaSelects" data-toggle="#areaSelectContainer">\r\n        Select Strategies by Area <i class="icon-caret-down"></i>\r\n    </button>\r\n    &nbsp;\r\n</div>';});
+define('scripts/text!templates/mapBottomRightTools.html',[],function () { return '<div class="pull-right">\r\n\r\n    <div class="input-append map-stuff">\r\n        <input id="goToPlaceInput" type="text" placeholder="Go to Location" />\r\n        <button class="btn btn-primary" type="button" data-loading-text="...">Go</button>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div class="pull-right">\r\n    <button class="btn" type="button" data-bind="click: toggleAreaSelects" data-toggle="#areaSelectContainer">\r\n        Select Strategies by Area <i class="icon-caret-up"></i>\r\n    </button>\r\n    &nbsp;\r\n</div>';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,

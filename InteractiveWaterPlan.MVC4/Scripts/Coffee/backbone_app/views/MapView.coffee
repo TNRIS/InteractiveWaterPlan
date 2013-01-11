@@ -3,6 +3,7 @@ define([
     'config/WmsThemeConfig'
 ],
 (namespace, WmsThemeConfig) ->
+
     class MapView extends Backbone.View
 
         origCenter: new OpenLayers.LonLat(-99.294317, 31.348335).transform(
@@ -30,7 +31,8 @@ define([
             @bingApiKey = config.bingApiKey
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
-                'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures')
+                'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures',
+                '_setupWugHoverControl')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -115,13 +117,66 @@ define([
 
             @wugLayer.addFeatures(wugFeatures)
             @map.addLayer(@wugLayer)
+            
+            #Add a select feature on hover control
+            @wugHoverControl = this._setupWugHoverControl()
+            @map.addControl(@wugHoverControl)
+
             @map.zoomToExtent(bounds)
             return
 
 
         clearWugFeatures: () ->
+            if @wugHoverControl? then @wugHoverControl.destroy()
             if @wugLayer? then @wugLayer.destroy()
             return
+
+        _setupWugHoverControl: () ->
+            timer = null
+            control = new OpenLayers.Control.SelectFeature(
+                @wugLayer,
+                {
+                    multiple: false
+                    hover: true
+                    autoActivate: true
+
+                    overFeature: (feature) ->
+                        layer = feature.layer;
+                        if (this.hover)
+                            if (this.highlightOnly) then this.highlight(feature);
+                            else if OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1
+                                timer = _.delay(() =>
+                                    this.select(feature)
+                                , 400)
+                        return
+
+                    onSelect: (wugFeature) =>
+                        popup = new OpenLayers.Popup.FramedCloud("wugpopup",
+                            wugFeature.geometry.getBounds().getCenterLonLat(),
+                            null, #contentSize
+                            "
+                                <b>#{wugFeature.attributes.name}</b><br/>
+                                #{namespace.currYear} Supply: #{wugFeature.attributes.sourceSupply} ac-ft/yr
+                            ",
+                            null, #anchor
+                            false, #closeBock
+                            ) #closeBoxCallback
+
+                        wugFeature.popup = popup
+                        @map.addPopup(popup)
+                        return
+
+                    onUnselect: (wugFeature) =>
+                        clearTimeout(timer)
+                        #if wugFeature.popup?
+                            #@map.removePopup(wugFeature.popup)
+                            #wugFeature.popup.destroy()
+                            #wugFeature.popup = null
+                        return
+                }
+            )
+
+            return control
 
         _calculateScaledValue: (max, min, scale_max, scale_min, val) ->
             if max == min then return scale_min
@@ -180,15 +235,6 @@ define([
                                 attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
                                 transitionEffect: "resize"
                                 isBaseLayer: true
-                                ### how to do listeners on the layers: 
-                                eventListeners: 
-                                    'loadstart': (evt) ->
-                                        console.log 'load start'
-
-                                    'loadend': (evt) ->
-                                        console.log 'ol loadend', evt
-                                        return null
-                                ###
                             }
                         ))
 
@@ -265,19 +311,16 @@ define([
         _wugStyleMap: new OpenLayers.StyleMap(
             "default" : new OpenLayers.Style( 
                 pointRadius: '${getPointRadius}'
-                strokeColor: 'yellow'
-                strokeWidth: '1'
-                fillColor: 'green'
+                strokeColor: "yellow"
+                strokeWidth: 1
+                fillColor: "green"
                 fillOpacity: 0.8
-
-
                 {
                     context:
                         getPointRadius: (feature) ->
                             if feature.size? then return feature.size
                             return 6
                     
-                    #TODO: THIS BREAKS WHEN DOING REGION FOR SOME REASON
                     rules: [
                         new OpenLayers.Rule({
                             maxScaleDenominator: 866688,
@@ -297,12 +340,11 @@ define([
                             }        
                         })
                     ]
-                    
-
                 }
             )
             "select" : new OpenLayers.Style(
                 fillColor: "yellow"
+                strokeColor: "green"
                 fillOpacity: 1
             )
         )
