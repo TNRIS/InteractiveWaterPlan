@@ -7,8 +7,6 @@ namespace InteractiveWaterPlan.MVC4
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            
-            
             bundles.Add(new ScriptBundle("~/bundles/js/modernizr.js").Include(
                 "~/Scripts/modernizr-{version}.js"
             ));
@@ -34,13 +32,6 @@ namespace InteractiveWaterPlan.MVC4
 
             bundles.Add(new ScriptBundle("~/bundles/js/iswp-app.js").Include(
               "~/Scripts/iswp-app.js"
-            ));
-
-            bundles.Add(new StyleBundle("~/bundles/css/iswp.css").Include(
-                "~/Content/bootstrap/css/cosmo.bootstrap.css",
-                "~/Content/FontAwesome/css/font-awesome.css",
-                "~/Content/chosen.cosmo.css",
-                "~/Content/Site.css"
             ));
 
         }
