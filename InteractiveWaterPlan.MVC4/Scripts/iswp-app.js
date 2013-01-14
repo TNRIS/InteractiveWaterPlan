@@ -128,7 +128,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
 
     MapView.prototype.bingApiKey = '';
 
-    MapView.prototype.baseLayers = ['mapquest_open', 'mapquest_aerial', 'esri_gray', 'bing_road', 'bing_hybrid', 'bing_aerial'];
+    MapView.prototype.baseLayers = ['esri_gray', 'mapquest_open', 'mapquest_aerial', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
     MapView.prototype.MAX_WUG_RADIUS = 18;
 
@@ -1522,7 +1522,12 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
       var newWugList, wug;
       newWugList = [];
       wug = strategyModels[0];
-      this.viewName(wug.get("recipientEntityName"));
+      try {
+        this.viewName(wug.get("recipientEntityName"));
+      } catch (e) {
+        alert("Invalid entity");
+        throw "invalidEntity";
+      }
       newWugList.push({
         id: wug.get("recipientEntityId"),
         name: wug.get("recipientEntityName"),

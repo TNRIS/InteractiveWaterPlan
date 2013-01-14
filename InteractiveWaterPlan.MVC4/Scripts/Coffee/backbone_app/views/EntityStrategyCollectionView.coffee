@@ -37,8 +37,12 @@ define([
             wug = strategyModels[0]
 
             #Set the viewName from the returned wug
-            @viewName(wug.get("recipientEntityName"))
-
+            try
+                @viewName(wug.get("recipientEntityName"))
+            catch e
+                alert "Invalid entity"
+                throw "invalidEntity"
+            
             newWugList.push(
                 id: wug.get("recipientEntityId")
                 name: wug.get("recipientEntityName")

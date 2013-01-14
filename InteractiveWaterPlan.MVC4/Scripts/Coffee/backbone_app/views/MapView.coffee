@@ -17,7 +17,7 @@ define([
 
         bingApiKey: ''
 
-        baseLayers: ['mapquest_open', 'mapquest_aerial', 'esri_gray', 
+        baseLayers: ['esri_gray', 'mapquest_open', 'mapquest_aerial', 
             'bing_road', 'bing_hybrid', 'bing_aerial']
 
         MAX_WUG_RADIUS: 18
