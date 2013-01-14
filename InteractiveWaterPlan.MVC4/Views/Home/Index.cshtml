@@ -103,11 +103,11 @@
 
     @if (HttpContext.Current.IsDebuggingEnabled)
     {
-        @Scripts.Render("~/Content/OpenLayers/OpenLayers.debug.js")
+        @Scripts.Render("~/Scripts/OpenLayers/OpenLayers.debug.js")
     }
     else
     {
-        @Scripts.Render("~/Content/OpenLayers/OpenLayers.js")
+        @Scripts.Render("~/Scripts/OpenLayers/OpenLayers.js")
     }
     
     @Scripts.Render("~/bundles/js/lib.js")
