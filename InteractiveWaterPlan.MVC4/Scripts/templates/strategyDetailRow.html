@@ -17,7 +17,12 @@
 <td>{{ $.number(m["supply"+currYear]) }}</td>
 <td>
     <span class="has-popover" data-content="Sponsor: {{m.sponsorName}}" data-placement="right">
-        ${{ $.number(m.capitalCost) }}
+        <%  if (m.sponsorId == m.recipientEntityId) {
+                print('$' + $.number(m.capitalCost));
+            } else {
+                print('---');
+            }
+        %>
     </span>
 </td>
 <td>{{m.onlineYear}}</td>

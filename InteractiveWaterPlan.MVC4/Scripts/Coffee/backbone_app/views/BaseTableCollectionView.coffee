@@ -68,7 +68,6 @@ define([
 
                         this.$('.has-popover').popover(trigger: 'hover')
                         this.hideLoading()
-
                     else
                         this.hideLoading()
                         this.showNothingFound()
@@ -164,11 +163,22 @@ define([
                     if a > b then return 1
                     return 0
 
+                #special sort for numbers formatted as currency $123,456
                 "formatted-currency": (a, b) ->
-                    a = parseInt(a.replace(/,/g,"").replace("$", ""))
-                    b = parseInt(b.replace(/,/g,"").replace("$", ""))
-                    if a < b then return -1
-                    if a > b then return 1
+                    a = a.replace(/,/g,"").replace("$", "")
+                    b = b.replace(/,/g,"").replace("$", "")
+
+                    if _.isNaN(parseFloat(a)) and _.isNaN(parseFloat(b))
+                        return 0
+                    if _.isNaN(parseFloat(a))
+                        return -1
+                    if _.isNaN(parseFloat(b))
+                        return 1
+
+                    int_a = parseFloat(a)
+                    int_b = parseFloat(b)
+                    if int_a < int_b then return -1
+                    if int_a > int_b then return 1
                     return 0
             )
 

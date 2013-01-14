@@ -147,12 +147,24 @@ define(['namespace'], function(namespace) {
           return 0;
         },
         "formatted-currency": function(a, b) {
-          a = parseInt(a.replace(/,/g, "").replace("$", ""));
-          b = parseInt(b.replace(/,/g, "").replace("$", ""));
-          if (a < b) {
+          var int_a, int_b;
+          a = a.replace(/,/g, "").replace("$", "");
+          b = b.replace(/,/g, "").replace("$", "");
+          if (_.isNaN(parseFloat(a)) && _.isNaN(parseFloat(b))) {
+            return 0;
+          }
+          if (_.isNaN(parseFloat(a))) {
             return -1;
           }
-          if (a > b) {
+          if (_.isNaN(parseFloat(b))) {
+            return 1;
+          }
+          int_a = parseFloat(a);
+          int_b = parseFloat(b);
+          if (int_a < int_b) {
+            return -1;
+          }
+          if (int_a > int_b) {
             return 1;
           }
           return 0;
