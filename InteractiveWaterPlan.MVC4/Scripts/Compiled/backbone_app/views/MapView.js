@@ -134,7 +134,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
     };
 
     MapView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugSelectControl != null)) {
+      if (!(this.wugSelectControl != null) || !(this.wugSelectControl.layer.selectedFeatures != null)) {
         return;
       }
       this.wugSelectControl.unselectAll();

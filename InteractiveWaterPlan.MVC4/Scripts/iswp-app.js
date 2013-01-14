@@ -242,7 +242,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
     };
 
     MapView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugSelectControl != null)) {
+      if (!(this.wugSelectControl != null) || !(this.wugSelectControl.layer.selectedFeatures != null)) {
         return;
       }
       this.wugSelectControl.unselectAll();

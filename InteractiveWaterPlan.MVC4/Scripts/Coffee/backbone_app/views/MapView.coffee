@@ -129,7 +129,6 @@ define([
                 
             return
 
-
         clearWugFeatures: () ->
             this.unselectWugFeatures() 
             if @wugSelectControl? then @wugSelectControl.destroy()
@@ -147,7 +146,8 @@ define([
             return
 
         unselectWugFeatures: () ->
-            if not @wugSelectControl? then return
+            if not @wugSelectControl? or not @wugSelectControl.layer.selectedFeatures? 
+                return
 
             @wugSelectControl.unselectAll()
 
