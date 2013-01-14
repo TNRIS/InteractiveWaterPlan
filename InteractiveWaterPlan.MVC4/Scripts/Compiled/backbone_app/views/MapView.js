@@ -39,7 +39,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       var layerConfig, overlay, _i, _len, _ref;
       this.$el.empty();
       this.map = new OpenLayers.Map({
-        div: this.$el.attr('id'),
+        div: this.$el[0],
         projection: new OpenLayers.Projection("EPSG:3857"),
         displayProjection: new OpenLayers.Projection("EPSG:4326"),
         layers: this._setupBaseLayers(this.baseLayers),

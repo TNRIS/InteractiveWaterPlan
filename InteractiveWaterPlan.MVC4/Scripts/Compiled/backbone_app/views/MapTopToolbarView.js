@@ -17,17 +17,23 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
     MapTopToolbarView.prototype.mapView = null;
 
     MapTopToolbarView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'toggleMap', 'renderStrategyTypeList', 'zoomToTexas');
+      _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList', 'zoomToTexas');
       this.mapView = options.mapView;
       return null;
     };
 
     MapTopToolbarView.prototype.render = function() {
+      var $btn;
       this.$el.empty();
       this.$el.html(this.template({
         currYear: namespace.currYear
       }));
       ko.applyBindings(this, this.el);
+      if ($("#mapContainer").is(":hidden")) {
+        $btn = this.$('#toggleMapBtn');
+        $btn.addClass('on');
+        this.toggleMap(null, null, $btn);
+      }
       this.renderStrategyTypeList();
       return this;
     };
@@ -61,9 +67,13 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
       this.mapView.resetExtent();
     };
 
-    MapTopToolbarView.prototype.toggleMap = function(data, event) {
+    MapTopToolbarView.prototype.toggleMap = function(data, event, $el) {
       var $target;
-      $target = $(event.target);
+      if ($el != null) {
+        $target = $el;
+      } else {
+        $target = $(event.target);
+      }
       if ($target.hasClass('off')) {
         $target.html('Hide Map');
         $('#mapContainer').slideDown();

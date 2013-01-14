@@ -12,7 +12,7 @@ define([
         mapView: null #must specify in options argument to constructor
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender', 'toggleMap', 
+            _.bindAll(this, 'render', 'unrender', 
                 'renderStrategyTypeList', 'zoomToTexas')
 
             @mapView = options.mapView
@@ -25,6 +25,14 @@ define([
                 currYear: namespace.currYear
             ))
             ko.applyBindings(this, @el) #need for the hide/show map button
+
+            #This is pretty hacky...
+            #TODO: separate the themeNav from the top mapTools
+            # and do this better
+            if $("#mapContainer").is(":hidden")
+                $btn = this.$('#toggleMapBtn')
+                $btn.addClass('on')
+                this.toggleMap(null, null, $btn)
 
             this.renderStrategyTypeList()
             return this
@@ -57,8 +65,11 @@ define([
             @mapView.resetExtent()
             return
 
-        toggleMap: (data, event) ->
-            $target = $(event.target)
+        toggleMap: (data, event, $el) ->
+            if $el?
+                $target = $el
+            else
+                $target = $(event.target)
 
             if $target.hasClass('off')
                 $target.html('Hide Map')

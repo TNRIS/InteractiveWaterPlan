@@ -42,7 +42,7 @@ define([
             @$el.empty()
 
             @map = new OpenLayers.Map(
-                div: @$el.attr('id')
+                div: @$el[0]
                 projection: new OpenLayers.Projection("EPSG:3857") #spherical/web mercator (aka 900913)
                 displayProjection: new OpenLayers.Projection("EPSG:4326") #geographic wgs-84 
                 layers: this._setupBaseLayers(@baseLayers)
