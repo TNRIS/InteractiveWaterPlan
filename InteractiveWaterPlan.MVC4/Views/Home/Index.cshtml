@@ -125,7 +125,6 @@
     
         var initStrategyTypes = @Html.Raw(ViewData["StrategyTypes"]);
     </script>
-
     
     @if (HttpContext.Current.IsDebuggingEnabled)
     {
@@ -134,7 +133,6 @@
     }
     else
     {
-        <p>HI JAMES</p>
         @* Preload the optimized module file *@
         @Scripts.Render(
             "~/bundles/js/iswp-app.js",
