@@ -33,10 +33,11 @@ $(()->
         urlArgs: "bust=" +  (new Date()).getTime() #busts the cache on each RequireJS request.
     )
 
-    require(['ISWPApp'],
-      (ISWPApp) ->
-        ISWPApp.initialize()
-        return
+    require(['WMSRouter'],
+        (WMSRouter) =>
+            r = new WMSRouter()
+            Backbone.history.start()
+            return
     )
 
     return

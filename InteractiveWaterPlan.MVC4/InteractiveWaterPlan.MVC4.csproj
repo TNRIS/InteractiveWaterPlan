@@ -248,7 +248,6 @@
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <None Include="Scripts\build-iswp-app.bat" />
-    <None Include="Scripts\Coffee\backbone_app\ISWPApp.coffee" />
     <None Include="Scripts\Coffee\backbone_app\config\WmsThemeConfig.coffee" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
@@ -258,7 +257,6 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
-    <Content Include="Scripts\Compiled\backbone_app\ISWPApp.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />

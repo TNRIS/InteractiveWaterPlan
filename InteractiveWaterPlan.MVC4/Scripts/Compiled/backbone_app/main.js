@@ -14,6 +14,7 @@ _.extend(_.templateSettings, {
 BASE_API_PATH = "/";
 
 $(function() {
+  var _this = this;
   BASE_API_PATH = $("#base_path").val();
   require.config({
     baseUrl: "" + BASE_API_PATH + "Scripts/Compiled/backbone_app",
@@ -23,7 +24,9 @@ $(function() {
     },
     urlArgs: "bust=" + (new Date()).getTime()
   });
-  require(['ISWPApp'], function(ISWPApp) {
-    ISWPApp.initialize();
+  require(['WMSRouter'], function(WMSRouter) {
+    var r;
+    r = new WMSRouter();
+    Backbone.history.start();
   });
 });
