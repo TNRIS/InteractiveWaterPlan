@@ -183,7 +183,8 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         return;
       }
       this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
-        styleMap: this._wugStyleMap
+        styleMap: this._wugStyleMap,
+        displayInLayerSwitcher: false
       });
       wktFormat = new OpenLayers.Format.WKT();
       max_supply = featureCollection.max(function(m) {

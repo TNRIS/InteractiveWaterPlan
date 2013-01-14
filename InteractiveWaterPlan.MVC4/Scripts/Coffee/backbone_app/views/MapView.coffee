@@ -85,6 +85,7 @@ define([
                 "Water User Groups",
                 {
                     styleMap: this._wugStyleMap
+                    displayInLayerSwitcher: false
                 })
 
             wktFormat = new OpenLayers.Format.WKT()
