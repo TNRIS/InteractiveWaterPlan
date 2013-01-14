@@ -110,9 +110,9 @@ define([
                     @map.displayProjection, @map.projection)
                 
                 if not bounds?
-                    #must create a new bounds, otherwise the feature's bounds
+                    #must clone the bounds, otherwise the feature's bounds
                     # will get modified by subsequent extends in the else condition
-                    bounds = new OpenLayers.Bounds(newFeature.geometry.getBounds())
+                    bounds = newFeature.geometry.getBounds().clone()
                 else
                     bounds.extend(newFeature.geometry.getBounds())
 
@@ -124,8 +124,9 @@ define([
             #Add a select feature on hover control
             @wugSelectControl = this._setupWugSelectControl()
             @map.addControl(@wugSelectControl)
-
+ 
             @map.zoomToExtent(bounds)
+                
             return
 
 
