@@ -27,6 +27,9 @@
 
     <property column="CapitalCost_SUM" name="CapitalCost" />
 
+    <property column="wmsSponsorEntityName" name="SponsorName" />
+    <property column="wmsSponsorEntityId" name="SponsorId" />
+
     <property column="CalculatedOnlineDate" name="OnlineYear" />
 
     <property column="SourceName" name="SourceName" />

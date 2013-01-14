@@ -60,6 +60,9 @@ define(['namespace'], function(namespace) {
               m = _ref[_i];
               _this.appendModel(m);
             }
+            _this.$('.has-popover').popover({
+              trigger: 'hover'
+            });
             _this.hideLoading();
           } else {
             _this.hideLoading();

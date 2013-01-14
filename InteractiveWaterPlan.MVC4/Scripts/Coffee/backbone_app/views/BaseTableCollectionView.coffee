@@ -66,6 +66,7 @@ define([
                         for m in collection.models
                             this.appendModel(m)
 
+                        this.$('.has-popover').popover(trigger: 'hover')
                         this.hideLoading()
 
                     else

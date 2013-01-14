@@ -27,6 +27,9 @@
 
     <property column="CapitalCost" name="CapitalCost" />
 
+    <property column="wmsSponsorEntityName" name="SponsorName" />
+    <property column="wmsSponsorEntityId" name="SponsorId" />
+             
     <property column="CalculatedOnlineDate" name="OnlineYear" />
 
     <property column="SourceName" name="SourceName" />
@@ -35,6 +38,7 @@
 
     <property column="wmsRecipientEntityId" name="RecipientEntityId" />
     <property column="wmsRecipientEntityName" name="RecipientEntityName" />
+    
     <property column="SQL_GEOG" name="RecipientEntityWktGeog" />
     
   </class>

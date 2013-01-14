@@ -13,5 +13,9 @@
 
 <td>{{m.sourceName}}</td>
 <td>{{ $.number(m["supply"+currYear]) }}</td>
-<td>${{ $.number(m.capitalCost) }}</td>
+<td>
+    <span class="has-popover" data-content="Sponsor: {{m.sponsorName}}" data-placement="right">
+        ${{ $.number(m.capitalCost) }}
+    </span>
+</td>
 <td>{{m.onlineYear}}</td>
