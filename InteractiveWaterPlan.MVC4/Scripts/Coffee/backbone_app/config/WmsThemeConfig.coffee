@@ -8,7 +8,7 @@
                 type: "WMS"
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 service_params:
-                    layers: "4"
+                    layers: "4,7" #7 is the annotation layer
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -32,7 +32,7 @@
                 type: "WMS"
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 service_params:
-                    layers: "1"
+                    layers: "1,13" #13 is the annotation layer
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -44,7 +44,7 @@
                 type: "WMS"
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 service_params:
-                    layers: "3"
+                    layers: "3,9" #9 is the annotation layer
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -56,7 +56,7 @@
                 type: "WMS"
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 service_params:
-                    layers: "2"
+                    layers: "2,11" #11 is the annotation layer
                     transparent: true
                 layer_params:
                     isBaseLayer: false

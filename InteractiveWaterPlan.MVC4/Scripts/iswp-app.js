@@ -40,7 +40,7 @@ define('namespace',['collections/WugFeatureCollection'], function(WugFeatureColl
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         service_params: {
-          layers: "4",
+          layers: "4,7",
           transparent: true
         },
         layer_params: {
@@ -66,7 +66,7 @@ define('namespace',['collections/WugFeatureCollection'], function(WugFeatureColl
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         service_params: {
-          layers: "1",
+          layers: "1,13",
           transparent: true
         },
         layer_params: {
@@ -79,7 +79,7 @@ define('namespace',['collections/WugFeatureCollection'], function(WugFeatureColl
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         service_params: {
-          layers: "3",
+          layers: "3,9",
           transparent: true
         },
         layer_params: {
@@ -92,7 +92,7 @@ define('namespace',['collections/WugFeatureCollection'], function(WugFeatureColl
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         service_params: {
-          layers: "2",
+          layers: "2,11",
           transparent: true
         },
         layer_params: {
