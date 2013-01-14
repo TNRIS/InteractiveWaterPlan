@@ -135,8 +135,9 @@
     else
     {
         @* Preload the optimized module file *@
-        @Scripts.Render("~/bundles/js/iswp-app.js")
-        @Scripts.Render("~/Scripts/Compiled/backbone_app/main.js")
+        @Scripts.Render(
+            "~/bundles/js/iswp-app.js",
+            "~/Scripts/Compiled/backbone_app/main.js")
     }
 
     
