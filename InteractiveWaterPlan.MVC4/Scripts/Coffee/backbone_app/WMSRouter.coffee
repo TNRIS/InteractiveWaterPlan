@@ -1,7 +1,7 @@
 define([
     'namespace'
     'views/MapView'
-    'views/MapTopToolbarView'
+    'views/ThemeNavToolbarView'
     'views/YearNavView'
     'views/MapBottomToolbarView'
     'views/CountyNetSupplyCollectionView'
@@ -11,6 +11,7 @@ define([
     'views/EntityStrategyCollectionView'
     'views/StrategyDetailCollectionView'
     'views/WmsAreaSelectView'
+    'views/MapTopButtonsView'
     'collections/StrategyTypeCollection'
     'collections/CountyCollection'
     'collections/RegionCollection'
@@ -19,7 +20,7 @@ define([
 ],
 (   namespace, 
     MapView, 
-    MapTopToolbarView, 
+    ThemeNavToolbarView, 
     YearNavView, 
     MapBottomToolbarView,
     CountyNetSupplyCollectionView, 
@@ -29,6 +30,7 @@ define([
     EntityStrategyCollectionView,
     StrategyDetailCollectionView,
     WmsAreaSelectView,
+    MapTopButtonsView,
     StrategyTypeCollection,
     CountyCollection,
     RegionCollection,
@@ -57,11 +59,16 @@ define([
             )
             @mapBottomToolbarView.render()
 
-            @mapTopToolbarView = new MapTopToolbarView(
-                el: $('#mapTopToolbarContainer')[0]
-                mapView: @mapView
+            @themeNavToolbarView = new ThemeNavToolbarView(
+                el: $('#themeNavContainer')[0]
             )
             #render in 'after' filter
+
+            @mapTopButtonsView = new MapTopButtonsView(
+                el: $('#mapTopButtonsContainer')[0]
+                mapView: @mapView
+            )
+            @mapTopButtonsView.render()
 
             @yearNavView = new YearNavView(
                 el: $('#yearNavContainer')[0] 
@@ -159,7 +166,7 @@ define([
                     #subscribe to currentYear changes
                     @yearNavView.currentYear.subscribe(this.updateViewsToNewYear) 
                     
-                    @mapTopToolbarView.render()
+                    @themeNavToolbarView.render()
        
 
         default: () ->

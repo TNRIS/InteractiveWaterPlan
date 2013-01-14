@@ -259,8 +259,10 @@
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\MapTopButtonsView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavToolbarView.js" />
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
@@ -276,7 +278,6 @@
     <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyTypeView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\MapTopToolbarView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyTypeCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
@@ -318,6 +319,7 @@
     <Content Include="Scripts\templates\entityStrategyRow.html" />
     <Content Include="Scripts\templates\entityStrategyTable.html" />
     <Content Include="Scripts\templates\mapBottomRightTools.html" />
+    <Content Include="Scripts\templates\mapTopButtons.html" />
     <Content Include="Scripts\templates\strategyDetailRow.html" />
     <Content Include="Scripts\templates\strategyDetailTable.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
@@ -325,7 +327,7 @@
     <Content Include="Scripts\templates\strategyTypeListItem.html" />
     <Content Include="Scripts\templates\strategyTypeRow.html" />
     <Content Include="Scripts\templates\strategyTypeTable.html" />
-    <Content Include="Scripts\templates\mapTopToolbar.html" />
+    <Content Include="Scripts\templates\themeNav.html" />
     <Content Include="Scripts\templates\yearNav.html" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\tnris.place_typeahead.js" />
@@ -341,6 +343,8 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
+    <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\ThemeNavToolbarView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
   </ItemGroup>
   <ItemGroup>
@@ -384,7 +388,6 @@
     <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyTypeView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyView.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\MapTopToolbarView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyTypeCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\YearNavView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />

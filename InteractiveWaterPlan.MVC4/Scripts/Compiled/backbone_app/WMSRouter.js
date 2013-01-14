@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/StrategyDetailCollectionView', 'views/WmsAreaSelectView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection', 'collections/HouseCollection', 'collections/SenateCollection'], function(namespace, MapView, MapTopToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyDetailCollectionView, WmsAreaSelectView, StrategyTypeCollection, CountyCollection, RegionCollection, HouseCollection, SenateCollection) {
+define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/StrategyDetailCollectionView', 'views/WmsAreaSelectView', 'views/MapTopButtonsView', 'collections/StrategyTypeCollection', 'collections/CountyCollection', 'collections/RegionCollection', 'collections/HouseCollection', 'collections/SenateCollection'], function(namespace, MapView, ThemeNavToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyDetailCollectionView, WmsAreaSelectView, MapTopButtonsView, StrategyTypeCollection, CountyCollection, RegionCollection, HouseCollection, SenateCollection) {
   var WMSRouter;
   return WMSRouter = (function(_super) {
 
@@ -26,10 +26,14 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
         mapView: this.mapView
       });
       this.mapBottomToolbarView.render();
-      this.mapTopToolbarView = new MapTopToolbarView({
-        el: $('#mapTopToolbarContainer')[0],
+      this.themeNavToolbarView = new ThemeNavToolbarView({
+        el: $('#themeNavContainer')[0]
+      });
+      this.mapTopButtonsView = new MapTopButtonsView({
+        el: $('#mapTopButtonsContainer')[0],
         mapView: this.mapView
       });
+      this.mapTopButtonsView.render();
       this.yearNavView = new YearNavView({
         el: $('#yearNavContainer')[0]
       });
@@ -113,7 +117,7 @@ define(['namespace', 'views/MapView', 'views/MapTopToolbarView', 'views/YearNavV
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
           this.yearNavView.render();
           this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
-          return this.mapTopToolbarView.render();
+          return this.themeNavToolbarView.render();
         }
       }
     };
