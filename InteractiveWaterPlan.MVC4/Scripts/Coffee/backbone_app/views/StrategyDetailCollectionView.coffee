@@ -12,9 +12,7 @@ define([
             _.bindAll(this, 'fetchCallback')
 
             @projectId = options.id
-            
-            #TODO: Get the project name (actually the description)
-
+           
             @viewName = ko.observable()
 
             fetchParams = {projectId: @projectId}

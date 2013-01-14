@@ -15,8 +15,7 @@ define([
             if (not namespace.countyNames? or not namespace.regionNames? or 
                 not namespace.houseNames? or not namespace.senateNames?)
                     throw "Must specify namespace.counties, namespace.regions, namespace.house,and namespace.senate"
-                #TODO: or could call populate those collections asynchronously 
-
+                
             @countyNamesCollection = namespace.countyNames
             @regionNamesCollection = namespace.regionNames
             @houseNamesCollection = namespace.houseNames
