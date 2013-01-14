@@ -184,6 +184,7 @@ define([
                             false, #closeBox
                             ) #closeBoxCallback
 
+                        popup.autoSize = true
                         wugFeature.popup = popup
                         @map.addPopup(popup)
                         return

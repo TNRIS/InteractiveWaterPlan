@@ -283,6 +283,7 @@
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
+    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Popup.Cosmo.js" />
     <Content Include="Scripts\iswp-app.js" />
     <Content Include="Scripts\iswp-app.min.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
@@ -342,6 +343,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
+    <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
