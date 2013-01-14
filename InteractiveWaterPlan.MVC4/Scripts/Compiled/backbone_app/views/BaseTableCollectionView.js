@@ -87,14 +87,17 @@ define(['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.connectTableRowsToWugFeatures = function() {
-      var _this = this;
-      this.$('table td').hover(function(event) {
+      var me;
+      me = this;
+      this.$('table tbody').delegate('tr', 'hover', function(event) {
         var $target, wugId;
-        $target = $(event.target);
-        wugId = $target.parent('tr').data('entity-id');
-        _this.selectedWug(wugId);
-      }, function(event) {
-        _this.selectedWug(null);
+        if (event.type === 'mouseenter') {
+          $target = $(this);
+          wugId = $target.data('entity-id');
+          me.selectedWug(wugId);
+        } else {
+          me.selectedWug(null);
+        }
       });
     };
 

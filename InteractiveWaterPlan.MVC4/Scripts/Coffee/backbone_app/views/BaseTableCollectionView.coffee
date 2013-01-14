@@ -100,20 +100,23 @@ define([
             return
 
 
+        #Attach hover listener to the data table to show a popup for the associated WUG Feature
         connectTableRowsToWugFeatures: () ->
 
-            this.$('table td').hover(
-                (event) => #Hover In - Select the WUG Feature
-                    $target = $(event.target) #it is a td
+            me = this #save reference to the View
+            this.$('table tbody').delegate('tr', 'hover', #delegates to tr
+                (event) ->
+                    if event.type == 'mouseenter'
+                        $target = $(this) #this = tr
 
-                    #grab entity-id from the parent tr
-                    wugId = $target.parent('tr').data('entity-id')
-                    
-                    #update the observable to trigger the event
-                    @selectedWug(wugId)
-                    return
-                (event) => #Hover Out - Deselect the WUG Feature
-                    @selectedWug(null)
+                        #grab entity-id from the parent tr
+                        wugId = $target.data('entity-id')
+                        
+                        #update the observable to trigger the event
+                        me.selectedWug(wugId)
+                    else
+                        me.selectedWug(null) #select none (hides the map popup)
+                        
                     return
             )
 
