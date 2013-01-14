@@ -1918,6 +1918,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/MapTopToolbarView', 'vi
           if (_.contains(namespace.VALID_YEARS, year)) {
             namespace.currYear = year;
           } else {
+            window.history.back();
             throw "Invalid Year.";
             return false;
           }

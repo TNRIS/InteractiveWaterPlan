@@ -141,6 +141,7 @@ define([
                     if _.contains(namespace.VALID_YEARS, year)
                         namespace.currYear = year
                     else
+                        window.history.back()
                         throw "Invalid Year."
                         return false
                 return
