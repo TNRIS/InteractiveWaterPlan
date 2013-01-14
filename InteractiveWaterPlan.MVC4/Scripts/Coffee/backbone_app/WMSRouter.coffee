@@ -111,9 +111,9 @@ define([
             return
 
         updateSelectedWug: (wugId) ->
-            if not wugId
+            if not wugId #if null, unselect all 
                 @mapView.unselectWugFeatures()
-            else
+            else #select the feature with the given id
                 @mapView.selectWugFeature(wugId)
             return
 
