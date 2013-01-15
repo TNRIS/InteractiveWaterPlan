@@ -21,6 +21,7 @@ namespace InteractiveWaterPlan.MVC4
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            HttpFilterConfig.RegisterGlobalHttpFilters(GlobalConfiguration.Configuration.Filters);
 
             List<HibernateConnection> hibernateConnections = new List<HibernateConnection>();
             hibernateConnections.Add(new HibernateConnection(CommonConstants.PLACES_SESSION_NAME, Server.MapPath("~/PlacesDB_Hibernate.config")));

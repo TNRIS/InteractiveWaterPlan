@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\HttpFilterConfig.cs" />
     <Compile Include="Controllers\BoundaryController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -142,6 +143,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
+    <Compile Include="Filters\GenericExceptionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
