@@ -101,8 +101,10 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
           if (_.contains(namespace.VALID_YEARS, year)) {
             namespace.currYear = year;
           } else {
-            window.history.back();
-            throw "Invalid Year.";
+            alert("Invalid decade specified.");
+            Backbone.history.navigate("", {
+              trigger: true
+            });
             return false;
           }
         }
@@ -111,7 +113,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.after = {
       '': function(year) {
-        if (year != null) {
+        if ((year != null) && (this.currTableView != null)) {
           this.currTableView.render();
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
           this.yearNavView.render();
@@ -134,6 +136,8 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.currTableView = new CountyNetSupplyCollectionView({
         el: this.tableContainer
       });
+      this.mapView.resetExtent();
+      this.mapView.clearWugFeatures();
     };
 
     WMSRouter.prototype.wmsRegion = function(year, regionLetter) {
@@ -145,8 +149,16 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsCounty = function(year, countyId) {
-      var countyName;
-      countyName = namespace.countyNames.get(countyId).get('name');
+      var county, countyName;
+      county = namespace.countyNames.get(countyId);
+      if (!(county != null)) {
+        alert("Invalid countyId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+        return;
+      }
+      countyName = county.get('name');
       this.currTableView = new CountyStrategyCollectionView({
         el: this.tableContainer,
         id: countyId,
@@ -155,8 +167,16 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsType = function(year, typeId) {
-      var typeName;
-      typeName = namespace.strategyTypes.get(typeId).get('name');
+      var typeName, wmsType;
+      wmsType = namespace.strategyTypes.get(typeId);
+      if (!(wmsType != null)) {
+        alert("Invalid typeId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+        return;
+      }
+      typeName = wmsType.get('name');
       this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         id: typeId,

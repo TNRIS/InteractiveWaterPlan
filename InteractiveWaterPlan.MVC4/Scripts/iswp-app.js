@@ -1101,12 +1101,12 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.showNothingFound = function() {
-      $('#nothingFound').fadeIn();
+      $('#nothingFoundMessage').fadeIn();
       $('.scrollTableContainer').hide();
     };
 
     BaseTableCollectionView.prototype.hideNothingFound = function() {
-      $('#nothingFound').hide();
+      $('#nothingFoundMessage').hide();
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {
@@ -1512,12 +1512,13 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
       var newWugList, wug;
       newWugList = [];
       wug = strategyModels[0];
-      try {
-        this.viewName(wug.get("recipientEntityName"));
-      } catch (e) {
-        alert("Invalid entity");
-        throw "invalidEntity";
+      if (!(wug != null)) {
+        alert("Invalid entityId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
       }
+      this.viewName(wug.get("recipientEntityName"));
       newWugList.push({
         id: wug.get("recipientEntityId"),
         name: wug.get("recipientEntityName"),
@@ -1589,6 +1590,12 @@ define('views/StrategyDetailCollectionView',['namespace', 'views/BaseTableCollec
     };
 
     StrategyDetailCollectionView.prototype.fetchCallback = function(strategyModels) {
+      if (strategyModels.length < (1 != null)) {
+        alert("Invalid projectId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+      }
       this.viewName(strategyModels[0].get("description"));
       StrategyDetailCollectionView.__super__.fetchCallback.call(this, strategyModels);
     };
@@ -1980,8 +1987,10 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
           if (_.contains(namespace.VALID_YEARS, year)) {
             namespace.currYear = year;
           } else {
-            window.history.back();
-            throw "Invalid Year.";
+            alert("Invalid decade specified.");
+            Backbone.history.navigate("", {
+              trigger: true
+            });
             return false;
           }
         }
@@ -1990,7 +1999,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
 
     WMSRouter.prototype.after = {
       '': function(year) {
-        if (year != null) {
+        if ((year != null) && (this.currTableView != null)) {
           this.currTableView.render();
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
           this.yearNavView.render();
@@ -2013,6 +2022,8 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       this.currTableView = new CountyNetSupplyCollectionView({
         el: this.tableContainer
       });
+      this.mapView.resetExtent();
+      this.mapView.clearWugFeatures();
     };
 
     WMSRouter.prototype.wmsRegion = function(year, regionLetter) {
@@ -2024,8 +2035,16 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     };
 
     WMSRouter.prototype.wmsCounty = function(year, countyId) {
-      var countyName;
-      countyName = namespace.countyNames.get(countyId).get('name');
+      var county, countyName;
+      county = namespace.countyNames.get(countyId);
+      if (!(county != null)) {
+        alert("Invalid countyId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+        return;
+      }
+      countyName = county.get('name');
       this.currTableView = new CountyStrategyCollectionView({
         el: this.tableContainer,
         id: countyId,
@@ -2034,8 +2053,16 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     };
 
     WMSRouter.prototype.wmsType = function(year, typeId) {
-      var typeName;
-      typeName = namespace.strategyTypes.get(typeId).get('name');
+      var typeName, wmsType;
+      wmsType = namespace.strategyTypes.get(typeId);
+      if (!(wmsType != null)) {
+        alert("Invalid typeId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+        return;
+      }
+      typeName = wmsType.get('name');
       this.currTableView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         id: typeId,

@@ -108,7 +108,6 @@ define([
                     break
 
             if oldYear == ""
-                #throw "Year invalid." 
                 Backbone.history.navigate("") #just redirect to default
 
             
@@ -145,14 +144,14 @@ define([
                     if _.contains(namespace.VALID_YEARS, year)
                         namespace.currYear = year
                     else
-                        window.history.back()
-                        throw "Invalid Year."
+                        alert "Invalid decade specified."
+                        Backbone.history.navigate("", {trigger: true})
                         return false
                 return
 
         after:
             '': (year) ->
-                if year?
+                if year? and @currTableView?
                     @currTableView.render()
 
                     #subscribe to table row select (by hover)
@@ -179,6 +178,9 @@ define([
             @currTableView = new CountyNetSupplyCollectionView(
                 el: @tableContainer
             )
+
+            @mapView.resetExtent()
+            @mapView.clearWugFeatures()
             
             return
 
@@ -194,9 +196,15 @@ define([
             return
         
         wmsCounty: (year, countyId) ->
-          
-            #TODO: If invalid countyId, then show error
-            countyName = namespace.countyNames.get(countyId).get('name')
+            #If invalid countyId, then show error
+            county = namespace.countyNames.get(countyId)
+            if not county?
+                alert("Invalid countyId specified.")
+                Backbone.history.navigate("", {trigger: true})
+                return
+
+            #otherwise render the view
+            countyName = county.get('name')
 
             @currTableView = new CountyStrategyCollectionView(
                 el: @tableContainer
@@ -208,9 +216,16 @@ define([
 
         wmsType: (year, typeId) ->
            
-            #TODO: If invalid typeId, then show error
-            typeName = namespace.strategyTypes.get(typeId).get('name')
+            #If invalid typeId, then show error
+            wmsType = namespace.strategyTypes.get(typeId)
+            if not wmsType?
+                alert("Invalid typeId specified.")
+                Backbone.history.navigate("", {trigger: true})
+                return
 
+            typeName = wmsType.get('name')
+
+            #otherwise render the view
             @currTableView = new StrategyTypeCollectionView(
                 el: @tableContainer
                 id: typeId
@@ -220,9 +235,9 @@ define([
             return
 
         wmsEntity: (year, entityId) ->
+            #(validation of projectId is taken care of in fetchCallback)
             
-            #TODO: If invalid entityId, then show error
-                    
+            #render the view
             @currTableView = new EntityStrategyCollectionView(
                 el: @tableContainer
                 id: entityId
@@ -231,8 +246,9 @@ define([
             return
 
         wmsProjectDetail: (year, projectId) ->
-            #TODO: If invalid projectId, then show error
-                    
+            #(validation of projectId is taken care of in fetchCallback)
+
+            #render the view
             @currTableView = new StrategyDetailCollectionView(
                 el: @tableContainer
                 id: projectId

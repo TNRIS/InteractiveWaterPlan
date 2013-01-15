@@ -114,12 +114,12 @@ define(['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.showNothingFound = function() {
-      $('#nothingFound').fadeIn();
+      $('#nothingFoundMessage').fadeIn();
       $('.scrollTableContainer').hide();
     };
 
     BaseTableCollectionView.prototype.hideNothingFound = function() {
-      $('#nothingFound').hide();
+      $('#nothingFoundMessage').hide();
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {

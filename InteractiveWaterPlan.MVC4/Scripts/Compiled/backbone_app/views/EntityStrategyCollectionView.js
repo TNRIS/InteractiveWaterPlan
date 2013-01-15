@@ -33,12 +33,13 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
       var newWugList, wug;
       newWugList = [];
       wug = strategyModels[0];
-      try {
-        this.viewName(wug.get("recipientEntityName"));
-      } catch (e) {
-        alert("Invalid entity");
-        throw "invalidEntity";
+      if (!(wug != null)) {
+        alert("Invalid entityId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
       }
+      this.viewName(wug.get("recipientEntityName"));
       newWugList.push({
         id: wug.get("recipientEntityId"),
         name: wug.get("recipientEntityName"),

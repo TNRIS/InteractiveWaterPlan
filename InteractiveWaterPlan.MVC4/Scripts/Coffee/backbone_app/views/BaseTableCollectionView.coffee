@@ -134,12 +134,12 @@ define([
             return
 
         showNothingFound: () ->
-            $('#nothingFound').fadeIn()
+            $('#nothingFoundMessage').fadeIn()
             $('.scrollTableContainer').hide()
             return
 
         hideNothingFound: () ->
-            $('#nothingFound').hide()
+            $('#nothingFoundMessage').hide()
 
             return
 

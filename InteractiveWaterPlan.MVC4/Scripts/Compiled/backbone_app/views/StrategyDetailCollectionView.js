@@ -30,6 +30,12 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyDetailView'
     };
 
     StrategyDetailCollectionView.prototype.fetchCallback = function(strategyModels) {
+      if (strategyModels.length < (1 != null)) {
+        alert("Invalid projectId specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+      }
       this.viewName(strategyModels[0].get("description"));
       StrategyDetailCollectionView.__super__.fetchCallback.call(this, strategyModels);
     };

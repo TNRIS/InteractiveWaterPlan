@@ -36,12 +36,13 @@ define([
 
             wug = strategyModels[0]
 
+            #if not valid, redirect to default view
+            if not wug?
+                alert "Invalid entityId specified."
+                Backbone.history.navigate("", {trigger: true})
+            
             #Set the viewName from the returned wug
-            try
-                @viewName(wug.get("recipientEntityName"))
-            catch e
-                alert "Invalid entity"
-                throw "invalidEntity"
+            @viewName(wug.get("recipientEntityName"))
             
             newWugList.push(
                 id: wug.get("recipientEntityId")
