@@ -17,7 +17,7 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.
     MapBottomToolbarView.prototype.mapView = null;
 
     MapBottomToolbarView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'toggleAreaSelects', 'showPlaceFeature');
+      _.bindAll(this, 'render', 'unrender', 'showPlaceFeature');
       this.mapView = options.mapView;
     };
 
@@ -46,18 +46,21 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.
 
     MapBottomToolbarView.prototype.toggleAreaSelects = function(data, event) {
       var $target, toggleSelector;
-      $target = $(event.target);
+      $target = $(event.delegateTarget);
       toggleSelector = $target.data('toggle');
       $(toggleSelector).slideToggle(300, function() {
-        var $i;
+        var $i, oldTitle;
         $i = $('i', $target);
         if ($i.hasClass('icon-caret-up')) {
           $i.removeClass('icon-caret-up');
-          return $i.addClass('icon-caret-down');
+          $i.addClass('icon-caret-down');
         } else {
           $i.addClass('icon-caret-up');
-          return $i.removeClass('icon-caret-down');
+          $i.removeClass('icon-caret-down');
         }
+        oldTitle = $('.title', $target).html();
+        $('.title', $target).html($target.attr('data-title-orig'));
+        return $target.attr('data-title-orig', oldTitle);
       });
     };
 

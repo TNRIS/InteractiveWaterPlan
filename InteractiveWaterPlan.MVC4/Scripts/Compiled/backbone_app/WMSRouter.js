@@ -141,6 +141,15 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsRegion = function(year, regionLetter) {
+      var region;
+      region = namespace.regionNames.get(regionLetter);
+      if (!(region != null)) {
+        alert("Invalid region specified.");
+        Backbone.history.navigate("", {
+          trigger: true
+        });
+        return;
+      }
       this.currTableView = new RegionStrategyCollectionView({
         el: this.tableContainer,
         id: regionLetter,

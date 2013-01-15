@@ -185,8 +185,13 @@ define([
             return
 
         wmsRegion: (year, regionLetter) ->
-          
-            #TODO: If invalid regionLetter, then show error
+
+            region = namespace.regionNames.get(regionLetter)
+            if not region?
+                alert("Invalid region specified.")
+                Backbone.history.navigate("", {trigger: true})
+                return
+
             @currTableView = new RegionStrategyCollectionView(
                 el: @tableContainer
                 id: regionLetter

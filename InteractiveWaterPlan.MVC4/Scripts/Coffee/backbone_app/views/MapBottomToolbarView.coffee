@@ -10,7 +10,7 @@ define([
         mapView: null #must specify in options argument to constructor
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender', 'toggleAreaSelects', 'showPlaceFeature')
+            _.bindAll(this, 'render', 'unrender', 'showPlaceFeature')
 
             @mapView = options.mapView
 
@@ -43,18 +43,23 @@ define([
             return null
 
         toggleAreaSelects: (data, event) ->
-            $target = $(event.target)
-
+            $target = $(event.delegateTarget)
+            
             toggleSelector = $target.data('toggle')
 
             $(toggleSelector).slideToggle(300, () ->
                 $i = $('i', $target)
-                if $i.hasClass('icon-caret-up')
+                if $i.hasClass('icon-caret-up') #it is shown, so hide it
                     $i.removeClass('icon-caret-up')
                     $i.addClass('icon-caret-down')
                 else
-                    $i.addClass('icon-caret-up')
+                    $i.addClass('icon-caret-up') #it is hidden, so show it
                     $i.removeClass('icon-caret-down')
+
+                #and swap the title span with the data-title-orig
+                oldTitle = $('.title', $target).html()
+                $('.title', $target).html($target.attr('data-title-orig'))
+                $target.attr('data-title-orig', oldTitle)
             )
            
             return

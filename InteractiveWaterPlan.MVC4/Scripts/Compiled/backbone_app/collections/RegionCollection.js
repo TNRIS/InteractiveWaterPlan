@@ -14,6 +14,10 @@ define([], function() {
 
     RegionCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/regions/names";
 
+    RegionCollection.prototype.model = Backbone.Model.extend({
+      idAttribute: 'letter'
+    });
+
     return RegionCollection;
 
   })(Backbone.Collection);
