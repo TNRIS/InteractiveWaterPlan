@@ -186,6 +186,11 @@ i.wugIcon
     height: 20px;
 }
 
+#nothingFoundMessage 
+{
+    padding-top:10px;
+}
+
 ul.breadcrumb 
 {
     font-size: 12px;
