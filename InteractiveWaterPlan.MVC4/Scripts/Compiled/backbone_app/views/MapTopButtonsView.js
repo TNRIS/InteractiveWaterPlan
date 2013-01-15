@@ -39,13 +39,9 @@ define(['scripts/text!templates/mapTopButtons.html'], function(tpl) {
       this.mapView.resetExtent();
     };
 
-    MapTopButtonsView.prototype.toggleMap = function(data, event, $el) {
+    MapTopButtonsView.prototype.toggleMap = function(data, event) {
       var $target;
-      if ($el != null) {
-        $target = $el;
-      } else {
-        $target = $(event.target);
-      }
+      $target = $(event.target);
       if ($target.hasClass('off')) {
         $target.html('Hide Map');
         $('#mapContainer').slideDown();

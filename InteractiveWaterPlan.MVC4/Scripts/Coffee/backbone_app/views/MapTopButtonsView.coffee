@@ -32,11 +32,8 @@ define([
             @mapView.resetExtent()
             return
 
-        toggleMap: (data, event, $el) ->
-            if $el?
-                $target = $el
-            else
-                $target = $(event.target)
+        toggleMap: (data, event) ->
+            $target = $(event.target)
 
             if $target.hasClass('off')
                 $target.html('Hide Map')
