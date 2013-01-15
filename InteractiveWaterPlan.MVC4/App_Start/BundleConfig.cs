@@ -18,6 +18,8 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/OpenLayers/tile.stamen.js",
                 "~/Scripts/Compiled/OpenLayers/*.js",
                 "~/Scripts/stupidtable.js",
+                "~/Scripts/jquery.dataTables.js",
+                "~/Scripts/DT_bootstrap.js",
                 "~/Scripts/chosen.jquery.js",
                 "~/Content/bootstrap/js/bootstrap.js",
                 "~/Scripts/tnris.place_typeahead.js",

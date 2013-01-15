@@ -13,7 +13,7 @@ define(['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', 'connectTableRowsToWugFeatures', '_makeTableSortable');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -27,7 +27,6 @@ define(['namespace'], function(namespace) {
       this.$el.html(this.template());
       this.fetchCollection();
       this.selectedWug = ko.observable();
-      this._makeTableSortable();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
         trigger: 'hover',
@@ -54,21 +53,22 @@ define(['namespace'], function(namespace) {
         data: params,
         success: function(collection) {
           var m, _i, _len, _ref;
-          if (collection.models.length > 0) {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this.hideLoading();
-          } else {
+          if (collection.models.length === 0) {
             _this.hideLoading();
             _this.showNothingFound();
+            return;
           }
+          _ref = collection.models;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            m = _ref[_i];
+            _this.appendModel(m);
+          }
+          _this.$('.has-popover').popover({
+            trigger: 'hover'
+          });
+          _this._setupDataTable();
           _this.connectTableRowsToWugFeatures();
+          _this.hideLoading();
           if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
             _this.fetchCallback(collection.models);
           }
@@ -87,6 +87,28 @@ define(['namespace'], function(namespace) {
         };
       });
       namespace.wugFeatureCollection.reset(newWugList);
+    };
+
+    BaseTableCollectionView.prototype._setupDataTable = function() {
+      var $table, dtColConfig;
+      $table = this.$('table');
+      dtColConfig = [];
+      $('th', $table).each(function(i, th) {
+        var $th;
+        $th = $(th);
+        if ($th.attr('data-sort') != null) {
+          return dtColConfig.push({
+            sType: $(th).attr('data-sort')
+          });
+        } else {
+          return dtColConfig.push(null);
+        }
+      });
+      $table.dataTable({
+        sPaginationType: "bootstrap",
+        aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]],
+        aoColumns: dtColConfig
+      });
     };
 
     BaseTableCollectionView.prototype.connectTableRowsToWugFeatures = function() {
@@ -115,7 +137,7 @@ define(['namespace'], function(namespace) {
 
     BaseTableCollectionView.prototype.showNothingFound = function() {
       $('#nothingFoundMessage').fadeIn();
-      $('.scrollTableContainer').hide();
+      $('.modelTable').hide();
     };
 
     BaseTableCollectionView.prototype.hideNothingFound = function() {
@@ -123,62 +145,13 @@ define(['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {
-      this.$('.scrollTableContainer').hide();
+      $('.modelTableWrapper').hide();
       $('.tableLoading').show();
     };
 
     BaseTableCollectionView.prototype.hideLoading = function() {
       $('.tableLoading').hide();
-      this.$('.scrollTableContainer').fadeIn();
-    };
-
-    BaseTableCollectionView.prototype._makeTableSortable = function() {
-      var sortTable;
-      sortTable = this.$('table').stupidtable({
-        "formatted-int": function(a, b) {
-          a = parseInt(a.replace(/,/g, ""));
-          b = parseInt(b.replace(/,/g, ""));
-          if (a < b) {
-            return -1;
-          }
-          if (a > b) {
-            return 1;
-          }
-          return 0;
-        },
-        "formatted-currency": function(a, b) {
-          var int_a, int_b;
-          a = a.replace(/,/g, "").replace("$", "");
-          b = b.replace(/,/g, "").replace("$", "");
-          if (_.isNaN(parseFloat(a)) && _.isNaN(parseFloat(b))) {
-            return 0;
-          }
-          if (_.isNaN(parseFloat(a))) {
-            return -1;
-          }
-          if (_.isNaN(parseFloat(b))) {
-            return 1;
-          }
-          int_a = parseFloat(a);
-          int_b = parseFloat(b);
-          if (int_a < int_b) {
-            return -1;
-          }
-          if (int_a > int_b) {
-            return 1;
-          }
-          return 0;
-        }
-      });
-      sortTable.on('aftertablesort', function(evt, data) {
-        var $th, iconClass;
-        $th = $('th', this);
-        $('i.icon-caret-up', $th).remove();
-        $('i.icon-caret-down', $th).remove();
-        iconClass = data.direction === "asc" ? 'icon-caret-up' : 'icon-caret-down';
-        $th.eq(data.column).prepend("<i class='" + iconClass + "'></i> ");
-        return null;
-      });
+      $('.modelTableWrapper').fadeIn();
     };
 
     return BaseTableCollectionView;

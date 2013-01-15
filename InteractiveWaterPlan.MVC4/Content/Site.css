@@ -99,15 +99,6 @@ ul.typeahead .catName
     margin-right: 30px;
 }
 
-.scrollTableContainer
-{
-    max-height: 600px;
-    overflow-y: auto;
-    border-top: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-}
-
 .aligned-left 
 {
     text-align: left !important;
@@ -118,21 +109,60 @@ i.wugIcon
     color: Green;
 }
 
-.modelTable
+.dataTables_filter
+{
+    float: right;
+}
+
+.paging_bootstrap 
+{
+    float: right;
+}
+
+.dataTables_info
+{
+    padding-top: 10px;
+}
+
+.modelTableWrapper .dataTables_length select
+{
+    width: 90px;
+}
+
+.modelTableWrapper, 
+.modelTableWrapper select,
+.modelTableWrapper label,
+.modelTableWrapper input
 {
     font-size: 12px;
-    line-height: 14px;
+    line-height: 12px;
+}
+
+.modelTable
+{
     width: 100%;
 }
 
 .modelTable th 
 {
     font-size: 14px;
+    cursor:pointer;
 }
 
-.modelTable th[data-sort]
+.modelTable th.sorting_asc
 {
-    cursor:pointer;
+    
+}
+
+.modelTable th.sorting_desc
+{
+    
+}
+
+
+.modelTable th:focus
+{
+    outline:none;
 }
 
 .modelTable thead .popover

@@ -7,8 +7,8 @@ define([
         
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'fetchCallback', 'connectTableRowsToWugFeatures'
-                '_makeTableSortable')
+                'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable',
+                'connectTableRowsToWugFeatures')
 
             options = options || {}
             @fetchParams = options.fetchParams || {}
@@ -31,9 +31,6 @@ define([
             #This observable is used to let the MapView to select a WUG
             @selectedWug = ko.observable()
 
-            #make sortable
-            this._makeTableSortable()
-            
             ko.applyBindings(this, @el)
             
             this.$('.has-popover').popover(
@@ -62,19 +59,23 @@ define([
                 
                 success: (collection) =>
                     
-                    if collection.models.length > 0
-                        for m in collection.models
-                            this.appendModel(m)
-
-                        this.$('.has-popover').popover(trigger: 'hover')
-                        this.hideLoading()
-                    else
+                    if collection.models.length == 0
                         this.hideLoading()
                         this.showNothingFound()
-                        
+                        return
+
+                    #else
+                    for m in collection.models
+                        this.appendModel(m)
+
+                    this.$('.has-popover').popover(trigger: 'hover')
+
+                    this._setupDataTable()
 
                     this.connectTableRowsToWugFeatures()
 
+                    this.hideLoading()
+                    
                     if this.fetchCallback? and _.isFunction(this.fetchCallback)
                         this.fetchCallback(collection.models)
 
@@ -99,6 +100,28 @@ define([
             namespace.wugFeatureCollection.reset(newWugList)
             return
 
+
+        _setupDataTable: () ->
+            #grab the table, get the headers
+            # for each th, grab the data-sort attribute
+            # and put its value in the column config
+            $table = this.$('table')
+            dtColConfig = []
+            $('th', $table).each((i, th) ->
+                $th = $(th)
+                if $th.attr('data-sort')?
+                    dtColConfig.push({sType: $(th).attr('data-sort')})
+                else
+                    dtColConfig.push(null)
+            )
+
+            $table.dataTable(
+                sPaginationType: "bootstrap",
+                aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]]
+                aoColumns: dtColConfig
+            )
+
+            return
 
         #Attach hover listener to the data table to show a popup for the associated WUG Feature
         connectTableRowsToWugFeatures: () ->
@@ -135,63 +158,22 @@ define([
 
         showNothingFound: () ->
             $('#nothingFoundMessage').fadeIn()
-            $('.scrollTableContainer').hide()
+            $('.modelTable').hide()
             return
 
         hideNothingFound: () ->
             $('#nothingFoundMessage').hide()
-
             return
 
         showLoading: () ->
-            this.$('.scrollTableContainer').hide()
+            $('.modelTableWrapper').hide()
             $('.tableLoading').show()
             return
 
         hideLoading: () ->
             $('.tableLoading').hide()
-            this.$('.scrollTableContainer').fadeIn()
+            $('.modelTableWrapper').fadeIn()
             return
 
-        _makeTableSortable: () ->
-            sortTable = this.$('table').stupidtable(
-                #special sort method for formatted numbers (ie, they have commas)
-                "formatted-int": (a, b) -> 
-                    a = parseInt(a.replace(/,/g,""))
-                    b = parseInt(b.replace(/,/g,""))
-                    if a < b then return -1
-                    if a > b then return 1
-                    return 0
-
-                #special sort for numbers formatted as currency $123,456
-                "formatted-currency": (a, b) ->
-                    a = a.replace(/,/g,"").replace("$", "")
-                    b = b.replace(/,/g,"").replace("$", "")
-
-                    if _.isNaN(parseFloat(a)) and _.isNaN(parseFloat(b))
-                        return 0
-                    if _.isNaN(parseFloat(a))
-                        return -1
-                    if _.isNaN(parseFloat(b))
-                        return 1
-
-                    int_a = parseFloat(a)
-                    int_b = parseFloat(b)
-                    if int_a < int_b then return -1
-                    if int_a > int_b then return 1
-                    return 0
-            )
-
-            #Add a listener to show FontAwesome up/down icons based on direction of sort
-            sortTable.on('aftertablesort', (evt, data) ->
-                $th = $('th',this)
-                $('i.icon-caret-up', $th).remove()
-                $('i.icon-caret-down', $th).remove()
-                iconClass = if data.direction == "asc" then 'icon-caret-up' else 'icon-caret-down'
-                $th.eq(data.column).prepend("<i class='#{iconClass}'></i> ")
-                return null
-            )
-
-            return
 
 )

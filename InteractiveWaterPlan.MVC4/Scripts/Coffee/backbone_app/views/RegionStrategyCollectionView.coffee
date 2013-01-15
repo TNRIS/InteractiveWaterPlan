@@ -22,7 +22,6 @@ define([
 
             super StrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
-
             
             return null
 
