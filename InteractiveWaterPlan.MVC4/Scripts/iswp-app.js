@@ -1949,7 +1949,6 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
         }
       }
       if (oldYear === "") {
-        throw "Year invalid.";
         Backbone.history.navigate("");
       }
       newRoute = currRoute.replace(oldYear, newYear);
@@ -2090,8 +2089,7 @@ $(function() {
     paths: {
       "scripts": "../..",
       "templates": "../../templates"
-    },
-    urlArgs: "bust=" + (new Date()).getTime()
+    }
   });
   require(['WMSRouter'], function(WMSRouter) {
     var r;

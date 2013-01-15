@@ -28,9 +28,6 @@ $(()->
         paths:
             "scripts" : "../.." #Used for loading text.js
             "templates": "../../templates" #Used for html templates
-
-        #TODO: Remove for production
-        urlArgs: "bust=" +  (new Date()).getTime() #busts the cache on each RequireJS request.
     )
 
     require(['WMSRouter'],

@@ -66,7 +66,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         }
       }
       if (oldYear === "") {
-        throw "Year invalid.";
         Backbone.history.navigate("");
       }
       newRoute = currRoute.replace(oldYear, newYear);

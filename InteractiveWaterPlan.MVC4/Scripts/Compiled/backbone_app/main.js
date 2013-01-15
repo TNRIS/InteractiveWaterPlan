@@ -21,8 +21,7 @@ $(function() {
     paths: {
       "scripts": "../..",
       "templates": "../../templates"
-    },
-    urlArgs: "bust=" + (new Date()).getTime()
+    }
   });
   require(['WMSRouter'], function(WMSRouter) {
     var r;

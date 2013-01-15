@@ -108,7 +108,7 @@ define([
                     break
 
             if oldYear == ""
-                throw "Year invalid." #TODO: show error to user?
+                #throw "Year invalid." 
                 Backbone.history.navigate("") #just redirect to default
 
             
@@ -124,9 +124,6 @@ define([
                 @mapView.selectWugFeature(wugId)
             return
 
-        #TODO: validate year (use namespace.VALID_YEARS)
-        # and see http://stackoverflow.com/questions/7394695/backbone-js-call-method-before-after-a-route-is-fired
-        # for possible way to wrap each route to check for valid year
         routes:
             "":                                   "default" #default route, for now it is the same as wms
             ":year/wms":                          "wmsNetCountySupplies"
