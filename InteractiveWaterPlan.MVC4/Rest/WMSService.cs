@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Xml;
-using Spring.Rest.Client;
 using Newtonsoft.Json;
-using InteractiveWaterPlan.Data;
+using Spring.Rest.Client;
 
 namespace InteractiveWaterPlan.MVC4.Rest
 {
