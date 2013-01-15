@@ -182,7 +182,7 @@ i.wugIcon
 {
     background: url('images/loading-36.gif') no-repeat;
     width: 130px;
-    margin: auto;
+    margin: 10px auto 0 auto;
     height: 20px;
 }
 

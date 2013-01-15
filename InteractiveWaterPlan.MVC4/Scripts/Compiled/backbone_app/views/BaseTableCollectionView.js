@@ -137,7 +137,7 @@ define(['namespace'], function(namespace) {
 
     BaseTableCollectionView.prototype.showNothingFound = function() {
       $('#nothingFoundMessage').fadeIn();
-      $('.modelTable').hide();
+      this.$el.hide();
     };
 
     BaseTableCollectionView.prototype.hideNothingFound = function() {
@@ -145,13 +145,13 @@ define(['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.showLoading = function() {
-      $('.modelTableWrapper').hide();
+      this.$el.hide();
       $('.tableLoading').show();
     };
 
     BaseTableCollectionView.prototype.hideLoading = function() {
       $('.tableLoading').hide();
-      $('.modelTableWrapper').fadeIn();
+      this.$el.fadeIn();
     };
 
     return BaseTableCollectionView;

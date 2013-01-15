@@ -158,7 +158,7 @@ define([
 
         showNothingFound: () ->
             $('#nothingFoundMessage').fadeIn()
-            $('.modelTable').hide()
+            @$el.hide()
             return
 
         hideNothingFound: () ->
@@ -166,13 +166,13 @@ define([
             return
 
         showLoading: () ->
-            $('.modelTableWrapper').hide()
+            @$el.hide()
             $('.tableLoading').show()
             return
 
         hideLoading: () ->
             $('.tableLoading').hide()
-            $('.modelTableWrapper').fadeIn()
+            @$el.fadeIn()
             return
 
 
