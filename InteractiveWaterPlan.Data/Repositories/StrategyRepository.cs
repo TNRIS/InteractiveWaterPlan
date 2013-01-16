@@ -85,9 +85,9 @@ namespace InteractiveWaterPlan.Data
                 .ToList<Strategy>();
         }
 
-        /*public IList<Strategy> GetStrategiesInDistrict(int districtId, string year = null)
+        public IList<Strategy> GetStrategiesInHouseDistrict(int districtId, string year = null)
         {
-            var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesInDistrict")
+            var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesByHouseDistrict")
                 .SetParameter("districtId", districtId)
                 .List<Strategy>()
                 .OrderBy(x => x.Id)
@@ -106,7 +106,30 @@ namespace InteractiveWaterPlan.Data
                     return supplyVal != 0;
                 })
                 .ToList<Strategy>();
-        }*/
+        }
+
+        public IList<Strategy> GetStrategiesInSenateDistrict(int districtId, string year = null)
+        {
+            var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesBySenateDistrict")
+                .SetParameter("districtId", districtId)
+                .List<Strategy>()
+                .OrderBy(x => x.Id)
+                .ToList<Strategy>();
+
+            if (year == null || year.Length == 0)
+            {
+                return allStrategiesInDistrict;
+            }
+
+            //else only return those that have non-null value in SupplyYEAR
+            return allStrategiesInDistrict
+                .Where(x =>
+                {
+                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
+                    return supplyVal != 0;
+                })
+                .ToList<Strategy>();
+        }
 
         public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year = null)
         {

@@ -60,12 +60,18 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Strategy", action = "GetStrategiesInCounty" }
             );
 
-            /*
+            
             config.Routes.MapHttpRoute(
-                "GetStrategiesInDistrict",
-                "api/strategies/region",
-                new { controller = "Strategy", action = "TODO" }
-            );*/
+                "GetStrategiesInHouseDistrict",
+                "api/strategies/district/house",
+                new { controller = "Strategy", action = "GetStrategiesInHouseDistrict" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetStrategiesInSenateDistrict",
+                "api/strategies/district/senate",
+                new { controller = "Strategy", action = "GetStrategiesInSenateDistrict" }
+            );
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesByType",

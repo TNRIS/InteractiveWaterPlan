@@ -50,14 +50,23 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetStrategiesInCounty(countyId, year);
         }
 
-        // GET api/strategies/district
-        /*public IList<Strategy> GetStrategiesInDistrict(int districtId, string year)
+        // GET api/strategies/district/house
+        public IList<Strategy> GetStrategiesInHouseDistrict(int districtId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
-            return _repo.GetStrategiesInDistrict(districtId, year);
-        }*/
+            return _repo.GetStrategiesInHouseDistrict(districtId, year);
+        }
+
+        // GET api/strategies/district/senate
+        public IList<Strategy> GetStrategiesInSenateDistrict(int districtId, string year)
+        {
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesInSenateDistrict(districtId, year);
+        }
 
         // GET api/strategies/type
         public IList<Strategy> GetStrategiesByType(int typeId, string year)
