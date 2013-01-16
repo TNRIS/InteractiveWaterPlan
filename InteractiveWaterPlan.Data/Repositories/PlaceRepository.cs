@@ -67,7 +67,7 @@ namespace InteractiveWaterPlan.Data
         /// </summary>
         /// <param name="parentPlaceId"></param>
         /// <returns></returns>
-        //TODO: Need stored procedure to support this
+        //TODO: Stored procedure exists - need to implement this method
         //public IEnumerable<Place> GetPlacesInParentPlace(int parentPlaceId)
         //{
         //
