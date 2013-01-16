@@ -5,8 +5,6 @@ define([
 
     class WmsAreaSelectView extends Backbone.View
 
-        #TODO: Add methods to reset selects (ie, choose the "Select a Region") option
-
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 
                 '_createRegionSelect', '_createCountySelect', 
