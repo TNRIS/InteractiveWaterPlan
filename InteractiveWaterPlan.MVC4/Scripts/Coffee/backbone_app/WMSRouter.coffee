@@ -210,6 +210,7 @@ define([
 
             @mapView.hideWmsOverlays()
             @mapView.showWmsOverlayByViewType("Regions")
+            @areaSelectView.resetSelects()
             
             return
 
@@ -315,6 +316,8 @@ define([
                 name: typeName
             )
             
+            @areaSelectView.resetSelects()
+
             return
 
         wmsEntity: (year, entityId) ->
@@ -326,6 +329,8 @@ define([
                 id: entityId
             )
 
+            @areaSelectView.resetSelects()
+
             return
 
         wmsProjectDetail: (year, projectId) ->
@@ -336,6 +341,8 @@ define([
                 el: @tableContainer
                 id: projectId
             )
+
+            @areaSelectView.resetSelects()
 
             return
 

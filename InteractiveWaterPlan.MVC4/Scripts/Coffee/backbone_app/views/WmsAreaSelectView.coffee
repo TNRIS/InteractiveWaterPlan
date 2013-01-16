@@ -11,7 +11,7 @@ define([
             _.bindAll(this, 'render', 'unrender', 
                 '_createRegionSelect', '_createCountySelect', 
                 '_createHouseSelect', '_createSenateSelect',
-                'enableSelects', 'disableSelects')
+                'enableSelects', 'disableSelects', 'resetSelects')
 
             if (not namespace.countyNames? or not namespace.regionNames? or 
                 not namespace.houseNames? or not namespace.senateNames?)
@@ -35,6 +35,12 @@ define([
 
             return this
 
+        resetSelects: (exceptName) ->
+            for select of @selects
+                if select != exceptName
+                    @selects[select].val("-1").trigger("liszt:updated")
+
+            return
 
         disableSelects: () ->
             for select of @selects
@@ -59,10 +65,12 @@ define([
             this.$("#regionSelectContainer").append($regionSelect)
 
             #trigger the router to navigate to the view for this county
+            me = this
             $regionSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/region/#{$this.val()}", {trigger: true})
+                me.resetSelects("region")
                 return
             )
             return $regionSelect
@@ -78,10 +86,12 @@ define([
             this.$("#countySelectContainer").append($countySelect)
 
             #trigger the router to navigate to the view for this county
+            me = this
             $countySelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/county/#{$this.val()}", {trigger: true})
+                me.resetSelects("county")
                 return
             )
             return $countySelect
@@ -97,10 +107,12 @@ define([
             this.$("#houseSelectContainer").append($houseSelect)
 
             #trigger the router to navigate to the view for this district
+            me = this
             $houseSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/house/#{$this.val()}", {trigger: true})
+                me.resetSelects("house")
                 return
             )
             return $houseSelect
@@ -117,10 +129,12 @@ define([
             this.$("#senateSelectContainer").append($houseSelect)
 
             #trigger the router to navigate to the view for this district
+            me = this
             $houseSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/senate/#{$this.val()}", {trigger: true})
+                me.resetSelects("senate")
                 return
             )
             return $houseSelect

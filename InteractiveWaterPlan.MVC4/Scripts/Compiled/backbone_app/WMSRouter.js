@@ -158,6 +158,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.mapView.clearWugFeatures();
       this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Regions");
+      this.areaSelectView.resetSelects();
     };
 
     WMSRouter.prototype.wmsRegion = function(year, regionLetter) {
@@ -255,6 +256,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         id: typeId,
         name: typeName
       });
+      this.areaSelectView.resetSelects();
     };
 
     WMSRouter.prototype.wmsEntity = function(year, entityId) {
@@ -262,6 +264,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         el: this.tableContainer,
         id: entityId
       });
+      this.areaSelectView.resetSelects();
     };
 
     WMSRouter.prototype.wmsProjectDetail = function(year, projectId) {
@@ -269,6 +272,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         el: this.tableContainer,
         id: projectId
       });
+      this.areaSelectView.resetSelects();
     };
 
     return WMSRouter;
