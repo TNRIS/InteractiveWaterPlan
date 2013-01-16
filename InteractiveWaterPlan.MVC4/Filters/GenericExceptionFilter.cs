@@ -9,8 +9,13 @@ namespace InteractiveWaterPlan.MVC4.Filters
     {
         public override void OnException(HttpActionExecutedContext context)
         {
+            string message = "Sorry, an error has occurred.";
+            if (context.Exception is ArgumentException){
+                message = context.Exception.Message;
+            }
+
             context.Response = context.Request.CreateErrorResponse(
-                HttpStatusCode.BadRequest, context.Exception.Message);
+                HttpStatusCode.BadRequest, message);
 
             base.OnException(context);
         }
