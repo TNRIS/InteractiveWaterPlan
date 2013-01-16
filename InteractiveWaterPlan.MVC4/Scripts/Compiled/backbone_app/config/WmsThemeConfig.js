@@ -19,19 +19,6 @@
           opacity: 0.6
         }
       }, {
-        name: "Water System Service Areas",
-        type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer",
-        service_params: {
-          layers: "0",
-          transparent: true
-        },
-        layer_params: {
-          isBaseLayer: false,
-          visibility: false,
-          opacity: 0.6
-        }
-      }, {
         name: "Texas Counties",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
@@ -66,6 +53,19 @@
         viewType: "HouseDistricts",
         service_params: {
           layers: "2,11",
+          transparent: true
+        },
+        layer_params: {
+          isBaseLayer: false,
+          visibility: false,
+          opacity: 0.6
+        }
+      }, {
+        name: "Water System Service Areas",
+        type: "WMS",
+        url: "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer",
+        service_params: {
+          layers: "0",
           transparent: true
         },
         layer_params: {
