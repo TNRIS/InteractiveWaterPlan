@@ -38,6 +38,8 @@
 
     <property column="wmsRecipientEntityId" name="RecipientEntityId" />
     <property column="wmsRecipientEntityName" name="RecipientEntityName" />
+    <property column="wmsRecipientEntityType" name="RecipientEntityType" />
+    
     <property column="SQL_GEOG" name="RecipientEntityWktGeog" />
     
   </class>
