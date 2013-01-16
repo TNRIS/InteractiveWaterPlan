@@ -44,8 +44,9 @@
 
   <sql-query name="GetStrategyDetailsByProjectId">
     <query-param name="projectId" type="int" />
+    <query-param name="year" type="string" />
     <return class="StrategyDetails" />
-    exec dbo.usp_Select_WMS_Details__tbl_SWP_Final :projectId
+    exec dbo.usp_Select_WMS_Details__tbl_SWP_Final :projectId, :year
   </sql-query>
 
 </hibernate-mapping>

@@ -45,38 +45,44 @@
 
   <sql-query name="GetStrategiesInRegion">
     <query-param name="regionLetter" type="char" />
+    <query-param name="year" type="string" />
     <return class="Strategy" />
-    exec dbo.usp_Select_Strategies_By_Region_Year__tbl_SWP_Final :regionLetter
+    exec dbo.usp_Select_Strategies_By_Region_Year__tbl_SWP_Final :regionLetter, :year
   </sql-query>
 
   <sql-query name="GetStrategiesInCounty">
     <query-param name="countyId" type="int" />
+    <query-param name="year" type="string" />
     <return class="Strategy"/>
-    exec dbo.usp_Select_Strategies_By_County_Year__tbl_SWP_Final :countyId
+    exec dbo.usp_Select_Strategies_By_County_Year__tbl_SWP_Final :countyId, :year
   </sql-query>
 
   <sql-query name="GetStrategiesByType">
     <query-param name="typeId" type="int" />
+    <query-param name="year" type="string" />
     <return class="Strategy"/>
-    exec dbo.usp_Select_tbl_SWP_Final_By_StrategyTypeID :typeId
+    exec dbo.usp_Select_tbl_SWP_Final_By_StrategyTypeID :typeId, :year
   </sql-query>
 
   <sql-query name="GetStrategiesForEntity">
     <query-param name="entityId" type="int" />
+    <query-param name="year" type="string" />
     <return class="Strategy" />
-    exec dbo.usp_Select_Strategies_By_Entity_Year__tbl_SWP_Final :entityId
+    exec dbo.usp_Select_Strategies_By_Entity_Year__tbl_SWP_Final :entityId, :year
   </sql-query>
 
   <sql-query name="GetStrategiesByHouseDistrict">
     <query-param name="districtId" type="int" />
+    <query-param name="year" type="string" />
     <return class="Strategy" />
-    exec dbo.usp_SpatialSelect_Strategies_By_HouseDistricts_Year__tbl_SWP_Final :districtId
+    exec dbo.usp_SpatialSelect_Strategies_By_HouseDistricts_Year__tbl_SWP_Final :districtId, :year
   </sql-query>
 
   <sql-query name="GetStrategiesBySenateDistrict">
     <query-param name="districtId" type="int" />
+    <query-param name="year" type="string" />
     <return class="Strategy" />
-    exec dbo.usp_SpatialSelect_Strategies_By_SenateDistricts_Year__tbl_SWP_Final :districtId
+    exec dbo.usp_SpatialSelect_Strategies_By_SenateDistricts_Year__tbl_SWP_Final :districtId, :year
   </sql-query>
 
 </hibernate-mapping>
