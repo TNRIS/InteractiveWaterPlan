@@ -43,7 +43,7 @@ define([
         
         initialize: (options) ->
             _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug',
-                'disableControls', 'enableControls')
+                'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound')
 
             @currTableView = null
             
@@ -138,6 +138,30 @@ define([
             ":year/wms/project/:projectId":       "wmsProjectDetail"
             #TODO: wms/source/:sourceId
 
+
+        # Event Handlers
+
+        onTableStartLoad: () ->
+            @areaSelectView.disableSelects()
+            @yearNavView.disableYearButtons()
+            @themeNavToolbarView.disableStrategyTypeList()
+            @mapView.showMapLoading()
+            @currTableView.showLoading()
+            return
+
+        onTableEndLoad: () ->
+            @areaSelectView.enableSelects()
+            @yearNavView.enableYearButtons()
+            @themeNavToolbarView.enableStrategyTypeList()
+            @mapView.hideMapLoading()
+            @currTableView.hideLoading()
+            return
+
+        onTableNothingFound: () ->
+            this.onTableEndLoad()
+            @currTableView.showNothingFound()
+            return
+
         #before filter from backbone.routefilter
         before:
             '': (year) ->
@@ -155,20 +179,8 @@ define([
                         return false
                 return
 
-        disableControls: () ->
-            @areaSelectView.disableSelects()
-            @yearNavView.disableYearButtons()
-            @themeNavToolbarView.disableStrategyTypeList()
-            @mapView.showMapLoading()
-            return
 
-        enableControls: () ->
-            @areaSelectView.enableSelects()
-            @yearNavView.enableYearButtons()
-            @themeNavToolbarView.enableStrategyTypeList()
-            @mapView.hideMapLoading()
-            return
-
+        #after route filter from backbone.routefilter
         after:
             '': (year) ->
                 if year? and @currTableView?
@@ -176,19 +188,19 @@ define([
                     @yearNavView.render()
                     @themeNavToolbarView.render()
 
-                    @currTableView.on("table:startload", this.disableControls)
+                    @currTableView.on("table:startload", this.onTableStartLoad)
+                    @currTableView.on("table:endload", this.onTableEndLoad)
+                    @currTableView.on("table:nothingfound", this.onTableNothingFound)
 
                     @currTableView.render()
 
                     #subscribe to table row select (by hover)
                     @currTableView.selectedWug.subscribe(this.updateSelectedWug)
 
-                    @currTableView.on("table:endload", this.enableControls)
-
                     #subscribe to currentYear changes
                     @yearNavView.currentYear.subscribe(this.updateViewsToNewYear) 
                     
-                    
+                    return
                 
 
         default: () ->

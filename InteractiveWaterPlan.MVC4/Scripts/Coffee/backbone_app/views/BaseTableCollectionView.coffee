@@ -8,7 +8,7 @@ define([
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable',
-                'connectTableRowsToWugFeatures')
+                'connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound')
 
             options = options || {}
             @fetchParams = options.fetchParams || {}
@@ -46,8 +46,6 @@ define([
 
         fetchCollection: () ->
 
-            this.hideNothingFound()
-            this.showLoading()
             
             this.$('tbody').empty() #clear the table contents
 
@@ -62,26 +60,22 @@ define([
                 success: (collection) =>
                     
                     if collection.models.length == 0
-                        this.hideLoading()
-                        this.showNothingFound()
-                        return
+                        this.trigger("table:nothingfound")
 
-                    #else
-                    for m in collection.models
-                        this.appendModel(m)
+                    else
+                        for m in collection.models
+                            this.appendModel(m)
 
-                    this.$('.has-popover').popover(trigger: 'hover')
+                        this.$('.has-popover').popover(trigger: 'hover')
 
-                    this._setupDataTable()
+                        this._setupDataTable()
 
-                    this.connectTableRowsToWugFeatures()
+                        this.connectTableRowsToWugFeatures()
 
-                    this.hideLoading()
+                        if this.fetchCallback? and _.isFunction(this.fetchCallback)
+                            this.fetchCallback(collection.models)
 
-                    if this.fetchCallback? and _.isFunction(this.fetchCallback)
-                        this.fetchCallback(collection.models)
-
-                    this.trigger("table:endload")
+                        this.trigger("table:endload")
 
                     return   
             )
@@ -171,6 +165,7 @@ define([
 
         showLoading: () ->
             @$el.hide()
+            this.hideNothingFound()
             $('.tableLoading').show()
             return
 

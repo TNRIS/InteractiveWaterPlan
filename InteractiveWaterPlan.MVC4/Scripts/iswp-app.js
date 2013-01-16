@@ -1066,7 +1066,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -1096,8 +1096,6 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     BaseTableCollectionView.prototype.fetchCollection = function() {
       var params,
         _this = this;
-      this.hideNothingFound();
-      this.showLoading();
       this.$('tbody').empty();
       params = _.extend({
         year: namespace.currYear
@@ -1108,25 +1106,23 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
         success: function(collection) {
           var m, _i, _len, _ref;
           if (collection.models.length === 0) {
-            _this.hideLoading();
-            _this.showNothingFound();
-            return;
+            _this.trigger("table:nothingfound");
+          } else {
+            _ref = collection.models;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              m = _ref[_i];
+              _this.appendModel(m);
+            }
+            _this.$('.has-popover').popover({
+              trigger: 'hover'
+            });
+            _this._setupDataTable();
+            _this.connectTableRowsToWugFeatures();
+            if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
+              _this.fetchCallback(collection.models);
+            }
+            _this.trigger("table:endload");
           }
-          _ref = collection.models;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            m = _ref[_i];
-            _this.appendModel(m);
-          }
-          _this.$('.has-popover').popover({
-            trigger: 'hover'
-          });
-          _this._setupDataTable();
-          _this.connectTableRowsToWugFeatures();
-          _this.hideLoading();
-          if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
-            _this.fetchCallback(collection.models);
-          }
-          _this.trigger("table:endload");
         }
       });
     };
@@ -1202,6 +1198,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
 
     BaseTableCollectionView.prototype.showLoading = function() {
       this.$el.hide();
+      this.hideNothingFound();
       $('.tableLoading').show();
     };
 
@@ -1360,7 +1357,7 @@ define('views/StrategyView',['namespace', 'views/BaseStrategyView', 'scripts/tex
   })(BaseStrategyView);
 });
 
-define('scripts/text!templates/strategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>Type</th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    Entity\r\n                </span>\r\n                <i class="wugIcon icon-circle"></i> \r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
+define('scripts/text!templates/strategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>Type</th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    EntityABC <i class="wugIcon icon-circle"></i>\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -1496,7 +1493,7 @@ define('views/StrategyTypeView',['namespace', 'views/BaseStrategyView', 'scripts
   })(BaseStrategyView);
 });
 
-define('scripts/text!templates/strategyTypeTable.html',[],function () { return '<h2>\r\n   <span data-bind="text: viewName"></span> STRATEGIES - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="State Water Plan Planning Region">\r\n                    Region\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water User Group supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    Entity\r\n                </span>\r\n                <i class="wugIcon icon-circle"></i>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
+define('scripts/text!templates/strategyTypeTable.html',[],function () { return '<h2>\r\n   <span data-bind="text: viewName"></span> STRATEGIES - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="State Water Plan Planning Region">\r\n                    Region\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water User Group supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    Entity <i class="wugIcon icon-circle"></i>\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -1638,7 +1635,7 @@ define('views/StrategyDetailView',['namespace', 'views/BaseStrategyView', 'scrip
   })(BaseStrategyView);
 });
 
-define('scripts/text!templates/strategyDetailTable.html',[],function () { return '<h2>\r\n    <span data-bind="text: viewName"></span> - \r\n    <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="State Water Plan Planning Region">\r\n                    Region\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water Management Strategy Type">\r\n                    Type\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n             <th>\r\n                <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    Entity\r\n                </span>\r\n                <i class="wugIcon icon-circle"></i> \r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
+define('scripts/text!templates/strategyDetailTable.html',[],function () { return '<h2>\r\n    <span data-bind="text: viewName"></span> - \r\n    <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="State Water Plan Planning Region">\r\n                    Region\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water Management Strategy Type">\r\n                    Type\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n             <th>\r\n                <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    Entity <i class="wugIcon icon-circle"></i>\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -2021,7 +2018,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'disableControls', 'enableControls');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -2102,6 +2099,27 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       ":year/wms/project/:projectId": "wmsProjectDetail"
     };
 
+    WMSRouter.prototype.onTableStartLoad = function() {
+      this.areaSelectView.disableSelects();
+      this.yearNavView.disableYearButtons();
+      this.themeNavToolbarView.disableStrategyTypeList();
+      this.mapView.showMapLoading();
+      this.currTableView.showLoading();
+    };
+
+    WMSRouter.prototype.onTableEndLoad = function() {
+      this.areaSelectView.enableSelects();
+      this.yearNavView.enableYearButtons();
+      this.themeNavToolbarView.enableStrategyTypeList();
+      this.mapView.hideMapLoading();
+      this.currTableView.hideLoading();
+    };
+
+    WMSRouter.prototype.onTableNothingFound = function() {
+      this.onTableEndLoad();
+      this.currTableView.showNothingFound();
+    };
+
     WMSRouter.prototype.before = {
       '': function(year) {
         if (this.currTableView != null) {
@@ -2121,30 +2139,17 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       }
     };
 
-    WMSRouter.prototype.disableControls = function() {
-      this.areaSelectView.disableSelects();
-      this.yearNavView.disableYearButtons();
-      this.themeNavToolbarView.disableStrategyTypeList();
-      this.mapView.showMapLoading();
-    };
-
-    WMSRouter.prototype.enableControls = function() {
-      this.areaSelectView.enableSelects();
-      this.yearNavView.enableYearButtons();
-      this.themeNavToolbarView.enableStrategyTypeList();
-      this.mapView.hideMapLoading();
-    };
-
     WMSRouter.prototype.after = {
       '': function(year) {
         if ((year != null) && (this.currTableView != null)) {
           this.yearNavView.render();
           this.themeNavToolbarView.render();
-          this.currTableView.on("table:startload", this.disableControls);
+          this.currTableView.on("table:startload", this.onTableStartLoad);
+          this.currTableView.on("table:endload", this.onTableEndLoad);
+          this.currTableView.on("table:nothingfound", this.onTableNothingFound);
           this.currTableView.render();
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
-          this.currTableView.on("table:endload", this.enableControls);
-          return this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
+          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
         }
       }
     };

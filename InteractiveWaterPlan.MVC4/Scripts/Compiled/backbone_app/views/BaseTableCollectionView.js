@@ -13,7 +13,7 @@ define(['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -43,8 +43,6 @@ define(['namespace'], function(namespace) {
     BaseTableCollectionView.prototype.fetchCollection = function() {
       var params,
         _this = this;
-      this.hideNothingFound();
-      this.showLoading();
       this.$('tbody').empty();
       params = _.extend({
         year: namespace.currYear
@@ -55,25 +53,23 @@ define(['namespace'], function(namespace) {
         success: function(collection) {
           var m, _i, _len, _ref;
           if (collection.models.length === 0) {
-            _this.hideLoading();
-            _this.showNothingFound();
-            return;
+            _this.trigger("table:nothingfound");
+          } else {
+            _ref = collection.models;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              m = _ref[_i];
+              _this.appendModel(m);
+            }
+            _this.$('.has-popover').popover({
+              trigger: 'hover'
+            });
+            _this._setupDataTable();
+            _this.connectTableRowsToWugFeatures();
+            if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
+              _this.fetchCallback(collection.models);
+            }
+            _this.trigger("table:endload");
           }
-          _ref = collection.models;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            m = _ref[_i];
-            _this.appendModel(m);
-          }
-          _this.$('.has-popover').popover({
-            trigger: 'hover'
-          });
-          _this._setupDataTable();
-          _this.connectTableRowsToWugFeatures();
-          _this.hideLoading();
-          if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
-            _this.fetchCallback(collection.models);
-          }
-          _this.trigger("table:endload");
         }
       });
     };
@@ -149,6 +145,7 @@ define(['namespace'], function(namespace) {
 
     BaseTableCollectionView.prototype.showLoading = function() {
       this.$el.hide();
+      this.hideNothingFound();
       $('.tableLoading').show();
     };
 

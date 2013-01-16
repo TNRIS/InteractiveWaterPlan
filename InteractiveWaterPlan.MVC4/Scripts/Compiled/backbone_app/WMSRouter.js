@@ -13,7 +13,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'disableControls', 'enableControls');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -94,6 +94,27 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       ":year/wms/project/:projectId": "wmsProjectDetail"
     };
 
+    WMSRouter.prototype.onTableStartLoad = function() {
+      this.areaSelectView.disableSelects();
+      this.yearNavView.disableYearButtons();
+      this.themeNavToolbarView.disableStrategyTypeList();
+      this.mapView.showMapLoading();
+      this.currTableView.showLoading();
+    };
+
+    WMSRouter.prototype.onTableEndLoad = function() {
+      this.areaSelectView.enableSelects();
+      this.yearNavView.enableYearButtons();
+      this.themeNavToolbarView.enableStrategyTypeList();
+      this.mapView.hideMapLoading();
+      this.currTableView.hideLoading();
+    };
+
+    WMSRouter.prototype.onTableNothingFound = function() {
+      this.onTableEndLoad();
+      this.currTableView.showNothingFound();
+    };
+
     WMSRouter.prototype.before = {
       '': function(year) {
         if (this.currTableView != null) {
@@ -113,30 +134,17 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       }
     };
 
-    WMSRouter.prototype.disableControls = function() {
-      this.areaSelectView.disableSelects();
-      this.yearNavView.disableYearButtons();
-      this.themeNavToolbarView.disableStrategyTypeList();
-      this.mapView.showMapLoading();
-    };
-
-    WMSRouter.prototype.enableControls = function() {
-      this.areaSelectView.enableSelects();
-      this.yearNavView.enableYearButtons();
-      this.themeNavToolbarView.enableStrategyTypeList();
-      this.mapView.hideMapLoading();
-    };
-
     WMSRouter.prototype.after = {
       '': function(year) {
         if ((year != null) && (this.currTableView != null)) {
           this.yearNavView.render();
           this.themeNavToolbarView.render();
-          this.currTableView.on("table:startload", this.disableControls);
+          this.currTableView.on("table:startload", this.onTableStartLoad);
+          this.currTableView.on("table:endload", this.onTableEndLoad);
+          this.currTableView.on("table:nothingfound", this.onTableNothingFound);
           this.currTableView.render();
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
-          this.currTableView.on("table:endload", this.enableControls);
-          return this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
+          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
         }
       }
     };
