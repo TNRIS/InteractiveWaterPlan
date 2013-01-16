@@ -26,6 +26,8 @@ define(['namespace'], function(namespace) {
     WmsAreaSelectView.prototype.render = function() {
       this._createRegionSelect().chosen();
       this._createCountySelect().chosen();
+      this._createHouseSelect().chosen();
+      this._createSenateSelect().chosen();
       return this;
     };
 
@@ -94,6 +96,9 @@ define(['namespace'], function(namespace) {
         if ($this.val() === "-1") {
           return;
         }
+        Backbone.history.navigate("#/" + namespace.currYear + "/wms/house/" + ($this.val()), {
+          trigger: true
+        });
       });
       return this.$houseSelect;
     };
@@ -115,6 +120,9 @@ define(['namespace'], function(namespace) {
         if ($this.val() === "-1") {
           return;
         }
+        Backbone.history.navigate("#/" + namespace.currYear + "/wms/senate/" + ($this.val()), {
+          trigger: true
+        });
       });
       return this.$senateSelect;
     };

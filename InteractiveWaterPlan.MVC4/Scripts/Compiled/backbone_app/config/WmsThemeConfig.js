@@ -8,6 +8,7 @@
         name: "Regional Water Planning Areas",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        viewType: "Regions",
         service_params: {
           layers: "4,7",
           transparent: true
@@ -34,6 +35,7 @@
         name: "Texas Counties",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        viewType: "Counties",
         service_params: {
           layers: "1,13",
           transparent: true
@@ -47,6 +49,7 @@
         name: "Texas Senate Districts (2011)",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        viewType: "SenateDistricts",
         service_params: {
           layers: "3,9",
           transparent: true
@@ -60,6 +63,7 @@
         name: "Texas House Districts (2011)",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        viewType: "HouseDistricts",
         service_params: {
           layers: "2,11",
           transparent: true

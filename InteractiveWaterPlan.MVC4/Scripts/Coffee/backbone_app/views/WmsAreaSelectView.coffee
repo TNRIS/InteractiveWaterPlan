@@ -31,10 +31,10 @@ define([
             this._createCountySelect().chosen()
 
             #create the houseSelect
-            #TODO: include this when ready: this._createHouseSelect().chosen() 
+            this._createHouseSelect().chosen() 
 
             #create the senateSelect
-            #TODO: include this when ready: this._createSenateSelect().chosen()
+            this._createSenateSelect().chosen()
 
             return this
 
@@ -91,8 +91,7 @@ define([
             @$houseSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
-                #TODO: houseSelect
-                #Backbone.history.navigate("#/#{namespace.currYear}/wms/district/house/#{$this.val()}", {trigger: true})
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/house/#{$this.val()}", {trigger: true})
                 return
             )
             return @$houseSelect
@@ -112,8 +111,7 @@ define([
             @$senateSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
-                #TODO: senateSelect
-                #Backbone.history.navigate("#/#{namespace.currYear}/wms/district/senate/#{$this.val()}", {trigger: true})
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/senate/#{$this.val()}", {trigger: true})
                 return
             )
             return @$senateSelect

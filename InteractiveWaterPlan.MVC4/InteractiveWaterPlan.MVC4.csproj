@@ -189,6 +189,7 @@
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\LegeDistrictCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapTopButtonsView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailView.js" />
@@ -344,6 +345,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
+    <None Include="Scripts\Coffee\backbone_app\views\LegeDistrictCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavToolbarView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />

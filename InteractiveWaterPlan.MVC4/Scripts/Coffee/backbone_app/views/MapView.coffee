@@ -32,7 +32,8 @@ define([
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
                 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures',
-                'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl')
+                'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl',
+                '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -53,16 +54,7 @@ define([
             )
 
             #Load Overlay layers from WmsThemeConfig.Layers
-            for layerConfig in WmsThemeConfig.Layers
-                switch layerConfig.type
-                    when "WMS"
-                        overlay = new OpenLayers.Layer.WMS(layerConfig.name, layerConfig.url,
-                            layerConfig.service_params, layerConfig.layer_params)
-                            
-                        @map.addLayer(overlay);
-                    else
-                        throw "Unsupported Layer Type" 
-
+            this._setupOverlayLayers()
 
             #@placeLayer = new OpenLayers.Layer.Vector("Place Layer",
             #    displayInLayerSwitcher: false)
@@ -151,6 +143,34 @@ define([
                 return
 
             @wugSelectControl.unselectAll()
+
+            return
+
+
+        hideWmsOverlays: () ->
+            for layer in @map.layers
+                if !layer.isBaseLayer then layer.setVisibility(false)
+                
+            return
+
+        showWmsOverlayByViewType: (viewType) ->
+            for layer in @map.getLayersBy("viewType", viewType)
+                layer.setVisibility(true)
+            return
+
+        _setupOverlayLayers: () ->
+            for layerConfig in WmsThemeConfig.Layers
+                switch layerConfig.type
+                    when "WMS"
+                        overlay = new OpenLayers.Layer.WMS(layerConfig.name, layerConfig.url,
+                            layerConfig.service_params, layerConfig.layer_params)
+                        
+                        #viewType is used to toggle on/off for the different wms views    
+                        overlay.viewType = layerConfig.viewType
+                        @map.addLayer(overlay);
+                        
+                    else
+                        throw "Unsupported Layer Type" 
 
             return
 

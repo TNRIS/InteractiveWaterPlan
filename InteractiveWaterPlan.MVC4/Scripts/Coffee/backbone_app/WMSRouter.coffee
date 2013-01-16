@@ -7,6 +7,7 @@ define([
     'views/CountyNetSupplyCollectionView'
     'views/RegionStrategyCollectionView'
     'views/CountyStrategyCollectionView'
+    'views/LegeDistrictCollectionView'
     'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
     'views/StrategyDetailCollectionView'
@@ -26,6 +27,7 @@ define([
     CountyNetSupplyCollectionView, 
     RegionStrategyCollectionView, 
     CountyStrategyCollectionView,
+    LegeDistrictCollectionView,
     StrategyTypeCollectionView,
     EntityStrategyCollectionView,
     StrategyDetailCollectionView,
@@ -128,6 +130,8 @@ define([
             ":year/wms":                          "wmsNetCountySupplies"
             ":year/wms/region/:regionLetter":     "wmsRegion"
             ":year/wms/county/:countyId":         "wmsCounty"
+            ":year/wms/house/:districtId":        "wmsHouseDistrict"
+            ":year/wms/senate/:districtId":       "wmsSenateDistrict"
             ":year/wms/type/:typeId":             "wmsType"
             ":year/wms/entity/:entityId":         "wmsEntity"
             ":year/wms/project/:projectId":       "wmsProjectDetail"
@@ -181,6 +185,9 @@ define([
 
             @mapView.resetExtent()
             @mapView.clearWugFeatures()
+
+            @mapView.hideWmsOverlays()
+            @mapView.showWmsOverlayByViewType("Regions")
             
             return
 
@@ -197,6 +204,9 @@ define([
                 id: regionLetter
                 name: regionLetter
             )
+
+            @mapView.hideWmsOverlays()
+            @mapView.showWmsOverlayByViewType("Regions")
 
             return
         
@@ -216,6 +226,52 @@ define([
                 id: countyId
                 name: countyName
             )
+
+            @mapView.hideWmsOverlays()
+            @mapView.showWmsOverlayByViewType("Counties")
+            
+            return
+
+        wmsHouseDistrict: (year, districtId) ->
+            #If invalid districtId, then show error
+            district = namespace.houseNames.get(districtId)
+            if not district?
+                alert("Invalid districtId specified.")
+                Backbone.history.navigate("", {trigger: true})
+                return
+
+            #otherwise render the view
+            @currTableView = new LegeDistrictCollectionView(
+                el: @tableContainer
+                id: districtId
+                type: "house"
+                name: district.get("name")
+            )
+
+            @mapView.hideWmsOverlays()
+            @mapView.showWmsOverlayByViewType("HouseDistricts")
+            
+            return
+
+        wmsSenateDistrict: (year, districtId) ->
+            #If invalid districtId, then show error
+            district = namespace.senateNames.get(districtId)
+            if not district?
+                alert("Invalid districtId specified.")
+                Backbone.history.navigate("", {trigger: true})
+                return
+
+
+            #otherwise render the view
+            @currTableView = new LegeDistrictCollectionView(
+                el: @tableContainer
+                id: districtId
+                type: "senate"
+                name: district.get("name")
+            )
+
+            @mapView.hideWmsOverlays()
+            @mapView.showWmsOverlayByViewType("SenateDistricts")
             
             return
 

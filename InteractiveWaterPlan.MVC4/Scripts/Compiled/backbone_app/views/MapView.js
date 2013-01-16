@@ -30,13 +30,12 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
 
     MapView.prototype.render = function() {
-      var layerConfig, overlay, _i, _len, _ref;
       this.$el.empty();
       this.map = new OpenLayers.Map({
         div: this.$el[0],
@@ -47,18 +46,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         zoom: this.origZoom,
         eventListeners: {}
       });
-      _ref = WmsThemeConfig.Layers;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        layerConfig = _ref[_i];
-        switch (layerConfig.type) {
-          case "WMS":
-            overlay = new OpenLayers.Layer.WMS(layerConfig.name, layerConfig.url, layerConfig.service_params, layerConfig.layer_params);
-            this.map.addLayer(overlay);
-            break;
-          default:
-            throw "Unsupported Layer Type";
-        }
-      }
+      this._setupOverlayLayers();
       this.map.addControl(new OpenLayers.Control.LayerSwitcher());
       return this;
     };
@@ -139,6 +127,43 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         return;
       }
       this.wugSelectControl.unselectAll();
+    };
+
+    MapView.prototype.hideWmsOverlays = function() {
+      var layer, _i, _len, _ref;
+      _ref = this.map.layers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        layer = _ref[_i];
+        if (!layer.isBaseLayer) {
+          layer.setVisibility(false);
+        }
+      }
+    };
+
+    MapView.prototype.showWmsOverlayByViewType = function(viewType) {
+      var layer, _i, _len, _ref;
+      _ref = this.map.getLayersBy("viewType", viewType);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        layer = _ref[_i];
+        layer.setVisibility(true);
+      }
+    };
+
+    MapView.prototype._setupOverlayLayers = function() {
+      var layerConfig, overlay, _i, _len, _ref;
+      _ref = WmsThemeConfig.Layers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        layerConfig = _ref[_i];
+        switch (layerConfig.type) {
+          case "WMS":
+            overlay = new OpenLayers.Layer.WMS(layerConfig.name, layerConfig.url, layerConfig.service_params, layerConfig.layer_params);
+            overlay.viewType = layerConfig.viewType;
+            this.map.addLayer(overlay);
+            break;
+          default:
+            throw "Unsupported Layer Type";
+        }
+      }
     };
 
     MapView.prototype._setupWugSelectControl = function() {
