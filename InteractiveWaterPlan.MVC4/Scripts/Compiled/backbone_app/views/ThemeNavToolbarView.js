@@ -15,7 +15,7 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
     ThemeNavToolbarView.prototype.template = _.template(tpl);
 
     ThemeNavToolbarView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList');
+      _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList', 'enableStrategyTypeList', 'disableStrategyTypeList');
       return null;
     };
 
@@ -47,6 +47,16 @@ define(['namespace', 'collections/StrategyTypeCollection', 'scripts/text!templat
           }
         }
       });
+    };
+
+    ThemeNavToolbarView.prototype.disableStrategyTypeList = function() {
+      this.$('.dropdown-toggle').attr('data-toggle', null).parent('li').addClass('disabled').on('click.me', function(event) {
+        event.preventDefault();
+      });
+    };
+
+    ThemeNavToolbarView.prototype.enableStrategyTypeList = function() {
+      this.$('.dropdown-toggle').attr('data-toggle', 'dropdown').parent('li').removeClass('disabled').off('click.me');
     };
 
     ThemeNavToolbarView.prototype.unrender = function() {

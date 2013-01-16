@@ -49,6 +49,7 @@ define(['namespace'], function(namespace) {
       params = _.extend({
         year: namespace.currYear
       }, this.fetchParams);
+      this.trigger("table:startload");
       this.collection.fetch({
         data: params,
         success: function(collection) {
@@ -72,6 +73,7 @@ define(['namespace'], function(namespace) {
           if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
             _this.fetchCallback(collection.models);
           }
+          _this.trigger("table:endload");
         }
       });
     };
@@ -105,6 +107,7 @@ define(['namespace'], function(namespace) {
         }
       });
       $table.dataTable({
+        bDestroy: true,
         sPaginationType: "bootstrap",
         aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]],
         aoColumns: dtColConfig

@@ -10,111 +10,120 @@ define([
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 
                 '_createRegionSelect', '_createCountySelect', 
-                '_createHouseSelect', '_createSenateSelect')
+                '_createHouseSelect', '_createSenateSelect',
+                'enableSelects', 'disableSelects')
 
             if (not namespace.countyNames? or not namespace.regionNames? or 
                 not namespace.houseNames? or not namespace.senateNames?)
                     throw "Must specify namespace.counties, namespace.regions, namespace.house,and namespace.senate"
-                
-            @countyNamesCollection = namespace.countyNames
-            @regionNamesCollection = namespace.regionNames
-            @houseNamesCollection = namespace.houseNames
-            @senateNamesCollection = namespace.senateNames
 
             return
 
         render: () ->
+            @selects = {}
             #create the regionSelect
-            this._createRegionSelect().chosen()
-
+            @selects["region"] = this._createRegionSelect().chosen()
+            
             #create the countySelect
-            this._createCountySelect().chosen()
+            @selects["county"] = this._createCountySelect().chosen()
 
             #create the houseSelect
-            this._createHouseSelect().chosen() 
+            @selects["house"] = this._createHouseSelect().chosen() 
 
             #create the senateSelect
-            this._createSenateSelect().chosen()
+            @selects["senate"] = this._createSenateSelect().chosen()
 
             return this
 
 
+        disableSelects: () ->
+            for select of @selects
+                @selects[select].attr('disabled', true).trigger("liszt:updated")
+
+            return
+
+        enableSelects: () ->
+            for select of @selects
+                @selects[select].attr('disabled', null).trigger("liszt:updated")
+
+            return
+
         _createRegionSelect: () ->
-            @$regionSelect = $("<select></select>")
-            @$regionSelect.append($("<option value='-1'>Select a Region</option>"))
-            for region in @regionNamesCollection.models
+            $regionSelect = $("<select></select>")
+            $regionSelect.append($("<option value='-1'>Select a Region</option>"))
+            for region in namespace.regionNames.models
                 opt = $("<option value='#{region.get("letter")}'>Region #{region.get("letter")}</option>")
-                @$regionSelect.append(opt)
+                $regionSelect.append(opt)
 
             #add it to the dom
-            this.$("#regionSelectContainer").append(@$regionSelect)
+            this.$("#regionSelectContainer").append($regionSelect)
 
             #trigger the router to navigate to the view for this county
-            @$regionSelect.on("change", () ->
+            $regionSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/region/#{$this.val()}", {trigger: true})
                 return
             )
-            return @$regionSelect
+            return $regionSelect
 
         _createCountySelect: () ->
-            @$countySelect = $("<select></select>")
-            @$countySelect.append($("<option value='-1'>Select a County</option>"))
-            for county in @countyNamesCollection.models
+            $countySelect = $("<select></select>")
+            $countySelect.append($("<option value='-1'>Select a County</option>"))
+            for county in namespace.countyNames.models
                 opt = $("<option value='#{county.get("id")}'>#{county.get("name")}</option>")
-                @$countySelect.append(opt)
+                $countySelect.append(opt)
 
             #add it to the dom
-            this.$("#countySelectContainer").append(@$countySelect)
+            this.$("#countySelectContainer").append($countySelect)
 
             #trigger the router to navigate to the view for this county
-            @$countySelect.on("change", () ->
+            $countySelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/county/#{$this.val()}", {trigger: true})
                 return
             )
-            return @$countySelect
+            return $countySelect
 
         _createHouseSelect: () ->
-            @$houseSelect = $("<select></select>")
-            @$houseSelect.append($("<option value='-1'>Select a State House District</option>"))
-            for district in @houseNamesCollection.models
+            $houseSelect = $("<select></select>")
+            $houseSelect.append($("<option value='-1'>Select a State House District</option>"))
+            for district in namespace.houseNames.models
                 opt = $("<option value='#{district.get("id")}'>#{district.get("name")}</option>")
-                @$houseSelect.append(opt)
+                $houseSelect.append(opt)
 
             #add it to the dom
-            this.$("#houseSelectContainer").append(@$houseSelect)
+            this.$("#houseSelectContainer").append($houseSelect)
 
             #trigger the router to navigate to the view for this district
-            @$houseSelect.on("change", () ->
+            $houseSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/house/#{$this.val()}", {trigger: true})
                 return
             )
-            return @$houseSelect
+            return $houseSelect
 
 
         _createSenateSelect: () ->
-            @$senateSelect = $("<select></select>")
-            @$senateSelect.append($("<option value='-1'>Select a State Senate District</option>"))
-            for district in @senateNamesCollection.models
+            $houseSelect = $("<select></select>")
+            $houseSelect.append($("<option value='-1'>Select a State Senate District</option>"))
+            for district in namespace.senateNames.models
                 opt = $("<option value='#{district.get("id")}'>#{district.get("name")}</option>")
-                @$senateSelect.append(opt)
+                $houseSelect.append(opt)
 
             #add it to the dom
-            this.$("#senateSelectContainer").append(@$senateSelect)
+            this.$("#senateSelectContainer").append($houseSelect)
 
             #trigger the router to navigate to the view for this district
-            @$senateSelect.on("change", () ->
+            $houseSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/senate/#{$this.val()}", {trigger: true})
                 return
             )
-            return @$senateSelect
+            return $houseSelect
 
         unrender: () ->
             @$el.remove();

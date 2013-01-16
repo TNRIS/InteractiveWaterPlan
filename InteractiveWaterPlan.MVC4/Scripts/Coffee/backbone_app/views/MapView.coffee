@@ -33,7 +33,8 @@ define([
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
                 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl',
-                '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays')
+                '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays',
+                'showMapLoading', 'hideMapLoading')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -69,6 +70,7 @@ define([
             return null
 
         resetWugFeatures: (featureCollection) ->
+            
             this.clearWugFeatures()
 
             if featureCollection.models.length < 1 then return
@@ -119,7 +121,6 @@ define([
             @map.addControl(@wugSelectControl)
  
             @map.zoomToExtent(bounds)
-                
             return
 
         clearWugFeatures: () ->
@@ -150,7 +151,7 @@ define([
         hideWmsOverlays: () ->
             for layer in @map.layers
                 if !layer.isBaseLayer then layer.setVisibility(false)
-                
+
             return
 
         showWmsOverlayByViewType: (viewType) ->
@@ -167,6 +168,7 @@ define([
                         
                         #viewType is used to toggle on/off for the different wms views    
                         overlay.viewType = layerConfig.viewType
+                        
                         @map.addLayer(overlay);
                         
                     else
@@ -257,6 +259,23 @@ define([
 
         transformToWebMerc: (geometry) ->
             return geometry.transform(@map.displayProjection, @map.projection)
+
+        showMapLoading: () ->
+            if not @$loadingOverlay?
+                @$loadingOverlay = $('<div></div>')
+
+                @$loadingOverlay.height(@$el.height()).width(@$el.width())
+                
+                @$loadingOverlay.addClass('mapLoadingOverlay')
+
+                @$el.prepend(@$loadingOverlay)
+            return
+
+        hideMapLoading: () ->
+            if @$loadingOverlay? 
+                @$loadingOverlay.remove()
+                @$loadingOverlay = null
+            return
 
         #returns array of base layers
         _setupBaseLayers: (baseLayers) ->

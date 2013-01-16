@@ -15,7 +15,7 @@ define(['namespace', 'scripts/text!templates/yearNav.html'], function(namespace,
     YearNavView.prototype.template = _.template(tpl);
 
     YearNavView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'changeYear');
+      _.bindAll(this, 'render', 'unrender', 'changeYear', 'disableYearButtons', 'enableYearButtons');
       return null;
     };
 
@@ -26,6 +26,14 @@ define(['namespace', 'scripts/text!templates/yearNav.html'], function(namespace,
       ko.applyBindings(this, this.el);
       this.$("a[data-value='" + namespace.currYear + "']").parent().addClass('active');
       return this;
+    };
+
+    YearNavView.prototype.disableYearButtons = function() {
+      this.$('a').parents('li').addClass('disabled');
+    };
+
+    YearNavView.prototype.enableYearButtons = function() {
+      this.$('a').parents('li').removeClass('disabled');
     };
 
     YearNavView.prototype.unrender = function() {

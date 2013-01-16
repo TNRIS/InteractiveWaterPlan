@@ -9,7 +9,8 @@ define([
         template: _.template(tpl)
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender', 'changeYear')
+            _.bindAll(this, 'render', 'unrender', 'changeYear', 
+                'disableYearButtons', 'enableYearButtons')
             
             return null
 
@@ -26,6 +27,14 @@ define([
             this.$("a[data-value='#{namespace.currYear}']").parent().addClass('active')
 
             return this
+
+        disableYearButtons: () ->
+            this.$('a').parents('li').addClass('disabled')
+            return
+
+        enableYearButtons: () ->
+            this.$('a').parents('li').removeClass('disabled')
+            return
 
         unrender: () ->
             kb.release(this)

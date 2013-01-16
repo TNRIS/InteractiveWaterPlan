@@ -13,36 +13,47 @@ define(['namespace'], function(namespace) {
     }
 
     WmsAreaSelectView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', '_createRegionSelect', '_createCountySelect', '_createHouseSelect', '_createSenateSelect');
+      _.bindAll(this, 'render', 'unrender', '_createRegionSelect', '_createCountySelect', '_createHouseSelect', '_createSenateSelect', 'enableSelects', 'disableSelects');
       if (!(namespace.countyNames != null) || !(namespace.regionNames != null) || !(namespace.houseNames != null) || !(namespace.senateNames != null)) {
         throw "Must specify namespace.counties, namespace.regions, namespace.house,and namespace.senate";
       }
-      this.countyNamesCollection = namespace.countyNames;
-      this.regionNamesCollection = namespace.regionNames;
-      this.houseNamesCollection = namespace.houseNames;
-      this.senateNamesCollection = namespace.senateNames;
     };
 
     WmsAreaSelectView.prototype.render = function() {
-      this._createRegionSelect().chosen();
-      this._createCountySelect().chosen();
-      this._createHouseSelect().chosen();
-      this._createSenateSelect().chosen();
+      this.selects = {};
+      this.selects["region"] = this._createRegionSelect().chosen();
+      this.selects["county"] = this._createCountySelect().chosen();
+      this.selects["house"] = this._createHouseSelect().chosen();
+      this.selects["senate"] = this._createSenateSelect().chosen();
       return this;
     };
 
+    WmsAreaSelectView.prototype.disableSelects = function() {
+      var select;
+      for (select in this.selects) {
+        this.selects[select].attr('disabled', true).trigger("liszt:updated");
+      }
+    };
+
+    WmsAreaSelectView.prototype.enableSelects = function() {
+      var select;
+      for (select in this.selects) {
+        this.selects[select].attr('disabled', null).trigger("liszt:updated");
+      }
+    };
+
     WmsAreaSelectView.prototype._createRegionSelect = function() {
-      var opt, region, _i, _len, _ref;
-      this.$regionSelect = $("<select></select>");
-      this.$regionSelect.append($("<option value='-1'>Select a Region</option>"));
-      _ref = this.regionNamesCollection.models;
+      var $regionSelect, opt, region, _i, _len, _ref;
+      $regionSelect = $("<select></select>");
+      $regionSelect.append($("<option value='-1'>Select a Region</option>"));
+      _ref = namespace.regionNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
         opt = $("<option value='" + (region.get("letter")) + "'>Region " + (region.get("letter")) + "</option>");
-        this.$regionSelect.append(opt);
+        $regionSelect.append(opt);
       }
-      this.$("#regionSelectContainer").append(this.$regionSelect);
-      this.$regionSelect.on("change", function() {
+      this.$("#regionSelectContainer").append($regionSelect);
+      $regionSelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -52,21 +63,21 @@ define(['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$regionSelect;
+      return $regionSelect;
     };
 
     WmsAreaSelectView.prototype._createCountySelect = function() {
-      var county, opt, _i, _len, _ref;
-      this.$countySelect = $("<select></select>");
-      this.$countySelect.append($("<option value='-1'>Select a County</option>"));
-      _ref = this.countyNamesCollection.models;
+      var $countySelect, county, opt, _i, _len, _ref;
+      $countySelect = $("<select></select>");
+      $countySelect.append($("<option value='-1'>Select a County</option>"));
+      _ref = namespace.countyNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         county = _ref[_i];
         opt = $("<option value='" + (county.get("id")) + "'>" + (county.get("name")) + "</option>");
-        this.$countySelect.append(opt);
+        $countySelect.append(opt);
       }
-      this.$("#countySelectContainer").append(this.$countySelect);
-      this.$countySelect.on("change", function() {
+      this.$("#countySelectContainer").append($countySelect);
+      $countySelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -76,21 +87,21 @@ define(['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$countySelect;
+      return $countySelect;
     };
 
     WmsAreaSelectView.prototype._createHouseSelect = function() {
-      var district, opt, _i, _len, _ref;
-      this.$houseSelect = $("<select></select>");
-      this.$houseSelect.append($("<option value='-1'>Select a State House District</option>"));
-      _ref = this.houseNamesCollection.models;
+      var $houseSelect, district, opt, _i, _len, _ref;
+      $houseSelect = $("<select></select>");
+      $houseSelect.append($("<option value='-1'>Select a State House District</option>"));
+      _ref = namespace.houseNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         district = _ref[_i];
         opt = $("<option value='" + (district.get("id")) + "'>" + (district.get("name")) + "</option>");
-        this.$houseSelect.append(opt);
+        $houseSelect.append(opt);
       }
-      this.$("#houseSelectContainer").append(this.$houseSelect);
-      this.$houseSelect.on("change", function() {
+      this.$("#houseSelectContainer").append($houseSelect);
+      $houseSelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -100,21 +111,21 @@ define(['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$houseSelect;
+      return $houseSelect;
     };
 
     WmsAreaSelectView.prototype._createSenateSelect = function() {
-      var district, opt, _i, _len, _ref;
-      this.$senateSelect = $("<select></select>");
-      this.$senateSelect.append($("<option value='-1'>Select a State Senate District</option>"));
-      _ref = this.senateNamesCollection.models;
+      var $houseSelect, district, opt, _i, _len, _ref;
+      $houseSelect = $("<select></select>");
+      $houseSelect.append($("<option value='-1'>Select a State Senate District</option>"));
+      _ref = namespace.senateNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         district = _ref[_i];
         opt = $("<option value='" + (district.get("id")) + "'>" + (district.get("name")) + "</option>");
-        this.$senateSelect.append(opt);
+        $houseSelect.append(opt);
       }
-      this.$("#senateSelectContainer").append(this.$senateSelect);
-      this.$senateSelect.on("change", function() {
+      this.$("#senateSelectContainer").append($houseSelect);
+      $houseSelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -124,7 +135,7 @@ define(['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$senateSelect;
+      return $houseSelect;
     };
 
     WmsAreaSelectView.prototype.unrender = function() {

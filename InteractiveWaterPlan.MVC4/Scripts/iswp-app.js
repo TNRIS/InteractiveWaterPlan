@@ -50,19 +50,6 @@ define('namespace',['collections/WugFeatureCollection'], function(WugFeatureColl
           opacity: 0.6
         }
       }, {
-        name: "Water System Service Areas",
-        type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer",
-        service_params: {
-          layers: "0",
-          transparent: true
-        },
-        layer_params: {
-          isBaseLayer: false,
-          visibility: false,
-          opacity: 0.6
-        }
-      }, {
         name: "Texas Counties",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
@@ -97,6 +84,19 @@ define('namespace',['collections/WugFeatureCollection'], function(WugFeatureColl
         viewType: "HouseDistricts",
         service_params: {
           layers: "2,11",
+          transparent: true
+        },
+        layer_params: {
+          isBaseLayer: false,
+          visibility: false,
+          opacity: 0.6
+        }
+      }, {
+        name: "Water System Service Areas",
+        type: "WMS",
+        url: "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer",
+        service_params: {
+          layers: "0",
           transparent: true
         },
         layer_params: {
@@ -142,7 +142,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -348,6 +348,22 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
 
     MapView.prototype.transformToWebMerc = function(geometry) {
       return geometry.transform(this.map.displayProjection, this.map.projection);
+    };
+
+    MapView.prototype.showMapLoading = function() {
+      if (!(this.$loadingOverlay != null)) {
+        this.$loadingOverlay = $('<div></div>');
+        this.$loadingOverlay.height(this.$el.height()).width(this.$el.width());
+        this.$loadingOverlay.addClass('mapLoadingOverlay');
+        this.$el.prepend(this.$loadingOverlay);
+      }
+    };
+
+    MapView.prototype.hideMapLoading = function() {
+      if (this.$loadingOverlay != null) {
+        this.$loadingOverlay.remove();
+        this.$loadingOverlay = null;
+      }
     };
 
     MapView.prototype._setupBaseLayers = function(baseLayers) {
@@ -812,7 +828,7 @@ define('views/ThemeNavToolbarView',['namespace', 'collections/StrategyTypeCollec
     ThemeNavToolbarView.prototype.template = _.template(tpl);
 
     ThemeNavToolbarView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList');
+      _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList', 'enableStrategyTypeList', 'disableStrategyTypeList');
       return null;
     };
 
@@ -846,6 +862,16 @@ define('views/ThemeNavToolbarView',['namespace', 'collections/StrategyTypeCollec
       });
     };
 
+    ThemeNavToolbarView.prototype.disableStrategyTypeList = function() {
+      this.$('.dropdown-toggle').attr('data-toggle', null).parent('li').addClass('disabled').on('click.me', function(event) {
+        event.preventDefault();
+      });
+    };
+
+    ThemeNavToolbarView.prototype.enableStrategyTypeList = function() {
+      this.$('.dropdown-toggle').attr('data-toggle', 'dropdown').parent('li').removeClass('disabled').off('click.me');
+    };
+
     ThemeNavToolbarView.prototype.unrender = function() {
       this.$el.remove();
       return null;
@@ -875,7 +901,7 @@ define('views/YearNavView',['namespace', 'scripts/text!templates/yearNav.html'],
     YearNavView.prototype.template = _.template(tpl);
 
     YearNavView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'changeYear');
+      _.bindAll(this, 'render', 'unrender', 'changeYear', 'disableYearButtons', 'enableYearButtons');
       return null;
     };
 
@@ -886,6 +912,14 @@ define('views/YearNavView',['namespace', 'scripts/text!templates/yearNav.html'],
       ko.applyBindings(this, this.el);
       this.$("a[data-value='" + namespace.currYear + "']").parent().addClass('active');
       return this;
+    };
+
+    YearNavView.prototype.disableYearButtons = function() {
+      this.$('a').parents('li').addClass('disabled');
+    };
+
+    YearNavView.prototype.enableYearButtons = function() {
+      this.$('a').parents('li').removeClass('disabled');
     };
 
     YearNavView.prototype.unrender = function() {
@@ -1068,6 +1102,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
       params = _.extend({
         year: namespace.currYear
       }, this.fetchParams);
+      this.trigger("table:startload");
       this.collection.fetch({
         data: params,
         success: function(collection) {
@@ -1091,6 +1126,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
           if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
             _this.fetchCallback(collection.models);
           }
+          _this.trigger("table:endload");
         }
       });
     };
@@ -1124,6 +1160,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
         }
       });
       $table.dataTable({
+        bDestroy: true,
         sPaginationType: "bootstrap",
         aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]],
         aoColumns: dtColConfig
@@ -1665,36 +1702,47 @@ define('views/WmsAreaSelectView',['namespace'], function(namespace) {
     }
 
     WmsAreaSelectView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', '_createRegionSelect', '_createCountySelect', '_createHouseSelect', '_createSenateSelect');
+      _.bindAll(this, 'render', 'unrender', '_createRegionSelect', '_createCountySelect', '_createHouseSelect', '_createSenateSelect', 'enableSelects', 'disableSelects');
       if (!(namespace.countyNames != null) || !(namespace.regionNames != null) || !(namespace.houseNames != null) || !(namespace.senateNames != null)) {
         throw "Must specify namespace.counties, namespace.regions, namespace.house,and namespace.senate";
       }
-      this.countyNamesCollection = namespace.countyNames;
-      this.regionNamesCollection = namespace.regionNames;
-      this.houseNamesCollection = namespace.houseNames;
-      this.senateNamesCollection = namespace.senateNames;
     };
 
     WmsAreaSelectView.prototype.render = function() {
-      this._createRegionSelect().chosen();
-      this._createCountySelect().chosen();
-      this._createHouseSelect().chosen();
-      this._createSenateSelect().chosen();
+      this.selects = {};
+      this.selects["region"] = this._createRegionSelect().chosen();
+      this.selects["county"] = this._createCountySelect().chosen();
+      this.selects["house"] = this._createHouseSelect().chosen();
+      this.selects["senate"] = this._createSenateSelect().chosen();
       return this;
     };
 
+    WmsAreaSelectView.prototype.disableSelects = function() {
+      var select;
+      for (select in this.selects) {
+        this.selects[select].attr('disabled', true).trigger("liszt:updated");
+      }
+    };
+
+    WmsAreaSelectView.prototype.enableSelects = function() {
+      var select;
+      for (select in this.selects) {
+        this.selects[select].attr('disabled', null).trigger("liszt:updated");
+      }
+    };
+
     WmsAreaSelectView.prototype._createRegionSelect = function() {
-      var opt, region, _i, _len, _ref;
-      this.$regionSelect = $("<select></select>");
-      this.$regionSelect.append($("<option value='-1'>Select a Region</option>"));
-      _ref = this.regionNamesCollection.models;
+      var $regionSelect, opt, region, _i, _len, _ref;
+      $regionSelect = $("<select></select>");
+      $regionSelect.append($("<option value='-1'>Select a Region</option>"));
+      _ref = namespace.regionNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
         opt = $("<option value='" + (region.get("letter")) + "'>Region " + (region.get("letter")) + "</option>");
-        this.$regionSelect.append(opt);
+        $regionSelect.append(opt);
       }
-      this.$("#regionSelectContainer").append(this.$regionSelect);
-      this.$regionSelect.on("change", function() {
+      this.$("#regionSelectContainer").append($regionSelect);
+      $regionSelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -1704,21 +1752,21 @@ define('views/WmsAreaSelectView',['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$regionSelect;
+      return $regionSelect;
     };
 
     WmsAreaSelectView.prototype._createCountySelect = function() {
-      var county, opt, _i, _len, _ref;
-      this.$countySelect = $("<select></select>");
-      this.$countySelect.append($("<option value='-1'>Select a County</option>"));
-      _ref = this.countyNamesCollection.models;
+      var $countySelect, county, opt, _i, _len, _ref;
+      $countySelect = $("<select></select>");
+      $countySelect.append($("<option value='-1'>Select a County</option>"));
+      _ref = namespace.countyNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         county = _ref[_i];
         opt = $("<option value='" + (county.get("id")) + "'>" + (county.get("name")) + "</option>");
-        this.$countySelect.append(opt);
+        $countySelect.append(opt);
       }
-      this.$("#countySelectContainer").append(this.$countySelect);
-      this.$countySelect.on("change", function() {
+      this.$("#countySelectContainer").append($countySelect);
+      $countySelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -1728,21 +1776,21 @@ define('views/WmsAreaSelectView',['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$countySelect;
+      return $countySelect;
     };
 
     WmsAreaSelectView.prototype._createHouseSelect = function() {
-      var district, opt, _i, _len, _ref;
-      this.$houseSelect = $("<select></select>");
-      this.$houseSelect.append($("<option value='-1'>Select a State House District</option>"));
-      _ref = this.houseNamesCollection.models;
+      var $houseSelect, district, opt, _i, _len, _ref;
+      $houseSelect = $("<select></select>");
+      $houseSelect.append($("<option value='-1'>Select a State House District</option>"));
+      _ref = namespace.houseNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         district = _ref[_i];
         opt = $("<option value='" + (district.get("id")) + "'>" + (district.get("name")) + "</option>");
-        this.$houseSelect.append(opt);
+        $houseSelect.append(opt);
       }
-      this.$("#houseSelectContainer").append(this.$houseSelect);
-      this.$houseSelect.on("change", function() {
+      this.$("#houseSelectContainer").append($houseSelect);
+      $houseSelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -1752,21 +1800,21 @@ define('views/WmsAreaSelectView',['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$houseSelect;
+      return $houseSelect;
     };
 
     WmsAreaSelectView.prototype._createSenateSelect = function() {
-      var district, opt, _i, _len, _ref;
-      this.$senateSelect = $("<select></select>");
-      this.$senateSelect.append($("<option value='-1'>Select a State Senate District</option>"));
-      _ref = this.senateNamesCollection.models;
+      var $houseSelect, district, opt, _i, _len, _ref;
+      $houseSelect = $("<select></select>");
+      $houseSelect.append($("<option value='-1'>Select a State Senate District</option>"));
+      _ref = namespace.senateNames.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         district = _ref[_i];
         opt = $("<option value='" + (district.get("id")) + "'>" + (district.get("name")) + "</option>");
-        this.$senateSelect.append(opt);
+        $houseSelect.append(opt);
       }
-      this.$("#senateSelectContainer").append(this.$senateSelect);
-      this.$senateSelect.on("change", function() {
+      this.$("#senateSelectContainer").append($houseSelect);
+      $houseSelect.on("change", function() {
         var $this;
         $this = $(this);
         if ($this.val() === "-1") {
@@ -1776,7 +1824,7 @@ define('views/WmsAreaSelectView',['namespace'], function(namespace) {
           trigger: true
         });
       });
-      return this.$senateSelect;
+      return $houseSelect;
     };
 
     WmsAreaSelectView.prototype.unrender = function() {
@@ -1956,7 +2004,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'disableControls', 'enableControls');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -1990,10 +2038,10 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       namespace.houseNames.reset(initHouseNames);
       namespace.senateNames = new SenateCollection();
       namespace.senateNames.reset(initSenateNames);
-      this.countyRegionSelect = new WmsAreaSelectView({
+      this.areaSelectView = new WmsAreaSelectView({
         el: $('#areaSelectContainer')[0]
       });
-      this.countyRegionSelect.render();
+      this.areaSelectView.render();
     };
 
     WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
@@ -2056,14 +2104,30 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       }
     };
 
+    WMSRouter.prototype.disableControls = function() {
+      this.areaSelectView.disableSelects();
+      this.yearNavView.disableYearButtons();
+      this.themeNavToolbarView.disableStrategyTypeList();
+      this.mapView.showMapLoading();
+    };
+
+    WMSRouter.prototype.enableControls = function() {
+      this.areaSelectView.enableSelects();
+      this.yearNavView.enableYearButtons();
+      this.themeNavToolbarView.enableStrategyTypeList();
+      this.mapView.hideMapLoading();
+    };
+
     WMSRouter.prototype.after = {
       '': function(year) {
         if ((year != null) && (this.currTableView != null)) {
+          this.yearNavView.render();
+          this.themeNavToolbarView.render();
+          this.currTableView.on("table:startload", this.disableControls);
           this.currTableView.render();
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
-          this.yearNavView.render();
-          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
-          return this.themeNavToolbarView.render();
+          this.currTableView.on("table:endload", this.enableControls);
+          return this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
         }
       }
     };

@@ -12,7 +12,8 @@ define([
         
 
         initialize: (options) ->
-            _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList')
+            _.bindAll(this, 'render', 'unrender', 'renderStrategyTypeList',
+                'enableStrategyTypeList', 'disableStrategyTypeList')
 
             return null
 
@@ -44,6 +45,22 @@ define([
                     return
             )
 
+            return
+
+        disableStrategyTypeList: () ->
+            this.$('.dropdown-toggle').attr('data-toggle', null)
+                .parent('li').addClass('disabled')
+                .on('click.me',(event)->
+                    event.preventDefault()
+                    return
+                )
+
+            return
+
+        enableStrategyTypeList: () ->
+            this.$('.dropdown-toggle').attr('data-toggle', 'dropdown')
+                .parent('li').removeClass('disabled')
+                .off('click.me')
             return
 
         unrender: () ->

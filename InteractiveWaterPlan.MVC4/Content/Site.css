@@ -178,6 +178,14 @@ i.wugIcon
     text-align: center;
 }
 
+.mapLoadingOverlay
+{
+    position: absolute;
+    z-index: 99999;
+    background: rgb(255, 255, 255) transparent; /* default fallback */
+    background: rgba(255,255,255,0.8) url('images/loading-36.gif') no-repeat center;
+}
+
 .tableLoading
 {
     background: url('images/loading-36.gif') no-repeat;

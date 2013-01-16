@@ -30,7 +30,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -236,6 +236,22 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.transformToWebMerc = function(geometry) {
       return geometry.transform(this.map.displayProjection, this.map.projection);
+    };
+
+    MapView.prototype.showMapLoading = function() {
+      if (!(this.$loadingOverlay != null)) {
+        this.$loadingOverlay = $('<div></div>');
+        this.$loadingOverlay.height(this.$el.height()).width(this.$el.width());
+        this.$loadingOverlay.addClass('mapLoadingOverlay');
+        this.$el.prepend(this.$loadingOverlay);
+      }
+    };
+
+    MapView.prototype.hideMapLoading = function() {
+      if (this.$loadingOverlay != null) {
+        this.$loadingOverlay.remove();
+        this.$loadingOverlay = null;
+      }
     };
 
     MapView.prototype._setupBaseLayers = function(baseLayers) {

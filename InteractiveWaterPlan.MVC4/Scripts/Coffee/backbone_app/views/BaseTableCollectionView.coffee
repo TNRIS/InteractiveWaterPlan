@@ -54,6 +54,8 @@ define([
             #always include the current year in the fetch parameters
             params = _.extend({year: namespace.currYear }, @fetchParams)
 
+            this.trigger("table:startload")
+
             @collection.fetch(
                 data: params
                 
@@ -75,10 +77,11 @@ define([
                     this.connectTableRowsToWugFeatures()
 
                     this.hideLoading()
-                    
+
                     if this.fetchCallback? and _.isFunction(this.fetchCallback)
                         this.fetchCallback(collection.models)
 
+                    this.trigger("table:endload")
 
                     return   
             )
@@ -116,6 +119,7 @@ define([
             )
 
             $table.dataTable(
+                bDestroy: true
                 sPaginationType: "bootstrap",
                 aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]]
                 aoColumns: dtColConfig

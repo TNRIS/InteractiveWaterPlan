@@ -42,7 +42,8 @@ define([
     class WMSRouter extends Backbone.Router
         
         initialize: (options) ->
-            _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug')
+            _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug',
+                'disableControls', 'enableControls')
 
             @currTableView = null
             
@@ -93,10 +94,10 @@ define([
             namespace.senateNames = new SenateCollection()
             namespace.senateNames.reset(initSenateNames)
 
-            @countyRegionSelect = new WmsAreaSelectView(
+            @areaSelectView = new WmsAreaSelectView(
                 el: $('#areaSelectContainer')[0]
             )
-            @countyRegionSelect.render()
+            @areaSelectView.render()
 
             return
 
@@ -140,6 +141,7 @@ define([
         #before filter from backbone.routefilter
         before:
             '': (year) ->
+                
                 #unrender the currTableView first
                 if @currTableView?
                     @currTableView = @currTableView.unrender()
@@ -153,21 +155,41 @@ define([
                         return false
                 return
 
+        disableControls: () ->
+            @areaSelectView.disableSelects()
+            @yearNavView.disableYearButtons()
+            @themeNavToolbarView.disableStrategyTypeList()
+            @mapView.showMapLoading()
+            return
+
+        enableControls: () ->
+            @areaSelectView.enableSelects()
+            @yearNavView.enableYearButtons()
+            @themeNavToolbarView.enableStrategyTypeList()
+            @mapView.hideMapLoading()
+            return
+
         after:
             '': (year) ->
                 if year? and @currTableView?
+                    
+                    @yearNavView.render()
+                    @themeNavToolbarView.render()
+
+                    @currTableView.on("table:startload", this.disableControls)
+
                     @currTableView.render()
 
                     #subscribe to table row select (by hover)
                     @currTableView.selectedWug.subscribe(this.updateSelectedWug)
 
-                    @yearNavView.render()
+                    @currTableView.on("table:endload", this.enableControls)
 
                     #subscribe to currentYear changes
                     @yearNavView.currentYear.subscribe(this.updateViewsToNewYear) 
                     
-                    @themeNavToolbarView.render()
-       
+                    
+                
 
         default: () ->
             #for now, redirect to the wms net-county view
