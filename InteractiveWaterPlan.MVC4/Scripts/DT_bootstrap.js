@@ -16,14 +16,14 @@ jQuery(function($) {
             $('th', $this).each(function(idx, th){
                 var $th = $(th);
 
-                $('i', $th).remove();
+                $('i.sortIcon', $th).remove();
                 $th.attr('style', "width:"+percentWidth+"%;");
                 
                 if ($th.hasClass('sorting_asc')) {
-                    $th.append(" <i class='icon-caret-up'></i>");
+                    $th.append(" <i class='icon-caret-up sortIcon'></i>");
                 }
                 else if ($th.hasClass('sorting_desc')) {
-                    $th.append(" <i class='icon-caret-down'></i>");
+                    $th.append(" <i class='icon-caret-down sortIcon'></i>");
                 }
             });
 
