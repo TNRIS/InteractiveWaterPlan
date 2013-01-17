@@ -215,6 +215,7 @@
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Popup.Cosmo.js" />
     <Content Include="Scripts\DT_bootstrap.js" />
+    <Content Include="Scripts\excanvas.min.js" />
     <Content Include="Scripts\iswp-app.js" />
     <Content Include="Scripts\iswp-app.min.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
@@ -222,6 +223,7 @@
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.flot.js" />
     <Content Include="Scripts\jquery.number.js" />
     <Content Include="Scripts\jquery.tableToCsv.js" />
     <Content Include="Scripts\knockback-core-stack.js" />
