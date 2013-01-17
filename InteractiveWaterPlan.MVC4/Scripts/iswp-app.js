@@ -190,7 +190,6 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       _ref = featureCollection.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         m = _ref[_i];
-        console.log(m.get("type"));
         newFeature = wktFormat.read(m.get('wktGeog'));
         newFeature.attributes = m.attributes;
         newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("sourceSupply"));

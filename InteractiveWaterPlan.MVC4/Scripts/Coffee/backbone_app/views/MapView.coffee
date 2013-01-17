@@ -96,7 +96,6 @@ define([
             bounds = null
             wugFeatures = []
             for m in featureCollection.models
-                console.log m.get("type")
                 newFeature = wktFormat.read(m.get('wktGeog'))
                 newFeature.attributes = m.attributes
                 newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
