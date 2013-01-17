@@ -116,10 +116,11 @@ define([
             @wugLayer.addFeatures(wugFeatures)
             @map.addLayer(@wugLayer)
             
-            #Add a select feature on hover control
+            #Add control to highlight feature and show popup on hover
             @wugHighlightControl = this._setupWugHighlightControl()
             @map.addControl(@wugHighlightControl)
 
+            #Add control to view entity details view on click
             @wugClickControl = this._setupWugClickControl()
             @map.addControl(@wugClickControl)
 
