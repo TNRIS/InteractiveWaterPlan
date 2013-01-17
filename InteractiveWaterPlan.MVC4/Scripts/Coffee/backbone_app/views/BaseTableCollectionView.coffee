@@ -165,10 +165,11 @@ define([
         #Attach hover listener to the data table to show a popup for the associated WUG Feature
         _connectTableRowsToWugFeatures: () ->
 
+
             me = this #save reference to the View
 
-            # !------- TODO: THIS IS NOT WORKING -----#
-            # For some reason, only ground water is firing the event
+            #Must use delegate methods because the table has not finished rendering
+            # by the time this is called (because the models are independently appended)
 
             this.$('table tbody').delegate('td.strategyType', 'hover'
                 (event) -> 
