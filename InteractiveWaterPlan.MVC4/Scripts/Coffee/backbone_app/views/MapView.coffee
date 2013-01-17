@@ -140,14 +140,15 @@ define([
             if @wugLayer? then @wugLayer.destroy()
             return
 
-        selectWugFeature: (wugId) ->
-            console.log "in select wug feature"
+        selectWugFeature: (wugId, projId) ->
             if not @wugHighlightControl? then return
 
             for wugFeature in @wugLayer.features
-                if wugFeature.attributes.id == wugId
-                    @wugHighlightControl.select(wugFeature)
-                    return
+
+                if wugFeature.attributes.id == wugId and
+                    wugFeature.attributes.projectId == projId
+                        @wugHighlightControl.select(wugFeature)
+                        return
 
             return
 
@@ -242,7 +243,6 @@ define([
                         return
 
                     onSelect: (wugFeature) =>
-
                         popup = new OpenLayers.Popup.FramedCloud("wugpopup",
                             wugFeature.geometry.getBounds().getCenterLonLat()
                             null, #contentSize

@@ -226,16 +226,15 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       }
     };
 
-    MapView.prototype.selectWugFeature = function(wugId) {
+    MapView.prototype.selectWugFeature = function(wugId, projId) {
       var wugFeature, _i, _len, _ref;
-      console.log("in select wug feature");
       if (!(this.wugHighlightControl != null)) {
         return;
       }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if (wugFeature.attributes.id === wugId) {
+        if (wugFeature.attributes.id === wugId && wugFeature.attributes.projectId === projId) {
           this.wugHighlightControl.select(wugFeature);
           return;
         }
@@ -1189,6 +1188,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
       newWugList = _.map(strategyModels, function(m) {
         return {
           id: m.get("recipientEntityId"),
+          projectId: m.get("projectId"),
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),
           sourceSupply: m.get("supply" + namespace.currYear),
@@ -1231,11 +1231,12 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
         console.log("out", this);
       });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
-        var $target, wugId;
+        var $target, projectId, wugId;
         if (event.type === 'mouseenter') {
           $target = $(this);
-          wugId = $target.data('entity-id');
-          me.trigger("table:hoverwug", wugId);
+          wugId = parseInt($target.attr('data-entity-id'));
+          projectId = parseInt($target.attr('data-project-id'));
+          me.trigger("table:hoverwug", wugId, projectId);
         } else {
           me.trigger("table:hoverwug", null);
         }
@@ -1311,6 +1312,7 @@ define('views/BaseStrategyView',['namespace'], function(namespace) {
         currYear: namespace.currYear
       }));
       this.$el.attr('data-entity-id', this.model.get("recipientEntityId"));
+      this.$el.attr('data-project-id', this.model.get("projectId"));
       return this;
     };
 
@@ -1689,6 +1691,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
       this.viewName(wug.get("recipientEntityName"));
       newWugList.push({
         id: wug.get("recipientEntityId"),
+        projectId: wug.get("projectId"),
         name: wug.get("recipientEntityName"),
         wktGeog: wug.get("recipientEntityWktGeog"),
         sourceSupply: wug.get("supply" + namespace.currYear),
@@ -2190,11 +2193,11 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       this.currTableView.showNothingFound();
     };
 
-    WMSRouter.prototype.updateSelectedWug = function(wugId) {
-      if (!wugId) {
+    WMSRouter.prototype.updateSelectedWug = function(wugId, projectId) {
+      if (!(wugId != null)) {
         this.mapView.unselectWugFeatures();
       } else {
-        this.mapView.selectWugFeature(wugId);
+        this.mapView.selectWugFeature(wugId, projectId);
       }
     };
 

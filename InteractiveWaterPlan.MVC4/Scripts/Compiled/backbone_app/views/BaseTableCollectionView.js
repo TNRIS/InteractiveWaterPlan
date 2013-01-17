@@ -81,6 +81,7 @@ define(['namespace'], function(namespace) {
       newWugList = _.map(strategyModels, function(m) {
         return {
           id: m.get("recipientEntityId"),
+          projectId: m.get("projectId"),
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),
           sourceSupply: m.get("supply" + namespace.currYear),
@@ -123,11 +124,12 @@ define(['namespace'], function(namespace) {
         console.log("out", this);
       });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
-        var $target, wugId;
+        var $target, projectId, wugId;
         if (event.type === 'mouseenter') {
           $target = $(this);
-          wugId = $target.data('entity-id');
-          me.trigger("table:hoverwug", wugId);
+          wugId = parseInt($target.attr('data-entity-id'));
+          projectId = parseInt($target.attr('data-project-id'));
+          me.trigger("table:hoverwug", wugId, projectId);
         } else {
           me.trigger("table:hoverwug", null);
         }

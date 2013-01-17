@@ -114,16 +114,15 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }
     };
 
-    MapView.prototype.selectWugFeature = function(wugId) {
+    MapView.prototype.selectWugFeature = function(wugId, projId) {
       var wugFeature, _i, _len, _ref;
-      console.log("in select wug feature");
       if (!(this.wugHighlightControl != null)) {
         return;
       }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if (wugFeature.attributes.id === wugId) {
+        if (wugFeature.attributes.id === wugId && wugFeature.attributes.projectId === projId) {
           this.wugHighlightControl.select(wugFeature);
           return;
         }

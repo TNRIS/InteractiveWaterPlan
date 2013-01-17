@@ -46,6 +46,7 @@ define([
             
             newWugList.push(
                 id: wug.get("recipientEntityId")
+                projectId: wug.get("projectId")
                 name: wug.get("recipientEntityName")
                 wktGeog: wug.get("recipientEntityWktGeog")
                 sourceSupply: wug.get("supply#{namespace.currYear}")

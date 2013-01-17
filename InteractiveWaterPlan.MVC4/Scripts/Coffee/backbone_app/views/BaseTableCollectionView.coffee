@@ -89,6 +89,7 @@ define([
             newWugList = _.map(strategyModels, (m) ->
                 return {
                     id: m.get("recipientEntityId")
+                    projectId: m.get("projectId")
                     name: m.get("recipientEntityName")
                     wktGeog: m.get("recipientEntityWktGeog")
                     sourceSupply: m.get("supply#{namespace.currYear}")
@@ -147,10 +148,11 @@ define([
                         $target = $(this) #this = tr
 
                         #grab entity-id from the parent tr
-                        wugId = $target.data('entity-id')
+                        wugId = parseInt($target.attr('data-entity-id'))
+                        projectId = parseInt($target.attr('data-project-id'))
                         
-                        #trigger the event passing wugId
-                        me.trigger("table:hoverwug", wugId)
+                        #trigger the event passing wugId and projectId
+                        me.trigger("table:hoverwug", wugId, projectId)
                     else
                         #trigger the event passing null as the id
                         me.trigger("table:hoverwug", null)

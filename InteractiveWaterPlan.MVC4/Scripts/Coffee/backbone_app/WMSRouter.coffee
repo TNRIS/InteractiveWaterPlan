@@ -144,11 +144,11 @@ define([
             @currTableView.showNothingFound()
             return
 
-        updateSelectedWug: (wugId) ->
-            if not wugId #if null, unselect all 
+        updateSelectedWug: (wugId, projectId) ->
+            if not wugId? #if null, unselect all 
                 @mapView.unselectWugFeatures()
-            else #select the feature with the given id
-                @mapView.selectWugFeature(wugId)
+            else #select the feature with the given id and projectId
+                @mapView.selectWugFeature(wugId, projectId)
             return
 
         updateViewsToNewYear: (newYear) ->
