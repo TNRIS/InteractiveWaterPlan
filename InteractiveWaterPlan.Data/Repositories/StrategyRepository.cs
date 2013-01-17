@@ -113,17 +113,14 @@ namespace InteractiveWaterPlan.Data
 
         public IList<StrategyDetails> GetStrategiesByProjectId(int projectId, string year)
         {
-            return Session.GetNamedQuery("GetStrategyDetailsByProjectId")
+            var strategyDetails = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
                 .SetParameter("projectId", projectId)
                 .SetParameter("year", year)
                 .List<StrategyDetails>()
                 .OrderBy(x => x.Id)
-                .Where(x =>
-                {
-                    long supplyVal = (long)(x.GetType().GetProperty("Supply" + year).GetValue(x, null));
-                    return supplyVal != 0;
-                })
                 .ToList();
+
+            return strategyDetails;
         }
 
     }
