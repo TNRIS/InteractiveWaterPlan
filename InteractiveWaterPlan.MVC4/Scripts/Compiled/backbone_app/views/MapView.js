@@ -30,7 +30,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -92,15 +92,22 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.map.addLayer(this.wugLayer);
-      this.wugSelectControl = this._setupWugSelectControl();
-      this.map.addControl(this.wugSelectControl);
+      this.wugHighlightControl = this._setupWugHighlightControl();
+      this.map.addControl(this.wugHighlightControl);
+      this.wugClickControl = this._setupWugClickControl();
+      this.map.addControl(this.wugClickControl);
       this.map.zoomToExtent(bounds);
     };
 
     MapView.prototype.clearWugFeatures = function() {
       this.unselectWugFeatures();
-      if (this.wugSelectControl != null) {
-        this.wugSelectControl.destroy();
+      if (this.wugHighlightControl != null) {
+        this.wugHighlightControl.destroy();
+        this.wugHighlightControl = null;
+      }
+      if (this.wugClickControl != null) {
+        this.wugClickControl.destroy();
+        this.wugClickControl = null;
       }
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
@@ -109,24 +116,24 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.selectWugFeature = function(wugId) {
       var wugFeature, _i, _len, _ref;
-      if (!(this.wugSelectControl != null)) {
+      if (!(this.wugHighlightControl != null)) {
         return;
       }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         if (wugFeature.attributes.id === wugId) {
-          this.wugSelectControl.select(wugFeature);
+          this.wugHighlightControl.select(wugFeature);
           return;
         }
       }
     };
 
     MapView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugSelectControl != null) || !(this.wugSelectControl.layer.selectedFeatures != null)) {
+      if (!(this.wugHighlightControl != null) || !(this.wugHighlightControl.layer.selectedFeatures != null)) {
         return;
       }
-      this.wugSelectControl.unselectAll();
+      this.wugHighlightControl.unselectAll();
     };
 
     MapView.prototype.hideWmsOverlays = function() {
@@ -166,7 +173,23 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }
     };
 
-    MapView.prototype._setupWugSelectControl = function() {
+    MapView.prototype._setupWugClickControl = function() {
+      var control,
+        _this = this;
+      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
+        autoActivate: true,
+        clickFeature: function(wugFeature) {
+          var wugId;
+          wugId = wugFeature.attributes.id;
+          Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
+            trigger: true
+          });
+        }
+      });
+      return control;
+    };
+
+    MapView.prototype._setupWugHighlightControl = function() {
       var control, timer,
         _this = this;
       timer = null;

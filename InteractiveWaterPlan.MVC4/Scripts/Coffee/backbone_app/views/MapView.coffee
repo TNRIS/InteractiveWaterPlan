@@ -32,9 +32,9 @@ define([
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
                 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures',
-                'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl',
+                'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
                 '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays',
-                'showMapLoading', 'hideMapLoading')
+                'showMapLoading', 'hideMapLoading', '_setupWugClickControl')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -117,33 +117,42 @@ define([
             @map.addLayer(@wugLayer)
             
             #Add a select feature on hover control
-            @wugSelectControl = this._setupWugSelectControl()
-            @map.addControl(@wugSelectControl)
- 
+            @wugHighlightControl = this._setupWugHighlightControl()
+            @map.addControl(@wugHighlightControl)
+
+            @wugClickControl = this._setupWugClickControl()
+            @map.addControl(@wugClickControl)
+
             @map.zoomToExtent(bounds)
             return
 
         clearWugFeatures: () ->
             this.unselectWugFeatures() 
-            if @wugSelectControl? then @wugSelectControl.destroy()
+            if @wugHighlightControl? 
+                @wugHighlightControl.destroy()
+                @wugHighlightControl = null
+            if @wugClickControl?
+                @wugClickControl.destroy()
+                @wugClickControl = null
+
             if @wugLayer? then @wugLayer.destroy()
             return
 
         selectWugFeature: (wugId) ->
-            if not @wugSelectControl? then return
+            if not @wugHighlightControl? then return
 
             for wugFeature in @wugLayer.features
                 if wugFeature.attributes.id == wugId
-                    @wugSelectControl.select(wugFeature)
+                    @wugHighlightControl.select(wugFeature)
                     return
 
             return
 
         unselectWugFeatures: () ->
-            if not @wugSelectControl? or not @wugSelectControl.layer.selectedFeatures? 
+            if not @wugHighlightControl? or not @wugHighlightControl.layer.selectedFeatures? 
                 return
 
-            @wugSelectControl.unselectAll()
+            @wugHighlightControl.unselectAll()
 
             return
 
@@ -176,7 +185,23 @@ define([
 
             return
 
-        _setupWugSelectControl: () ->
+        _setupWugClickControl: () ->
+            control = new OpenLayers.Control.SelectFeature(
+                @wugLayer,
+                {
+                    autoActivate: true
+                    #Navigate to Entity Details view when feature is clicked
+                    clickFeature: (wugFeature) =>
+                        #TODO: do nothing if wugType = WWP
+                        wugId = wugFeature.attributes.id
+                        Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
+                            {trigger: true})
+            
+                        return
+                })
+            return control
+
+        _setupWugHighlightControl: () ->
             timer = null
             control = new OpenLayers.Control.SelectFeature(
                 @wugLayer,
@@ -190,14 +215,16 @@ define([
                         if (this.hover)
                             if (this.highlightOnly) then this.highlight(feature);
                             else if OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1
+                                #use a slight delay to prevent windows popping up too much
                                 timer = _.delay(() =>
                                     this.select(feature)
                                 , 400)
                         return
 
                     onSelect: (wugFeature) =>
+
                         popup = new OpenLayers.Popup.FramedCloud("wugpopup",
-                            wugFeature.geometry.getBounds().getCenterLonLat(),
+                            wugFeature.geometry.getBounds().getCenterLonLat()
                             null, #contentSize
                             "
                                 <b>#{wugFeature.attributes.name}</b><br/>
@@ -205,7 +232,8 @@ define([
                             ",
                             null, #anchor
                             false, #closeBox
-                            ) #closeBoxCallback
+                            #closeBoxCallback
+                        ) 
 
                         popup.autoSize = true
                         wugFeature.popup = popup
@@ -220,7 +248,9 @@ define([
                             wugFeature.popup = null
                         return
                 }
+
             )
+
 
             return control
 

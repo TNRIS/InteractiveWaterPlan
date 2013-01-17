@@ -142,7 +142,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugSelectControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -204,15 +204,22 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.map.addLayer(this.wugLayer);
-      this.wugSelectControl = this._setupWugSelectControl();
-      this.map.addControl(this.wugSelectControl);
+      this.wugHighlightControl = this._setupWugHighlightControl();
+      this.map.addControl(this.wugHighlightControl);
+      this.wugClickControl = this._setupWugClickControl();
+      this.map.addControl(this.wugClickControl);
       this.map.zoomToExtent(bounds);
     };
 
     MapView.prototype.clearWugFeatures = function() {
       this.unselectWugFeatures();
-      if (this.wugSelectControl != null) {
-        this.wugSelectControl.destroy();
+      if (this.wugHighlightControl != null) {
+        this.wugHighlightControl.destroy();
+        this.wugHighlightControl = null;
+      }
+      if (this.wugClickControl != null) {
+        this.wugClickControl.destroy();
+        this.wugClickControl = null;
       }
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
@@ -221,24 +228,24 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
 
     MapView.prototype.selectWugFeature = function(wugId) {
       var wugFeature, _i, _len, _ref;
-      if (!(this.wugSelectControl != null)) {
+      if (!(this.wugHighlightControl != null)) {
         return;
       }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         if (wugFeature.attributes.id === wugId) {
-          this.wugSelectControl.select(wugFeature);
+          this.wugHighlightControl.select(wugFeature);
           return;
         }
       }
     };
 
     MapView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugSelectControl != null) || !(this.wugSelectControl.layer.selectedFeatures != null)) {
+      if (!(this.wugHighlightControl != null) || !(this.wugHighlightControl.layer.selectedFeatures != null)) {
         return;
       }
-      this.wugSelectControl.unselectAll();
+      this.wugHighlightControl.unselectAll();
     };
 
     MapView.prototype.hideWmsOverlays = function() {
@@ -278,7 +285,23 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       }
     };
 
-    MapView.prototype._setupWugSelectControl = function() {
+    MapView.prototype._setupWugClickControl = function() {
+      var control,
+        _this = this;
+      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
+        autoActivate: true,
+        clickFeature: function(wugFeature) {
+          var wugId;
+          wugId = wugFeature.attributes.id;
+          Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
+            trigger: true
+          });
+        }
+      });
+      return control;
+    };
+
+    MapView.prototype._setupWugHighlightControl = function() {
       var control, timer,
         _this = this;
       timer = null;
@@ -1357,7 +1380,7 @@ define('views/StrategyView',['namespace', 'views/BaseStrategyView', 'scripts/tex
   })(BaseStrategyView);
 });
 
-define('scripts/text!templates/strategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>Type</th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    EntityABC <i class="wugIcon icon-circle"></i>\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
+define('scripts/text!templates/strategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>Type</th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Water User Group (WUG) supplied by the Water Management Strategy. In the map, the circles for WUGs are sized based on their relative supply volume.">\r\n                    Entity <i class="wugIcon icon-circle"></i>\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
