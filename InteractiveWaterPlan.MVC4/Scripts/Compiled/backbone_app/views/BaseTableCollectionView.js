@@ -77,20 +77,24 @@ define(['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList;
-      console.log("models lenght", strategyModels.length);
+      var newWugList,
+        _this = this;
       newWugList = _.map(strategyModels, function(m) {
-        return {
-          entityId: m.get("recipientEntityId"),
-          projectId: m.get("projectId"),
-          name: m.get("recipientEntityName"),
-          wktGeog: m.get("recipientEntityWktGeog"),
-          sourceSupply: m.get("supply" + namespace.currYear),
-          type: m.get("recipientEntityType"),
-          stratTypeId: m.get("typeId")
-        };
+        return _this._mapStrategyModelToWugFeature(m);
       });
       namespace.wugFeatureCollection.reset(newWugList);
+    };
+
+    BaseTableCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
+      return {
+        entityId: m.get("recipientEntityId"),
+        projectId: m.get("projectId"),
+        name: m.get("recipientEntityName"),
+        wktGeog: m.get("recipientEntityWktGeog"),
+        sourceSupply: m.get("supply" + namespace.currYear),
+        type: m.get("recipientEntityType"),
+        stratTypeId: m.get("typeId")
+      };
     };
 
     BaseTableCollectionView.prototype._setupDataTable = function() {

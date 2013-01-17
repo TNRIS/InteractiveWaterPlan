@@ -170,7 +170,6 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
 
     MapView.prototype.resetWugFeatures = function(featureCollection) {
       var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
-      console.log("featureCollection len", featureCollection.length, featureCollection);
       this.clearWugFeatures();
       if (featureCollection.models.length < 1) {
         return;
@@ -1185,20 +1184,24 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList;
-      console.log("models lenght", strategyModels.length);
+      var newWugList,
+        _this = this;
       newWugList = _.map(strategyModels, function(m) {
-        return {
-          entityId: m.get("recipientEntityId"),
-          projectId: m.get("projectId"),
-          name: m.get("recipientEntityName"),
-          wktGeog: m.get("recipientEntityWktGeog"),
-          sourceSupply: m.get("supply" + namespace.currYear),
-          type: m.get("recipientEntityType"),
-          stratTypeId: m.get("typeId")
-        };
+        return _this._mapStrategyModelToWugFeature(m);
       });
       namespace.wugFeatureCollection.reset(newWugList);
+    };
+
+    BaseTableCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
+      return {
+        entityId: m.get("recipientEntityId"),
+        projectId: m.get("projectId"),
+        name: m.get("recipientEntityName"),
+        wktGeog: m.get("recipientEntityWktGeog"),
+        sourceSupply: m.get("supply" + namespace.currYear),
+        type: m.get("recipientEntityType"),
+        stratTypeId: m.get("typeId")
+      };
     };
 
     BaseTableCollectionView.prototype._setupDataTable = function() {
@@ -1691,15 +1694,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
         });
       }
       this.viewName(wug.get("recipientEntityName"));
-      newWugList.push({
-        entityId: m.get("recipientEntityId"),
-        projectId: wug.get("projectId"),
-        name: wug.get("recipientEntityName"),
-        wktGeog: wug.get("recipientEntityWktGeog"),
-        sourceSupply: wug.get("supply" + namespace.currYear),
-        type: wug.get("recipientEntityType"),
-        stratTypeId: wug.get("typeId")
-      });
+      newWugList.push(this._mapStrategyModelToWugFeature(wug));
       namespace.wugFeatureCollection.reset(newWugList);
     };
 

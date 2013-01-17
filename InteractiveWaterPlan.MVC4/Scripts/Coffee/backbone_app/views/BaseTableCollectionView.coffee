@@ -86,22 +86,24 @@ define([
         fetchCallback: (strategyModels) ->
             #Use underscore to map WUG properties to new WUG object
             # and then add them all to the namespace.wugFeatureCollection
-            console.log "models lenght", strategyModels.length
-            newWugList = _.map(strategyModels, (m) ->
-                return {
-                    entityId: m.get("recipientEntityId")
-                    projectId: m.get("projectId")
-                    name: m.get("recipientEntityName")
-                    wktGeog: m.get("recipientEntityWktGeog")
-                    sourceSupply: m.get("supply#{namespace.currYear}")
-                    type: m.get("recipientEntityType")
-                    stratTypeId: m.get("typeId")
-                }
+            newWugList = _.map(strategyModels, (m) =>
+                return this._mapStrategyModelToWugFeature(m)
             )
 
             namespace.wugFeatureCollection.reset(newWugList)
             return
 
+
+        _mapStrategyModelToWugFeature: (m) ->
+            return {
+                entityId: m.get("recipientEntityId")
+                projectId: m.get("projectId")
+                name: m.get("recipientEntityName")
+                wktGeog: m.get("recipientEntityWktGeog")
+                sourceSupply: m.get("supply#{namespace.currYear}")
+                type: m.get("recipientEntityType")
+                stratTypeId: m.get("typeId")
+            }
 
         _setupDataTable: () ->
             #grab the table, get the headers

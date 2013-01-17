@@ -58,7 +58,6 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.resetWugFeatures = function(featureCollection) {
       var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
-      console.log("featureCollection len", featureCollection.length, featureCollection);
       this.clearWugFeatures();
       if (featureCollection.models.length < 1) {
         return;

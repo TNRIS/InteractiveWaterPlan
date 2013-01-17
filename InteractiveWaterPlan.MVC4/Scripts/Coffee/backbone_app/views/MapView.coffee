@@ -71,7 +71,6 @@ define([
             return null
 
         resetWugFeatures: (featureCollection) ->
-            console.log "featureCollection len", featureCollection.length, featureCollection
             this.clearWugFeatures()
 
             if featureCollection.models.length < 1 then return

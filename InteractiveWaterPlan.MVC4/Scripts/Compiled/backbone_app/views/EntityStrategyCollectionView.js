@@ -40,15 +40,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
         });
       }
       this.viewName(wug.get("recipientEntityName"));
-      newWugList.push({
-        entityId: m.get("recipientEntityId"),
-        projectId: wug.get("projectId"),
-        name: wug.get("recipientEntityName"),
-        wktGeog: wug.get("recipientEntityWktGeog"),
-        sourceSupply: wug.get("supply" + namespace.currYear),
-        type: wug.get("recipientEntityType"),
-        stratTypeId: wug.get("typeId")
-      });
+      newWugList.push(this._mapStrategyModelToWugFeature(wug));
       namespace.wugFeatureCollection.reset(newWugList);
     };
 
