@@ -76,6 +76,7 @@ define([
             @yearNavView = new YearNavView(
                 el: $('#yearNavContainer')[0] 
             ) 
+            @yearNavView.on("changeyear", this.updateViewsToNewYear) 
             #render in 'after' filter
             
             #Load the boostrapped arrays (defined in Index.cshtml)
@@ -101,33 +102,9 @@ define([
 
             return
 
-        updateViewsToNewYear: (newYear) ->
-            currRoute = Backbone.history.fragment
-            oldYear = ""
-
-            for y in namespace.VALID_YEARS
-                if currRoute.indexOf(y+"/") != -1
-                    oldYear = y
-                    break
-
-            if oldYear == ""
-                Backbone.history.navigate("") #just redirect to default
-
-            
-            newRoute = currRoute.replace(oldYear, newYear)
-
-            Backbone.history.navigate("#/"+newRoute, { trigger: true })
-            return
-
-        updateSelectedWug: (wugId) ->
-            if not wugId #if null, unselect all 
-                @mapView.unselectWugFeatures()
-            else #select the feature with the given id
-                @mapView.selectWugFeature(wugId)
-            return
 
         routes:
-            "":                                   "default" #default route, for now it is the same as wms
+            "":                                   "default" #default route, for now it is the same as :year/wms
             ":year/wms":                          "wmsNetCountySupplies"
             ":year/wms/region/:regionLetter":     "wmsRegion"
             ":year/wms/county/:countyId":         "wmsCounty"
@@ -137,10 +114,9 @@ define([
             ":year/wms/entity/:entityId":         "wmsEntity"
             ":year/wms/project/:projectId":       "wmsProjectDetail"
             #TODO: wms/source/:sourceId
-
-
+            
+            
         # Event Handlers
-
         onTableStartLoad: () ->
             @areaSelectView.disableSelects()
             @yearNavView.disableYearButtons()
@@ -168,14 +144,36 @@ define([
             @currTableView.showNothingFound()
             return
 
+        updateSelectedWug: (wugId) ->
+            if not wugId #if null, unselect all 
+                @mapView.unselectWugFeatures()
+            else #select the feature with the given id
+                @mapView.selectWugFeature(wugId)
+            return
+
+        updateViewsToNewYear: (newYear) ->
+            currRoute = Backbone.history.fragment
+            oldYear = ""
+
+            for y in namespace.VALID_YEARS
+                if currRoute.indexOf(y+"/") != -1
+                    oldYear = y
+                    break
+
+            if oldYear == ""
+                Backbone.history.navigate("") #just redirect to default
+
+            newRoute = currRoute.replace(oldYear, newYear)
+            Backbone.history.navigate("#/"+newRoute, { trigger: true })
+            return
+
         #before filter from backbone.routefilter
         before:
-            '': (year) ->
-                
+            '^[0-9]{4}/wms': (year) ->
                 #unrender the currTableView first
                 if @currTableView?
                     @currTableView = @currTableView.unrender()
-                
+                    
                 if year?
                     if _.contains(namespace.VALID_YEARS, year)
                         namespace.currYear = year
@@ -183,32 +181,30 @@ define([
                         alert "Invalid decade specified."
                         Backbone.history.navigate("", {trigger: true})
                         return false
+
                 return
 
 
         #after route filter from backbone.routefilter
         after:
-            '': (year) ->
+            '^[0-9]{4}/wms': (year) ->
                 if year? and @currTableView?
                     
-                    @yearNavView.render()
                     @themeNavToolbarView.render()
+                    @yearNavView.render()
 
+                    #subscribe to table events on the new @currTableView
+                    @currTableView.off()
                     @currTableView.on("table:startload", this.onTableStartLoad)
                     @currTableView.on("table:endload", this.onTableEndLoad)
                     @currTableView.on("table:nothingfound", this.onTableNothingFound)
                     @currTableView.on("table:fetcherror", this.onTableFetchError)
-
+                    @currTableView.on("table:hoverwug", this.updateSelectedWug)
+                    
+                    #then render the table
                     @currTableView.render()
-
-                    #subscribe to table row select (by hover)
-                    @currTableView.selectedWug.subscribe(this.updateSelectedWug)
-
-                    #subscribe to currentYear changes
-                    @yearNavView.currentYear.subscribe(this.updateViewsToNewYear) 
                     
                     return
-                
 
         default: () ->
             #for now, redirect to the wms net-county view

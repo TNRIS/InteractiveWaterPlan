@@ -8,7 +8,7 @@ define([
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable',
-                'connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound')
+                '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound')
 
             options = options || {}
             @fetchParams = options.fetchParams || {}
@@ -27,9 +27,6 @@ define([
             @$el.html(this.template())
 
             this.fetchCollection()
-
-            #This observable is used to let the MapView to select a WUG
-            @selectedWug = ko.observable()
 
             ko.applyBindings(this, @el)
             
@@ -70,7 +67,7 @@ define([
 
                         this._setupDataTable()
 
-                        this.connectTableRowsToWugFeatures()
+                        this._connectTableRowsToWugFeatures()
 
                         if this.fetchCallback? and _.isFunction(this.fetchCallback)
                             this.fetchCallback(collection.models)
@@ -96,6 +93,7 @@ define([
                     wktGeog: m.get("recipientEntityWktGeog")
                     sourceSupply: m.get("supply#{namespace.currYear}")
                     type: m.get("recipientEntityType")
+                    stratTypeId: m.get("typeId")
                 }
             )
 
@@ -126,10 +124,23 @@ define([
 
             return
 
+
         #Attach hover listener to the data table to show a popup for the associated WUG Feature
-        connectTableRowsToWugFeatures: () ->
+        _connectTableRowsToWugFeatures: () ->
 
             me = this #save reference to the View
+
+            this.$('td.strategyType').hover(
+                (evt) -> #hoverIn
+                    console.log "in", this
+                    #TODO: highlight wug features of the same type
+                    return
+                (evt) -> #hoverOut
+                    console.log "out", this
+                    #TODO: unhighlight all wug features
+                    return
+            )
+
             this.$('table tbody').delegate('tr', 'hover', #delegates to tr
                 (event) ->
                     if event.type == 'mouseenter'
@@ -138,11 +149,12 @@ define([
                         #grab entity-id from the parent tr
                         wugId = $target.data('entity-id')
                         
-                        #update the observable to trigger the event
-                        me.selectedWug(wugId)
+                        #trigger the event passing wugId
+                        me.trigger("table:hoverwug", wugId)
                     else
-                        me.selectedWug(null) #select none (hides the map popup)
-                        
+                        #trigger the event passing null as the id
+                        me.trigger("table:hoverwug", null)
+
                     return
             )
 

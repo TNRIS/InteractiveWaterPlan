@@ -34,7 +34,8 @@ define([
                 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
                 '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays',
-                'showMapLoading', 'hideMapLoading', '_setupWugClickControl')
+                'showMapLoading', 'hideMapLoading', '_setupWugClickControl',
+                'highlightStratTypeWugs')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -140,6 +141,7 @@ define([
             return
 
         selectWugFeature: (wugId) ->
+            console.log "in select wug feature"
             if not @wugHighlightControl? then return
 
             for wugFeature in @wugLayer.features
@@ -167,6 +169,19 @@ define([
         showWmsOverlayByViewType: (viewType) ->
             for layer in @map.getLayersBy("viewType", viewType)
                 layer.setVisibility(true)
+            return
+
+        highlightStratTypeWugs: (stratTypeId) ->
+            for wugFeature in @wugLayer.features
+                if (wugFeature.attributes.stratTypeId? and
+                    wugFeature.attributes.stratTypeId == stratTypeId)
+                        wugFeature.renderIntent = "typehighlight"
+                        wugFeature.layer.drawFeature(wugFeature)
+                        
+            return
+
+        unhighlightStratTypeWugs: () ->
+            @wugLayer.redraw()
             return
 
         _setupOverlayLayers: () ->
@@ -449,6 +464,11 @@ define([
                 fillColor: "yellow"
                 strokeColor: "green"
                 fillOpacity: 1
+            )
+            "typehighlight" : new OpenLayers.Style(
+                fillColor: "blue"
+                fillOpacity: 0.8
+                strokeColor: "yellow"
             )
         )
 

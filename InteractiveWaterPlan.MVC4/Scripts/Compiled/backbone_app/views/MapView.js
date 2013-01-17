@@ -30,7 +30,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -116,6 +116,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.selectWugFeature = function(wugId) {
       var wugFeature, _i, _len, _ref;
+      console.log("in select wug feature");
       if (!(this.wugHighlightControl != null)) {
         return;
       }
@@ -154,6 +155,22 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         layer = _ref[_i];
         layer.setVisibility(true);
       }
+    };
+
+    MapView.prototype.highlightStratTypeWugs = function(stratTypeId) {
+      var wugFeature, _i, _len, _ref;
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        if ((wugFeature.attributes.stratTypeId != null) && wugFeature.attributes.stratTypeId === stratTypeId) {
+          wugFeature.renderIntent = "typehighlight";
+          wugFeature.layer.drawFeature(wugFeature);
+        }
+      }
+    };
+
+    MapView.prototype.unhighlightStratTypeWugs = function() {
+      this.wugLayer.redraw();
     };
 
     MapView.prototype._setupOverlayLayers = function() {
@@ -389,6 +406,11 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         fillColor: "yellow",
         strokeColor: "green",
         fillOpacity: 1
+      }),
+      "typehighlight": new OpenLayers.Style({
+        fillColor: "blue",
+        fillOpacity: 0.8,
+        strokeColor: "yellow"
       })
     });
 

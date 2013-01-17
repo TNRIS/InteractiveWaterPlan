@@ -37,6 +37,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.yearNavView = new YearNavView({
         el: $('#yearNavContainer')[0]
       });
+      this.yearNavView.on("changeyear", this.updateViewsToNewYear);
       namespace.strategyTypes = new StrategyTypeCollection();
       namespace.strategyTypes.reset(initStrategyTypes);
       namespace.countyNames = new CountyCollection();
@@ -51,35 +52,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         el: $('#areaSelectContainer')[0]
       });
       this.areaSelectView.render();
-    };
-
-    WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
-      var currRoute, newRoute, oldYear, y, _i, _len, _ref;
-      currRoute = Backbone.history.fragment;
-      oldYear = "";
-      _ref = namespace.VALID_YEARS;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        y = _ref[_i];
-        if (currRoute.indexOf(y + "/") !== -1) {
-          oldYear = y;
-          break;
-        }
-      }
-      if (oldYear === "") {
-        Backbone.history.navigate("");
-      }
-      newRoute = currRoute.replace(oldYear, newYear);
-      Backbone.history.navigate("#/" + newRoute, {
-        trigger: true
-      });
-    };
-
-    WMSRouter.prototype.updateSelectedWug = function(wugId) {
-      if (!wugId) {
-        this.mapView.unselectWugFeatures();
-      } else {
-        this.mapView.selectWugFeature(wugId);
-      }
     };
 
     WMSRouter.prototype.routes = {
@@ -122,8 +94,37 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.currTableView.showNothingFound();
     };
 
+    WMSRouter.prototype.updateSelectedWug = function(wugId) {
+      if (!wugId) {
+        this.mapView.unselectWugFeatures();
+      } else {
+        this.mapView.selectWugFeature(wugId);
+      }
+    };
+
+    WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
+      var currRoute, newRoute, oldYear, y, _i, _len, _ref;
+      currRoute = Backbone.history.fragment;
+      oldYear = "";
+      _ref = namespace.VALID_YEARS;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        y = _ref[_i];
+        if (currRoute.indexOf(y + "/") !== -1) {
+          oldYear = y;
+          break;
+        }
+      }
+      if (oldYear === "") {
+        Backbone.history.navigate("");
+      }
+      newRoute = currRoute.replace(oldYear, newYear);
+      Backbone.history.navigate("#/" + newRoute, {
+        trigger: true
+      });
+    };
+
     WMSRouter.prototype.before = {
-      '': function(year) {
+      '^[0-9]{4}/wms': function(year) {
         if (this.currTableView != null) {
           this.currTableView = this.currTableView.unrender();
         }
@@ -142,17 +143,17 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.after = {
-      '': function(year) {
+      '^[0-9]{4}/wms': function(year) {
         if ((year != null) && (this.currTableView != null)) {
-          this.yearNavView.render();
           this.themeNavToolbarView.render();
+          this.yearNavView.render();
+          this.currTableView.off();
           this.currTableView.on("table:startload", this.onTableStartLoad);
           this.currTableView.on("table:endload", this.onTableEndLoad);
           this.currTableView.on("table:nothingfound", this.onTableNothingFound);
           this.currTableView.on("table:fetcherror", this.onTableFetchError);
+          this.currTableView.on("table:hoverwug", this.updateSelectedWug);
           this.currTableView.render();
-          this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
-          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
         }
       }
     };

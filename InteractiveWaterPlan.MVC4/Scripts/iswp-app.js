@@ -142,7 +142,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -228,6 +228,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
 
     MapView.prototype.selectWugFeature = function(wugId) {
       var wugFeature, _i, _len, _ref;
+      console.log("in select wug feature");
       if (!(this.wugHighlightControl != null)) {
         return;
       }
@@ -266,6 +267,22 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         layer = _ref[_i];
         layer.setVisibility(true);
       }
+    };
+
+    MapView.prototype.highlightStratTypeWugs = function(stratTypeId) {
+      var wugFeature, _i, _len, _ref;
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        if ((wugFeature.attributes.stratTypeId != null) && wugFeature.attributes.stratTypeId === stratTypeId) {
+          wugFeature.renderIntent = "typehighlight";
+          wugFeature.layer.drawFeature(wugFeature);
+        }
+      }
+    };
+
+    MapView.prototype.unhighlightStratTypeWugs = function() {
+      this.wugLayer.redraw();
     };
 
     MapView.prototype._setupOverlayLayers = function() {
@@ -501,6 +518,11 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         fillColor: "yellow",
         strokeColor: "green",
         fillOpacity: 1
+      }),
+      "typehighlight": new OpenLayers.Style({
+        fillColor: "blue",
+        fillOpacity: 0.8,
+        strokeColor: "yellow"
       })
     });
 
@@ -961,9 +983,10 @@ define('views/YearNavView',['namespace', 'scripts/text!templates/yearNav.html'],
     };
 
     YearNavView.prototype.changeYear = function(data, event) {
-      var $target;
+      var $target, newYear;
       $target = $(event.target);
-      this.currentYear($target.data('value'));
+      newYear = $target.attr('data-value');
+      this.trigger("changeyear", newYear);
       $target.parent().siblings().removeClass('active');
       $target.parent().addClass('active');
       return null;
@@ -1098,7 +1121,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -1111,7 +1134,6 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     BaseTableCollectionView.prototype.render = function() {
       this.$el.html(this.template());
       this.fetchCollection();
-      this.selectedWug = ko.observable();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
         trigger: 'hover',
@@ -1149,7 +1171,7 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
               trigger: 'hover'
             });
             _this._setupDataTable();
-            _this.connectTableRowsToWugFeatures();
+            _this._connectTableRowsToWugFeatures();
             if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
               _this.fetchCallback(collection.models);
             }
@@ -1170,7 +1192,8 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),
           sourceSupply: m.get("supply" + namespace.currYear),
-          type: m.get("recipientEntityType")
+          type: m.get("recipientEntityType"),
+          stratTypeId: m.get("typeId")
         };
       });
       namespace.wugFeatureCollection.reset(newWugList);
@@ -1199,17 +1222,22 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
       });
     };
 
-    BaseTableCollectionView.prototype.connectTableRowsToWugFeatures = function() {
+    BaseTableCollectionView.prototype._connectTableRowsToWugFeatures = function() {
       var me;
       me = this;
+      this.$('td.strategyType').hover(function(evt) {
+        console.log("in", this);
+      }, function(evt) {
+        console.log("out", this);
+      });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
         var $target, wugId;
         if (event.type === 'mouseenter') {
           $target = $(this);
           wugId = $target.data('entity-id');
-          me.selectedWug(wugId);
+          me.trigger("table:hoverwug", wugId);
         } else {
-          me.selectedWug(null);
+          me.trigger("table:hoverwug", null);
         }
       });
     };
@@ -1370,7 +1398,7 @@ define('views/CountyNetSupplyCollectionView',['views/BaseTableCollectionView', '
   })(BaseTableCollectionView);
 });
 
-define('scripts/text!templates/strategyRow.html',[],function () { return '\r\n<td>\r\n    <a href="#/{{currYear}}/wms/type/{{m.typeId}}">\r\n        {{m.typeName}}\r\n    </a>\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
+define('scripts/text!templates/strategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -1430,7 +1458,7 @@ define('views/RegionStrategyCollectionView',['namespace', 'views/BaseTableCollec
   })(BaseTableCollectionView);
 });
 
-define('scripts/text!templates/countyStrategyRow.html',[],function () { return '\r\n<td>\r\n    <a href="#/{{currYear}}/wms/type/{{m.typeId}}">\r\n        {{m.typeName}}\r\n    </a>\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
+define('scripts/text!templates/countyStrategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -1592,7 +1620,7 @@ define('views/StrategyTypeCollectionView',['namespace', 'views/BaseTableCollecti
   })(BaseTableCollectionView);
 });
 
-define('scripts/text!templates/entityStrategyRow.html',[],function () { return '\r\n<td>\r\n    <a href="#/{{currYear}}/wms/type/{{m.typeId}}">\r\n        {{m.typeName}}\r\n    </a>\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n\r\n<td>{{m.sourceName}}</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
+define('scripts/text!templates/entityStrategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n\r\n<td>{{m.sourceName}}</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -1664,7 +1692,8 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
         name: wug.get("recipientEntityName"),
         wktGeog: wug.get("recipientEntityWktGeog"),
         sourceSupply: wug.get("supply" + namespace.currYear),
-        type: wug.get("recipientEntityType")
+        type: wug.get("recipientEntityType"),
+        stratTypeId: wug.get("typeId")
       });
       namespace.wugFeatureCollection.reset(newWugList);
     };
@@ -1674,7 +1703,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
   })(BaseTableCollectionView);
 });
 
-define('scripts/text!templates/strategyDetailRow.html',[],function () { return '<td>\r\n    <a href="#/{{currYear}}/wms/region/{{m.regionLetter}}">\r\n        {{m.regionLetter}}\r\n    </a>\r\n</td>\r\n<td>\r\n    <a href="#/{{currYear}}/wms/type/{{m.typeId}}">\r\n        {{m.typeName}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
+define('scripts/text!templates/strategyDetailRow.html',[],function () { return '<td>\r\n    <a href="#/{{currYear}}/wms/region/{{m.regionLetter}}">\r\n        {{m.regionLetter}}\r\n    </a>\r\n</td>\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -2104,6 +2133,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       this.yearNavView = new YearNavView({
         el: $('#yearNavContainer')[0]
       });
+      this.yearNavView.on("changeyear", this.updateViewsToNewYear);
       namespace.strategyTypes = new StrategyTypeCollection();
       namespace.strategyTypes.reset(initStrategyTypes);
       namespace.countyNames = new CountyCollection();
@@ -2118,35 +2148,6 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
         el: $('#areaSelectContainer')[0]
       });
       this.areaSelectView.render();
-    };
-
-    WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
-      var currRoute, newRoute, oldYear, y, _i, _len, _ref;
-      currRoute = Backbone.history.fragment;
-      oldYear = "";
-      _ref = namespace.VALID_YEARS;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        y = _ref[_i];
-        if (currRoute.indexOf(y + "/") !== -1) {
-          oldYear = y;
-          break;
-        }
-      }
-      if (oldYear === "") {
-        Backbone.history.navigate("");
-      }
-      newRoute = currRoute.replace(oldYear, newYear);
-      Backbone.history.navigate("#/" + newRoute, {
-        trigger: true
-      });
-    };
-
-    WMSRouter.prototype.updateSelectedWug = function(wugId) {
-      if (!wugId) {
-        this.mapView.unselectWugFeatures();
-      } else {
-        this.mapView.selectWugFeature(wugId);
-      }
     };
 
     WMSRouter.prototype.routes = {
@@ -2189,8 +2190,37 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       this.currTableView.showNothingFound();
     };
 
+    WMSRouter.prototype.updateSelectedWug = function(wugId) {
+      if (!wugId) {
+        this.mapView.unselectWugFeatures();
+      } else {
+        this.mapView.selectWugFeature(wugId);
+      }
+    };
+
+    WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
+      var currRoute, newRoute, oldYear, y, _i, _len, _ref;
+      currRoute = Backbone.history.fragment;
+      oldYear = "";
+      _ref = namespace.VALID_YEARS;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        y = _ref[_i];
+        if (currRoute.indexOf(y + "/") !== -1) {
+          oldYear = y;
+          break;
+        }
+      }
+      if (oldYear === "") {
+        Backbone.history.navigate("");
+      }
+      newRoute = currRoute.replace(oldYear, newYear);
+      Backbone.history.navigate("#/" + newRoute, {
+        trigger: true
+      });
+    };
+
     WMSRouter.prototype.before = {
-      '': function(year) {
+      '^[0-9]{4}/wms': function(year) {
         if (this.currTableView != null) {
           this.currTableView = this.currTableView.unrender();
         }
@@ -2209,17 +2239,17 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     };
 
     WMSRouter.prototype.after = {
-      '': function(year) {
+      '^[0-9]{4}/wms': function(year) {
         if ((year != null) && (this.currTableView != null)) {
-          this.yearNavView.render();
           this.themeNavToolbarView.render();
+          this.yearNavView.render();
+          this.currTableView.off();
           this.currTableView.on("table:startload", this.onTableStartLoad);
           this.currTableView.on("table:endload", this.onTableEndLoad);
           this.currTableView.on("table:nothingfound", this.onTableNothingFound);
           this.currTableView.on("table:fetcherror", this.onTableFetchError);
+          this.currTableView.on("table:hoverwug", this.updateSelectedWug);
           this.currTableView.render();
-          this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
-          this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);
         }
       }
     };
@@ -2389,8 +2419,24 @@ $(function() {
     }
   });
   require(['WMSRouter'], function(WMSRouter) {
-    var r;
+    var MyHistory, r;
+    MyHistory = Backbone.History.extend({
+      loadUrl: function() {
+        var match;
+        match = Backbone.History.prototype.loadUrl.apply(this, arguments);
+        if (!match) {
+          this.trigger('route-not-found');
+        }
+        return match;
+      }
+    });
+    Backbone.history = new MyHistory();
     r = new WMSRouter();
+    Backbone.history.on("route-not-found", function() {
+      Backbone.history.navigate("", {
+        trigger: true
+      });
+    });
     Backbone.history.start();
   });
 });

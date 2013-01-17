@@ -43,9 +43,10 @@ define(['namespace', 'scripts/text!templates/yearNav.html'], function(namespace,
     };
 
     YearNavView.prototype.changeYear = function(data, event) {
-      var $target;
+      var $target, newYear;
       $target = $(event.target);
-      this.currentYear($target.data('value'));
+      newYear = $target.attr('data-value');
+      this.trigger("changeyear", newYear);
       $target.parent().siblings().removeClass('active');
       $target.parent().addClass('active');
       return null;

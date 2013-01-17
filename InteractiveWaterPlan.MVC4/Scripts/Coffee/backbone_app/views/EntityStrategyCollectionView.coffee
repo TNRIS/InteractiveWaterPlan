@@ -50,6 +50,7 @@ define([
                 wktGeog: wug.get("recipientEntityWktGeog")
                 sourceSupply: wug.get("supply#{namespace.currYear}")
                 type: wug.get("recipientEntityType")
+                stratTypeId: wug.get("typeId")
             )
 
             namespace.wugFeatureCollection.reset(newWugList)

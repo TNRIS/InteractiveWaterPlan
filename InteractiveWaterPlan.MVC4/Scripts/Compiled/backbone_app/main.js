@@ -24,8 +24,24 @@ $(function() {
     }
   });
   require(['WMSRouter'], function(WMSRouter) {
-    var r;
+    var MyHistory, r;
+    MyHistory = Backbone.History.extend({
+      loadUrl: function() {
+        var match;
+        match = Backbone.History.prototype.loadUrl.apply(this, arguments);
+        if (!match) {
+          this.trigger('route-not-found');
+        }
+        return match;
+      }
+    });
+    Backbone.history = new MyHistory();
     r = new WMSRouter();
+    Backbone.history.on("route-not-found", function() {
+      Backbone.history.navigate("", {
+        trigger: true
+      });
+    });
     Backbone.history.start();
   });
 });

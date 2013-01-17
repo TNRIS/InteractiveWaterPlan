@@ -32,8 +32,28 @@ $(()->
 
     require(['WMSRouter'],
         (WMSRouter) =>
+            
+            #Extend Backbone.History to trigger an event when a route is not found
+            MyHistory = Backbone.History.extend(
+                loadUrl: () ->
+                    match = Backbone.History.prototype.loadUrl.apply(this, arguments);
+                    if !match 
+                        this.trigger('route-not-found')
+                    return match;
+            )
+            Backbone.history = new MyHistory()
+
             r = new WMSRouter()
+            
+            #Catch any bad route and just redirect to default
+            Backbone.history.on("route-not-found", () ->
+                Backbone.history.navigate("", {trigger: true})
+                return
+            )
+
             Backbone.history.start()
+
+
             return
     )
 

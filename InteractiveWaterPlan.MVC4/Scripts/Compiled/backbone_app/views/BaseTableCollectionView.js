@@ -13,7 +13,7 @@ define(['namespace'], function(namespace) {
     }
 
     BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', 'connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.currYear = ko.observable(namespace.currYear);
@@ -26,7 +26,6 @@ define(['namespace'], function(namespace) {
     BaseTableCollectionView.prototype.render = function() {
       this.$el.html(this.template());
       this.fetchCollection();
-      this.selectedWug = ko.observable();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
         trigger: 'hover',
@@ -64,7 +63,7 @@ define(['namespace'], function(namespace) {
               trigger: 'hover'
             });
             _this._setupDataTable();
-            _this.connectTableRowsToWugFeatures();
+            _this._connectTableRowsToWugFeatures();
             if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
               _this.fetchCallback(collection.models);
             }
@@ -85,7 +84,8 @@ define(['namespace'], function(namespace) {
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),
           sourceSupply: m.get("supply" + namespace.currYear),
-          type: m.get("recipientEntityType")
+          type: m.get("recipientEntityType"),
+          stratTypeId: m.get("typeId")
         };
       });
       namespace.wugFeatureCollection.reset(newWugList);
@@ -114,17 +114,22 @@ define(['namespace'], function(namespace) {
       });
     };
 
-    BaseTableCollectionView.prototype.connectTableRowsToWugFeatures = function() {
+    BaseTableCollectionView.prototype._connectTableRowsToWugFeatures = function() {
       var me;
       me = this;
+      this.$('td.strategyType').hover(function(evt) {
+        console.log("in", this);
+      }, function(evt) {
+        console.log("out", this);
+      });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
         var $target, wugId;
         if (event.type === 'mouseenter') {
           $target = $(this);
           wugId = $target.data('entity-id');
-          me.selectedWug(wugId);
+          me.trigger("table:hoverwug", wugId);
         } else {
-          me.selectedWug(null);
+          me.trigger("table:hoverwug", null);
         }
       });
     };
