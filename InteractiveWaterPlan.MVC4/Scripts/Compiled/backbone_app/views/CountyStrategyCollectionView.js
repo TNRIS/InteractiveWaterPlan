@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(namespace, BaseTableCollectionView, StrategyView, tpl) {
+define(['namespace', 'views/BaseTableCollectionView', 'views/CountyStrategyView', 'scripts/text!templates/countyStrategyTable.html'], function(namespace, BaseTableCollectionView, CountyStrategyView, tpl) {
   var CountyStrategyCollectionView;
   return CountyStrategyCollectionView = (function(_super) {
 
@@ -23,7 +23,7 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/county"
       });
-      CountyStrategyCollectionView.__super__.initialize.call(this, StrategyView, StrategyCollection, tpl, {
+      CountyStrategyCollectionView.__super__.initialize.call(this, CountyStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;

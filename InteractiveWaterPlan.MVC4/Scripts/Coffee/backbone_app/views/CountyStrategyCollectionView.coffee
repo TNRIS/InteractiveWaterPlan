@@ -1,10 +1,10 @@
 define([
     'namespace'
     'views/BaseTableCollectionView'
-    'views/StrategyView'
-    'scripts/text!templates/strategyTable.html'
+    'views/CountyStrategyView'
+    'scripts/text!templates/countyStrategyTable.html'
 ],
-(namespace, BaseTableCollectionView, StrategyView, tpl) ->
+(namespace, BaseTableCollectionView, CountyStrategyView, tpl) ->
 
     class CountyStrategyCollectionView extends BaseTableCollectionView
         
@@ -21,7 +21,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/county" 
             )
 
-            super StrategyView, 
+            super CountyStrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
 
             

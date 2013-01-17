@@ -1,0 +1,24 @@
+
+<td>
+    <a href="#/{{currYear}}/wms/type/{{m.typeId}}">
+        {{m.typeName}}
+    </a>
+</td>
+
+<td class="aligned-left">
+    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">
+        {{m.description}}
+    </a>
+</td>
+<td>{{m.sourceName}}</td>
+<td>
+    <% if (m.recipientEntityType != "WWP") { %>
+        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    
+            {{m.recipientEntityName}}
+        </a>
+    <% } else { %>
+        {{m.recipientEntityName}}
+    <% } %>
+</td>
+<td>{{ $.number(m["supply"+currYear]) }}</td>
+<td>{{m.sponsorName}}</td>
