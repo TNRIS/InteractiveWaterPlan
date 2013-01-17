@@ -329,7 +329,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         },
         onSelect: function(wugFeature) {
           var popup;
-          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                " + namespace.currYear + " Supply: " + wugFeature.attributes.sourceSupply + " ac-ft/yr                            ", null, false);
+          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.sourceSupply)) + " ac-ft/yr                            ", null, false);
           popup.autoSize = true;
           wugFeature.popup = popup;
           _this.map.addPopup(popup);

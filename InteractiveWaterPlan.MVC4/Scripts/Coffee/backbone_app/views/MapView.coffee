@@ -234,7 +234,7 @@ define([
                             null, #contentSize
                             "
                                 <b>#{wugFeature.attributes.name}</b><br/>
-                                #{namespace.currYear} Supply: #{wugFeature.attributes.sourceSupply} ac-ft/yr
+                                #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.sourceSupply)} ac-ft/yr
                             ",
                             null, #anchor
                             false, #closeBox
