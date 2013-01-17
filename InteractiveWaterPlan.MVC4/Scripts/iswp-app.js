@@ -142,7 +142,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -273,14 +273,22 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if ((wugFeature.attributes.stratTypeId != null) && wugFeature.attributes.stratTypeId === stratTypeId) {
+        if ((wugFeature.attributes.strategyTypes != null) && _.contains(wugFeature.attributes.strategyTypes, stratTypeId)) {
           wugFeature.renderIntent = "typehighlight";
-          wugFeature.layer.drawFeature(wugFeature);
+        } else {
+          wugFeature.renderIntent = "transparent";
         }
       }
+      this.wugLayer.redraw();
     };
 
     MapView.prototype.unhighlightStratTypeWugs = function() {
+      var wugFeature, _i, _len, _ref;
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        wugFeature.renderIntent = "default";
+      }
       this.wugLayer.redraw();
     };
 
@@ -522,6 +530,10 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         fillColor: "blue",
         fillOpacity: 0.8,
         strokeColor: "yellow"
+      }),
+      "transparent": new OpenLayers.Style({
+        fillOpacity: 0,
+        strokeOpacity: 0
       })
     });
 
@@ -1245,10 +1257,14 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     BaseTableCollectionView.prototype._connectTableRowsToWugFeatures = function() {
       var me;
       me = this;
-      this.$('td.strategyType').hover(function(evt) {
-        console.log("in", this);
-      }, function(evt) {
-        console.log("out", this);
+      this.$('table tbody').delegate('td.strategyType', 'hover', function(event) {
+        var typeId;
+        if (event.type === 'mouseenter') {
+          typeId = parseInt($(this).attr('data-type-id'));
+          me.trigger("table:hovertype", typeId);
+        } else {
+          me.trigger("table:hovertype", null);
+        }
       });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
         var $target, wugId;
@@ -2112,7 +2128,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError', 'highlightWugsByStrategyType');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -2201,6 +2217,14 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       }
     };
 
+    WMSRouter.prototype.highlightWugsByStrategyType = function(stratTypeId) {
+      if (!(stratTypeId != null)) {
+        this.mapView.unhighlightStratTypeWugs();
+      } else {
+        this.mapView.highlightStratTypeWugs(stratTypeId);
+      }
+    };
+
     WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
       var currRoute, newRoute, oldYear, y, _i, _len, _ref;
       currRoute = Backbone.history.fragment;
@@ -2252,6 +2276,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
           this.currTableView.on("table:nothingfound", this.onTableNothingFound);
           this.currTableView.on("table:fetcherror", this.onTableFetchError);
           this.currTableView.on("table:hoverwug", this.updateSelectedWug);
+          this.currTableView.on("table:hovertype", this.highlightWugsByStrategyType);
           this.currTableView.render();
         }
       }

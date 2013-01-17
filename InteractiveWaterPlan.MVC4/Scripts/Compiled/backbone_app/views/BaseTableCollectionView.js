@@ -138,10 +138,14 @@ define(['namespace'], function(namespace) {
     BaseTableCollectionView.prototype._connectTableRowsToWugFeatures = function() {
       var me;
       me = this;
-      this.$('td.strategyType').hover(function(evt) {
-        console.log("in", this);
-      }, function(evt) {
-        console.log("out", this);
+      this.$('table tbody').delegate('td.strategyType', 'hover', function(event) {
+        var typeId;
+        if (event.type === 'mouseenter') {
+          typeId = parseInt($(this).attr('data-type-id'));
+          me.trigger("table:hovertype", typeId);
+        } else {
+          me.trigger("table:hovertype", null);
+        }
       });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
         var $target, wugId;

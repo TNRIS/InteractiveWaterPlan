@@ -30,7 +30,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -161,14 +161,22 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if ((wugFeature.attributes.stratTypeId != null) && wugFeature.attributes.stratTypeId === stratTypeId) {
+        if ((wugFeature.attributes.strategyTypes != null) && _.contains(wugFeature.attributes.strategyTypes, stratTypeId)) {
           wugFeature.renderIntent = "typehighlight";
-          wugFeature.layer.drawFeature(wugFeature);
+        } else {
+          wugFeature.renderIntent = "transparent";
         }
       }
+      this.wugLayer.redraw();
     };
 
     MapView.prototype.unhighlightStratTypeWugs = function() {
+      var wugFeature, _i, _len, _ref;
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        wugFeature.renderIntent = "default";
+      }
       this.wugLayer.redraw();
     };
 
@@ -410,6 +418,10 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         fillColor: "blue",
         fillOpacity: 0.8,
         strokeColor: "yellow"
+      }),
+      "transparent": new OpenLayers.Style({
+        fillOpacity: 0,
+        strokeOpacity: 0
       })
     });
 

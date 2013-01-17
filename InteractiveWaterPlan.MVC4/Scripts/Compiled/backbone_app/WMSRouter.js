@@ -13,7 +13,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError', 'highlightWugsByStrategyType');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -102,6 +102,14 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       }
     };
 
+    WMSRouter.prototype.highlightWugsByStrategyType = function(stratTypeId) {
+      if (!(stratTypeId != null)) {
+        this.mapView.unhighlightStratTypeWugs();
+      } else {
+        this.mapView.highlightStratTypeWugs(stratTypeId);
+      }
+    };
+
     WMSRouter.prototype.updateViewsToNewYear = function(newYear) {
       var currRoute, newRoute, oldYear, y, _i, _len, _ref;
       currRoute = Backbone.history.fragment;
@@ -153,6 +161,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
           this.currTableView.on("table:nothingfound", this.onTableNothingFound);
           this.currTableView.on("table:fetcherror", this.onTableFetchError);
           this.currTableView.on("table:hoverwug", this.updateSelectedWug);
+          this.currTableView.on("table:hovertype", this.highlightWugsByStrategyType);
           this.currTableView.render();
         }
       }

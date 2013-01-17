@@ -35,7 +35,7 @@ define([
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
                 '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays',
                 'showMapLoading', 'hideMapLoading', '_setupWugClickControl',
-                'highlightStratTypeWugs')
+                'highlightStratTypeWugs', 'unhighlightStratTypeWugs')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -172,14 +172,19 @@ define([
 
         highlightStratTypeWugs: (stratTypeId) ->
             for wugFeature in @wugLayer.features
-                if (wugFeature.attributes.stratTypeId? and
-                    wugFeature.attributes.stratTypeId == stratTypeId)
+                if (wugFeature.attributes.strategyTypes? and
+                    _.contains(wugFeature.attributes.strategyTypes,stratTypeId))
                         wugFeature.renderIntent = "typehighlight"
-                        wugFeature.layer.drawFeature(wugFeature)
-                        
+                else
+                    wugFeature.renderIntent = "transparent"    
+
+            @wugLayer.redraw()   
             return
 
         unhighlightStratTypeWugs: () ->
+            for wugFeature in @wugLayer.features
+                wugFeature.renderIntent = "default"
+
             @wugLayer.redraw()
             return
 
@@ -467,6 +472,10 @@ define([
                 fillColor: "blue"
                 fillOpacity: 0.8
                 strokeColor: "yellow"
+            )
+            "transparent" : new OpenLayers.Style(
+                fillOpacity: 0
+                strokeOpacity: 0
             )
         )
 

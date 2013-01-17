@@ -65,6 +65,7 @@ define([
 
                         this.$('.has-popover').popover(trigger: 'hover')
 
+                        
                         this._setupDataTable()
 
                         this._connectTableRowsToWugFeatures()
@@ -166,14 +167,21 @@ define([
 
             me = this #save reference to the View
 
-            this.$('td.strategyType').hover(
-                (evt) -> #hoverIn
-                    console.log "in", this
-                    #TODO: highlight wug features of the same type
-                    return
-                (evt) -> #hoverOut
-                    console.log "out", this
-                    #TODO: unhighlight all wug features
+            # !------- TODO: THIS IS NOT WORKING -----#
+            # For some reason, only ground water is firing the event
+
+            this.$('table tbody').delegate('td.strategyType', 'hover'
+                (event) -> 
+                    if event.type == 'mouseenter' #hoverIn
+                        #trigger an event to let the map know to
+                        # highlight wug features of with the strategy type
+                        typeId = parseInt($(this).attr('data-type-id'))
+                        me.trigger("table:hovertype", typeId)
+                    
+                
+                    else #hover out
+                        #trigger the event with null to clear type-highlighted features
+                        me.trigger("table:hovertype", null)
                     return
             )
 

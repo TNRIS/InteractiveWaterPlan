@@ -43,7 +43,8 @@ define([
         
         initialize: (options) ->
             _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug',
-                'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError')
+                'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 
+                'onTableFetchError', 'highlightWugsByStrategyType')
 
             @currTableView = null
             
@@ -151,6 +152,14 @@ define([
                 @mapView.selectWugFeature(wugId)
             return
 
+        highlightWugsByStrategyType: (stratTypeId) ->
+            if not stratTypeId?
+                @mapView.unhighlightStratTypeWugs()
+            else
+                @mapView.highlightStratTypeWugs(stratTypeId)
+                
+            return
+
         updateViewsToNewYear: (newYear) ->
             currRoute = Backbone.history.fragment
             oldYear = ""
@@ -200,7 +209,8 @@ define([
                     @currTableView.on("table:nothingfound", this.onTableNothingFound)
                     @currTableView.on("table:fetcherror", this.onTableFetchError)
                     @currTableView.on("table:hoverwug", this.updateSelectedWug)
-                    
+                    @currTableView.on("table:hovertype", this.highlightWugsByStrategyType)
+
                     #then render the table
                     @currTableView.render()
                     
