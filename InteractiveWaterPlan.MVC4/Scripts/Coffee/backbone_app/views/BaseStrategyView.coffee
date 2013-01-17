@@ -30,9 +30,8 @@ define([
                 )
             )
 
-            #save the entityId and projectId to the element
+            #save the entityId to the <tr>
             @$el.attr('data-entity-id', @model.get("recipientEntityId"))
-            @$el.attr('data-project-id', @model.get("projectId"))
             return this
 
         unrender: () ->

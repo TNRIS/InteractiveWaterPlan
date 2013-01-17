@@ -180,11 +180,11 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       });
       wktFormat = new OpenLayers.Format.WKT();
       max_supply = featureCollection.max(function(m) {
-        return m.get("sourceSupply");
-      }).get("sourceSupply");
+        return m.get("totalSupply");
+      }).get("totalSupply");
       min_supply = featureCollection.min(function(m) {
-        return m.get("sourceSupply");
-      }).get("sourceSupply");
+        return m.get("totalSupply");
+      }).get("totalSupply");
       bounds = null;
       wugFeatures = [];
       _ref = featureCollection.models;
@@ -192,7 +192,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         m = _ref[_i];
         newFeature = wktFormat.read(m.get('wktGeog'));
         newFeature.attributes = m.attributes;
-        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("sourceSupply"));
+        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
         newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
         if (!(bounds != null)) {
@@ -234,7 +234,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if (wugFeature.attributes.entityId === wugId && wugFeature.attributes.projectId === projId) {
+        if (wugFeature.attributes.entityId === wugId) {
           this.wugHighlightControl.select(wugFeature);
           return;
         }
@@ -344,7 +344,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         },
         onSelect: function(wugFeature) {
           var popup;
-          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.sourceSupply)) + " ac-ft/yr                            ", null, false);
+          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                            ", null, false);
           popup.autoSize = true;
           wugFeature.popup = popup;
           _this.map.addPopup(popup);
@@ -1184,10 +1184,26 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList,
-        _this = this;
-      newWugList = _.map(strategyModels, function(m) {
-        return _this._mapStrategyModelToWugFeature(m);
+      var groupedById, newWugList;
+      groupedById = _.groupBy(strategyModels, function(m) {
+        return m.get("recipientEntityId");
+      });
+      newWugList = _.map(groupedById, function(group) {
+        var entity;
+        entity = _.reduce(group, function(memo, m) {
+          memo.entityId = m.get("recipientEntityId");
+          memo.name = m.get("recipientEntityName");
+          memo.wktGeog = m.get("recipientEntityWktGeog");
+          memo.type = m.get("recipientEntityType");
+          memo.strategyTypes.push(m.get("typeId"));
+          memo.totalSupply += m.get("supply" + namespace.currYear);
+          return memo;
+        }, {
+          totalSupply: 0,
+          strategyTypes: []
+        });
+        entity.strategyTypes = _.uniq(entity.strategyTypes);
+        return entity;
       });
       namespace.wugFeatureCollection.reset(newWugList);
     };
@@ -1195,10 +1211,9 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
     BaseTableCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
       return {
         entityId: m.get("recipientEntityId"),
-        projectId: m.get("projectId"),
         name: m.get("recipientEntityName"),
         wktGeog: m.get("recipientEntityWktGeog"),
-        sourceSupply: m.get("supply" + namespace.currYear),
+        totalSupply: m.get("supply" + namespace.currYear),
         type: m.get("recipientEntityType"),
         stratTypeId: m.get("typeId")
       };
@@ -1236,12 +1251,11 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
         console.log("out", this);
       });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
-        var $target, projectId, wugId;
+        var $target, wugId;
         if (event.type === 'mouseenter') {
           $target = $(this);
           wugId = parseInt($target.attr('data-entity-id'));
-          projectId = parseInt($target.attr('data-project-id'));
-          me.trigger("table:hoverwug", wugId, projectId);
+          me.trigger("table:hoverwug", wugId);
         } else {
           me.trigger("table:hoverwug", null);
         }
@@ -1317,7 +1331,6 @@ define('views/BaseStrategyView',['namespace'], function(namespace) {
         currYear: namespace.currYear
       }));
       this.$el.attr('data-entity-id', this.model.get("recipientEntityId"));
-      this.$el.attr('data-project-id', this.model.get("projectId"));
       return this;
     };
 
@@ -2180,11 +2193,11 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
       this.currTableView.showNothingFound();
     };
 
-    WMSRouter.prototype.updateSelectedWug = function(wugId, projectId) {
+    WMSRouter.prototype.updateSelectedWug = function(wugId) {
       if (!(wugId != null)) {
         this.mapView.unselectWugFeatures();
       } else {
-        this.mapView.selectWugFeature(wugId, projectId);
+        this.mapView.selectWugFeature(wugId);
       }
     };
 

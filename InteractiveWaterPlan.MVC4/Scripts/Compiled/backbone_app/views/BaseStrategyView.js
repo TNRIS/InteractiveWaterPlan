@@ -33,7 +33,6 @@ define(['namespace'], function(namespace) {
         currYear: namespace.currYear
       }));
       this.$el.attr('data-entity-id', this.model.get("recipientEntityId"));
-      this.$el.attr('data-project-id', this.model.get("projectId"));
       return this;
     };
 

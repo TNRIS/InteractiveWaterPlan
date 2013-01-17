@@ -77,10 +77,26 @@ define(['namespace'], function(namespace) {
     };
 
     BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList,
-        _this = this;
-      newWugList = _.map(strategyModels, function(m) {
-        return _this._mapStrategyModelToWugFeature(m);
+      var groupedById, newWugList;
+      groupedById = _.groupBy(strategyModels, function(m) {
+        return m.get("recipientEntityId");
+      });
+      newWugList = _.map(groupedById, function(group) {
+        var entity;
+        entity = _.reduce(group, function(memo, m) {
+          memo.entityId = m.get("recipientEntityId");
+          memo.name = m.get("recipientEntityName");
+          memo.wktGeog = m.get("recipientEntityWktGeog");
+          memo.type = m.get("recipientEntityType");
+          memo.strategyTypes.push(m.get("typeId"));
+          memo.totalSupply += m.get("supply" + namespace.currYear);
+          return memo;
+        }, {
+          totalSupply: 0,
+          strategyTypes: []
+        });
+        entity.strategyTypes = _.uniq(entity.strategyTypes);
+        return entity;
       });
       namespace.wugFeatureCollection.reset(newWugList);
     };
@@ -88,10 +104,9 @@ define(['namespace'], function(namespace) {
     BaseTableCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
       return {
         entityId: m.get("recipientEntityId"),
-        projectId: m.get("projectId"),
         name: m.get("recipientEntityName"),
         wktGeog: m.get("recipientEntityWktGeog"),
-        sourceSupply: m.get("supply" + namespace.currYear),
+        totalSupply: m.get("supply" + namespace.currYear),
         type: m.get("recipientEntityType"),
         stratTypeId: m.get("typeId")
       };
@@ -129,12 +144,11 @@ define(['namespace'], function(namespace) {
         console.log("out", this);
       });
       this.$('table tbody').delegate('tr', 'hover', function(event) {
-        var $target, projectId, wugId;
+        var $target, wugId;
         if (event.type === 'mouseenter') {
           $target = $(this);
           wugId = parseInt($target.attr('data-entity-id'));
-          projectId = parseInt($target.attr('data-project-id'));
-          me.trigger("table:hoverwug", wugId, projectId);
+          me.trigger("table:hoverwug", wugId);
         } else {
           me.trigger("table:hoverwug", null);
         }

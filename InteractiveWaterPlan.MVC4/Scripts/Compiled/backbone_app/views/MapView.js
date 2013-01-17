@@ -68,11 +68,11 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       });
       wktFormat = new OpenLayers.Format.WKT();
       max_supply = featureCollection.max(function(m) {
-        return m.get("sourceSupply");
-      }).get("sourceSupply");
+        return m.get("totalSupply");
+      }).get("totalSupply");
       min_supply = featureCollection.min(function(m) {
-        return m.get("sourceSupply");
-      }).get("sourceSupply");
+        return m.get("totalSupply");
+      }).get("totalSupply");
       bounds = null;
       wugFeatures = [];
       _ref = featureCollection.models;
@@ -80,7 +80,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         m = _ref[_i];
         newFeature = wktFormat.read(m.get('wktGeog'));
         newFeature.attributes = m.attributes;
-        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("sourceSupply"));
+        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
         newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
         if (!(bounds != null)) {
@@ -122,7 +122,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if (wugFeature.attributes.entityId === wugId && wugFeature.attributes.projectId === projId) {
+        if (wugFeature.attributes.entityId === wugId) {
           this.wugHighlightControl.select(wugFeature);
           return;
         }
@@ -232,7 +232,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         },
         onSelect: function(wugFeature) {
           var popup;
-          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.sourceSupply)) + " ac-ft/yr                            ", null, false);
+          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                            ", null, false);
           popup.autoSize = true;
           wugFeature.popup = popup;
           _this.map.addPopup(popup);

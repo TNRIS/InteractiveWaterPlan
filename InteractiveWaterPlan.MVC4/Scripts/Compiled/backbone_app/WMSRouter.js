@@ -94,11 +94,11 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.currTableView.showNothingFound();
     };
 
-    WMSRouter.prototype.updateSelectedWug = function(wugId, projectId) {
+    WMSRouter.prototype.updateSelectedWug = function(wugId) {
       if (!(wugId != null)) {
         this.mapView.unselectWugFeatures();
       } else {
-        this.mapView.selectWugFeature(wugId, projectId);
+        this.mapView.selectWugFeature(wugId);
       }
     };
 

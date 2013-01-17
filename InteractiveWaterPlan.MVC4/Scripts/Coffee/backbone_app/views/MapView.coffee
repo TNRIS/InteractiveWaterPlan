@@ -86,12 +86,12 @@ define([
 
             #Size based on source supply (need to pass source supply to model)
             max_supply = featureCollection.max((m) ->
-                return m.get("sourceSupply")
-            ).get("sourceSupply")
+                return m.get("totalSupply")
+            ).get("totalSupply")
             
             min_supply = featureCollection.min((m) ->
-                return m.get("sourceSupply")
-            ).get("sourceSupply")
+                return m.get("totalSupply")
+            ).get("totalSupply")
  
             bounds = null
             wugFeatures = []
@@ -99,7 +99,7 @@ define([
                 newFeature = wktFormat.read(m.get('wktGeog'))
                 newFeature.attributes = m.attributes
                 newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
-                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, m.get("sourceSupply"))
+                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, m.get("totalSupply"))
                 delete newFeature.attributes.wktGeog
                 newFeature.geometry = newFeature.geometry.transform(
                     @map.displayProjection, @map.projection)
@@ -144,10 +144,9 @@ define([
 
             for wugFeature in @wugLayer.features
 
-                if wugFeature.attributes.entityId == wugId and
-                    wugFeature.attributes.projectId == projId
-                        @wugHighlightControl.select(wugFeature)
-                        return
+                if wugFeature.attributes.entityId == wugId
+                    @wugHighlightControl.select(wugFeature)
+                    return
 
             return
 
@@ -247,7 +246,7 @@ define([
                             null, #contentSize
                             "
                                 <b>#{wugFeature.attributes.name}</b><br/>
-                                #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.sourceSupply)} ac-ft/yr
+                                Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
                             ",
                             null, #anchor
                             false, #closeBox

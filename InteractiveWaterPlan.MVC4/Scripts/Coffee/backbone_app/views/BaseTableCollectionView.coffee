@@ -84,10 +84,43 @@ define([
             return
 
         fetchCallback: (strategyModels) ->
-            #Use underscore to map WUG properties to new WUG object
-            # and then add them all to the namespace.wugFeatureCollection
-            newWugList = _.map(strategyModels, (m) =>
-                return this._mapStrategyModelToWugFeature(m)
+           
+            #Use some sweet underscore.js methods to
+            #first group the returned strategies by ID
+            # then reduce those groups to a single WUG (which will become a feature on the map)
+
+            groupedById = _.groupBy(strategyModels, (m) ->
+                return m.get("recipientEntityId")
+            )
+
+            #map to a new array, reducing each group to a single WUG
+            newWugList = _.map(groupedById, 
+                (group) ->
+                    entity = _.reduce(group, 
+                        (memo, m)->
+                            
+                            #these properties should change
+                            memo.entityId = m.get("recipientEntityId")
+                            memo.name = m.get("recipientEntityName")
+                            memo.wktGeog = m.get("recipientEntityWktGeog")
+                            memo.type = m.get("recipientEntityType")
+                            
+                            #add each type to the list of types
+                            memo.strategyTypes.push(m.get("typeId"))
+
+                            #add to the calculated total supply
+                            memo.totalSupply += m.get("supply#{namespace.currYear}")
+
+                            return memo
+                        {
+                            totalSupply: 0
+                            strategyTypes: []
+                        }
+                    )
+
+                    #make sure strategyTypes are not duplicated
+                    entity.strategyTypes = _.uniq(entity.strategyTypes)
+                    return entity
             )
 
             namespace.wugFeatureCollection.reset(newWugList)
@@ -97,10 +130,9 @@ define([
         _mapStrategyModelToWugFeature: (m) ->
             return {
                 entityId: m.get("recipientEntityId")
-                projectId: m.get("projectId")
                 name: m.get("recipientEntityName")
                 wktGeog: m.get("recipientEntityWktGeog")
-                sourceSupply: m.get("supply#{namespace.currYear}")
+                totalSupply: m.get("supply#{namespace.currYear}")
                 type: m.get("recipientEntityType")
                 stratTypeId: m.get("typeId")
             }
@@ -152,10 +184,9 @@ define([
 
                         #grab entity-id from the parent tr
                         wugId = parseInt($target.attr('data-entity-id'))
-                        projectId = parseInt($target.attr('data-project-id'))
                         
-                        #trigger the event passing wugId and projectId
-                        me.trigger("table:hoverwug", wugId, projectId)
+                        #trigger the event passing wugId
+                        me.trigger("table:hoverwug", wugId)
                     else
                         #trigger the event passing null as the id
                         me.trigger("table:hoverwug", null)
