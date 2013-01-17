@@ -71,7 +71,7 @@ define([
             return null
 
         resetWugFeatures: (featureCollection) ->
-            
+            console.log "featureCollection len", featureCollection.length, featureCollection
             this.clearWugFeatures()
 
             if featureCollection.models.length < 1 then return
@@ -145,7 +145,7 @@ define([
 
             for wugFeature in @wugLayer.features
 
-                if wugFeature.attributes.id == wugId and
+                if wugFeature.attributes.entityId == wugId and
                     wugFeature.attributes.projectId == projId
                         @wugHighlightControl.select(wugFeature)
                         return
@@ -214,7 +214,7 @@ define([
                             return
 
                         #else navigate to Entity Details view when feature is clicked
-                        wugId = wugFeature.attributes.id
+                        wugId = wugFeature.attributes.entityId
                         Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
                             {trigger: true})
             

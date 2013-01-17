@@ -58,6 +58,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.resetWugFeatures = function(featureCollection) {
       var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
+      console.log("featureCollection len", featureCollection.length, featureCollection);
       this.clearWugFeatures();
       if (featureCollection.models.length < 1) {
         return;
@@ -122,7 +123,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if (wugFeature.attributes.id === wugId && wugFeature.attributes.projectId === projId) {
+        if (wugFeature.attributes.entityId === wugId && wugFeature.attributes.projectId === projId) {
           this.wugHighlightControl.select(wugFeature);
           return;
         }
@@ -199,7 +200,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
           if ((wugFeature.attributes.type != null) && wugFeature.attributes.type === "WWP") {
             return;
           }
-          wugId = wugFeature.attributes.id;
+          wugId = wugFeature.attributes.entityId;
           Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
             trigger: true
           });

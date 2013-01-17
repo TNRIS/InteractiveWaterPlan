@@ -78,9 +78,10 @@ define(['namespace'], function(namespace) {
 
     BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
       var newWugList;
+      console.log("models lenght", strategyModels.length);
       newWugList = _.map(strategyModels, function(m) {
         return {
-          id: m.get("recipientEntityId"),
+          entityId: m.get("recipientEntityId"),
           projectId: m.get("projectId"),
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),

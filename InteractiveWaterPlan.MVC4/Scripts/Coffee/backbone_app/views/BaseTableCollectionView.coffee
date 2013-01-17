@@ -86,9 +86,10 @@ define([
         fetchCallback: (strategyModels) ->
             #Use underscore to map WUG properties to new WUG object
             # and then add them all to the namespace.wugFeatureCollection
+            console.log "models lenght", strategyModels.length
             newWugList = _.map(strategyModels, (m) ->
                 return {
-                    id: m.get("recipientEntityId")
+                    entityId: m.get("recipientEntityId")
                     projectId: m.get("projectId")
                     name: m.get("recipientEntityName")
                     wktGeog: m.get("recipientEntityWktGeog")

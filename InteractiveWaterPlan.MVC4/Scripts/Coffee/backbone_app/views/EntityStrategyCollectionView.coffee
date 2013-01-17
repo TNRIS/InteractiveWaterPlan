@@ -45,7 +45,7 @@ define([
             @viewName(wug.get("recipientEntityName"))
             
             newWugList.push(
-                id: wug.get("recipientEntityId")
+                entityId: m.get("recipientEntityId")
                 projectId: wug.get("projectId")
                 name: wug.get("recipientEntityName")
                 wktGeog: wug.get("recipientEntityWktGeog")

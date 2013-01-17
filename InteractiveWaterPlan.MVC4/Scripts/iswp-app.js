@@ -170,6 +170,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
 
     MapView.prototype.resetWugFeatures = function(featureCollection) {
       var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
+      console.log("featureCollection len", featureCollection.length, featureCollection);
       this.clearWugFeatures();
       if (featureCollection.models.length < 1) {
         return;
@@ -234,7 +235,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
-        if (wugFeature.attributes.id === wugId && wugFeature.attributes.projectId === projId) {
+        if (wugFeature.attributes.entityId === wugId && wugFeature.attributes.projectId === projId) {
           this.wugHighlightControl.select(wugFeature);
           return;
         }
@@ -311,7 +312,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
           if ((wugFeature.attributes.type != null) && wugFeature.attributes.type === "WWP") {
             return;
           }
-          wugId = wugFeature.attributes.id;
+          wugId = wugFeature.attributes.entityId;
           Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
             trigger: true
           });
@@ -1185,9 +1186,10 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
 
     BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
       var newWugList;
+      console.log("models lenght", strategyModels.length);
       newWugList = _.map(strategyModels, function(m) {
         return {
-          id: m.get("recipientEntityId"),
+          entityId: m.get("recipientEntityId"),
           projectId: m.get("projectId"),
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),
@@ -1690,7 +1692,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseTableCollec
       }
       this.viewName(wug.get("recipientEntityName"));
       newWugList.push({
-        id: wug.get("recipientEntityId"),
+        entityId: m.get("recipientEntityId"),
         projectId: wug.get("projectId"),
         name: wug.get("recipientEntityName"),
         wktGeog: wug.get("recipientEntityWktGeog"),
