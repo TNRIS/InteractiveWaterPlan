@@ -29,26 +29,13 @@ define([
 
         #override the BaseTableCollectionView.fetchCallback
         fetchCallback: (strategyModels) ->
-            #While there may be multiple Strategies in the models collection
-            # they should all have the same entity at this point
 
-            newWugList = []
-
-            wug = strategyModels[0]
-
-            #if not valid, redirect to default view
-            if not wug?
-                alert "Invalid entityId specified."
-                Backbone.history.navigate("", {trigger: true})
+            #Set the viewName from the first wug
+            @viewName(strategyModels[0].get("recipientEntityName"))
             
-            #Set the viewName from the returned wug
-            @viewName(wug.get("recipientEntityName"))
-            
-            newWugList.push(
-                this._mapStrategyModelToWugFeature(wug)
-            )
+            #then call the super fetchCallback
+            super strategyModels
 
-            namespace.wugFeatureCollection.reset(newWugList)
             return
 
 )

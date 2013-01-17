@@ -30,18 +30,8 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
     };
 
     EntityStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
-      var newWugList, wug;
-      newWugList = [];
-      wug = strategyModels[0];
-      if (!(wug != null)) {
-        alert("Invalid entityId specified.");
-        Backbone.history.navigate("", {
-          trigger: true
-        });
-      }
-      this.viewName(wug.get("recipientEntityName"));
-      newWugList.push(this._mapStrategyModelToWugFeature(wug));
-      namespace.wugFeatureCollection.reset(newWugList);
+      this.viewName(strategyModels[0].get("recipientEntityName"));
+      EntityStrategyCollectionView.__super__.fetchCallback.call(this, strategyModels);
     };
 
     return EntityStrategyCollectionView;
