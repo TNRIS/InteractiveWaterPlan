@@ -43,7 +43,7 @@ define([
         
         initialize: (options) ->
             _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug',
-                'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound')
+                'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError')
 
             @currTableView = null
             
@@ -157,6 +157,12 @@ define([
             @currTableView.hideLoading()
             return
 
+        onTableFetchError: () ->
+            #just redirect back to original view
+            alert("An error has occured.")
+            Backbone.history.navigate("", {trigger: true})
+            return
+
         onTableNothingFound: () ->
             this.onTableEndLoad()
             @currTableView.showNothingFound()
@@ -191,6 +197,7 @@ define([
                     @currTableView.on("table:startload", this.onTableStartLoad)
                     @currTableView.on("table:endload", this.onTableEndLoad)
                     @currTableView.on("table:nothingfound", this.onTableNothingFound)
+                    @currTableView.on("table:fetcherror", this.onTableFetchError)
 
                     @currTableView.render()
 

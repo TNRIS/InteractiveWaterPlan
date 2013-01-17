@@ -70,6 +70,9 @@ define(['namespace'], function(namespace) {
             }
             _this.trigger("table:endload");
           }
+        },
+        error: function() {
+          _this.trigger("table:fetcherror");
         }
       });
     };
@@ -81,7 +84,8 @@ define(['namespace'], function(namespace) {
           id: m.get("recipientEntityId"),
           name: m.get("recipientEntityName"),
           wktGeog: m.get("recipientEntityWktGeog"),
-          sourceSupply: m.get("supply" + namespace.currYear)
+          sourceSupply: m.get("supply" + namespace.currYear),
+          type: m.get("recipientEntityType")
         };
       });
       namespace.wugFeatureCollection.reset(newWugList);

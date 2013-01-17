@@ -78,6 +78,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       _ref = featureCollection.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         m = _ref[_i];
+        console.log(m.get("type"));
         newFeature = wktFormat.read(m.get('wktGeog'));
         newFeature.attributes = m.attributes;
         newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("sourceSupply"));
@@ -180,6 +181,9 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         autoActivate: true,
         clickFeature: function(wugFeature) {
           var wugId;
+          if ((wugFeature.attributes.type != null) && wugFeature.attributes.type === "WWP") {
+            return;
+          }
           wugId = wugFeature.attributes.id;
           Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
             trigger: true
@@ -348,7 +352,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         pointRadius: '${getPointRadius}',
         strokeColor: "yellow",
         strokeWidth: 1,
-        fillColor: "green",
+        fillColor: "${getFillColor}",
         fillOpacity: 0.8
       }, {
         context: {
@@ -357,6 +361,12 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
               return feature.size;
             }
             return 6;
+          },
+          getFillColor: function(feature) {
+            if ((feature.attributes.type != null) && feature.attributes.type === "WWP") {
+              return 'gray';
+            }
+            return 'green';
           }
         },
         rules: [

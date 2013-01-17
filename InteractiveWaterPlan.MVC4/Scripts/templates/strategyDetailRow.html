@@ -10,9 +10,13 @@
 </td>
 <td>{{m.sourceName}}</td>
 <td>
-    <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    
+    <% if (m.recipientEntityType != "WWP") { %>
+        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    
+            {{m.recipientEntityName}}
+        </a>
+    <% } else { %>
         {{m.recipientEntityName}}
-    </a>
+    <% } %>
 </td>
 <td>{{ $.number(m["supply"+currYear]) }}</td>
 <td>

@@ -13,5 +13,7 @@ namespace InteractiveWaterPlan.Core
 
         public const string SWP_SESSION_NAME = "SWP_Session";
         public const string PLACES_SESSION_NAME = "Places_Session";
+
+        public const string WWP_ENTITY_TYPE = "WWP";
     }
 }

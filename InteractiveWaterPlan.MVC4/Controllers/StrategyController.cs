@@ -83,7 +83,17 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
-            return _repo.GetStrategiesForEntity(entityId, year);
+            var strategies = _repo.GetStrategiesForEntity(entityId, year);
+
+            //Strategy Details are not valid for WWP-type entities
+            // so throw an exception
+            if (strategies != null && strategies.Count > 0)
+            {
+                if (CommonConstants.WWP_ENTITY_TYPE.Equals(strategies[0].RecipientEntityType))
+                    throw new ArgumentException("Invalid entityId");
+            }
+            
+            return strategies;
         }
 
 

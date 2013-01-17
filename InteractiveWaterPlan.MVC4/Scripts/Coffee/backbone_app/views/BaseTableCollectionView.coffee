@@ -78,6 +78,10 @@ define([
                         this.trigger("table:endload")
 
                     return   
+
+                error: () =>
+                    this.trigger("table:fetcherror")
+                    return
             )
 
             return
@@ -91,6 +95,7 @@ define([
                     name: m.get("recipientEntityName")
                     wktGeog: m.get("recipientEntityWktGeog")
                     sourceSupply: m.get("supply#{namespace.currYear}")
+                    type: m.get("recipientEntityType")
                 }
             )
 

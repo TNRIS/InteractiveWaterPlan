@@ -96,6 +96,7 @@ define([
             bounds = null
             wugFeatures = []
             for m in featureCollection.models
+                console.log m.get("type")
                 newFeature = wktFormat.read(m.get('wktGeog'))
                 newFeature.attributes = m.attributes
                 newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
@@ -191,9 +192,13 @@ define([
                 @wugLayer,
                 {
                     autoActivate: true
-                    #Navigate to Entity Details view when feature is clicked
+                    
                     clickFeature: (wugFeature) =>
-                        #TODO: do nothing if wugType = WWP
+                        #do nothing if wugType = WWP
+                        if wugFeature.attributes.type? and wugFeature.attributes.type == "WWP"
+                            return
+
+                        #else navigate to Entity Details view when feature is clicked
                         wugId = wugFeature.attributes.id
                         Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
                             {trigger: true})
@@ -407,13 +412,18 @@ define([
                 pointRadius: '${getPointRadius}'
                 strokeColor: "yellow"
                 strokeWidth: 1
-                fillColor: "green"
+                fillColor: "${getFillColor}"
                 fillOpacity: 0.8
                 {
                     context:
                         getPointRadius: (feature) ->
                             if feature.size? then return feature.size
                             return 6
+
+                        getFillColor: (feature) ->
+                            if feature.attributes.type? and feature.attributes.type == "WWP"
+                                return 'gray'
+                            return 'green'
                     
                     rules: [
                         new OpenLayers.Rule({

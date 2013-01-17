@@ -13,7 +13,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     }
 
     WMSRouter.prototype.initialize = function(options) {
-      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound');
+      _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError');
       this.currTableView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
@@ -110,6 +110,13 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.currTableView.hideLoading();
     };
 
+    WMSRouter.prototype.onTableFetchError = function() {
+      alert("An error has occured.");
+      Backbone.history.navigate("", {
+        trigger: true
+      });
+    };
+
     WMSRouter.prototype.onTableNothingFound = function() {
       this.onTableEndLoad();
       this.currTableView.showNothingFound();
@@ -142,6 +149,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
           this.currTableView.on("table:startload", this.onTableStartLoad);
           this.currTableView.on("table:endload", this.onTableEndLoad);
           this.currTableView.on("table:nothingfound", this.onTableNothingFound);
+          this.currTableView.on("table:fetcherror", this.onTableFetchError);
           this.currTableView.render();
           this.currTableView.selectedWug.subscribe(this.updateSelectedWug);
           this.yearNavView.currentYear.subscribe(this.updateViewsToNewYear);

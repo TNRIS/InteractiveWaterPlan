@@ -41,11 +41,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")
                 .SetParameter("regionLetter", regionLetter)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList<Strategy>();
 
             return allStrategiesInRegion;
@@ -53,11 +61,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var allStrategiesInCounty = Session.GetNamedQuery("GetStrategiesInCounty")
                 .SetParameter("countyId", countyId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList<Strategy>();
 
             return allStrategiesInCounty;
@@ -65,11 +81,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesInHouseDistrict(int districtId, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesByHouseDistrict")
                 .SetParameter("districtId", districtId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList<Strategy>();
 
             return allStrategiesInDistrict;
@@ -77,11 +101,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesInSenateDistrict(int districtId, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesBySenateDistrict")
                 .SetParameter("districtId", districtId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList<Strategy>();
 
             return allStrategiesInDistrict;
@@ -89,11 +121,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesByType(int strategyTypeId, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var allStrategiesOfType = Session.GetNamedQuery("GetStrategiesByType")
                 .SetParameter("typeId", strategyTypeId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList<Strategy>();
 
             return allStrategiesOfType;
@@ -101,11 +141,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesForEntity(int entityId, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var strategiesForEntity = Session.GetNamedQuery("GetStrategiesForEntity")
                 .SetParameter("entityId", entityId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList<Strategy>();
 
             return strategiesForEntity;
@@ -113,11 +161,19 @@ namespace InteractiveWaterPlan.Data
 
         public IList<StrategyDetails> GetStrategiesByProjectId(int projectId, string year)
         {
+            /* returned list is sorted so that WWP entities are first, then
+             * ordered descending by supply in the given year */
             var strategyDetails = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
                 .SetParameter("projectId", projectId)
                 .SetParameter("year", year)
                 .List<StrategyDetails>()
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
+                .ThenByDescending(x =>
+                {
+                    long currSupplyVal = (long)(x.GetType().GetProperty(
+                        "Supply" + year).GetValue(x, null));
+                    return currSupplyVal;
+                })
                 .ToList();
 
             return strategyDetails;
