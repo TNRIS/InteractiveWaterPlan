@@ -188,6 +188,7 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\BaseSelectableRegionTableView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\LegeDistrictCollectionView.js" />
@@ -354,6 +355,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
+    <None Include="Scripts\Coffee\backbone_app\views\BaseSelectableRegionTableView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\LegeDistrictCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
