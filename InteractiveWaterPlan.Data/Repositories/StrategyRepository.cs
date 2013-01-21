@@ -49,14 +49,7 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("regionLetter", regionLetter)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
-                .ToList<Strategy>();
+                .ToList();
 
             return allStrategiesInRegion;
         }
@@ -69,14 +62,7 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("countyId", countyId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
-                .ToList<Strategy>();
+                .ToList();
 
             return allStrategiesInCounty;
         }
@@ -89,14 +75,7 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("districtId", districtId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
-                .ToList<Strategy>();
+                .ToList();
 
             return allStrategiesInDistrict;
         }
@@ -109,14 +88,7 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("districtId", districtId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
-                .ToList<Strategy>();
+                .ToList();
 
             return allStrategiesInDistrict;
         }
@@ -129,14 +101,7 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("typeId", strategyTypeId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
-                .ToList<Strategy>();
+                .ToList();
 
             return allStrategiesOfType;
         }
@@ -149,14 +114,7 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("entityId", entityId)
                 .SetParameter("year", year)
                 .List<Strategy>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
-                .ToList<Strategy>();
+                .ToList();
 
             return strategiesForEntity;
         }
@@ -169,13 +127,6 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("projectId", projectId)
                 .SetParameter("year", year)
                 .List<StrategyDetails>()
-                .OrderBy(x => x.RecipientEntityType.StartsWith("WWP") ? 1 : 2)
-                .ThenByDescending(x =>
-                {
-                    long currSupplyVal = (long)(x.GetType().GetProperty(
-                        "Supply" + year).GetValue(x, null));
-                    return currSupplyVal;
-                })
                 .ToList();
 
             return strategyDetails;
