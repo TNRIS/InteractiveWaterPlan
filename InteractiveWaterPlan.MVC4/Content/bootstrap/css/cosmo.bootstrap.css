@@ -2206,7 +2206,7 @@ button.close {
 .btn.disabled,
 .btn[disabled] {
   color: #999999;
-  background-color: #c8c8c8;
+  background-color: black;
   *background-color: #bbbbbb;
 }
 .btn:active,
@@ -2217,7 +2217,7 @@ button.close {
   *margin-left: 0;
 }
 .btn:hover {
-  color: #999999;
+  color: white;
   text-decoration: none;
   background-position: 0 -15px;
   -webkit-transition: background-position 0.1s linear;
