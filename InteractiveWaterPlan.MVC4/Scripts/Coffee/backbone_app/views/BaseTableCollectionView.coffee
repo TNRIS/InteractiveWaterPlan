@@ -124,6 +124,8 @@ define([
                     return entity
             )
 
+            #Reset the shared namespace collection to trigger the map to update
+            # which features it shows
             namespace.wugFeatureCollection.reset(newWugList)
             return
 
