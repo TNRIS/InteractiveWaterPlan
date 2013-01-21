@@ -1331,6 +1331,137 @@ define('views/BaseTableCollectionView',['namespace'], function(namespace) {
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+define('views/BaseSelectableRegionTableView',['namespace', 'views/BaseTableCollectionView'], function(namespace, BaseTableCollectionView) {
+  var BaseSelectableRegionTableView;
+  return BaseSelectableRegionTableView = (function(_super) {
+
+    __extends(BaseSelectableRegionTableView, _super);
+
+    function BaseSelectableRegionTableView() {
+      return BaseSelectableRegionTableView.__super__.constructor.apply(this, arguments);
+    }
+
+    BaseSelectableRegionTableView.prototype.initialize = function(ModelView, Collection, tpl, mapView, options) {
+      var RegionCollection;
+      BaseSelectableRegionTableView.__super__.initialize.call(this, ModelView, Collection, tpl, options);
+      _.bindAll(this, 'onRegionCollectionSuccess');
+      this.mapView = mapView;
+      RegionCollection = Backbone.Collection.extend({
+        url: "" + BASE_API_PATH + "api/boundary/regions/all"
+      });
+      this.regionCollection = new RegionCollection();
+    };
+
+    BaseSelectableRegionTableView.prototype.unrender = function() {
+      if (this.regionHighlightControl != null) {
+        this.regionHighlightControl.destroy();
+      }
+      if (this.regionClickControl != null) {
+        this.regionClickControl.destroy();
+      }
+      if (this.regionLayer != null) {
+        this.regionLayer.destroy();
+      }
+      return BaseSelectableRegionTableView.__super__.unrender.apply(this, arguments);
+    };
+
+    BaseSelectableRegionTableView.prototype.fetchCollection = function() {
+      var params,
+        _this = this;
+      this.$('tbody').empty();
+      params = _.extend({
+        year: namespace.currYear
+      }, this.fetchParams);
+      this.trigger("table:startload");
+      this.collection.fetch({
+        data: params,
+        success: function(collection) {
+          var m, _i, _len, _ref;
+          if (collection.models.length === 0) {
+            _this.trigger("table:nothingfound");
+          } else {
+            _ref = collection.models;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              m = _ref[_i];
+              _this.appendModel(m);
+            }
+            _this.$('.has-popover').popover({
+              trigger: 'hover'
+            });
+            _this._setupDataTable();
+            _this.trigger("table:endload");
+          }
+        },
+        error: function() {
+          _this.trigger("table:fetcherror");
+        }
+      });
+      this.regionCollection.fetch({
+        success: this.onRegionCollectionSuccess
+      });
+    };
+
+    BaseSelectableRegionTableView.prototype.onRegionCollectionSuccess = function(regionCollection) {
+      var newFeature, region, regionFeatures, wktFormat, _i, _len, _ref;
+      wktFormat = new OpenLayers.Format.WKT();
+      regionFeatures = [];
+      _ref = regionCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        newFeature = wktFormat.read(region.get('wktGeog'));
+        newFeature.attributes = region.attributes;
+        delete newFeature.attributes.wktGeog;
+        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        regionFeatures.push(newFeature);
+      }
+      this.regionLayer = new OpenLayers.Layer.Vector("Region Feature Layer", {
+        displayInLayerSwitcher: false,
+        styleMap: new OpenLayers.StyleMap({
+          "default": new OpenLayers.Style({
+            strokeColor: "gray",
+            strokeWidth: 0,
+            fillColor: "white",
+            fillOpacity: 0
+          }),
+          "select": new OpenLayers.Style({
+            fillColor: "yellow",
+            strokeColor: "orange",
+            strokeWidth: 2,
+            fillOpacity: 0.2
+          })
+        })
+      });
+      this.regionLayer.addFeatures(regionFeatures);
+      this.mapView.map.addLayer(this.regionLayer);
+      this.regionHighlightControl = new OpenLayers.Control.SelectFeature(this.regionLayer, {
+        autoActivate: true,
+        hover: true
+      });
+      this.mapView.map.addControl(this.regionHighlightControl);
+      this.regionHighlightControl.handlers.feature.stopDown = false;
+      this.regionClickControl = new OpenLayers.Control.SelectFeature(this.regionLayer, {
+        autoActivate: true,
+        clickFeature: function(regionFeature) {
+          var regionLetter;
+          regionLetter = regionFeature.attributes.letter;
+          Backbone.history.navigate("#/" + namespace.currYear + "/wms/region/" + regionLetter, {
+            trigger: true
+          });
+        }
+      });
+      this.mapView.map.addControl(this.regionClickControl);
+      this.regionClickControl.handlers.feature.stopDown = false;
+    };
+
+    return BaseSelectableRegionTableView;
+
+  })(BaseTableCollectionView);
+});
+
+// Generated by CoffeeScript 1.3.3
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
 define('views/BaseStrategyView',['namespace'], function(namespace) {
   var BaseStrategyView;
   return BaseStrategyView = (function(_super) {
@@ -1425,7 +1556,7 @@ define('scripts/text!templates/countyNetSupplyTable.html',[],function () { retur
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/CountyNetSupplyCollectionView',['namespace', 'views/BaseTableCollectionView', 'views/CountyNetSupplyView', 'collections/CountyNetSupplyCollection', 'scripts/text!templates/countyNetSupplyTable.html'], function(namespace, BaseTableCollectionView, CountyNetSupplyView, CountyNetSupplyCollection, tpl) {
+define('views/CountyNetSupplyCollectionView',['namespace', 'views/BaseSelectableRegionTableView', 'views/CountyNetSupplyView', 'collections/CountyNetSupplyCollection', 'scripts/text!templates/countyNetSupplyTable.html'], function(namespace, BaseSelectableRegionTableView, CountyNetSupplyView, CountyNetSupplyCollection, tpl) {
   var CountyNetSupplyCollectionView;
   return CountyNetSupplyCollectionView = (function(_super) {
 
@@ -1436,80 +1567,12 @@ define('views/CountyNetSupplyCollectionView',['namespace', 'views/BaseTableColle
     }
 
     CountyNetSupplyCollectionView.prototype.initialize = function(options) {
-      var RegionCollection;
-      this.mapView = options.mapView;
-      RegionCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/boundary/regions/all"
-      });
-      this.regionCollection = new RegionCollection();
-      CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
-    };
-
-    CountyNetSupplyCollectionView.prototype.unrender = function() {
-      if (this.regionLayer != null) {
-        this.regionLayer.destroy();
-      }
-      return CountyNetSupplyCollectionView.__super__.unrender.apply(this, arguments);
-    };
-
-    CountyNetSupplyCollectionView.prototype.fetchCollection = function() {
-      var params,
-        _this = this;
-      this.$('tbody').empty();
-      params = _.extend({
-        year: namespace.currYear
-      }, this.fetchParams);
-      this.trigger("table:startload");
-      this.collection.fetch({
-        data: params,
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          if (collection.models.length === 0) {
-            _this.trigger("table:nothingfound");
-          } else {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this._setupDataTable();
-            _this.trigger("table:endload");
-          }
-        },
-        error: function() {
-          _this.trigger("table:fetcherror");
-        }
-      });
-      this.regionCollection.fetch({
-        success: function(regionCollection) {
-          var newFeature, region, regionFeatures, wktFormat, _i, _len, _ref;
-          console.log(regionCollection);
-          wktFormat = new OpenLayers.Format.WKT();
-          regionFeatures = [];
-          _ref = regionCollection.models;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            region = _ref[_i];
-            newFeature = wktFormat.read(region.get('wktGeog'));
-            newFeature.attributes = region.attributes;
-            delete newFeature.attributes.wktGeog;
-            newFeature.geometry = _this.mapView.transformToWebMerc(newFeature.geometry);
-            regionFeatures.push(newFeature);
-          }
-          _this.regionLayer = new OpenLayers.Layer.Vector("Region Feature Layer", {
-            displayInLayerSwitcher: false
-          });
-          _this.regionLayer.addFeatures(regionFeatures);
-          _this.mapView.map.addLayer(_this.regionLayer);
-        }
-      });
+      CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl, options.mapView);
     };
 
     return CountyNetSupplyCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseSelectableRegionTableView);
 });
 
 define('scripts/text!templates/regionStrategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    <%  if (m.sponsorId == m.recipientEntityId) {\r\n            print(\'$\' + $.number(m.capitalCost));\r\n        } else {\r\n            print(\'---\');\r\n        }\r\n    %>\r\n</td>\r\n';});
@@ -1541,7 +1604,7 @@ define('scripts/text!templates/regionStrategyTable.html',[],function () { return
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/RegionStrategyCollectionView',['namespace', 'views/BaseTableCollectionView', 'views/RegionStrategyView', 'scripts/text!templates/regionStrategyTable.html'], function(namespace, BaseTableCollectionView, StrategyView, tpl) {
+define('views/RegionStrategyCollectionView',['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrategyView', 'scripts/text!templates/regionStrategyTable.html'], function(namespace, BaseSelectableRegionTableView, RegionStrategyView, tpl) {
   var RegionStrategyCollectionView;
   return RegionStrategyCollectionView = (function(_super) {
 
@@ -1552,72 +1615,35 @@ define('views/RegionStrategyCollectionView',['namespace', 'views/BaseTableCollec
     }
 
     RegionStrategyCollectionView.prototype.initialize = function(options) {
-      var RegionModel, StrategyCollection, fetchParams;
+      var StrategyCollection, fetchParams;
       this.regionLetter = options.id;
       this.viewName = ko.observable("Region " + this.regionLetter);
-      this.mapView = options.mapView;
       fetchParams = {
         regionLetter: this.regionLetter
       };
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/region"
       });
-      RegionModel = Backbone.Model.extend({
-        url: "" + BASE_API_PATH + "api/boundary/region/" + this.regionLetter
-      });
-      this.region = new RegionModel();
-      RegionStrategyCollectionView.__super__.initialize.call(this, StrategyView, StrategyCollection, tpl, {
+      RegionStrategyCollectionView.__super__.initialize.call(this, RegionStrategyView, StrategyCollection, tpl, options.mapView, {
         fetchParams: fetchParams
       });
       return null;
     };
 
-    RegionStrategyCollectionView.prototype.fetchCollection = function() {
-      var params,
+    RegionStrategyCollectionView.prototype.onRegionCollectionSuccess = function(regionCollection) {
+      var bounds, matchedRegion,
         _this = this;
-      this.$('tbody').empty();
-      params = _.extend({
-        year: namespace.currYear
-      }, this.fetchParams);
-      this.trigger("table:startload");
-      this.collection.fetch({
-        data: params,
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          if (collection.models.length === 0) {
-            _this.trigger("table:nothingfound");
-          } else {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this._setupDataTable();
-            _this.trigger("table:endload");
-          }
-        },
-        error: function() {
-          _this.trigger("table:fetcherror");
-        }
+      RegionStrategyCollectionView.__super__.onRegionCollectionSuccess.call(this, regionCollection);
+      matchedRegion = _.find(this.regionLayer.features, function(regionFeature) {
+        return regionFeature.attributes.letter === _this.regionLetter;
       });
-      this.region.fetch({
-        success: function(model) {
-          var bounds, regionFeature, wktFormat;
-          wktFormat = new OpenLayers.Format.WKT();
-          regionFeature = wktFormat.read(model.get('wktGeog'));
-          regionFeature.geometry = _this.mapView.transformToWebMerc(regionFeature.geometry);
-          bounds = regionFeature.geometry.getBounds();
-          _this.mapView.map.zoomToExtent(bounds);
-        }
-      });
+      bounds = matchedRegion.geometry.getBounds();
+      this.mapView.map.zoomToExtent(bounds);
     };
 
     return RegionStrategyCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseSelectableRegionTableView);
 });
 
 define('scripts/text!templates/countyStrategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>\r\n    <% if (m.recipientEntityType != "WWP") { %>\r\n        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    \r\n            {{m.recipientEntityName}}\r\n        </a>\r\n    <% } else { %>\r\n        {{m.recipientEntityName}}\r\n    <% } %>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>{{m.sponsorName}}</td>\r\n';});

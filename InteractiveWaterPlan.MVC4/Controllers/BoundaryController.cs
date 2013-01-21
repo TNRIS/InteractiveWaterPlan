@@ -38,7 +38,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         //api/boundary/regions/all
         public IEnumerable<PlanningRegion> GetAllPlanningRegions()
         {
-            return _repo.GetPlanningRegions();
+            return _repo.GetPlanningRegions(1000);
         }
 
         //api/boundary/region/{regionLetter}

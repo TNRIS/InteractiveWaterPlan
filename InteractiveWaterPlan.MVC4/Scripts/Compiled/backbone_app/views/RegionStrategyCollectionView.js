@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/RegionStrategyView', 'scripts/text!templates/regionStrategyTable.html'], function(namespace, BaseTableCollectionView, StrategyView, tpl) {
+define(['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrategyView', 'scripts/text!templates/regionStrategyTable.html'], function(namespace, BaseSelectableRegionTableView, RegionStrategyView, tpl) {
   var RegionStrategyCollectionView;
   return RegionStrategyCollectionView = (function(_super) {
 
@@ -13,70 +13,33 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/RegionStrategyView'
     }
 
     RegionStrategyCollectionView.prototype.initialize = function(options) {
-      var RegionModel, StrategyCollection, fetchParams;
+      var StrategyCollection, fetchParams;
       this.regionLetter = options.id;
       this.viewName = ko.observable("Region " + this.regionLetter);
-      this.mapView = options.mapView;
       fetchParams = {
         regionLetter: this.regionLetter
       };
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/region"
       });
-      RegionModel = Backbone.Model.extend({
-        url: "" + BASE_API_PATH + "api/boundary/region/" + this.regionLetter
-      });
-      this.region = new RegionModel();
-      RegionStrategyCollectionView.__super__.initialize.call(this, StrategyView, StrategyCollection, tpl, {
+      RegionStrategyCollectionView.__super__.initialize.call(this, RegionStrategyView, StrategyCollection, tpl, options.mapView, {
         fetchParams: fetchParams
       });
       return null;
     };
 
-    RegionStrategyCollectionView.prototype.fetchCollection = function() {
-      var params,
+    RegionStrategyCollectionView.prototype.onRegionCollectionSuccess = function(regionCollection) {
+      var bounds, matchedRegion,
         _this = this;
-      this.$('tbody').empty();
-      params = _.extend({
-        year: namespace.currYear
-      }, this.fetchParams);
-      this.trigger("table:startload");
-      this.collection.fetch({
-        data: params,
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          if (collection.models.length === 0) {
-            _this.trigger("table:nothingfound");
-          } else {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this._setupDataTable();
-            _this.trigger("table:endload");
-          }
-        },
-        error: function() {
-          _this.trigger("table:fetcherror");
-        }
+      RegionStrategyCollectionView.__super__.onRegionCollectionSuccess.call(this, regionCollection);
+      matchedRegion = _.find(this.regionLayer.features, function(regionFeature) {
+        return regionFeature.attributes.letter === _this.regionLetter;
       });
-      this.region.fetch({
-        success: function(model) {
-          var bounds, regionFeature, wktFormat;
-          wktFormat = new OpenLayers.Format.WKT();
-          regionFeature = wktFormat.read(model.get('wktGeog'));
-          regionFeature.geometry = _this.mapView.transformToWebMerc(regionFeature.geometry);
-          bounds = regionFeature.geometry.getBounds();
-          _this.mapView.map.zoomToExtent(bounds);
-        }
-      });
+      bounds = matchedRegion.geometry.getBounds();
+      this.mapView.map.zoomToExtent(bounds);
     };
 
     return RegionStrategyCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseSelectableRegionTableView);
 });

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/CountyNetSupplyView', 'collections/CountyNetSupplyCollection', 'scripts/text!templates/countyNetSupplyTable.html'], function(namespace, BaseTableCollectionView, CountyNetSupplyView, CountyNetSupplyCollection, tpl) {
+define(['namespace', 'views/BaseSelectableRegionTableView', 'views/CountyNetSupplyView', 'collections/CountyNetSupplyCollection', 'scripts/text!templates/countyNetSupplyTable.html'], function(namespace, BaseSelectableRegionTableView, CountyNetSupplyView, CountyNetSupplyCollection, tpl) {
   var CountyNetSupplyCollectionView;
   return CountyNetSupplyCollectionView = (function(_super) {
 
@@ -13,78 +13,10 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/CountyNetSupplyView
     }
 
     CountyNetSupplyCollectionView.prototype.initialize = function(options) {
-      var RegionCollection;
-      this.mapView = options.mapView;
-      RegionCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/boundary/regions/all"
-      });
-      this.regionCollection = new RegionCollection();
-      CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl);
-    };
-
-    CountyNetSupplyCollectionView.prototype.unrender = function() {
-      if (this.regionLayer != null) {
-        this.regionLayer.destroy();
-      }
-      return CountyNetSupplyCollectionView.__super__.unrender.apply(this, arguments);
-    };
-
-    CountyNetSupplyCollectionView.prototype.fetchCollection = function() {
-      var params,
-        _this = this;
-      this.$('tbody').empty();
-      params = _.extend({
-        year: namespace.currYear
-      }, this.fetchParams);
-      this.trigger("table:startload");
-      this.collection.fetch({
-        data: params,
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          if (collection.models.length === 0) {
-            _this.trigger("table:nothingfound");
-          } else {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this._setupDataTable();
-            _this.trigger("table:endload");
-          }
-        },
-        error: function() {
-          _this.trigger("table:fetcherror");
-        }
-      });
-      this.regionCollection.fetch({
-        success: function(regionCollection) {
-          var newFeature, region, regionFeatures, wktFormat, _i, _len, _ref;
-          console.log(regionCollection);
-          wktFormat = new OpenLayers.Format.WKT();
-          regionFeatures = [];
-          _ref = regionCollection.models;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            region = _ref[_i];
-            newFeature = wktFormat.read(region.get('wktGeog'));
-            newFeature.attributes = region.attributes;
-            delete newFeature.attributes.wktGeog;
-            newFeature.geometry = _this.mapView.transformToWebMerc(newFeature.geometry);
-            regionFeatures.push(newFeature);
-          }
-          _this.regionLayer = new OpenLayers.Layer.Vector("Region Feature Layer", {
-            displayInLayerSwitcher: false
-          });
-          _this.regionLayer.addFeatures(regionFeatures);
-          _this.mapView.map.addLayer(_this.regionLayer);
-        }
-      });
+      CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl, options.mapView);
     };
 
     return CountyNetSupplyCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseSelectableRegionTableView);
 });
