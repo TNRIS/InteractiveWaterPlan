@@ -178,7 +178,8 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         this.currTableView = this.currTableView.unrender();
       }
       this.currTableView = new CountyNetSupplyCollectionView({
-        el: this.tableContainer
+        el: this.tableContainer,
+        mapView: this.mapView
       });
       this.mapView.resetExtent();
       this.mapView.clearWugFeatures();

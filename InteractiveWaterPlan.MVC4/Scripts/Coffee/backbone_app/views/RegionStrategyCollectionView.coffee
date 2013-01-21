@@ -34,8 +34,8 @@ define([
             return null
 
         #override the super's fetchCollection
-        #This one works a bit differently in that no WUGs are shown, but the region
-        # itself should be
+        #This one works a bit differently in that no WUGs are shown, 
+        # but the region needs to be zoomed to
         fetchCollection: () ->
 
             this.$('tbody').empty() #clear the table contents

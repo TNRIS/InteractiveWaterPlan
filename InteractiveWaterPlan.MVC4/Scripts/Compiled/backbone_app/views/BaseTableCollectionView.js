@@ -98,6 +98,15 @@ define(['namespace'], function(namespace) {
         entity.strategyTypes = _.uniq(entity.strategyTypes);
         return entity;
       });
+      newWugList.sort(function(a, b) {
+        if (a.type === "WWP") {
+          return -1;
+        }
+        if (b.type === "WWP") {
+          return 1;
+        }
+        return b.totalSupply - a.totalSupply;
+      });
       namespace.wugFeatureCollection.reset(newWugList);
     };
 

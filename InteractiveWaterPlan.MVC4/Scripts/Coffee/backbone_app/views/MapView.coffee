@@ -95,6 +95,7 @@ define([
  
             bounds = null
             wugFeatures = []
+            
             for m in featureCollection.models
                 newFeature = wktFormat.read(m.get('wktGeog'))
                 newFeature.attributes = m.attributes
@@ -112,6 +113,7 @@ define([
                     bounds.extend(newFeature.geometry.getBounds())
 
                 wugFeatures.push(newFeature)
+            
 
             @wugLayer.addFeatures(wugFeatures)
             @map.addLayer(@wugLayer)

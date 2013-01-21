@@ -123,6 +123,19 @@ define([
                     return entity
             )
 
+            #Sort the features so that WWP type features are first
+            # then sorty by totalSupply, largest to smallest,
+            # so that the features draw appropriately (big behind small)
+            newWugList.sort((a, b) ->
+                #first check the type
+                if a.type == "WWP" then return -1
+                if b .type == "WWP" then return 1
+
+                #then check the supply value
+                return b.totalSupply - a.totalSupply
+            )
+            
+
             #Reset the shared namespace collection to trigger the map to update
             # which features it shows
             namespace.wugFeatureCollection.reset(newWugList)
@@ -165,8 +178,6 @@ define([
 
         #Attach hover listener to the data table to show a popup for the associated WUG Feature
         _connectTableRowsToWugFeatures: () ->
-
-
             me = this #save reference to the View
 
             #Must use delegate methods because the table has not finished rendering

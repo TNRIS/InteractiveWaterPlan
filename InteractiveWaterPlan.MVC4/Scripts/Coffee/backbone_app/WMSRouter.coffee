@@ -228,6 +228,9 @@ define([
 
             @currTableView = new CountyNetSupplyCollectionView(
                 el: @tableContainer
+
+                #pass the mapView so the regions can be drawn
+                mapView: @mapView
             )
 
             @mapView.resetExtent()
