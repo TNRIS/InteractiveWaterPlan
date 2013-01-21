@@ -100,7 +100,7 @@ define([
                     entity = _.reduce(group, 
                         (memo, m)->
                             
-                            #these properties should change
+                            #these properties should not change
                             memo.entityId = m.get("recipientEntityId")
                             memo.name = m.get("recipientEntityName")
                             memo.wktGeog = m.get("recipientEntityWktGeog")
