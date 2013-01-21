@@ -36,8 +36,7 @@ namespace InteractiveWaterPlan.MVC4
 
 
             bundles.Add(new StyleBundle("~/bundles/css/cosmo.css").Include(
-                "~/Content/bootstrap/css/cosmo.bootstrap.css",
-                "~/Content/chosen.cosmo.css"
+                "~/Content/bootstrap/css/cosmo.bootstrap.css"
             ));
 
         }
