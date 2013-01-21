@@ -200,7 +200,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.currTableView = new RegionStrategyCollectionView({
         el: this.tableContainer,
         id: regionLetter,
-        name: regionLetter
+        mapView: this.mapView
       });
       this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Regions");

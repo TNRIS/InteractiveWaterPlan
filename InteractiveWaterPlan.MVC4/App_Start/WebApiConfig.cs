@@ -135,6 +135,12 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
+                "GetPlanningRegion",
+                "api/boundary/region/{regionLetter}",
+                new { controller = "Boundary", action = "GetPlanningRegion" }
+            );
+
+            config.Routes.MapHttpRoute(
                 "GetAllHouseDistricts",
                 "api/boundary/districts/house/all",
                 new { controller = "Boundary", action = "GetAllHouseDistrictFeatures" }

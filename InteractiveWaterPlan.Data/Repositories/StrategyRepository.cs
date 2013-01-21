@@ -41,6 +41,8 @@ namespace InteractiveWaterPlan.Data
 
         public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year)
         {
+            regionLetter = char.ToUpper(regionLetter);
+
             /* returned list is sorted so that WWP entities are first, then
              * ordered descending by supply in the given year */
             var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")

@@ -51,6 +51,7 @@ namespace InteractiveWaterPlan.Data
                 .OrderBy(x => x.Letter)
                 .ToList<PlanningRegion>();
 
+            //reduce the geography
             foreach (var planningRegion in planningRegions)
             {
                 SqlGeography geog = SqlGeography.Parse(planningRegion.WktGeog);
@@ -58,8 +59,25 @@ namespace InteractiveWaterPlan.Data
                 planningRegion.WktGeog = reducedGeog.ToString();
             }
 
-            return planningRegions.ToList();
+            return planningRegions.ToList(); 
+        }
+
+        public PlanningRegion GetPlanningRegion(char regionLetter, int reduceFactor = 400)
+        {
+            var planningRegion = Session.GetNamedQuery("GetAllPlanningRegions")
+               .List<PlanningRegion>()
+               .Where(x => x.Letter == regionLetter)
+               .FirstOrDefault();
+
+            if (planningRegion == null)
+                return null;
+
+            //reduce the geography
+            SqlGeography geog = SqlGeography.Parse(planningRegion.WktGeog);
+            SqlGeography reducedGeog = geog.Reduce(reduceFactor);
+            planningRegion.WktGeog = reducedGeog.ToString();
             
+            return planningRegion;
         }
 
         public IEnumerable<object> GetHouseDistrictNames()

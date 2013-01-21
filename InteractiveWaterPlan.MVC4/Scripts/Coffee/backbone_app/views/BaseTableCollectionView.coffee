@@ -43,7 +43,6 @@ define([
 
         fetchCollection: () ->
 
-            
             this.$('tbody').empty() #clear the table contents
 
             #always include the current year in the fetch parameters

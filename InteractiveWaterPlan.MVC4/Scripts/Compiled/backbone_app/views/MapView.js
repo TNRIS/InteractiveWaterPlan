@@ -158,6 +158,9 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.highlightStratTypeWugs = function(stratTypeId) {
       var wugFeature, _i, _len, _ref;
+      if (!this.wugLayer) {
+        return;
+      }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
@@ -172,6 +175,9 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.unhighlightStratTypeWugs = function() {
       var wugFeature, _i, _len, _ref;
+      if (!this.wugLayer) {
+        return;
+      }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];

@@ -250,7 +250,9 @@ define([
             @currTableView = new RegionStrategyCollectionView(
                 el: @tableContainer
                 id: regionLetter
-                name: regionLetter
+
+                #Also pass the mapView for drawing the region features
+                mapView: @mapView
             )
 
             @mapView.hideWmsOverlays()

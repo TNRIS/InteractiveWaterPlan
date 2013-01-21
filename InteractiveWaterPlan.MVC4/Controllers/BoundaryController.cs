@@ -41,6 +41,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetPlanningRegions();
         }
 
+        //api/boundary/region/{regionLetter}
+        public PlanningRegion GetPlanningRegion(char regionLetter)
+        {
+            regionLetter = char.ToUpper(regionLetter);
+            return _repo.GetPlanningRegion(regionLetter);
+        }
+
         //api/boundary/districts/house/all
         public IEnumerable<LegeDistrict> GetAllHouseDistrictFeatures()
         {

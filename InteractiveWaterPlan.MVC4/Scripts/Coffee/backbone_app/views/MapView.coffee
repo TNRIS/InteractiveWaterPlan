@@ -158,7 +158,6 @@ define([
 
             return
 
-
         hideWmsOverlays: () ->
             for layer in @map.layers
                 if !layer.isBaseLayer then layer.setVisibility(false)
@@ -171,6 +170,8 @@ define([
             return
 
         highlightStratTypeWugs: (stratTypeId) ->
+            if not @wugLayer then return
+
             for wugFeature in @wugLayer.features
                 if (wugFeature.attributes.strategyTypes? and
                     _.contains(wugFeature.attributes.strategyTypes,stratTypeId))
@@ -182,6 +183,8 @@ define([
             return
 
         unhighlightStratTypeWugs: () ->
+            if not @wugLayer then return
+
             for wugFeature in @wugLayer.features
                 wugFeature.renderIntent = "default"
 
