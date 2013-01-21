@@ -36,6 +36,8 @@ define([
                     return regionFeature.attributes.letter == @regionLetter
             )
             
+            @regionHighlightControl.select(matchedRegion)
+
             bounds = matchedRegion.geometry.getBounds()
             @mapView.map.zoomToExtent(bounds)
 

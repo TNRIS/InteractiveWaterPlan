@@ -35,6 +35,7 @@ define(['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrateg
       matchedRegion = _.find(this.regionLayer.features, function(regionFeature) {
         return regionFeature.attributes.letter === _this.regionLetter;
       });
+      this.regionHighlightControl.select(matchedRegion);
       bounds = matchedRegion.geometry.getBounds();
       this.mapView.map.zoomToExtent(bounds);
     };
