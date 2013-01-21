@@ -433,14 +433,14 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
         switch (layer_name) {
           case 'mapquest_open':
             layers.push(new OpenLayers.Layer.XYZ("MapQuest Open Street", ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png", "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"], {
-              attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
+              attribution: "Data, imagery, and map information provided by \n<a href='http://www.mapquest.com' target='_blank'>MapQuest</a>, \n<a href='http://www.openstreetmap.org' target='_blank'>Open Street Map</a> \nand contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/' \ntarget='_blank'>CC-BY-SA</a>",
               transitionEffect: "resize",
               isBaseLayer: true
             }));
             break;
           case 'mapquest_aerial':
             layers.push(new OpenLayers.Layer.XYZ("MapQuest Open Aerial", ["http://oatile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png", "http://oatile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png", "http://oatile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png", "http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png"], {
-              attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
+              attribution: "Tiles Courtesy of <a href='http://www.mapquest.com/'' target='_blank'>MapQuest</a>.\nPortions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency",
               transitionEffect: "resize",
               isBaseLayer: true
             }));
@@ -474,7 +474,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
             break;
           case 'esri_gray':
             layers.push(new OpenLayers.Layer.XYZ('ESRI Gray', ['http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'], {
-              attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>",
+              attribution: "Tiles Courtesy of <a href='http://www.esri.com' target='_blank'>esri</a>",
               isBaseLayer: true
             }));
             break;

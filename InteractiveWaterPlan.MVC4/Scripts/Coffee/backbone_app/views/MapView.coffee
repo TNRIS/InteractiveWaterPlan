@@ -353,7 +353,12 @@ define([
                                 "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"
                             ],
                             {
-                                attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
+                                attribution: """Data, imagery, and map information provided by 
+                                    <a href='http://www.mapquest.com' target='_blank'>MapQuest</a>, 
+                                    <a href='http://www.openstreetmap.org' target='_blank'>Open Street Map</a> 
+                                    and contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/' 
+                                    target='_blank'>CC-BY-SA</a>
+                                    """
                                 transitionEffect: "resize"
                                 isBaseLayer: true
                             }
@@ -369,7 +374,10 @@ define([
                                 "http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png"
                             ],
                             {
-                                attribution: "Tiles courtesy <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a>",
+                                attribution: """
+                                    Tiles Courtesy of <a href='http://www.mapquest.com/'' target='_blank'>MapQuest</a>.
+                                    Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency
+                                    """
                                 transitionEffect: "resize"
                                 isBaseLayer: true
                             }
@@ -411,7 +419,7 @@ define([
                                 'http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/${z}/${y}/${x}'
                             ],
                             {
-                                attribution: "Tiles courtesy <a href='http://www.esri.com' target='_blank'>esri</a>"
+                                attribution: "Tiles Courtesy of <a href='http://www.esri.com' target='_blank'>esri</a>"
                                 isBaseLayer: true
                             }
                         ))
