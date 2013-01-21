@@ -1,8 +1,8 @@
 define([
     'namespace'
     'views/BaseTableCollectionView'
-    'views/StrategyView'
-    'scripts/text!templates/strategyTable.html'
+    'views/RegionStrategyView'
+    'scripts/text!templates/regionStrategyTable.html'
 ],
 (namespace, BaseTableCollectionView, StrategyView, tpl) ->
 

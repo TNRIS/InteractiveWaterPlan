@@ -192,6 +192,7 @@
     <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\LegeDistrictCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapTopButtonsView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavToolbarView.js" />
@@ -326,6 +327,8 @@
     <Content Include="Scripts\templates\entityStrategyTable.html" />
     <Content Include="Scripts\templates\mapBottomRightTools.html" />
     <Content Include="Scripts\templates\mapTopButtons.html" />
+    <Content Include="Scripts\templates\regionStrategyRow.html" />
+    <Content Include="Scripts\templates\regionStrategyTable.html" />
     <Content Include="Scripts\templates\strategyDetailRow.html" />
     <Content Include="Scripts\templates\strategyDetailTable.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
@@ -354,6 +357,7 @@
     <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\LegeDistrictCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavToolbarView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
   </ItemGroup>
