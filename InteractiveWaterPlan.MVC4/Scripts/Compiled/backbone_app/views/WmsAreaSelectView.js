@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace'], function(namespace) {
+define(['namespace', 'scripts/text!templates/wmsAreaSelect.html'], function(namespace, tpl) {
   var WmsAreaSelectView;
   return WmsAreaSelectView = (function(_super) {
 
@@ -12,6 +12,8 @@ define(['namespace'], function(namespace) {
       return WmsAreaSelectView.__super__.constructor.apply(this, arguments);
     }
 
+    WmsAreaSelectView.prototype.template = _.template(tpl);
+
     WmsAreaSelectView.prototype.initialize = function(options) {
       _.bindAll(this, 'render', 'unrender', '_createRegionSelect', '_createCountySelect', '_createHouseSelect', '_createSenateSelect', 'enableSelects', 'disableSelects', 'resetSelects');
       if (!(namespace.countyNames != null) || !(namespace.regionNames != null) || !(namespace.houseNames != null) || !(namespace.senateNames != null)) {
@@ -20,6 +22,8 @@ define(['namespace'], function(namespace) {
     };
 
     WmsAreaSelectView.prototype.render = function() {
+      this.$el.empty();
+      this.$el.html(this.template());
       this.selects = {};
       this.selects["region"] = this._createRegionSelect().chosen();
       this.selects["county"] = this._createCountySelect().chosen();

@@ -1,9 +1,12 @@
 define([
     'namespace'
+    'scripts/text!templates/wmsAreaSelect.html'
 ],
-(namespace) ->
+(namespace, tpl) ->
 
     class WmsAreaSelectView extends Backbone.View
+
+        template: _.template(tpl)
 
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 
@@ -18,6 +21,9 @@ define([
             return
 
         render: () ->
+            @$el.empty()
+            @$el.html(@template())
+
             @selects = {}
             #create the regionSelect
             @selects["region"] = this._createRegionSelect().chosen()

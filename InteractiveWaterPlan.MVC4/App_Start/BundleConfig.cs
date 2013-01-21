@@ -31,7 +31,13 @@ namespace InteractiveWaterPlan.MVC4
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/js/iswp-app.js").Include(
-              "~/Scripts/iswp-app.js"
+                "~/Scripts/iswp-app.js"
+            ));
+
+
+            bundles.Add(new StyleBundle("~/bundles/css/cosmo.css").Include(
+                "~/Content/bootstrap/css/cosmo.bootstrap.css",
+                "~/Content/chosen.cosmo.css"
             ));
 
         }
