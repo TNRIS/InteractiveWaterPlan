@@ -2450,6 +2450,9 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
         if (this.currTableView != null) {
           this.currTableView = this.currTableView.unrender();
         }
+        if (this.mapView != null) {
+          this.mapView.clearWugFeatures();
+        }
         if (year != null) {
           if (_.contains(namespace.VALID_YEARS, year)) {
             namespace.currYear = year;

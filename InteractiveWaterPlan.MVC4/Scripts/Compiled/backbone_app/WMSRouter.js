@@ -123,6 +123,9 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         if (this.currTableView != null) {
           this.currTableView = this.currTableView.unrender();
         }
+        if (this.mapView != null) {
+          this.mapView.clearWugFeatures();
+        }
         if (year != null) {
           if (_.contains(namespace.VALID_YEARS, year)) {
             namespace.currYear = year;

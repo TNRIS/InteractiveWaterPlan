@@ -153,7 +153,11 @@ define([
                 #unrender the currTableView first
                 if @currTableView?
                     @currTableView = @currTableView.unrender()
-                    
+                
+                #and clear out any wug features from the mapview
+                if @mapView?
+                    @mapView.clearWugFeatures()
+
                 if year?
                     if _.contains(namespace.VALID_YEARS, year)
                         namespace.currYear = year
