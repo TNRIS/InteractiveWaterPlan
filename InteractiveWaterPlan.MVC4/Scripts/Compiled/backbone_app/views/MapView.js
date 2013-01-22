@@ -26,11 +26,13 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.MIN_WUG_RADIUS = 6;
 
+    MapView.prototype.isMapLocked = false;
+
     MapView.prototype.initialize = function(config) {
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', 'zoomToExtent');
       namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
       return null;
     };
@@ -96,7 +98,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.map.addControl(this.wugHighlightControl);
       this.wugClickControl = this._setupWugClickControl();
       this.map.addControl(this.wugClickControl);
-      this.map.zoomToExtent(bounds);
+      this.zoomToExtent(bounds);
     };
 
     MapView.prototype.clearWugFeatures = function() {
@@ -281,13 +283,19 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.map.setCenter(this.origCenter, zoom);
     };
 
+    MapView.prototype.zoomToExtent = function(bounds) {
+      if (!this.isMapLocked) {
+        this.map.zoomToExtent(bounds);
+      }
+    };
+
     MapView.prototype.showPlaceFeature = function(placeFeature) {
       var bounds, feature, wktFormat;
       wktFormat = new OpenLayers.Format.WKT();
       feature = wktFormat.read(placeFeature.get('wktGeog'));
       this.transformToWebMerc(feature.geometry);
       bounds = feature.geometry.getBounds();
-      this.map.zoomToExtent(bounds);
+      this.zoomToExtent(bounds);
     };
 
     MapView.prototype.transformToWebMerc = function(geometry) {

@@ -23,6 +23,9 @@ define([
         MAX_WUG_RADIUS: 18
         MIN_WUG_RADIUS: 6
 
+        #only zoomToExtent when isMapLocked is true 
+        isMapLocked: false
+
         initialize: (config) ->
 
             @$el = $("##{config.mapContainerId}")
@@ -35,7 +38,7 @@ define([
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
                 '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays',
                 'showMapLoading', 'hideMapLoading', '_setupWugClickControl',
-                'highlightStratTypeWugs', 'unhighlightStratTypeWugs')
+                'highlightStratTypeWugs', 'unhighlightStratTypeWugs', 'zoomToExtent')
             
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
@@ -126,7 +129,7 @@ define([
             @wugClickControl = this._setupWugClickControl()
             @map.addControl(@wugClickControl)
 
-            @map.zoomToExtent(bounds)
+            this.zoomToExtent(bounds)
             return
 
         clearWugFeatures: () ->
@@ -300,6 +303,11 @@ define([
             @map.setCenter(@origCenter, zoom);
             return
 
+        zoomToExtent: (bounds) ->
+            #only zoom if the mapView is not 'locked'
+            if not @isMapLocked then @map.zoomToExtent(bounds)
+            return
+
         showPlaceFeature: (placeFeature) ->
             wktFormat = new OpenLayers.Format.WKT()
             feature = wktFormat.read(placeFeature.get('wktGeog'))
@@ -309,7 +317,7 @@ define([
 
             bounds = feature.geometry.getBounds()
             
-            @map.zoomToExtent(bounds)
+            this.zoomToExtent(bounds)
 
             #@placeLayer.removeAllFeatures()
             #@placeLayer.addFeatures(feature)

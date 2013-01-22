@@ -15,7 +15,7 @@ define(['scripts/text!templates/mapTopButtons.html'], function(tpl) {
     MapTopButtonsView.prototype.template = _.template(tpl);
 
     MapTopButtonsView.prototype.initialize = function(options) {
-      _.bindAll(this, 'render', 'unrender', 'zoomToTexas', 'toggleMap');
+      _.bindAll(this, 'render', 'unrender', 'toggleMapViewLock', 'zoomToTexas', 'toggleMap');
       if (!(options.mapView != null)) {
         throw "options.mapView not defined";
       }
@@ -35,13 +35,29 @@ define(['scripts/text!templates/mapTopButtons.html'], function(tpl) {
       return null;
     };
 
+    MapTopButtonsView.prototype.toggleMapViewLock = function(data, event) {
+      var $icon, $target, swap;
+      $target = $(event.delegateTarget);
+      $icon = $('i', $target);
+      swap = $icon.attr('class');
+      $icon.attr('class', $target.attr('data-other-icon-class'));
+      $target.attr('data-other-icon-class', swap);
+      if ($target.hasClass("locked")) {
+        $target.removeClass("locked");
+        this.mapView.isMapLocked = false;
+      } else {
+        $target.addClass("locked");
+        this.mapView.isMapLocked = true;
+      }
+    };
+
     MapTopButtonsView.prototype.zoomToTexas = function() {
       this.mapView.resetExtent();
     };
 
     MapTopButtonsView.prototype.toggleMap = function(data, event) {
       var $target;
-      $target = $(event.target);
+      $target = $(event.delegateTarget);
       if ($target.hasClass('off')) {
         $target.html('Hide Map');
         $('#mapContainer').slideDown();
