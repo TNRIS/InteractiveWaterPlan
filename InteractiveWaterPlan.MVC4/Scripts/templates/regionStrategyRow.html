@@ -11,10 +11,7 @@
 <td>{{m.sourceName}}</td>
 <td>{{ $.number(m["supply"+currYear]) }}</td>
 <td>
-    <%  if (m.sponsorId == m.recipientEntityId) {
-            print('$' + $.number(m.capitalCost));
-        } else {
-            print('---');
-        }
-    %>
+    
+    {{ '$' + $.number(m.capitalCost) }}
+        
 </td>

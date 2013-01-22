@@ -48,10 +48,48 @@ namespace InteractiveWaterPlan.Data
             var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")
                 .SetParameter("regionLetter", regionLetter)
                 .SetParameter("year", year)
-                .List<Strategy>()
-                .ToList();
+                .List<Strategy>();
+                
 
-            return allStrategiesInRegion;
+            //Group by ProjectId
+            var aggregatedStrategyList = allStrategiesInRegion
+                .GroupBy(x => x.ProjectId)
+                .Select<IGrouping<int, Strategy>, Strategy>(
+                    grp =>
+                    {
+                        //Create a starting Strategy from a clone of the first
+                        // one in the group.
+                        var start = grp.First().Clone();
+                        
+                        //Set the values to be aggregated to 0
+                        start.Supply2010 = 0;
+                        start.Supply2020 = 0;
+                        start.Supply2030 = 0;
+                        start.Supply2040 = 0;
+                        start.Supply2050 = 0;
+                        start.Supply2060 = 0;
+                        start.CapitalCost = 0;
+
+                        //Then aggregate each group into a single strategy with
+                        // summed Supply and CapitalCost values
+                        return grp.Aggregate(start, 
+                            (aggStrategy, nextStrategy) =>
+                            {
+                                aggStrategy.Supply2010 += nextStrategy.Supply2010;
+                                aggStrategy.Supply2020 += nextStrategy.Supply2020;
+                                aggStrategy.Supply2030 += nextStrategy.Supply2030;
+                                aggStrategy.Supply2040 += nextStrategy.Supply2040;
+                                aggStrategy.Supply2050 += nextStrategy.Supply2050;
+                                aggStrategy.Supply2060 += nextStrategy.Supply2060;
+
+                                aggStrategy.CapitalCost += nextStrategy.CapitalCost;
+
+                                return aggStrategy;
+                            });
+                    }
+                ).ToList();
+
+            return aggregatedStrategyList;
         }
 
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year)

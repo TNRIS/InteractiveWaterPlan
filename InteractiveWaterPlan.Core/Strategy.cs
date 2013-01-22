@@ -44,6 +44,11 @@
         public virtual string RecipientEntityName { get; set; }
         public virtual string RecipientEntityType { get; set; }
         public virtual string RecipientEntityWktGeog { get; set; }
+
+        public virtual Strategy Clone()
+        {
+            return (Strategy)this.MemberwiseClone();
+        }
     }
 
     public class StrategyDetails : Strategy
