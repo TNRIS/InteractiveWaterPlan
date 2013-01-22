@@ -81,12 +81,27 @@ ul.nav > li.nav-label
     border: 4px solid #FF7501;
     padding: 5px;
     background: white;
-    color: #555; 
+    color: black; 
 }
 
 .alert.alert-warning-border h4
 {
     color: black;
+    font-weight: bold;
+}
+
+.alert.alert-error-border
+{
+    border: 4px solid #ff0039;
+    padding: 5px;
+    background: white;
+    color: black;
+}
+
+.alert.alert-error-border h4
+{
+    color: black;
+    font-weight: bold;
 }
 
 ul.typeahead .catName
