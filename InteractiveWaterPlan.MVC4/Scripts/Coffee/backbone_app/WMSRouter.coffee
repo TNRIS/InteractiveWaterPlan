@@ -13,11 +13,6 @@ define([
     'views/StrategyDetailCollectionView'
     'views/WmsAreaSelectView'
     'views/MapTopButtonsView'
-    'collections/StrategyTypeCollection'
-    'collections/CountyCollection'
-    'collections/RegionCollection'
-    'collections/HouseCollection'
-    'collections/SenateCollection'
 ],
 (   namespace, 
     MapView, 
@@ -32,12 +27,7 @@ define([
     EntityStrategyCollectionView,
     StrategyDetailCollectionView,
     WmsAreaSelectView,
-    MapTopButtonsView,
-    StrategyTypeCollection,
-    CountyCollection,
-    RegionCollection,
-    HouseCollection,
-    SenateCollection) ->
+    MapTopButtonsView) ->
 
     class WMSRouter extends Backbone.Router
         
@@ -80,29 +70,12 @@ define([
             @yearNavView.on("changeyear", this.updateViewsToNewYear) 
             #render in 'after' filter
             
-            #Load the boostrapped arrays (defined in Index.cshtml)
-            namespace.strategyTypes = new StrategyTypeCollection()
-            namespace.strategyTypes.reset(initStrategyTypes)
-
-            namespace.countyNames = new CountyCollection()
-            namespace.countyNames.reset(initCountyNames)
-
-            namespace.regionNames = new RegionCollection()
-            namespace.regionNames.reset(initRegionNames)
-
-            namespace.houseNames = new HouseCollection()
-            namespace.houseNames.reset(initHouseNames)
-
-            namespace.senateNames = new SenateCollection()
-            namespace.senateNames.reset(initSenateNames)
-
             @areaSelectView = new WmsAreaSelectView(
                 el: $('#areaSelectContainer')[0]
             )
             @areaSelectView.render()
 
             return
-
 
         routes:
             "":                                   "default" #default route, for now it is the same as :year/wms
@@ -135,7 +108,6 @@ define([
             return
 
         onTableFetchError: () ->
-            #just redirect back to original view
             alert "An error has occured.  Please reload this page or go back."
             return
 

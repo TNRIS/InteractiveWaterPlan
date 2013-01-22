@@ -23,8 +23,8 @@ $(function() {
       "templates": "../../templates"
     }
   });
-  require(['WMSRouter'], function(WMSRouter) {
-    var MyHistory, r;
+  require(['namespace', 'WMSRouter'], function(namespace, WMSRouter) {
+    var MyHistory;
     MyHistory = Backbone.History.extend({
       loadUrl: function() {
         var match;
@@ -36,12 +36,17 @@ $(function() {
       }
     });
     Backbone.history = new MyHistory();
-    r = new WMSRouter();
     Backbone.history.on("route-not-found", function() {
       Backbone.history.navigate("", {
         trigger: true
       });
     });
-    Backbone.history.start();
+    namespace.bootstrapData().done(function() {
+      var r;
+      r = new WMSRouter();
+      Backbone.history.start();
+    }).fail(function() {
+      alert("An error has occured.  Please reload this page or go back.");
+    });
   });
 });

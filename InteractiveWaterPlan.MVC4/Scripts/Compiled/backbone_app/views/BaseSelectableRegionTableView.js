@@ -14,7 +14,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
 
     BaseSelectableRegionTableView.prototype.initialize = function(ModelView, Collection, tpl, mapView, options) {
       BaseSelectableRegionTableView.__super__.initialize.call(this, ModelView, Collection, tpl, options);
-      _.bindAll(this, 'onRegionCollectionSuccess', 'onStrategyCollectionSuccess');
+      _.bindAll(this, 'showRegionFeatures', 'onStrategyCollectionSuccess');
       this.mapView = mapView;
       this.regionCollection = null;
     };
@@ -52,8 +52,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
     };
 
     BaseSelectableRegionTableView.prototype.onStrategyCollectionSuccess = function(collection) {
-      var m, _i, _len, _ref,
-        _this = this;
+      var m, _i, _len, _ref;
       if (collection.models.length === 0) {
         this.trigger("table:nothingfound");
       } else {
@@ -66,26 +65,16 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
           trigger: 'hover'
         });
         this._setupDataTable();
-        if (namespace.regionFeatureCollection != null) {
-          this.regionCollection = namespace.regionFeatureCollection;
-          this.onRegionCollectionSuccess(this.regionCollection);
-        } else {
-          this.regionCollection = new RegionFeatureCollection();
-          this.regionCollection.fetch({
-            success: function(regionCollection) {
-              namespace.regionFeatureCollection = regionCollection;
-              _this.onRegionCollectionSuccess(regionCollection);
-            }
-          });
-        }
+        this.regionCollection = namespace.regionFeatures;
+        this.showRegionFeatures();
       }
     };
 
-    BaseSelectableRegionTableView.prototype.onRegionCollectionSuccess = function(regionCollection) {
+    BaseSelectableRegionTableView.prototype.showRegionFeatures = function() {
       var newFeature, region, regionFeatures, wktFormat, _i, _len, _ref;
       wktFormat = new OpenLayers.Format.WKT();
       regionFeatures = [];
-      _ref = regionCollection.models;
+      _ref = this.regionCollection.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
         newFeature = wktFormat.read(region.get('wktGeog'));

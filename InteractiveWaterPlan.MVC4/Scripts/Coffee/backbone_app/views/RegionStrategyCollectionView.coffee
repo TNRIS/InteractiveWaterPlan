@@ -27,8 +27,9 @@ define([
 
         #override the super's onRegionCollectionSuccess
         #to also zoom to the current region's extent
-        onRegionCollectionSuccess: (regionCollection) ->
-            super regionCollection
+        showRegionFeatures: () ->
+            #call the super first to display the region features
+            super
 
             #find the associated region in the regionLayer's features
             matchedRegion = _.find(@regionLayer.features, 

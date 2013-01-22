@@ -11,7 +11,7 @@ define([
 
             super ModelView, Collection, tpl, options
 
-            _.bindAll(this, 'onRegionCollectionSuccess', 'onStrategyCollectionSuccess')
+            _.bindAll(this, 'showRegionFeatures', 'onStrategyCollectionSuccess')
 
             @mapView = mapView
 
@@ -65,35 +65,23 @@ define([
 
                 this.$('.has-popover').popover(trigger: 'hover')
 
-                
                 this._setupDataTable()
 
-                #get the region features out of the namespace if they exist
-                if namespace.regionFeatureCollection? 
-                    @regionCollection = namespace.regionFeatureCollection
-                    # and add to map
-                    this.onRegionCollectionSuccess(@regionCollection)
-                else #otherwise need to fetch them 
-                    @regionCollection = new RegionFeatureCollection()
-                    @regionCollection.fetch(
-                        success: (regionCollection) => 
-                            #save to the namespace collection
-                            namespace.regionFeatureCollection = regionCollection
-
-                            #and then add to map
-                            this.onRegionCollectionSuccess(regionCollection)
-                            return
-                    )
-
+                #get the region features out of the namespace
+                
+                @regionCollection = namespace.regionFeatures
+                # and add to map
+                this.showRegionFeatures()
+                
             return   
 
-        onRegionCollectionSuccess: (regionCollection) ->
+        showRegionFeatures: () ->
                    
             wktFormat = new OpenLayers.Format.WKT()
 
             regionFeatures = []
 
-            for region in regionCollection.models
+            for region in @regionCollection.models
                 newFeature = wktFormat.read(region.get('wktGeog'))
                 newFeature.attributes = _.clone(region.attributes)
                 

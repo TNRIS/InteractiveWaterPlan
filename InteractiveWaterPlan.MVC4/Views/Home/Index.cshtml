@@ -118,18 +118,6 @@
     }
     
     @Scripts.Render("~/bundles/js/lib.js")
-
-    <script type="text/javascript">
-        var initCountyNames = @Html.Raw(ViewData["CountyNames"]);
-
-        var initRegionNames = @Html.Raw(ViewData["RegionNames"]);
-
-        var initHouseNames = @Html.Raw(ViewData["HouseNames"]);
-
-        var initSenateNames = @Html.Raw(ViewData["SenateNames"]);
-    
-        var initStrategyTypes = @Html.Raw(ViewData["StrategyTypes"]);
-    </script>
     
     @if (HttpContext.Current.IsDebuggingEnabled)
     {

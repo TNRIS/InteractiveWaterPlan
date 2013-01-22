@@ -30,8 +30,12 @@ $(()->
             "templates": "../../templates" #Used for html templates
     )
 
-    require(['WMSRouter'],
-        (WMSRouter) =>
+    require([
+        'namespace'
+       
+        'WMSRouter'
+        ],
+        (namespace, WMSRouter) =>
             
             #Extend Backbone.History to trigger an event when a route is not found
             MyHistory = Backbone.History.extend(
@@ -43,21 +47,23 @@ $(()->
             )
             Backbone.history = new MyHistory()
 
-            #TODO: do prefetching here; use $.when to create the WMSRouter once
-            # everything is finished
-
-            
-
-            r = new WMSRouter()
-            
-            #Catch any bad route and just redirect to default
+            #Catch any bad routes and just redirect to default
             Backbone.history.on("route-not-found", () ->
                 Backbone.history.navigate("", {trigger: true})
                 return
             )
 
-            Backbone.history.start()
-
+            #Bootstrap data into namespace
+            namespace.bootstrapData()
+                .done(
+                    () ->
+                        r = new WMSRouter()
+                        Backbone.history.start()
+                        return
+                ).fail(() ->
+                    alert "An error has occured.  Please reload this page or go back."
+                    return
+                )
 
             return
     )

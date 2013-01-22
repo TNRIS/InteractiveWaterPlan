@@ -3,22 +3,22 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define([], function() {
-  var RegionCollection;
-  return RegionCollection = (function(_super) {
+  var RegionNamesCollection;
+  return RegionNamesCollection = (function(_super) {
 
-    __extends(RegionCollection, _super);
+    __extends(RegionNamesCollection, _super);
 
-    function RegionCollection() {
-      return RegionCollection.__super__.constructor.apply(this, arguments);
+    function RegionNamesCollection() {
+      return RegionNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    RegionCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/regions/names";
+    RegionNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/regions/names";
 
-    RegionCollection.prototype.model = Backbone.Model.extend({
+    RegionNamesCollection.prototype.model = Backbone.Model.extend({
       idAttribute: 'letter'
     });
 
-    return RegionCollection;
+    return RegionNamesCollection;
 
   })(Backbone.Collection);
 });

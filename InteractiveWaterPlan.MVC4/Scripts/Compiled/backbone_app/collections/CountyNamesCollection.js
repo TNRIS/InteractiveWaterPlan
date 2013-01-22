@@ -3,18 +3,18 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define([], function() {
-  var CountyCollection;
-  return CountyCollection = (function(_super) {
+  var CountyNamesCollection;
+  return CountyNamesCollection = (function(_super) {
 
-    __extends(CountyCollection, _super);
+    __extends(CountyNamesCollection, _super);
 
-    function CountyCollection() {
-      return CountyCollection.__super__.constructor.apply(this, arguments);
+    function CountyNamesCollection() {
+      return CountyNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    CountyCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/counties/names";
+    CountyNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/counties/names";
 
-    return CountyCollection;
+    return CountyNamesCollection;
 
   })(Backbone.Collection);
 });

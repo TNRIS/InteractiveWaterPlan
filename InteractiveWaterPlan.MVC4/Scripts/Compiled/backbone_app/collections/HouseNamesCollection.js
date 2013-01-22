@@ -3,18 +3,18 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define([], function() {
-  var SenateCollection;
-  return SenateCollection = (function(_super) {
+  var HouseNamesCollection;
+  return HouseNamesCollection = (function(_super) {
 
-    __extends(SenateCollection, _super);
+    __extends(HouseNamesCollection, _super);
 
-    function SenateCollection() {
-      return SenateCollection.__super__.constructor.apply(this, arguments);
+    function HouseNamesCollection() {
+      return HouseNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    SenateCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/districts/senate/names";
+    HouseNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/districts/house/names";
 
-    return SenateCollection;
+    return HouseNamesCollection;
 
   })(Backbone.Collection);
 });

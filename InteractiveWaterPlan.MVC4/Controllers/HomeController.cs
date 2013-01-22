@@ -12,27 +12,6 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
-            //Setup 'bootstrapped' data for the backbone app
-            var boundaryController = new BoundaryController();
-            ViewData["CountyNames"] = JsonConvert.SerializeObject(
-                boundaryController.GetAllCountyNames(), Formatting.None, settings);
-
-            ViewData["RegionNames"] = JsonConvert.SerializeObject(
-                boundaryController.GetAllPlanningRegionNames(), Formatting.None, settings);
-
-            ViewData["HouseNames"] = JsonConvert.SerializeObject(
-               boundaryController.GetAllHouseDistrictNames(), Formatting.None, settings);
-
-            ViewData["SenateNames"] = JsonConvert.SerializeObject(
-               boundaryController.GetAllSenateDistrictNames(), Formatting.None, settings);
-
-            var strategyController = new StrategyController();
-            ViewData["StrategyTypes"] = JsonConvert.SerializeObject(
-                strategyController.GetStrategyTypes(), Formatting.None, settings);
-
             return View();
         }
     }

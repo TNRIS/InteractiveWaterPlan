@@ -28,10 +28,10 @@ define(['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrateg
       return null;
     };
 
-    RegionStrategyCollectionView.prototype.onRegionCollectionSuccess = function(regionCollection) {
+    RegionStrategyCollectionView.prototype.showRegionFeatures = function() {
       var bounds, matchedRegion,
         _this = this;
-      RegionStrategyCollectionView.__super__.onRegionCollectionSuccess.call(this, regionCollection);
+      RegionStrategyCollectionView.__super__.showRegionFeatures.apply(this, arguments);
       matchedRegion = _.find(this.regionLayer.features, function(regionFeature) {
         return regionFeature.attributes.letter === _this.regionLetter;
       });
