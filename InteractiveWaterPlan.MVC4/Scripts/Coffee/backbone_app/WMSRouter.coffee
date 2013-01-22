@@ -108,6 +108,7 @@ define([
             return
 
         onTableFetchError: () ->
+            $('#errorMessage').show() #TODO: is there are more centralized way to do this?
             alert "An error has occured.  Please reload this page or go back."
             return
 
@@ -149,6 +150,10 @@ define([
 
         #before filter from backbone.routefilter
         before:
+            '': () ->
+                $('#errorMessage').hide()
+                return
+
             '^[0-9]{4}/wms': (year) ->
                 #unrender the currTableView first
                 if @currTableView?

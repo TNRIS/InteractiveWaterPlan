@@ -73,6 +73,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.onTableFetchError = function() {
+      $('#errorMessage').show();
       alert("An error has occured.  Please reload this page or go back.");
     };
 
@@ -119,6 +120,9 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.before = {
+      '': function() {
+        $('#errorMessage').hide();
+      },
       '^[0-9]{4}/wms': function(year) {
         if (this.currTableView != null) {
           this.currTableView = this.currTableView.unrender();

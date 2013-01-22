@@ -57,6 +57,14 @@
             </div>
         </noscript>
 
+        <div class="row hide" id="errorMessage">
+            <div class="span12">
+                <div class="alert alert-error alert-error-border">
+                    An unexpected error has occurred. Please go back or try reloading the page.
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="span7" id="themeNavContainer">
             </div>
@@ -80,7 +88,6 @@
         <div id="dataContainer">
             <div class="row" id="areaSelectContainer">
                 
-                
             </div>
 
             <div class="row">
@@ -92,18 +99,14 @@
                     <div class="alert alert-info">Sorry, no strategies found.</div>
                 </div>
             </div>
-            <div class="row hide" id="errorMessage">
-                <div class="span12">
-                    <div class="alert alert-error messageText">
-                        <a href="#" class="close" data-dismiss="alert">&times;</a>
-                        An error has occurred. Please go back or try reloading the page.
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
+        
     </div>
     
+    
+
     <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
     <input type="hidden" id="base_path" value="@Url.Content("~/")" />
     <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["BingMapsKey"]" />

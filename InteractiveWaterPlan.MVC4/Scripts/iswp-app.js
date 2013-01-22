@@ -2424,6 +2424,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     };
 
     WMSRouter.prototype.onTableFetchError = function() {
+      $('#errorMessage').show();
       alert("An error has occured.  Please reload this page or go back.");
     };
 
@@ -2470,6 +2471,9 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     };
 
     WMSRouter.prototype.before = {
+      '': function() {
+        $('#errorMessage').hide();
+      },
       '^[0-9]{4}/wms': function(year) {
         if (this.currTableView != null) {
           this.currTableView = this.currTableView.unrender();
@@ -2698,6 +2702,7 @@ $(function() {
       Backbone.history.start();
     }).fail(function() {
       alert("An error has occured.  Please reload this page or go back.");
+      $('#errorMessage').show();
     }).always(function() {
       $('.tableLoading').hide();
     });
