@@ -83,10 +83,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.onTableFetchError = function() {
-      alert("An error has occured.");
-      Backbone.history.navigate("", {
-        trigger: true
-      });
+      alert("An error has occured.  Please reload this page or go back.");
     };
 
     WMSRouter.prototype.onTableNothingFound = function() {
