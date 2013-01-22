@@ -1,8 +1,9 @@
 define([
     'namespace'
+    'collections/RegionFeatureCollection'
     'views/BaseTableCollectionView'
 ],
-(namespace, BaseTableCollectionView) ->
+(namespace, RegionFeatureCollection, BaseTableCollectionView) ->
 
     class BaseSelectableRegionTableView extends BaseTableCollectionView
 
@@ -10,15 +11,11 @@ define([
 
             super ModelView, Collection, tpl, options
 
-            _.bindAll(this, 'onRegionCollectionSuccess')
+            _.bindAll(this, 'onRegionCollectionSuccess', 'onStrategyCollectionSuccess')
 
             @mapView = mapView
 
-            RegionCollection = Backbone.Collection.extend(
-                url: "#{BASE_API_PATH}api/boundary/regions/all"
-            )
-
-            @regionCollection = new RegionCollection()
+            @regionCollection = null
 
             return
 
@@ -40,42 +37,59 @@ define([
 
             this.trigger("table:startload")
 
-            @collection.fetch(
+            #Fetch the strategy collection
+            deferred = @collection.fetch(
                 data: params
                 
-                success: (collection) =>
+                success: this.onStrategyCollectionSuccess
                     
-                    if collection.models.length == 0
-                        this.trigger("table:nothingfound")
+               
+            )
 
-                    else
-                        for m in collection.models
-                            this.appendModel(m)
-
-                        this.$('.has-popover').popover(trigger: 'hover')
-
-                        
-                        this._setupDataTable()
-
-                        #Don't need to do this stuff
-                        #this._connectTableRowsToWugFeatures()
-                        #if this.fetchCallback? and _.isFunction(this.fetchCallback)
-                        #    this.fetchCallback(collection.models)
-
-                        this.trigger("table:endload")
-
-                    return   
-
-                error: () =>
+            deferred
+                .then(() => 
+                    this.trigger("table:endload")
+                    return
+                )
+                .fail(() =>
                     this.trigger("table:fetcherror")
                     return
-            )
-
-            @regionCollection.fetch(
-                success: this.onRegionCollectionSuccess
-            )
-
+                )
+                
             return
+
+        onStrategyCollectionSuccess: (collection) ->
+            if collection.models.length == 0
+                this.trigger("table:nothingfound")
+
+            else
+                for m in collection.models
+                    this.appendModel(m)
+
+                this.$('.has-popover').popover(trigger: 'hover')
+
+                
+                this._setupDataTable()
+
+                #get the region features out of the namespace if they exist
+                if namespace.regionFeatureCollection? 
+                    @regionCollection = namespace.regionFeatureCollection
+                    # and add to map
+                    this.onRegionCollectionSuccess(@regionCollection)
+                else #otherwise need to fetch them 
+                    @regionCollection = new RegionFeatureCollection()
+                    console.log "fetching regions"
+                    @regionCollection.fetch(
+                        success: (regionCollection) => 
+                            #save to the namespace
+                            namespace.regionFeatureCollection = regionCollection
+
+                            #and then add to map
+                            this.onRegionCollectionSuccess(regionCollection)
+                            return
+                    )
+
+            return   
 
         onRegionCollectionSuccess: (regionCollection) ->
                    
@@ -85,8 +99,9 @@ define([
 
             for region in regionCollection.models
                 newFeature = wktFormat.read(region.get('wktGeog'))
-                newFeature.attributes = region.attributes
+                newFeature.attributes = _.clone(region.attributes)
                 
+                #but we don't need to carry about the large wktGeog
                 delete newFeature.attributes.wktGeog
                 
                 newFeature.geometry = @mapView.transformToWebMerc(

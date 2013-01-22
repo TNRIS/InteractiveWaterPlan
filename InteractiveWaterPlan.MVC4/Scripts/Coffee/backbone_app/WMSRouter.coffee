@@ -136,8 +136,7 @@ define([
 
         onTableFetchError: () ->
             #just redirect back to original view
-            alert("An error has occured.")
-            Backbone.history.navigate("", {trigger: true})
+            alert "An error has occured.  Please reload this page or go back."
             return
 
         onTableNothingFound: () ->

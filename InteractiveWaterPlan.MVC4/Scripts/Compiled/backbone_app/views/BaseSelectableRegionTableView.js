@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView'], function(namespace, BaseTableCollectionView) {
+define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableCollectionView'], function(namespace, RegionFeatureCollection, BaseTableCollectionView) {
   var BaseSelectableRegionTableView;
   return BaseSelectableRegionTableView = (function(_super) {
 
@@ -13,14 +13,10 @@ define(['namespace', 'views/BaseTableCollectionView'], function(namespace, BaseT
     }
 
     BaseSelectableRegionTableView.prototype.initialize = function(ModelView, Collection, tpl, mapView, options) {
-      var RegionCollection;
       BaseSelectableRegionTableView.__super__.initialize.call(this, ModelView, Collection, tpl, options);
-      _.bindAll(this, 'onRegionCollectionSuccess');
+      _.bindAll(this, 'onRegionCollectionSuccess', 'onStrategyCollectionSuccess');
       this.mapView = mapView;
-      RegionCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/boundary/regions/all"
-      });
-      this.regionCollection = new RegionCollection();
+      this.regionCollection = null;
     };
 
     BaseSelectableRegionTableView.prototype.unrender = function() {
@@ -37,39 +33,53 @@ define(['namespace', 'views/BaseTableCollectionView'], function(namespace, BaseT
     };
 
     BaseSelectableRegionTableView.prototype.fetchCollection = function() {
-      var params,
+      var deferred, params,
         _this = this;
       this.$('tbody').empty();
       params = _.extend({
         year: namespace.currYear
       }, this.fetchParams);
       this.trigger("table:startload");
-      this.collection.fetch({
+      deferred = this.collection.fetch({
         data: params,
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          if (collection.models.length === 0) {
-            _this.trigger("table:nothingfound");
-          } else {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this._setupDataTable();
-            _this.trigger("table:endload");
-          }
-        },
-        error: function() {
-          _this.trigger("table:fetcherror");
+        success: this.onStrategyCollectionSuccess
+      });
+      deferred.then(function() {
+        _this.trigger("table:endload");
+      }).fail(function() {
+        _this.trigger("table:fetcherror");
+      });
+    };
+
+    BaseSelectableRegionTableView.prototype.onStrategyCollectionSuccess = function(collection) {
+      var m, _i, _len, _ref,
+        _this = this;
+      if (collection.models.length === 0) {
+        this.trigger("table:nothingfound");
+      } else {
+        _ref = collection.models;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          m = _ref[_i];
+          this.appendModel(m);
         }
-      });
-      this.regionCollection.fetch({
-        success: this.onRegionCollectionSuccess
-      });
+        this.$('.has-popover').popover({
+          trigger: 'hover'
+        });
+        this._setupDataTable();
+        if (namespace.regionFeatureCollection != null) {
+          this.regionCollection = namespace.regionFeatureCollection;
+          this.onRegionCollectionSuccess(this.regionCollection);
+        } else {
+          this.regionCollection = new RegionFeatureCollection();
+          console.log("fetching regions");
+          this.regionCollection.fetch({
+            success: function(regionCollection) {
+              namespace.regionFeatureCollection = regionCollection;
+              _this.onRegionCollectionSuccess(regionCollection);
+            }
+          });
+        }
+      }
     };
 
     BaseSelectableRegionTableView.prototype.onRegionCollectionSuccess = function(regionCollection) {
@@ -80,7 +90,7 @@ define(['namespace', 'views/BaseTableCollectionView'], function(namespace, BaseT
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
         newFeature = wktFormat.read(region.get('wktGeog'));
-        newFeature.attributes = region.attributes;
+        newFeature.attributes = _.clone(region.attributes);
         delete newFeature.attributes.wktGeog;
         newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
         regionFeatures.push(newFeature);

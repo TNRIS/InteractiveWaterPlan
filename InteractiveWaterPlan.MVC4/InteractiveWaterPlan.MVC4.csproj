@@ -178,11 +178,13 @@
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <None Include="Scripts\build-iswp-app.bat" />
+    <None Include="Scripts\Coffee\backbone_app\collections\RegionFeatureCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\config\WmsThemeConfig.coffee" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\CountyNetSupplyCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\HouseCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\RegionCollection.js" />
+    <Content Include="Scripts\Compiled\backbone_app\collections\RegionFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\SenateCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />

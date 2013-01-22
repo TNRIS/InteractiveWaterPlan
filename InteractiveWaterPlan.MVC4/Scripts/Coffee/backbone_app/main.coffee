@@ -43,6 +43,11 @@ $(()->
             )
             Backbone.history = new MyHistory()
 
+            #TODO: do prefetching here; use $.when to create the WMSRouter once
+            # everything is finished
+
+            
+
             r = new WMSRouter()
             
             #Catch any bad route and just redirect to default
