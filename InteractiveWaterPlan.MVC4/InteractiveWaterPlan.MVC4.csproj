@@ -221,6 +221,7 @@
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyTypeCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\YearNavView.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
+    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.JsonVector.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Popup.Cosmo.js" />
     <Content Include="Scripts\DT_bootstrap.js" />
@@ -367,6 +368,7 @@
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavToolbarView.coffee" />
+    <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.JsonVector.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
   </ItemGroup>
   <ItemGroup>

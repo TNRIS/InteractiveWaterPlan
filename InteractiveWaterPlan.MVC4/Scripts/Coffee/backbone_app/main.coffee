@@ -53,6 +53,8 @@ $(()->
                 return
             )
 
+            $('.tableLoading').show()
+
             #Bootstrap data into namespace
             namespace.bootstrapData()
                 .done(
@@ -62,6 +64,9 @@ $(()->
                         return
                 ).fail(() ->
                     alert "An error has occured.  Please reload this page or go back."
+                    return
+                ).always(() ->
+                    $('.tableLoading').hide()
                     return
                 )
 

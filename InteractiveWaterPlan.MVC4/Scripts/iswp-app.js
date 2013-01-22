@@ -2664,12 +2664,15 @@ $(function() {
         trigger: true
       });
     });
+    $('.tableLoading').show();
     namespace.bootstrapData().done(function() {
       var r;
       r = new WMSRouter();
       Backbone.history.start();
     }).fail(function() {
       alert("An error has occured.  Please reload this page or go back.");
+    }).always(function() {
+      $('.tableLoading').hide();
     });
   });
 });

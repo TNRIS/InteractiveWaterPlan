@@ -1,6 +1,4 @@
 
-
-
 ###
     Class: OpenLayers.Layer.QuadKey
     Layer using direct tile access based on Bing-style Quad Keys
