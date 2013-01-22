@@ -1421,7 +1421,6 @@ define('views/BaseSelectableRegionTableView',['namespace', 'collections/RegionFe
           this.onRegionCollectionSuccess(this.regionCollection);
         } else {
           this.regionCollection = new RegionFeatureCollection();
-          console.log("fetching regions");
           this.regionCollection.fetch({
             success: function(regionCollection) {
               namespace.regionFeatureCollection = regionCollection;

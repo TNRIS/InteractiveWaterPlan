@@ -40,10 +40,7 @@ define([
             #Fetch the strategy collection
             deferred = @collection.fetch(
                 data: params
-                
                 success: this.onStrategyCollectionSuccess
-                    
-               
             )
 
             deferred
@@ -55,7 +52,7 @@ define([
                     this.trigger("table:fetcherror")
                     return
                 )
-                
+
             return
 
         onStrategyCollectionSuccess: (collection) ->
@@ -78,10 +75,9 @@ define([
                     this.onRegionCollectionSuccess(@regionCollection)
                 else #otherwise need to fetch them 
                     @regionCollection = new RegionFeatureCollection()
-                    console.log "fetching regions"
                     @regionCollection.fetch(
                         success: (regionCollection) => 
-                            #save to the namespace
+                            #save to the namespace collection
                             namespace.regionFeatureCollection = regionCollection
 
                             #and then add to map
