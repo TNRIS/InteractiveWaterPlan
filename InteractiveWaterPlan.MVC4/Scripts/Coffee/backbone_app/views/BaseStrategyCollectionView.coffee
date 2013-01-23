@@ -7,7 +7,7 @@ define([
         MAX_WUG_RADIUS: 18
         MIN_WUG_RADIUS: 6
 
-        initialize: (ModelView, Collection, tpl, options) ->
+        initialize: (ModelView, StrategyCollection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 
                 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
@@ -26,7 +26,9 @@ define([
 
             @template = _.template(tpl)
 
-            @collection = new Collection()
+            @strategyCollection = new StrategyCollection()
+
+            @wugCollection = new Backbone.Collection()
 
             @ModelView = ModelView
 
@@ -60,7 +62,7 @@ define([
 
             this.trigger("table:startload")
 
-            @collection.fetch(
+            @strategyCollection.fetch(
                 data: params
                 
                 success: this.onFetchCollectionSuccess
@@ -72,12 +74,12 @@ define([
 
             return
 
-        onFetchCollectionSuccess: (collection) ->
-            if collection.models.length == 0
+        onFetchCollectionSuccess: (strategyCollection) ->
+            if strategyCollection.models.length == 0
                 this.trigger("table:nothingfound")
 
             else
-                for m in collection.models
+                for m in strategyCollection.models
                     this.appendModel(m)
 
                 this.$('.has-popover').popover(trigger: 'hover')
@@ -88,7 +90,7 @@ define([
                 this._connectTableRowsToWugFeatures()
 
                 if this.fetchCallback? and _.isFunction(this.fetchCallback)
-                    this.fetchCallback(collection.models)
+                    this.fetchCallback(strategyCollection.models)
 
                 this.trigger("table:endload")
 
@@ -148,7 +150,8 @@ define([
             
 
             #show the wugFeatures
-            this.showWugFeatures(newWugList)
+            @wugCollection.reset(newWugList)
+            this.showWugFeatures()
             return
 
 
@@ -260,10 +263,10 @@ define([
 
         #############################################
 
-        showWugFeatures: (wugList) ->
+        showWugFeatures: () ->
             this.clearWugFeaturesAndControls()
 
-            if wugList.length < 1 then return
+            if @wugCollection.models.length < 1 then return
 
             @wugLayer = new OpenLayers.Layer.Vector(
                 "Water User Groups",
@@ -275,22 +278,22 @@ define([
             wktFormat = new OpenLayers.Format.WKT()
 
             #Size based on source supply (need to pass source supply to model)
-            max_supply = _.max(wugList, (m) ->
-                return m.totalSupply
-            ).totalSupply
+            max_supply = @wugCollection.max((m) ->
+                return m.get("totalSupply")
+            ).get("totalSupply")
             
-            min_supply = _.min(wugList, (m) ->
-                return m.totalSupply
-            ).totalSupply
+            min_supply = @wugCollection.min((m) ->
+                return m.get("totalSupply")
+            ).get("totalSupply")
  
             bounds = null
             wugFeatures = []
             
-            for wug in wugList
-                newFeature = wktFormat.read(wug.wktGeog)
-                newFeature.attributes = _.clone(wug)
+            for wug in @wugCollection.models
+                newFeature = wktFormat.read(wug.get("wktGeog"))
+                newFeature.attributes = _.clone(wug.attributes)
                 newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
-                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, wug.totalSupply)
+                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, wug.get("totalSupply"))
                 delete newFeature.attributes.wktGeog
                
                 newFeature.geometry = @mapView.transformToWebMerc(newFeature.geometry)

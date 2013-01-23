@@ -73,8 +73,11 @@ define([
             return
 
         showWmsOverlayByViewType: (viewType) ->
-            for layer in @map.getLayersBy("viewType", viewType)
-                layer.setVisibility(true)
+            for layer in @map.layers
+                if layer.viewType == viewType
+                    layer.setVisibility(true)
+                else if !layer.isBaseLayer
+                    layer.setVisibility(false)
             return
 
         _setupOverlayLayers: () ->

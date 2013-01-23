@@ -42,7 +42,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
         year: namespace.currYear
       }, this.fetchParams);
       this.trigger("table:startload");
-      $.when(this.collection.fetch({
+      $.when(this.strategyCollection.fetch({
         data: params
       }), this.sourceCollection.fetch()).then(function() {
         _this.onFetchBothCollectionSuccess();
@@ -66,7 +66,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
-      this.onFetchCollectionSuccess(this.collection);
+      this.onFetchCollectionSuccess(this.strategyCollection);
       this.showSourceFeatures();
     };
 

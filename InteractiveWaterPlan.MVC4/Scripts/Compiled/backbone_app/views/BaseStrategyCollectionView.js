@@ -16,14 +16,15 @@ define(['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
-    BaseStrategyCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
+    BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
       _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
       this.currYear = ko.observable(namespace.currYear);
       this.template = _.template(tpl);
-      this.collection = new Collection();
+      this.strategyCollection = new StrategyCollection();
+      this.wugCollection = new Backbone.Collection();
       this.ModelView = ModelView;
       return null;
     };
@@ -53,7 +54,7 @@ define(['namespace'], function(namespace) {
         year: namespace.currYear
       }, this.fetchParams);
       this.trigger("table:startload");
-      this.collection.fetch({
+      this.strategyCollection.fetch({
         data: params,
         success: this.onFetchCollectionSuccess,
         error: function() {
@@ -62,12 +63,12 @@ define(['namespace'], function(namespace) {
       });
     };
 
-    BaseStrategyCollectionView.prototype.onFetchCollectionSuccess = function(collection) {
+    BaseStrategyCollectionView.prototype.onFetchCollectionSuccess = function(strategyCollection) {
       var m, _i, _len, _ref;
-      if (collection.models.length === 0) {
+      if (strategyCollection.models.length === 0) {
         this.trigger("table:nothingfound");
       } else {
-        _ref = collection.models;
+        _ref = strategyCollection.models;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           m = _ref[_i];
           this.appendModel(m);
@@ -78,7 +79,7 @@ define(['namespace'], function(namespace) {
         this._setupDataTable();
         this._connectTableRowsToWugFeatures();
         if ((this.fetchCallback != null) && _.isFunction(this.fetchCallback)) {
-          this.fetchCallback(collection.models);
+          this.fetchCallback(strategyCollection.models);
         }
         this.trigger("table:endload");
       }
@@ -115,7 +116,8 @@ define(['namespace'], function(namespace) {
         }
         return b.totalSupply - a.totalSupply;
       });
-      this.showWugFeatures(newWugList);
+      this.wugCollection.reset(newWugList);
+      this.showWugFeatures();
     };
 
     BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
@@ -205,10 +207,10 @@ define(['namespace'], function(namespace) {
       this.$el.fadeIn();
     };
 
-    BaseStrategyCollectionView.prototype.showWugFeatures = function(wugList) {
-      var bounds, max_supply, min_supply, newFeature, wktFormat, wug, wugFeatures, _i, _len;
+    BaseStrategyCollectionView.prototype.showWugFeatures = function() {
+      var bounds, max_supply, min_supply, newFeature, wktFormat, wug, wugFeatures, _i, _len, _ref;
       this.clearWugFeaturesAndControls();
-      if (wugList.length < 1) {
+      if (this.wugCollection.models.length < 1) {
         return;
       }
       this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
@@ -216,19 +218,20 @@ define(['namespace'], function(namespace) {
         displayInLayerSwitcher: false
       });
       wktFormat = new OpenLayers.Format.WKT();
-      max_supply = _.max(wugList, function(m) {
-        return m.totalSupply;
-      }).totalSupply;
-      min_supply = _.min(wugList, function(m) {
-        return m.totalSupply;
-      }).totalSupply;
+      max_supply = this.wugCollection.max(function(m) {
+        return m.get("totalSupply");
+      }).get("totalSupply");
+      min_supply = this.wugCollection.min(function(m) {
+        return m.get("totalSupply");
+      }).get("totalSupply");
       bounds = null;
       wugFeatures = [];
-      for (_i = 0, _len = wugList.length; _i < _len; _i++) {
-        wug = wugList[_i];
-        newFeature = wktFormat.read(wug.wktGeog);
-        newFeature.attributes = _.clone(wug);
-        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.totalSupply);
+      _ref = this.wugCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wug = _ref[_i];
+        newFeature = wktFormat.read(wug.get("wktGeog"));
+        newFeature.attributes = _.clone(wug.attributes);
+        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
         newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {

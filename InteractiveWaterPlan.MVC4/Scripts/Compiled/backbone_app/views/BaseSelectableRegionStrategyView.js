@@ -40,7 +40,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyC
         year: namespace.currYear
       }, this.fetchParams);
       this.trigger("table:startload");
-      deferred = this.collection.fetch({
+      deferred = this.strategyCollection.fetch({
         data: params,
         success: this.onStrategyCollectionSuccess
       });

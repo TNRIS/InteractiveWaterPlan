@@ -48,7 +48,7 @@ define([
 
             #Fetch the collections
             $.when(
-                @collection.fetch( {data: params} ),
+                @strategyCollection.fetch( {data: params} ),
                 @sourceCollection.fetch()
             )
             .then(() => 
@@ -71,8 +71,8 @@ define([
 
         onFetchBothCollectionSuccess: () ->
 
-            #Do @collection stuff (can just use the super's callback method)
-            this.onFetchCollectionSuccess(@collection)
+            #Do @strategyCollection stuff (can just use the super's callback method)
+            this.onFetchCollectionSuccess(@strategyCollection)
 
             #Do @sourceCollection stuff
             this.showSourceFeatures()
@@ -94,6 +94,8 @@ define([
             #TODO: will also need to draw lines from entity to source
             #TODO: Add popup on highlight
             #TODO: can only have a single instance of select control (can't have two on two different layers)
+            #TODO: should probably style on type, which means we'd need the DB to return
+            # the type (reservoir, well, stream, etc)
             # see - http://openlayers.org/dev/examples/select-feature-multilayer.html
             # this is where have all the feature stuff controlled by these
             # StrategyViews would make more sense

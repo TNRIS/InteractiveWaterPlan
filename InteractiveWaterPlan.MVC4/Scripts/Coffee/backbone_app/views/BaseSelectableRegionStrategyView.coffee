@@ -38,7 +38,7 @@ define([
             this.trigger("table:startload")
 
             #Fetch the strategy collection
-            deferred = @collection.fetch(
+            deferred = @strategyCollection.fetch(
                 data: params
                 success: this.onStrategyCollectionSuccess
             )

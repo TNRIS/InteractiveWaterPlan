@@ -171,7 +171,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         el: this.tableContainer
       });
       this.mapView.resetExtent();
-      this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Regions");
       this.areaSelectView.resetSelects();
     };
@@ -190,7 +189,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         el: this.tableContainer,
         id: regionLetter
       });
-      this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Regions");
     };
 
@@ -210,7 +208,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         id: countyId,
         name: countyName
       });
-      this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Counties");
     };
 
@@ -230,7 +227,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         type: "house",
         name: district.get("name")
       });
-      this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("HouseDistricts");
     };
 
@@ -250,7 +246,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         type: "senate",
         name: district.get("name")
       });
-      this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("SenateDistricts");
     };
 
@@ -279,6 +274,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         id: entityId
       });
       this.areaSelectView.resetSelects();
+      this.mapView.showWmsOverlayByViewType("Counties");
     };
 
     WMSRouter.prototype.wmsProjectDetail = function(year, projectId) {

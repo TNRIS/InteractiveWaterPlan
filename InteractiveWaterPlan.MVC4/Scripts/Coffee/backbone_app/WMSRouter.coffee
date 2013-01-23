@@ -207,10 +207,8 @@ define([
             )
 
             @mapView.resetExtent()
-            #TODO prob don't need, unrender takes care of it @currStrategyView.clearWugFeaturesAndControls()
-
+            
             #TODO: could put this hide/showOverlays stuff in the CollectionView
-            @mapView.hideWmsOverlays()
             @mapView.showWmsOverlayByViewType("Regions")
             @areaSelectView.resetSelects()
             
@@ -229,7 +227,7 @@ define([
                 id: regionLetter
             )
 
-            @mapView.hideWmsOverlays()
+            
             @mapView.showWmsOverlayByViewType("Regions")
 
             return
@@ -251,7 +249,7 @@ define([
                 name: countyName
             )
 
-            @mapView.hideWmsOverlays()
+            
             @mapView.showWmsOverlayByViewType("Counties")
             
             return
@@ -272,7 +270,7 @@ define([
                 name: district.get("name")
             )
 
-            @mapView.hideWmsOverlays()
+            
             @mapView.showWmsOverlayByViewType("HouseDistricts")
             
             return
@@ -294,7 +292,7 @@ define([
                 name: district.get("name")
             )
 
-            @mapView.hideWmsOverlays()
+            
             @mapView.showWmsOverlayByViewType("SenateDistricts")
             
             return
@@ -331,6 +329,8 @@ define([
             )
 
             @areaSelectView.resetSelects()
+            
+            @mapView.showWmsOverlayByViewType("Counties")
 
             return
 

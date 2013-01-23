@@ -66,10 +66,14 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.showWmsOverlayByViewType = function(viewType) {
       var layer, _i, _len, _ref;
-      _ref = this.map.getLayersBy("viewType", viewType);
+      _ref = this.map.layers;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         layer = _ref[_i];
-        layer.setVisibility(true);
+        if (layer.viewType === viewType) {
+          layer.setVisibility(true);
+        } else if (!layer.isBaseLayer) {
+          layer.setVisibility(false);
+        }
       }
     };
 
