@@ -311,6 +311,9 @@ define([
             @wugLayer.addFeatures(wugFeatures)
             @mapView.map.addLayer(@wugLayer)
             
+            #TODO: make highlight and select control more generic (ie, not just wug)
+            # because child of this class will have to share those controls
+
             #Add control to highlight feature and show popup on hover
             @wugHighlightControl = this._setupWugHighlightControl()
             @mapView.map.addControl(@wugHighlightControl)
