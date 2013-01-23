@@ -1,11 +1,9 @@
 define([
     'namespace'
-    'collections/WugFeatureCollection'
 ],
-(namespace, WugFeatureCollection) ->
+(namespace) ->
     class BaseStrategyCollectionView extends Backbone.View
 
-        
         MAX_WUG_RADIUS: 18
         MIN_WUG_RADIUS: 6
 
@@ -14,7 +12,7 @@ define([
                 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 
                 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
                 'showNothingFound', 'hideNothingFound',
-                'resetWugFeatures', 'clearWugFeatures', '_setupWugClickControl',
+                'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs'
             )
@@ -31,8 +29,6 @@ define([
             @collection = new Collection()
 
             @ModelView = ModelView
-
-            @wugFeatureCollection = new WugFeatureCollection()
 
             return null
 
@@ -52,7 +48,7 @@ define([
 
         unrender: () ->
             #TODO: lots of other cleanup (all wug map stuff [layers, controls, etc])
-            this.clearWugFeatures()
+            this.clearWugFeaturesAndControls()
             @$el.html()
             return null
 
@@ -151,9 +147,8 @@ define([
             )
             
 
-            #Reset the shared namespace collection to trigger the map to update
-            # which features it shows
-            namespace.wugFeatureCollection.reset(newWugList)
+            #show the wugFeatures
+            this.showWugFeatures(newWugList)
             return
 
 
@@ -265,10 +260,10 @@ define([
 
         #############################################
 
-        resetWugFeatures: (featureCollection) ->
-            this.clearWugFeatures()
+        showWugFeatures: (wugList) ->
+            this.clearWugFeaturesAndControls()
 
-            if featureCollection.models.length < 1 then return
+            if wugList.length < 1 then return
 
             @wugLayer = new OpenLayers.Layer.Vector(
                 "Water User Groups",
@@ -280,26 +275,26 @@ define([
             wktFormat = new OpenLayers.Format.WKT()
 
             #Size based on source supply (need to pass source supply to model)
-            max_supply = featureCollection.max((m) ->
-                return m.get("totalSupply")
-            ).get("totalSupply")
+            max_supply = _.max(wugList, (m) ->
+                return m.totalSupply
+            ).totalSupply
             
-            min_supply = featureCollection.min((m) ->
-                return m.get("totalSupply")
-            ).get("totalSupply")
+            min_supply = _.min(wugList, (m) ->
+                return m.totalSupply
+            ).totalSupply
  
             bounds = null
             wugFeatures = []
             
-            for m in featureCollection.models
-                newFeature = wktFormat.read(m.get('wktGeog'))
-                newFeature.attributes = _.clone(m.attributes)
+            for wug in wugList
+                newFeature = wktFormat.read(wug.wktGeog)
+                newFeature.attributes = _.clone(wug)
                 newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
-                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, m.get("totalSupply"))
+                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, wug.totalSupply)
                 delete newFeature.attributes.wktGeog
-                newFeature.geometry = newFeature.geometry.transform(
-                    @map.displayProjection, @map.projection)
-                
+               
+                newFeature.geometry = @mapView.transformToWebMerc(newFeature.geometry)
+
                 if not bounds?
                     #must clone the bounds, otherwise the feature's bounds
                     # will get modified by subsequent extends in the else condition
@@ -311,20 +306,20 @@ define([
             
 
             @wugLayer.addFeatures(wugFeatures)
-            @map.addLayer(@wugLayer)
+            @mapView.map.addLayer(@wugLayer)
             
             #Add control to highlight feature and show popup on hover
             @wugHighlightControl = this._setupWugHighlightControl()
-            @map.addControl(@wugHighlightControl)
+            @mapView.map.addControl(@wugHighlightControl)
 
             #Add control to view entity details view on click
             @wugClickControl = this._setupWugClickControl()
-            @map.addControl(@wugClickControl)
+            @mapView.map.addControl(@wugClickControl)
 
-            this.zoomToExtent(bounds)
+            @mapView.zoomToExtent(bounds)
             return
 
-        clearWugFeatures: () ->
+        clearWugFeaturesAndControls: () ->
             this.unselectWugFeatures() 
             if @wugHighlightControl? 
                 @wugHighlightControl.destroy()
@@ -432,13 +427,13 @@ define([
 
                         popup.autoSize = true
                         wugFeature.popup = popup
-                        @map.addPopup(popup)
+                        @mapView.map.addPopup(popup)
                         return
 
                     onUnselect: (wugFeature) =>
                         clearTimeout(timer)
                         if wugFeature.popup?
-                            @map.removePopup(wugFeature.popup)
+                            @mapView.map.removePopup(wugFeature.popup)
                             wugFeature.popup.destroy()
                             wugFeature.popup = null
                         return

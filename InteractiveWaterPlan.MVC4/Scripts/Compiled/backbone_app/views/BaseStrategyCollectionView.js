@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'collections/WugFeatureCollection'], function(namespace, WugFeatureCollection) {
+define(['namespace'], function(namespace) {
   var BaseStrategyCollectionView;
   return BaseStrategyCollectionView = (function(_super) {
 
@@ -17,7 +17,7 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'resetWugFeatures', 'clearWugFeatures', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -25,7 +25,6 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
       this.template = _.template(tpl);
       this.collection = new Collection();
       this.ModelView = ModelView;
-      this.wugFeatureCollection = new WugFeatureCollection();
       return null;
     };
 
@@ -41,7 +40,7 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
     };
 
     BaseStrategyCollectionView.prototype.unrender = function() {
-      this.clearWugFeatures();
+      this.clearWugFeaturesAndControls();
       this.$el.html();
       return null;
     };
@@ -116,7 +115,7 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
         }
         return b.totalSupply - a.totalSupply;
       });
-      namespace.wugFeatureCollection.reset(newWugList);
+      this.showWugFeatures(newWugList);
     };
 
     BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
@@ -206,10 +205,10 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
       this.$el.fadeIn();
     };
 
-    BaseStrategyCollectionView.prototype.resetWugFeatures = function(featureCollection) {
-      var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
-      this.clearWugFeatures();
-      if (featureCollection.models.length < 1) {
+    BaseStrategyCollectionView.prototype.showWugFeatures = function(wugList) {
+      var bounds, max_supply, min_supply, newFeature, wktFormat, wug, wugFeatures, _i, _len;
+      this.clearWugFeaturesAndControls();
+      if (wugList.length < 1) {
         return;
       }
       this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
@@ -217,22 +216,21 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
         displayInLayerSwitcher: false
       });
       wktFormat = new OpenLayers.Format.WKT();
-      max_supply = featureCollection.max(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
-      min_supply = featureCollection.min(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
+      max_supply = _.max(wugList, function(m) {
+        return m.totalSupply;
+      }).totalSupply;
+      min_supply = _.min(wugList, function(m) {
+        return m.totalSupply;
+      }).totalSupply;
       bounds = null;
       wugFeatures = [];
-      _ref = featureCollection.models;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        m = _ref[_i];
-        newFeature = wktFormat.read(m.get('wktGeog'));
-        newFeature.attributes = _.clone(m.attributes);
-        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("totalSupply"));
+      for (_i = 0, _len = wugList.length; _i < _len; _i++) {
+        wug = wugList[_i];
+        newFeature = wktFormat.read(wug.wktGeog);
+        newFeature.attributes = _.clone(wug);
+        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.totalSupply);
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
+        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -241,15 +239,15 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
         wugFeatures.push(newFeature);
       }
       this.wugLayer.addFeatures(wugFeatures);
-      this.map.addLayer(this.wugLayer);
+      this.mapView.map.addLayer(this.wugLayer);
       this.wugHighlightControl = this._setupWugHighlightControl();
-      this.map.addControl(this.wugHighlightControl);
+      this.mapView.map.addControl(this.wugHighlightControl);
       this.wugClickControl = this._setupWugClickControl();
-      this.map.addControl(this.wugClickControl);
-      this.zoomToExtent(bounds);
+      this.mapView.map.addControl(this.wugClickControl);
+      this.mapView.zoomToExtent(bounds);
     };
 
-    BaseStrategyCollectionView.prototype.clearWugFeatures = function() {
+    BaseStrategyCollectionView.prototype.clearWugFeaturesAndControls = function() {
       this.unselectWugFeatures();
       if (this.wugHighlightControl != null) {
         this.wugHighlightControl.destroy();
@@ -362,12 +360,12 @@ define(['namespace', 'collections/WugFeatureCollection'], function(namespace, Wu
           popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                            ", null, false);
           popup.autoSize = true;
           wugFeature.popup = popup;
-          _this.map.addPopup(popup);
+          _this.mapView.map.addPopup(popup);
         },
         onUnselect: function(wugFeature) {
           clearTimeout(timer);
           if (wugFeature.popup != null) {
-            _this.map.removePopup(wugFeature.popup);
+            _this.mapView.map.removePopup(wugFeature.popup);
             wugFeature.popup.destroy();
             wugFeature.popup = null;
           }

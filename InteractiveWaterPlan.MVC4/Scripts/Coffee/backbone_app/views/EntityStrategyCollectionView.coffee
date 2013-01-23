@@ -104,6 +104,10 @@ define([
             sourceFeatures = []
 
             for source in @sourceCollection.models
+
+                #skip sources with no geog
+                if not source.get('wktGeog')? then continue
+
                 newFeature = wktFormat.read(source.get('wktGeog'))
                 newFeature.attributes = _.clone(source.attributes)
                 
@@ -179,9 +183,11 @@ define([
 
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
-            for wugFeat in @mapView.wugLayer
-                bounds.extend(wugFeat.geometry.getBounds())
-            @mapView.zoomToExtent(bounds)
+            if bounds?
+                for wugFeat in @wugLayer.features
+                    bounds.extend(wugFeat.geometry.getBounds())
+
+                @mapView.zoomToExtent(bounds)
 
             return
 

@@ -83,6 +83,9 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       _ref = this.sourceCollection.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         source = _ref[_i];
+        if (!(source.get('wktGeog') != null)) {
+          continue;
+        }
         newFeature = wktFormat.read(source.get('wktGeog'));
         newFeature.attributes = _.clone(source.attributes);
         delete newFeature.attributes.wktGeog;
@@ -146,12 +149,14 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       @sourceClickControl.handlers.feature.stopDown = false;
       */
 
-      _ref1 = this.mapView.wugLayer;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        wugFeat = _ref1[_j];
-        bounds.extend(wugFeat.geometry.getBounds());
+      if (bounds != null) {
+        _ref1 = this.wugLayer.features;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          wugFeat = _ref1[_j];
+          bounds.extend(wugFeat.geometry.getBounds());
+        }
+        this.mapView.zoomToExtent(bounds);
       }
-      this.mapView.zoomToExtent(bounds);
     };
 
     return EntityStrategyCollectionView;

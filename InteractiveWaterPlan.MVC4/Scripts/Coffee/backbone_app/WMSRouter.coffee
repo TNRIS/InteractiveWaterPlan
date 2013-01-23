@@ -207,7 +207,7 @@ define([
             )
 
             @mapView.resetExtent()
-            #TODO prob don't need, unrender takes care of it @currStrategyView.clearWugFeatures()
+            #TODO prob don't need, unrender takes care of it @currStrategyView.clearWugFeaturesAndControls()
 
             #TODO: could put this hide/showOverlays stuff in the CollectionView
             @mapView.hideWmsOverlays()
