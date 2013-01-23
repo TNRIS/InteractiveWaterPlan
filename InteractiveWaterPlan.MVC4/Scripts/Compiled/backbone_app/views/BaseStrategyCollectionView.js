@@ -67,22 +67,22 @@ define(['namespace'], function(namespace) {
       var m, _i, _len, _ref;
       if (strategyCollection.models.length === 0) {
         this.trigger("table:nothingfound");
-      } else {
-        _ref = strategyCollection.models;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          m = _ref[_i];
-          this.appendModel(m);
-        }
-        this.$('.has-popover').popover({
-          trigger: 'hover'
-        });
-        this._setupDataTable();
-        this._connectTableRowsToWugFeatures();
-        if ((this.fetchCallback != null) && _.isFunction(this.fetchCallback)) {
-          this.fetchCallback(strategyCollection.models);
-        }
-        this.trigger("table:endload");
+        return false;
       }
+      _ref = strategyCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        this.appendModel(m);
+      }
+      this.$('.has-popover').popover({
+        trigger: 'hover'
+      });
+      this._setupDataTable();
+      this._connectTableRowsToWugFeatures();
+      if ((this.fetchCallback != null) && _.isFunction(this.fetchCallback)) {
+        this.fetchCallback(strategyCollection.models);
+      }
+      this.trigger("table:endload");
     };
 
     BaseStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {

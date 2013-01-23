@@ -77,24 +77,25 @@ define([
         onFetchCollectionSuccess: (strategyCollection) ->
             if strategyCollection.models.length == 0
                 this.trigger("table:nothingfound")
+                return false
 
-            else
-                for m in strategyCollection.models
-                    this.appendModel(m)
+            for m in strategyCollection.models
+                this.appendModel(m)
 
-                this.$('.has-popover').popover(trigger: 'hover')
+            this.$('.has-popover').popover(trigger: 'hover')
 
-                
-                this._setupDataTable()
+            
+            this._setupDataTable()
 
-                this._connectTableRowsToWugFeatures()
+            this._connectTableRowsToWugFeatures()
 
-                if this.fetchCallback? and _.isFunction(this.fetchCallback)
-                    this.fetchCallback(strategyCollection.models)
+            if this.fetchCallback? and _.isFunction(this.fetchCallback)
+                this.fetchCallback(strategyCollection.models)
 
-                this.trigger("table:endload")
+            this.trigger("table:endload")
 
-            return   
+            return
+
 
         fetchCallback: (strategyModels) ->
            

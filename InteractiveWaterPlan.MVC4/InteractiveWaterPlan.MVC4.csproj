@@ -192,7 +192,6 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\RegionNamesCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\SenateNamesCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\collections\StrategyTypeCollection.js" />
-    <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseSelectableRegionStrategyView.js" />
@@ -392,7 +391,6 @@
     <Content Include="PlacesDB_Hibernate.config" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNetSupplyCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\collections\WugFeatureCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\main.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BaseStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\StrategyDetailCollectionView.coffee" />

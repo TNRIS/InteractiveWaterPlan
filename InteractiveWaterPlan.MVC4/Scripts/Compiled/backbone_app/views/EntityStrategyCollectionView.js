@@ -44,10 +44,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       this.trigger("table:startload");
       $.when(this.strategyCollection.fetch({
         data: params
-      }), this.sourceCollection.fetch()).then(function() {
-        _this.onFetchBothCollectionSuccess();
-        _this.trigger("table:endload");
-      }).fail(function() {
+      }), this.sourceCollection.fetch()).then(this.onFetchBothCollectionSuccess).fail(function() {
         _this.trigger("table:fetcherror");
       });
     };
@@ -66,8 +63,12 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
-      this.onFetchCollectionSuccess(this.strategyCollection);
+      if (!this.onFetchCollectionSuccess(this.strategyCollection)) {
+        return;
+      }
+      console.log("here");
       this.showSourceFeatures();
+      this.trigger("table:endload");
     };
 
     EntityStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {

@@ -51,10 +51,8 @@ define([
                 @strategyCollection.fetch( {data: params} ),
                 @sourceCollection.fetch()
             )
-            .then(() => 
-                this.onFetchBothCollectionSuccess() #process the collections
-                this.trigger("table:endload")
-                return
+            .then(
+                this.onFetchBothCollectionSuccess #process the collections
             )
             .fail(() =>
                 this.trigger("table:fetcherror")
@@ -72,11 +70,15 @@ define([
         onFetchBothCollectionSuccess: () ->
 
             #Do @strategyCollection stuff (can just use the super's callback method)
-            this.onFetchCollectionSuccess(@strategyCollection)
+            if not this.onFetchCollectionSuccess(@strategyCollection)
+                return
 
+            #only continuing if that returned non-false
+            console.log "here"
             #Do @sourceCollection stuff
             this.showSourceFeatures()
 
+            this.trigger("table:endload")
             return
 
         #override the BaseStrategyCollectionView.fetchCallback

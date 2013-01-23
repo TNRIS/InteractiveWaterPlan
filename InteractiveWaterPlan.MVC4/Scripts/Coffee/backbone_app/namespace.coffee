@@ -10,8 +10,7 @@ define([
 
 ],
 (StrategyTypeCollection, CountyNamesCollection, RegionNamesCollection,
-    HouseNamesCollection, SenateNamesCollection, RegionFeatureCollection, 
-    WugFeatureCollection) ->
+    HouseNamesCollection, SenateNamesCollection, RegionFeatureCollection) ->
     
     namespace = {}
 
