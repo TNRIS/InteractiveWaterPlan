@@ -2,7 +2,7 @@ define([
     'namespace'
     'views/BaseStrategyCollectionView'
     'views/StrategyView'
-    'scripts/text!templates/strategyTable.html'
+    'scripts/text!templates/districtStrategyTable.html'
 ],
 (namespace, BaseStrategyCollectionView, StrategyView, tpl) ->
 

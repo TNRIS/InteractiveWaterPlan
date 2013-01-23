@@ -77,6 +77,27 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
     };
 
     EntityStrategyCollectionView.prototype.showSourceFeatures = function() {
+      /*
+                  style.addRules([
+                      new OpenLayers.Rule({
+                          symbolizer: 
+                              Line:
+                                  strokeWidth: 3
+                                  strokeOpacity: 1
+                                  strokeColor: "#666666"
+                                  strokeDashstyle: "dash"
+                              #TODO: This is just here as a reminder example 
+                              #for how to do feature-type-based styling
+                              Polygon: 
+                                  strokeWidth: 2
+                                  strokeOpacity: 1
+                                  strokeColor: "#666666"
+                                  fillColor: "white"
+                                  fillOpacity: 0.3
+                      })
+                  ])
+      */
+
       var bounds, newFeature, source, sourceFeatures, wktFormat, wugFeat, _i, _j, _len, _len1, _ref, _ref1;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;

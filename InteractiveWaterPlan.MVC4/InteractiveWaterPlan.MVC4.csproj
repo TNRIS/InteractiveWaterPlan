@@ -331,6 +331,7 @@
     <Content Include="Scripts\templates\countyNetSupplyTable.html" />
     <Content Include="Scripts\templates\countyStrategyRow.html" />
     <Content Include="Scripts\templates\countyStrategyTable.html" />
+    <Content Include="Scripts\templates\districtStrategyTable.html" />
     <Content Include="Scripts\templates\entityStrategyRow.html" />
     <Content Include="Scripts\templates\entityStrategyTable.html" />
     <Content Include="Scripts\templates\mapBottomRightTools.html" />

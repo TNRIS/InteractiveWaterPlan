@@ -96,8 +96,30 @@ define([
             #TODO: will also need to draw lines from entity to source
             #TODO: Add popup on highlight
             #TODO: can only have a single instance of select control (can't have two on two different layers)
+            
             #TODO: should probably style on type, which means we'd need the DB to return
             # the type (reservoir, well, stream, etc)
+            ###
+            style.addRules([
+                new OpenLayers.Rule({
+                    symbolizer: 
+                        Line:
+                            strokeWidth: 3
+                            strokeOpacity: 1
+                            strokeColor: "#666666"
+                            strokeDashstyle: "dash"
+                        #TODO: This is just here as a reminder example 
+                        #for how to do feature-type-based styling
+                        Polygon: 
+                            strokeWidth: 2
+                            strokeOpacity: 1
+                            strokeColor: "#666666"
+                            fillColor: "white"
+                            fillOpacity: 0.3
+                })
+            ])
+            ###
+
             # see - http://openlayers.org/dev/examples/select-feature-multilayer.html
             # this is where have all the feature stuff controlled by these
             # StrategyViews would make more sense
