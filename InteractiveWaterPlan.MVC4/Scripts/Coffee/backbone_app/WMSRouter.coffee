@@ -36,7 +36,7 @@ define([
                 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 
                 'onTableFetchError', 'highlightWugsByStrategyType')
 
-            @currTableView = null
+            @currStrategyView = null
             
             #save reference to the tableContainer dom element
             @tableContainer = $('#tableContainer')[0]
@@ -45,11 +45,12 @@ define([
                 mapContainerId: 'mapContainer'
                 bingApiKey: $('#bing_maps_key').val()
             )
+            #save it into the namespace b/c we will use it a lot
+            namespace.mapView = @mapView 
             @mapView.render()
 
             @mapBottomToolbarView = new MapBottomToolbarView(
                 el: $('#mapBottomToolsContainer')[0]
-                mapView: @mapView
             )
             @mapBottomToolbarView.render()
 
@@ -60,7 +61,6 @@ define([
 
             @mapTopButtonsView = new MapTopButtonsView(
                 el: $('#mapTopButtonsContainer')[0]
-                mapView: @mapView
             )
             @mapTopButtonsView.render()
 
@@ -96,7 +96,7 @@ define([
             @yearNavView.disableYearButtons()
             @themeNavToolbarView.disableStrategyTypeList()
             @mapView.showMapLoading()
-            @currTableView.showLoading()
+            @currStrategyView.showLoading()
             return
 
         onTableEndLoad: () ->
@@ -104,7 +104,7 @@ define([
             @yearNavView.enableYearButtons()
             @themeNavToolbarView.enableStrategyTypeList()
             @mapView.hideMapLoading()
-            @currTableView.hideLoading()
+            @currStrategyView.hideLoading()
             return
 
         onTableFetchError: () ->
@@ -114,7 +114,7 @@ define([
 
         onTableNothingFound: () ->
             this.onTableEndLoad()
-            @currTableView.showNothingFound()
+            @currStrategyView.showNothingFound()
             return
 
         updateSelectedWug: (wugId) ->
@@ -151,16 +151,16 @@ define([
         #before filter from backbone.routefilter
         before:
             '': () ->
-                $('#errorMessage').hide()
+                $('#errorMessage').hide() #hide in case it was shown
                 return
 
             '^[0-9]{4}/wms': (year) ->
-                #unrender the currTableView first
-                if @currTableView?
-                    @currTableView = @currTableView.unrender()
+                #unrender the currStrategyView first
+                if @currStrategyView?
+                    @currStrategyView = @currStrategyView.unrender()
                 
-                #and clear out any wug features from the mapview
-                if @mapView?
+                #and clear out any wug features from the mapView
+                if @mapView? #TODO: just take care of this in tableView.unrender
                     @mapView.clearWugFeatures()
 
                 if year?
@@ -177,22 +177,22 @@ define([
         #after route filter from backbone.routefilter
         after:
             '^[0-9]{4}/wms': (year) ->
-                if year? and @currTableView?
+                if year? and @currStrategyView?
                     
                     @themeNavToolbarView.render()
                     @yearNavView.render()
 
-                    #subscribe to table events on the new @currTableView
-                    @currTableView.off()
-                    @currTableView.on("table:startload", this.onTableStartLoad)
-                    @currTableView.on("table:endload", this.onTableEndLoad)
-                    @currTableView.on("table:nothingfound", this.onTableNothingFound)
-                    @currTableView.on("table:fetcherror", this.onTableFetchError)
-                    @currTableView.on("table:hoverwug", this.updateSelectedWug)
-                    @currTableView.on("table:hovertype", this.highlightWugsByStrategyType)
+                    #subscribe to table events on the new @currStrategyView
+                    @currStrategyView.off()
+                    @currStrategyView.on("table:startload", this.onTableStartLoad)
+                    @currStrategyView.on("table:endload", this.onTableEndLoad)
+                    @currStrategyView.on("table:nothingfound", this.onTableNothingFound)
+                    @currStrategyView.on("table:fetcherror", this.onTableFetchError)
+                    @currStrategyView.on("table:hoverwug", this.updateSelectedWug)
+                    @currStrategyView.on("table:hovertype", this.highlightWugsByStrategyType)
 
                     #then render the table
-                    @currTableView.render()
+                    @currStrategyView.render()
                     
                     return
 
@@ -204,13 +204,10 @@ define([
 
         wmsNetCountySupplies: (year) ->
 
-            if @currTableView? then @currTableView = @currTableView.unrender()
+            if @currStrategyView? then @currStrategyView = @currStrategyView.unrender()
 
-            @currTableView = new CountyNetSupplyCollectionView(
+            @currStrategyView = new CountyNetSupplyCollectionView(
                 el: @tableContainer
-
-                #pass the mapView so the regions can be drawn
-                mapView: @mapView
             )
 
             @mapView.resetExtent()
@@ -230,12 +227,9 @@ define([
                 Backbone.history.navigate("", {trigger: true})
                 return
 
-            @currTableView = new RegionStrategyCollectionView(
+            @currStrategyView = new RegionStrategyCollectionView(
                 el: @tableContainer
                 id: regionLetter
-
-                #Also pass the mapView for drawing the region features
-                mapView: @mapView
             )
 
             @mapView.hideWmsOverlays()
@@ -254,7 +248,7 @@ define([
             #otherwise render the view
             countyName = county.get('name')
 
-            @currTableView = new CountyStrategyCollectionView(
+            @currStrategyView = new CountyStrategyCollectionView(
                 el: @tableContainer
                 id: countyId
                 name: countyName
@@ -274,7 +268,7 @@ define([
                 return
 
             #otherwise render the view
-            @currTableView = new LegeDistrictCollectionView(
+            @currStrategyView = new LegeDistrictCollectionView(
                 el: @tableContainer
                 id: districtId
                 type: "house"
@@ -296,7 +290,7 @@ define([
 
 
             #otherwise render the view
-            @currTableView = new LegeDistrictCollectionView(
+            @currStrategyView = new LegeDistrictCollectionView(
                 el: @tableContainer
                 id: districtId
                 type: "senate"
@@ -320,7 +314,7 @@ define([
             typeName = wmsType.get('name')
 
             #otherwise render the view
-            @currTableView = new StrategyTypeCollectionView(
+            @currStrategyView = new StrategyTypeCollectionView(
                 el: @tableContainer
                 id: typeId
                 name: typeName
@@ -334,7 +328,7 @@ define([
             #(validation of projectId is taken care of in fetchCallback)
             
             #render the view
-            @currTableView = new EntityStrategyCollectionView(
+            @currStrategyView = new EntityStrategyCollectionView(
                 el: @tableContainer
                 id: entityId
             )
@@ -347,7 +341,7 @@ define([
             #(validation of projectId is taken care of in fetchCallback)
 
             #render the view
-            @currTableView = new StrategyDetailCollectionView(
+            @currStrategyView = new StrategyDetailCollectionView(
                 el: @tableContainer
                 id: projectId
             )

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(namespace, BaseTableCollectionView, StrategyView, tpl) {
+define(['namespace', 'views/BaseStrategyCollectionView', 'views/StrategyView', 'scripts/text!templates/strategyTable.html'], function(namespace, BaseStrategyCollectionView, StrategyView, tpl) {
   var LegeDistrictCollectionView;
   return LegeDistrictCollectionView = (function(_super) {
 
@@ -35,5 +35,5 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyView', 'scr
 
     return LegeDistrictCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseStrategyCollectionView);
 });

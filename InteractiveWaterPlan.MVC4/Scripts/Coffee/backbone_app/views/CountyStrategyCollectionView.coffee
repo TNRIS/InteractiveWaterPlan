@@ -1,12 +1,12 @@
 define([
     'namespace'
-    'views/BaseTableCollectionView'
+    'views/BaseStrategyCollectionView'
     'views/CountyStrategyView'
     'scripts/text!templates/countyStrategyTable.html'
 ],
-(namespace, BaseTableCollectionView, CountyStrategyView, tpl) ->
+(namespace, BaseStrategyCollectionView, CountyStrategyView, tpl) ->
 
-    class CountyStrategyCollectionView extends BaseTableCollectionView
+    class CountyStrategyCollectionView extends BaseStrategyCollectionView
         
         initialize: (options) ->
 

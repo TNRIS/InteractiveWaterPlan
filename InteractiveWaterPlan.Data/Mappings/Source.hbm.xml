@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
+  
+  <class name="Source" mutable="false">
+    <id name="Id">
+      <column name="SQL_ID"/>
+    </id>
+
+    <property column="DBSOID" name="SourceId" />
+    <property column="Source_Name" name="Name" />
+    <property column="SQL_GEOG" name="WktGeog" />
+    <property column="GEOG_Mapping_Pt_Txt" name="WktMappingPoint" />
+  </class>
+  
+  <!-- Queries -->
+  
+  <sql-query name="GetSourcesForEntity">
+    <query-param name="entityId" type="int" />
+    <return class="Source"/>
+    exec dbo.usp_Select_Sources_By_Entity__tbl_DB12_Sources :entityId
+  </sql-query>
+  
+</hibernate-mapping>

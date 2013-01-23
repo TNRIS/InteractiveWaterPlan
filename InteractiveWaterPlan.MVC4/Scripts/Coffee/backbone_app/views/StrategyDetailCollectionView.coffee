@@ -1,12 +1,12 @@
 define([
     'namespace'
-    'views/BaseTableCollectionView'
+    'views/BaseStrategyCollectionView'
     'views/StrategyDetailView'
     'scripts/text!templates/strategyDetailTable.html'
 ],
-(namespace, BaseTableCollectionView, StrategyDetailView, tpl) ->
+(namespace, BaseStrategyCollectionView, StrategyDetailView, tpl) ->
 
-    class StrategyDetailCollectionView extends BaseTableCollectionView
+    class StrategyDetailCollectionView extends BaseStrategyCollectionView
         
         initialize: (options) ->
             _.bindAll(this, 'fetchCallback')

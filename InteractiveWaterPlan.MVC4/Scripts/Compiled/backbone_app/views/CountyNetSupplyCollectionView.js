@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseSelectableRegionTableView', 'views/CountyNetSupplyView', 'collections/CountyNetSupplyCollection', 'scripts/text!templates/countyNetSupplyTable.html'], function(namespace, BaseSelectableRegionTableView, CountyNetSupplyView, CountyNetSupplyCollection, tpl) {
+define(['namespace', 'views/BaseSelectableRegionStrategyView', 'views/CountyNetSupplyView', 'collections/CountyNetSupplyCollection', 'scripts/text!templates/countyNetSupplyTable.html'], function(namespace, BaseSelectableRegionStrategyView, CountyNetSupplyView, CountyNetSupplyCollection, tpl) {
   var CountyNetSupplyCollectionView;
   return CountyNetSupplyCollectionView = (function(_super) {
 
@@ -13,10 +13,10 @@ define(['namespace', 'views/BaseSelectableRegionTableView', 'views/CountyNetSupp
     }
 
     CountyNetSupplyCollectionView.prototype.initialize = function(options) {
-      CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl, options.mapView);
+      CountyNetSupplyCollectionView.__super__.initialize.call(this, CountyNetSupplyView, CountyNetSupplyCollection, tpl, namespace.mapView);
     };
 
     return CountyNetSupplyCollectionView;
 
-  })(BaseSelectableRegionTableView);
+  })(BaseSelectableRegionStrategyView);
 });

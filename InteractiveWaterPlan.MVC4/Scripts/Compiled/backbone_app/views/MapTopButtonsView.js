@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['scripts/text!templates/mapTopButtons.html'], function(tpl) {
+define(['namespace', 'scripts/text!templates/mapTopButtons.html'], function(namespace, tpl) {
   var MapTopButtonsView;
   return MapTopButtonsView = (function(_super) {
 
@@ -16,10 +16,10 @@ define(['scripts/text!templates/mapTopButtons.html'], function(tpl) {
 
     MapTopButtonsView.prototype.initialize = function(options) {
       _.bindAll(this, 'render', 'unrender', 'toggleMapViewLock', 'zoomToTexas', 'toggleMap');
-      if (!(options.mapView != null)) {
-        throw "options.mapView not defined";
+      if (!(namespace.mapView != null)) {
+        throw "namespace.mapView not defined";
       }
-      this.mapView = options.mapView;
+      this.mapView = namespace.mapView;
       return null;
     };
 

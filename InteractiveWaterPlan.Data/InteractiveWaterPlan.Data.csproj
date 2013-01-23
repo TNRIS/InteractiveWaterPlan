@@ -70,6 +70,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Mappings\Source.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Mappings\README.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -101,10 +104,12 @@
     <Compile Include="Repositories\CountyNetSupplyRepository.cs" />
     <Compile Include="Repositories\EntityRepository.cs" />
     <Compile Include="Repositories\PlaceRepository.cs" />
+    <Compile Include="Repositories\SourceRepository.cs" />
     <Compile Include="Repositories\StrategyRepository.cs" />
     <Compile Include="AbstractHibernateRepository.cs" />
     <Compile Include="Type\SqlGeographyType.cs" />
     <Compile Include="Type\SqlGeometryType.cs" />
+    <Compile Include="Utils\DataUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

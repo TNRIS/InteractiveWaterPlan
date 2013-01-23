@@ -49,8 +49,10 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("regionLetter", regionLetter)
                 .SetParameter("year", year)
                 .List<Strategy>();
-                
 
+            return allStrategiesInRegion;
+
+            /* TODO: Remove after checking.  Database now performs this aggregation.
             //Group by ProjectId
             var aggregatedStrategyList = allStrategiesInRegion
                 .GroupBy(x => x.ProjectId)
@@ -90,6 +92,7 @@ namespace InteractiveWaterPlan.Data
                 ).ToList();
 
             return aggregatedStrategyList;
+            */
         }
 
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year)

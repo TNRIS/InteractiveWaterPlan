@@ -2,17 +2,20 @@ define([
     'namespace'
 ],
 (namespace) ->
-    class BaseTableCollectionView extends Backbone.View
+    class BaseStrategyCollectionView extends Backbone.View
 
         
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable',
-                '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound')
+                'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 
+                'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
+                'showNothingFound', 'hideNothingFound')
 
             options = options || {}
             @fetchParams = options.fetchParams || {}
             
+            @mapView = namespace.mapView
+
             @currYear = ko.observable(namespace.currYear)
 
             @template = _.template(tpl)
@@ -52,35 +55,36 @@ define([
             @collection.fetch(
                 data: params
                 
-                success: (collection) =>
+                success: this.onFetchCollectionSuccess
                     
-                    if collection.models.length == 0
-                        this.trigger("table:nothingfound")
-
-                    else
-                        for m in collection.models
-                            this.appendModel(m)
-
-                        this.$('.has-popover').popover(trigger: 'hover')
-
-                        
-                        this._setupDataTable()
-
-                        this._connectTableRowsToWugFeatures()
-
-                        if this.fetchCallback? and _.isFunction(this.fetchCallback)
-                            this.fetchCallback(collection.models)
-
-                        this.trigger("table:endload")
-
-                    return   
-
                 error: () =>
                     this.trigger("table:fetcherror")
                     return
             )
 
             return
+
+        onFetchCollectionSuccess: (collection) ->
+            if collection.models.length == 0
+                this.trigger("table:nothingfound")
+
+            else
+                for m in collection.models
+                    this.appendModel(m)
+
+                this.$('.has-popover').popover(trigger: 'hover')
+
+                
+                this._setupDataTable()
+
+                this._connectTableRowsToWugFeatures()
+
+                if this.fetchCallback? and _.isFunction(this.fetchCallback)
+                    this.fetchCallback(collection.models)
+
+                this.trigger("table:endload")
+
+            return   
 
         fetchCallback: (strategyModels) ->
            

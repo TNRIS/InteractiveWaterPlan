@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrategyView', 'scripts/text!templates/regionStrategyTable.html'], function(namespace, BaseSelectableRegionTableView, RegionStrategyView, tpl) {
+define(['namespace', 'views/BaseSelectableRegionStrategyView', 'views/RegionStrategyView', 'scripts/text!templates/regionStrategyTable.html'], function(namespace, BaseSelectableRegionStrategyView, RegionStrategyView, tpl) {
   var RegionStrategyCollectionView;
   return RegionStrategyCollectionView = (function(_super) {
 
@@ -22,7 +22,7 @@ define(['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrateg
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/region"
       });
-      RegionStrategyCollectionView.__super__.initialize.call(this, RegionStrategyView, StrategyCollection, tpl, options.mapView, {
+      RegionStrategyCollectionView.__super__.initialize.call(this, RegionStrategyView, StrategyCollection, tpl, namespace.mapView, {
         fetchParams: fetchParams
       });
       return null;
@@ -42,5 +42,5 @@ define(['namespace', 'views/BaseSelectableRegionTableView', 'views/RegionStrateg
 
     return RegionStrategyCollectionView;
 
-  })(BaseSelectableRegionTableView);
+  })(BaseSelectableRegionStrategyView);
 });

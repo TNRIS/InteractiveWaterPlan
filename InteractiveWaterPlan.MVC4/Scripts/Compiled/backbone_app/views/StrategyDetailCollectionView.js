@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyDetailView', 'scripts/text!templates/strategyDetailTable.html'], function(namespace, BaseTableCollectionView, StrategyDetailView, tpl) {
+define(['namespace', 'views/BaseStrategyCollectionView', 'views/StrategyDetailView', 'scripts/text!templates/strategyDetailTable.html'], function(namespace, BaseStrategyCollectionView, StrategyDetailView, tpl) {
   var StrategyDetailCollectionView;
   return StrategyDetailCollectionView = (function(_super) {
 
@@ -42,5 +42,5 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/StrategyDetailView'
 
     return StrategyDetailCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseStrategyCollectionView);
 });

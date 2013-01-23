@@ -2,24 +2,24 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableCollectionView'], function(namespace, RegionFeatureCollection, BaseTableCollectionView) {
-  var BaseSelectableRegionTableView;
-  return BaseSelectableRegionTableView = (function(_super) {
+define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyCollectionView'], function(namespace, RegionFeatureCollection, BaseStrategyCollectionView) {
+  var BaseSelectableRegionStrategyView;
+  return BaseSelectableRegionStrategyView = (function(_super) {
 
-    __extends(BaseSelectableRegionTableView, _super);
+    __extends(BaseSelectableRegionStrategyView, _super);
 
-    function BaseSelectableRegionTableView() {
-      return BaseSelectableRegionTableView.__super__.constructor.apply(this, arguments);
+    function BaseSelectableRegionStrategyView() {
+      return BaseSelectableRegionStrategyView.__super__.constructor.apply(this, arguments);
     }
 
-    BaseSelectableRegionTableView.prototype.initialize = function(ModelView, Collection, tpl, mapView, options) {
-      BaseSelectableRegionTableView.__super__.initialize.call(this, ModelView, Collection, tpl, options);
+    BaseSelectableRegionStrategyView.prototype.initialize = function(ModelView, Collection, tpl, mapView, options) {
+      BaseSelectableRegionStrategyView.__super__.initialize.call(this, ModelView, Collection, tpl, options);
       _.bindAll(this, 'showRegionFeatures', 'onStrategyCollectionSuccess');
       this.mapView = mapView;
       this.regionCollection = null;
     };
 
-    BaseSelectableRegionTableView.prototype.unrender = function() {
+    BaseSelectableRegionStrategyView.prototype.unrender = function() {
       if (this.regionHighlightControl != null) {
         this.regionHighlightControl.destroy();
       }
@@ -29,10 +29,10 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
       if (this.regionLayer != null) {
         this.regionLayer.destroy();
       }
-      return BaseSelectableRegionTableView.__super__.unrender.apply(this, arguments);
+      return BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
     };
 
-    BaseSelectableRegionTableView.prototype.fetchCollection = function() {
+    BaseSelectableRegionStrategyView.prototype.fetchCollection = function() {
       var deferred, params,
         _this = this;
       this.$('tbody').empty();
@@ -51,7 +51,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
       });
     };
 
-    BaseSelectableRegionTableView.prototype.onStrategyCollectionSuccess = function(collection) {
+    BaseSelectableRegionStrategyView.prototype.onStrategyCollectionSuccess = function(collection) {
       var m, _i, _len, _ref;
       if (collection.models.length === 0) {
         this.trigger("table:nothingfound");
@@ -70,7 +70,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
       }
     };
 
-    BaseSelectableRegionTableView.prototype.showRegionFeatures = function() {
+    BaseSelectableRegionStrategyView.prototype.showRegionFeatures = function() {
       var newFeature, region, regionFeatures, wktFormat, _i, _len, _ref;
       wktFormat = new OpenLayers.Format.WKT();
       regionFeatures = [];
@@ -122,7 +122,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseTableColl
       this.regionClickControl.handlers.feature.stopDown = false;
     };
 
-    return BaseSelectableRegionTableView;
+    return BaseSelectableRegionStrategyView;
 
-  })(BaseTableCollectionView);
+  })(BaseStrategyCollectionView);
 });

@@ -1,19 +1,19 @@
 define([
     'namespace'
-    'views/BaseSelectableRegionTableView'
+    'views/BaseSelectableRegionStrategyView'
     'views/CountyNetSupplyView'
     'collections/CountyNetSupplyCollection'
     'scripts/text!templates/countyNetSupplyTable.html'
 ],
-(namespace, BaseSelectableRegionTableView, CountyNetSupplyView, 
+(namespace, BaseSelectableRegionStrategyView, CountyNetSupplyView, 
     CountyNetSupplyCollection, tpl) ->
 
-    class CountyNetSupplyCollectionView extends BaseSelectableRegionTableView
+    class CountyNetSupplyCollectionView extends BaseSelectableRegionStrategyView
 
         initialize: (options) ->
 
             super CountyNetSupplyView, CountyNetSupplyCollection, 
-                tpl, options.mapView
+                tpl, namespace.mapView
            
             return
 

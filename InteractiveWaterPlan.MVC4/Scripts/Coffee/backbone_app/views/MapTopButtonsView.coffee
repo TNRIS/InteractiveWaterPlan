@@ -1,7 +1,8 @@
 define([
+    'namespace'
     'scripts/text!templates/mapTopButtons.html'
 ],
-(tpl) ->
+(namespace, tpl) ->
     
     class MapTopButtonsView extends Backbone.View
 
@@ -11,10 +12,10 @@ define([
             _.bindAll(this, 'render', 'unrender', 'toggleMapViewLock', 
                 'zoomToTexas', 'toggleMap')
 
-            if not options.mapView? 
-                throw "options.mapView not defined"
+            if not namespace.mapView? 
+                throw "namespace.mapView not defined"
 
-            @mapView = options.mapView
+            @mapView = namespace.mapView
 
             return null
 

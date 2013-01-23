@@ -3,19 +3,20 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['namespace'], function(namespace) {
-  var BaseTableCollectionView;
-  return BaseTableCollectionView = (function(_super) {
+  var BaseStrategyCollectionView;
+  return BaseStrategyCollectionView = (function(_super) {
 
-    __extends(BaseTableCollectionView, _super);
+    __extends(BaseStrategyCollectionView, _super);
 
-    function BaseTableCollectionView() {
-      return BaseTableCollectionView.__super__.constructor.apply(this, arguments);
+    function BaseStrategyCollectionView() {
+      return BaseStrategyCollectionView.__super__.constructor.apply(this, arguments);
     }
 
-    BaseTableCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
+    BaseStrategyCollectionView.prototype.initialize = function(ModelView, Collection, tpl, options) {
+      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
+      this.mapView = namespace.mapView;
       this.currYear = ko.observable(namespace.currYear);
       this.template = _.template(tpl);
       this.collection = new Collection();
@@ -23,7 +24,7 @@ define(['namespace'], function(namespace) {
       return null;
     };
 
-    BaseTableCollectionView.prototype.render = function() {
+    BaseStrategyCollectionView.prototype.render = function() {
       this.$el.html(this.template());
       this.fetchCollection();
       ko.applyBindings(this, this.el);
@@ -34,12 +35,12 @@ define(['namespace'], function(namespace) {
       return this;
     };
 
-    BaseTableCollectionView.prototype.unrender = function() {
+    BaseStrategyCollectionView.prototype.unrender = function() {
       this.$el.html();
       return null;
     };
 
-    BaseTableCollectionView.prototype.fetchCollection = function() {
+    BaseStrategyCollectionView.prototype.fetchCollection = function() {
       var params,
         _this = this;
       this.$('tbody').empty();
@@ -49,34 +50,36 @@ define(['namespace'], function(namespace) {
       this.trigger("table:startload");
       this.collection.fetch({
         data: params,
-        success: function(collection) {
-          var m, _i, _len, _ref;
-          if (collection.models.length === 0) {
-            _this.trigger("table:nothingfound");
-          } else {
-            _ref = collection.models;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              m = _ref[_i];
-              _this.appendModel(m);
-            }
-            _this.$('.has-popover').popover({
-              trigger: 'hover'
-            });
-            _this._setupDataTable();
-            _this._connectTableRowsToWugFeatures();
-            if ((_this.fetchCallback != null) && _.isFunction(_this.fetchCallback)) {
-              _this.fetchCallback(collection.models);
-            }
-            _this.trigger("table:endload");
-          }
-        },
+        success: this.onFetchCollectionSuccess,
         error: function() {
           _this.trigger("table:fetcherror");
         }
       });
     };
 
-    BaseTableCollectionView.prototype.fetchCallback = function(strategyModels) {
+    BaseStrategyCollectionView.prototype.onFetchCollectionSuccess = function(collection) {
+      var m, _i, _len, _ref;
+      if (collection.models.length === 0) {
+        this.trigger("table:nothingfound");
+      } else {
+        _ref = collection.models;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          m = _ref[_i];
+          this.appendModel(m);
+        }
+        this.$('.has-popover').popover({
+          trigger: 'hover'
+        });
+        this._setupDataTable();
+        this._connectTableRowsToWugFeatures();
+        if ((this.fetchCallback != null) && _.isFunction(this.fetchCallback)) {
+          this.fetchCallback(collection.models);
+        }
+        this.trigger("table:endload");
+      }
+    };
+
+    BaseStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
       var groupedById, newWugList;
       groupedById = _.groupBy(strategyModels, function(m) {
         return m.get("recipientEntityId");
@@ -110,7 +113,7 @@ define(['namespace'], function(namespace) {
       namespace.wugFeatureCollection.reset(newWugList);
     };
 
-    BaseTableCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
+    BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
       return {
         entityId: m.get("recipientEntityId"),
         name: m.get("recipientEntityName"),
@@ -121,7 +124,7 @@ define(['namespace'], function(namespace) {
       };
     };
 
-    BaseTableCollectionView.prototype._setupDataTable = function() {
+    BaseStrategyCollectionView.prototype._setupDataTable = function() {
       var $table, dtColConfig;
       $table = this.$('table');
       dtColConfig = [];
@@ -144,7 +147,7 @@ define(['namespace'], function(namespace) {
       });
     };
 
-    BaseTableCollectionView.prototype._connectTableRowsToWugFeatures = function() {
+    BaseStrategyCollectionView.prototype._connectTableRowsToWugFeatures = function() {
       var me;
       me = this;
       this.$('table tbody').delegate('td.strategyType', 'hover', function(event) {
@@ -168,7 +171,7 @@ define(['namespace'], function(namespace) {
       });
     };
 
-    BaseTableCollectionView.prototype.appendModel = function(model) {
+    BaseStrategyCollectionView.prototype.appendModel = function(model) {
       var modelView;
       modelView = new this.ModelView({
         model: model,
@@ -177,27 +180,27 @@ define(['namespace'], function(namespace) {
       this.$('tbody').append(modelView.render().el);
     };
 
-    BaseTableCollectionView.prototype.showNothingFound = function() {
+    BaseStrategyCollectionView.prototype.showNothingFound = function() {
       $('#nothingFoundMessage').fadeIn();
       this.$el.hide();
     };
 
-    BaseTableCollectionView.prototype.hideNothingFound = function() {
+    BaseStrategyCollectionView.prototype.hideNothingFound = function() {
       $('#nothingFoundMessage').hide();
     };
 
-    BaseTableCollectionView.prototype.showLoading = function() {
+    BaseStrategyCollectionView.prototype.showLoading = function() {
       this.$el.hide();
       this.hideNothingFound();
       $('.tableLoading').show();
     };
 
-    BaseTableCollectionView.prototype.hideLoading = function() {
+    BaseStrategyCollectionView.prototype.hideLoading = function() {
       $('.tableLoading').hide();
       this.$el.fadeIn();
     };
 
-    return BaseTableCollectionView;
+    return BaseStrategyCollectionView;
 
   })(Backbone.View);
 });

@@ -40,6 +40,9 @@ define([
                 'showMapLoading', 'hideMapLoading', '_setupWugClickControl',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', 'zoomToExtent')
             
+
+            #TODO: Might as well just put all the wug mapping stuff in BaseStrategyCollectionView
+            # and remove it from here/namespace (and pass the mapView to BaseStrategyCollectionView)
             namespace.wugFeatureCollection.on('reset', this.resetWugFeatures)
 
             return null
@@ -101,7 +104,7 @@ define([
             
             for m in featureCollection.models
                 newFeature = wktFormat.read(m.get('wktGeog'))
-                newFeature.attributes = m.attributes
+                newFeature.attributes = _.clone(m.attributes)
                 newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
                     @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, m.get("totalSupply"))
                 delete newFeature.attributes.wktGeog

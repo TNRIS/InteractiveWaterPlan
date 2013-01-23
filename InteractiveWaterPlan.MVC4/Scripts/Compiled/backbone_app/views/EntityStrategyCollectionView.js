@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(namespace, BaseTableCollectionView, EntityStrategyView, tpl) {
+define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(namespace, BaseStrategyCollectionView, EntityStrategyView, tpl) {
   var EntityStrategyCollectionView;
   return EntityStrategyCollectionView = (function(_super) {
 
@@ -13,20 +13,61 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
     }
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
-      var StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback');
+      var SourceCollection, StrategyCollection, fetchParams;
+      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures');
       this.entityId = options.id;
       this.viewName = ko.observable();
+      this.mapView = namespace.mapView;
       fetchParams = {
         entityId: this.entityId
       };
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_API_PATH + "api/strategies/entity"
       });
+      SourceCollection = Backbone.Collection.extend({
+        url: "" + BASE_API_PATH + "api/entity/" + this.entityId + "/sources"
+      });
+      this.sourceCollection = new SourceCollection();
       EntityStrategyCollectionView.__super__.initialize.call(this, EntityStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
       return null;
+    };
+
+    EntityStrategyCollectionView.prototype.fetchCollection = function() {
+      var params,
+        _this = this;
+      this.$('tbody').empty();
+      params = _.extend({
+        year: namespace.currYear
+      }, this.fetchParams);
+      this.trigger("table:startload");
+      $.when(this.collection.fetch({
+        data: params
+      }), this.sourceCollection.fetch()).then(function() {
+        _this.onFetchBothCollectionSuccess();
+        _this.trigger("table:endload");
+      }).fail(function() {
+        _this.trigger("table:fetcherror");
+      });
+    };
+
+    EntityStrategyCollectionView.prototype.unrender = function() {
+      if (this.sourceHighlightControl != null) {
+        this.sourceHighlightControl.destroy();
+      }
+      if (this.sourceClickControl != null) {
+        this.sourceClickControl.destroy();
+      }
+      if (this.sourceLayer != null) {
+        this.sourceLayer.destroy();
+      }
+      return EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
+    };
+
+    EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
+      this.onFetchCollectionSuccess(this.collection);
+      this.showSourceFeatures();
     };
 
     EntityStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
@@ -34,7 +75,86 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/EntityStrategyView'
       EntityStrategyCollectionView.__super__.fetchCallback.call(this, strategyModels);
     };
 
+    EntityStrategyCollectionView.prototype.showSourceFeatures = function() {
+      var bounds, newFeature, source, sourceFeatures, wktFormat, wugFeat, _i, _j, _len, _len1, _ref, _ref1;
+      wktFormat = new OpenLayers.Format.WKT();
+      bounds = null;
+      sourceFeatures = [];
+      _ref = this.sourceCollection.models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        source = _ref[_i];
+        newFeature = wktFormat.read(source.get('wktGeog'));
+        newFeature.attributes = _.clone(source.attributes);
+        delete newFeature.attributes.wktGeog;
+        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        if (!(bounds != null)) {
+          bounds = newFeature.geometry.getBounds().clone();
+        } else {
+          bounds.extend(newFeature.geometry.getBounds());
+        }
+        sourceFeatures.push(newFeature);
+      }
+      this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
+        displayInLayerSwitcher: false,
+        styleMap: new OpenLayers.StyleMap({
+          "default": new OpenLayers.Style({
+            strokeColor: "cyan",
+            strokeWidth: 1,
+            fillColor: "blue",
+            fillOpacity: 0.8
+          }),
+          "select": new OpenLayers.Style({
+            fillColor: "cyan",
+            strokeColor: "blue"
+          })
+        })
+      });
+      this.sourceLayer.addFeatures(sourceFeatures);
+      this.mapView.map.addLayer(this.sourceLayer);
+      /* TODO: See notes above
+      @sourceHighlightControl = new OpenLayers.Control.SelectFeature(
+          @sourceLayer,
+          {
+              autoActivate: true
+              hover: true
+          })
+      
+      @mapView.map.addControl(@sourceHighlightControl)
+      
+      #OL workaround to allow dragging while over a feature
+      # see http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues    
+      @sourceHighlightControl.handlers.feature.stopDown = false;
+      
+      @sourceClickControl = new OpenLayers.Control.SelectFeature(
+          @sourceLayer,
+          {
+              autoActivate: true
+              
+              clickFeature: (sourceFeature) ->
+                  #else navigate to Source Details view when feature is clicked
+                  sourceId = sourceFeature.attributes.sourceId
+                  #TODO: navigate to source page
+                  #Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
+                  #    {trigger: true})
+      
+                  return
+          })
+      
+      @mapView.map.addControl(@sourceClickControl)
+      
+      #OL workaround again
+      @sourceClickControl.handlers.feature.stopDown = false;
+      */
+
+      _ref1 = this.mapView.wugLayer;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        wugFeat = _ref1[_j];
+        bounds.extend(wugFeat.geometry.getBounds());
+      }
+      this.mapView.zoomToExtent(bounds);
+    };
+
     return EntityStrategyCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseStrategyCollectionView);
 });

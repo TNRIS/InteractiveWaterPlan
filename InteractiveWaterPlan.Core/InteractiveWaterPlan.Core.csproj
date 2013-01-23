@@ -52,6 +52,7 @@
     <Compile Include="PlanningRegion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reservoir.cs" />
+    <Compile Include="Source.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="StrategyType.cs" />
     <Compile Include="WaterSourceSupplyData.cs" />

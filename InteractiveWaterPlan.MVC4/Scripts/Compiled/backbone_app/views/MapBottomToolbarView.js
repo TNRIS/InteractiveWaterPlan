@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.html'], function(PlaceFeature, tpl) {
+define(['namespace', 'models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.html'], function(namespace, PlaceFeature, tpl) {
   var MapBottomToolbarView;
   return MapBottomToolbarView = (function(_super) {
 
@@ -14,11 +14,9 @@ define(['models/PlaceFeatureModel', 'scripts/text!templates/mapBottomRightTools.
 
     MapBottomToolbarView.prototype.template = _.template(tpl);
 
-    MapBottomToolbarView.prototype.mapView = null;
-
     MapBottomToolbarView.prototype.initialize = function(options) {
       _.bindAll(this, 'render', 'unrender', 'showPlaceFeature');
-      this.mapView = options.mapView;
+      this.mapView = namespace.mapView;
     };
 
     MapBottomToolbarView.prototype.render = function() {

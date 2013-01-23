@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/BaseTableCollectionView', 'views/CountyStrategyView', 'scripts/text!templates/countyStrategyTable.html'], function(namespace, BaseTableCollectionView, CountyStrategyView, tpl) {
+define(['namespace', 'views/BaseStrategyCollectionView', 'views/CountyStrategyView', 'scripts/text!templates/countyStrategyTable.html'], function(namespace, BaseStrategyCollectionView, CountyStrategyView, tpl) {
   var CountyStrategyCollectionView;
   return CountyStrategyCollectionView = (function(_super) {
 
@@ -31,5 +31,5 @@ define(['namespace', 'views/BaseTableCollectionView', 'views/CountyStrategyView'
 
     return CountyStrategyCollectionView;
 
-  })(BaseTableCollectionView);
+  })(BaseStrategyCollectionView);
 });

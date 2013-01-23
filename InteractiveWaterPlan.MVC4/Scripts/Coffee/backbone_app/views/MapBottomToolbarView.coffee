@@ -1,18 +1,18 @@
 define([
+    'namespace'
     'models/PlaceFeatureModel'
     'scripts/text!templates/mapBottomRightTools.html'
 ],
-(PlaceFeature, tpl) ->
+(namespace, PlaceFeature, tpl) ->
 
     class MapBottomToolbarView extends Backbone.View
 
         template: _.template(tpl)
-        mapView: null #must specify in options argument to constructor
-
+        
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 'showPlaceFeature')
 
-            @mapView = options.mapView
+            @mapView = namespace.mapView
 
             return
 

@@ -1,11 +1,11 @@
 define([
     'namespace'
     'collections/RegionFeatureCollection'
-    'views/BaseTableCollectionView'
+    'views/BaseStrategyCollectionView'
 ],
-(namespace, RegionFeatureCollection, BaseTableCollectionView) ->
+(namespace, RegionFeatureCollection, BaseStrategyCollectionView) ->
 
-    class BaseSelectableRegionTableView extends BaseTableCollectionView
+    class BaseSelectableRegionStrategyView extends BaseStrategyCollectionView
 
         initialize: (ModelView, Collection, tpl, mapView, options) ->
 

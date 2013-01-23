@@ -14,24 +14,23 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.initialize = function(options) {
       _.bindAll(this, 'updateViewsToNewYear', 'updateSelectedWug', 'onTableStartLoad', 'onTableEndLoad', 'onTableNothingFound', 'onTableFetchError', 'highlightWugsByStrategyType');
-      this.currTableView = null;
+      this.currStrategyView = null;
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
         mapContainerId: 'mapContainer',
         bingApiKey: $('#bing_maps_key').val()
       });
+      namespace.mapView = this.mapView;
       this.mapView.render();
       this.mapBottomToolbarView = new MapBottomToolbarView({
-        el: $('#mapBottomToolsContainer')[0],
-        mapView: this.mapView
+        el: $('#mapBottomToolsContainer')[0]
       });
       this.mapBottomToolbarView.render();
       this.themeNavToolbarView = new ThemeNavToolbarView({
         el: $('#themeNavContainer')[0]
       });
       this.mapTopButtonsView = new MapTopButtonsView({
-        el: $('#mapTopButtonsContainer')[0],
-        mapView: this.mapView
+        el: $('#mapTopButtonsContainer')[0]
       });
       this.mapTopButtonsView.render();
       this.yearNavView = new YearNavView({
@@ -61,7 +60,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.yearNavView.disableYearButtons();
       this.themeNavToolbarView.disableStrategyTypeList();
       this.mapView.showMapLoading();
-      this.currTableView.showLoading();
+      this.currStrategyView.showLoading();
     };
 
     WMSRouter.prototype.onTableEndLoad = function() {
@@ -69,7 +68,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.yearNavView.enableYearButtons();
       this.themeNavToolbarView.enableStrategyTypeList();
       this.mapView.hideMapLoading();
-      this.currTableView.hideLoading();
+      this.currStrategyView.hideLoading();
     };
 
     WMSRouter.prototype.onTableFetchError = function() {
@@ -79,7 +78,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.onTableNothingFound = function() {
       this.onTableEndLoad();
-      this.currTableView.showNothingFound();
+      this.currStrategyView.showNothingFound();
     };
 
     WMSRouter.prototype.updateSelectedWug = function(wugId) {
@@ -124,8 +123,8 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         $('#errorMessage').hide();
       },
       '^[0-9]{4}/wms': function(year) {
-        if (this.currTableView != null) {
-          this.currTableView = this.currTableView.unrender();
+        if (this.currStrategyView != null) {
+          this.currStrategyView = this.currStrategyView.unrender();
         }
         if (this.mapView != null) {
           this.mapView.clearWugFeatures();
@@ -146,17 +145,17 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.after = {
       '^[0-9]{4}/wms': function(year) {
-        if ((year != null) && (this.currTableView != null)) {
+        if ((year != null) && (this.currStrategyView != null)) {
           this.themeNavToolbarView.render();
           this.yearNavView.render();
-          this.currTableView.off();
-          this.currTableView.on("table:startload", this.onTableStartLoad);
-          this.currTableView.on("table:endload", this.onTableEndLoad);
-          this.currTableView.on("table:nothingfound", this.onTableNothingFound);
-          this.currTableView.on("table:fetcherror", this.onTableFetchError);
-          this.currTableView.on("table:hoverwug", this.updateSelectedWug);
-          this.currTableView.on("table:hovertype", this.highlightWugsByStrategyType);
-          this.currTableView.render();
+          this.currStrategyView.off();
+          this.currStrategyView.on("table:startload", this.onTableStartLoad);
+          this.currStrategyView.on("table:endload", this.onTableEndLoad);
+          this.currStrategyView.on("table:nothingfound", this.onTableNothingFound);
+          this.currStrategyView.on("table:fetcherror", this.onTableFetchError);
+          this.currStrategyView.on("table:hoverwug", this.updateSelectedWug);
+          this.currStrategyView.on("table:hovertype", this.highlightWugsByStrategyType);
+          this.currStrategyView.render();
         }
       }
     };
@@ -168,12 +167,11 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsNetCountySupplies = function(year) {
-      if (this.currTableView != null) {
-        this.currTableView = this.currTableView.unrender();
+      if (this.currStrategyView != null) {
+        this.currStrategyView = this.currStrategyView.unrender();
       }
-      this.currTableView = new CountyNetSupplyCollectionView({
-        el: this.tableContainer,
-        mapView: this.mapView
+      this.currStrategyView = new CountyNetSupplyCollectionView({
+        el: this.tableContainer
       });
       this.mapView.resetExtent();
       this.mapView.clearWugFeatures();
@@ -192,10 +190,9 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         });
         return;
       }
-      this.currTableView = new RegionStrategyCollectionView({
+      this.currStrategyView = new RegionStrategyCollectionView({
         el: this.tableContainer,
-        id: regionLetter,
-        mapView: this.mapView
+        id: regionLetter
       });
       this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Regions");
@@ -212,7 +209,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         return;
       }
       countyName = county.get('name');
-      this.currTableView = new CountyStrategyCollectionView({
+      this.currStrategyView = new CountyStrategyCollectionView({
         el: this.tableContainer,
         id: countyId,
         name: countyName
@@ -231,7 +228,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         });
         return;
       }
-      this.currTableView = new LegeDistrictCollectionView({
+      this.currStrategyView = new LegeDistrictCollectionView({
         el: this.tableContainer,
         id: districtId,
         type: "house",
@@ -251,7 +248,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         });
         return;
       }
-      this.currTableView = new LegeDistrictCollectionView({
+      this.currStrategyView = new LegeDistrictCollectionView({
         el: this.tableContainer,
         id: districtId,
         type: "senate",
@@ -272,7 +269,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         return;
       }
       typeName = wmsType.get('name');
-      this.currTableView = new StrategyTypeCollectionView({
+      this.currStrategyView = new StrategyTypeCollectionView({
         el: this.tableContainer,
         id: typeId,
         name: typeName
@@ -281,7 +278,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsEntity = function(year, entityId) {
-      this.currTableView = new EntityStrategyCollectionView({
+      this.currStrategyView = new EntityStrategyCollectionView({
         el: this.tableContainer,
         id: entityId
       });
@@ -289,7 +286,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsProjectDetail = function(year, projectId) {
-      this.currTableView = new StrategyDetailCollectionView({
+      this.currStrategyView = new StrategyDetailCollectionView({
         el: this.tableContainer,
         id: projectId
       });

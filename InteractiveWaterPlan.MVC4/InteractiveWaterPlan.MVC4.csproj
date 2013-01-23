@@ -138,6 +138,7 @@
     <Compile Include="Controllers\BoundaryController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\SourceController.cs" />
     <Compile Include="Controllers\CountyNetSupplyController.cs" />
     <Compile Include="Controllers\EntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -194,7 +195,8 @@
     <Content Include="Scripts\Compiled\backbone_app\collections\WugFeatureCollection.js" />
     <Content Include="Scripts\Compiled\backbone_app\config\WmsThemeConfig.js" />
     <Content Include="Scripts\Compiled\backbone_app\main.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\BaseSelectableRegionTableView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\BaseSelectableRegionStrategyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\LegeDistrictCollectionView.js" />
@@ -206,7 +208,6 @@
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />
     <Content Include="Scripts\Compiled\backbone_app\namespace.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\BaseTableCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyNetSupplyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\WmsAreaSelectView.js" />
@@ -362,7 +363,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
-    <None Include="Scripts\Coffee\backbone_app\views\BaseSelectableRegionTableView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\BaseSelectableRegionStrategyView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\BaseStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\LegeDistrictCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
@@ -398,7 +400,6 @@
     <None Include="Scripts\Coffee\backbone_app\WMSRouter.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\namespace.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\BaseTableCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyNetSupplyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\WmsAreaSelectView.coffee" />

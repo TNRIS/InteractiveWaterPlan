@@ -1,12 +1,12 @@
 define([
     'namespace'
-    'views/BaseSelectableRegionTableView'
+    'views/BaseSelectableRegionStrategyView'
     'views/RegionStrategyView'
     'scripts/text!templates/regionStrategyTable.html'
 ],
-(namespace, BaseSelectableRegionTableView, RegionStrategyView, tpl) ->
+(namespace, BaseSelectableRegionStrategyView, RegionStrategyView, tpl) ->
 
-    class RegionStrategyCollectionView extends BaseSelectableRegionTableView
+    class RegionStrategyCollectionView extends BaseSelectableRegionStrategyView
         
         initialize: (options) ->
             
@@ -20,7 +20,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/region" 
             )
 
-            super RegionStrategyView, StrategyCollection, tpl, options.mapView,
+            super RegionStrategyView, StrategyCollection, tpl, namespace.mapView,
                 {fetchParams: fetchParams}
             
             return null

@@ -174,11 +174,22 @@ namespace InteractiveWaterPlan.MVC4
                 "api/entity/{entityId}",
                 new { controller = "Entity", action = "GetEntity" }
             );
+            #endregion
 
+            #region Source Routes
+
+            config.Routes.MapHttpRoute(
+                "GetSourcesForEntityRoute",
+                "api/entity/{entityId}/sources", /* Note: entity route */
+                new { controller = "Source", action = "GetSourcesForEntity" }
+            );
 
             #endregion
 
-            /*config.Routes.MapHttpRoute(
+
+
+            /*Don't need default route
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
