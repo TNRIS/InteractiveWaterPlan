@@ -1,15 +1,23 @@
 define([
     'namespace'
+    'collections/WugFeatureCollection'
 ],
-(namespace) ->
+(namespace, WugFeatureCollection) ->
     class BaseStrategyCollectionView extends Backbone.View
 
         
+        MAX_WUG_RADIUS: 18
+        MIN_WUG_RADIUS: 6
+
         initialize: (ModelView, Collection, tpl, options) ->
             _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
                 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 
                 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
-                'showNothingFound', 'hideNothingFound')
+                'showNothingFound', 'hideNothingFound',
+                'resetWugFeatures', 'clearWugFeatures', '_setupWugClickControl',
+                'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
+                'highlightStratTypeWugs', 'unhighlightStratTypeWugs'
+            )
 
             options = options || {}
             @fetchParams = options.fetchParams || {}
@@ -23,6 +31,8 @@ define([
             @collection = new Collection()
 
             @ModelView = ModelView
+
+            @wugFeatureCollection = new WugFeatureCollection()
 
             return null
 
@@ -41,6 +51,8 @@ define([
             return this
 
         unrender: () ->
+            #TODO: lots of other cleanup (all wug map stuff [layers, controls, etc])
+            this.clearWugFeatures()
             @$el.html()
             return null
 
@@ -251,5 +263,255 @@ define([
             @$el.fadeIn()
             return
 
+        #############################################
+
+        resetWugFeatures: (featureCollection) ->
+            this.clearWugFeatures()
+
+            if featureCollection.models.length < 1 then return
+
+            @wugLayer = new OpenLayers.Layer.Vector(
+                "Water User Groups",
+                {
+                    styleMap: this._wugStyleMap
+                    displayInLayerSwitcher: false
+                })
+
+            wktFormat = new OpenLayers.Format.WKT()
+
+            #Size based on source supply (need to pass source supply to model)
+            max_supply = featureCollection.max((m) ->
+                return m.get("totalSupply")
+            ).get("totalSupply")
+            
+            min_supply = featureCollection.min((m) ->
+                return m.get("totalSupply")
+            ).get("totalSupply")
+ 
+            bounds = null
+            wugFeatures = []
+            
+            for m in featureCollection.models
+                newFeature = wktFormat.read(m.get('wktGeog'))
+                newFeature.attributes = _.clone(m.attributes)
+                newFeature.size = this._calculateScaledValue(max_supply, min_supply, 
+                    @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, m.get("totalSupply"))
+                delete newFeature.attributes.wktGeog
+                newFeature.geometry = newFeature.geometry.transform(
+                    @map.displayProjection, @map.projection)
+                
+                if not bounds?
+                    #must clone the bounds, otherwise the feature's bounds
+                    # will get modified by subsequent extends in the else condition
+                    bounds = newFeature.geometry.getBounds().clone()
+                else
+                    bounds.extend(newFeature.geometry.getBounds())
+
+                wugFeatures.push(newFeature)
+            
+
+            @wugLayer.addFeatures(wugFeatures)
+            @map.addLayer(@wugLayer)
+            
+            #Add control to highlight feature and show popup on hover
+            @wugHighlightControl = this._setupWugHighlightControl()
+            @map.addControl(@wugHighlightControl)
+
+            #Add control to view entity details view on click
+            @wugClickControl = this._setupWugClickControl()
+            @map.addControl(@wugClickControl)
+
+            this.zoomToExtent(bounds)
+            return
+
+        clearWugFeatures: () ->
+            this.unselectWugFeatures() 
+            if @wugHighlightControl? 
+                @wugHighlightControl.destroy()
+                @wugHighlightControl = null
+            if @wugClickControl?
+                @wugClickControl.destroy()
+                @wugClickControl = null
+
+            if @wugLayer? then @wugLayer.destroy()
+            return
+
+        selectWugFeature: (wugId, projId) ->
+            if not @wugHighlightControl? then return
+
+            for wugFeature in @wugLayer.features
+
+                if wugFeature.attributes.entityId == wugId
+                    @wugHighlightControl.select(wugFeature)
+                    return
+
+            return
+
+        unselectWugFeatures: () ->
+            if not @wugHighlightControl? or not @wugHighlightControl.layer.selectedFeatures? 
+                return
+
+            @wugHighlightControl.unselectAll()
+
+            return
+
+        highlightStratTypeWugs: (stratTypeId) ->
+            if not @wugLayer then return
+
+            for wugFeature in @wugLayer.features
+                if (wugFeature.attributes.strategyTypes? and
+                    _.contains(wugFeature.attributes.strategyTypes,stratTypeId))
+                        wugFeature.renderIntent = "typehighlight"
+                else
+                    wugFeature.renderIntent = "transparent"    
+
+            @wugLayer.redraw()   
+            return
+
+        unhighlightStratTypeWugs: () ->
+            if not @wugLayer then return
+
+            for wugFeature in @wugLayer.features
+                wugFeature.renderIntent = "default"
+
+            @wugLayer.redraw()
+            return
+
+        _setupWugClickControl: () ->
+            control = new OpenLayers.Control.SelectFeature(
+                @wugLayer,
+                {
+                    autoActivate: true
+                    
+                    clickFeature: (wugFeature) =>
+                        #do nothing if wugType = WWP
+                        if wugFeature.attributes.type? and wugFeature.attributes.type == "WWP"
+                            return
+
+                        #else navigate to Entity Details view when feature is clicked
+                        wugId = wugFeature.attributes.entityId
+                        Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
+                            {trigger: true})
+            
+                        return
+                })
+            return control
+
+        _setupWugHighlightControl: () ->
+            timer = null
+            control = new OpenLayers.Control.SelectFeature(
+                @wugLayer,
+                {
+                    multiple: false
+                    hover: true
+                    autoActivate: true
+
+                    overFeature: (feature) ->
+                        layer = feature.layer;
+                        if (this.hover)
+                            if (this.highlightOnly) then this.highlight(feature);
+                            else if OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1
+                                #use a slight delay to prevent windows popping up too much
+                                timer = _.delay(() =>
+                                    this.select(feature)
+                                , 400)
+                        return
+
+                    onSelect: (wugFeature) =>
+                        popup = new OpenLayers.Popup.FramedCloud("wugpopup",
+                            wugFeature.geometry.getBounds().getCenterLonLat()
+                            null, #contentSize
+                            "
+                                <b>#{wugFeature.attributes.name}</b><br/>
+                                Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
+                            ",
+                            null, #anchor
+                            false, #closeBox
+                            #closeBoxCallback
+                        ) 
+
+                        popup.autoSize = true
+                        wugFeature.popup = popup
+                        @map.addPopup(popup)
+                        return
+
+                    onUnselect: (wugFeature) =>
+                        clearTimeout(timer)
+                        if wugFeature.popup?
+                            @map.removePopup(wugFeature.popup)
+                            wugFeature.popup.destroy()
+                            wugFeature.popup = null
+                        return
+                }
+
+            )
+
+
+            return control
+
+        _calculateScaledValue: (max, min, scale_max, scale_min, val) ->
+            if max == min then return scale_min
+
+            #linearly scale the input value
+            scaled_val = (scale_max - scale_min)*(val - min)/(max-min) + scale_min
+            
+            return scaled_val
+
+
+
+        _wugStyleMap: new OpenLayers.StyleMap(
+            "default" : new OpenLayers.Style( 
+                pointRadius: '${getPointRadius}'
+                strokeColor: "yellow"
+                strokeWidth: 1
+                fillColor: "${getFillColor}"
+                fillOpacity: 0.8
+                {
+                    context:
+                        getPointRadius: (feature) ->
+                            if feature.size? then return feature.size
+                            return 6
+
+                        getFillColor: (feature) ->
+                            if feature.attributes.type? and feature.attributes.type == "WWP"
+                                return 'gray'
+                            return 'green'
+                    
+                    rules: [
+                        new OpenLayers.Rule({
+                            maxScaleDenominator: 866688,
+                            symbolizer: {
+                                fontSize: "11px"
+                                labelAlign: 'cb'
+                                labelOutlineColor: "yellow"
+                                labelOutlineWidth: 2
+                                labelYOffset: 8
+                                label: "${name}"
+                            }        
+                        })
+                        new OpenLayers.Rule({
+                            minScaleDenominator: 866688,
+                            symbolizer: {
+                                
+                            }        
+                        })
+                    ]
+                }
+            )
+            "select" : new OpenLayers.Style(
+                fillColor: "yellow"
+                strokeColor: "green"
+                fillOpacity: 1
+            )
+            "typehighlight" : new OpenLayers.Style(
+                fillColor: "blue"
+                fillOpacity: 0.8
+                strokeColor: "yellow"
+            )
+            "transparent" : new OpenLayers.Style(
+                fillOpacity: 0
+                strokeOpacity: 0
+            )
+        )
 
 )

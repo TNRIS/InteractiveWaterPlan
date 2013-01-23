@@ -22,18 +22,13 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.baseLayers = ['esri_gray', 'mapquest_open', 'mapquest_aerial', 'bing_road', 'bing_hybrid', 'bing_aerial'];
 
-    MapView.prototype.MAX_WUG_RADIUS = 18;
-
-    MapView.prototype.MIN_WUG_RADIUS = 6;
-
     MapView.prototype.isMapLocked = false;
 
     MapView.prototype.initialize = function(config) {
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', 'resetWugFeatures', 'clearWugFeatures', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', '_setupWugClickControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', 'zoomToExtent');
-      namespace.wugFeatureCollection.on('reset', this.resetWugFeatures);
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', 'zoomToExtent');
       return null;
     };
 
@@ -58,86 +53,6 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       return null;
     };
 
-    MapView.prototype.resetWugFeatures = function(featureCollection) {
-      var bounds, m, max_supply, min_supply, newFeature, wktFormat, wugFeatures, _i, _len, _ref;
-      this.clearWugFeatures();
-      if (featureCollection.models.length < 1) {
-        return;
-      }
-      this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
-        styleMap: this._wugStyleMap,
-        displayInLayerSwitcher: false
-      });
-      wktFormat = new OpenLayers.Format.WKT();
-      max_supply = featureCollection.max(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
-      min_supply = featureCollection.min(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
-      bounds = null;
-      wugFeatures = [];
-      _ref = featureCollection.models;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        m = _ref[_i];
-        newFeature = wktFormat.read(m.get('wktGeog'));
-        newFeature.attributes = _.clone(m.attributes);
-        newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, m.get("totalSupply"));
-        delete newFeature.attributes.wktGeog;
-        newFeature.geometry = newFeature.geometry.transform(this.map.displayProjection, this.map.projection);
-        if (!(bounds != null)) {
-          bounds = newFeature.geometry.getBounds().clone();
-        } else {
-          bounds.extend(newFeature.geometry.getBounds());
-        }
-        wugFeatures.push(newFeature);
-      }
-      this.wugLayer.addFeatures(wugFeatures);
-      this.map.addLayer(this.wugLayer);
-      this.wugHighlightControl = this._setupWugHighlightControl();
-      this.map.addControl(this.wugHighlightControl);
-      this.wugClickControl = this._setupWugClickControl();
-      this.map.addControl(this.wugClickControl);
-      this.zoomToExtent(bounds);
-    };
-
-    MapView.prototype.clearWugFeatures = function() {
-      this.unselectWugFeatures();
-      if (this.wugHighlightControl != null) {
-        this.wugHighlightControl.destroy();
-        this.wugHighlightControl = null;
-      }
-      if (this.wugClickControl != null) {
-        this.wugClickControl.destroy();
-        this.wugClickControl = null;
-      }
-      if (this.wugLayer != null) {
-        this.wugLayer.destroy();
-      }
-    };
-
-    MapView.prototype.selectWugFeature = function(wugId, projId) {
-      var wugFeature, _i, _len, _ref;
-      if (!(this.wugHighlightControl != null)) {
-        return;
-      }
-      _ref = this.wugLayer.features;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        wugFeature = _ref[_i];
-        if (wugFeature.attributes.entityId === wugId) {
-          this.wugHighlightControl.select(wugFeature);
-          return;
-        }
-      }
-    };
-
-    MapView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugHighlightControl != null) || !(this.wugHighlightControl.layer.selectedFeatures != null)) {
-        return;
-      }
-      this.wugHighlightControl.unselectAll();
-    };
-
     MapView.prototype.hideWmsOverlays = function() {
       var layer, _i, _len, _ref;
       _ref = this.map.layers;
@@ -158,36 +73,6 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }
     };
 
-    MapView.prototype.highlightStratTypeWugs = function(stratTypeId) {
-      var wugFeature, _i, _len, _ref;
-      if (!this.wugLayer) {
-        return;
-      }
-      _ref = this.wugLayer.features;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        wugFeature = _ref[_i];
-        if ((wugFeature.attributes.strategyTypes != null) && _.contains(wugFeature.attributes.strategyTypes, stratTypeId)) {
-          wugFeature.renderIntent = "typehighlight";
-        } else {
-          wugFeature.renderIntent = "transparent";
-        }
-      }
-      this.wugLayer.redraw();
-    };
-
-    MapView.prototype.unhighlightStratTypeWugs = function() {
-      var wugFeature, _i, _len, _ref;
-      if (!this.wugLayer) {
-        return;
-      }
-      _ref = this.wugLayer.features;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        wugFeature = _ref[_i];
-        wugFeature.renderIntent = "default";
-      }
-      this.wugLayer.redraw();
-    };
-
     MapView.prototype._setupOverlayLayers = function() {
       var layerConfig, overlay, _i, _len, _ref;
       _ref = WmsThemeConfig.Layers;
@@ -203,75 +88,6 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
             throw "Unsupported Layer Type";
         }
       }
-    };
-
-    MapView.prototype._setupWugClickControl = function() {
-      var control,
-        _this = this;
-      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
-        autoActivate: true,
-        clickFeature: function(wugFeature) {
-          var wugId;
-          if ((wugFeature.attributes.type != null) && wugFeature.attributes.type === "WWP") {
-            return;
-          }
-          wugId = wugFeature.attributes.entityId;
-          Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
-            trigger: true
-          });
-        }
-      });
-      return control;
-    };
-
-    MapView.prototype._setupWugHighlightControl = function() {
-      var control, timer,
-        _this = this;
-      timer = null;
-      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
-        multiple: false,
-        hover: true,
-        autoActivate: true,
-        overFeature: function(feature) {
-          var layer,
-            _this = this;
-          layer = feature.layer;
-          if (this.hover) {
-            if (this.highlightOnly) {
-              this.highlight(feature);
-            } else if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) === -1) {
-              timer = _.delay(function() {
-                return _this.select(feature);
-              }, 400);
-            }
-          }
-        },
-        onSelect: function(wugFeature) {
-          var popup;
-          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                            ", null, false);
-          popup.autoSize = true;
-          wugFeature.popup = popup;
-          _this.map.addPopup(popup);
-        },
-        onUnselect: function(wugFeature) {
-          clearTimeout(timer);
-          if (wugFeature.popup != null) {
-            _this.map.removePopup(wugFeature.popup);
-            wugFeature.popup.destroy();
-            wugFeature.popup = null;
-          }
-        }
-      });
-      return control;
-    };
-
-    MapView.prototype._calculateScaledValue = function(max, min, scale_max, scale_min, val) {
-      var scaled_val;
-      if (max === min) {
-        return scale_min;
-      }
-      scaled_val = (scale_max - scale_min) * (val - min) / (max - min) + scale_min;
-      return scaled_val;
     };
 
     MapView.prototype.resetExtent = function() {
@@ -383,61 +199,6 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }
       return layers;
     };
-
-    MapView.prototype._wugStyleMap = new OpenLayers.StyleMap({
-      "default": new OpenLayers.Style({
-        pointRadius: '${getPointRadius}',
-        strokeColor: "yellow",
-        strokeWidth: 1,
-        fillColor: "${getFillColor}",
-        fillOpacity: 0.8
-      }, {
-        context: {
-          getPointRadius: function(feature) {
-            if (feature.size != null) {
-              return feature.size;
-            }
-            return 6;
-          },
-          getFillColor: function(feature) {
-            if ((feature.attributes.type != null) && feature.attributes.type === "WWP") {
-              return 'gray';
-            }
-            return 'green';
-          }
-        },
-        rules: [
-          new OpenLayers.Rule({
-            maxScaleDenominator: 866688,
-            symbolizer: {
-              fontSize: "11px",
-              labelAlign: 'cb',
-              labelOutlineColor: "yellow",
-              labelOutlineWidth: 2,
-              labelYOffset: 8,
-              label: "${name}"
-            }
-          }), new OpenLayers.Rule({
-            minScaleDenominator: 866688,
-            symbolizer: {}
-          })
-        ]
-      }),
-      "select": new OpenLayers.Style({
-        fillColor: "yellow",
-        strokeColor: "green",
-        fillOpacity: 1
-      }),
-      "typehighlight": new OpenLayers.Style({
-        fillColor: "blue",
-        fillOpacity: 0.8,
-        strokeColor: "yellow"
-      }),
-      "transparent": new OpenLayers.Style({
-        fillOpacity: 0,
-        strokeOpacity: 0
-      })
-    });
 
     return MapView;
 

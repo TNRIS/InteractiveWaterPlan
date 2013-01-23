@@ -83,17 +83,17 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.updateSelectedWug = function(wugId) {
       if (!(wugId != null)) {
-        this.mapView.unselectWugFeatures();
+        this.currStrategyView.unselectWugFeatures();
       } else {
-        this.mapView.selectWugFeature(wugId);
+        this.currStrategyView.selectWugFeature(wugId);
       }
     };
 
     WMSRouter.prototype.highlightWugsByStrategyType = function(stratTypeId) {
       if (!(stratTypeId != null)) {
-        this.mapView.unhighlightStratTypeWugs();
+        this.currStrategyView.unhighlightStratTypeWugs();
       } else {
-        this.mapView.highlightStratTypeWugs(stratTypeId);
+        this.currStrategyView.highlightStratTypeWugs(stratTypeId);
       }
     };
 
@@ -125,9 +125,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       '^[0-9]{4}/wms': function(year) {
         if (this.currStrategyView != null) {
           this.currStrategyView = this.currStrategyView.unrender();
-        }
-        if (this.mapView != null) {
-          this.mapView.clearWugFeatures();
         }
         if (year != null) {
           if (_.contains(namespace.VALID_YEARS, year)) {
@@ -174,7 +171,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         el: this.tableContainer
       });
       this.mapView.resetExtent();
-      this.mapView.clearWugFeatures();
       this.mapView.hideWmsOverlays();
       this.mapView.showWmsOverlayByViewType("Regions");
       this.areaSelectView.resetSelects();

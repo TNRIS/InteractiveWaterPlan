@@ -119,16 +119,16 @@ define([
 
         updateSelectedWug: (wugId) ->
             if not wugId? #if null, unselect all 
-                @mapView.unselectWugFeatures()
+                @currStrategyView.unselectWugFeatures()
             else #select the feature with the given id
-                @mapView.selectWugFeature(wugId)
+                @currStrategyView.selectWugFeature(wugId)
             return
 
         highlightWugsByStrategyType: (stratTypeId) ->
             if not stratTypeId?
-                @mapView.unhighlightStratTypeWugs()
+                @currStrategyView.unhighlightStratTypeWugs()
             else
-                @mapView.highlightStratTypeWugs(stratTypeId)
+                @currStrategyView.highlightStratTypeWugs(stratTypeId)
                 
             return
 
@@ -158,10 +158,6 @@ define([
                 #unrender the currStrategyView first
                 if @currStrategyView?
                     @currStrategyView = @currStrategyView.unrender()
-                
-                #and clear out any wug features from the mapView
-                if @mapView? #TODO: just take care of this in tableView.unrender
-                    @mapView.clearWugFeatures()
 
                 if year?
                     if _.contains(namespace.VALID_YEARS, year)
@@ -211,8 +207,9 @@ define([
             )
 
             @mapView.resetExtent()
-            @mapView.clearWugFeatures()
+            #TODO prob don't need, unrender takes care of it @currStrategyView.clearWugFeatures()
 
+            #TODO: could put this hide/showOverlays stuff in the CollectionView
             @mapView.hideWmsOverlays()
             @mapView.showWmsOverlayByViewType("Regions")
             @areaSelectView.resetSelects()
