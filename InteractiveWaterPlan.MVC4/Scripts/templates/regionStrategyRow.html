@@ -1,15 +1,15 @@
 
 <td class="strategyType" data-type-id="{{m.typeId}}">   
     {{m.typeName}} 
-    <% if (m.isRedundantSupply === 'Y') { 
-        print("<span class='note-marker'>*</span>"); 
-    } %>
 </td>
 
 <td class="aligned-left">
     <a href="#/{{currYear}}/wms/project/{{m.projectId}}">
         {{m.description}}
     </a>
+    <% if (m.isRedundantSupply === 'Y') { 
+        print("<span class='note-marker'>*</span>"); 
+    } %>
 </td>
 <td>{{ $.number(m["supply"+currYear]) }}</td>
 <td>
