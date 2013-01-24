@@ -44,13 +44,6 @@
     
   </class>
 
-  <sql-query name="GetStrategiesInRegion">
-    <query-param name="regionLetter" type="char" />
-    <query-param name="year" type="string" />
-    <return class="Strategy" />
-    exec dbo.usp_Select_Strategies_By_Region_Year__tbl_SWP_Final :regionLetter, :year
-  </sql-query>
-
   <sql-query name="GetStrategiesInCounty">
     <query-param name="countyId" type="int" />
     <query-param name="year" type="string" />

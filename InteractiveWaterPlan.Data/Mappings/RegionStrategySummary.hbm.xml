@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
+
+  <class name="RegionStrategySummary" mutable="false">
+    
+    <id name="Id">
+      <column name="SQL_ID"/>
+    </id>
+
+    <property column="wmsProjectNameSWP" name="Description" />
+    <property column="wmsRedundantSupply" name="IsRedundantSupply" />
+    
+    <property column="DBProjectId" name="ProjectId" />
+    
+    <property column="wmsTypeNameSWP" name="TypeName" />
+    <property column="wmsTypeId" name="TypeId" />
+
+    <property column="SS2010" name="Supply2010" />
+    <property column="SS2020" name="Supply2020" />
+    <property column="SS2030" name="Supply2030" />
+    <property column="SS2040" name="Supply2040" />
+    <property column="SS2050" name="Supply2050" />
+    <property column="SS2060" name="Supply2060" />
+
+    <property column="CapitalCost" name="CapitalCost" />
+    
+    <property column="CalculatedOnlineDate" name="OnlineYear" />
+    
+  </class>
+
+  <sql-query name="GetStrategiesInRegion">
+    <query-param name="regionLetter" type="char" />
+    <query-param name="year" type="string" />
+    <return class="RegionStrategySummary" />
+    exec dbo.usp_Select_Strategies_By_Region_Year__tbl_SWP_Final :regionLetter, :year
+  </sql-query>
+
+</hibernate-mapping>

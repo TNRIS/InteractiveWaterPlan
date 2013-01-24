@@ -28,7 +28,7 @@ define([
             
         #override the super's because we don't need to do any WUG feature stuff
         # but we do need do region highlighting
-        fetchCollection: () ->
+        fetchData: () ->
 
             this.$('tbody').empty() #clear the table contents
 

@@ -34,7 +34,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       return null;
     };
 
-    EntityStrategyCollectionView.prototype.fetchCollection = function() {
+    EntityStrategyCollectionView.prototype.fetchData = function() {
       var params,
         _this = this;
       this.$('tbody').empty();
@@ -63,10 +63,9 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
-      if (!this.onFetchCollectionSuccess(this.strategyCollection)) {
+      if (!this.onFetchDataSuccess(this.strategyCollection)) {
         return;
       }
-      console.log("here");
       this.showSourceFeatures();
       this.trigger("table:endload");
     };

@@ -32,7 +32,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyC
       return BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
     };
 
-    BaseSelectableRegionStrategyView.prototype.fetchCollection = function() {
+    BaseSelectableRegionStrategyView.prototype.fetchData = function() {
       var deferred, params,
         _this = this;
       this.$('tbody').empty();

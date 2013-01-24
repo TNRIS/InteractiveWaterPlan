@@ -24,7 +24,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/region
-        public IList<Strategy> GetStrategiesInRegion(int regionId, string year)
+        public IList<RegionStrategySummary> GetStrategiesInRegion(int regionId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
@@ -33,7 +33,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/region
-        public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year)
+        public IList<RegionStrategySummary> GetStrategiesInRegion(char regionLetter, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");

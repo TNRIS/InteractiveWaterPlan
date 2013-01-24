@@ -1011,7 +1011,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', 'setupWugHighlight', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -1025,7 +1025,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.render = function() {
       this.$el.html(this.template());
-      this.fetchCollection();
+      this.fetchData();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
         trigger: 'hover',
@@ -1040,7 +1040,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       return null;
     };
 
-    BaseStrategyCollectionView.prototype.fetchCollection = function() {
+    BaseStrategyCollectionView.prototype.fetchData = function() {
       var params,
         _this = this;
       this.$('tbody').empty();
@@ -1050,14 +1050,14 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       this.trigger("table:startload");
       this.strategyCollection.fetch({
         data: params,
-        success: this.onFetchCollectionSuccess,
+        success: this.onFetchDataSuccess,
         error: function() {
           _this.trigger("table:fetcherror");
         }
       });
     };
 
-    BaseStrategyCollectionView.prototype.onFetchCollectionSuccess = function(strategyCollection) {
+    BaseStrategyCollectionView.prototype.onFetchDataSuccess = function(strategyCollection) {
       var m, _i, _len, _ref;
       if (strategyCollection.models.length === 0) {
         this.trigger("table:nothingfound");
@@ -1237,8 +1237,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.mapView.map.addLayer(this.wugLayer);
-      this.wugHighlightControl = this._setupWugHighlightControl();
-      this.mapView.map.addControl(this.wugHighlightControl);
+      this.setupWugHighlight();
       this.wugClickControl = this._setupWugClickControl();
       this.mapView.map.addControl(this.wugClickControl);
       this.mapView.zoomToExtent(bounds);
@@ -1246,9 +1245,9 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.clearWugFeaturesAndControls = function() {
       this.unselectWugFeatures();
-      if (this.wugHighlightControl != null) {
-        this.wugHighlightControl.destroy();
-        this.wugHighlightControl = null;
+      if (this.highlightFeatureControl != null) {
+        this.highlightFeatureControl.destroy();
+        this.highlightFeatureControl = null;
       }
       if (this.wugClickControl != null) {
         this.wugClickControl.destroy();
@@ -1261,24 +1260,24 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
       var wugFeature, _i, _len, _ref;
-      if (!(this.wugHighlightControl != null)) {
+      if (!(this.highlightFeatureControl != null)) {
         return;
       }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         if (wugFeature.attributes.entityId === wugId) {
-          this.wugHighlightControl.select(wugFeature);
+          this.highlightFeatureControl.select(wugFeature);
           return;
         }
       }
     };
 
     BaseStrategyCollectionView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugHighlightControl != null) || !(this.wugHighlightControl.layer.selectedFeatures != null)) {
+      if (!(this.highlightFeatureControl != null) || !(this.highlightFeatureControl.layer != null) || !(this.highlightFeatureControl.layer.selectedFeatures != null)) {
         return;
       }
-      this.wugHighlightControl.unselectAll();
+      this.highlightFeatureControl.unselectAll();
     };
 
     BaseStrategyCollectionView.prototype.highlightStratTypeWugs = function(stratTypeId) {
@@ -1330,45 +1329,55 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       return control;
     };
 
-    BaseStrategyCollectionView.prototype._setupWugHighlightControl = function() {
-      var control, timer,
-        _this = this;
-      timer = null;
-      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
+    BaseStrategyCollectionView.prototype.setupWugHighlight = function() {
+      var _this = this;
+      if (!(this.highlightFeatureControl != null)) {
+        this._setupHighlightFeatureControl(this.wugLayer);
+      } else {
+        this.highlightFeatureControl.setLayer(this.wugLayer);
+      }
+      this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
+        var popup, wugFeature;
+        wugFeature = event.feature;
+        popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                        <b>" + wugFeature.attributes.name + "</b><br/>                        Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                    ", null, false);
+        popup.autoSize = true;
+        wugFeature.popup = popup;
+        _this.mapView.map.addPopup(popup);
+      });
+      this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
+        var wugFeature;
+        wugFeature = event.feature;
+        clearTimeout(_this.highlightTimer);
+        if (wugFeature.popup != null) {
+          _this.mapView.map.removePopup(wugFeature.popup);
+          wugFeature.popup.destroy();
+          wugFeature.popup = null;
+        }
+      });
+    };
+
+    BaseStrategyCollectionView.prototype._setupHighlightFeatureControl = function(layer) {
+      var me;
+      me = this;
+      this.highlightFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
         multiple: false,
         hover: true,
         autoActivate: true,
         overFeature: function(feature) {
-          var layer,
-            _this = this;
+          var _this = this;
           layer = feature.layer;
           if (this.hover) {
             if (this.highlightOnly) {
               this.highlight(feature);
             } else if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) === -1) {
-              timer = _.delay(function() {
+              me.highlightTimer = _.delay(function() {
                 return _this.select(feature);
               }, 400);
             }
           }
-        },
-        onSelect: function(wugFeature) {
-          var popup;
-          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                            ", null, false);
-          popup.autoSize = true;
-          wugFeature.popup = popup;
-          _this.mapView.map.addPopup(popup);
-        },
-        onUnselect: function(wugFeature) {
-          clearTimeout(timer);
-          if (wugFeature.popup != null) {
-            _this.mapView.map.removePopup(wugFeature.popup);
-            wugFeature.popup.destroy();
-            wugFeature.popup = null;
-          }
         }
       });
-      return control;
+      this.mapView.map.addControl(this.highlightFeatureControl);
     };
 
     BaseStrategyCollectionView.prototype._calculateScaledValue = function(max, min, scale_max, scale_min, val) {
@@ -1474,7 +1483,7 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
       return BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
     };
 
-    BaseSelectableRegionStrategyView.prototype.fetchCollection = function() {
+    BaseSelectableRegionStrategyView.prototype.fetchData = function() {
       var deferred, params,
         _this = this;
       this.$('tbody').empty();
@@ -1686,7 +1695,7 @@ define('views/CountyNetSupplyCollectionView',['namespace', 'views/BaseSelectable
   })(BaseSelectableRegionStrategyView);
 });
 
-define('scripts/text!templates/regionStrategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{m.sourceName}}</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    \r\n    {{ \'$\' + $.number(m.capitalCost) }}\r\n        \r\n</td>\r\n';});
+define('scripts/text!templates/regionStrategyRow.html',[],function () { return '\r\n<td class="strategyType" data-type-id="{{m.typeId}}">   \r\n    {{m.typeName}}\r\n</td>\r\n\r\n<td class="aligned-left">\r\n    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">\r\n        {{m.description}}\r\n    </a>\r\n</td>\r\n<td>{{ $.number(m["supply"+currYear]) }}</td>\r\n<td>\r\n    \r\n    {{ \'$\' + $.number(m.capitalCost) }}\r\n        \r\n</td>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -1709,7 +1718,7 @@ define('views/RegionStrategyView',['namespace', 'views/BaseStrategyView', 'scrip
   })(BaseStrategyView);
 });
 
-define('scripts/text!templates/regionStrategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="Type of the recommended Water Management Strategy.">\r\n                    Type\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
+define('scripts/text!templates/regionStrategyTable.html',[],function () { return '<h2>\r\n    Recommended Water Management Strategies in <span data-bind="text: viewName"></span> - <span data-bind="text: currYear"></span>\r\n</h2>\r\n<p>All supply amounts are in units of acre-feet/year.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="Type of the recommended Water Management Strategy.">\r\n                    Type\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -2006,7 +2015,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
       return null;
     };
 
-    EntityStrategyCollectionView.prototype.fetchCollection = function() {
+    EntityStrategyCollectionView.prototype.fetchData = function() {
       var params,
         _this = this;
       this.$('tbody').empty();
@@ -2035,10 +2044,9 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
-      if (!this.onFetchCollectionSuccess(this.strategyCollection)) {
+      if (!this.onFetchDataSuccess(this.strategyCollection)) {
         return;
       }
-      console.log("here");
       this.showSourceFeatures();
       this.trigger("table:endload");
     };

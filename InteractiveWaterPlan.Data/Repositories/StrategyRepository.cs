@@ -27,7 +27,7 @@ namespace InteractiveWaterPlan.Data
                 .ToList<StrategyType>();
         }
 
-        public IList<Strategy> GetStrategiesInRegion(int regionId, string year)
+        public IList<RegionStrategySummary> GetStrategiesInRegion(int regionId, string year)
         {
             //first need to figure out the regionLetter of the given regionId
             var regionLetter = Session.GetNamedQuery("GetAllPlanningRegions")
@@ -39,7 +39,7 @@ namespace InteractiveWaterPlan.Data
             return GetStrategiesInRegion(regionLetter, year);
         }
 
-        public IList<Strategy> GetStrategiesInRegion(char regionLetter, string year)
+        public IList<RegionStrategySummary> GetStrategiesInRegion(char regionLetter, string year)
         {
             regionLetter = char.ToUpper(regionLetter);
 
@@ -48,7 +48,7 @@ namespace InteractiveWaterPlan.Data
             var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")
                 .SetParameter("regionLetter", regionLetter)
                 .SetParameter("year", year)
-                .List<Strategy>();
+                .List<RegionStrategySummary>();
 
             return allStrategiesInRegion;
 

@@ -8,13 +8,13 @@ define([
         MIN_WUG_RADIUS: 6
 
         initialize: (ModelView, StrategyCollection, tpl, options) ->
-            _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel',
-                'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 
+            _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel',
+                'hideLoading', 'showLoading', 'onFetchDataSuccess', 
                 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
                 'showNothingFound', 'hideNothingFound',
                 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl',
-                'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl',
-                'highlightStratTypeWugs', 'unhighlightStratTypeWugs'
+                'selectWugFeature', 'unselectWugFeatures', 'setupWugHighlight',
+                'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl'
             )
 
             options = options || {}
@@ -37,7 +37,7 @@ define([
         render: () ->
             @$el.html(this.template())
 
-            this.fetchCollection()
+            this.fetchData()
 
             ko.applyBindings(this, @el)
             
@@ -54,7 +54,7 @@ define([
             @$el.html()
             return null
 
-        fetchCollection: () ->
+        fetchData: () ->
             this.$('tbody').empty() #clear the table contents
 
             #always include the current year in the fetch parameters
@@ -65,7 +65,7 @@ define([
             @strategyCollection.fetch(
                 data: params
                 
-                success: this.onFetchCollectionSuccess
+                success: this.onFetchDataSuccess
                     
                 error: () =>
                     this.trigger("table:fetcherror")
@@ -74,7 +74,7 @@ define([
 
             return
 
-        onFetchCollectionSuccess: (strategyCollection) ->
+        onFetchDataSuccess: (strategyCollection) ->
             if strategyCollection.models.length == 0
                 this.trigger("table:nothingfound")
                 return false
@@ -316,8 +316,8 @@ define([
             # because child of this class will have to share those controls
 
             #Add control to highlight feature and show popup on hover
-            @wugHighlightControl = this._setupWugHighlightControl()
-            @mapView.map.addControl(@wugHighlightControl)
+            this.setupWugHighlight()
+           
 
             #Add control to view entity details view on click
             @wugClickControl = this._setupWugClickControl()
@@ -328,32 +328,35 @@ define([
 
         clearWugFeaturesAndControls: () ->
             this.unselectWugFeatures() 
-            if @wugHighlightControl? 
-                @wugHighlightControl.destroy()
-                @wugHighlightControl = null
+            if @highlightFeatureControl? 
+                @highlightFeatureControl.destroy()
+                @highlightFeatureControl = null
             if @wugClickControl?
                 @wugClickControl.destroy()
                 @wugClickControl = null
 
-            if @wugLayer? then @wugLayer.destroy()
+            if @wugLayer?
+
+                @wugLayer.destroy()
             return
 
         selectWugFeature: (wugId, projId) ->
-            if not @wugHighlightControl? then return
+            if not @highlightFeatureControl? then return
 
             for wugFeature in @wugLayer.features
 
                 if wugFeature.attributes.entityId == wugId
-                    @wugHighlightControl.select(wugFeature)
+                    @highlightFeatureControl.select(wugFeature)
                     return
 
             return
 
         unselectWugFeatures: () ->
-            if not @wugHighlightControl? or not @wugHighlightControl.layer.selectedFeatures? 
-                return
+            if (not @highlightFeatureControl? or not @highlightFeatureControl.layer? or
+                not @highlightFeatureControl.layer.selectedFeatures? )
+                    return
 
-            @wugHighlightControl.unselectAll()
+            @highlightFeatureControl.unselectAll()
 
             return
 
@@ -379,6 +382,7 @@ define([
             @wugLayer.redraw()
             return
 
+        #TODO: will have to do the same junk here as in the WugHighlight
         _setupWugClickControl: () ->
             control = new OpenLayers.Control.SelectFeature(
                 @wugLayer,
@@ -399,57 +403,81 @@ define([
                 })
             return control
 
-        _setupWugHighlightControl: () ->
-            timer = null
-            control = new OpenLayers.Control.SelectFeature(
-                @wugLayer,
+        setupWugHighlight: () ->
+            
+            #first see if the control exists, if not, set it up
+            if not @highlightFeatureControl?
+                this._setupHighlightFeatureControl(@wugLayer)
+            
+            #TODO: need to check if there is already a layer there, then add it?
+            # setLayer will override any layers that have been set
+            else
+                #TODO: use an _addLayerToControl(@highlightFeatureControl, @wugLayer) method
+                @highlightFeatureControl.setLayer(@wugLayer)
+
+            @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
+                wugFeature = event.feature
+                popup = new OpenLayers.Popup.FramedCloud("wugpopup",
+                    wugFeature.geometry.getBounds().getCenterLonLat()
+                    null, #contentSize
+                    "
+                        <b>#{wugFeature.attributes.name}</b><br/>
+                        Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
+                    ",
+                    null, #anchor
+                    false, #closeBox
+                    #closeBoxCallback
+                ) 
+
+                popup.autoSize = true
+                wugFeature.popup = popup
+                @mapView.map.addPopup(popup)
+                return
+            )
+
+            @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
+                wugFeature = event.feature
+                clearTimeout(@highlightTimer)
+                if wugFeature.popup?
+                    @mapView.map.removePopup(wugFeature.popup)
+                    wugFeature.popup.destroy()
+                    wugFeature.popup = null
+                return
+            )
+
+
+            return
+
+       
+        _setupHighlightFeatureControl: (layer) ->
+
+            me = this #save a reference to the current this
+
+            @highlightFeatureControl = new OpenLayers.Control.SelectFeature(
+                layer,  #an initial layer must be specified or else setLayer will cause an exception later
                 {
                     multiple: false
                     hover: true
                     autoActivate: true
-
+                    
                     overFeature: (feature) ->
                         layer = feature.layer;
                         if (this.hover)
-                            if (this.highlightOnly) then this.highlight(feature);
+                            if (this.highlightOnly)
+                                this.highlight(feature);
                             else if OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1
                                 #use a slight delay to prevent windows popping up too much
-                                timer = _.delay(() =>
+                                #save the timer in 'me'
+                                me.highlightTimer = _.delay(() =>
                                     this.select(feature)
                                 , 400)
                         return
-
-                    onSelect: (wugFeature) =>
-                        popup = new OpenLayers.Popup.FramedCloud("wugpopup",
-                            wugFeature.geometry.getBounds().getCenterLonLat()
-                            null, #contentSize
-                            "
-                                <b>#{wugFeature.attributes.name}</b><br/>
-                                Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
-                            ",
-                            null, #anchor
-                            false, #closeBox
-                            #closeBoxCallback
-                        ) 
-
-                        popup.autoSize = true
-                        wugFeature.popup = popup
-                        @mapView.map.addPopup(popup)
-                        return
-
-                    onUnselect: (wugFeature) =>
-                        clearTimeout(timer)
-                        if wugFeature.popup?
-                            @mapView.map.removePopup(wugFeature.popup)
-                            wugFeature.popup.destroy()
-                            wugFeature.popup = null
-                        return
                 }
-
             )
 
+            @mapView.map.addControl(@highlightFeatureControl)
 
-            return control
+            return
 
         _calculateScaledValue: (max, min, scale_max, scale_min, val) ->
             if max == min then return scale_min

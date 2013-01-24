@@ -17,7 +17,7 @@ define(['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchCollection', 'appendModel', 'hideLoading', 'showLoading', 'onFetchCollectionSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightControl', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', 'setupWugHighlight', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -31,7 +31,7 @@ define(['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.render = function() {
       this.$el.html(this.template());
-      this.fetchCollection();
+      this.fetchData();
       ko.applyBindings(this, this.el);
       this.$('.has-popover').popover({
         trigger: 'hover',
@@ -46,7 +46,7 @@ define(['namespace'], function(namespace) {
       return null;
     };
 
-    BaseStrategyCollectionView.prototype.fetchCollection = function() {
+    BaseStrategyCollectionView.prototype.fetchData = function() {
       var params,
         _this = this;
       this.$('tbody').empty();
@@ -56,14 +56,14 @@ define(['namespace'], function(namespace) {
       this.trigger("table:startload");
       this.strategyCollection.fetch({
         data: params,
-        success: this.onFetchCollectionSuccess,
+        success: this.onFetchDataSuccess,
         error: function() {
           _this.trigger("table:fetcherror");
         }
       });
     };
 
-    BaseStrategyCollectionView.prototype.onFetchCollectionSuccess = function(strategyCollection) {
+    BaseStrategyCollectionView.prototype.onFetchDataSuccess = function(strategyCollection) {
       var m, _i, _len, _ref;
       if (strategyCollection.models.length === 0) {
         this.trigger("table:nothingfound");
@@ -243,8 +243,7 @@ define(['namespace'], function(namespace) {
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.mapView.map.addLayer(this.wugLayer);
-      this.wugHighlightControl = this._setupWugHighlightControl();
-      this.mapView.map.addControl(this.wugHighlightControl);
+      this.setupWugHighlight();
       this.wugClickControl = this._setupWugClickControl();
       this.mapView.map.addControl(this.wugClickControl);
       this.mapView.zoomToExtent(bounds);
@@ -252,9 +251,9 @@ define(['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.clearWugFeaturesAndControls = function() {
       this.unselectWugFeatures();
-      if (this.wugHighlightControl != null) {
-        this.wugHighlightControl.destroy();
-        this.wugHighlightControl = null;
+      if (this.highlightFeatureControl != null) {
+        this.highlightFeatureControl.destroy();
+        this.highlightFeatureControl = null;
       }
       if (this.wugClickControl != null) {
         this.wugClickControl.destroy();
@@ -267,24 +266,24 @@ define(['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
       var wugFeature, _i, _len, _ref;
-      if (!(this.wugHighlightControl != null)) {
+      if (!(this.highlightFeatureControl != null)) {
         return;
       }
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         if (wugFeature.attributes.entityId === wugId) {
-          this.wugHighlightControl.select(wugFeature);
+          this.highlightFeatureControl.select(wugFeature);
           return;
         }
       }
     };
 
     BaseStrategyCollectionView.prototype.unselectWugFeatures = function() {
-      if (!(this.wugHighlightControl != null) || !(this.wugHighlightControl.layer.selectedFeatures != null)) {
+      if (!(this.highlightFeatureControl != null) || !(this.highlightFeatureControl.layer != null) || !(this.highlightFeatureControl.layer.selectedFeatures != null)) {
         return;
       }
-      this.wugHighlightControl.unselectAll();
+      this.highlightFeatureControl.unselectAll();
     };
 
     BaseStrategyCollectionView.prototype.highlightStratTypeWugs = function(stratTypeId) {
@@ -336,45 +335,55 @@ define(['namespace'], function(namespace) {
       return control;
     };
 
-    BaseStrategyCollectionView.prototype._setupWugHighlightControl = function() {
-      var control, timer,
-        _this = this;
-      timer = null;
-      control = new OpenLayers.Control.SelectFeature(this.wugLayer, {
+    BaseStrategyCollectionView.prototype.setupWugHighlight = function() {
+      var _this = this;
+      if (!(this.highlightFeatureControl != null)) {
+        this._setupHighlightFeatureControl(this.wugLayer);
+      } else {
+        this.highlightFeatureControl.setLayer(this.wugLayer);
+      }
+      this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
+        var popup, wugFeature;
+        wugFeature = event.feature;
+        popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                        <b>" + wugFeature.attributes.name + "</b><br/>                        Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                    ", null, false);
+        popup.autoSize = true;
+        wugFeature.popup = popup;
+        _this.mapView.map.addPopup(popup);
+      });
+      this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
+        var wugFeature;
+        wugFeature = event.feature;
+        clearTimeout(_this.highlightTimer);
+        if (wugFeature.popup != null) {
+          _this.mapView.map.removePopup(wugFeature.popup);
+          wugFeature.popup.destroy();
+          wugFeature.popup = null;
+        }
+      });
+    };
+
+    BaseStrategyCollectionView.prototype._setupHighlightFeatureControl = function(layer) {
+      var me;
+      me = this;
+      this.highlightFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
         multiple: false,
         hover: true,
         autoActivate: true,
         overFeature: function(feature) {
-          var layer,
-            _this = this;
+          var _this = this;
           layer = feature.layer;
           if (this.hover) {
             if (this.highlightOnly) {
               this.highlight(feature);
             } else if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) === -1) {
-              timer = _.delay(function() {
+              me.highlightTimer = _.delay(function() {
                 return _this.select(feature);
               }, 400);
             }
           }
-        },
-        onSelect: function(wugFeature) {
-          var popup;
-          popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                                <b>" + wugFeature.attributes.name + "</b><br/>                                Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                            ", null, false);
-          popup.autoSize = true;
-          wugFeature.popup = popup;
-          _this.mapView.map.addPopup(popup);
-        },
-        onUnselect: function(wugFeature) {
-          clearTimeout(timer);
-          if (wugFeature.popup != null) {
-            _this.mapView.map.removePopup(wugFeature.popup);
-            wugFeature.popup.destroy();
-            wugFeature.popup = null;
-          }
         }
       });
-      return control;
+      this.mapView.map.addControl(this.highlightFeatureControl);
     };
 
     BaseStrategyCollectionView.prototype._calculateScaledValue = function(max, min, scale_max, scale_min, val) {

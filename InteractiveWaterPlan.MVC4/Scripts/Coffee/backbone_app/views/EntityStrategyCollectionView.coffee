@@ -36,8 +36,8 @@ define([
             
             return null
 
-        #override the super's fetchCollection to also fetch sources
-        fetchCollection: () ->
+        #override the super's fetchData to also fetch sources
+        fetchData: () ->
 
             this.$('tbody').empty() #clear the table contents
 
@@ -70,11 +70,10 @@ define([
         onFetchBothCollectionSuccess: () ->
 
             #Do @strategyCollection stuff (can just use the super's callback method)
-            if not this.onFetchCollectionSuccess(@strategyCollection)
+            if not this.onFetchDataSuccess(@strategyCollection)
                 return
 
             #only continuing if that returned non-false
-            console.log "here"
             #Do @sourceCollection stuff
             this.showSourceFeatures()
 
@@ -93,7 +92,7 @@ define([
             return
 
         showSourceFeatures: () ->
-            #TODO: will also need to draw lines from entity to source
+            #TODO: will also need to draw lines from entity to source - maybe just for reservoirs and points?
             #TODO: Add popup on highlight
             #TODO: can only have a single instance of select control (can't have two on two different layers)
             
