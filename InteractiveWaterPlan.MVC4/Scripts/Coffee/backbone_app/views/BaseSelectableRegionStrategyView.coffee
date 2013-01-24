@@ -21,10 +21,11 @@ define([
 
         #override so we can destroy the regionLayer
         unrender: () ->
+            super
             if @regionHighlightControl? then @regionHighlightControl.destroy()
             if @regionClickControl? then @regionClickControl.destroy()
             if @regionLayer? then @regionLayer.destroy()
-            return super
+            return null
             
         #override the super's because we don't need to do any WUG feature stuff
         # but we do need do region highlighting

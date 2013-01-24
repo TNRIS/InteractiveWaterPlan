@@ -38,7 +38,6 @@ define([
 
         #override the super's fetchData to also fetch sources
         fetchData: () ->
-
             this.$('tbody').empty() #clear the table contents
 
             #always include the current year in the fetch parameters
@@ -62,15 +61,15 @@ define([
             return
 
         unrender: () ->
-            if @sourceHighlightControl? then @sourceHighlightControl.destroy()
-            if @sourceClickControl? then @sourceClickControl.destroy()
+            #must call super first because of how controls are destroyed
+            super
             if @sourceLayer? then @sourceLayer.destroy()
-            return super
+            return null
 
         onFetchBothCollectionSuccess: () ->
 
             #Do @strategyCollection stuff (can just use the super's callback method)
-            if not this.onFetchDataSuccess(@strategyCollection)
+            if this.onFetchDataSuccess(@strategyCollection) == false
                 return
 
             #only continuing if that returned non-false
@@ -170,6 +169,8 @@ define([
             @sourceLayer.addFeatures(sourceFeatures)
 
             @mapView.map.addLayer(@sourceLayer)
+
+            this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
 
             ### TODO: See notes above
             @sourceHighlightControl = new OpenLayers.Control.SelectFeature(

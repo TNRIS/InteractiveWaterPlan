@@ -1077,6 +1077,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         this.fetchCallback(strategyCollection.models);
       }
       this.trigger("table:endload");
+      return true;
     };
 
     BaseStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
@@ -1338,6 +1339,9 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       }
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, wugFeature;
+        if (event.feature.layer.id !== _this.wugLayer.id) {
+          return;
+        }
         wugFeature = event.feature;
         popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                        <b>" + wugFeature.attributes.name + "</b><br/>                        Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                    ", null, false);
         popup.autoSize = true;
@@ -1346,8 +1350,10 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var wugFeature;
+        if (event.feature.layer.id !== _this.wugLayer.id) {
+          return;
+        }
         wugFeature = event.feature;
-        clearTimeout(_this.highlightTimer);
         if (wugFeature.popup != null) {
           _this.mapView.map.removePopup(wugFeature.popup);
           wugFeature.popup.destroy();
@@ -1356,9 +1362,27 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       });
     };
 
+    BaseStrategyCollectionView.prototype._addLayerToControl = function(control, newLayer) {
+      var alreadyThere, oldLayers;
+      if (!(control != null) || !(newLayer != null)) {
+        return;
+      }
+      oldLayers = null;
+      if (control.layers != null) {
+        oldLayers = control.layers;
+      } else if (control.layer != null) {
+        oldLayers = [control.layer];
+      }
+      alreadyThere = _.find(oldLayers, function(l) {
+        return l.id === newLayer.id;
+      });
+      if (alreadyThere != null) {
+        return;
+      }
+      control.setLayer(_.flatten([oldLayers, newLayer], true));
+    };
+
     BaseStrategyCollectionView.prototype._setupHighlightFeatureControl = function(layer) {
-      var me;
-      me = this;
       this.highlightFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
         multiple: false,
         hover: true,
@@ -1370,9 +1394,30 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
             if (this.highlightOnly) {
               this.highlight(feature);
             } else if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) === -1) {
-              me.highlightTimer = _.delay(function() {
+              this.highlightTimer = _.delay(function() {
                 return _this.select(feature);
               }, 400);
+            }
+          }
+        },
+        outFeature: function(feature) {
+          var control;
+          if (this.hover) {
+            clearTimeout(this.highlightTimer);
+            if (this.highlightOnly) {
+              if (feature._lastHighlighter === this.id) {
+                if (feature._prevHighlighter && feature._prevHighlighter !== this.id) {
+                  delete feature._lastHighlighter;
+                  control = this.map.getControl(feature._prevHighlighter);
+                  if (control) {
+                    return control.highlight(feature);
+                  }
+                } else {
+                  return this.unhighlight(feature);
+                }
+              }
+            } else {
+              return this.unselect(feature);
             }
           }
         }
@@ -1471,6 +1516,7 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
     };
 
     BaseSelectableRegionStrategyView.prototype.unrender = function() {
+      BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
       if (this.regionHighlightControl != null) {
         this.regionHighlightControl.destroy();
       }
@@ -1480,7 +1526,7 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
       if (this.regionLayer != null) {
         this.regionLayer.destroy();
       }
-      return BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
+      return null;
     };
 
     BaseSelectableRegionStrategyView.prototype.fetchData = function() {
@@ -2031,20 +2077,15 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
     };
 
     EntityStrategyCollectionView.prototype.unrender = function() {
-      if (this.sourceHighlightControl != null) {
-        this.sourceHighlightControl.destroy();
-      }
-      if (this.sourceClickControl != null) {
-        this.sourceClickControl.destroy();
-      }
+      EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
+      return null;
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
-      if (!this.onFetchDataSuccess(this.strategyCollection)) {
+      if (this.onFetchDataSuccess(this.strategyCollection) === false) {
         return;
       }
       this.showSourceFeatures();
@@ -2116,6 +2157,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
       });
       this.sourceLayer.addFeatures(sourceFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
+      this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       /* TODO: See notes above
       @sourceHighlightControl = new OpenLayers.Control.SelectFeature(
           @sourceLayer,

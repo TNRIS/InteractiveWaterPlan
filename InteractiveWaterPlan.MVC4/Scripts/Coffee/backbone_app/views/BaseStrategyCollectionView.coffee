@@ -94,7 +94,7 @@ define([
 
             this.trigger("table:endload")
 
-            return
+            return true
 
 
         fetchCallback: (strategyModels) ->
@@ -416,6 +416,10 @@ define([
                 @highlightFeatureControl.setLayer(@wugLayer)
 
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
+                #only do this handler for @wugLayer
+                if event.feature.layer.id != @wugLayer.id
+                    return
+
                 wugFeature = event.feature
                 popup = new OpenLayers.Popup.FramedCloud("wugpopup",
                     wugFeature.geometry.getBounds().getCenterLonLat()
@@ -436,8 +440,13 @@ define([
             )
 
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
+                
+                #only do this handler for @wugLayer
+                if event.feature.layer.id != @wugLayer.id
+                    return
+
                 wugFeature = event.feature
-                clearTimeout(@highlightTimer)
+                
                 if wugFeature.popup?
                     @mapView.map.removePopup(wugFeature.popup)
                     wugFeature.popup.destroy()
@@ -448,10 +457,31 @@ define([
 
             return
 
+        _addLayerToControl: (control, newLayer) ->
+            if not control? or not newLayer? then return
+
+            oldLayers = null
+
+            if control.layers?
+                oldLayers = control.layers
+
+            else if control.layer?
+                oldLayers = [control.layer]
+           
+            #check to make a layer with the same id is not already in there
+            alreadyThere = _.find(oldLayers, (l) ->
+                return l.id == newLayer.id  
+            )
+            if alreadyThere? then return
+
+            #calling _.flatten with shallow=true will create 
+            # a single dimension array layers
+            control.setLayer(_.flatten([oldLayers, newLayer], true))
+
+            return
+
        
         _setupHighlightFeatureControl: (layer) ->
-
-            me = this #save a reference to the current this
 
             @highlightFeatureControl = new OpenLayers.Control.SelectFeature(
                 layer,  #an initial layer must be specified or else setLayer will cause an exception later
@@ -460,6 +490,7 @@ define([
                     hover: true
                     autoActivate: true
                     
+                    #override the default overFeature to add a timer
                     overFeature: (feature) ->
                         layer = feature.layer;
                         if (this.hover)
@@ -467,11 +498,33 @@ define([
                                 this.highlight(feature);
                             else if OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1
                                 #use a slight delay to prevent windows popping up too much
-                                #save the timer in 'me'
-                                me.highlightTimer = _.delay(() =>
+                                #save the timer in the control
+                                this.highlightTimer = _.delay(() =>
                                     this.select(feature)
                                 , 400)
                         return
+
+                    #override the default outFeature to reset the timer
+                    outFeature: (feature) ->
+                        if (this.hover)
+                            clearTimeout(this.highlightTimer)
+                            if (this.highlightOnly)
+                                # we do nothing if we're not the last highlighter of the
+                                # feature
+                                if (feature._lastHighlighter == this.id)
+                                    # if another select control had highlighted the feature before
+                                    # we did it ourself then we use that control to highlight the
+                                    # feature as it was before we highlighted it, else we just
+                                    # unhighlight it
+                                    if (feature._prevHighlighter and feature._prevHighlighter != this.id)
+                                        delete feature._lastHighlighter
+                                        control = this.map.getControl(feature._prevHighlighter)
+                                        if (control) then control.highlight(feature)
+                                        
+                                    else
+                                        this.unhighlight(feature);
+                            else
+                                this.unselect(feature);
                 }
             )
 
@@ -487,8 +540,7 @@ define([
             
             return scaled_val
 
-
-
+        #Sweet style map for wugs
         _wugStyleMap: new OpenLayers.StyleMap(
             "default" : new OpenLayers.Style( 
                 pointRadius: '${getPointRadius}'

@@ -50,20 +50,15 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
     };
 
     EntityStrategyCollectionView.prototype.unrender = function() {
-      if (this.sourceHighlightControl != null) {
-        this.sourceHighlightControl.destroy();
-      }
-      if (this.sourceClickControl != null) {
-        this.sourceClickControl.destroy();
-      }
+      EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
+      return null;
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
-      if (!this.onFetchDataSuccess(this.strategyCollection)) {
+      if (this.onFetchDataSuccess(this.strategyCollection) === false) {
         return;
       }
       this.showSourceFeatures();
@@ -135,6 +130,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       });
       this.sourceLayer.addFeatures(sourceFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
+      this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       /* TODO: See notes above
       @sourceHighlightControl = new OpenLayers.Control.SelectFeature(
           @sourceLayer,

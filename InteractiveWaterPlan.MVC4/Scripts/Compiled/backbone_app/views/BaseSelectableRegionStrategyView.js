@@ -20,6 +20,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyC
     };
 
     BaseSelectableRegionStrategyView.prototype.unrender = function() {
+      BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
       if (this.regionHighlightControl != null) {
         this.regionHighlightControl.destroy();
       }
@@ -29,7 +30,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyC
       if (this.regionLayer != null) {
         this.regionLayer.destroy();
       }
-      return BaseSelectableRegionStrategyView.__super__.unrender.apply(this, arguments);
+      return null;
     };
 
     BaseSelectableRegionStrategyView.prototype.fetchData = function() {
