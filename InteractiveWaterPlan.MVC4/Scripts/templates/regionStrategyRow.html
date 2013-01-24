@@ -1,6 +1,9 @@
 
 <td class="strategyType" data-type-id="{{m.typeId}}">   
-    {{m.typeName}}
+    {{m.typeName}} 
+    <% if (m.isRedundantSupply === 'Y') { 
+        print("<span class='note-marker'>*</span>"); 
+    } %>
 </td>
 
 <td class="aligned-left">

@@ -235,6 +235,11 @@ ul.breadcrumb li:last-child > a:hover
     vertical-align: 0px;
 }
 
+.note-marker
+{
+    color: #fe781e;
+}
+
 /* OpenLayers */
 .olControlLayerSwitcher 
 {
