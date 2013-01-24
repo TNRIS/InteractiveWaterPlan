@@ -273,6 +273,14 @@ ul.breadcrumb li:last-child > a:hover
     bottom: 0.5em !important;
 }
 
+div.olControlMousePosition 
+{
+    bottom: 0.5em !important;
+    left: 5px !important;
+    font-size: 10px !important;
+    
+}
+
 .olControlLayerSwitcher label 
 {
     display: inline;   

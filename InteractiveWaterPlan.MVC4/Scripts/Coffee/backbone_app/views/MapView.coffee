@@ -32,7 +32,8 @@ define([
 
             _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 
                 'transformToWebMerc',  '_setupOverlayLayers', 'showWmsOverlayByViewType', 
-                'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', 'zoomToExtent')
+                'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', 'zoomToExtent',
+                'getMouseLonLat')
             
             return null
 
@@ -58,6 +59,12 @@ define([
             #@map.addLayer(@placeLayer)
             
             @map.addControl(new OpenLayers.Control.LayerSwitcher());
+
+
+            #setup mouse position control
+            @map.addControl(new OpenLayers.Control.MousePosition(
+                emptyString: ""
+            ))
 
             return this
 
@@ -127,6 +134,13 @@ define([
             #@placeLayer.removeAllFeatures()
             #@placeLayer.addFeatures(feature)
             return
+
+        getMouseLonLat: () ->
+            return @map.getLonLatFromPixel(
+                (@map.getControlsByClass(
+                    "OpenLayers.Control.MousePosition")[0])
+                .lastXy)
+        
 
         transformToWebMerc: (geometry) ->
             return geometry.transform(@map.displayProjection, @map.projection)

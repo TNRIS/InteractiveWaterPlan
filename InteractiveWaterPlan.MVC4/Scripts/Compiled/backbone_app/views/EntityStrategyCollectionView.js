@@ -92,7 +92,8 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
                   ])
       */
 
-      var bounds, newFeature, source, sourceFeatures, wktFormat, wugFeat, _i, _j, _len, _len1, _ref, _ref1;
+      var bounds, newFeature, source, sourceFeatures, wktFormat, wugFeat, _i, _j, _len, _len1, _ref, _ref1,
+        _this = this;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       sourceFeatures = [];
@@ -115,36 +116,36 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       }
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
-        styleMap: new OpenLayers.StyleMap({
-          "default": new OpenLayers.Style({
-            strokeColor: "cyan",
-            strokeWidth: 1,
-            fillColor: "blue",
-            fillOpacity: 0.8
-          }),
-          "select": new OpenLayers.Style({
-            fillColor: "cyan",
-            strokeColor: "blue"
-          })
-        })
+        styleMap: this._sourceStyleMap
       });
       this.sourceLayer.addFeatures(sourceFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
+      this.mapView.map.raiseLayer(this.wugLayer, 1);
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
-      /* TODO: See notes above
-      @sourceHighlightControl = new OpenLayers.Control.SelectFeature(
-          @sourceLayer,
-          {
-              autoActivate: true
-              hover: true
-          })
-      
-      @mapView.map.addControl(@sourceHighlightControl)
-      
-      #OL workaround to allow dragging while over a feature
-      # see http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues    
-      @sourceHighlightControl.handlers.feature.stopDown = false;
-      
+      this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
+        var popup, sourceFeature;
+        if (event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
+        }
+        sourceFeature = event.feature;
+        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b>                    ", null, false);
+        popup.autoSize = true;
+        sourceFeature.popup = popup;
+        _this.mapView.map.addPopup(popup);
+      });
+      this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
+        var sourceFeature;
+        if (event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
+        }
+        sourceFeature = event.feature;
+        if (sourceFeature.popup != null) {
+          _this.mapView.map.removePopup(sourceFeature.popup);
+          sourceFeature.popup.destroy();
+          sourceFeature.popup = null;
+        }
+      });
+      /* TODO: See notes above - do the same thing for click control
       @sourceClickControl = new OpenLayers.Control.SelectFeature(
           @sourceLayer,
           {
@@ -175,6 +176,19 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
         this.mapView.zoomToExtent(bounds);
       }
     };
+
+    EntityStrategyCollectionView.prototype._sourceStyleMap = new OpenLayers.StyleMap({
+      "default": new OpenLayers.Style({
+        strokeColor: "cyan",
+        strokeWidth: 1,
+        fillColor: "blue",
+        fillOpacity: 0.8
+      }),
+      "select": new OpenLayers.Style({
+        fillColor: "cyan",
+        strokeColor: "blue"
+      })
+    });
 
     return EntityStrategyCollectionView;
 

@@ -152,40 +152,61 @@ define([
                 "Source Feature Layer",
                 {
                     displayInLayerSwitcher: false
-                    styleMap: new OpenLayers.StyleMap(
-                        "default" : new OpenLayers.Style( 
-                            strokeColor: "cyan"
-                            strokeWidth: 1
-                            fillColor: "blue"
-                            fillOpacity: 0.8
-                        )
-                        "select" : new OpenLayers.Style(
-                            fillColor: "cyan"
-                            strokeColor: "blue"
-                        )
-                    )
+                    styleMap: this._sourceStyleMap
                 }
             )
             @sourceLayer.addFeatures(sourceFeatures)
 
             @mapView.map.addLayer(@sourceLayer)
 
+            #then, make sure @sourceLayer is beneath the @wugLayer
+            @mapView.map.raiseLayer(@wugLayer, 1)
+
             this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
 
-            ### TODO: See notes above
-            @sourceHighlightControl = new OpenLayers.Control.SelectFeature(
-                @sourceLayer,
-                {
-                    autoActivate: true
-                    hover: true
-                })
+            @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
+                #only do this handler for @sourceLayer
+                if event.feature.layer.id != @sourceLayer.id
+                    return
 
-            @mapView.map.addControl(@sourceHighlightControl)
+                sourceFeature = event.feature
 
-            #OL workaround to allow dragging while over a feature
-            # see http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues    
-            @sourceHighlightControl.handlers.feature.stopDown = false;
+                #TODO: if we want to show source supply value we'll need the sproc to return it
+                #TODO: QUESTION: do the sources change based on year??? seems like they should
+                popup = new OpenLayers.Popup.FramedCloud("sourcepopup",
+                    @mapView.getMouseLonLat(),
+                    null, #contentSize
+                    "
+                        <b>#{sourceFeature.attributes.name}</b>
+                    ",
+                    null, #anchor
+                    false, #closeBox
+                    #closeBoxCallback
+                ) 
 
+                popup.autoSize = true
+                sourceFeature.popup = popup
+                @mapView.map.addPopup(popup)
+                return
+            )
+
+            @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
+                
+                #only do this handler for @sourceLayer
+                if event.feature.layer.id != @sourceLayer.id
+                    return
+
+                sourceFeature = event.feature
+                
+                if sourceFeature.popup?
+                    @mapView.map.removePopup(sourceFeature.popup)
+                    sourceFeature.popup.destroy()
+                    sourceFeature.popup = null
+                return
+            )
+
+
+            ### TODO: See notes above - do the same thing for click control
             @sourceClickControl = new OpenLayers.Control.SelectFeature(
                 @sourceLayer,
                 {
@@ -216,5 +237,18 @@ define([
                 @mapView.zoomToExtent(bounds)
 
             return
+
+        _sourceStyleMap: new OpenLayers.StyleMap(
+            "default" : new OpenLayers.Style( 
+                strokeColor: "cyan"
+                strokeWidth: 1
+                fillColor: "blue"
+                fillOpacity: 0.8
+            )
+            "select" : new OpenLayers.Style(
+                fillColor: "cyan"
+                strokeColor: "blue"
+            )
+        )
 
 )

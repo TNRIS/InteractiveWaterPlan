@@ -28,7 +28,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
       this.bingApiKey = config.bingApiKey;
-      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', 'zoomToExtent');
+      _.bindAll(this, 'render', 'unrender', 'resetExtent', 'showPlaceFeature', 'transformToWebMerc', '_setupOverlayLayers', 'showWmsOverlayByViewType', 'hideWmsOverlays', 'showMapLoading', 'hideMapLoading', 'zoomToExtent', 'getMouseLonLat');
       return null;
     };
 
@@ -45,6 +45,9 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       });
       this._setupOverlayLayers();
       this.map.addControl(new OpenLayers.Control.LayerSwitcher());
+      this.map.addControl(new OpenLayers.Control.MousePosition({
+        emptyString: ""
+      }));
       return this;
     };
 
@@ -116,6 +119,10 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.transformToWebMerc(feature.geometry);
       bounds = feature.geometry.getBounds();
       this.zoomToExtent(bounds);
+    };
+
+    MapView.prototype.getMouseLonLat = function() {
+      return this.map.getLonLatFromPixel((this.map.getControlsByClass("OpenLayers.Control.MousePosition")[0]).lastXy);
     };
 
     MapView.prototype.transformToWebMerc = function(geometry) {
