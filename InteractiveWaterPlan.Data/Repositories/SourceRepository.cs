@@ -23,10 +23,11 @@ namespace InteractiveWaterPlan.Data
         /// Returns details for a specific entity
         /// </summary>
         /// <returns></returns>
-        public IList<Source> GetSourcesForEntity(int entityId, int polygonReduceFactor = 200)
+        public IList<Source> GetSourcesForEntity(int entityId, string year, int polygonReduceFactor = 200)
         {
             var sources = Session.GetNamedQuery("GetSourcesForEntity")
                 .SetParameter("entityId", entityId)
+                .SetParameter("year", year)
                 .List<Source>()
                 .ToList();
 

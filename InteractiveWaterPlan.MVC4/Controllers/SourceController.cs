@@ -2,6 +2,8 @@
 using System.Web.Http;
 using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
+using System;
+using System.Linq;
 
 
 namespace InteractiveWaterPlan.MVC4.Controllers
@@ -16,10 +18,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             _repo = new SourceRepository(CommonConstants.SWP_SESSION_NAME);
         }
 
-        //api/entity/{entityId}/sources
-        public IList<Source> GetSourcesForEntity(int entityId)
+        //api/entity/{entityId}/sources?year=20X0
+        public IList<Source> GetSourcesForEntity(int entityId, string year)
         {
-            return _repo.GetSourcesForEntity(entityId);
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+            
+            return _repo.GetSourcesForEntity(entityId, year);
         }
     }
 }

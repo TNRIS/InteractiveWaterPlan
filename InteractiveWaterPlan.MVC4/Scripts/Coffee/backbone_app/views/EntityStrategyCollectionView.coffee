@@ -24,6 +24,7 @@ define([
                 url: "#{BASE_API_PATH}api/strategies/entity" 
             )
 
+            #also need to specify ?year=currYear
             SourceCollection = Backbone.Collection.extend(
                 url: "#{BASE_API_PATH}api/entity/#{@entityId}/sources"
             )
@@ -48,7 +49,11 @@ define([
             #Fetch the collections
             $.when(
                 @strategyCollection.fetch( {data: params} ),
-                @sourceCollection.fetch()
+                
+                @sourceCollection.fetch(
+                    data:
+                        year: namespace.currYear
+                )
             )
             .then(
                 this.onFetchBothCollectionSuccess #process the collections
@@ -92,7 +97,7 @@ define([
 
         showSourceFeatures: () ->
             #TODO: will also need to draw lines from entity to source - maybe just for reservoirs and points?
-            #TODO: Add popup on highlight
+            
             #TODO: can only have a single instance of select control (can't have two on two different layers)
             
             #TODO: should probably style on type, which means we'd need the DB to return
@@ -178,7 +183,7 @@ define([
                     null, #contentSize
                     "
                         <b>#{sourceFeature.attributes.name}</b>
-                    ",
+                    ", #TODO: Need to put SourceSupplyYEAR here.
                     null, #anchor
                     false, #closeBox
                     #closeBoxCallback

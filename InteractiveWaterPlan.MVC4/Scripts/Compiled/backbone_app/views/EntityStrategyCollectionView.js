@@ -44,7 +44,11 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyVi
       this.trigger("table:startload");
       $.when(this.strategyCollection.fetch({
         data: params
-      }), this.sourceCollection.fetch()).then(this.onFetchBothCollectionSuccess).fail(function() {
+      }), this.sourceCollection.fetch({
+        data: {
+          year: namespace.currYear
+        }
+      })).then(this.onFetchBothCollectionSuccess).fail(function() {
         _this.trigger("table:fetcherror");
       });
     };

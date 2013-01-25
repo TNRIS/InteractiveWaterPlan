@@ -103,11 +103,18 @@ define([
             #first group the returned strategies by ID
             # then reduce those groups to a single WUG (which will become a feature on the map)
 
+            #first get rid of the WWP entities, we don't want to map them
+            strategyModels = _.reject(strategyModels, (m) ->
+                return m.get('recipientEntityType') == "WWP"
+            )
+
+            #then group the entities by id
             groupedById = _.groupBy(strategyModels, (m) ->
                 return m.get("recipientEntityId")
             )
 
             #map to a new array, reducing each group to a single WUG
+            # with the totalsupply summed, and the types pushed together
             newWugList = _.map(groupedById, 
                 (group) ->
                     entity = _.reduce(group, 

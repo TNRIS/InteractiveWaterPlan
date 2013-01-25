@@ -1089,6 +1089,9 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
       var groupedById, newWugList;
+      strategyModels = _.reject(strategyModels, function(m) {
+        return m.get('recipientEntityType') === "WWP";
+      });
       groupedById = _.groupBy(strategyModels, function(m) {
         return m.get("recipientEntityId");
       });
@@ -2078,7 +2081,11 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
       this.trigger("table:startload");
       $.when(this.strategyCollection.fetch({
         data: params
-      }), this.sourceCollection.fetch()).then(this.onFetchBothCollectionSuccess).fail(function() {
+      }), this.sourceCollection.fetch({
+        data: {
+          year: namespace.currYear
+        }
+      })).then(this.onFetchBothCollectionSuccess).fail(function() {
         _this.trigger("table:fetcherror");
       });
     };
