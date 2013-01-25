@@ -1413,7 +1413,6 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         outFeature: function(feature) {
           var control;
           if (this.hover) {
-            clearTimeout(this.highlightTimer);
             if (this.highlightOnly) {
               if (feature._lastHighlighter === this.id) {
                 if (feature._prevHighlighter && feature._prevHighlighter !== this.id) {
@@ -1427,6 +1426,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
                 }
               }
             } else {
+              clearTimeout(this.highlightTimer);
               return this.unselect(feature);
             }
           }

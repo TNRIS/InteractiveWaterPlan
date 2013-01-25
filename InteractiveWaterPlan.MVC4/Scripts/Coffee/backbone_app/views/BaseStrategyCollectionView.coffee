@@ -514,7 +514,6 @@ define([
                     #override the default outFeature to reset the timer
                     outFeature: (feature) ->
                         if (this.hover)
-                            clearTimeout(this.highlightTimer)
                             if (this.highlightOnly)
                                 # we do nothing if we're not the last highlighter of the
                                 # feature
@@ -531,6 +530,7 @@ define([
                                     else
                                         this.unhighlight(feature);
                             else
+                                clearTimeout(this.highlightTimer)
                                 this.unselect(feature);
                 }
             )
