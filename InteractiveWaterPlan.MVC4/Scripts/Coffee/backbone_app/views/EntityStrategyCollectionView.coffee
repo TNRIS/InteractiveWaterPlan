@@ -182,7 +182,9 @@ define([
                     @mapView.getMouseLonLat(),
                     null, #contentSize
                     "
-                        <b>#{sourceFeature.attributes.name}</b>
+                        <b>#{sourceFeature.attributes.name}</b><br/>
+                        #{namespace.currYear} Supply to Water User Group: 
+                        #{$.number(sourceFeature.attributes.supplyInYear)} ac-ft/yr
                     ", #TODO: Need to put SourceSupplyYEAR here.
                     null, #anchor
                     false, #closeBox
