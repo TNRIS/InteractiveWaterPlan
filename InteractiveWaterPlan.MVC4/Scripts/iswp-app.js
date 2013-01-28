@@ -2095,6 +2095,9 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
+      if (this.lineLayer != null) {
+        this.lineLayer.destroy();
+      }
       return null;
     };
 
@@ -2133,11 +2136,13 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
                   ])
       */
 
-      var bounds, newFeature, source, sourceFeatures, wktFormat, wugFeat, _i, _j, _len, _len1, _ref, _ref1,
+      var bounds, lineFeatures, newFeature, source, sourceFeatures, sourcePoint, wktFormat, wugFeat, wugFeature, _i, _len, _ref,
         _this = this;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       sourceFeatures = [];
+      lineFeatures = [];
+      wugFeature = this.wugLayer.features[0];
       _ref = this.sourceCollection.models;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         source = _ref[_i];
@@ -2145,8 +2150,18 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
           continue;
         }
         newFeature = wktFormat.read(source.get('wktGeog'));
+        if (!(newFeature != null)) {
+          continue;
+        }
         newFeature.attributes = _.clone(source.attributes);
+        console.log(newFeature);
+        if (source.attributes.wktMappingPoint != null) {
+          sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
+          sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
+          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry])));
+        }
         delete newFeature.attributes.wktGeog;
+        delete newFeature.attributes.wktMappingPoint;
         newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
@@ -2155,13 +2170,18 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
         }
         sourceFeatures.push(newFeature);
       }
+      this.lineLayer = new OpenLayers.Layer.Vector("Lines Layer", {
+        displayInLayerSwitcher: false
+      });
+      this.lineLayer.addFeatures(lineFeatures);
+      this.mapView.map.addLayer(this.lineLayer);
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
         styleMap: this._sourceStyleMap
       });
       this.sourceLayer.addFeatures(sourceFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
-      this.mapView.map.raiseLayer(this.wugLayer, 1);
+      this.mapView.map.setLayerIndex(this.wugLayer, this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
@@ -2209,19 +2229,16 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
       */
 
       if (bounds != null) {
-        _ref1 = this.wugLayer.features;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          wugFeat = _ref1[_j];
-          bounds.extend(wugFeat.geometry.getBounds());
-        }
+        wugFeat = this.wugLayer.features[0];
+        bounds.extend(wugFeat.geometry.getBounds());
         this.mapView.zoomToExtent(bounds);
       }
     };
 
     EntityStrategyCollectionView.prototype._sourceStyleMap = new OpenLayers.StyleMap({
       "default": new OpenLayers.Style({
-        strokeColor: "cyan",
-        strokeWidth: 1,
+        strokeColor: "blue",
+        strokeWidth: 0,
         fillColor: "blue",
         fillOpacity: 0.8
       }),

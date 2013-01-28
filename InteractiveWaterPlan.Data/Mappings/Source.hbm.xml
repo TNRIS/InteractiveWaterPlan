@@ -10,8 +10,10 @@
     <property column="Source_Name" name="Name" />
     <property column="SQL_GEOG" name="WktGeog" />
     <property column="GEOG_Mapping_Pt_Txt" name="WktMappingPoint" />
-    <!-- TODO: SourceTypeId, SourceTypeDescription -->
+
     <property column="SSYear" name="SupplyInYear" />
+    <property column="SoTypeId" name="SourceTypeId" />
+    <property column="SourceTypeDescription" name="SourceType" />
   </class>
   
   <!-- Queries -->

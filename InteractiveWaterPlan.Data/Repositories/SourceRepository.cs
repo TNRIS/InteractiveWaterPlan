@@ -33,7 +33,7 @@ namespace InteractiveWaterPlan.Data
 
             foreach (var src in sources)
             {
-                if (src.WktGeog.StartsWith("POLYGON")) //only need to reduce polygons
+                if (src.WktGeog.StartsWith("POLYGON") || src.WktGeog.StartsWith("MULTIPOLYGON")) //only need to reduce polygons
                 {
                     SqlGeography geog = SqlGeography.Parse(src.WktGeog);
                     SqlGeography reducedGeog = geog.Reduce(polygonReduceFactor);

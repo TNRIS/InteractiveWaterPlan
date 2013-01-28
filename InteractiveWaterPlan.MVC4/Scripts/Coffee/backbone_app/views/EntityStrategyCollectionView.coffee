@@ -69,6 +69,7 @@ define([
             #must call super first because of how controls are destroyed
             super
             if @sourceLayer? then @sourceLayer.destroy()
+            if @lineLayer? then @lineLayer.destroy()
             return null
 
         onFetchBothCollectionSuccess: () ->
@@ -96,7 +97,6 @@ define([
             return
 
         showSourceFeatures: () ->
-            #TODO: will also need to draw lines from entity to source - maybe just for reservoirs and points?
             
             #TODO: can only have a single instance of select control (can't have two on two different layers)
             
@@ -131,6 +131,8 @@ define([
 
             bounds = null
             sourceFeatures = []
+            lineFeatures = []
+            wugFeature = @wugLayer.features[0]
 
             for source in @sourceCollection.models
 
@@ -138,11 +140,24 @@ define([
                 if not source.get('wktGeog')? then continue
 
                 newFeature = wktFormat.read(source.get('wktGeog'))
+                if not newFeature? then continue
+
                 newFeature.attributes = _.clone(source.attributes)
-                
-                #but we don't need to carry about the large wktGeog
+                console.log newFeature
+                #grab the source point for mapping  and transform from geographic to web merc
+                if source.attributes.wktMappingPoint?
+                    sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
+                    sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
+
+                    lineFeatures.push new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry])
+                    )
+
+                #we don't need to carry about the large wktGeog
                 delete newFeature.attributes.wktGeog
+                delete newFeature.attributes.wktMappingPoint
                 
+                #transform from geographic to web merc
                 newFeature.geometry = @mapView.transformToWebMerc(
                     newFeature.geometry)
         
@@ -153,6 +168,17 @@ define([
 
                 sourceFeatures.push(newFeature)
 
+            #add the lineLayer first to show lines from source to entity
+            @lineLayer = new OpenLayers.Layer.Vector(
+                "Lines Layer",
+                {
+                    displayInLayerSwitcher: false    
+                }
+            )
+            @lineLayer.addFeatures(lineFeatures)
+            @mapView.map.addLayer(@lineLayer)
+
+            #then add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
                 "Source Feature Layer",
                 {
@@ -161,11 +187,11 @@ define([
                 }
             )
             @sourceLayer.addFeatures(sourceFeatures)
-
             @mapView.map.addLayer(@sourceLayer)
-
+           
             #then, make sure @sourceLayer is beneath the @wugLayer
-            @mapView.map.raiseLayer(@wugLayer, 1)
+            @mapView.map.setLayerIndex(@wugLayer, 
+                @mapView.map.getLayerIndex(@sourceLayer) + 1)
 
             this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
 
@@ -176,8 +202,6 @@ define([
 
                 sourceFeature = event.feature
 
-                #TODO: if we want to show source supply value we'll need the sproc to return it
-                #TODO: QUESTION: do the sources change based on year??? seems like they should
                 popup = new OpenLayers.Popup.FramedCloud("sourcepopup",
                     @mapView.getMouseLonLat(),
                     null, #contentSize
@@ -185,7 +209,7 @@ define([
                         <b>#{sourceFeature.attributes.name}</b><br/>
                         #{namespace.currYear} Supply to Water User Group: 
                         #{$.number(sourceFeature.attributes.supplyInYear)} ac-ft/yr
-                    ", #TODO: Need to put SourceSupplyYEAR here.
+                    ",
                     null, #anchor
                     false, #closeBox
                     #closeBoxCallback
@@ -238,8 +262,8 @@ define([
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
             if bounds?
-                for wugFeat in @wugLayer.features
-                    bounds.extend(wugFeat.geometry.getBounds())
+                wugFeat = @wugLayer.features[0]
+                bounds.extend(wugFeat.geometry.getBounds())
 
                 @mapView.zoomToExtent(bounds)
 
@@ -247,8 +271,8 @@ define([
 
         _sourceStyleMap: new OpenLayers.StyleMap(
             "default" : new OpenLayers.Style( 
-                strokeColor: "cyan"
-                strokeWidth: 1
+                strokeColor: "blue"
+                strokeWidth: 0
                 fillColor: "blue"
                 fillOpacity: 0.8
             )
