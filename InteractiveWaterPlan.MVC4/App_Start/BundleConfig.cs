@@ -17,6 +17,7 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/jquery.number.js",
                 "~/Scripts/OpenLayers/tile.stamen.js",
                 "~/Scripts/Compiled/OpenLayers/*.js",
+                "~/Scripts/OpenLayers/OpenLayers.Format.TopoJSON.js",
                 "~/Scripts/jquery.dataTables.js",
                 "~/Scripts/DT_bootstrap.js",
                 "~/Scripts/chosen.jquery.js",

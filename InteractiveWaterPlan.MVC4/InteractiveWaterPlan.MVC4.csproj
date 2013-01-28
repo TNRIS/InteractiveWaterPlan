@@ -281,6 +281,7 @@
     <Content Include="Scripts\OpenLayers\img\zoom-world-mini.png" />
     <Content Include="Scripts\OpenLayers\img\zoombar.png" />
     <Content Include="Scripts\OpenLayers\OpenLayers.debug.js" />
+    <Content Include="Scripts\OpenLayers\OpenLayers.Format.TopoJSON.js" />
     <Content Include="Scripts\OpenLayers\OpenLayers.js" />
     <Content Include="Scripts\OpenLayers\theme\default\google.css" />
     <Content Include="Scripts\OpenLayers\theme\default\google.tidy.css" />
