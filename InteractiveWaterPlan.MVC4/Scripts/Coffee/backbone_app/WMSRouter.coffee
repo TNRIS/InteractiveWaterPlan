@@ -330,7 +330,7 @@ define([
 
             @areaSelectView.resetSelects()
             
-            @mapView.showWmsOverlayByViewType("Counties")
+            @mapView.showWmsOverlayByViewType("CountyNames")
 
             return
 

@@ -17,10 +17,12 @@ _.extend(
 
 
 BASE_API_PATH = "/"
+BASE_CONTENT_PATH = "/"
 
 #Launch-point for the application
 $(()->
     BASE_API_PATH = $("#base_path").val()
+    BASE_CONTENT_PATH = $("#base_content_path").val()
 
     #Config for RequireJS
     require.config(
@@ -32,7 +34,6 @@ $(()->
 
     require([
         'namespace'
-       
         'WMSRouter'
         ],
         (namespace, WMSRouter) =>

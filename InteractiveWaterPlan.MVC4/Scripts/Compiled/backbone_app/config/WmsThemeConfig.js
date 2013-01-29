@@ -54,6 +54,20 @@
           opacity: 0.6
         }
       }, {
+        name: "Texas County Names",
+        type: "WMS",
+        url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        viewType: "CountyNames",
+        service_params: {
+          layers: "13",
+          transparent: true
+        },
+        layer_params: {
+          isBaseLayer: false,
+          visibility: false,
+          opacity: 0.6
+        }
+      }, {
         name: "Texas Senate Districts (2011)",
         type: "WMS",
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",

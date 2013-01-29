@@ -274,7 +274,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         id: entityId
       });
       this.areaSelectView.resetSelects();
-      this.mapView.showWmsOverlayByViewType("Counties");
+      this.mapView.showWmsOverlayByViewType("CountyNames");
     };
 
     WMSRouter.prototype.wmsProjectDetail = function(year, projectId) {
