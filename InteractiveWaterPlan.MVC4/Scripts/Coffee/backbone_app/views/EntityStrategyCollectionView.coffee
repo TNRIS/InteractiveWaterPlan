@@ -139,6 +139,17 @@ define([
 
                 sourceFeatures.push(newFeature)
 
+
+            #sort the sourceFeatures so surface water are on top 
+            # of everything else
+            sourceFeatures.sort((a, b) ->
+                
+                if a.attributes.sourceType == "SURFACE WATER" then return 1
+                if b.attributes.sourceType == "SURFACE WATER" then return -1
+
+                return a.attributes.sourceTypeId - b.attributes.sourceTypeId
+            )
+            
             #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
                 "Source Feature Layer",
@@ -149,7 +160,7 @@ define([
             )
             @sourceLayer.addFeatures(sourceFeatures)
             @mapView.map.addLayer(@sourceLayer)
-           
+        
             #create and add the lineLayer
             @lineLayer = new OpenLayers.Layer.Vector(
                 "Lines Layer",

@@ -2182,6 +2182,15 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         }
         sourceFeatures.push(newFeature);
       }
+      sourceFeatures.sort(function(a, b) {
+        if (a.attributes.sourceType === "SURFACE WATER") {
+          return 1;
+        }
+        if (b.attributes.sourceType === "SURFACE WATER") {
+          return -1;
+        }
+        return a.attributes.sourceTypeId - b.attributes.sourceTypeId;
+      });
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
         styleMap: this._sourceStyleMap

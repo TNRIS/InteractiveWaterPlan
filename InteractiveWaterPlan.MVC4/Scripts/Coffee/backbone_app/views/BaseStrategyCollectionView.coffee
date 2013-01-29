@@ -118,7 +118,7 @@ define([
             newWugList = _.map(groupedById, 
                 (group) ->
                     entity = _.reduce(group, 
-                        (memo, m)->
+                        (memo, m) ->
                             
                             #these properties should not change
                             memo.entityId = m.get("recipientEntityId")
@@ -150,7 +150,7 @@ define([
             newWugList.sort((a, b) ->
                 #first check the type
                 if a.type == "WWP" then return -1
-                if b .type == "WWP" then return 1
+                if b.type == "WWP" then return 1
 
                 #then check the supply value
                 return b.totalSupply - a.totalSupply
