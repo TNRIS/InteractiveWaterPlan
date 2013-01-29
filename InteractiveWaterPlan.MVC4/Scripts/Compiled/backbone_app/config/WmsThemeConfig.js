@@ -13,15 +13,15 @@
       }, {
         id: 0,
         name: "SURFACE WATER",
-        strokeColor: "blue",
+        strokeColor: "white",
         fillColor: "#1E90FF",
-        strokeWidth: 0
+        strokeWidth: 1
       }, {
         id: 1,
         name: "GROUNDWATER",
-        strokeColor: "#4169E1",
+        strokeColor: "white",
         fillColor: "#4682B4",
-        strokeWidth: 0
+        strokeWidth: 1
       }
     ],
     Layers: [

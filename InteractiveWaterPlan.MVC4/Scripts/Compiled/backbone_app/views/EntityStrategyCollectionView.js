@@ -14,7 +14,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
       var SourceCollection, StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents');
+      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents');
       this.entityId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -58,9 +58,6 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      if (this.lineLayer != null) {
-        this.lineLayer.destroy();
-      }
       return null;
     };
 
@@ -98,7 +95,9 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
           sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
-          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry])));
+          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]), {
+            featureType: "connector"
+          }));
         }
         delete newFeature.attributes.wktGeog;
         delete newFeature.attributes.wktMappingPoint;
@@ -124,37 +123,12 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         styleMap: this._sourceStyleMap
       });
       this.sourceLayer.addFeatures(sourceFeatures);
+      this.sourceLayer.addFeatures(lineFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
-      this.lineLayer = new OpenLayers.Layer.Vector("Lines Layer", {
-        displayInLayerSwitcher: false
-      });
-      this.lineLayer.addFeatures(lineFeatures);
-      this.mapView.map.addLayer(this.lineLayer);
-      this.mapView.map.setLayerIndex(this.wugLayer, this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
+      this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this._registerHighlightEvents();
-      /* TODO: See notes above - do the same thing for click control
-      @sourceClickControl = new OpenLayers.Control.SelectFeature(
-          @sourceLayer,
-          {
-              autoActivate: true
-              
-              clickFeature: (sourceFeature) ->
-                  #else navigate to Source Details view when feature is clicked
-                  sourceId = sourceFeature.attributes.sourceId
-                  #TODO: navigate to source page
-                  #Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
-                  #    {trigger: true})
-      
-                  return
-          })
-      
-      @mapView.map.addControl(@sourceClickControl)
-      
-      #OL workaround again
-      @sourceClickControl.handlers.feature.stopDown = false;
-      */
-
+      this._registerClickEvents();
       if (bounds != null) {
         wugFeat = this.wugLayer.features[0];
         bounds.extend(wugFeat.geometry.getBounds());
@@ -162,12 +136,22 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       }
     };
 
+    EntityStrategyCollectionView.prototype._registerClickEvents = function() {};
+
     EntityStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
+      this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
+        var feature;
+        feature = event.feature;
+        if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
+          return false;
+        }
+        return true;
+      });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
         if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return;
+          return false;
         }
         sourceFeature = event.feature;
         popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
@@ -178,7 +162,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
         if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return;
+          return false;
         }
         sourceFeature = event.feature;
         if (sourceFeature.popup != null) {
@@ -199,6 +183,9 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         context: {
           getStrokeColor: function(feature) {
             var style;
+            if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
+              return "#ee9900";
+            }
             style = _.find(WmsThemeConfig.SourceStyles, function(style) {
               return style.id === feature.attributes.sourceTypeId;
             });

@@ -11,7 +11,7 @@ define([
         
         initialize: (options) ->
             _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 
-                'showSourceFeatures', '_registerHighlightEvents')
+                'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents')
 
             @entityId = options.id
             
@@ -70,7 +70,6 @@ define([
             #must call super first because of how controls are destroyed
             super
             if @sourceLayer? then @sourceLayer.destroy()
-            if @lineLayer? then @lineLayer.destroy()
             return null
 
         onFetchBothCollectionSuccess: () ->
@@ -121,7 +120,8 @@ define([
                     sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
 
                     lineFeatures.push new OpenLayers.Feature.Vector(
-                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry])
+                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
+                        { featureType: "connector" }
                     )
 
                 #we don't need to carry about the large wktGeog
@@ -150,6 +150,7 @@ define([
                 return a.attributes.sourceTypeId - b.attributes.sourceTypeId
             )
             
+
             #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
                 "Source Feature Layer",
@@ -159,64 +160,49 @@ define([
                 }
             )
             @sourceLayer.addFeatures(sourceFeatures)
+            @sourceLayer.addFeatures(lineFeatures)
             @mapView.map.addLayer(@sourceLayer)
         
-            #create and add the lineLayer
-            @lineLayer = new OpenLayers.Layer.Vector(
-                "Lines Layer",
-                {
-                    displayInLayerSwitcher: false    
-                }
-            )
-            @lineLayer.addFeatures(lineFeatures)
-            @mapView.map.addLayer(@lineLayer)
-
-            #then, make sure @wugLayer is on top
             @mapView.map.setLayerIndex(@wugLayer, 
-                @mapView.map.getLayerIndex(@sourceLayer) + 1)
+                +@mapView.map.getLayerIndex(@sourceLayer)+1)
 
             this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
 
             this._registerHighlightEvents()
-
+            this._registerClickEvents() #TODO: See notes above - do the same thing for click control
             
-            ### TODO: See notes above - do the same thing for click control
-            @sourceClickControl = new OpenLayers.Control.SelectFeature(
-                @sourceLayer,
-                {
-                    autoActivate: true
-                    
-                    clickFeature: (sourceFeature) ->
-                        #else navigate to Source Details view when feature is clicked
-                        sourceId = sourceFeature.attributes.sourceId
-                        #TODO: navigate to source page
-                        #Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
-                        #    {trigger: true})
-            
-                        return
-                })
-
-            @mapView.map.addControl(@sourceClickControl)
-            
-            #OL workaround again
-            @sourceClickControl.handlers.feature.stopDown = false;
-            ###
 
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
             if bounds?
                 wugFeat = @wugLayer.features[0]
                 bounds.extend(wugFeat.geometry.getBounds())
-
                 @mapView.zoomToExtent(bounds)
 
             return
 
+        _registerClickEvents: () ->
+            return
+
         _registerHighlightEvents: () ->
+
+            @highlightFeatureControl.events.register('beforefeaturehighlighted', null, (event) =>
+                
+                feature = event.feature
+
+                #and not for connectors
+                if feature.attributes.featureType? and 
+                    feature.attributes.featureType == "connector"
+                        return false #stops the rest of the highlight events
+
+                return true
+            )
+
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
+                 
                 #only do this handler for @sourceLayer
                 if event.feature.layer.id != @sourceLayer.id
-                    return
+                    return false #stops the rest of the highlight events
 
                 sourceFeature = event.feature
 
@@ -240,10 +226,9 @@ define([
             )
 
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
-                
                 #only do this handler for @sourceLayer
                 if event.feature.layer.id != @sourceLayer.id
-                    return
+                    return false #stops the rest of the highlight events
 
                 sourceFeature = event.feature
                 
@@ -265,6 +250,9 @@ define([
                 {   #lookup style attributes from WmsThemeConfig
                     context:
                         getStrokeColor: (feature) ->
+                            if feature.attributes.featureType? and feature.attributes.featureType == "connector"
+                                return "#ee9900"
+
                             style = _.find(WmsThemeConfig.SourceStyles, (style) ->
                                 return style.id == feature.attributes.sourceTypeId
                             )

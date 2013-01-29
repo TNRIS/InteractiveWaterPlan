@@ -13,7 +13,7 @@ define([
                 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
                 'showNothingFound', 'hideNothingFound',
                 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl',
-                'selectWugFeature', 'unselectWugFeatures', 'setupWugHighlight',
+                'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl'
             )
 
@@ -323,7 +323,7 @@ define([
             # because child of this class will have to share those controls
 
             #Add control to highlight feature and show popup on hover
-            this.setupWugHighlight()
+            this._setupWugHighlightContol()
            
 
             #Add control to view entity details view on click
@@ -410,7 +410,7 @@ define([
                 })
             return control
 
-        setupWugHighlight: () ->
+        _setupWugHighlightContol: () ->
             
             #first see if the control exists, if not, set it up
             if not @highlightFeatureControl?

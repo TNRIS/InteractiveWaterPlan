@@ -17,7 +17,7 @@ define(['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', 'setupWugHighlight', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', 'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -247,7 +247,7 @@ define(['namespace'], function(namespace) {
       }
       this.wugLayer.addFeatures(wugFeatures);
       this.mapView.map.addLayer(this.wugLayer);
-      this.setupWugHighlight();
+      this._setupWugHighlightContol();
       this.wugClickControl = this._setupWugClickControl();
       this.mapView.map.addControl(this.wugClickControl);
       this.mapView.zoomToExtent(bounds);
@@ -339,7 +339,7 @@ define(['namespace'], function(namespace) {
       return control;
     };
 
-    BaseStrategyCollectionView.prototype.setupWugHighlight = function() {
+    BaseStrategyCollectionView.prototype._setupWugHighlightContol = function() {
       var _this = this;
       if (!(this.highlightFeatureControl != null)) {
         this._setupHighlightFeatureControl(this.wugLayer);
