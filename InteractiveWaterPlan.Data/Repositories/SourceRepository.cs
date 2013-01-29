@@ -48,11 +48,6 @@ namespace InteractiveWaterPlan.Data
             }
 
             return sources;
-
-            //now reduce the geometry of each polygon feature
-
         }
-
-
     }
 }

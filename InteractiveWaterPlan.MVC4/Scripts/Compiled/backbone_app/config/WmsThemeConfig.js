@@ -3,6 +3,27 @@
 ﻿define([], function() {
   var WmsThemeConfig;
   WmsThemeConfig = {
+    SourceStyles: [
+      {
+        id: "default",
+        name: "DEFAULT",
+        strokeColor: "blue",
+        fillColor: "blue",
+        strokeWidth: 1
+      }, {
+        id: 0,
+        name: "SURFACE WATER",
+        strokeColor: "blue",
+        fillColor: "#1E90FF",
+        strokeWidth: 0
+      }, {
+        id: 1,
+        name: "GROUNDWATER",
+        strokeColor: "#4169E1",
+        fillColor: "#4682B4",
+        strokeWidth: 0
+      }
+    ],
     Layers: [
       {
         name: "Regional Water Planning Areas",

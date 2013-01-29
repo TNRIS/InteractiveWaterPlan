@@ -1,16 +1,17 @@
 define([
     'namespace'
+    'config/WmsThemeConfig'
     'views/BaseStrategyCollectionView'
     'views/EntityStrategyView'
     'scripts/text!templates/entityStrategyTable.html'
 ],
-(namespace, BaseStrategyCollectionView, EntityStrategyView, tpl) ->
+(namespace, WmsThemeConfig, BaseStrategyCollectionView, EntityStrategyView, tpl) ->
 
     class EntityStrategyCollectionView extends BaseStrategyCollectionView
         
         initialize: (options) ->
             _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 
-                'showSourceFeatures')
+                'showSourceFeatures', '_registerHighlightEvents')
 
             @entityId = options.id
             
@@ -97,36 +98,6 @@ define([
             return
 
         showSourceFeatures: () ->
-            
-            #TODO: can only have a single instance of select control (can't have two on two different layers)
-            
-            #TODO: should probably style on type, which means we'd need the DB to return
-            # the type (reservoir, well, stream, etc)
-            ###
-            style.addRules([
-                new OpenLayers.Rule({
-                    symbolizer: 
-                        Line:
-                            strokeWidth: 3
-                            strokeOpacity: 1
-                            strokeColor: "#666666"
-                            strokeDashstyle: "dash"
-                        #TODO: This is just here as a reminder example 
-                        #for how to do feature-type-based styling
-                        Polygon: 
-                            strokeWidth: 2
-                            strokeOpacity: 1
-                            strokeColor: "#666666"
-                            fillColor: "white"
-                            fillOpacity: 0.3
-                })
-            ])
-            ###
-
-            # see - http://openlayers.org/dev/examples/select-feature-multilayer.html
-            # this is where have all the feature stuff controlled by these
-            # StrategyViews would make more sense
-
             wktFormat = new OpenLayers.Format.WKT()
 
             bounds = null
@@ -143,7 +114,7 @@ define([
                 if not newFeature? then continue
 
                 newFeature.attributes = _.clone(source.attributes)
-                console.log newFeature
+
                 #grab the source point for mapping  and transform from geographic to web merc
                 if source.attributes.wktMappingPoint?
                     sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
@@ -168,17 +139,7 @@ define([
 
                 sourceFeatures.push(newFeature)
 
-            #add the lineLayer first to show lines from source to entity
-            @lineLayer = new OpenLayers.Layer.Vector(
-                "Lines Layer",
-                {
-                    displayInLayerSwitcher: false    
-                }
-            )
-            @lineLayer.addFeatures(lineFeatures)
-            @mapView.map.addLayer(@lineLayer)
-
-            #then add the sourceLayer
+            #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
                 "Source Feature Layer",
                 {
@@ -189,12 +150,58 @@ define([
             @sourceLayer.addFeatures(sourceFeatures)
             @mapView.map.addLayer(@sourceLayer)
            
-            #then, make sure @sourceLayer is beneath the @wugLayer
+            #create and add the lineLayer
+            @lineLayer = new OpenLayers.Layer.Vector(
+                "Lines Layer",
+                {
+                    displayInLayerSwitcher: false    
+                }
+            )
+            @lineLayer.addFeatures(lineFeatures)
+            @mapView.map.addLayer(@lineLayer)
+
+            #then, make sure @wugLayer is on top
             @mapView.map.setLayerIndex(@wugLayer, 
                 @mapView.map.getLayerIndex(@sourceLayer) + 1)
 
             this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
 
+            this._registerHighlightEvents()
+
+            
+            ### TODO: See notes above - do the same thing for click control
+            @sourceClickControl = new OpenLayers.Control.SelectFeature(
+                @sourceLayer,
+                {
+                    autoActivate: true
+                    
+                    clickFeature: (sourceFeature) ->
+                        #else navigate to Source Details view when feature is clicked
+                        sourceId = sourceFeature.attributes.sourceId
+                        #TODO: navigate to source page
+                        #Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
+                        #    {trigger: true})
+            
+                        return
+                })
+
+            @mapView.map.addControl(@sourceClickControl)
+            
+            #OL workaround again
+            @sourceClickControl.handlers.feature.stopDown = false;
+            ###
+
+            #And zoom the map to include the bounds of the sources as well
+            # as the wugFeatures (should only be one)
+            if bounds?
+                wugFeat = @wugLayer.features[0]
+                bounds.extend(wugFeat.geometry.getBounds())
+
+                @mapView.zoomToExtent(bounds)
+
+            return
+
+        _registerHighlightEvents: () ->
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                 #only do this handler for @sourceLayer
                 if event.feature.layer.id != @sourceLayer.id
@@ -236,50 +243,43 @@ define([
                 return
             )
 
-
-            ### TODO: See notes above - do the same thing for click control
-            @sourceClickControl = new OpenLayers.Control.SelectFeature(
-                @sourceLayer,
-                {
-                    autoActivate: true
-                    
-                    clickFeature: (sourceFeature) ->
-                        #else navigate to Source Details view when feature is clicked
-                        sourceId = sourceFeature.attributes.sourceId
-                        #TODO: navigate to source page
-                        #Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
-                        #    {trigger: true})
-            
-                        return
-                })
-
-            @mapView.map.addControl(@sourceClickControl)
-            
-            #OL workaround again
-            @sourceClickControl.handlers.feature.stopDown = false;
-            ###
-
-            #And zoom the map to include the bounds of the sources as well
-            # as the wugFeatures (should only be one)
-            if bounds?
-                wugFeat = @wugLayer.features[0]
-                bounds.extend(wugFeat.geometry.getBounds())
-
-                @mapView.zoomToExtent(bounds)
-
             return
 
         _sourceStyleMap: new OpenLayers.StyleMap(
             "default" : new OpenLayers.Style( 
-                strokeColor: "blue"
-                strokeWidth: 0
-                fillColor: "blue"
+                strokeColor: "${getStrokeColor}"
+                strokeWidth: "${getStrokeWidth}"
+                fillColor: "${getFillColor}"
                 fillOpacity: 0.8
+                {   #lookup style attributes from WmsThemeConfig
+                    context:
+                        getStrokeColor: (feature) ->
+                            style = _.find(WmsThemeConfig.SourceStyles, (style) ->
+                                return style.id == feature.attributes.sourceTypeId
+                            )
+                            if style? then return style.strokeColor
+                            return WmsThemeConfig.SourceStyles[0].strokeColor
+
+                        getStrokeWidth: (feature) ->
+                            style = _.find(WmsThemeConfig.SourceStyles, (style) ->
+                                return style.id == feature.attributes.sourceTypeId
+                            )
+                            if style? then return style.strokeWidth
+                            return WmsThemeConfig.SourceStyles[0].strokeWidth
+
+                        getFillColor: (feature) ->
+                            style = _.find(WmsThemeConfig.SourceStyles, (style) ->
+                                return style.id == feature.attributes.sourceTypeId
+                            )
+                            if style? then return style.fillColor
+                            return WmsThemeConfig.SourceStyles[0].fillColor
+                }
             )
             "select" : new OpenLayers.Style(
                 fillColor: "cyan"
                 strokeColor: "blue"
             )
+
         )
 
 )

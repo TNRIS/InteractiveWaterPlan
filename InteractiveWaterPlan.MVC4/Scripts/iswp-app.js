@@ -153,6 +153,27 @@ define('namespace',['collections/StrategyTypeCollection', 'collections/CountyNam
 ﻿define('config/WmsThemeConfig',[], function() {
   var WmsThemeConfig;
   WmsThemeConfig = {
+    SourceStyles: [
+      {
+        id: "default",
+        name: "DEFAULT",
+        strokeColor: "blue",
+        fillColor: "blue",
+        strokeWidth: 1
+      }, {
+        id: 0,
+        name: "SURFACE WATER",
+        strokeColor: "blue",
+        fillColor: "#1E90FF",
+        strokeWidth: 0
+      }, {
+        id: 1,
+        name: "GROUNDWATER",
+        strokeColor: "#4169E1",
+        fillColor: "#4682B4",
+        strokeWidth: 0
+      }
+    ],
     Layers: [
       {
         name: "Regional Water Planning Areas",
@@ -2039,7 +2060,7 @@ define('scripts/text!templates/entityStrategyTable.html',[],function () { return
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(namespace, BaseStrategyCollectionView, EntityStrategyView, tpl) {
+define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(namespace, WmsThemeConfig, BaseStrategyCollectionView, EntityStrategyView, tpl) {
   var EntityStrategyCollectionView;
   return EntityStrategyCollectionView = (function(_super) {
 
@@ -2051,7 +2072,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
       var SourceCollection, StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures');
+      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents');
       this.entityId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -2115,29 +2136,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
     };
 
     EntityStrategyCollectionView.prototype.showSourceFeatures = function() {
-      /*
-                  style.addRules([
-                      new OpenLayers.Rule({
-                          symbolizer: 
-                              Line:
-                                  strokeWidth: 3
-                                  strokeOpacity: 1
-                                  strokeColor: "#666666"
-                                  strokeDashstyle: "dash"
-                              #TODO: This is just here as a reminder example 
-                              #for how to do feature-type-based styling
-                              Polygon: 
-                                  strokeWidth: 2
-                                  strokeOpacity: 1
-                                  strokeColor: "#666666"
-                                  fillColor: "white"
-                                  fillOpacity: 0.3
-                      })
-                  ])
-      */
-
-      var bounds, lineFeatures, newFeature, source, sourceFeatures, sourcePoint, wktFormat, wugFeat, wugFeature, _i, _len, _ref,
-        _this = this;
+      var bounds, lineFeatures, newFeature, source, sourceFeatures, sourcePoint, wktFormat, wugFeat, wugFeature, _i, _len, _ref;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       sourceFeatures = [];
@@ -2154,7 +2153,6 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
           continue;
         }
         newFeature.attributes = _.clone(source.attributes);
-        console.log(newFeature);
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
           sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
@@ -2170,42 +2168,20 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
         }
         sourceFeatures.push(newFeature);
       }
-      this.lineLayer = new OpenLayers.Layer.Vector("Lines Layer", {
-        displayInLayerSwitcher: false
-      });
-      this.lineLayer.addFeatures(lineFeatures);
-      this.mapView.map.addLayer(this.lineLayer);
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
         styleMap: this._sourceStyleMap
       });
       this.sourceLayer.addFeatures(sourceFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
+      this.lineLayer = new OpenLayers.Layer.Vector("Lines Layer", {
+        displayInLayerSwitcher: false
+      });
+      this.lineLayer.addFeatures(lineFeatures);
+      this.mapView.map.addLayer(this.lineLayer);
       this.mapView.map.setLayerIndex(this.wugLayer, this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
-      this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
-        var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return;
-        }
-        sourceFeature = event.feature;
-        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
-        popup.autoSize = true;
-        sourceFeature.popup = popup;
-        _this.mapView.map.addPopup(popup);
-      });
-      this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
-        var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return;
-        }
-        sourceFeature = event.feature;
-        if (sourceFeature.popup != null) {
-          _this.mapView.map.removePopup(sourceFeature.popup);
-          sourceFeature.popup.destroy();
-          sourceFeature.popup = null;
-        }
-      });
+      this._registerHighlightEvents();
       /* TODO: See notes above - do the same thing for click control
       @sourceClickControl = new OpenLayers.Control.SelectFeature(
           @sourceLayer,
@@ -2235,12 +2211,72 @@ define('views/EntityStrategyCollectionView',['namespace', 'views/BaseStrategyCol
       }
     };
 
+    EntityStrategyCollectionView.prototype._registerHighlightEvents = function() {
+      var _this = this;
+      this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
+        var popup, sourceFeature;
+        if (event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
+        }
+        sourceFeature = event.feature;
+        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
+        popup.autoSize = true;
+        sourceFeature.popup = popup;
+        _this.mapView.map.addPopup(popup);
+      });
+      this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
+        var sourceFeature;
+        if (event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
+        }
+        sourceFeature = event.feature;
+        if (sourceFeature.popup != null) {
+          _this.mapView.map.removePopup(sourceFeature.popup);
+          sourceFeature.popup.destroy();
+          sourceFeature.popup = null;
+        }
+      });
+    };
+
     EntityStrategyCollectionView.prototype._sourceStyleMap = new OpenLayers.StyleMap({
       "default": new OpenLayers.Style({
-        strokeColor: "blue",
-        strokeWidth: 0,
-        fillColor: "blue",
+        strokeColor: "${getStrokeColor}",
+        strokeWidth: "${getStrokeWidth}",
+        fillColor: "${getFillColor}",
         fillOpacity: 0.8
+      }, {
+        context: {
+          getStrokeColor: function(feature) {
+            var style;
+            style = _.find(WmsThemeConfig.SourceStyles, function(style) {
+              return style.id === feature.attributes.sourceTypeId;
+            });
+            if (style != null) {
+              return style.strokeColor;
+            }
+            return WmsThemeConfig.SourceStyles[0].strokeColor;
+          },
+          getStrokeWidth: function(feature) {
+            var style;
+            style = _.find(WmsThemeConfig.SourceStyles, function(style) {
+              return style.id === feature.attributes.sourceTypeId;
+            });
+            if (style != null) {
+              return style.strokeWidth;
+            }
+            return WmsThemeConfig.SourceStyles[0].strokeWidth;
+          },
+          getFillColor: function(feature) {
+            var style;
+            style = _.find(WmsThemeConfig.SourceStyles, function(style) {
+              return style.id === feature.attributes.sourceTypeId;
+            });
+            if (style != null) {
+              return style.fillColor;
+            }
+            return WmsThemeConfig.SourceStyles[0].fillColor;
+          }
+        }
       }),
       "select": new OpenLayers.Style({
         fillColor: "cyan",

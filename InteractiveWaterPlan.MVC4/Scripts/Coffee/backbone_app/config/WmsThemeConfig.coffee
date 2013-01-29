@@ -2,6 +2,37 @@
 ],
 () ->
     WmsThemeConfig =
+        #Colors for styling Source features
+        SourceStyles: [
+            { #This default one should always be first
+                id: "default"
+                name: "DEFAULT"
+                strokeColor: "blue"
+                fillColor: "blue"
+                strokeWidth: 1
+            }
+            {
+                id: 0
+                name: "SURFACE WATER"
+                strokeColor: "blue"
+                fillColor: "#1E90FF"
+                strokeWidth: 0
+            }
+            {
+                id: 1
+                name: "GROUNDWATER"
+                strokeColor: "#4169E1"
+                fillColor: "#4682B4"
+                strokeWidth: 0
+            }
+            #0 - SURFACE WATER
+            #1 - GROUNDWATER
+            #3 - CONSERVATION
+            #4 - REUSE
+            #5 - DROUGHT MANAGEMENT
+            #6 - WEATHER MODIFICATION
+        ]
+
         Layers: [
             {
                 name: "Regional Water Planning Areas"
