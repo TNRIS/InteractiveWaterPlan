@@ -7,7 +7,7 @@
     </id>
 
     <property column="DBSOID" name="SourceId" />
-    <property column="Source_Name" name="Name" />
+    <property column="SourceName" name="Name" />
     <property column="SQL_GEOG" name="WktGeog" />
     <property column="GEOG_Mapping_Pt_Txt" name="WktMappingPoint" />
 
