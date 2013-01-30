@@ -23,6 +23,9 @@ define([
         #only zoomToExtent when isMapLocked is true 
         isMapLocked: false
 
+        #Max Zoom Level that the map will be able to zoom to.
+        MAX_ZOOM: 13
+
         initialize: (config) ->
 
             @$el = $("##{config.mapContainerId}")
@@ -47,8 +50,17 @@ define([
                 layers: this._setupBaseLayers(@baseLayers)
                 center: @origCenter
                 zoom: @origZoom
-                eventListeners: {}
-                    #zoomend: this.handleMapEvent
+                eventListeners:
+                    zoomend: (obj, el) => #enforce a max zoom level
+                        currZoom = @map.getZoom()
+
+                        #fix for Bing's zoom levels being weird
+                        if @map.baseLayer instanceof OpenLayers.Layer.Bing
+                            currZoom = currZoom+1
+
+                        if (currZoom > @MAX_ZOOM)
+                            @map.zoomTo(@MAX_ZOOM)
+                        return
             )
 
             #Load Overlay layers from WmsThemeConfig.Layers

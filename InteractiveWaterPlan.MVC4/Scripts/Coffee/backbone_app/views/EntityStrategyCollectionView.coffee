@@ -139,7 +139,6 @@ define([
 
                 sourceFeatures.push(newFeature)
 
-
             #sort the sourceFeatures so surface water are on top 
             # of everything else
             sourceFeatures.sort((a, b) ->
@@ -150,7 +149,6 @@ define([
                 return a.attributes.sourceTypeId - b.attributes.sourceTypeId
             )
             
-
             #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
                 "Source Feature Layer",
@@ -160,7 +158,7 @@ define([
                 }
             )
             @sourceLayer.addFeatures(sourceFeatures)
-            @sourceLayer.addFeatures(lineFeatures)
+            @sourceLayer.addFeatures(lineFeatures) #put the line connector features in with the sources
             @mapView.map.addLayer(@sourceLayer)
         
             @mapView.map.setLayerIndex(@wugLayer, 
@@ -171,7 +169,6 @@ define([
             this._registerHighlightEvents()
             this._registerClickEvents() #TODO: See notes above - do the same thing for click control
             
-
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
             if bounds?

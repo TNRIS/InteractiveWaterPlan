@@ -24,6 +24,8 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
 
     MapView.prototype.isMapLocked = false;
 
+    MapView.prototype.MAX_ZOOM = 13;
+
     MapView.prototype.initialize = function(config) {
       this.$el = $("#" + config.mapContainerId);
       this.el = this.$el[0];
@@ -33,6 +35,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
     };
 
     MapView.prototype.render = function() {
+      var _this = this;
       this.$el.empty();
       this.map = new OpenLayers.Map({
         div: this.$el[0],
@@ -41,7 +44,18 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         layers: this._setupBaseLayers(this.baseLayers),
         center: this.origCenter,
         zoom: this.origZoom,
-        eventListeners: {}
+        eventListeners: {
+          zoomend: function(obj, el) {
+            var currZoom;
+            currZoom = _this.map.getZoom();
+            if (_this.map.baseLayer instanceof OpenLayers.Layer.Bing) {
+              currZoom = currZoom + 1;
+            }
+            if (currZoom > _this.MAX_ZOOM) {
+              _this.map.zoomTo(_this.MAX_ZOOM);
+            }
+          }
+        }
       });
       this._setupOverlayLayers();
       this.map.addControl(new OpenLayers.Control.LayerSwitcher());
