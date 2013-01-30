@@ -178,6 +178,7 @@
     <Content Include="Scripts\backbone.routefilter.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
+    <None Include="Content\topojson\swp_basins_s05.json" />
     <None Include="Scripts\build-iswp-app.bat" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNamesCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\HouseNamesCollection.coffee" />
@@ -376,7 +377,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\topojson\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
