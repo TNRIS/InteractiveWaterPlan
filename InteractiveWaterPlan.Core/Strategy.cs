@@ -53,6 +53,37 @@
 
     public class StrategyDetails : Strategy
     {
+        
+    }
+
+    public class SourceStrategy
+    {
+        public virtual int Id { get; set; }
+        
+        public virtual string Description { get; set; }
+        public virtual int ProjectId { get; set; }
+
+        public virtual string TypeName { get; set; }
+        public virtual int TypeId { get; set; }
+
+        public virtual string SourceBasin { get; set; }
+        public virtual char RegionLetter { get; set; }
+
+        public virtual long Supply2010 { get; set; }
+        public virtual long Supply2020 { get; set; }
+        public virtual long Supply2030 { get; set; }
+        public virtual long Supply2040 { get; set; }
+        public virtual long Supply2050 { get; set; }
+        public virtual long Supply2060 { get; set; }
+
+        public virtual int RecipientEntityId { get; set; }
+        public virtual string RecipientEntityName { get; set; }
+        public virtual string RecipientEntityWktGeog { get; set; }
+
+        public virtual SourceStrategy Clone()
+        {
+            return (SourceStrategy)this.MemberwiseClone();
+        }
 
     }
 }

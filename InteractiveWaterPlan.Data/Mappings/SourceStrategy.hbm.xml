@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
+
+  <class name="SourceStrategy" mutable="false">
+    
+    <id name="Id">
+      <column name="SQL_ID"/>
+    </id>
+
+    <property column="wmsProjectNameSWP" name="Description" />
+    <property column="DBProjectId" name="ProjectId" />
+    
+    <property column="wmsTypeNameSWP" name="TypeName" />
+    <property column="wmsTypeId" name="TypeId" />
+
+    <property column="SourceBasin" name="SourceBasin" />
+
+    <property column="wmsProjectSponsorRegion" name="RegionLetter" />
+    
+    <property column="SS2010" name="Supply2010" />
+    <property column="SS2020" name="Supply2020" />
+    <property column="SS2030" name="Supply2030" />
+    <property column="SS2040" name="Supply2040" />
+    <property column="SS2050" name="Supply2050" />
+    <property column="SS2060" name="Supply2060" />
+
+    <property column="wmsRecipientEntityId" name="RecipientEntityId" />
+    <property column="wmsRecipientEntityName" name="RecipientEntityName" />
+    <property column="SQL_GEOG" name="RecipientEntityWktGeog" />
+    
+  </class>
+
+  <sql-query name="GetStrategiesForSource">
+    <query-param name="sourceId" type="int" />
+    <query-param name="year" type="string" />
+    <return class="SourceStrategy" />
+    exec dbo.usp_Select_Strategies_By_Source_Year__tbl_DB12_Sources :sourceId, :year
+  </sql-query>
+
+</hibernate-mapping>

@@ -12,6 +12,11 @@ h2, h3
     line-height: 22px;
 }
 
+hr.space
+{
+    border: none;
+}
+
 #mapContainer
 {
     height: 400px;

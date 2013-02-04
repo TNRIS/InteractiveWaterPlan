@@ -247,8 +247,9 @@ define([
                 {   #lookup style attributes from WmsThemeConfig
                     context:
                         getStrokeColor: (feature) ->
-                            if feature.attributes.featureType? and feature.attributes.featureType == "connector"
-                                return "#ee9900"
+                            if feature.attributes.featureType? and 
+                                feature.attributes.featureType == "connector"
+                                    return "#ee9900" #orange
 
                             style = _.find(WmsThemeConfig.SourceStyles, (style) ->
                                 return style.id == feature.attributes.sourceTypeId

@@ -1,0 +1,22 @@
+
+<td class="strategyType" data-type-id="{{m.typeId}}">   
+    {{m.typeName}}
+</td>
+
+<td class="aligned-left">
+    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">
+        {{m.description}}
+    </a>
+</td>
+
+<td>{{m.sourceName}}</td>
+<td>{{ $.number(m["supply"+currYear]) }}</td>
+<td>
+    <%  if (m.sponsorId == m.recipientEntityId) {
+            print('$' + $.number(m.capitalCost));
+        } else {
+            print('---');
+        }
+    %>
+</td>
+<td>{{m.sponsorName}}</td>
