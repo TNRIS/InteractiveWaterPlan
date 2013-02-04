@@ -66,6 +66,16 @@ ul.nav > li.nav-label
     border: 2px solid black;
 }
 
+.nav-pills .dropdown-menu li.nav-category 
+{
+    padding: 5px 20px 3px 20px;
+    clear: both;
+    line-height: 20px;
+    color: #999999;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
 #themeNav
 {
     margin-bottom: 4px;
