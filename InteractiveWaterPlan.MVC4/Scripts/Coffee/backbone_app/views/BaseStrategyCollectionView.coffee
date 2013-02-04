@@ -187,11 +187,17 @@ define([
                     dtColConfig.push(null)
             )
 
+
             $table.dataTable(
                 bDestroy: true
                 sPaginationType: "bootstrap",
                 aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]]
                 aoColumns: dtColConfig
+                iDisplayLength: namespace.selectedDisplayLength || 10
+                #save the display length and use that on the next datatable render
+                fnDrawCallback: (settings) =>
+                    namespace.selectedDisplayLength = settings._iDisplayLength
+                    return
             )
 
             return

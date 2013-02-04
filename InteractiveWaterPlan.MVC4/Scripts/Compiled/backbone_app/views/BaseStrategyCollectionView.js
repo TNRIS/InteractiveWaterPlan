@@ -136,7 +136,8 @@ define(['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._setupDataTable = function() {
-      var $table, dtColConfig;
+      var $table, dtColConfig,
+        _this = this;
       $table = this.$('table');
       dtColConfig = [];
       $('th', $table).each(function(i, th) {
@@ -154,7 +155,11 @@ define(['namespace'], function(namespace) {
         bDestroy: true,
         sPaginationType: "bootstrap",
         aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]],
-        aoColumns: dtColConfig
+        aoColumns: dtColConfig,
+        iDisplayLength: namespace.selectedDisplayLength || 10,
+        fnDrawCallback: function(settings) {
+          namespace.selectedDisplayLength = settings._iDisplayLength;
+        }
       });
     };
 
