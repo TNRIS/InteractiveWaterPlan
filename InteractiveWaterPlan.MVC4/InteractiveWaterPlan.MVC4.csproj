@@ -340,6 +340,8 @@
     <Content Include="Scripts\templates\mapTopButtons.html" />
     <Content Include="Scripts\templates\regionStrategyRow.html" />
     <Content Include="Scripts\templates\regionStrategyTable.html" />
+    <Content Include="Scripts\templates\sourceStrategyRow.html" />
+    <Content Include="Scripts\templates\sourceStrategyTable.html" />
     <Content Include="Scripts\templates\strategyDetailRow.html" />
     <Content Include="Scripts\templates\strategyDetailTable.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
