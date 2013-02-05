@@ -2261,7 +2261,6 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
           trigger: true
         });
       });
-      console.log(this.clickFeatureControl);
     };
 
     EntityStrategyCollectionView.prototype._registerHighlightEvents = function() {
@@ -2469,8 +2468,8 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
     }
 
     SourceStrategyCollectionView.prototype.initialize = function(options) {
-      var SourceCollection, StrategyCollection, fetchParams;
-      _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents');
+      var SourceModel, StrategyCollection, fetchParams;
+      _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeature', '_registerHighlightEvents', '_registerClickEvents');
       this.sourceId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -2480,10 +2479,10 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_PATH + "api/strategies/source"
       });
-      SourceCollection = Backbone.Collection.extend({
+      SourceModel = Backbone.Model.extend({
         url: "" + BASE_PATH + "api/source/feature/" + this.sourceId
       });
-      this.sourceCollection = new SourceCollection();
+      this.sourceModel = new SourceModel();
       SourceStrategyCollectionView.__super__.initialize.call(this, SourceStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
@@ -2499,7 +2498,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this.trigger("table:startload");
       $.when(this.strategyCollection.fetch({
         data: params
-      }), this.sourceCollection.fetch()).then(this.onFetchBothCollectionSuccess).fail(function() {
+      }), this.sourceModel.fetch()).then(this.onFetchBothCollectionSuccess).fail(function() {
         _this.trigger("table:fetcherror");
       });
     };
@@ -2516,95 +2515,64 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       if (this.onFetchDataSuccess(this.strategyCollection) === false) {
         return;
       }
-      this.viewName("Source " + this.sourceId);
-      this.showSourceFeatures();
+      this.viewName(this.sourceModel.attributes.name);
+      this.showSourceFeature();
       this.trigger("table:endload");
     };
 
-    SourceStrategyCollectionView.prototype.showSourceFeatures = function() {
-      /*
-                  #TODO: show the source features. verify can still click on
-                  # wugs
-                  wktFormat = new OpenLayers.Format.WKT()
+    SourceStrategyCollectionView.prototype.showSourceFeature = function() {
+      var bounds, lineFeatures, sourceFeature, wktFormat, wugFeat, wugFeature, wugFeatures, wugModel, _i, _j, _len, _len1, _ref, _ref1;
+      wktFormat = new OpenLayers.Format.WKT();
+      bounds = null;
+      lineFeatures = [];
+      wugFeatures = this.wugLayer.features;
+      if (!(this.sourceModel.get('wktGeog') != null)) {
+        return;
+      }
+      sourceFeature = wktFormat.read(this.sourceModel.get('wktGeog'));
+      if (!(sourceFeature != null)) {
+        return;
+      }
+      sourceFeature.attributes = _.clone(this.sourceModel.attributes);
+      /*if source.attributes.wktMappingPoint?
+          sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
+          sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
       
-                  bounds = null
-                  sourceFeatures = []
-                  lineFeatures = []
-                  wugFeature = @wugLayer.features[0]
-      
-                  for source in @sourceCollection.models
-      
-                      #skip sources with no geog
-                      if not source.get('wktGeog')? then continue
-      
-                      newFeature = wktFormat.read(source.get('wktGeog'))
-                      if not newFeature? then continue
-      
-                      newFeature.attributes = _.clone(source.attributes)
-      
-                      #grab the source point for mapping  and transform from geographic to web merc
-                      if source.attributes.wktMappingPoint?
-                          sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-                          sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
-      
-                          lineFeatures.push new OpenLayers.Feature.Vector(
-                              new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-                              { featureType: "connector" }
-                          )
-      
-                      #we don't need to carry around the large wktGeog
-                      delete newFeature.attributes.wktGeog
-                      delete newFeature.attributes.wktMappingPoint
-                      
-                      #transform from geographic to web merc
-                      newFeature.geometry = @mapView.transformToWebMerc(
-                          newFeature.geometry)
-              
-                      if not bounds?
-                          bounds = newFeature.geometry.getBounds().clone()
-                      else
-                          bounds.extend(newFeature.geometry.getBounds())
-      
-                      sourceFeatures.push(newFeature)
-      
-                  #sort the sourceFeatures so surface water are on top 
-                  # of everything else
-                  sourceFeatures.sort((a, b) ->
-                      
-                      if a.attributes.sourceType == "SURFACE WATER" then return 1
-                      if b.attributes.sourceType == "SURFACE WATER" then return -1
-      
-                      return a.attributes.sourceTypeId - b.attributes.sourceTypeId
-                  )
-                  
-                  #create and add the sourceLayer
-                  @sourceLayer = new OpenLayers.Layer.Vector(
-                      "Source Feature Layer",
-                      {
-                          displayInLayerSwitcher: false
-                          styleMap: this._sourceStyleMap
-                      }
-                  )
-                  @sourceLayer.addFeatures(sourceFeatures)
-                  @sourceLayer.addFeatures(lineFeatures) #put the line connector features in with the sources
-                  @mapView.map.addLayer(@sourceLayer)
-              
-                  @mapView.map.setLayerIndex(@wugLayer, 
-                      +@mapView.map.getLayerIndex(@sourceLayer)+1)
-      
-                  
-      
-                  this._registerHighlightEvents()
-                  this._registerClickEvents()
-                  
-                  #And zoom the map to include the bounds of the sources as well
-                  # as the wugFeatures (should only be one)
-                  if bounds?
-                      wugFeat = @wugLayer.features[0]
-                      bounds.extend(wugFeat.geometry.getBounds())
-                      @mapView.zoomToExtent(bounds)
+          lineFeatures.push new OpenLayers.Feature.Vector(
+              new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
+              { featureType: "connector" }
+          )
       */
 
+      delete sourceFeature.attributes.wktGeog;
+      delete sourceFeature.attributes.wktMappingPoint;
+      sourceFeature.geometry = this.mapView.transformToWebMerc(sourceFeature.geometry);
+      bounds = sourceFeature.geometry.getBounds().clone();
+      _ref = this.wugLayer.features;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wugFeature = _ref[_i];
+        bounds.extend(wugFeature.geometry.getBounds());
+      }
+      _ref1 = this.wugCollection.models;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        wugModel = _ref1[_j];
+        console.log(wugModel);
+      }
+      this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
+        displayInLayerSwitcher: false,
+        styleMap: this._sourceStyleMap
+      });
+      this.sourceLayer.addFeatures(sourceFeature);
+      this.sourceLayer.addFeatures(lineFeatures);
+      this.mapView.map.addLayer(this.sourceLayer);
+      this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
+      this._registerHighlightEvents();
+      this._registerClickEvents();
+      if (bounds != null) {
+        wugFeat = this.wugLayer.features[0];
+        bounds.extend(wugFeat.geometry.getBounds());
+        this.mapView.zoomToExtent(bounds);
+      }
     };
 
     SourceStrategyCollectionView.prototype._registerClickEvents = function() {};

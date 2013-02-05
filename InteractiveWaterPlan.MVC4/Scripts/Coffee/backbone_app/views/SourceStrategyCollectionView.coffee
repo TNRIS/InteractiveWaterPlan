@@ -11,7 +11,7 @@ define([
         
         initialize: (options) ->
             _.bindAll(this, 'onFetchBothCollectionSuccess', 
-                'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents')
+                'showSourceFeature', '_registerHighlightEvents', '_registerClickEvents')
 
             @sourceId = options.id
             
@@ -26,11 +26,11 @@ define([
             )
 
             #Also crete a model for the source feature
-            SourceCollection = Backbone.Collection.extend(
+            SourceModel = Backbone.Model.extend(
                 url: "#{BASE_PATH}api/source/feature/#{@sourceId}"
             )
 
-            @sourceCollection = new SourceCollection()
+            @sourceModel = new SourceModel()
 
             super SourceStrategyView, StrategyCollection, tpl, {fetchParams: fetchParams}
 
@@ -50,7 +50,7 @@ define([
                 @strategyCollection.fetch( {data: params} ),
                 
                 #TODO fetch the source feature collection
-                @sourceCollection.fetch()
+                @sourceModel.fetch()
             )
             .then(
                 this.onFetchBothCollectionSuccess #process the collections
@@ -76,74 +76,60 @@ define([
 
             #only continuing if that returned non-false
             
-            #TODO: update @viewName with the name of the source 
-            # (grab name of first from @sourceCollection)
-            @viewName("Source #{@sourceId}")
+            #update @viewName with the name of the source 
+            @viewName(@sourceModel.attributes.name)
 
-            #Do @sourceCollection stuff
-            this.showSourceFeatures()
+            #and show the feature on the map
+            this.showSourceFeature()
 
             this.trigger("table:endload")
             return
 
-        showSourceFeatures: () ->
+        showSourceFeature: () ->
             
-
-            ###
-            #TODO: show the source features. verify can still click on
-            # wugs
             wktFormat = new OpenLayers.Format.WKT()
 
             bounds = null
-            sourceFeatures = []
-            lineFeatures = []
-            wugFeature = @wugLayer.features[0]
-
-            for source in @sourceCollection.models
-
-                #skip sources with no geog
-                if not source.get('wktGeog')? then continue
-
-                newFeature = wktFormat.read(source.get('wktGeog'))
-                if not newFeature? then continue
-
-                newFeature.attributes = _.clone(source.attributes)
-
-                #grab the source point for mapping  and transform from geographic to web merc
-                if source.attributes.wktMappingPoint?
-                    sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-                    sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
-
-                    lineFeatures.push new OpenLayers.Feature.Vector(
-                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-                        { featureType: "connector" }
-                    )
-
-                #we don't need to carry around the large wktGeog
-                delete newFeature.attributes.wktGeog
-                delete newFeature.attributes.wktMappingPoint
-                
-                #transform from geographic to web merc
-                newFeature.geometry = @mapView.transformToWebMerc(
-                    newFeature.geometry)
-        
-                if not bounds?
-                    bounds = newFeature.geometry.getBounds().clone()
-                else
-                    bounds.extend(newFeature.geometry.getBounds())
-
-                sourceFeatures.push(newFeature)
-
-            #sort the sourceFeatures so surface water are on top 
-            # of everything else
-            sourceFeatures.sort((a, b) ->
-                
-                if a.attributes.sourceType == "SURFACE WATER" then return 1
-                if b.attributes.sourceType == "SURFACE WATER" then return -1
-
-                return a.attributes.sourceTypeId - b.attributes.sourceTypeId
-            )
             
+            lineFeatures = []
+            wugFeatures = @wugLayer.features
+
+            #skip sources with no geog
+            if not @sourceModel.get('wktGeog')? then return
+
+            sourceFeature = wktFormat.read(@sourceModel.get('wktGeog'))
+            if not sourceFeature? then return
+
+            sourceFeature.attributes = _.clone(@sourceModel.attributes)
+
+            #grab the source point for mapping  and transform from geographic to web merc
+            ###if source.attributes.wktMappingPoint?
+                sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
+                sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
+
+                lineFeatures.push new OpenLayers.Feature.Vector(
+                    new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
+                    { featureType: "connector" }
+                )###
+
+            #we don't need to carry around the large wktGeog
+            delete sourceFeature.attributes.wktGeog
+            delete sourceFeature.attributes.wktMappingPoint
+            
+            #transform from geographic to web merc
+            sourceFeature.geometry = @mapView.transformToWebMerc(
+                sourceFeature.geometry)
+    
+            bounds = sourceFeature.geometry.getBounds().clone()
+
+            #TODO: iterate through wugs, and create line features, and extend the bounds
+            for wugFeature in @wugLayer.features
+                bounds.extend(wugFeature.geometry.getBounds())
+
+            for wugModel in @wugCollection.models
+                console.log wugModel
+                #TODO: need to transfer WugMappingPoint from server side so we can make lines. barf.
+
             #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
                 "Source Feature Layer",
@@ -152,14 +138,13 @@ define([
                     styleMap: this._sourceStyleMap
                 }
             )
-            @sourceLayer.addFeatures(sourceFeatures)
+            @sourceLayer.addFeatures(sourceFeature)
             @sourceLayer.addFeatures(lineFeatures) #put the line connector features in with the sources
+            
             @mapView.map.addLayer(@sourceLayer)
         
             @mapView.map.setLayerIndex(@wugLayer, 
                 +@mapView.map.getLayerIndex(@sourceLayer)+1)
-
-            
 
             this._registerHighlightEvents()
             this._registerClickEvents()
@@ -170,7 +155,7 @@ define([
                 wugFeat = @wugLayer.features[0]
                 bounds.extend(wugFeat.geometry.getBounds())
                 @mapView.zoomToExtent(bounds)
-            ###
+            
             return
 
         _registerClickEvents: () ->
@@ -180,7 +165,7 @@ define([
 
             #first add the layer to the control
             this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
-            
+
             @highlightFeatureControl.events.register('beforefeaturehighlighted', null, (event) =>
                 
                 feature = event.feature

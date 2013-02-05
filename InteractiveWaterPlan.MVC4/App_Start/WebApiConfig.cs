@@ -200,7 +200,7 @@ namespace InteractiveWaterPlan.MVC4
             config.Routes.MapHttpRoute(
                 "GetSourceByIdRoute",
                 "api/source/feature/{sourceId}",
-                new { controller = "Source", action = "GetSourceFeatures" }
+                new { controller = "Source", action = "GetSource" }
             );
 
             #endregion

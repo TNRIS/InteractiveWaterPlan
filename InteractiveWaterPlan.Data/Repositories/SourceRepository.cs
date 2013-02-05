@@ -49,5 +49,28 @@ namespace InteractiveWaterPlan.Data
 
             return sources;
         }
+
+        public SourceDetail GetSource(int sourceId, int polygonReduceFactor = 200)
+        {
+            var source = Session.GetNamedQuery("GetSource")
+                .SetParameter("sourceId", sourceId)
+                .UniqueResult<SourceDetail>();
+
+            if (source != null && source.WktGeog != null && source.WktGeog.Length > 0)
+            {
+                SqlGeography geog = SqlGeography.Parse(source.WktGeog);
+                SqlGeography reducedGeog = geog.Reduce(polygonReduceFactor);
+
+                //Sometimes reducing the geometry of a complex polygon will leave artifacts
+                //such as points and linestrings.  This is a problem for drawing.
+                //So, remove those artifacts if the original was of type MultiPolygon.
+                reducedGeog = DataUtils.CleanUpPolygonGeography(reducedGeog);
+
+                source.WktGeog = reducedGeog.ToString();
+            }
+
+            return source;
+
+        }
     }
 }

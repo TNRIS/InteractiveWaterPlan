@@ -201,8 +201,6 @@ define([
                 return
             )
 
-            console.log @clickFeatureControl
-
             return
 
         _registerHighlightEvents: () ->

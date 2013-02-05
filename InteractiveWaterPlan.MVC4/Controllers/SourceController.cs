@@ -28,10 +28,9 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         //api/source/feature/{sourceId}
-        public IList<Source> GetSourceFeatures(int sourceId)
+        public SourceDetail GetSource(int sourceId)
         {
-            //TODO - need stored proc
-            return null;
+            return _repo.GetSource(sourceId);
         }
     }
 }

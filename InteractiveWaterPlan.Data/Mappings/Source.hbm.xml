@@ -15,6 +15,18 @@
     <property column="SoTypeId" name="SourceTypeId" />
     <property column="SourceTypeDescription" name="SourceType" />
   </class>
+
+  <class name="SourceDetail" mutable="false">
+    <id name="Id">
+      <column name="DBsoId"/>
+    </id>
+
+    <property column="SourceName" name="Name" />
+    <property column="SQL_GEOG" name="WktGeog" />
+
+    <property column="SoTypeId" name="SourceTypeId" />
+    <property column="SourceTypeDescription" name="SourceType" />
+  </class>
   
   <!-- Queries -->
   
@@ -23,5 +35,12 @@
     <return class="Source"/>
     exec dbo.usp_Select_Sources_By_Entity_Year__tbl_DB12_Sources :entityId, :year
   </sql-query>
-  
+
+  <sql-query name="GetSource">
+    <query-param name="sourceId" type="int" />
+    <return class="SourceDetail"/>
+    exec dbo.usp_Select_Source_Details__tbl_DB12_Sources :sourceId
+  </sql-query>
+
+
 </hibernate-mapping>

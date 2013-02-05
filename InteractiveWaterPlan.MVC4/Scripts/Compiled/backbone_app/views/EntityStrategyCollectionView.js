@@ -152,7 +152,6 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
           trigger: true
         });
       });
-      console.log(this.clickFeatureControl);
     };
 
     EntityStrategyCollectionView.prototype._registerHighlightEvents = function() {
