@@ -73,6 +73,9 @@ define(['namespace'], function(namespace) {
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         m = _ref[_i];
         this.appendModel(m);
+        if (m.attributes.isRedundantSupply === 'Y') {
+          this.$(".note-marker-container").show();
+        }
       }
       this.$('.has-popover').popover({
         trigger: 'hover'

@@ -30,6 +30,8 @@
         public virtual long Supply2050 { get; set; }
         public virtual long Supply2060 { get; set; }
 
+        public virtual string IsRedundantSupply { get; set; }
+
         public virtual double CapitalCost { get; set; }
 
         public virtual string SponsorName { get; set; }
@@ -77,6 +79,8 @@
         public virtual long Supply2040 { get; set; }
         public virtual long Supply2050 { get; set; }
         public virtual long Supply2060 { get; set; }
+
+        public virtual string IsRedundantSupply { get; set; }
 
         public virtual int RecipientEntityId { get; set; }
         public virtual string RecipientEntityName { get; set; }

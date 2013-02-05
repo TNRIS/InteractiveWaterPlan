@@ -214,6 +214,11 @@ i.wugIcon
     text-align: center;
 }
 
+p.note-marker-container
+{
+    display: none;
+}
+
 .mapLoadingOverlay
 {
     position: absolute;

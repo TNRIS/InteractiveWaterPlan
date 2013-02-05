@@ -25,6 +25,8 @@
     <property column="WS_Volume_2050" name="Supply2050" />
     <property column="WS_Volume_2060" name="Supply2060" />
 
+    <property column="wmsRedundantSupply" name="IsRedundantSupply" />
+
     <property column="CapitalCost_SUM" name="CapitalCost" />
 
     <property column="wmsSponsorEntityName" name="SponsorName" />

@@ -81,10 +81,11 @@ define([
 
             for m in strategyCollection.models
                 this.appendModel(m)
+                if m.attributes.isRedundantSupply == 'Y'
+                    this.$(".note-marker-container").show()
 
             this.$('.has-popover').popover(trigger: 'hover')
 
-            
             this._setupDataTable()
 
             this._connectTableRowsToWugFeatures()
