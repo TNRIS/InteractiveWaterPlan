@@ -11,8 +11,8 @@ define([
             _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel',
                 'hideLoading', 'showLoading', 'onFetchDataSuccess', 
                 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 
-                'showNothingFound', 'hideNothingFound',
-                'showWugFeatures', 'clearWugFeaturesAndControls', '_setupWugClickControl',
+                'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl',
+                'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl'
             )
@@ -49,8 +49,7 @@ define([
             return this
 
         unrender: () ->
-            #TODO: lots of other cleanup (all wug map stuff [layers, controls, etc])
-            this.clearWugFeaturesAndControls()
+            this._clearWugFeaturesAndControls()
             @$el.html()
             return null
 
@@ -96,7 +95,6 @@ define([
             this.trigger("table:endload")
 
             return true
-
 
         fetchCallback: (strategyModels) ->
            
@@ -157,7 +155,6 @@ define([
                 return b.totalSupply - a.totalSupply
             )
             
-
             #show the wugFeatures
             @wugCollection.reset(newWugList)
             this.showWugFeatures()
@@ -279,7 +276,7 @@ define([
         #############################################
 
         showWugFeatures: () ->
-            this.clearWugFeaturesAndControls()
+            this._clearWugFeaturesAndControls()
 
             if @wugCollection.models.length < 1 then return
 
@@ -326,32 +323,30 @@ define([
             @wugLayer.addFeatures(wugFeatures)
             @mapView.map.addLayer(@wugLayer)
             
-            #TODO: make highlight and select control more generic (ie, not just wug)
-            # because child of this class will have to share those controls
-
             #Add control to highlight feature and show popup on hover
             this._setupWugHighlightContol()
            
-
             #Add control to view entity details view on click
-            @wugClickControl = this._setupWugClickControl()
-            @mapView.map.addControl(@wugClickControl)
-
+            this._setupWugClickControl()
+            
             @mapView.zoomToExtent(bounds)
             return
 
-        clearWugFeaturesAndControls: () ->
+        _clearWugFeaturesAndControls: () ->
             this.unselectWugFeatures() 
+
+            #TODO: maybe instead of destroying the controls, we should just 
+            # remove the wug layer from them
             if @highlightFeatureControl? 
                 @highlightFeatureControl.destroy()
                 @highlightFeatureControl = null
-            if @wugClickControl?
-                @wugClickControl.destroy()
-                @wugClickControl = null
+            if @clickFeatureControl?
+                @clickFeatureControl.destroy()
+                @clickFeatureControl = null
 
             if @wugLayer?
-
                 @wugLayer.destroy()
+
             return
 
         selectWugFeature: (wugId, projId) ->
@@ -396,43 +391,49 @@ define([
             @wugLayer.redraw()
             return
 
-        #TODO: will have to do the same junk here as in the WugHighlight
         _setupWugClickControl: () ->
-            control = new OpenLayers.Control.SelectFeature(
-                @wugLayer,
-                {
-                    autoActivate: true
-                    
-                    clickFeature: (wugFeature) =>
-                        #do nothing if wugType = WWP
-                        if wugFeature.attributes.type? and wugFeature.attributes.type == "WWP"
-                            return
-
-                        #else navigate to Entity Details view when feature is clicked
-                        wugId = wugFeature.attributes.entityId
-                        Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
-                            {trigger: true})
             
-                        return
-                })
-            return control
+            #first see if the control exists, if not, set it up
+            if not @clickFeatureControl?
+                this._setupClickFeatureControl(@wugLayer)
+            #else add the wug layer to the highlight control
+            else
+                this._addLayerToControl(@clickFeatureControl, @wugLayer)
+
+            #then setup event listeners
+            @clickFeatureControl.events.register('clickfeature', null, (event) =>
+                #only do this handler for @wugLayer
+                if event.feature.layer.id != @wugLayer.id then return
+
+                wugFeature = event.feature
+
+                #do nothing if wugType = WWP
+                if wugFeature.attributes.type? and wugFeature.attributes.type == "WWP"
+                    return
+
+                #else navigate to Entity Details view when feature is clicked
+                wugId = wugFeature.attributes.entityId
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
+                    {trigger: true})
+    
+                return
+            )
+
+            return
 
         _setupWugHighlightContol: () ->
             
             #first see if the control exists, if not, set it up
             if not @highlightFeatureControl?
                 this._setupHighlightFeatureControl(@wugLayer)
-            
-            #TODO: need to check if there is already a layer there, then add it?
-            # setLayer will override any layers that have been set
+            #else add the wug layer to the highlight control
             else
-                #TODO: use an _addLayerToControl(@highlightFeatureControl, @wugLayer) method
-                @highlightFeatureControl.setLayer(@wugLayer)
-
+                this._addLayerToControl(@highlightFeatureControl, @wugLayer)
+                
+            #then setup event listeners
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                 #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id
-                    return
+                if event.feature.layer.id != @wugLayer.id then return
 
                 wugFeature = event.feature
                 popup = new OpenLayers.Popup.FramedCloud("wugpopup",
@@ -486,7 +487,7 @@ define([
             alreadyThere = _.find(oldLayers, (l) ->
                 return l.id == newLayer.id  
             )
-            if alreadyThere? then return
+            if alreadyThere? then return false
 
             #calling _.flatten with shallow=true will create 
             # a single dimension array layers
@@ -494,6 +495,22 @@ define([
 
             return
 
+        _setupClickFeatureControl: (layer) ->
+
+            @clickFeatureControl = new OpenLayers.Control.SelectFeature(
+                layer,  #an initial layer must be specified or else setLayer will cause an exception later
+                {
+                    autoActivate: true
+                    clickFeature: (feature) ->
+                        #trigger a click feature event for listeners to subscribe to
+                        this.events.triggerEvent("clickfeature", {feature: feature})
+                        return
+
+                })
+
+            @mapView.map.addControl(@clickFeatureControl)
+
+            return
        
         _setupHighlightFeatureControl: (layer) ->
 

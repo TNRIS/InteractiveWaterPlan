@@ -136,10 +136,10 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
                   @mapView.map.setLayerIndex(@wugLayer, 
                       +@mapView.map.getLayerIndex(@sourceLayer)+1)
       
-                  this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
+                  
       
                   this._registerHighlightEvents()
-                  this._registerClickEvents() #TODO: See notes above - do the same thing for click control
+                  this._registerClickEvents()
                   
                   #And zoom the map to include the bounds of the sources as well
                   # as the wugFeatures (should only be one)
@@ -155,6 +155,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
 
     SourceStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
+      this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
         feature = event.feature;

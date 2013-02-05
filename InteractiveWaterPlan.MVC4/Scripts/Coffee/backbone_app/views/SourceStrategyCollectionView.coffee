@@ -159,10 +159,10 @@ define([
             @mapView.map.setLayerIndex(@wugLayer, 
                 +@mapView.map.getLayerIndex(@sourceLayer)+1)
 
-            this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
+            
 
             this._registerHighlightEvents()
-            this._registerClickEvents() #TODO: See notes above - do the same thing for click control
+            this._registerClickEvents()
             
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
@@ -178,6 +178,9 @@ define([
 
         _registerHighlightEvents: () ->
 
+            #first add the layer to the control
+            this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
+            
             @highlightFeatureControl.events.register('beforefeaturehighlighted', null, (event) =>
                 
                 feature = event.feature
