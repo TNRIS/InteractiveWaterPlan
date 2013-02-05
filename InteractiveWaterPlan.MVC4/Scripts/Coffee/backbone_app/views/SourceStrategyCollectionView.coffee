@@ -10,7 +10,7 @@ define([
     class SourceStrategyCollectionView extends BaseStrategyCollectionView
         
         initialize: (options) ->
-            _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 
+            _.bindAll(this, 'onFetchBothCollectionSuccess', 
                 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents')
 
             @sourceId = options.id
@@ -75,24 +75,23 @@ define([
                 return
 
             #only continuing if that returned non-false
+            
+            #TODO: update @viewName with the name of the source 
+            # (grab name of first from @sourceCollection)
+            @viewName("Source #{@sourceId}")
+
             #Do @sourceCollection stuff
             this.showSourceFeatures()
 
             this.trigger("table:endload")
             return
 
-        #override the BaseStrategyCollectionView.fetchCallback
-        fetchCallback: (strategyModels) ->
-
-            #Set the viewName from the first wug
-            @viewName(strategyModels[0].get("recipientEntityName"))
-            
-            #then call the super fetchCallback
-            super strategyModels
-
-            return
-
         showSourceFeatures: () ->
+            
+
+            ###
+            #TODO: show the source features. verify can still click on
+            # wugs
             wktFormat = new OpenLayers.Format.WKT()
 
             bounds = null
@@ -171,7 +170,7 @@ define([
                 wugFeat = @wugLayer.features[0]
                 bounds.extend(wugFeat.geometry.getBounds())
                 @mapView.zoomToExtent(bounds)
-
+            ###
             return
 
         _registerClickEvents: () ->

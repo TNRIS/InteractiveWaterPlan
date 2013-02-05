@@ -164,11 +164,10 @@ define([
             @mapView.map.setLayerIndex(@wugLayer, 
                 +@mapView.map.getLayerIndex(@sourceLayer)+1)
 
-            this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
-
-            this._registerHighlightEvents()
-            this._registerClickEvents() #TODO: See notes above - do the same thing for click control
             
+            this._registerHighlightEvents()
+            this._registerClickEvents() 
+
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
             if bounds?
@@ -179,15 +178,47 @@ define([
             return
 
         _registerClickEvents: () ->
+
+            #first add the layer to the control
+            this._addLayerToControl(@clickFeatureControl, @sourceLayer)
+
+            @clickFeatureControl.events.register('clickfeature', null, (event) => 
+                #only do this handler for @sourceLayer
+                if event.feature.layer.id != @sourceLayer.id
+                    return
+
+                #don't do anything for connectors either
+                if event.feature.attributes.featureType? and 
+                    event.feature.attributes.featureType == "connector"
+                        return
+
+                sourceFeature = event.feature
+
+                sourceId = sourceFeature.attributes.sourceId
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
+                    {trigger: true})
+
+                return
+            )
+
+            console.log @clickFeatureControl
+
             return
 
         _registerHighlightEvents: () ->
 
+            #first add the layer to the control
+            this._addLayerToControl(@highlightFeatureControl, @sourceLayer)
+
             @highlightFeatureControl.events.register('beforefeaturehighlighted', null, (event) =>
                 
+                #only do this handler for @sourceLayer
+                if event.feature.layer.id != @sourceLayer.id
+                    return true
+
                 feature = event.feature
 
-                #and not for connectors
+                #don't do anything for connectors
                 if feature.attributes.featureType? and 
                     feature.attributes.featureType == "connector"
                         return false #stops the rest of the highlight events

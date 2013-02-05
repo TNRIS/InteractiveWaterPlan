@@ -126,7 +126,6 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.sourceLayer.addFeatures(lineFeatures);
       this.mapView.map.addLayer(this.sourceLayer);
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
-      this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this._registerHighlightEvents();
       this._registerClickEvents();
       if (bounds != null) {
@@ -136,12 +135,34 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       }
     };
 
-    EntityStrategyCollectionView.prototype._registerClickEvents = function() {};
+    EntityStrategyCollectionView.prototype._registerClickEvents = function() {
+      var _this = this;
+      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
+      this.clickFeatureControl.events.register('clickfeature', null, function(event) {
+        var sourceFeature, sourceId;
+        if (event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
+        }
+        if ((event.feature.attributes.featureType != null) && event.feature.attributes.featureType === "connector") {
+          return;
+        }
+        sourceFeature = event.feature;
+        sourceId = sourceFeature.attributes.sourceId;
+        Backbone.history.navigate("#/" + namespace.currYear + "/wms/source/" + sourceId, {
+          trigger: true
+        });
+      });
+      console.log(this.clickFeatureControl);
+    };
 
     EntityStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
+      this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
+        if (event.feature.layer.id !== _this.sourceLayer.id) {
+          return true;
+        }
         feature = event.feature;
         if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
           return false;
