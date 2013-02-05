@@ -110,7 +110,14 @@ define([
                         overlay.viewType = layerConfig.viewType
                         
                         @map.addLayer(overlay);
-                        
+                    
+                    #when "XYZ"
+                    #    if layerConfig.url.indexOf("${z}") == -1 or
+                    #        layerConfig.url.indexOf("${x}") == -1 or
+                    #            layerConfig.url.indexOf("${y}") == -1
+                    #                throw "XYZ layer must include '${z}', '${x}', and '${y}'"
+                    #    overlay = new OpenLayers.Layer.XYZ(layerConfig.name, 
+                    #        layerConfig.url, layerConfig.layer_params)
                     else
                         throw "Unsupported Layer Type" 
 

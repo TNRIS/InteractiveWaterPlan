@@ -1,19 +1,22 @@
 
 <td>
-    <a href="#/{{currYear}}/wms/region/{{m.regionLetter}}">
+    <a href="#/{{currYear}}/wms/region/{{m.regionLetter}}" title="Click for Strategies in Region {{m.regionLetter}}">
         {{m.regionLetter}}
     </a>
 </td>
-
 <td class="aligned-left">
-    <a href="#/{{currYear}}/wms/project/{{m.projectId}}">
+    <a href="#/{{currYear}}/wms/project/{{m.projectId}}" title="Click for Strategy details">
         {{m.description}}
     </a>
 </td>
-<td>{{m.sourceName}}</td>
+<td>
+    <a href="#/{{currYear}}/wms/source/{{m.sourceId}}" title="Click for Strategies related to {{m.sourceName}}">
+        {{m.sourceName}}
+    </a>
+</td>
 <td>
     <% if (m.recipientEntityType != "WWP") { %>
-        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}">    
+        <a href="#/{{currYear}}/wms/entity/{{m.recipientEntityId}}" title="Click for Strategies of {{m.recipientEntityName}}">    
             {{m.recipientEntityName}}
         </a>
     <% } else { %>

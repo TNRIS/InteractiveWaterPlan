@@ -1,151 +1,114 @@
-﻿@{
-    Layout = null;
-}
-
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
 @using System.Web.Configuration
 
-<!DOCTYPE html>
+@{
+    ViewBag.Title = "2012 Texas State Water Plan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Interactive State Water Plan 2012 | TWDB</title>
+<header class="page-header">
+    <h1>
+        Texas State Water Plan 2012
+    </h1>
+    <p class="lead">Texas Water Development Board</p>
+</header>
 
-    <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
-
-    @Styles.Render(
-        "~/bundles/css/cosmo.css",
-        "~/Content/FontAwesome/css/font-awesome.css",
-        "~/Content/chosen.cosmo.css",
-        "~/Content/Site.css"
-    )
-
-    @Scripts.Render("~/bundles/js/modernizr.js")
-
-</head>
-<body lang="en">
-    <div class="container">
-        <div class="page-header">
-            <h1>
-                Texas State Water Plan 2012
-            </h1>
-            <p class="lead">Texas Water Development Board</p>
+<div class="row">
+    <div class="span12">
+        <div class="alert alert-block alert-warning-border">
+            <h4><i class="icon-warning-sign"></i> Warning!</h4>
+            This site is currently in beta testing and is undergoing QA/QC.  
+            In some cases, the data are known to be inaccurate.  
+            For definitive data see the <a href="http://www.twdb.state.tx.us/waterplanning/swp/2012/" title="2012 State Water Plan">2012 State Water Plan</a>
+            or <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/" title="2011 Regional Water Plans">2011 Regional Water Plans</a>.
         </div>
+    </div>
+</div>
 
-        <div class="row">
-            <div class="span12">
-                <div class="alert alert-block alert-warning-border">
-                    <h4><i class="icon-warning-sign"></i> Warning!</h4>
-                    This site is currently in alpha testing and is undergoing extensive QA/QC.
-                    In some cases, the data are known to be wrong. Do not rely on these data.<br />
-                    For definitive 2011 Regional Water Plan data please go to: <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
-                </div>
-            </div>
-        </div>
-
-        <noscript>
-            <div class="row">
-                <div class="span12">
-                    <div class="alert alert-block alert-error-border">
-                        <h4><i class="icon-exclamation-sign"></i> Error: Javascript is Required!</h4>
-                        Javascript is required to use the Interactive State Water Plan Application. <br />
-                        Please enable Javascript in your browser, or visit <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
-                        to view Regional Water Plan data in the traditional viewer.
-                    </div>
-                </div>
-            </div>
-        </noscript>
-
-        <div class="row hide" id="errorMessage">
-            <div class="span12">
-                <div class="alert alert-error alert-error-border">
-                    <i class="icon-exclamation-sign"></i> An unexpected error has occurred. Please go back or try reloading the page.
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="span7" id="themeNavContainer">
-            </div>
-            <div class="span5" id="mapTopButtonsContainer">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="span12">
-                <div id="mapContainer"></div>
-            </div>
-        </div>
-
-        <div class="row toolbar">
-            <div class="span12">
-                <div class="pull-left" id="yearNavContainer"></div>
-                <div id="mapBottomToolsContainer"></div>
-            </div>
-        </div>
-
-        <div id="dataContainer">
-            <div class="row" id="areaSelectContainer">
-                
-            </div>
-
-            <div class="row">
-                <div class="span12" id="tableContainer"></div>
-            </div>
-            <div class="row"><div class="tableLoading hide"></div></div>
-            <div class="row hide" id="nothingFoundMessage">
-                <div class="span12">
-                    <div class="alert alert-info">Sorry, no strategies found.  Try changing to a different planning decade using the buttons above.</div>
-                </div>
+<noscript>
+    <div class="row">
+        <div class="span12">
+            <div class="alert alert-block alert-error-border">
+                <h4><i class="icon-exclamation-sign"></i> Error: Javascript is Required!</h4>
+                Javascript is required to use the Interactive State Water Plan Application. <br />
+                Please enable Javascript in your browser, or visit <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
+                to view Regional Water Plan data in the traditional viewer.
             </div>
         </div>
     </div>
+</noscript>
+
+<div class="row hide" id="errorMessage">
+    <div class="span12">
+        <div class="alert alert-error alert-error-border">
+            <i class="icon-exclamation-sign"></i> An unexpected error has occurred. Please go back or try reloading the page.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span7" id="themeNavContainer">
+    </div>
+    <div class="span5" id="mapTopButtonsContainer">
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <div id="mapContainer"></div>
+    </div>
+</div>
+
+<div class="row toolbar">
+    <div class="span12">
+        <div class="pull-left" id="yearNavContainer"></div>
+        <div id="mapBottomToolsContainer"></div>
+    </div>
+</div>
+
+<div id="dataContainer">
+    <div class="row" id="areaSelectContainer">
+                
+    </div>
+
+    <div class="row">
+        <div class="span12" id="tableContainer"></div>
+    </div>
+    <div class="row"><div class="tableLoading hide"></div></div>
+    <div class="row hide" id="nothingFoundMessage">
+        <div class="span12">
+            <div class="alert alert-info">Sorry, no strategies found.  Try changing to a different planning decade using the buttons above.</div>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
+<input type="hidden" id="base_content_path" value="@Url.Content("~/Content")" />
+<input type="hidden" id="base_path" value="@Url.Content("~/")" />
+<input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["BingMapsKey"]" />
+
+@if (HttpContext.Current.IsDebuggingEnabled)
+{
+    @Scripts.Render("~/Scripts/OpenLayers/OpenLayers.debug.js")
+}
+else
+{
+    @Scripts.Render("~/Scripts/OpenLayers/OpenLayers.js")
+}
     
+@Scripts.Render("~/bundles/js/lib.js")
     
+@if (HttpContext.Current.IsDebuggingEnabled)
+{
+    @* only load the bootstrap file, and require.js will load modules as needed *@
+    @Scripts.Render("~/Scripts/Compiled/backbone_app/main.js")
+}
+else
+{
+    @* Load the optimized file containing all modules *@
+    @Scripts.Render(
+        "~/bundles/js/iswp-app.js"
+    )
+}
 
-    <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
-    <input type="hidden" id="base_content_path" value="@Url.Content("~/Content")" />
-    <input type="hidden" id="base_path" value="@Url.Content("~/")" />
-    <input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["BingMapsKey"]" />
-
-    @if (HttpContext.Current.IsDebuggingEnabled)
-    {
-        @Scripts.Render("~/Scripts/OpenLayers/OpenLayers.debug.js")
-    }
-    else
-    {
-        @Scripts.Render("~/Scripts/OpenLayers/OpenLayers.js")
-    }
-    
-    @Scripts.Render("~/bundles/js/lib.js")
-    
-    @if (HttpContext.Current.IsDebuggingEnabled)
-    {
-        @* only load the bootstrap file, and require.js will load modules as needed *@
-        @Scripts.Render("~/Scripts/Compiled/backbone_app/main.js")
-    }
-    else
-    {
-        @* Load the optimized file containing all modules *@
-        @Scripts.Render(
-            "~/bundles/js/iswp-app.js"
-        )
-    }
-
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '@WebConfigurationManager.AppSettings["GoogleAnalyticsTrackingKey"]']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-
-</body>
-</html>

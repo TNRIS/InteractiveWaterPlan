@@ -21,5 +21,14 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         {
             return _repo.GetEntity(entityId);
         }
+
+        //api/entities/auto
+        public IList<EntityNameId> GetEntitiesAutocomplete(string namePart)
+        {
+            if (namePart.Length < 2)
+                return null;
+
+            return _repo.GetEntitiesByNamePart(namePart);
+        }
     }
 }

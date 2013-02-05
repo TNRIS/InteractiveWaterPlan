@@ -23,7 +23,7 @@ define([
             fetchParams = {districtId: @districtId}
 
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategies/district/#{@districtType}" 
+                url: "#{BASE_PATH}api/strategies/district/#{@districtType}" 
             )
 
             super StrategyView, 

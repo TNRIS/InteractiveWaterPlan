@@ -2,43 +2,41 @@ define([
     'namespace'
     'config/WmsThemeConfig'
     'views/BaseStrategyCollectionView'
-    'views/EntityStrategyView'
-    'scripts/text!templates/entityStrategyTable.html'
+    'views/SourceStrategyView'
+    'scripts/text!templates/sourceStrategyTable.html'
 ],
-(namespace, WmsThemeConfig, BaseStrategyCollectionView, EntityStrategyView, tpl) ->
+(namespace, WmsThemeConfig, BaseStrategyCollectionView, SourceStrategyView, tpl) ->
 
-    class EntityStrategyCollectionView extends BaseStrategyCollectionView
+    class SourceStrategyCollectionView extends BaseStrategyCollectionView
         
         initialize: (options) ->
             _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 
                 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents')
 
-            @entityId = options.id
+            @sourceId = options.id
             
             @viewName = ko.observable()
 
             @mapView = namespace.mapView
 
-            fetchParams = {entityId: @entityId}
-            
+            fetchParams = {sourceId: @sourceId}
+
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_PATH}api/strategies/entity" 
+                url: "#{BASE_PATH}api/strategies/source" 
             )
 
-            #also need to specify ?year=currYear
-            SourceCollection = Backbone.Collection.extend(
-                url: "#{BASE_PATH}api/entity/#{@entityId}/sources"
+            #Also crete a model for the source feature
+            SourceFeature = Backbone.Model.extend(
+                url: "#{BASE_PATH}api/feature/source/#{@sourceId}"
             )
 
-            @sourceCollection = new SourceCollection()
+            @sourceFeature = new SourceFeature()
 
-            super EntityStrategyView, 
-                StrategyCollection, tpl, {fetchParams: fetchParams}
+            super SourceStrategyView, StrategyCollection, tpl, {fetchParams: fetchParams}
 
-            
-            return null
+            return
 
-        #override the super's fetchData to also fetch sources
+        #override the super's fetchData to also fetch the source
         fetchData: () ->
             this.$('tbody').empty() #clear the table contents
 
@@ -51,10 +49,11 @@ define([
             $.when(
                 @strategyCollection.fetch( {data: params} ),
                 
-                @sourceCollection.fetch(
-                    data:
-                        year: namespace.currYear
-                )
+                #TODO fetch the source model
+                #@sourceCollection.fetch(
+                #    data:
+                #        year: namespace.currYear
+                #)
             )
             .then(
                 this.onFetchBothCollectionSuccess #process the collections

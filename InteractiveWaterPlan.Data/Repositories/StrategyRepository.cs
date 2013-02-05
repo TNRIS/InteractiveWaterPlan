@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using InteractiveWaterPlan.Core;
+using System.Reflection;
 using NHibernate;
 using System;
 
@@ -50,47 +51,6 @@ namespace InteractiveWaterPlan.Data
 
             return allStrategiesInRegion;
 
-            /* TODO: Remove after checking.  Database now performs this aggregation.
-            //Group by ProjectId
-            var aggregatedStrategyList = allStrategiesInRegion
-                .GroupBy(x => x.ProjectId)
-                .Select<IGrouping<int, Strategy>, Strategy>(
-                    grp =>
-                    {
-                        //Create a starting Strategy from a clone of the first
-                        // one in the group.
-                        var start = grp.First().Clone();
-                        
-                        //Set the values to be aggregated to 0
-                        start.Supply2010 = 0;
-                        start.Supply2020 = 0;
-                        start.Supply2030 = 0;
-                        start.Supply2040 = 0;
-                        start.Supply2050 = 0;
-                        start.Supply2060 = 0;
-                        start.CapitalCost = 0;
-
-                        //Then aggregate each group into a single strategy with
-                        // summed Supply and CapitalCost values
-                        return grp.Aggregate(start, 
-                            (aggStrategy, nextStrategy) =>
-                            {
-                                aggStrategy.Supply2010 += nextStrategy.Supply2010;
-                                aggStrategy.Supply2020 += nextStrategy.Supply2020;
-                                aggStrategy.Supply2030 += nextStrategy.Supply2030;
-                                aggStrategy.Supply2040 += nextStrategy.Supply2040;
-                                aggStrategy.Supply2050 += nextStrategy.Supply2050;
-                                aggStrategy.Supply2060 += nextStrategy.Supply2060;
-
-                                aggStrategy.CapitalCost += nextStrategy.CapitalCost;
-
-                                return aggStrategy;
-                            });
-                    }
-                ).ToList();
-
-            return aggregatedStrategyList;
-            */
         }
 
         public IList<Strategy> GetStrategiesInCounty(int countyId, string year)
@@ -154,9 +114,25 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("projectId", projectId)
                 .SetParameter("year", year)
                 .List<StrategyDetails>()
+                .Where(x => { //only need strategies where the SupplyYEAR != 0 and recipientId == sponsorId
+                    var propertyInfo = x.GetType().GetProperty("Supply"+year);
+                    var supplyVal = (long)(propertyInfo.GetValue(x, null));
+                    return !(supplyVal == 0 && x.RecipientEntityId != x.SponsorId);
+                })
                 .ToList();
 
             return strategyDetails;
+        }
+
+        public IList<SourceStrategy> GetStrategiesBySource(int sourceId, string year)
+        {
+            var strategies = Session.GetNamedQuery("GetStrategiesForSource")
+                .SetParameter("sourceId", sourceId)
+                .SetParameter("year", year)
+                .List<SourceStrategy>()
+                .ToList();
+
+            return strategies;
         }
 
     }

@@ -18,7 +18,7 @@ define([
             fetchParams = {countyId: @countyId}
             
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategies/county" 
+                url: "#{BASE_PATH}api/strategies/county" 
             )
 
             super CountyStrategyView, 

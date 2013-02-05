@@ -12,7 +12,7 @@ define([], function() {
       return StrategyTypeCollection.__super__.constructor.apply(this, arguments);
     }
 
-    StrategyTypeCollection.prototype.url = "" + BASE_API_PATH + "api/strategy/types";
+    StrategyTypeCollection.prototype.url = "" + BASE_PATH + "api/strategy/types";
 
     return StrategyTypeCollection;
 

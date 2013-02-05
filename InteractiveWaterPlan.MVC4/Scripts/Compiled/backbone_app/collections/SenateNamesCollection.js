@@ -12,7 +12,7 @@ define([], function() {
       return SenateNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    SenateNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/districts/senate/names";
+    SenateNamesCollection.prototype.url = "" + BASE_PATH + "api/boundary/districts/senate/names";
 
     return SenateNamesCollection;
 

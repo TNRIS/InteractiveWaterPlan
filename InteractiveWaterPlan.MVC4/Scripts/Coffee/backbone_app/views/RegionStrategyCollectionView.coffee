@@ -17,7 +17,7 @@ define([
             fetchParams = {regionLetter: @regionLetter}
             
             StrategyCollection = Backbone.Collection.extend(  
-                url: "#{BASE_API_PATH}api/strategies/region" 
+                url: "#{BASE_PATH}api/strategies/region" 
             )
 
             super RegionStrategyView, StrategyCollection, tpl, namespace.mapView,

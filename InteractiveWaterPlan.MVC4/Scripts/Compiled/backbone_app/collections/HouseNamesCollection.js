@@ -12,7 +12,7 @@ define([], function() {
       return HouseNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    HouseNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/districts/house/names";
+    HouseNamesCollection.prototype.url = "" + BASE_PATH + "api/boundary/districts/house/names";
 
     return HouseNamesCollection;
 

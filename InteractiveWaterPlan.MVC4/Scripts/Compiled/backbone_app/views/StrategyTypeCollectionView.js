@@ -21,7 +21,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/StrategyTypeView
         typeId: this.typeId
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategies/type"
+        url: "" + BASE_PATH + "api/strategies/type"
       });
       StrategyTypeCollectionView.__super__.initialize.call(this, StrategyTypeView, StrategyCollection, tpl, {
         fetchParams: fetchParams

@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/LegeDistrictCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/StrategyDetailCollectionView', 'views/WmsAreaSelectView', 'views/MapTopButtonsView'], function(namespace, MapView, ThemeNavToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, LegeDistrictCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyDetailCollectionView, WmsAreaSelectView, MapTopButtonsView) {
+define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/LegeDistrictCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/StrategyDetailCollectionView', 'views/SourceStrategyCollectionView', 'views/WmsAreaSelectView', 'views/MapTopButtonsView'], function(namespace, MapView, ThemeNavToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, LegeDistrictCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyDetailCollectionView, SourceStrategyCollectionView, WmsAreaSelectView, MapTopButtonsView) {
   var WMSRouter;
   return WMSRouter = (function(_super) {
 
@@ -52,7 +52,8 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       ":year/wms/senate/:districtId": "wmsSenateDistrict",
       ":year/wms/type/:typeId": "wmsType",
       ":year/wms/entity/:entityId": "wmsEntity",
-      ":year/wms/project/:projectId": "wmsProjectDetail"
+      ":year/wms/project/:projectId": "wmsProjectDetail",
+      ":year/wms/source/:sourceId": "wmsSource"
     };
 
     WMSRouter.prototype.onTableStartLoad = function() {
@@ -73,7 +74,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.onTableFetchError = function() {
       $('#errorMessage').show();
-      alert("An error has occured.  Please reload this page or go back.");
     };
 
     WMSRouter.prototype.onTableNothingFound = function() {
@@ -283,6 +283,15 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
         id: projectId
       });
       this.areaSelectView.resetSelects();
+    };
+
+    WMSRouter.prototype.wmsSource = function(year, sourceId) {
+      this.currStrategyView = new SourceStrategyCollectionView({
+        el: this.tableContainer,
+        id: sourceId
+      });
+      this.areaSelectView.resetSelects();
+      this.mapView.showWmsOverlayByViewType("CountyNames");
     };
 
     return WMSRouter;

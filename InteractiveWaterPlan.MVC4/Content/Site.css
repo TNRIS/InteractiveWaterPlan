@@ -33,6 +33,12 @@ hr.space
     padding-bottom: 40px;
 }
 
+footer
+{
+    text-align: center;
+    font-size: small;
+}
+
 .btn
 {
     line-height: 22px;

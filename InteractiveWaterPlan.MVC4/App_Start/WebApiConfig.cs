@@ -91,6 +91,12 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             config.Routes.MapHttpRoute(
+                "GetStrategiesBySource",
+                "api/strategies/source",
+                new { controller = "Strategy", action = "GetStrategiesBySource" }
+            );
+
+            config.Routes.MapHttpRoute(
                 "GetStrategyTypesRoute",
                 "api/strategy/types",
                 new { controller = "Strategy", action = "GetStrategyTypes" }
@@ -174,6 +180,13 @@ namespace InteractiveWaterPlan.MVC4
                 "api/entity/{entityId}",
                 new { controller = "Entity", action = "GetEntity" }
             );
+
+            config.Routes.MapHttpRoute(
+                "GetEntitiesAutocomplete",
+                "api/entities/auto",
+                new { controller = "Entity", action = "GetEntitiesAutocomplete" }
+            );
+
             #endregion
 
             #region Source Routes
@@ -182,6 +195,12 @@ namespace InteractiveWaterPlan.MVC4
                 "GetSourcesForEntityRoute",
                 "api/entity/{entityId}/sources", /* Note: entity route */
                 new { controller = "Source", action = "GetSourcesForEntity" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetSourceByIdRoute",
+                "api/source/{sourceId}",
+                new { controller = "Source", action = "GetSource" }
             );
 
             #endregion

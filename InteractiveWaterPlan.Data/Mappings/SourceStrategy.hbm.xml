@@ -9,13 +9,15 @@
 
     <property column="wmsProjectNameSWP" name="Description" />
     <property column="DBProjectId" name="ProjectId" />
+
+    <property column="SourceTypeDescription" name="SourceType" />
     
     <property column="wmsTypeNameSWP" name="TypeName" />
     <property column="wmsTypeId" name="TypeId" />
 
     <property column="SourceBasin" name="SourceBasin" />
 
-    <property column="wmsProjectSponsorRegion" name="RegionLetter" />
+    <property column="wmsRecipientEntityRegion" name="RegionLetter" />
     
     <property column="SS2010" name="Supply2010" />
     <property column="SS2020" name="Supply2020" />
@@ -26,6 +28,8 @@
 
     <property column="wmsRecipientEntityId" name="RecipientEntityId" />
     <property column="wmsRecipientEntityName" name="RecipientEntityName" />
+    <property column="wmsRecipientEntityType" name="RecipientEntityType" />
+    
     <property column="SQL_GEOG" name="RecipientEntityWktGeog" />
     
   </class>

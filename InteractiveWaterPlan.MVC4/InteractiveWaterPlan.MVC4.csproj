@@ -202,6 +202,8 @@
     <Content Include="Scripts\Compiled\backbone_app\views\LegeDistrictCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapTopButtonsView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\SourceStrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\SourceStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavToolbarView.js" />
@@ -237,6 +239,7 @@
     <Content Include="Scripts\jquery.flot.js" />
     <Content Include="Scripts\jquery.number.js" />
     <Content Include="Scripts\jquery.tableToCsv.js" />
+    <Content Include="Scripts\ajax-chosen.jquery.js" />
     <Content Include="Scripts\knockback-core-stack.js" />
     <Content Include="Scripts\knockback-core-stack.min.js" />
     <Content Include="Scripts\knockback-core.js" />
@@ -373,9 +376,13 @@
     <None Include="Scripts\Coffee\backbone_app\views\LegeDistrictCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\SourceStrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\SourceStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\ThemeNavToolbarView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.JsonVector.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

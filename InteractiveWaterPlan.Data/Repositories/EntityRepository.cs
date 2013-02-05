@@ -30,6 +30,14 @@ namespace InteractiveWaterPlan.Data
                 .FirstOrDefault();
         }
 
+
+        public IList<EntityNameId> GetEntitiesByNamePart(string namePart)
+        {
+            return Session.GetNamedQuery("GetEntityAutocomplete")
+                .SetParameter("namePart", namePart)
+                .List<EntityNameId>()
+                .ToList();
+        }
        
     }
 }

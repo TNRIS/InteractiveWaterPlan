@@ -2,39 +2,38 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView', 'views/EntityStrategyView', 'scripts/text!templates/entityStrategyTable.html'], function(namespace, WmsThemeConfig, BaseStrategyCollectionView, EntityStrategyView, tpl) {
-  var EntityStrategyCollectionView;
-  return EntityStrategyCollectionView = (function(_super) {
+define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView', 'views/SourceStrategyView', 'scripts/text!templates/sourceStrategyTable.html'], function(namespace, WmsThemeConfig, BaseStrategyCollectionView, SourceStrategyView, tpl) {
+  var SourceStrategyCollectionView;
+  return SourceStrategyCollectionView = (function(_super) {
 
-    __extends(EntityStrategyCollectionView, _super);
+    __extends(SourceStrategyCollectionView, _super);
 
-    function EntityStrategyCollectionView() {
-      return EntityStrategyCollectionView.__super__.constructor.apply(this, arguments);
+    function SourceStrategyCollectionView() {
+      return SourceStrategyCollectionView.__super__.constructor.apply(this, arguments);
     }
 
-    EntityStrategyCollectionView.prototype.initialize = function(options) {
-      var SourceCollection, StrategyCollection, fetchParams;
+    SourceStrategyCollectionView.prototype.initialize = function(options) {
+      var SourceFeature, StrategyCollection, fetchParams;
       _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents');
-      this.entityId = options.id;
+      this.sourceId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
       fetchParams = {
-        entityId: this.entityId
+        sourceId: this.sourceId
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_PATH + "api/strategies/entity"
+        url: "" + BASE_PATH + "api/strategies/source"
       });
-      SourceCollection = Backbone.Collection.extend({
-        url: "" + BASE_PATH + "api/entity/" + this.entityId + "/sources"
+      SourceFeature = Backbone.Model.extend({
+        url: "" + BASE_PATH + "api/feature/source/" + this.sourceId
       });
-      this.sourceCollection = new SourceCollection();
-      EntityStrategyCollectionView.__super__.initialize.call(this, EntityStrategyView, StrategyCollection, tpl, {
+      this.sourceFeature = new SourceFeature();
+      SourceStrategyCollectionView.__super__.initialize.call(this, SourceStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
-      return null;
     };
 
-    EntityStrategyCollectionView.prototype.fetchData = function() {
+    SourceStrategyCollectionView.prototype.fetchData = function() {
       var params,
         _this = this;
       this.$('tbody').empty();
@@ -44,24 +43,20 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.trigger("table:startload");
       $.when(this.strategyCollection.fetch({
         data: params
-      }), this.sourceCollection.fetch({
-        data: {
-          year: namespace.currYear
-        }
       })).then(this.onFetchBothCollectionSuccess).fail(function() {
         _this.trigger("table:fetcherror");
       });
     };
 
-    EntityStrategyCollectionView.prototype.unrender = function() {
-      EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
+    SourceStrategyCollectionView.prototype.unrender = function() {
+      SourceStrategyCollectionView.__super__.unrender.apply(this, arguments);
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
       return null;
     };
 
-    EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
+    SourceStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
       if (this.onFetchDataSuccess(this.strategyCollection) === false) {
         return;
       }
@@ -69,12 +64,12 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.trigger("table:endload");
     };
 
-    EntityStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
+    SourceStrategyCollectionView.prototype.fetchCallback = function(strategyModels) {
       this.viewName(strategyModels[0].get("recipientEntityName"));
-      EntityStrategyCollectionView.__super__.fetchCallback.call(this, strategyModels);
+      SourceStrategyCollectionView.__super__.fetchCallback.call(this, strategyModels);
     };
 
-    EntityStrategyCollectionView.prototype.showSourceFeatures = function() {
+    SourceStrategyCollectionView.prototype.showSourceFeatures = function() {
       var bounds, lineFeatures, newFeature, source, sourceFeatures, sourcePoint, wktFormat, wugFeat, wugFeature, _i, _len, _ref;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
@@ -136,9 +131,9 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       }
     };
 
-    EntityStrategyCollectionView.prototype._registerClickEvents = function() {};
+    SourceStrategyCollectionView.prototype._registerClickEvents = function() {};
 
-    EntityStrategyCollectionView.prototype._registerHighlightEvents = function() {
+    SourceStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
@@ -173,7 +168,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
     };
 
-    EntityStrategyCollectionView.prototype._sourceStyleMap = new OpenLayers.StyleMap({
+    SourceStrategyCollectionView.prototype._sourceStyleMap = new OpenLayers.StyleMap({
       "default": new OpenLayers.Style({
         strokeColor: "${getStrokeColor}",
         strokeWidth: "${getStrokeWidth}",
@@ -222,7 +217,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       })
     });
 
-    return EntityStrategyCollectionView;
+    return SourceStrategyCollectionView;
 
   })(BaseStrategyCollectionView);
 });

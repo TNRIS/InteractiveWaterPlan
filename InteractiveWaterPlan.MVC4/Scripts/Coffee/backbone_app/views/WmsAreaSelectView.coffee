@@ -11,7 +11,7 @@ define([
         initialize: (options) ->
             _.bindAll(this, 'render', 'unrender', 
                 '_createRegionSelect', '_createCountySelect', 
-                '_createHouseSelect', '_createSenateSelect',
+                '_createHouseSenateSelect', '_createWugSelect',
                 'enableSelects', 'disableSelects', 'resetSelects')
 
             if (not namespace.countyNames? or not namespace.regionNames? or 
@@ -31,11 +31,20 @@ define([
             #create the countySelect
             @selects["county"] = this._createCountySelect().chosen()
 
-            #create the houseSelect
-            @selects["house"] = this._createHouseSelect().chosen() 
+            #create the houseSenateSelect
+            @selects["district"] = this._createHouseSenateSelect().chosen() 
 
-            #create the senateSelect
-            @selects["senate"] = this._createSenateSelect().chosen()
+            #create the wugSelect, which is ajax-backed
+            @selects["wug"] = this._createWugSelect().ajaxChosen(
+                type: 'GET'
+                url: "#{BASE_PATH}api/entities/auto"
+                jsonTermKey: "namePart"
+                , (data) ->
+                    results = []
+                    for kvp in data
+                        results.push(value: kvp.id, text: kvp.name)
+                    return results 
+            )
 
             return this
 
@@ -100,48 +109,55 @@ define([
             )
             return $countySelect
 
-        _createHouseSelect: () ->
-            $houseSelect = $("<select></select>")
-            $houseSelect.append($("<option value='-1'>Select a State House District</option>"))
-            for district in namespace.houseNames.models
-                opt = $("<option value='#{district.get("id")}'>#{district.get("name")}</option>")
-                $houseSelect.append(opt)
-
-            #add it to the dom
-            this.$("#houseSelectContainer").append($houseSelect)
-
-            #trigger the router to navigate to the view for this district
-            me = this
-            $houseSelect.on("change", () ->
-                $this = $(this)
-                if $this.val() == "-1" then return
-                Backbone.history.navigate("#/#{namespace.currYear}/wms/house/#{$this.val()}", {trigger: true})
-                me.resetSelects("house")
-                return
-            )
-            return $houseSelect
-
-
-        _createSenateSelect: () ->
-            $houseSelect = $("<select></select>")
-            $houseSelect.append($("<option value='-1'>Select a State Senate District</option>"))
+        _createHouseSenateSelect: () ->
+            $houseSenateSelect = $("<select></select>")
+            $houseSenateSelect.append($("<option value='-1'>Select a Legislative District</option>"))
+            
             for district in namespace.senateNames.models
-                opt = $("<option value='#{district.get("id")}'>#{district.get("name")}</option>")
-                $houseSelect.append(opt)
+                opt = $("<option data-type='senate' value='#{district.get("id")}'>#{district.get("name")}</option>")
+                $houseSenateSelect.append(opt)
+
+            for district in namespace.houseNames.models
+                opt = $("<option data-type='house' value='#{district.get("id")}'>#{district.get("name")}</option>")
+                $houseSenateSelect.append(opt)
 
             #add it to the dom
-            this.$("#senateSelectContainer").append($houseSelect)
+            this.$("#districtSelectContainer").append($houseSenateSelect)
 
             #trigger the router to navigate to the view for this district
             me = this
-            $houseSelect.on("change", () ->
+            $houseSenateSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
-                Backbone.history.navigate("#/#{namespace.currYear}/wms/senate/#{$this.val()}", {trigger: true})
-                me.resetSelects("senate")
+                districtType = $this.attr('data-type')
+
+                if districtType == 'senate'
+                    Backbone.history.navigate("#/#{namespace.currYear}/wms/senate/#{$this.val()}", {trigger: true})
+                else
+                    Backbone.history.navigate("#/#{namespace.currYear}/wms/house/#{$this.val()}", {trigger: true})
+                
+                me.resetSelects("district")
                 return
             )
-            return $houseSelect
+            return $houseSenateSelect
+
+        _createWugSelect: () ->
+            $wugSelect = $("<select></select>")
+            $wugSelect.append($("<option value='-1'>Select a Water User Group</option>"))
+            
+            this.$("#wugSelectContainer").append($wugSelect)
+
+            #trigger the router to navigate to the view for this county
+            me = this
+            $wugSelect.on("change", () ->
+                $this = $(this)
+                if $this.val() == "-1" then return
+                Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{$this.val()}", {trigger: true})
+                me.resetSelects("wug")
+                return
+            )
+
+            return $wugSelect
 
         unrender: () ->
             @$el.remove();

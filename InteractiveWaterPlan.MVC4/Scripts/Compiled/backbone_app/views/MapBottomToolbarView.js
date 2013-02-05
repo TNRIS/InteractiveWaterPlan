@@ -26,7 +26,7 @@ define(['namespace', 'models/PlaceFeatureModel', 'scripts/text!templates/mapBott
         minLength: 2,
         source: function(query, process) {
           this.$element.data('selected-place-id', null);
-          return $.get("" + BASE_API_PATH + "api/place", {
+          return $.get("" + BASE_PATH + "api/place", {
             name: query
           }, function(places) {
             return process(places);

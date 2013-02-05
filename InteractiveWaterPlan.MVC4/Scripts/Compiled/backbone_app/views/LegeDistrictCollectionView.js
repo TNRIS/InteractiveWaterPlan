@@ -25,7 +25,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/StrategyView', '
         districtId: this.districtId
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategies/district/" + this.districtType
+        url: "" + BASE_PATH + "api/strategies/district/" + this.districtType
       });
       LegeDistrictCollectionView.__super__.initialize.call(this, StrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams

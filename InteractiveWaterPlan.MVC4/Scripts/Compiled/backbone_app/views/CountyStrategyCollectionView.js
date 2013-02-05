@@ -21,7 +21,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/CountyStrategyVi
         countyId: this.countyId
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategies/county"
+        url: "" + BASE_PATH + "api/strategies/county"
       });
       CountyStrategyCollectionView.__super__.initialize.call(this, CountyStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams

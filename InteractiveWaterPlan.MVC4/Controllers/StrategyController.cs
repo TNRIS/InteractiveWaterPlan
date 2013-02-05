@@ -96,13 +96,22 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return strategies;
         }
 
-
+        // GET api/strategies/project
         public IList<StrategyDetails> GetStrategiesByProjectId(int projectId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
             return _repo.GetStrategiesByProjectId(projectId, year);
+        }
+
+        // GET api/strategies/source
+        public IList<SourceStrategy> GetStrategiesBySource(int sourceId, string year)
+        {
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetStrategiesBySource(sourceId, year);
         }
 
     }

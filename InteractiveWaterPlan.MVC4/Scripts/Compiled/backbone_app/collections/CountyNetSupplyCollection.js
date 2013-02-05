@@ -12,7 +12,7 @@ define([], function() {
       return CountyNetSupplyCollection.__super__.constructor.apply(this, arguments);
     }
 
-    CountyNetSupplyCollection.prototype.url = "" + BASE_API_PATH + "api/supply/county-net";
+    CountyNetSupplyCollection.prototype.url = "" + BASE_PATH + "api/supply/county-net";
 
     return CountyNetSupplyCollection;
 

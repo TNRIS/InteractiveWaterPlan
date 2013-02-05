@@ -11,6 +11,7 @@ define([
     'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
     'views/StrategyDetailCollectionView'
+    'views/SourceStrategyCollectionView'
     'views/WmsAreaSelectView'
     'views/MapTopButtonsView'
 ],
@@ -26,6 +27,7 @@ define([
     StrategyTypeCollectionView,
     EntityStrategyCollectionView,
     StrategyDetailCollectionView,
+    SourceStrategyCollectionView,
     WmsAreaSelectView,
     MapTopButtonsView) ->
 
@@ -87,7 +89,7 @@ define([
             ":year/wms/type/:typeId":             "wmsType"
             ":year/wms/entity/:entityId":         "wmsEntity"
             ":year/wms/project/:projectId":       "wmsProjectDetail"
-            #TODO: wms/source/:sourceId
+            ":year/wms/source/:sourceId":         "wmsSource"
             
             
         # Event Handlers
@@ -109,7 +111,7 @@ define([
 
         onTableFetchError: () ->
             $('#errorMessage').show() #TODO: is there are more centralized way to do this?
-            alert "An error has occured.  Please reload this page or go back."
+            #alert "An error has occured.  Please reload this page or go back."
             return
 
         onTableNothingFound: () ->
@@ -344,6 +346,21 @@ define([
             )
 
             @areaSelectView.resetSelects()
+
+            return
+
+        wmsSource: (year, sourceId) ->
+            #(validation of sourceId is taken care of in fetchCallback)
+
+            #render the view
+            @currStrategyView = new SourceStrategyCollectionView(
+                el: @tableContainer
+                id: sourceId
+            )
+
+            @areaSelectView.resetSelects()
+
+            @mapView.showWmsOverlayByViewType("CountyNames")
 
             return
 

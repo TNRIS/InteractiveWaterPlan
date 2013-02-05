@@ -12,7 +12,7 @@ define([], function() {
       return RegionNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    RegionNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/regions/names";
+    RegionNamesCollection.prototype.url = "" + BASE_PATH + "api/boundary/regions/names";
 
     RegionNamesCollection.prototype.model = Backbone.Model.extend({
       idAttribute: 'letter'

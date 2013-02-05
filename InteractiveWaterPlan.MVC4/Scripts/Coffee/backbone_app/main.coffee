@@ -16,17 +16,17 @@ _.extend(
     })
 
 
-BASE_API_PATH = "/"
+BASE_PATH = "/"
 BASE_CONTENT_PATH = "/"
 
 #Launch-point for the application
 $(()->
-    BASE_API_PATH = $("#base_path").val()
+    BASE_PATH = $("#base_path").val()
     BASE_CONTENT_PATH = $("#base_content_path").val()
 
     #Config for RequireJS
     require.config(
-        baseUrl: "#{BASE_API_PATH}Scripts/Compiled/backbone_app"
+        baseUrl: "#{BASE_PATH}Scripts/Compiled/backbone_app"
         paths:
             "scripts" : "../.." #Used for loading text.js
             "templates": "../../templates" #Used for html templates

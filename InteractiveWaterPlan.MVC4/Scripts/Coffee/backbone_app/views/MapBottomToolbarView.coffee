@@ -27,7 +27,7 @@ define([
                 source: (query, process) ->
                     this.$element.data('selected-place-id', null)
 
-                    return $.get("#{BASE_API_PATH}api/place", 
+                    return $.get("#{BASE_PATH}api/place", 
                         {name: query},
                         (places) ->
                             return process(places)

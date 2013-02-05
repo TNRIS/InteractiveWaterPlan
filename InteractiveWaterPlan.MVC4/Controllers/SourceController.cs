@@ -26,5 +26,12 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             
             return _repo.GetSourcesForEntity(entityId, year);
         }
+
+        //api/source/{sourceId}
+        public Source GetSource(int sourceId)
+        {
+            //TODO - need stored proc
+            return null;
+        }
     }
 }

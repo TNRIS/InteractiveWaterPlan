@@ -1,42 +1,56 @@
 ﻿@using System.Web.Optimization
+@using System.Web.Configuration
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title | TWDB</title>
 
-    @Styles.Render("~/Content/ExtJS/resources/css/ext-all-gray.css",
-        "~/Content/OpenLayers/theme/default/style.css",
-        "~/Content/bootstrap/css/bootstrap.min.css",
+    <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
+
+    @Styles.Render(
+        "~/bundles/css/cosmo.css",
+        "~/Content/FontAwesome/css/font-awesome.css",
+        "~/Content/chosen.cosmo.css",
         "~/Content/Site.css"
     )
 
-    <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
-   
+    @Scripts.Render("~/bundles/js/modernizr.js")
+
 </head>
 
-<body>
+<body lang="en">
+    <div class="container">
+        @RenderBody()
 
-    @RenderBody()
- 
-    @if (HttpContext.Current.IsDebuggingEnabled)
-    {
-        @Scripts.Render("~/Content/OpenLayers/OpenLayers.debug.js")
-    }
-    else
-    {
-        @Scripts.Render("~/Content/OpenLayers/OpenLayers.js")
-    }
-    
-    <input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
-    <input type="hidden" id="base_path" value="@Url.Content("~/")" />
+        <footer>
+            <p>
+                This website is brought to you by the 
+                <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a>
+            </p>
+            <p>
+                <a href="#TODO" title="Site Policies">Site Policies</a> | 
+                <a href="http://www.texas.gov/" title="Texas Online">Texas Online</a> | 
+                <a href="http://www.governor.texas.gov/homeland" title="Homeland Security">Homeland Security</a> | 
+                <a href="http://www2.tsl.state.tx.us/trail" title="TRAIL">TRAIL</a> | 
+                <a href="#TODO" title="Contact Us">Contact Us</a>
+            </p>
+        </footer>
+    </div>
 
-    @Scripts.Render("~/bundles/js/scripts")
+    <script type="text/javascript">
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '@WebConfigurationManager.AppSettings["GoogleAnalyticsTrackingKey"]']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
 </body>
 </html>

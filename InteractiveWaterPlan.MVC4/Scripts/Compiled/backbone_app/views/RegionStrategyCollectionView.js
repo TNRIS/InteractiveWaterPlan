@@ -20,7 +20,7 @@ define(['namespace', 'views/BaseSelectableRegionStrategyView', 'views/RegionStra
         regionLetter: this.regionLetter
       };
       StrategyCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategies/region"
+        url: "" + BASE_PATH + "api/strategies/region"
       });
       RegionStrategyCollectionView.__super__.initialize.call(this, RegionStrategyView, StrategyCollection, tpl, namespace.mapView, {
         fetchParams: fetchParams

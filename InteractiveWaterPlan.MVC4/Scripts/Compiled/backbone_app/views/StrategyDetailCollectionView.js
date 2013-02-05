@@ -21,7 +21,7 @@ define(['namespace', 'views/BaseStrategyCollectionView', 'views/StrategyDetailVi
         projectId: this.projectId
       };
       StrategyDetailCollection = Backbone.Collection.extend({
-        url: "" + BASE_API_PATH + "api/strategies/project"
+        url: "" + BASE_PATH + "api/strategies/project"
       });
       StrategyDetailCollectionView.__super__.initialize.call(this, StrategyDetailView, StrategyDetailCollection, tpl, {
         fetchParams: fetchParams

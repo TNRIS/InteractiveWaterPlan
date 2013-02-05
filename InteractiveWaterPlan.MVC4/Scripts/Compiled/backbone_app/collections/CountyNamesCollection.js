@@ -12,7 +12,7 @@ define([], function() {
       return CountyNamesCollection.__super__.constructor.apply(this, arguments);
     }
 
-    CountyNamesCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/counties/names";
+    CountyNamesCollection.prototype.url = "" + BASE_PATH + "api/boundary/counties/names";
 
     return CountyNamesCollection;
 

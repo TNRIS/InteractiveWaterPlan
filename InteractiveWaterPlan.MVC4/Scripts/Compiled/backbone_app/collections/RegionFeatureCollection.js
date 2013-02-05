@@ -12,7 +12,7 @@ define([], function() {
       return RegionFeatureCollection.__super__.constructor.apply(this, arguments);
     }
 
-    RegionFeatureCollection.prototype.url = "" + BASE_API_PATH + "api/boundary/regions/all";
+    RegionFeatureCollection.prototype.url = "" + BASE_PATH + "api/boundary/regions/all";
 
     return RegionFeatureCollection;
 
