@@ -164,7 +164,7 @@ define(['namespace', 'scripts/text!templates/wmsAreaSelect.html'], function(name
     WmsAreaSelectView.prototype._createWugSelect = function() {
       var $wugSelect, me;
       $wugSelect = $("<select></select>");
-      $wugSelect.append($("<option value='-1'>Select a Water User Group</option>"));
+      $wugSelect.append($("<option value='-1'>Search for a Water User Group</option>"));
       this.$("#wugSelectContainer").append($wugSelect);
       me = this;
       $wugSelect.on("change", function() {

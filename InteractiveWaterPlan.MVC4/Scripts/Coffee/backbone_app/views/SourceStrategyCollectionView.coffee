@@ -26,11 +26,11 @@ define([
             )
 
             #Also crete a model for the source feature
-            SourceFeature = Backbone.Model.extend(
-                url: "#{BASE_PATH}api/feature/source/#{@sourceId}"
+            SourceCollection = Backbone.Collection.extend(
+                url: "#{BASE_PATH}api/source/feature/#{@sourceId}"
             )
 
-            @sourceFeature = new SourceFeature()
+            @sourceCollection = new SourceCollection()
 
             super SourceStrategyView, StrategyCollection, tpl, {fetchParams: fetchParams}
 
@@ -49,11 +49,8 @@ define([
             $.when(
                 @strategyCollection.fetch( {data: params} ),
                 
-                #TODO fetch the source model
-                #@sourceCollection.fetch(
-                #    data:
-                #        year: namespace.currYear
-                #)
+                #TODO fetch the source feature collection
+                @sourceCollection.fetch()
             )
             .then(
                 this.onFetchBothCollectionSuccess #process the collections

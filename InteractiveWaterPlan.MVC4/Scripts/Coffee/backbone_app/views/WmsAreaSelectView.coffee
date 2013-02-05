@@ -143,7 +143,7 @@ define([
 
         _createWugSelect: () ->
             $wugSelect = $("<select></select>")
-            $wugSelect.append($("<option value='-1'>Select a Water User Group</option>"))
+            $wugSelect.append($("<option value='-1'>Search for a Water User Group</option>"))
             
             this.$("#wugSelectContainer").append($wugSelect)
 

@@ -13,7 +13,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
     }
 
     SourceStrategyCollectionView.prototype.initialize = function(options) {
-      var SourceFeature, StrategyCollection, fetchParams;
+      var SourceCollection, StrategyCollection, fetchParams;
       _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents');
       this.sourceId = options.id;
       this.viewName = ko.observable();
@@ -24,10 +24,10 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       StrategyCollection = Backbone.Collection.extend({
         url: "" + BASE_PATH + "api/strategies/source"
       });
-      SourceFeature = Backbone.Model.extend({
-        url: "" + BASE_PATH + "api/feature/source/" + this.sourceId
+      SourceCollection = Backbone.Collection.extend({
+        url: "" + BASE_PATH + "api/source/feature/" + this.sourceId
       });
-      this.sourceFeature = new SourceFeature();
+      this.sourceCollection = new SourceCollection();
       SourceStrategyCollectionView.__super__.initialize.call(this, SourceStrategyView, StrategyCollection, tpl, {
         fetchParams: fetchParams
       });
@@ -43,7 +43,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.trigger("table:startload");
       $.when(this.strategyCollection.fetch({
         data: params
-      })).then(this.onFetchBothCollectionSuccess).fail(function() {
+      }), this.sourceCollection.fetch()).then(this.onFetchBothCollectionSuccess).fail(function() {
         _this.trigger("table:fetcherror");
       });
     };
