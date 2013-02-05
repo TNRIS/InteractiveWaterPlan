@@ -31,6 +31,8 @@
     <property column="wmsRecipientEntityType" name="RecipientEntityType" />
     
     <property column="SQL_GEOG" name="RecipientEntityWktGeog" />
+
+    <property column="GEOG_Mapping_Pt" name="SourceMappingPoint" />
     
   </class>
 

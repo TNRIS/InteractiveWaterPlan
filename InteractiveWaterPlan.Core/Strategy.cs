@@ -83,6 +83,8 @@
         public virtual string RecipientEntityType { get; set; }
         public virtual string RecipientEntityWktGeog { get; set; }
 
+        public virtual string SourceMappingPoint { get; set; }
+
         public virtual SourceStrategy Clone()
         {
             return (SourceStrategy)this.MemberwiseClone();
