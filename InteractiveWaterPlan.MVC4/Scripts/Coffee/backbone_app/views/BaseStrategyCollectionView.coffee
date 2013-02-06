@@ -50,7 +50,6 @@ define([
             return this
 
         unrender: () ->
-            console.log "unrender in base"
             this._clearWugFeaturesAndControls()
             @$el.html()
             return null

@@ -1091,7 +1091,6 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype.unrender = function() {
-      console.log("unrender in base");
       this._clearWugFeaturesAndControls();
       this.$el.html();
       return null;
