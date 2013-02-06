@@ -11,7 +11,7 @@ define([
         
         initialize: (options) ->
             _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 
-                'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents')
+                'showSourceFeatures', '_registerHighlightEvents')
 
             @entityId = options.id
             
@@ -70,7 +70,8 @@ define([
             #must call super first because of how controls are destroyed
             super
             if @sourceLayer? then @sourceLayer.destroy()
-            return null
+
+            return
 
         onFetchBothCollectionSuccess: () ->
 
@@ -117,7 +118,7 @@ define([
                 #grab the source point for mapping  and transform from geographic to web merc
                 if source.attributes.wktMappingPoint?
                     sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-                    sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
+                    @mapView.transformToWebMerc(sourcePoint.geometry)
 
                     lineFeatures.push new OpenLayers.Feature.Vector(
                         new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
@@ -129,8 +130,7 @@ define([
                 delete newFeature.attributes.wktMappingPoint
                 
                 #transform from geographic to web merc
-                newFeature.geometry = @mapView.transformToWebMerc(
-                    newFeature.geometry)
+                @mapView.transformToWebMerc(newFeature.geometry)
         
                 if not bounds?
                     bounds = newFeature.geometry.getBounds().clone()
@@ -166,7 +166,8 @@ define([
 
             
             this._registerHighlightEvents()
-            this._registerClickEvents() 
+            this._addLayerToControl(@clickFeatureControl, @sourceLayer)
+            #this._registerClickEvents() 
 
             #And zoom the map to include the bounds of the sources as well
             # as the wugFeatures (should only be one)
@@ -177,31 +178,23 @@ define([
 
             return
 
-        _registerClickEvents: () ->
+        #override the super's _clickFeature so we can also click
+        # source features
+        _clickFeature: (feature) ->
+            super feature
 
-            #first add the layer to the control
-            this._addLayerToControl(@clickFeatureControl, @sourceLayer)
+            if feature.layer.id != @sourceLayer.id then return
 
-            @clickFeatureControl.events.register('clickfeature', null, (event) => 
-                #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
+            #don't do anything for connectors either
+            if feature.attributes.featureType? and 
+                feature.attributes.featureType == "connector"
                     return
 
-                #don't do anything for connectors either
-                if event.feature.attributes.featureType? and 
-                    event.feature.attributes.featureType == "connector"
-                        return
-
-                sourceFeature = event.feature
-
-                sourceId = sourceFeature.attributes.sourceId
-                Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
-                    {trigger: true})
-
-                return
-            )
-
+            sourceId = feature.attributes.sourceId
+            Backbone.history.navigate("#/#{namespace.currYear}/wms/source/#{sourceId}", 
+                {trigger: true})
             return
+
 
         _registerHighlightEvents: () ->
 
@@ -211,7 +204,7 @@ define([
             @highlightFeatureControl.events.register('beforefeaturehighlighted', null, (event) =>
                 
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
                     return true
 
                 feature = event.feature
@@ -227,8 +220,8 @@ define([
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                  
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
-                    return false #stops the rest of the highlight events
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
+                    return
 
                 sourceFeature = event.feature
 
@@ -253,8 +246,8 @@ define([
 
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
-                    return false #stops the rest of the highlight events
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
+                    return
 
                 sourceFeature = event.feature
                 

@@ -14,7 +14,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
       var SourceCollection, StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents');
+      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents');
       this.entityId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -58,7 +58,6 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -94,14 +93,14 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         newFeature.attributes = _.clone(source.attributes);
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
-          sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
           lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]), {
             featureType: "connector"
           }));
         }
         delete newFeature.attributes.wktGeog;
         delete newFeature.attributes.wktMappingPoint;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -127,7 +126,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.mapView.map.addLayer(this.sourceLayer);
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._registerHighlightEvents();
-      this._registerClickEvents();
+      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
       if (bounds != null) {
         wugFeat = this.wugLayer.features[0];
         bounds.extend(wugFeat.geometry.getBounds());
@@ -135,22 +134,18 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       }
     };
 
-    EntityStrategyCollectionView.prototype._registerClickEvents = function() {
-      var _this = this;
-      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
-      this.clickFeatureControl.events.register('clickfeature', null, function(event) {
-        var sourceFeature, sourceId;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return;
-        }
-        if ((event.feature.attributes.featureType != null) && event.feature.attributes.featureType === "connector") {
-          return;
-        }
-        sourceFeature = event.feature;
-        sourceId = sourceFeature.attributes.sourceId;
-        Backbone.history.navigate("#/" + namespace.currYear + "/wms/source/" + sourceId, {
-          trigger: true
-        });
+    EntityStrategyCollectionView.prototype._clickFeature = function(feature) {
+      var sourceId;
+      EntityStrategyCollectionView.__super__._clickFeature.call(this, feature);
+      if (feature.layer.id !== this.sourceLayer.id) {
+        return;
+      }
+      if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
+        return;
+      }
+      sourceId = feature.attributes.sourceId;
+      Backbone.history.navigate("#/" + namespace.currYear + "/wms/source/" + sourceId, {
+        trigger: true
       });
     };
 
@@ -159,7 +154,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return true;
         }
         feature = event.feature;
@@ -170,8 +165,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
@@ -181,8 +176,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         if (sourceFeature.popup != null) {

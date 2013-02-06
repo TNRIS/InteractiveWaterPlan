@@ -17,7 +17,7 @@ define(['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -44,6 +44,21 @@ define(['namespace'], function(namespace) {
       this._clearWugFeaturesAndControls();
       this.$el.html();
       return null;
+    };
+
+    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
+      this.unselectWugFeatures();
+      if (this.highlightFeatureControl != null) {
+        this.highlightFeatureControl.deactivate();
+        this.highlightFeatureControl = null;
+      }
+      if (this.clickFeatureControl != null) {
+        this.clickFeatureControl.deactivate();
+        this.clickFeatureControl = null;
+      }
+      if (this.wugLayer != null) {
+        this.wugLayer.destroy();
+      }
     };
 
     BaseStrategyCollectionView.prototype.fetchData = function() {
@@ -125,17 +140,6 @@ define(['namespace'], function(namespace) {
       });
       this.wugCollection.reset(newWugList);
       this.showWugFeatures();
-    };
-
-    BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
-      return {
-        entityId: m.get("recipientEntityId"),
-        name: m.get("recipientEntityName"),
-        wktGeog: m.get("recipientEntityWktGeog"),
-        totalSupply: m.get("supply" + namespace.currYear),
-        type: m.get("recipientEntityType"),
-        stratTypeId: m.get("typeId")
-      };
     };
 
     BaseStrategyCollectionView.prototype._setupDataTable = function() {
@@ -221,7 +225,9 @@ define(['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.showWugFeatures = function() {
       var bounds, max_supply, min_supply, newFeature, wktFormat, wug, wugFeatures, _i, _len, _ref;
-      this._clearWugFeaturesAndControls();
+      if (this.wugLayer != null) {
+        this.wugLayer.destroy();
+      }
       if (this.wugCollection.models.length < 1) {
         return;
       }
@@ -245,7 +251,7 @@ define(['namespace'], function(namespace) {
         newFeature.attributes = _.clone(wug.attributes);
         newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -258,21 +264,6 @@ define(['namespace'], function(namespace) {
       this._setupWugHighlightContol();
       this._setupWugClickControl();
       this.mapView.zoomToExtent(bounds);
-    };
-
-    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
-      this.unselectWugFeatures();
-      if (this.highlightFeatureControl != null) {
-        this.highlightFeatureControl.destroy();
-        this.highlightFeatureControl = null;
-      }
-      if (this.clickFeatureControl != null) {
-        this.clickFeatureControl.destroy();
-        this.clickFeatureControl = null;
-      }
-      if (this.wugLayer != null) {
-        this.wugLayer.destroy();
-      }
     };
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
@@ -328,26 +319,11 @@ define(['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._setupWugClickControl = function() {
-      var _this = this;
       if (!(this.clickFeatureControl != null)) {
         this._setupClickFeatureControl(this.wugLayer);
       } else {
         this._addLayerToControl(this.clickFeatureControl, this.wugLayer);
       }
-      this.clickFeatureControl.events.register('clickfeature', null, function(event) {
-        var wugFeature, wugId;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
-          return;
-        }
-        wugFeature = event.feature;
-        if ((wugFeature.attributes.type != null) && wugFeature.attributes.type === "WWP") {
-          return;
-        }
-        wugId = wugFeature.attributes.entityId;
-        Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
-          trigger: true
-        });
-      });
     };
 
     BaseStrategyCollectionView.prototype._setupWugHighlightContol = function() {
@@ -359,7 +335,7 @@ define(['namespace'], function(namespace) {
       }
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -370,7 +346,7 @@ define(['namespace'], function(namespace) {
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -383,35 +359,32 @@ define(['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._addLayerToControl = function(control, newLayer) {
-      var alreadyThere, oldLayers;
       if (!(control != null) || !(newLayer != null)) {
         return;
       }
-      oldLayers = null;
-      if (control.layers != null) {
-        oldLayers = control.layers;
-      } else if (control.layer != null) {
-        oldLayers = [control.layer];
-      }
-      alreadyThere = _.find(oldLayers, function(l) {
-        return l.id === newLayer.id;
-      });
-      if (alreadyThere != null) {
-        return false;
-      }
-      control.setLayer(_.flatten([oldLayers, newLayer], true));
+      control.setLayer((control.layers || [control.layer]).concat(newLayer));
     };
 
     BaseStrategyCollectionView.prototype._setupClickFeatureControl = function(layer) {
       this.clickFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
         autoActivate: true,
-        clickFeature: function(feature) {
-          this.events.triggerEvent("clickfeature", {
-            feature: feature
-          });
-        }
+        clickFeature: this._clickFeature
       });
       this.mapView.map.addControl(this.clickFeatureControl);
+    };
+
+    BaseStrategyCollectionView.prototype._clickFeature = function(feature) {
+      var wugId;
+      if (feature.layer.id !== this.wugLayer.id) {
+        return;
+      }
+      if ((feature.attributes.type != null) && feature.attributes.type === "WWP") {
+        return;
+      }
+      wugId = feature.attributes.entityId;
+      Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
+        trigger: true
+      });
     };
 
     BaseStrategyCollectionView.prototype._setupHighlightFeatureControl = function(layer) {
@@ -419,6 +392,12 @@ define(['namespace'], function(namespace) {
         multiple: false,
         hover: true,
         autoActivate: true,
+        select: function(feature) {
+          if (!(feature != null) || !(feature.layer != null)) {
+            return;
+          }
+          OpenLayers.Control.SelectFeature.prototype.select.apply(this, arguments);
+        },
         overFeature: function(feature) {
           var _this = this;
           layer = feature.layer;

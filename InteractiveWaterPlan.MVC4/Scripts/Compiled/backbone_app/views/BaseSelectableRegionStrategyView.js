@@ -81,7 +81,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyC
         newFeature = wktFormat.read(region.get('wktGeog'));
         newFeature.attributes = _.clone(region.attributes);
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         regionFeatures.push(newFeature);
       }
       this.regionLayer = new OpenLayers.Layer.Vector("Region Feature Layer", {

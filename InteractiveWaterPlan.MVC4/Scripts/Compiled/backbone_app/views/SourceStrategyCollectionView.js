@@ -14,7 +14,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
 
     SourceStrategyCollectionView.prototype.initialize = function(options) {
       var SourceModel, StrategyCollection, fetchParams;
-      _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeature', '_registerHighlightEvents', '_registerClickEvents');
+      _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeature', '_registerHighlightEvents');
       this.sourceId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -53,7 +53,6 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     SourceStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -66,7 +65,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
     };
 
     SourceStrategyCollectionView.prototype.showSourceFeature = function() {
-      var bounds, lineFeatures, sourceFeature, wktFormat, wugFeat, wugFeature, wugFeatures, wugModel, _i, _j, _len, _len1, _ref, _ref1;
+      var bounds, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref, _ref1;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       lineFeatures = [];
@@ -79,29 +78,29 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         return;
       }
       sourceFeature.attributes = _.clone(this.sourceModel.attributes);
-      /*if source.attributes.wktMappingPoint?
-          sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-          sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
-      
-          lineFeatures.push new OpenLayers.Feature.Vector(
-              new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-              { featureType: "connector" }
-          )
-      */
-
       delete sourceFeature.attributes.wktGeog;
       delete sourceFeature.attributes.wktMappingPoint;
-      sourceFeature.geometry = this.mapView.transformToWebMerc(sourceFeature.geometry);
+      this.mapView.transformToWebMerc(sourceFeature.geometry);
       bounds = sourceFeature.geometry.getBounds().clone();
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         bounds.extend(wugFeature.geometry.getBounds());
       }
-      _ref1 = this.wugCollection.models;
+      _ref1 = this.strategyCollection.models;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        wugModel = _ref1[_j];
-        console.log(wugModel);
+        stratModel = _ref1[_j];
+        sourcePointText = stratModel.get("sourceMappingPoint");
+        wugPointText = stratModel.get("recipientEntityWktGeog");
+        if ((sourcePointText != null) && (wugPointText != null)) {
+          sourcePoint = wktFormat.read(sourcePointText);
+          wugPoint = wktFormat.read(wugPointText);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(wugPoint.geometry);
+          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugPoint.geometry]), {
+            featureType: "connector"
+          }));
+        }
       }
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
@@ -112,15 +111,13 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.mapView.map.addLayer(this.sourceLayer);
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._registerHighlightEvents();
-      this._registerClickEvents();
+      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
       if (bounds != null) {
         wugFeat = this.wugLayer.features[0];
         bounds.extend(wugFeat.geometry.getBounds());
         this.mapView.zoomToExtent(bounds);
       }
     };
-
-    SourceStrategyCollectionView.prototype._registerClickEvents = function() {};
 
     SourceStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
@@ -135,7 +132,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;
@@ -146,7 +143,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;

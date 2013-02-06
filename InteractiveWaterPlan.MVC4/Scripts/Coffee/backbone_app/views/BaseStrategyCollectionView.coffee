@@ -14,7 +14,8 @@ define([
                 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl',
                 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol',
-                'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl'
+                'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl',
+                '_clickFeature'
             )
 
             options = options || {}
@@ -52,6 +53,23 @@ define([
             this._clearWugFeaturesAndControls()
             @$el.html()
             return null
+
+        _clearWugFeaturesAndControls: () ->
+            this.unselectWugFeatures() 
+
+            #TODO: maybe instead of destroying the controls, we should just 
+            # remove the wug layer from them
+            if @highlightFeatureControl?
+                @highlightFeatureControl.deactivate()
+
+                @highlightFeatureControl = null
+            if @clickFeatureControl?
+                @clickFeatureControl.deactivate()
+                @clickFeatureControl = null
+
+            if @wugLayer? then @wugLayer.destroy()
+            
+            return
 
         fetchData: () ->
             this.$('tbody').empty() #clear the table contents
@@ -160,17 +178,6 @@ define([
             this.showWugFeatures()
             return
 
-
-        _mapStrategyModelToWugFeature: (m) ->
-            return {
-                entityId: m.get("recipientEntityId")
-                name: m.get("recipientEntityName")
-                wktGeog: m.get("recipientEntityWktGeog")
-                totalSupply: m.get("supply#{namespace.currYear}")
-                type: m.get("recipientEntityType")
-                stratTypeId: m.get("typeId")
-            }
-
         _setupDataTable: () ->
             #grab the table, get the headers
             # for each th, grab the data-sort attribute
@@ -273,10 +280,9 @@ define([
             @$el.fadeIn()
             return
 
-        #############################################
-
         showWugFeatures: () ->
-            this._clearWugFeaturesAndControls()
+            #TODO: ??? this._clearWugFeaturesAndControls()
+            if @wugLayer? then @wugLayer.destroy()
 
             if @wugCollection.models.length < 1 then return
 
@@ -308,7 +314,7 @@ define([
                     @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, wug.get("totalSupply"))
                 delete newFeature.attributes.wktGeog
                
-                newFeature.geometry = @mapView.transformToWebMerc(newFeature.geometry)
+                @mapView.transformToWebMerc(newFeature.geometry)
 
                 if not bounds?
                     #must clone the bounds, otherwise the feature's bounds
@@ -330,23 +336,6 @@ define([
             this._setupWugClickControl()
             
             @mapView.zoomToExtent(bounds)
-            return
-
-        _clearWugFeaturesAndControls: () ->
-            this.unselectWugFeatures() 
-
-            #TODO: maybe instead of destroying the controls, we should just 
-            # remove the wug layer from them
-            if @highlightFeatureControl? 
-                @highlightFeatureControl.destroy()
-                @highlightFeatureControl = null
-            if @clickFeatureControl?
-                @clickFeatureControl.destroy()
-                @clickFeatureControl = null
-
-            if @wugLayer?
-                @wugLayer.destroy()
-
             return
 
         selectWugFeature: (wugId, projId) ->
@@ -392,32 +381,12 @@ define([
             return
 
         _setupWugClickControl: () ->
-            
             #first see if the control exists, if not, set it up
             if not @clickFeatureControl?
                 this._setupClickFeatureControl(@wugLayer)
             #else add the wug layer to the highlight control
             else
                 this._addLayerToControl(@clickFeatureControl, @wugLayer)
-
-            #then setup event listeners
-            @clickFeatureControl.events.register('clickfeature', null, (event) =>
-                #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id then return
-
-                wugFeature = event.feature
-
-                #do nothing if wugType = WWP
-                if wugFeature.attributes.type? and wugFeature.attributes.type == "WWP"
-                    return
-
-                #else navigate to Entity Details view when feature is clicked
-                wugId = wugFeature.attributes.entityId
-                Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
-                    {trigger: true})
-    
-                return
-            )
 
             return
 
@@ -433,7 +402,8 @@ define([
             #then setup event listeners
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                 #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id then return
+                if not event.feature.layer? or event.feature.layer.id != @wugLayer.id 
+                    return
 
                 wugFeature = event.feature
                 popup = new OpenLayers.Popup.FramedCloud("wugpopup",
@@ -457,7 +427,7 @@ define([
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
                 
                 #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id
+                if not event.feature.layer? or event.feature.layer.id != @wugLayer.id
                     return
 
                 wugFeature = event.feature
@@ -475,43 +445,38 @@ define([
         _addLayerToControl: (control, newLayer) ->
             if not control? or not newLayer? then return
 
-            oldLayers = null
-
-            if control.layers?
-                oldLayers = control.layers
-
-            else if control.layer?
-                oldLayers = [control.layer]
-           
-            #check to make a layer with the same id is not already in there
-            alreadyThere = _.find(oldLayers, (l) ->
-                return l.id == newLayer.id  
-            )
-            if alreadyThere? then return false
-
-            #calling _.flatten with shallow=true will create 
-            # a single dimension array layers
-            control.setLayer(_.flatten([oldLayers, newLayer], true))
+            control.setLayer((control.layers || [control.layer]).concat(newLayer))
 
             return
 
         _setupClickFeatureControl: (layer) ->
-
+            
             @clickFeatureControl = new OpenLayers.Control.SelectFeature(
                 layer,  #an initial layer must be specified or else setLayer will cause an exception later
                 {
                     autoActivate: true
-                    clickFeature: (feature) ->
-                        #trigger a click feature event for listeners to subscribe to
-                        this.events.triggerEvent("clickfeature", {feature: feature})
-                        return
-
+                    clickFeature: this._clickFeature
                 })
 
             @mapView.map.addControl(@clickFeatureControl)
+            
+            return
+
+        _clickFeature: (feature) -> 
+
+            if feature.layer.id != @wugLayer.id then return
+
+            #do nothing if wugType = WWP
+            if feature.attributes.type? and feature.attributes.type == "WWP"
+                return
+
+            wugId = feature.attributes.entityId
+
+            Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
+                {trigger: true})
 
             return
-       
+
         _setupHighlightFeatureControl: (layer) ->
 
             @highlightFeatureControl = new OpenLayers.Control.SelectFeature(
@@ -520,7 +485,15 @@ define([
                     multiple: false
                     hover: true
                     autoActivate: true
-                    
+
+                    select: (feature) ->
+                        #TODO: This is a hack to get around an issue with how layers and controls
+                        # are deconstructed (see destroy() calls in unrender method) and/or
+                        # how the events are queued and cannot seem to be stopped.  
+                        if not feature? or not feature.layer? then return
+                        OpenLayers.Control.SelectFeature.prototype.select.apply(this, arguments)
+                        return
+
                     #override the default overFeature to add a timer
                     overFeature: (feature) ->
                         layer = feature.layer;

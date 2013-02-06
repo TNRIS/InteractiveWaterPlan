@@ -1067,7 +1067,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -1094,6 +1094,21 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       this._clearWugFeaturesAndControls();
       this.$el.html();
       return null;
+    };
+
+    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
+      this.unselectWugFeatures();
+      if (this.highlightFeatureControl != null) {
+        this.highlightFeatureControl.deactivate();
+        this.highlightFeatureControl = null;
+      }
+      if (this.clickFeatureControl != null) {
+        this.clickFeatureControl.deactivate();
+        this.clickFeatureControl = null;
+      }
+      if (this.wugLayer != null) {
+        this.wugLayer.destroy();
+      }
     };
 
     BaseStrategyCollectionView.prototype.fetchData = function() {
@@ -1175,17 +1190,6 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       });
       this.wugCollection.reset(newWugList);
       this.showWugFeatures();
-    };
-
-    BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
-      return {
-        entityId: m.get("recipientEntityId"),
-        name: m.get("recipientEntityName"),
-        wktGeog: m.get("recipientEntityWktGeog"),
-        totalSupply: m.get("supply" + namespace.currYear),
-        type: m.get("recipientEntityType"),
-        stratTypeId: m.get("typeId")
-      };
     };
 
     BaseStrategyCollectionView.prototype._setupDataTable = function() {
@@ -1271,7 +1275,9 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
 
     BaseStrategyCollectionView.prototype.showWugFeatures = function() {
       var bounds, max_supply, min_supply, newFeature, wktFormat, wug, wugFeatures, _i, _len, _ref;
-      this._clearWugFeaturesAndControls();
+      if (this.wugLayer != null) {
+        this.wugLayer.destroy();
+      }
       if (this.wugCollection.models.length < 1) {
         return;
       }
@@ -1295,7 +1301,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         newFeature.attributes = _.clone(wug.attributes);
         newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -1308,21 +1314,6 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       this._setupWugHighlightContol();
       this._setupWugClickControl();
       this.mapView.zoomToExtent(bounds);
-    };
-
-    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
-      this.unselectWugFeatures();
-      if (this.highlightFeatureControl != null) {
-        this.highlightFeatureControl.destroy();
-        this.highlightFeatureControl = null;
-      }
-      if (this.clickFeatureControl != null) {
-        this.clickFeatureControl.destroy();
-        this.clickFeatureControl = null;
-      }
-      if (this.wugLayer != null) {
-        this.wugLayer.destroy();
-      }
     };
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
@@ -1378,26 +1369,11 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._setupWugClickControl = function() {
-      var _this = this;
       if (!(this.clickFeatureControl != null)) {
         this._setupClickFeatureControl(this.wugLayer);
       } else {
         this._addLayerToControl(this.clickFeatureControl, this.wugLayer);
       }
-      this.clickFeatureControl.events.register('clickfeature', null, function(event) {
-        var wugFeature, wugId;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
-          return;
-        }
-        wugFeature = event.feature;
-        if ((wugFeature.attributes.type != null) && wugFeature.attributes.type === "WWP") {
-          return;
-        }
-        wugId = wugFeature.attributes.entityId;
-        Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
-          trigger: true
-        });
-      });
     };
 
     BaseStrategyCollectionView.prototype._setupWugHighlightContol = function() {
@@ -1409,7 +1385,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       }
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -1420,7 +1396,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -1433,35 +1409,32 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._addLayerToControl = function(control, newLayer) {
-      var alreadyThere, oldLayers;
       if (!(control != null) || !(newLayer != null)) {
         return;
       }
-      oldLayers = null;
-      if (control.layers != null) {
-        oldLayers = control.layers;
-      } else if (control.layer != null) {
-        oldLayers = [control.layer];
-      }
-      alreadyThere = _.find(oldLayers, function(l) {
-        return l.id === newLayer.id;
-      });
-      if (alreadyThere != null) {
-        return false;
-      }
-      control.setLayer(_.flatten([oldLayers, newLayer], true));
+      control.setLayer((control.layers || [control.layer]).concat(newLayer));
     };
 
     BaseStrategyCollectionView.prototype._setupClickFeatureControl = function(layer) {
       this.clickFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
         autoActivate: true,
-        clickFeature: function(feature) {
-          this.events.triggerEvent("clickfeature", {
-            feature: feature
-          });
-        }
+        clickFeature: this._clickFeature
       });
       this.mapView.map.addControl(this.clickFeatureControl);
+    };
+
+    BaseStrategyCollectionView.prototype._clickFeature = function(feature) {
+      var wugId;
+      if (feature.layer.id !== this.wugLayer.id) {
+        return;
+      }
+      if ((feature.attributes.type != null) && feature.attributes.type === "WWP") {
+        return;
+      }
+      wugId = feature.attributes.entityId;
+      Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
+        trigger: true
+      });
     };
 
     BaseStrategyCollectionView.prototype._setupHighlightFeatureControl = function(layer) {
@@ -1469,6 +1442,12 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         multiple: false,
         hover: true,
         autoActivate: true,
+        select: function(feature) {
+          if (!(feature != null) || !(feature.layer != null)) {
+            return;
+          }
+          OpenLayers.Control.SelectFeature.prototype.select.apply(this, arguments);
+        },
         overFeature: function(feature) {
           var _this = this;
           layer = feature.layer;
@@ -1659,7 +1638,7 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
         newFeature = wktFormat.read(region.get('wktGeog'));
         newFeature.attributes = _.clone(region.attributes);
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         regionFeatures.push(newFeature);
       }
       this.regionLayer = new OpenLayers.Layer.Vector("Region Feature Layer", {
@@ -2105,7 +2084,7 @@ define('views/EntityStrategyView',['namespace', 'views/BaseStrategyView', 'scrip
   })(BaseStrategyView);
 });
 
-define('scripts/text!templates/entityStrategyTable.html',[],function () { return '\r\n<p>Map includes a schematic representation of water sources for water management strategies supplying <<b><span data-bind="text: viewName"></span></b> <i class="wugIcon icon-circle"></i> in <span data-bind="text: currYear"></span>.</p>\r\n\r\n<p>Conservation and other local strategy water sources are not mapped.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="Type of the recommended Water Management Strategy. Hover over a type name to view only Water User Groups with Water Management Strategies of that type.">\r\n                    Type\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n\r\n<p class="note-marker-container">\r\n    <small>\r\n        <span class="note-marker">*</span>\r\n        Denotes a strategy with supply volume included in other strategies.\r\n    </small>\r\n</p>';});
+define('scripts/text!templates/entityStrategyTable.html',[],function () { return '\r\n<p>Map includes a schematic representation of water sources for water management strategies supplying <b><span data-bind="text: viewName"></span></b> <i class="wugIcon icon-circle"></i> in <span data-bind="text: currYear"></span>.</p>\r\n\r\n<p>Conservation and other local strategy water sources are not mapped.</p>\r\n\r\n<table class="table-hover table-striped table-bordered table-condensed modelTable">\r\n    <thead>\r\n        <tr>\r\n            <th>\r\n                <span class="has-popover" data-content="Type of the recommended Water Management Strategy. Hover over a type name to view only Water User Groups with Water Management Strategies of that type.">\r\n                    Type\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Description of the recommended Water Management Strategy. Click to view project details.">\r\n                    Description\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Source supply of water for the Water Management Strategy">\r\n                    Source\r\n                </span>\r\n            </th>\r\n            <th data-sort="formatted-int">\r\n                <span class="has-popover" data-content="Volume of water (in acre-feet/year) supplied by the Water Management Strategy">\r\n                    Supply Volume <span data-bind="text: currYear"></span>\r\n                </span>\r\n            </th>\r\n            <th data-sort="currency">\r\n                <span class="has-popover" data-content="Estimated capital cost of the Water Management Strategy">\r\n                    Capital Cost\r\n                </span>\r\n            </th>\r\n            <th>\r\n                <span class="has-popover" data-content="Sponsor of the Water Management Strategy">\r\n                    Sponsor Entity\r\n                </span>\r\n            </th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n\r\n    </tbody>\r\n</table>\r\n\r\n<p class="note-marker-container">\r\n    <small>\r\n        <span class="note-marker">*</span>\r\n        Denotes a strategy with supply volume included in other strategies.\r\n    </small>\r\n</p>';});
 
 // Generated by CoffeeScript 1.3.3
 var __hasProp = {}.hasOwnProperty,
@@ -2123,7 +2102,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
 
     EntityStrategyCollectionView.prototype.initialize = function(options) {
       var SourceCollection, StrategyCollection, fetchParams;
-      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents', '_registerClickEvents');
+      _.bindAll(this, 'fetchCallback', 'onFetchBothCollectionSuccess', 'showSourceFeatures', '_registerHighlightEvents');
       this.entityId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -2167,7 +2146,6 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -2203,14 +2181,14 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         newFeature.attributes = _.clone(source.attributes);
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
-          sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
           lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]), {
             featureType: "connector"
           }));
         }
         delete newFeature.attributes.wktGeog;
         delete newFeature.attributes.wktMappingPoint;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -2236,7 +2214,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this.mapView.map.addLayer(this.sourceLayer);
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._registerHighlightEvents();
-      this._registerClickEvents();
+      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
       if (bounds != null) {
         wugFeat = this.wugLayer.features[0];
         bounds.extend(wugFeat.geometry.getBounds());
@@ -2244,22 +2222,18 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       }
     };
 
-    EntityStrategyCollectionView.prototype._registerClickEvents = function() {
-      var _this = this;
-      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
-      this.clickFeatureControl.events.register('clickfeature', null, function(event) {
-        var sourceFeature, sourceId;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return;
-        }
-        if ((event.feature.attributes.featureType != null) && event.feature.attributes.featureType === "connector") {
-          return;
-        }
-        sourceFeature = event.feature;
-        sourceId = sourceFeature.attributes.sourceId;
-        Backbone.history.navigate("#/" + namespace.currYear + "/wms/source/" + sourceId, {
-          trigger: true
-        });
+    EntityStrategyCollectionView.prototype._clickFeature = function(feature) {
+      var sourceId;
+      EntityStrategyCollectionView.__super__._clickFeature.call(this, feature);
+      if (feature.layer.id !== this.sourceLayer.id) {
+        return;
+      }
+      if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
+        return;
+      }
+      sourceId = feature.attributes.sourceId;
+      Backbone.history.navigate("#/" + namespace.currYear + "/wms/source/" + sourceId, {
+        trigger: true
       });
     };
 
@@ -2268,7 +2242,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return true;
         }
         feature = event.feature;
@@ -2279,8 +2253,8 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
@@ -2290,8 +2264,8 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         if (sourceFeature.popup != null) {
@@ -2469,7 +2443,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
 
     SourceStrategyCollectionView.prototype.initialize = function(options) {
       var SourceModel, StrategyCollection, fetchParams;
-      _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeature', '_registerHighlightEvents', '_registerClickEvents');
+      _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeature', '_registerHighlightEvents');
       this.sourceId = options.id;
       this.viewName = ko.observable();
       this.mapView = namespace.mapView;
@@ -2508,7 +2482,6 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     SourceStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -2521,7 +2494,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
     };
 
     SourceStrategyCollectionView.prototype.showSourceFeature = function() {
-      var bounds, lineFeatures, sourceFeature, wktFormat, wugFeat, wugFeature, wugFeatures, wugModel, _i, _j, _len, _len1, _ref, _ref1;
+      var bounds, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref, _ref1;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       lineFeatures = [];
@@ -2534,29 +2507,29 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         return;
       }
       sourceFeature.attributes = _.clone(this.sourceModel.attributes);
-      /*if source.attributes.wktMappingPoint?
-          sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-          sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
-      
-          lineFeatures.push new OpenLayers.Feature.Vector(
-              new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-              { featureType: "connector" }
-          )
-      */
-
       delete sourceFeature.attributes.wktGeog;
       delete sourceFeature.attributes.wktMappingPoint;
-      sourceFeature.geometry = this.mapView.transformToWebMerc(sourceFeature.geometry);
+      this.mapView.transformToWebMerc(sourceFeature.geometry);
       bounds = sourceFeature.geometry.getBounds().clone();
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         bounds.extend(wugFeature.geometry.getBounds());
       }
-      _ref1 = this.wugCollection.models;
+      _ref1 = this.strategyCollection.models;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        wugModel = _ref1[_j];
-        console.log(wugModel);
+        stratModel = _ref1[_j];
+        sourcePointText = stratModel.get("sourceMappingPoint");
+        wugPointText = stratModel.get("recipientEntityWktGeog");
+        if ((sourcePointText != null) && (wugPointText != null)) {
+          sourcePoint = wktFormat.read(sourcePointText);
+          wugPoint = wktFormat.read(wugPointText);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(wugPoint.geometry);
+          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugPoint.geometry]), {
+            featureType: "connector"
+          }));
+        }
       }
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
@@ -2567,15 +2540,13 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this.mapView.map.addLayer(this.sourceLayer);
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._registerHighlightEvents();
-      this._registerClickEvents();
+      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
       if (bounds != null) {
         wugFeat = this.wugLayer.features[0];
         bounds.extend(wugFeat.geometry.getBounds());
         this.mapView.zoomToExtent(bounds);
       }
     };
-
-    SourceStrategyCollectionView.prototype._registerClickEvents = function() {};
 
     SourceStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
@@ -2590,7 +2561,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;
@@ -2601,7 +2572,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;
