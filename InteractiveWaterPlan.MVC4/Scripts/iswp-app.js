@@ -1091,9 +1091,26 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype.unrender = function() {
+      console.log("unrender in base");
       this._clearWugFeaturesAndControls();
       this.$el.html();
       return null;
+    };
+
+    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
+      this.unselectWugFeatures();
+      if (this.highlightFeatureControl != null) {
+        this.highlightFeatureControl.destroy();
+        this.highlightFeatureControl = null;
+      }
+      if (this.clickFeatureControl != null) {
+        this.clickFeatureControl.destroy();
+        this.clickFeatureControl = null;
+      }
+      if (this.wugLayer != null) {
+        this.mapView.map.removeLayer(this.wugLayer);
+        this.wugLayer.destroy();
+      }
     };
 
     BaseStrategyCollectionView.prototype.fetchData = function() {
@@ -1175,17 +1192,6 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       });
       this.wugCollection.reset(newWugList);
       this.showWugFeatures();
-    };
-
-    BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
-      return {
-        entityId: m.get("recipientEntityId"),
-        name: m.get("recipientEntityName"),
-        wktGeog: m.get("recipientEntityWktGeog"),
-        totalSupply: m.get("supply" + namespace.currYear),
-        type: m.get("recipientEntityType"),
-        stratTypeId: m.get("typeId")
-      };
     };
 
     BaseStrategyCollectionView.prototype._setupDataTable = function() {
@@ -1295,7 +1301,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         newFeature.attributes = _.clone(wug.attributes);
         newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -1308,21 +1314,6 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       this._setupWugHighlightContol();
       this._setupWugClickControl();
       this.mapView.zoomToExtent(bounds);
-    };
-
-    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
-      this.unselectWugFeatures();
-      if (this.highlightFeatureControl != null) {
-        this.highlightFeatureControl.destroy();
-        this.highlightFeatureControl = null;
-      }
-      if (this.clickFeatureControl != null) {
-        this.clickFeatureControl.destroy();
-        this.clickFeatureControl = null;
-      }
-      if (this.wugLayer != null) {
-        this.wugLayer.destroy();
-      }
     };
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
@@ -1386,7 +1377,11 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       }
       this.clickFeatureControl.events.register('clickfeature', null, function(event) {
         var wugFeature, wugId;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        console.log("click feature", event);
+        if (event.cancelBubble) {
+          return;
+        }
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -1397,6 +1392,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
           trigger: true
         });
+        OpenLayers.Event.stop(event);
       });
     };
 
@@ -1409,7 +1405,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       }
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -1420,7 +1416,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -1453,13 +1449,15 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._setupClickFeatureControl = function(layer) {
+      console.log("Setting up click feature");
       this.clickFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
-        autoActivate: true,
-        clickFeature: function(feature) {
-          this.events.triggerEvent("clickfeature", {
-            feature: feature
-          });
-        }
+        autoActivate: true
+      });
+      this.clickFeatureControl.events.register("featurehighlighted", null, function(event) {
+        this.events.triggerEvent("clickfeature", {
+          feature: event.feature
+        });
+        return true;
       });
       this.mapView.map.addControl(this.clickFeatureControl);
     };
@@ -1659,7 +1657,7 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
         newFeature = wktFormat.read(region.get('wktGeog'));
         newFeature.attributes = _.clone(region.attributes);
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         regionFeatures.push(newFeature);
       }
       this.regionLayer = new OpenLayers.Layer.Vector("Region Feature Layer", {
@@ -2164,10 +2162,10 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
 
     EntityStrategyCollectionView.prototype.unrender = function() {
       EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
+      console.log("unrender entity strat", this.sourceLayer);
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -2203,14 +2201,14 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         newFeature.attributes = _.clone(source.attributes);
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
-          sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
           lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]), {
             featureType: "connector"
           }));
         }
         delete newFeature.attributes.wktGeog;
         delete newFeature.attributes.wktMappingPoint;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -2249,7 +2247,8 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
       this.clickFeatureControl.events.register('clickfeature', null, function(event) {
         var sourceFeature, sourceId;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        console.log("click in entity strat view", event);
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return;
         }
         if ((event.feature.attributes.featureType != null) && event.feature.attributes.featureType === "connector") {
@@ -2268,7 +2267,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return true;
         }
         feature = event.feature;
@@ -2279,8 +2278,8 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
@@ -2290,8 +2289,8 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         if (sourceFeature.popup != null) {
@@ -2505,10 +2504,10 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
 
     SourceStrategyCollectionView.prototype.unrender = function() {
       SourceStrategyCollectionView.__super__.unrender.apply(this, arguments);
+      console.log("unrender source strat");
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     SourceStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -2521,7 +2520,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
     };
 
     SourceStrategyCollectionView.prototype.showSourceFeature = function() {
-      var bounds, lineFeatures, sourceFeature, wktFormat, wugFeat, wugFeature, wugFeatures, wugModel, _i, _j, _len, _len1, _ref, _ref1;
+      var bounds, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref, _ref1;
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       lineFeatures = [];
@@ -2534,29 +2533,29 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         return;
       }
       sourceFeature.attributes = _.clone(this.sourceModel.attributes);
-      /*if source.attributes.wktMappingPoint?
-          sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-          sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
-      
-          lineFeatures.push new OpenLayers.Feature.Vector(
-              new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-              { featureType: "connector" }
-          )
-      */
-
       delete sourceFeature.attributes.wktGeog;
       delete sourceFeature.attributes.wktMappingPoint;
-      sourceFeature.geometry = this.mapView.transformToWebMerc(sourceFeature.geometry);
+      this.mapView.transformToWebMerc(sourceFeature.geometry);
       bounds = sourceFeature.geometry.getBounds().clone();
       _ref = this.wugLayer.features;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wugFeature = _ref[_i];
         bounds.extend(wugFeature.geometry.getBounds());
       }
-      _ref1 = this.wugCollection.models;
+      _ref1 = this.strategyCollection.models;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        wugModel = _ref1[_j];
-        console.log(wugModel);
+        stratModel = _ref1[_j];
+        sourcePointText = stratModel.get("sourceMappingPoint");
+        wugPointText = stratModel.get("recipientEntityWktGeog");
+        if ((sourcePointText != null) && (wugPointText != null)) {
+          sourcePoint = wktFormat.read(sourcePointText);
+          wugPoint = wktFormat.read(wugPointText);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(wugPoint.geometry);
+          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugPoint.geometry]), {
+            featureType: "connector"
+          }));
+        }
       }
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {
         displayInLayerSwitcher: false,
@@ -2575,7 +2574,9 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       }
     };
 
-    SourceStrategyCollectionView.prototype._registerClickEvents = function() {};
+    SourceStrategyCollectionView.prototype._registerClickEvents = function() {
+      this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
+    };
 
     SourceStrategyCollectionView.prototype._registerHighlightEvents = function() {
       var _this = this;
@@ -2590,7 +2591,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;
@@ -2601,7 +2602,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;

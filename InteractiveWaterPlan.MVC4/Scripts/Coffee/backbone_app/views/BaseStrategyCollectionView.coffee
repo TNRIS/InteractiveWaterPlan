@@ -49,9 +49,29 @@ define([
             return this
 
         unrender: () ->
+            console.log "unrender in base"
             this._clearWugFeaturesAndControls()
             @$el.html()
             return null
+
+        _clearWugFeaturesAndControls: () ->
+            this.unselectWugFeatures() 
+
+            #TODO: maybe instead of destroying the controls, we should just 
+            # remove the wug layer from them
+            if @highlightFeatureControl?
+                @highlightFeatureControl.destroy()
+                @highlightFeatureControl = null
+            if @clickFeatureControl?
+                @clickFeatureControl.destroy()
+                @clickFeatureControl = null
+
+
+            if @wugLayer?
+                @mapView.map.removeLayer(@wugLayer)
+                @wugLayer.destroy()
+            
+            return
 
         fetchData: () ->
             this.$('tbody').empty() #clear the table contents
@@ -160,17 +180,6 @@ define([
             this.showWugFeatures()
             return
 
-
-        _mapStrategyModelToWugFeature: (m) ->
-            return {
-                entityId: m.get("recipientEntityId")
-                name: m.get("recipientEntityName")
-                wktGeog: m.get("recipientEntityWktGeog")
-                totalSupply: m.get("supply#{namespace.currYear}")
-                type: m.get("recipientEntityType")
-                stratTypeId: m.get("typeId")
-            }
-
         _setupDataTable: () ->
             #grab the table, get the headers
             # for each th, grab the data-sort attribute
@@ -273,8 +282,6 @@ define([
             @$el.fadeIn()
             return
 
-        #############################################
-
         showWugFeatures: () ->
             this._clearWugFeaturesAndControls()
 
@@ -308,7 +315,7 @@ define([
                     @MAX_WUG_RADIUS, @MIN_WUG_RADIUS, wug.get("totalSupply"))
                 delete newFeature.attributes.wktGeog
                
-                newFeature.geometry = @mapView.transformToWebMerc(newFeature.geometry)
+                @mapView.transformToWebMerc(newFeature.geometry)
 
                 if not bounds?
                     #must clone the bounds, otherwise the feature's bounds
@@ -330,23 +337,6 @@ define([
             this._setupWugClickControl()
             
             @mapView.zoomToExtent(bounds)
-            return
-
-        _clearWugFeaturesAndControls: () ->
-            this.unselectWugFeatures() 
-
-            #TODO: maybe instead of destroying the controls, we should just 
-            # remove the wug layer from them
-            if @highlightFeatureControl? 
-                @highlightFeatureControl.destroy()
-                @highlightFeatureControl = null
-            if @clickFeatureControl?
-                @clickFeatureControl.destroy()
-                @clickFeatureControl = null
-
-            if @wugLayer?
-                @wugLayer.destroy()
-
             return
 
         selectWugFeature: (wugId, projId) ->
@@ -392,7 +382,6 @@ define([
             return
 
         _setupWugClickControl: () ->
-            
             #first see if the control exists, if not, set it up
             if not @clickFeatureControl?
                 this._setupClickFeatureControl(@wugLayer)
@@ -403,7 +392,12 @@ define([
             #then setup event listeners
             @clickFeatureControl.events.register('clickfeature', null, (event) =>
                 #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id then return
+                console.log "click feature", event
+
+                if event.cancelBubble then return
+
+                if not event.feature.layer? or event.feature.layer.id != @wugLayer.id 
+                    return
 
                 wugFeature = event.feature
 
@@ -416,6 +410,8 @@ define([
                 Backbone.history.navigate("#/#{namespace.currYear}/wms/entity/#{wugId}", 
                     {trigger: true})
     
+                #don't propagate the event because we're already navigating
+                OpenLayers.Event.stop(event)
                 return
             )
 
@@ -433,7 +429,8 @@ define([
             #then setup event listeners
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                 #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id then return
+                if not event.feature.layer? or event.feature.layer.id != @wugLayer.id 
+                    return
 
                 wugFeature = event.feature
                 popup = new OpenLayers.Popup.FramedCloud("wugpopup",
@@ -457,7 +454,7 @@ define([
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
                 
                 #only do this handler for @wugLayer
-                if event.feature.layer.id != @wugLayer.id
+                if not event.feature.layer? or event.feature.layer.id != @wugLayer.id
                     return
 
                 wugFeature = event.feature
@@ -496,17 +493,22 @@ define([
             return
 
         _setupClickFeatureControl: (layer) ->
-
+            console.log "Setting up click feature"
             @clickFeatureControl = new OpenLayers.Control.SelectFeature(
                 layer,  #an initial layer must be specified or else setLayer will cause an exception later
                 {
                     autoActivate: true
-                    clickFeature: (feature) ->
+                    #clickFeature: (feature) ->
                         #trigger a click feature event for listeners to subscribe to
-                        this.events.triggerEvent("clickfeature", {feature: feature})
-                        return
+                    #    this.events.triggerEvent("clickfeature", {feature: feature})
+                    #    return
 
                 })
+
+            @clickFeatureControl.events.register("featurehighlighted", null, (event) ->
+                this.events.triggerEvent("clickfeature", {feature: event.feature})
+                return true
+            )
 
             @mapView.map.addControl(@clickFeatureControl)
 

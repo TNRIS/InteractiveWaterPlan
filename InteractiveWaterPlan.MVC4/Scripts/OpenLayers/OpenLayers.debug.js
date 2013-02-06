@@ -38111,6 +38111,7 @@ OpenLayers.Control.SelectFeature = OpenLayers.Class(OpenLayers.Control, {
      * feature - {<OpenLayers.Feature.Vector>} 
      */
     clickFeature: function(feature) {
+        console.log("clicked feature", feature);
         if(!this.hover) {
             var selected = (OpenLayers.Util.indexOf(
                 feature.layer.selectedFeatures, feature) > -1);
@@ -63093,7 +63094,7 @@ OpenLayers.Marker.Box = OpenLayers.Class(OpenLayers.Marker, {
     * sz - {<OpenLayers.Size>} 
     * 
     * Returns: 
-    * {DOMElement} A new DOM Image with this marker´s icon set at the 
+    * {DOMElement} A new DOM Image with this marker?s icon set at the 
     *         location passed-in
     */
     draw: function(px, sz) {

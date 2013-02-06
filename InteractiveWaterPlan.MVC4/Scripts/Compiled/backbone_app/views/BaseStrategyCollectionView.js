@@ -41,9 +41,26 @@ define(['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype.unrender = function() {
+      console.log("unrender in base");
       this._clearWugFeaturesAndControls();
       this.$el.html();
       return null;
+    };
+
+    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
+      this.unselectWugFeatures();
+      if (this.highlightFeatureControl != null) {
+        this.highlightFeatureControl.destroy();
+        this.highlightFeatureControl = null;
+      }
+      if (this.clickFeatureControl != null) {
+        this.clickFeatureControl.destroy();
+        this.clickFeatureControl = null;
+      }
+      if (this.wugLayer != null) {
+        this.mapView.map.removeLayer(this.wugLayer);
+        this.wugLayer.destroy();
+      }
     };
 
     BaseStrategyCollectionView.prototype.fetchData = function() {
@@ -125,17 +142,6 @@ define(['namespace'], function(namespace) {
       });
       this.wugCollection.reset(newWugList);
       this.showWugFeatures();
-    };
-
-    BaseStrategyCollectionView.prototype._mapStrategyModelToWugFeature = function(m) {
-      return {
-        entityId: m.get("recipientEntityId"),
-        name: m.get("recipientEntityName"),
-        wktGeog: m.get("recipientEntityWktGeog"),
-        totalSupply: m.get("supply" + namespace.currYear),
-        type: m.get("recipientEntityType"),
-        stratTypeId: m.get("typeId")
-      };
     };
 
     BaseStrategyCollectionView.prototype._setupDataTable = function() {
@@ -245,7 +251,7 @@ define(['namespace'], function(namespace) {
         newFeature.attributes = _.clone(wug.attributes);
         newFeature.size = this._calculateScaledValue(max_supply, min_supply, this.MAX_WUG_RADIUS, this.MIN_WUG_RADIUS, wug.get("totalSupply"));
         delete newFeature.attributes.wktGeog;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -258,21 +264,6 @@ define(['namespace'], function(namespace) {
       this._setupWugHighlightContol();
       this._setupWugClickControl();
       this.mapView.zoomToExtent(bounds);
-    };
-
-    BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
-      this.unselectWugFeatures();
-      if (this.highlightFeatureControl != null) {
-        this.highlightFeatureControl.destroy();
-        this.highlightFeatureControl = null;
-      }
-      if (this.clickFeatureControl != null) {
-        this.clickFeatureControl.destroy();
-        this.clickFeatureControl = null;
-      }
-      if (this.wugLayer != null) {
-        this.wugLayer.destroy();
-      }
     };
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
@@ -336,7 +327,11 @@ define(['namespace'], function(namespace) {
       }
       this.clickFeatureControl.events.register('clickfeature', null, function(event) {
         var wugFeature, wugId;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        console.log("click feature", event);
+        if (event.cancelBubble) {
+          return;
+        }
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -347,6 +342,7 @@ define(['namespace'], function(namespace) {
         Backbone.history.navigate("#/" + namespace.currYear + "/wms/entity/" + wugId, {
           trigger: true
         });
+        OpenLayers.Event.stop(event);
       });
     };
 
@@ -359,7 +355,7 @@ define(['namespace'], function(namespace) {
       }
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -370,7 +366,7 @@ define(['namespace'], function(namespace) {
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var wugFeature;
-        if (event.feature.layer.id !== _this.wugLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.wugLayer.id) {
           return;
         }
         wugFeature = event.feature;
@@ -403,13 +399,15 @@ define(['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._setupClickFeatureControl = function(layer) {
+      console.log("Setting up click feature");
       this.clickFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
-        autoActivate: true,
-        clickFeature: function(feature) {
-          this.events.triggerEvent("clickfeature", {
-            feature: feature
-          });
-        }
+        autoActivate: true
+      });
+      this.clickFeatureControl.events.register("featurehighlighted", null, function(event) {
+        this.events.triggerEvent("clickfeature", {
+          feature: event.feature
+        });
+        return true;
       });
       this.mapView.map.addControl(this.clickFeatureControl);
     };

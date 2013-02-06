@@ -65,8 +65,11 @@ define([
         unrender: () ->
             #must call super first because of how controls are destroyed
             super
-            if @sourceLayer? then @sourceLayer.destroy()
-            return null
+            console.log "unrender source strat"
+            if @sourceLayer?
+                @sourceLayer.destroy()
+
+            return
 
         onFetchBothCollectionSuccess: () ->
 
@@ -102,33 +105,33 @@ define([
 
             sourceFeature.attributes = _.clone(@sourceModel.attributes)
 
-            #grab the source point for mapping  and transform from geographic to web merc
-            ###if source.attributes.wktMappingPoint?
-                sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-                sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
-
-                lineFeatures.push new OpenLayers.Feature.Vector(
-                    new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-                    { featureType: "connector" }
-                )###
-
             #we don't need to carry around the large wktGeog
             delete sourceFeature.attributes.wktGeog
             delete sourceFeature.attributes.wktMappingPoint
             
             #transform from geographic to web merc
-            sourceFeature.geometry = @mapView.transformToWebMerc(
-                sourceFeature.geometry)
+            @mapView.transformToWebMerc(sourceFeature.geometry)
     
             bounds = sourceFeature.geometry.getBounds().clone()
 
-            #TODO: iterate through wugs, and create line features, and extend the bounds
+            #iterate through wugs, and create line features, and extend the bounds
             for wugFeature in @wugLayer.features
                 bounds.extend(wugFeature.geometry.getBounds())
 
-            for wugModel in @wugCollection.models
-                console.log wugModel
-                #TODO: need to transfer WugMappingPoint from server side so we can make lines. barf.
+            #iterate through the strategy models, grab the source points and wug points
+            # to make connector lines
+            for stratModel in @strategyCollection.models
+                sourcePointText = stratModel.get("sourceMappingPoint")
+                wugPointText = stratModel.get("recipientEntityWktGeog")
+                if sourcePointText? and wugPointText?
+                    sourcePoint = wktFormat.read(sourcePointText)
+                    wugPoint = wktFormat.read(wugPointText)
+                    @mapView.transformToWebMerc(sourcePoint.geometry)
+                    @mapView.transformToWebMerc(wugPoint.geometry)
+                    lineFeatures.push new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, 
+                            wugPoint.geometry]), {featureType: "connector"}
+                        )
 
             #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(
@@ -159,6 +162,7 @@ define([
             return
 
         _registerClickEvents: () ->
+            this._addLayerToControl(@clickFeatureControl, @sourceLayer)
             return
 
         _registerHighlightEvents: () ->
@@ -181,7 +185,7 @@ define([
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                  
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
                     return false #stops the rest of the highlight events
 
                 sourceFeature = event.feature
@@ -207,7 +211,7 @@ define([
 
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
                     return false #stops the rest of the highlight events
 
                 sourceFeature = event.feature

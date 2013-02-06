@@ -69,8 +69,11 @@ define([
         unrender: () ->
             #must call super first because of how controls are destroyed
             super
-            if @sourceLayer? then @sourceLayer.destroy()
-            return null
+            console.log "unrender entity strat", @sourceLayer
+            if @sourceLayer?
+                @sourceLayer.destroy()
+
+            return
 
         onFetchBothCollectionSuccess: () ->
 
@@ -117,7 +120,7 @@ define([
                 #grab the source point for mapping  and transform from geographic to web merc
                 if source.attributes.wktMappingPoint?
                     sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
-                    sourcePoint.geometry = @mapView.transformToWebMerc(sourcePoint.geometry)
+                    @mapView.transformToWebMerc(sourcePoint.geometry)
 
                     lineFeatures.push new OpenLayers.Feature.Vector(
                         new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
@@ -129,8 +132,7 @@ define([
                 delete newFeature.attributes.wktMappingPoint
                 
                 #transform from geographic to web merc
-                newFeature.geometry = @mapView.transformToWebMerc(
-                    newFeature.geometry)
+                @mapView.transformToWebMerc(newFeature.geometry)
         
                 if not bounds?
                     bounds = newFeature.geometry.getBounds().clone()
@@ -184,7 +186,9 @@ define([
 
             @clickFeatureControl.events.register('clickfeature', null, (event) => 
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
+                console.log "click in entity strat view", event
+
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
                     return
 
                 #don't do anything for connectors either
@@ -211,7 +215,7 @@ define([
             @highlightFeatureControl.events.register('beforefeaturehighlighted', null, (event) =>
                 
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
                     return true
 
                 feature = event.feature
@@ -227,8 +231,8 @@ define([
             @highlightFeatureControl.events.register('featurehighlighted', null, (event) =>
                  
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
-                    return false #stops the rest of the highlight events
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
+                    return
 
                 sourceFeature = event.feature
 
@@ -253,8 +257,8 @@ define([
 
             @highlightFeatureControl.events.register('featureunhighlighted', null, (event) =>
                 #only do this handler for @sourceLayer
-                if event.feature.layer.id != @sourceLayer.id
-                    return false #stops the rest of the highlight events
+                if not event.feature.layer? or event.feature.layer.id != @sourceLayer.id
+                    return
 
                 sourceFeature = event.feature
                 

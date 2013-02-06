@@ -55,10 +55,10 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
 
     EntityStrategyCollectionView.prototype.unrender = function() {
       EntityStrategyCollectionView.__super__.unrender.apply(this, arguments);
+      console.log("unrender entity strat", this.sourceLayer);
       if (this.sourceLayer != null) {
         this.sourceLayer.destroy();
       }
-      return null;
     };
 
     EntityStrategyCollectionView.prototype.onFetchBothCollectionSuccess = function() {
@@ -94,14 +94,14 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         newFeature.attributes = _.clone(source.attributes);
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
-          sourcePoint.geometry = this.mapView.transformToWebMerc(sourcePoint.geometry);
+          this.mapView.transformToWebMerc(sourcePoint.geometry);
           lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]), {
             featureType: "connector"
           }));
         }
         delete newFeature.attributes.wktGeog;
         delete newFeature.attributes.wktMappingPoint;
-        newFeature.geometry = this.mapView.transformToWebMerc(newFeature.geometry);
+        this.mapView.transformToWebMerc(newFeature.geometry);
         if (!(bounds != null)) {
           bounds = newFeature.geometry.getBounds().clone();
         } else {
@@ -140,7 +140,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
       this.clickFeatureControl.events.register('clickfeature', null, function(event) {
         var sourceFeature, sourceId;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        console.log("click in entity strat view", event);
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return;
         }
         if ((event.feature.attributes.featureType != null) && event.feature.attributes.featureType === "connector") {
@@ -159,7 +160,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this._addLayerToControl(this.highlightFeatureControl, this.sourceLayer);
       this.highlightFeatureControl.events.register('beforefeaturehighlighted', null, function(event) {
         var feature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return true;
         }
         feature = event.feature;
@@ -170,8 +171,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
         var popup, sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "                        <b>" + sourceFeature.attributes.name + "</b><br/>                        " + namespace.currYear + " Supply to Water User Group:                         " + ($.number(sourceFeature.attributes.supplyInYear)) + " ac-ft/yr                    ", null, false);
@@ -181,8 +182,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       });
       this.highlightFeatureControl.events.register('featureunhighlighted', null, function(event) {
         var sourceFeature;
-        if (event.feature.layer.id !== _this.sourceLayer.id) {
-          return false;
+        if (!(event.feature.layer != null) || event.feature.layer.id !== _this.sourceLayer.id) {
+          return;
         }
         sourceFeature = event.feature;
         if (sourceFeature.popup != null) {

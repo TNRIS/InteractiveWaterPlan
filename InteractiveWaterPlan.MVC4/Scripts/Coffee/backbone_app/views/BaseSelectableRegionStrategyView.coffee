@@ -89,8 +89,7 @@ define([
                 #but we don't need to carry about the large wktGeog
                 delete newFeature.attributes.wktGeog
                 
-                newFeature.geometry = @mapView.transformToWebMerc(
-                    newFeature.geometry)
+                @mapView.transformToWebMerc(newFeature.geometry)
         
                 regionFeatures.push(newFeature)
 
