@@ -1091,6 +1091,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype.unrender = function() {
+      console.log("unrender in base");
       this._clearWugFeaturesAndControls();
       this.$el.html();
       return null;
@@ -1099,11 +1100,11 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype._clearWugFeaturesAndControls = function() {
       this.unselectWugFeatures();
       if (this.highlightFeatureControl != null) {
-        this.highlightFeatureControl.deactivate();
+        this.highlightFeatureControl.destroy();
         this.highlightFeatureControl = null;
       }
       if (this.clickFeatureControl != null) {
-        this.clickFeatureControl.deactivate();
+        this.clickFeatureControl.destroy();
         this.clickFeatureControl = null;
       }
       if (this.wugLayer != null) {
@@ -1419,6 +1420,12 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       this.clickFeatureControl = new OpenLayers.Control.SelectFeature(layer, {
         autoActivate: true,
         clickFeature: this._clickFeature
+      });
+      this.clickFeatureControl.events.register("featurehighlighted", null, function(event) {
+        this.events.triggerEvent("clickfeature", {
+          feature: event.feature
+        });
+        return true;
       });
       this.mapView.map.addControl(this.clickFeatureControl);
     };

@@ -69,6 +69,7 @@ define([
         unrender: () ->
             #must call super first because of how controls are destroyed
             super
+
             if @sourceLayer? then @sourceLayer.destroy()
 
             return

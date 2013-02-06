@@ -50,6 +50,7 @@ define([
             return this
 
         unrender: () ->
+            console.log "unrender in base"
             this._clearWugFeaturesAndControls()
             @$el.html()
             return null
@@ -60,15 +61,14 @@ define([
             #TODO: maybe instead of destroying the controls, we should just 
             # remove the wug layer from them
             if @highlightFeatureControl?
-                @highlightFeatureControl.deactivate()
-
+                @highlightFeatureControl.destroy()
                 @highlightFeatureControl = null
             if @clickFeatureControl?
-                @clickFeatureControl.deactivate()
+                @clickFeatureControl.destroy()
                 @clickFeatureControl = null
 
             if @wugLayer? then @wugLayer.destroy()
-            
+
             return
 
         fetchData: () ->
@@ -450,13 +450,18 @@ define([
             return
 
         _setupClickFeatureControl: (layer) ->
-            
+
             @clickFeatureControl = new OpenLayers.Control.SelectFeature(
                 layer,  #an initial layer must be specified or else setLayer will cause an exception later
                 {
                     autoActivate: true
                     clickFeature: this._clickFeature
                 })
+
+            @clickFeatureControl.events.register("featurehighlighted", null, (event) ->
+                this.events.triggerEvent("clickfeature", {feature: event.feature})
+                return true
+            )
 
             @mapView.map.addControl(@clickFeatureControl)
             
