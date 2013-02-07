@@ -156,13 +156,10 @@ textarea {
   thead {
     display: table-header-group;
   }
-  tr,
-  img {
+  tr {
     page-break-inside: avoid;
   }
-  img {
-    max-width: 100% !important;
-  }
+  
   @page  {
     margin: 0.5cm;
   }
