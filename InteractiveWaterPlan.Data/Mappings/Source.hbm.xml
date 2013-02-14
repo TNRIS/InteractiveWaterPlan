@@ -32,6 +32,7 @@
   
   <sql-query name="GetSourcesForEntity">
     <query-param name="entityId" type="int" />
+    <query-param name="year" type="string" />
     <return class="Source"/>
     exec dbo.usp_Select_Sources_By_Entity_Year__tbl_DB12_Sources :entityId, :year
   </sql-query>
