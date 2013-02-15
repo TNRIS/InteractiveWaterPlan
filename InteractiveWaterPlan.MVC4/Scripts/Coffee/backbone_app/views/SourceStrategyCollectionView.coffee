@@ -120,6 +120,11 @@ define([
             #iterate through the strategy models, grab the source points and wug points
             # to make connector lines
             for stratModel in @strategyCollection.models
+                
+                #don't draw lines for WWP entities
+                if stratModel.get("recipientEntityType") == "WWP"
+                    continue
+
                 sourcePointText = stratModel.get("sourceMappingPoint")
                 wugPointText = stratModel.get("recipientEntityWktGeog")
                 if sourcePointText? and wugPointText?

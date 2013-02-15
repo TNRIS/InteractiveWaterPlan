@@ -90,6 +90,9 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       _ref1 = this.strategyCollection.models;
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         stratModel = _ref1[_j];
+        if (stratModel.get("recipientEntityType") === "WWP") {
+          continue;
+        }
         sourcePointText = stratModel.get("sourceMappingPoint");
         wugPointText = stratModel.get("recipientEntityWktGeog");
         if ((sourcePointText != null) && (wugPointText != null)) {
