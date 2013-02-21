@@ -78,7 +78,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/entity
-        public IList<Strategy> GetStrategiesForEntity(int entityId, string year)
+        public IList<EntityStrategy> GetStrategiesForEntity(int entityId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");

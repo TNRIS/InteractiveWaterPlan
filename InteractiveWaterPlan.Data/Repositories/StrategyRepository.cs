@@ -97,12 +97,12 @@ namespace InteractiveWaterPlan.Data
             return allStrategiesOfType;
         }
 
-        public IList<Strategy> GetStrategiesForEntity(int entityId, string year)
+        public IList<EntityStrategy> GetStrategiesForEntity(int entityId, string year)
         {
             var strategiesForEntity = Session.GetNamedQuery("GetStrategiesForEntity")
                 .SetParameter("entityId", entityId)
                 .SetParameter("year", year)
-                .List<Strategy>()
+                .List<EntityStrategy>()
                 .ToList();
 
             return strategiesForEntity;
