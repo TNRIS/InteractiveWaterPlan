@@ -129,7 +129,8 @@ define([
             $houseSenateSelect.on("change", () ->
                 $this = $(this)
                 if $this.val() == "-1" then return
-                districtType = $this.attr('data-type')
+                $selectedOption = $this.find(":selected")
+                districtType = $selectedOption.attr('data-type')
 
                 if districtType == 'senate'
                     Backbone.history.navigate("#/#{namespace.currYear}/wms/senate/#{$this.val()}", {trigger: true})

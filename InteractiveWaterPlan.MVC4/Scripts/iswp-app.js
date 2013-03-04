@@ -2792,12 +2792,13 @@ define('views/WmsAreaSelectView',['namespace', 'scripts/text!templates/wmsAreaSe
       this.$("#districtSelectContainer").append($houseSenateSelect);
       me = this;
       $houseSenateSelect.on("change", function() {
-        var $this, districtType;
+        var $selectedOption, $this, districtType;
         $this = $(this);
         if ($this.val() === "-1") {
           return;
         }
-        districtType = $this.attr('data-type');
+        $selectedOption = $this.find(":selected");
+        districtType = $selectedOption.attr('data-type');
         if (districtType === 'senate') {
           Backbone.history.navigate("#/" + namespace.currYear + "/wms/senate/" + ($this.val()), {
             trigger: true
