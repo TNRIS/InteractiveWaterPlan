@@ -184,7 +184,7 @@ define([
         _clickFeature: (feature) ->
             super feature
 
-            if feature.layer.id != @sourceLayer.id then return
+            if not feature.layer? or feature.layer.id != @sourceLayer.id then return
 
             #don't do anything for connectors either
             if feature.attributes.featureType? and 

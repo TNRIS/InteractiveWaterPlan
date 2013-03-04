@@ -137,7 +137,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
     EntityStrategyCollectionView.prototype._clickFeature = function(feature) {
       var sourceId;
       EntityStrategyCollectionView.__super__._clickFeature.call(this, feature);
-      if (feature.layer.id !== this.sourceLayer.id) {
+      if (!(feature.layer != null) || feature.layer.id !== this.sourceLayer.id) {
         return;
       }
       if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {

@@ -8,7 +8,7 @@
 
     <property column="wmsProjectNameSWP" name="Description" />
 
-    <property column="DBProjectId" name="ProjectId" />
+    <property column="DBProjectId" name="ProjectId" /> 
     
     <property column="wmsTypeNameSWP" name="TypeName" />
     <property column="wmsTypeId" name="TypeId" />
@@ -27,16 +27,13 @@
 
     <property column="wmsRedundantSupply" name="IsRedundantSupply" />
 
-    <property column="CapitalCost" name="CapitalCost" />
-
     <property column="wmsSponsorEntityName" name="SponsorName" />
-    <property column="wmsSponsorEntityId" name="SponsorId" />
+    <!-- <property column="wmsSponsorEntityId" name="SponsorId" />  * -->
              
-    <property column="CalculatedOnlineDate" name="OnlineYear" />
+    <property column="CalculatedOnlineDate" name="OnlineYear" /> 
 
     <property column="SourceName" name="SourceName" />
     <property column="DBsoId" name="SourceId" />
-    <!-- TODO: don't know what the correct SourceId db column should be-->
 
     <property column="wmsRecipientEntityId" name="RecipientEntityId" />
     <property column="wmsRecipientEntityName" name="RecipientEntityName" />
