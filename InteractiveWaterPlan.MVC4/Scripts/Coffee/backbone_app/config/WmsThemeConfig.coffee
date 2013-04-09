@@ -1,7 +1,5 @@
-﻿define([
-],
-() ->
-    WmsThemeConfig =
+﻿define [], () ->
+    WmsThemeConfig = {
         #Colors for styling Source features
         SourceStyles: [
             { #This default one should always be first
@@ -114,5 +112,6 @@
            
         ]
 
+    }
+
     return WmsThemeConfig
-)
