@@ -51,7 +51,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/district/house
-        public IList<Strategy> GetStrategiesInHouseDistrict(int districtId, string year)
+        public IList<DistrictStrategy> GetStrategiesInHouseDistrict(int districtId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
@@ -60,7 +60,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
         }
 
         // GET api/strategies/district/senate
-        public IList<Strategy> GetStrategiesInSenateDistrict(int districtId, string year)
+        public IList<DistrictStrategy> GetStrategiesInSenateDistrict(int districtId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");

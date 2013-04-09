@@ -336,6 +336,7 @@
     <Content Include="Scripts\templates\countyNetSupplyTable.html" />
     <Content Include="Scripts\templates\countyStrategyRow.html" />
     <Content Include="Scripts\templates\countyStrategyTable.html" />
+    <Content Include="Scripts\templates\districtStrategyRow.html" />
     <Content Include="Scripts\templates\districtStrategyTable.html" />
     <Content Include="Scripts\templates\entityStrategyRow.html" />
     <Content Include="Scripts\templates\entityStrategyTable.html" />
@@ -373,6 +374,7 @@
     <None Include="Scripts\Coffee\backbone_app\views\BaseSelectableRegionStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BaseStrategyCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\CountyStrategyView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\DistrictStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\LegeDistrictCollectionView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\MapTopButtonsView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\RegionStrategyView.coffee" />

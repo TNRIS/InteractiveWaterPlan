@@ -64,23 +64,23 @@ namespace InteractiveWaterPlan.Data
             return allStrategiesInCounty;
         }
 
-        public IList<Strategy> GetStrategiesInHouseDistrict(int districtId, string year)
+        public IList<DistrictStrategy> GetStrategiesInHouseDistrict(int districtId, string year)
         {
             var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesByHouseDistrict")
                 .SetParameter("districtId", districtId)
                 .SetParameter("year", year)
-                .List<Strategy>()
+                .List<DistrictStrategy>()
                 .ToList();
 
             return allStrategiesInDistrict;
         }
 
-        public IList<Strategy> GetStrategiesInSenateDistrict(int districtId, string year)
+        public IList<DistrictStrategy> GetStrategiesInSenateDistrict(int districtId, string year)
         {
             var allStrategiesInDistrict = Session.GetNamedQuery("GetStrategiesBySenateDistrict")
                 .SetParameter("districtId", districtId)
                 .SetParameter("year", year)
-                .List<Strategy>()
+                .List<DistrictStrategy>()
                 .ToList();
 
             return allStrategiesInDistrict;

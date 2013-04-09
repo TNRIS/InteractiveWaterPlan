@@ -1,10 +1,10 @@
 define([
     'namespace'
     'views/BaseStrategyCollectionView'
-    'views/StrategyView'
+    'views/DistrictStrategyView'
     'scripts/text!templates/districtStrategyTable.html'
 ],
-(namespace, BaseStrategyCollectionView, StrategyView, tpl) ->
+(namespace, BaseStrategyCollectionView, DistrictStrategyView, tpl) ->
 
     class LegeDistrictCollectionView extends BaseStrategyCollectionView
         
@@ -26,7 +26,7 @@ define([
                 url: "#{BASE_PATH}api/strategies/district/#{@districtType}" 
             )
 
-            super StrategyView, 
+            super DistrictStrategyView, 
                 StrategyCollection, tpl, {fetchParams: fetchParams}
             
             return null

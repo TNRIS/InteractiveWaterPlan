@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
 
-  <class name="Strategy" mutable="false">
+  <class name="DistrictStrategy" mutable="false">
     <id name="Id">
       <column name="SQL_ID"/>
     </id>
@@ -13,10 +13,7 @@
     <property column="wmsTypeNameSWP" name="TypeName" />
     <property column="wmsTypeId" name="TypeId" />
 
-    <property column="wmsRecipientEntityRegion" name="RegionLetter" />
-    
-    <property column="wmsRecipientEntityCounty" name="CountyName" />
-    <property column="wmsRecipientEntityCountyId" name="CountyId" />
+    <property column="wmsProjectSponsorRegion" name="SponsorRegionLetter" />
 
     <property column="SS2010" name="Supply2010" />
     <property column="SS2020" name="Supply2020" />
@@ -28,7 +25,7 @@
     <property column="wmsRedundantSupply" name="IsRedundantSupply" />
 
     <property column="wmsSponsorEntityName" name="SponsorName" />
-    <!-- <property column="wmsSponsorEntityId" name="SponsorId" />  * -->
+    <property column="wmsSponsorEntityId" name="SponsorId" />
              
     <property column="CalculatedOnlineDate" name="OnlineYear" /> 
 
@@ -43,18 +40,18 @@
     
   </class>
 
-  <sql-query name="GetStrategiesInCounty">
-    <query-param name="countyId" type="int" />
+  <sql-query name="GetStrategiesByHouseDistrict">
+    <query-param name="districtId" type="int" />
     <query-param name="year" type="string" />
-    <return class="Strategy"/>
-    exec dbo.usp_Select_Strategies_By_County_Year__tbl_SWP_Final :countyId, :year
+    <return class="DistrictStrategy" />
+    exec dbo.usp_SpatialSelect_Strategies_By_HouseDistrict_Year :districtId, :year
   </sql-query>
 
-  <sql-query name="GetStrategiesByType">
-    <query-param name="typeId" type="int" />
+  <sql-query name="GetStrategiesBySenateDistrict">
+    <query-param name="districtId" type="int" />
     <query-param name="year" type="string" />
-    <return class="Strategy"/>
-    exec dbo.usp_Select_tbl_SWP_Final_By_StrategyTypeID :typeId, :year
+    <return class="DistrictStrategy" />
+    exec dbo.usp_SpatialSelect_Strategies_By_SenateDistrict_Year :districtId, :year
   </sql-query>
 
 </hibernate-mapping>
