@@ -122,8 +122,10 @@ define([
                     @mapView.transformToWebMerc(sourcePoint.geometry)
 
                     lineFeatures.push new OpenLayers.Feature.Vector(
-                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]),
-                        { featureType: "connector" }
+                        new OpenLayers.Geometry.LineString(
+                                [sourcePoint.geometry, wugFeature.geometry]
+                        )
+                        ,{ featureType: "connector" }
                     )
 
                 #we don't need to carry around the large wktGeog
