@@ -28,7 +28,7 @@ namespace InteractiveWaterPlan.Data
                 .ToList<StrategyType>();
         }
 
-        public IList<RegionStrategySummary> GetStrategiesInRegion(int regionId, string year)
+        public IList<RegionStrategy> GetStrategiesInRegion(int regionId, string year)
         {
             //first need to figure out the regionLetter of the given regionId
             var regionLetter = Session.GetNamedQuery("GetAllPlanningRegions")
@@ -40,14 +40,14 @@ namespace InteractiveWaterPlan.Data
             return GetStrategiesInRegion(regionLetter, year);
         }
 
-        public IList<RegionStrategySummary> GetStrategiesInRegion(char regionLetter, string year)
+        public IList<RegionStrategy> GetStrategiesInRegion(char regionLetter, string year)
         {
             regionLetter = char.ToUpper(regionLetter);
 
             var allStrategiesInRegion = Session.GetNamedQuery("GetStrategiesInRegion")
                 .SetParameter("regionLetter", regionLetter)
                 .SetParameter("year", year)
-                .List<RegionStrategySummary>();
+                .List<RegionStrategy>();
 
             return allStrategiesInRegion;
 
@@ -108,17 +108,17 @@ namespace InteractiveWaterPlan.Data
             return strategiesForEntity;
         }
 
-        public IList<StrategyDetails> GetStrategiesByProjectId(int projectId, string year)
+        public IList<ProjectStrategy> GetStrategiesByProjectId(int projectId, string year)
         {
             var strategyDetails = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
                 .SetParameter("projectId", projectId)
                 .SetParameter("year", year)
-                .List<StrategyDetails>()
-                .Where(x => { //only need strategies where the SupplyYEAR != 0 and recipientId == sponsorId
-                    var propertyInfo = x.GetType().GetProperty("Supply"+year);
-                    var supplyVal = (long)(propertyInfo.GetValue(x, null));
-                    return !(supplyVal == 0 && x.RecipientEntityId != x.SponsorId);
-                })
+                .List<ProjectStrategy>()
+                //.Where(x => { //only need strategies where the SupplyYEAR != 0 and recipientId == sponsorId
+                //    var propertyInfo = x.GetType().GetProperty("Supply"+year);
+                //    var supplyVal = (long)(propertyInfo.GetValue(x, null));
+                //    return !(supplyVal == 0 && x.RecipientEntityId != x.SponsorId);
+                //})
                 .ToList();
 
             return strategyDetails;
