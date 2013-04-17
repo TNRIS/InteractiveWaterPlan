@@ -145,6 +145,7 @@
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Filters\GenericExceptionFilter.cs" />
+    <Compile Include="Formatters\StrategyCsvFormatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

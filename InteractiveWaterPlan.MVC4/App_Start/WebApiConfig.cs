@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using InteractiveWaterPlan.MVC4.Formatters;
 
 namespace InteractiveWaterPlan.MVC4
 {
@@ -6,6 +7,9 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void Register(HttpConfiguration config)
         {
+            //Register the CSV formatter
+            config.Formatters.Add(new StrategyCsvFormatter());
+
             #region Place Routes
             config.Routes.MapHttpRoute(
                 "GetRegionalWaterPlanningAreas",
