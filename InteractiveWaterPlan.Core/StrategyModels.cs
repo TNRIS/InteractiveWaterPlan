@@ -5,11 +5,7 @@
     using System.Linq;
     using System.Text;
 
-    /// <summary>
-    /// Water Management Strategy Model Class.
-    /// This base Strategy class is used for "County" Strategies and "Type" Strategies.
-    /// </summary>
-    public class Strategy
+    public abstract class BaseStrategy 
     {
         public virtual int Id { get; set; }
         public virtual string Description { get; set; }
@@ -19,17 +15,24 @@
         public virtual string TypeName { get; set; }
         public virtual int TypeId { get; set; }
 
-        public virtual string RegionLetter { get; set; }
-        
-        public virtual string CountyName { get; set; }
-        public virtual int CountyId { get; set; }
-
         public virtual long Supply2010 { get; set; }
         public virtual long Supply2020 { get; set; }
         public virtual long Supply2030 { get; set; }
         public virtual long Supply2040 { get; set; }
         public virtual long Supply2050 { get; set; }
         public virtual long Supply2060 { get; set; }
+    }
+
+    /// <summary>
+    /// Water Management Strategy Model Class.
+    /// This base Strategy class is used for "County" Strategies and "Type" Strategies.
+    /// </summary>
+    public class Strategy : BaseStrategy
+    {
+        public virtual string RegionLetter { get; set; }
+        
+        public virtual string CountyName { get; set; }
+        public virtual int CountyId { get; set; }
 
         public virtual string IsRedundantSupply { get; set; }
 
@@ -37,7 +40,6 @@
 
         public virtual string SponsorName { get; set; }
         
-
         public virtual string OnlineYear { get; set; }
 
         public virtual string SourceName { get; set; }
@@ -65,23 +67,8 @@
         }
     }
 
-    public class EntityStrategy
+    public class EntityStrategy : BaseStrategy
     {
-        public virtual int Id { get; set; }
-
-        public virtual string Description { get; set; }
-        public virtual int ProjectId { get; set; }
-
-        public virtual string TypeName { get; set; }
-        public virtual int TypeId { get; set; }
-
-        public virtual long Supply2010 { get; set; }
-        public virtual long Supply2020 { get; set; }
-        public virtual long Supply2030 { get; set; }
-        public virtual long Supply2040 { get; set; }
-        public virtual long Supply2050 { get; set; }
-        public virtual long Supply2060 { get; set; }
-
         public virtual string IsRedundantSupply { get; set; }
 
         public virtual double CapitalCost { get; set; }
@@ -105,27 +92,12 @@
         }
     }
 
-    public class SourceStrategy
+    public class SourceStrategy : BaseStrategy
     {
-        public virtual int Id { get; set; }
-        
-        public virtual string Description { get; set; }
-        public virtual int ProjectId { get; set; }
-
         public virtual string SourceType { get; set; }
-
-        public virtual string TypeName { get; set; }
-        public virtual int TypeId { get; set; }
 
         public virtual string SourceBasin { get; set; }
         public virtual char RegionLetter { get; set; }
-
-        public virtual long Supply2010 { get; set; }
-        public virtual long Supply2020 { get; set; }
-        public virtual long Supply2030 { get; set; }
-        public virtual long Supply2040 { get; set; }
-        public virtual long Supply2050 { get; set; }
-        public virtual long Supply2060 { get; set; }
 
         public virtual string IsRedundantSupply { get; set; }
 
@@ -142,24 +114,9 @@
         }
     }
 
-    public class DistrictStrategy
+    public class DistrictStrategy : BaseStrategy
     {
-        public virtual int Id { get; set; }
-        public virtual string Description { get; set; }
-
-        public virtual int ProjectId { get; set; }
-
-        public virtual string TypeName { get; set; }
-        public virtual int TypeId { get; set; }
-
         public virtual string SponsorRegionLetter { get; set; }
-
-        public virtual long Supply2010 { get; set; }
-        public virtual long Supply2020 { get; set; }
-        public virtual long Supply2030 { get; set; }
-        public virtual long Supply2040 { get; set; }
-        public virtual long Supply2050 { get; set; }
-        public virtual long Supply2060 { get; set; }
 
         public virtual string IsRedundantSupply { get; set; }
 
@@ -185,29 +142,14 @@
     /// <summary>
     /// Region Strategy Model Class
     /// </summary>
-    public class RegionStrategy
+    public class RegionStrategy : BaseStrategy
     {
-        public virtual int Id { get; set; }
-        public virtual string Description { get; set; }
-
         public virtual string IsRedundantSupply { get; set; }
-
-        public virtual int ProjectId { get; set; }
-
-        public virtual string TypeName { get; set; }
-        public virtual int TypeId { get; set; }
 
         public virtual string RegionLetter { get; set; }
 
         public virtual string CountyName { get; set; }
         public virtual int CountyId { get; set; }
-
-        public virtual long Supply2010 { get; set; }
-        public virtual long Supply2020 { get; set; }
-        public virtual long Supply2030 { get; set; }
-        public virtual long Supply2040 { get; set; }
-        public virtual long Supply2050 { get; set; }
-        public virtual long Supply2060 { get; set; }
 
         public virtual double CapitalCost { get; set; }
 
