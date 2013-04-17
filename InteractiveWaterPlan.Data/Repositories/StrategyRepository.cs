@@ -110,7 +110,7 @@ namespace InteractiveWaterPlan.Data
 
         public IList<ProjectStrategy> GetStrategiesByProjectId(int projectId, string year)
         {
-            var strategyDetails = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
+            var strategies = Session.GetNamedQuery("GetStrategyDetailsByProjectId")
                 .SetParameter("projectId", projectId)
                 .SetParameter("year", year)
                 .List<ProjectStrategy>()
@@ -121,7 +121,7 @@ namespace InteractiveWaterPlan.Data
                 //})
                 .ToList();
 
-            return strategyDetails;
+            return strategies;
         }
 
         public IList<SourceStrategy> GetStrategiesBySource(int sourceId, string year)
