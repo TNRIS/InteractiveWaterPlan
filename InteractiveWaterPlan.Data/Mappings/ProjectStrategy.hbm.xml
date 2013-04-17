@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="InteractiveWaterPlan.Core" namespace="InteractiveWaterPlan.Core">
 
-  <class name="StrategyDetails" mutable="false">
+  <class name="ProjectStrategy" mutable="false">
     <id name="Id">
       <column name="SQL_ID"/>
     </id>
@@ -49,7 +49,7 @@
   <sql-query name="GetStrategyDetailsByProjectId">
     <query-param name="projectId" type="int" />
     <query-param name="year" type="string" />
-    <return class="StrategyDetails" />
+    <return class="ProjectStrategy" />
     exec dbo.usp_Select_WMS_Details__tbl_SWP_Final :projectId, :year
   </sql-query>
 

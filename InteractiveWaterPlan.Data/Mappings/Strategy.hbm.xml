@@ -28,7 +28,6 @@
     <property column="wmsRedundantSupply" name="IsRedundantSupply" />
 
     <property column="wmsSponsorEntityName" name="SponsorName" />
-    <!-- <property column="wmsSponsorEntityId" name="SponsorId" />  * -->
              
     <property column="CalculatedOnlineDate" name="OnlineYear" /> 
 

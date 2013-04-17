@@ -6,7 +6,8 @@
     using System.Text;
 
     /// <summary>
-    /// Water Management Strategy Model Class
+    /// Water Management Strategy Model Class.
+    /// This base Strategy class is used for "County" Strategies and "Type" Strategies.
     /// </summary>
     public class Strategy
     {
@@ -32,10 +33,10 @@
 
         public virtual string IsRedundantSupply { get; set; }
 
-        public virtual double CapitalCost { get; set; }
+        //public virtual double CapitalCost { get; set; }
 
         public virtual string SponsorName { get; set; }
-        public virtual int SponsorId { get; set; } 
+        
 
         public virtual string OnlineYear { get; set; }
 
@@ -53,9 +54,15 @@
         }
     }
 
-    public class StrategyDetails : Strategy
+    public class ProjectStrategy : Strategy
     {
-        
+        public virtual double CapitalCost { get; set; }
+        public virtual int SponsorId { get; set; }
+
+        public virtual ProjectStrategy Clone()
+        {
+            return (ProjectStrategy)this.MemberwiseClone();
+        }
     }
 
     public class EntityStrategy
@@ -169,9 +176,46 @@
         public virtual string RecipientEntityType { get; set; }
         public virtual string RecipientEntityWktGeog { get; set; }
 
-        public virtual Strategy Clone()
+        public virtual DistrictStrategy Clone()
         {
-            return (Strategy)this.MemberwiseClone();
+            return (DistrictStrategy)this.MemberwiseClone();
+        }
+    }
+
+    /// <summary>
+    /// Region Strategy Model Class
+    /// </summary>
+    public class RegionStrategy
+    {
+        public virtual int Id { get; set; }
+        public virtual string Description { get; set; }
+
+        public virtual string IsRedundantSupply { get; set; }
+
+        public virtual int ProjectId { get; set; }
+
+        public virtual string TypeName { get; set; }
+        public virtual int TypeId { get; set; }
+
+        public virtual string RegionLetter { get; set; }
+
+        public virtual string CountyName { get; set; }
+        public virtual int CountyId { get; set; }
+
+        public virtual long Supply2010 { get; set; }
+        public virtual long Supply2020 { get; set; }
+        public virtual long Supply2030 { get; set; }
+        public virtual long Supply2040 { get; set; }
+        public virtual long Supply2050 { get; set; }
+        public virtual long Supply2060 { get; set; }
+
+        public virtual double CapitalCost { get; set; }
+
+        public virtual string OnlineYear { get; set; }
+
+        public virtual RegionStrategy Clone()
+        {
+            return (RegionStrategy)this.MemberwiseClone();
         }
     }
 }
