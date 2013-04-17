@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http.Formatting;
+using System.Web.Http;
 using InteractiveWaterPlan.MVC4.Formatters;
 
 namespace InteractiveWaterPlan.MVC4
@@ -7,8 +8,12 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void Register(HttpConfiguration config)
         {
-            //Register the CSV formatter
-            config.Formatters.Add(new StrategyCsvFormatter());
+            //Register the CSV formatter to respond when given a 
+            // query string parameter for "format=csv"
+            var strategyCsvFormatter = new StrategyCsvFormatter(
+                new QueryStringMapping("format", "csv", "text/csv")
+            );
+            config.Formatters.Add(strategyCsvFormatter);
 
             #region Place Routes
             config.Routes.MapHttpRoute(

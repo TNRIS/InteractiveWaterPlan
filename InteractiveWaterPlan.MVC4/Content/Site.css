@@ -266,6 +266,16 @@ ul.breadcrumb li:last-child > a:hover
     color: #fe781e;
 }
 
+.tableDownloadLink
+{
+    float:right;
+}
+
+.tableDownloadLink:hover i
+{
+    text-decoration:none;
+}
+
 /* OpenLayers */
 .olControlLayerSwitcher 
 {

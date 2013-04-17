@@ -23,24 +23,39 @@ namespace InteractiveWaterPlan.MVC4.Formatters
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/csv"));
         }
 
+        public StrategyCsvFormatter(MediaTypeMapping mediaTypeMapping) : this ()
+        {
+            MediaTypeMappings.Add(mediaTypeMapping);
+        }
+
+        public StrategyCsvFormatter(IEnumerable<MediaTypeMapping> mediaTypeMappings)
+            : this()
+        {
+            foreach (var mapping in mediaTypeMappings)
+            {
+                MediaTypeMappings.Add(mapping);
+            };
+        }
+
         public override void SetDefaultContentHeaders(Type type, 
             HttpContentHeaders headers, MediaTypeHeaderValue mediaType)
         {
             base.SetDefaultContentHeaders(type, headers, mediaType);
-
             headers.Add("Content-Disposition", "attachment; filename=strategies.csv");
         }
 
+
         public override bool CanWriteType(Type type)
         {
-            if (type == typeof(BaseStrategy))
+            if (type == typeof(BaseStrategy) || type == typeof(CountyNetSupply))
             {
                 return true;
             }
             else
             {
-                Type enumerableType = typeof(IEnumerable<BaseStrategy>);
-                return enumerableType.IsAssignableFrom(type);
+                Type stratEnumerableType = typeof(IEnumerable<BaseStrategy>);
+                Type countyNetEnumerableType = typeof(IEnumerable<CountyNetSupply>);
+                return stratEnumerableType.IsAssignableFrom(type) || countyNetEnumerableType.IsAssignableFrom(type);
             }
         }
 
