@@ -238,7 +238,6 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.flot.js" />
     <Content Include="Scripts\jquery.number.js" />
-    <Content Include="Scripts\jquery.tableToCsv.js" />
     <Content Include="Scripts\ajax-chosen.jquery.js" />
     <Content Include="Scripts\knockback-core-stack.js" />
     <Content Include="Scripts\knockback-core-stack.min.js" />
