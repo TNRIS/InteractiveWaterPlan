@@ -69,6 +69,7 @@ define(['namespace', 'collections/RegionFeatureCollection', 'views/BaseStrategyC
           trigger: 'hover'
         });
         this._setupDataTable();
+        this._createDownloadLink();
         this.regionCollection = namespace.regionFeatures;
         this.showRegionFeatures();
       }

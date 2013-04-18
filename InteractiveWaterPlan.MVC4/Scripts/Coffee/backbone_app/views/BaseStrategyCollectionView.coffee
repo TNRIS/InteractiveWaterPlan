@@ -15,7 +15,7 @@ define([
                 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl',
-                '_clickFeature'
+                '_clickFeature', '_createDownloadLink'
             )
 
             options = options || {}
@@ -103,6 +103,7 @@ define([
             this.$('.has-popover').popover(trigger: 'hover')
 
             this._setupDataTable()
+            this._createDownloadLink()
 
             this._connectTableRowsToWugFeatures()
 
@@ -204,6 +205,15 @@ define([
                     return
             )
 
+            return
+
+        _createDownloadLink: () ->
+            paramStr = ""
+            for param of @fetchParams
+                paramStr += "&#{param}=#{@fetchParams[param]}"
+            $downloadLink = this.$('.tableDownloadLink').attr('href',
+                "#{@strategyCollection.url}?format=csv&year=#{namespace.currYear}#{paramStr}")
+            
             return
 
 

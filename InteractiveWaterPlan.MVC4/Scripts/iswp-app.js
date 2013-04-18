@@ -1093,7 +1093,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature', '_createDownloadLink');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -1174,6 +1174,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         trigger: 'hover'
       });
       this._setupDataTable();
+      this._createDownloadLink();
       this._connectTableRowsToWugFeatures();
       if ((this.fetchCallback != null) && _.isFunction(this.fetchCallback)) {
         this.fetchCallback(strategyCollection.models);
@@ -1250,6 +1251,16 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
           namespace.selectedDisplayLength = settings._iDisplayLength;
         }
       });
+    };
+
+    BaseStrategyCollectionView.prototype._createDownloadLink = function() {
+      var $downloadLink, param, paramStr;
+
+      paramStr = "";
+      for (param in this.fetchParams) {
+        paramStr += "&" + param + "=" + this.fetchParams[param];
+      }
+      $downloadLink = this.$('.tableDownloadLink').attr('href', "" + this.strategyCollection.url + "?format=csv&year=" + namespace.currYear + paramStr);
     };
 
     BaseStrategyCollectionView.prototype._connectTableRowsToWugFeatures = function() {
@@ -1679,6 +1690,7 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
           trigger: 'hover'
         });
         this._setupDataTable();
+        this._createDownloadLink();
         this.regionCollection = namespace.regionFeatures;
         this.showRegionFeatures();
       }
@@ -3400,7 +3412,6 @@ $(function() {
       r = new WMSRouter();
       Backbone.history.start();
     }).fail(function() {
-      alert("An error has occured.  Please reload this page or go back.");
       $('#errorMessage').show();
     }).always(function() {
       $('.tableLoading').hide();

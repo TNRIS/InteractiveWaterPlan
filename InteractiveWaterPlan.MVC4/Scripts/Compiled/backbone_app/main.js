@@ -54,7 +54,6 @@ $(function() {
       r = new WMSRouter();
       Backbone.history.start();
     }).fail(function() {
-      alert("An error has occured.  Please reload this page or go back.");
       $('#errorMessage').show();
     }).always(function() {
       $('.tableLoading').hide();

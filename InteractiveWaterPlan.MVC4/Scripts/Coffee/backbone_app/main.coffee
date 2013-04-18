@@ -64,7 +64,6 @@ $(()->
                         Backbone.history.start()
                         return
                 ).fail(() ->
-                    alert "An error has occured.  Please reload this page or go back."
                     $('#errorMessage').show() #TODO: is there a more 'centralized' way to handle this?
                     return
                 ).always(() ->
