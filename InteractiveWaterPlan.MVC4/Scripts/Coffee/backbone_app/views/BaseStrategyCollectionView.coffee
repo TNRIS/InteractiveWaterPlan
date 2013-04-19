@@ -423,7 +423,7 @@ define([
                         Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
                     ",
                     null, #anchor
-                    false, #closeBox
+                    true, #closeBox
                     #closeBoxCallback
                 ) 
 

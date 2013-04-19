@@ -193,13 +193,9 @@ define([
                 popup = new OpenLayers.Popup.FramedCloud("sourcepopup",
                     @mapView.getMouseLonLat(),
                     null, #contentSize
-                    "
-                        <b>#{sourceFeature.attributes.name}</b><br/>
-                        #{namespace.currYear} Supply to Water User Group: 
-                        #{$.number(sourceFeature.attributes.supplyInYear)} ac-ft/yr
-                    ",
+                    "<strong>#{sourceFeature.attributes.name}</strong>",
                     null, #anchor
-                    false, #closeBox
+                    true, #closeBox
                     #closeBoxCallback
                 ) 
 
