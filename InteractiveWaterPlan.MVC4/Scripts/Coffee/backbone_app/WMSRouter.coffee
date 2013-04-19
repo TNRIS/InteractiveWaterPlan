@@ -51,10 +51,10 @@ define([
             namespace.mapView = @mapView 
             @mapView.render()
 
-            @mapBottomToolbarView = new MapBottomToolbarView(
-                el: $('#mapBottomToolsContainer')[0]
-            )
-            @mapBottomToolbarView.render()
+            # @mapBottomToolbarView = new MapBottomToolbarView(
+            #     el: $('#mapBottomToolsContainer')[0]
+            # )
+            # @mapBottomToolbarView.render()
 
             @themeNavToolbarView = new ThemeNavToolbarView(
                 el: $('#themeNavContainer')[0]

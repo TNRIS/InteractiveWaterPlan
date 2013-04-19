@@ -23,10 +23,6 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       });
       namespace.mapView = this.mapView;
       this.mapView.render();
-      this.mapBottomToolbarView = new MapBottomToolbarView({
-        el: $('#mapBottomToolsContainer')[0]
-      });
-      this.mapBottomToolbarView.render();
       this.themeNavToolbarView = new ThemeNavToolbarView({
         el: $('#themeNavContainer')[0]
       });
