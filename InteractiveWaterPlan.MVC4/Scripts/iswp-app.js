@@ -1685,6 +1685,9 @@ define('views/BaseSelectableRegionStrategyView',['namespace', 'collections/Regio
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           m = _ref1[_i];
           this.appendModel(m);
+          if (m.attributes.isRedundantSupply === 'Y') {
+            this.$(".note-marker-container").show();
+          }
         }
         this.$('.has-popover').popover({
           trigger: 'hover'
