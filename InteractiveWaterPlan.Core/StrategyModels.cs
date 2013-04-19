@@ -146,11 +146,6 @@
     {
         public virtual string IsRedundantSupply { get; set; }
 
-        public virtual string RegionLetter { get; set; }
-
-        public virtual string CountyName { get; set; }
-        public virtual int CountyId { get; set; }
-
         public virtual double CapitalCost { get; set; }
 
         public virtual string OnlineYear { get; set; }
