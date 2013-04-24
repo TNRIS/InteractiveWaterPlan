@@ -171,6 +171,7 @@ define(['namespace'], function(namespace) {
         sPaginationType: "bootstrap",
         aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]],
         aoColumns: dtColConfig,
+        aaSorting: [],
         iDisplayLength: namespace.selectedDisplayLength || 10,
         fnDrawCallback: function(settings) {
           namespace.selectedDisplayLength = settings._iDisplayLength;

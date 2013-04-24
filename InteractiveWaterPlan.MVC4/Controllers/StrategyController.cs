@@ -38,7 +38,13 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             if (!CommonConstants.VALID_YEARS.Contains(year))
                 throw new ArgumentException("Specified year is not valid.");
 
-            return _repo.GetStrategiesInRegion(regionLetter, year);
+            var strategies = _repo.GetStrategiesInRegion(regionLetter, year)
+                .OrderBy(s => s.IsRedundantSupply)
+                .ThenBy(s => s.Description)
+                .ToList();
+           
+
+            return strategies;
         }
 
         // GET api/strategies/county

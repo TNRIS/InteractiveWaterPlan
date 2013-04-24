@@ -184,6 +184,7 @@ define([
             # and put its value in the column config
             $table = this.$('table')
             dtColConfig = []
+            
             $('th', $table).each((i, th) ->
                 $th = $(th)
                 if $th.attr('data-sort')?
@@ -192,12 +193,12 @@ define([
                     dtColConfig.push(null)
             )
 
-
             $table.dataTable(
                 bDestroy: true
                 sPaginationType: "bootstrap",
                 aLengthMenu: [[10, 25, 50, 100, 99999], [10, 25, 50, 100, "All"]]
                 aoColumns: dtColConfig
+                aaSorting: [] # Disable initial sort
                 iDisplayLength: namespace.selectedDisplayLength || 10
                 #save the display length and use that on the next datatable render
                 fnDrawCallback: (settings) =>
