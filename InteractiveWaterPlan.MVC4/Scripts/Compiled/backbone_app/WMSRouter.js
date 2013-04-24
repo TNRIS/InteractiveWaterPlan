@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/LegeDistrictCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/StrategyDetailCollectionView', 'views/SourceStrategyCollectionView', 'views/WmsAreaSelectView', 'views/MapTopButtonsView'], function(namespace, MapView, ThemeNavToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, LegeDistrictCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, StrategyDetailCollectionView, SourceStrategyCollectionView, WmsAreaSelectView, MapTopButtonsView) {
+define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNavView', 'views/MapBottomToolbarView', 'views/CountyNetSupplyCollectionView', 'views/RegionStrategyCollectionView', 'views/CountyStrategyCollectionView', 'views/LegeDistrictCollectionView', 'views/StrategyTypeCollectionView', 'views/EntityStrategyCollectionView', 'views/ProjectStrategyCollectionView', 'views/SourceStrategyCollectionView', 'views/WmsAreaSelectView', 'views/MapTopButtonsView'], function(namespace, MapView, ThemeNavToolbarView, YearNavView, MapBottomToolbarView, CountyNetSupplyCollectionView, RegionStrategyCollectionView, CountyStrategyCollectionView, LegeDistrictCollectionView, StrategyTypeCollectionView, EntityStrategyCollectionView, ProjectStrategyCollectionView, SourceStrategyCollectionView, WmsAreaSelectView, MapTopButtonsView) {
   var WMSRouter, _ref;
 
   return WMSRouter = (function(_super) {
@@ -281,7 +281,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     };
 
     WMSRouter.prototype.wmsProjectDetail = function(year, projectId) {
-      this.currStrategyView = new StrategyDetailCollectionView({
+      this.currStrategyView = new ProjectStrategyCollectionView({
         el: this.tableContainer,
         id: projectId
       });

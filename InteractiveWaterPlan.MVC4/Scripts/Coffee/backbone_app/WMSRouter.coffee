@@ -10,7 +10,7 @@ define([
     'views/LegeDistrictCollectionView'
     'views/StrategyTypeCollectionView'
     'views/EntityStrategyCollectionView'
-    'views/StrategyDetailCollectionView'
+    'views/ProjectStrategyCollectionView'
     'views/SourceStrategyCollectionView'
     'views/WmsAreaSelectView'
     'views/MapTopButtonsView'
@@ -26,7 +26,7 @@ define([
     LegeDistrictCollectionView,
     StrategyTypeCollectionView,
     EntityStrategyCollectionView,
-    StrategyDetailCollectionView,
+    ProjectStrategyCollectionView,
     SourceStrategyCollectionView,
     WmsAreaSelectView,
     MapTopButtonsView) ->
@@ -340,7 +340,7 @@ define([
             #(validation of projectId is taken care of in fetchCallback)
 
             #render the view
-            @currStrategyView = new StrategyDetailCollectionView(
+            @currStrategyView = new ProjectStrategyCollectionView(
                 el: @tableContainer
                 id: projectId
             )

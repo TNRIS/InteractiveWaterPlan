@@ -1,12 +1,12 @@
 define([
     'namespace'
     'views/BaseStrategyCollectionView'
-    'views/StrategyDetailView'
-    'scripts/text!templates/strategyDetailTable.html'
+    'views/ProjectStrategyView'
+    'scripts/text!templates/projectStrategyTable.html'
 ],
-(namespace, BaseStrategyCollectionView, StrategyDetailView, tpl) ->
+(namespace, BaseStrategyCollectionView, ProjectStrategyView, tpl) ->
 
-    class StrategyDetailCollectionView extends BaseStrategyCollectionView
+    class ProjectStrategyCollectionView extends BaseStrategyCollectionView
         
         initialize: (options) ->
             _.bindAll(this, 'fetchCallback')
@@ -17,12 +17,12 @@ define([
 
             fetchParams = {projectId: @projectId}
             
-            StrategyDetailCollection = Backbone.Collection.extend(  
+            ProjectStrategyCollection = Backbone.Collection.extend(  
                 url: "#{BASE_PATH}api/strategies/project" 
             )
 
-            super StrategyDetailView, 
-                StrategyDetailCollection, tpl, {fetchParams: fetchParams}
+            super ProjectStrategyView, 
+                ProjectStrategyCollection, tpl, {fetchParams: fetchParams}
 
             return null
 

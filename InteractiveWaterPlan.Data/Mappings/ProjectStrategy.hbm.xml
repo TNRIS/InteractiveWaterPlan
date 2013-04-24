@@ -27,7 +27,7 @@
 
     <!-- <property column="wmsRedundantSupply" name="IsRedundantSupply" /> -->
 
-    <property column="CapitalCost_SUM" name="CapitalCost" />
+    <!--<property column="CapitalCost_SUM" name="CapitalCost" />-->
 
     <property column="wmsSponsorEntityName" name="SponsorName" />
     <property column="wmsSponsorEntityId" name="SponsorId" />

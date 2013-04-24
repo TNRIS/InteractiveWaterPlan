@@ -1,11 +1,11 @@
 define([
     'namespace'
     'views/BaseStrategyView'
-    'scripts/text!templates/strategyDetailRow.html'
+    'scripts/text!templates/projectStrategyRow.html'
 ],
 (namespace, BaseStrategyView, tpl) ->
 
-    class StrategyDetailView extends BaseStrategyView
+    class ProjectStrategyView extends BaseStrategyView
 
         template: tpl
 

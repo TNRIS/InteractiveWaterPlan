@@ -346,8 +346,8 @@
     <Content Include="Scripts\templates\regionStrategyTable.html" />
     <Content Include="Scripts\templates\sourceStrategyRow.html" />
     <Content Include="Scripts\templates\sourceStrategyTable.html" />
-    <Content Include="Scripts\templates\strategyDetailRow.html" />
-    <Content Include="Scripts\templates\strategyDetailTable.html" />
+    <Content Include="Scripts\templates\projectStrategyRow.html" />
+    <Content Include="Scripts\templates\projectStrategyTable.html" />
     <Content Include="Scripts\templates\strategyRow.html" />
     <Content Include="Scripts\templates\strategyTable.html" />
     <Content Include="Scripts\templates\strategyTypeListItem.html" />
@@ -407,8 +407,8 @@
     <None Include="Scripts\Coffee\backbone_app\collections\StrategyTypeCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\main.coffee" />
     <None Include="Scripts\Coffee\backbone_app\views\BaseStrategyView.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\StrategyDetailCollectionView.coffee" />
-    <None Include="Scripts\Coffee\backbone_app\views\StrategyDetailView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\ProjectStrategyCollectionView.coffee" />
+    <None Include="Scripts\Coffee\backbone_app\views\ProjectStrategyView.coffee" />
     <None Include="Scripts\Coffee\backbone_app\WMSRouter.coffee" />
     <None Include="Scripts\Coffee\backbone_app\models\PlaceFeatureModel.coffee" />
     <None Include="Scripts\Coffee\backbone_app\namespace.coffee" />

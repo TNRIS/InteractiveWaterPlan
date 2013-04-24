@@ -58,7 +58,7 @@
 
     public class ProjectStrategy : Strategy
     {
-        public virtual double CapitalCost { get; set; }
+        //REMOVED: public virtual double CapitalCost { get; set; }
         public virtual int SponsorId { get; set; }
 
         public virtual ProjectStrategy Clone()
