@@ -69,6 +69,7 @@ namespace InteractiveWaterPlan.MVC4
                 new { controller = "Strategy", action = "GetStrategiesInCounty" }
             );
 
+            /* TODO: REMOVED until data queries can be properly resolved
             config.Routes.MapHttpRoute(
                 "GetStrategiesInHouseDistrict",
                 "api/strategies/district/house",
@@ -79,7 +80,7 @@ namespace InteractiveWaterPlan.MVC4
                 "GetStrategiesInSenateDistrict",
                 "api/strategies/district/senate",
                 new { controller = "Strategy", action = "GetStrategiesInSenateDistrict" }
-            );
+            );*/
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesByType",

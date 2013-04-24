@@ -200,13 +200,14 @@
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\BaseStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\CountyStrategyView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\DistrictStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\LegeDistrictCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\MapTopButtonsView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\ProjectStrategyCollectionView.js" />
+    <Content Include="Scripts\Compiled\backbone_app\views\ProjectStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\RegionStrategyView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\SourceStrategyCollectionView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\SourceStrategyView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailCollectionView.js" />
-    <Content Include="Scripts\Compiled\backbone_app\views\StrategyDetailView.js" />
     <Content Include="Scripts\Compiled\backbone_app\views\ThemeNavToolbarView.js" />
     <Content Include="Scripts\Compiled\backbone_app\WMSRouter.js" />
     <Content Include="Scripts\Compiled\backbone_app\models\PlaceFeatureModel.js" />

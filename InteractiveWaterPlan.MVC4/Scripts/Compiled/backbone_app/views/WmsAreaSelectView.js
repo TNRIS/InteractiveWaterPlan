@@ -28,7 +28,6 @@ define(['namespace', 'scripts/text!templates/wmsAreaSelect.html'], function(name
       this.selects = {};
       this.selects["region"] = this._createRegionSelect().chosen();
       this.selects["county"] = this._createCountySelect().chosen();
-      this.selects["district"] = this._createHouseSenateSelect().chosen();
       this.selects["wug"] = this._createWugSelect().ajaxChosen({
         type: 'GET',
         url: "" + BASE_PATH + "api/entities/auto",

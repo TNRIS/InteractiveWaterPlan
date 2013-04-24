@@ -31,8 +31,9 @@ define([
             #create the countySelect
             @selects["county"] = this._createCountySelect().chosen()
 
+            #TODO: REMOVED until query can be improved
             #create the houseSenateSelect
-            @selects["district"] = this._createHouseSenateSelect().chosen() 
+            #@selects["district"] = this._createHouseSenateSelect().chosen() 
 
             #create the wugSelect, which is ajax-backed
             @selects["wug"] = this._createWugSelect().ajaxChosen(
