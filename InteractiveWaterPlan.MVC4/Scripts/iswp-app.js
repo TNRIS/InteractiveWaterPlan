@@ -2382,6 +2382,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         strokeColor: "${getStrokeColor}",
         strokeWidth: "${getStrokeWidth}",
         fillColor: "${getFillColor}",
+        pointRadius: 6,
         fillOpacity: 0.8
       }, {
         context: {
@@ -2708,6 +2709,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         strokeColor: "${getStrokeColor}",
         strokeWidth: "${getStrokeWidth}",
         fillColor: "${getFillColor}",
+        pointRadius: 6,
         fillOpacity: 0.8
       }, {
         context: {

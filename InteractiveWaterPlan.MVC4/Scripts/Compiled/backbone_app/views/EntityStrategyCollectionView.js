@@ -202,6 +202,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         strokeColor: "${getStrokeColor}",
         strokeWidth: "${getStrokeWidth}",
         fillColor: "${getFillColor}",
+        pointRadius: 6,
         fillOpacity: 0.8
       }, {
         context: {
