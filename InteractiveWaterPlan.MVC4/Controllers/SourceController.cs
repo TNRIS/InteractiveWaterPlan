@@ -18,7 +18,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             _repo = new SourceRepository(CommonConstants.SWP_SESSION_NAME);
         }
 
-        //api/entity/{entityId}/sources?year=20X0
+        // api/entity/{entityId}/sources?year=20X0
         public IList<Source> GetSourcesForEntity(int entityId, string year)
         {
             if (!CommonConstants.VALID_YEARS.Contains(year))
@@ -27,7 +27,7 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetSourcesForEntity(entityId, year);
         }
 
-        //api/source/feature/{sourceId}
+        // api/source/feature/{sourceId}
         public SourceDetail GetSource(int sourceId)
         {
             return _repo.GetSource(sourceId);
