@@ -10,10 +10,10 @@
     <property column="wmsProjectNameSWP" name="Description" />
     <property column="DBProjectId" name="ProjectId" />
 
+    <!--
     <property column="SourceTypeDescription" name="SourceType" />
-    
     <property column="wmsTypeNameSWP" name="TypeName" />
-    <property column="wmsTypeId" name="TypeId" />
+    <property column="wmsTypeId" name="TypeId" />-->
 
     <property column="SourceBasin" name="SourceBasin" />
 

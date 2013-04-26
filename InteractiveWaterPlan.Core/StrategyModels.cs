@@ -12,8 +12,8 @@
 
         public virtual int ProjectId { get; set; }
 
-        public virtual string TypeName { get; set; }
-        public virtual int TypeId { get; set; }
+        //public virtual string TypeName { get; set; }
+        //public virtual int TypeId { get; set; }
 
         public virtual long Supply2010 { get; set; }
         public virtual long Supply2020 { get; set; }
@@ -94,7 +94,7 @@
 
     public class SourceStrategy : BaseStrategy
     {
-        public virtual string SourceType { get; set; }
+        //public virtual string SourceType { get; set; }
 
         public virtual string SourceBasin { get; set; }
         public virtual char RegionLetter { get; set; }

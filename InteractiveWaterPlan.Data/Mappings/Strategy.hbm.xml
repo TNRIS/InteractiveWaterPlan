@@ -10,8 +10,8 @@
 
     <property column="DBProjectId" name="ProjectId" /> 
     
-    <property column="wmsTypeNameSWP" name="TypeName" />
-    <property column="wmsTypeId" name="TypeId" />
+    <!--<property column="wmsTypeNameSWP" name="TypeName" />
+    <property column="wmsTypeId" name="TypeId" />-->
 
     <property column="wmsRecipientEntityRegion" name="RegionLetter" />
     

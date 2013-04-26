@@ -12,8 +12,8 @@
     
     <property column="DBProjectId" name="ProjectId" />
     
-    <property column="wmsTypeNameSWP" name="TypeName" />
-    <property column="wmsTypeId" name="TypeId" />
+    <!--<property column="wmsTypeNameSWP" name="TypeName" />
+    <property column="wmsTypeId" name="TypeId" />-->
 
     <property column="SS2010" name="Supply2010" />
     <property column="SS2020" name="Supply2020" />
