@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\HttpFilterConfig.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\BoundaryController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -169,6 +170,7 @@
     <Content Include="Content\FontAwesome\css\font-awesome-ie7.min.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.min.css" />
+    <Content Include="Content\images\iswp.jpg" />
     <Content Include="Content\images\layer-switcher-maximize.png" />
     <Content Include="Content\images\loading-36.gif" />
     <Content Include="Content\Site.css" />
@@ -385,7 +387,7 @@
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.JsonVector.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

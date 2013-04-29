@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title | TWDB</title>
+    <title>Interactive 2012 Texas State Water Plan | @ViewBag.Title | TWDB</title>
 
     <link rel="icon" type="image/ico" href="@Url.Content("~/favicon.ico")" />
 
@@ -22,6 +22,30 @@
 
 <body lang="en">
     <div class="container">
+        <header class="page-header">
+            <h1>
+                <a href="@Url.Action("Index", "Home")" title="Texas State Water Plan 2012">Texas State Water Plan 2012</a>
+            </h1>
+            <p class="lead">Texas Water Development Board</p>
+            <div class="menu ">
+                @if (@ViewBag.ShowBackLink)
+                { 
+                    <a href="@Url.Action("Index", "Home")" class="btn">Back to Viewer</a>
+                }
+                <div class="btn-group">
+                    <a href='#' class="btn dropdown-toggle" data-toggle="dropdown">
+                        About <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a title="Glossary" href="@Url.Action("Index", "About")#Glossary">Glossary</a></li>
+                        <li><a title="Downloading Data" href="@Url.Action("Index", "About")#DownloadingData">Downloading Data</a></li>
+                        <li><a title="About Us" href="@Url.Action("Index", "About")#AboutUs">About Us</a></li>
+                        <li><a title="Site Policies" href="@Url.Action("Index", "About")#SitePolicies">Site Policies</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
         @RenderBody()
 
         <footer>
@@ -30,11 +54,11 @@
                 <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a>
             </p>
             <p>
-                <a href="#TODO" title="Site Policies">Site Policies</a> | 
+                <a href="@Url.Action("Index", "About")#SitePolicies" title="Site Policies">Site Policies</a> | 
                 <a href="http://www.texas.gov/" title="Texas Online">Texas Online</a> | 
                 <a href="http://www.governor.texas.gov/homeland" title="Homeland Security">Homeland Security</a> | 
                 <a href="http://www2.tsl.state.tx.us/trail" title="TRAIL">TRAIL</a> | 
-                <a href="#TODO" title="Contact Us">Contact Us</a>
+                <a href="mailto:InteractiveSWP@twdb.state.gov" title="Contact Us">Contact Us</a>
             </p>
         </footer>
     </div>

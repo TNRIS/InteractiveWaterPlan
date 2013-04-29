@@ -11,6 +11,11 @@ namespace InteractiveWaterPlan.MVC4
                 "~/Scripts/modernizr-{version}.js"
             ));
 
+            bundles.Add(new ScriptBundle("~/bundles/js/bootstrap.js").Include(
+                "~/Scripts/jquery-{version}.js",
+                "~/Content/bootstrap/js/bootstrap.js"
+            ));
+
             //Note: Openlayers has to be included separately because of how it loads its css
             bundles.Add(new ScriptBundle("~/bundles/js/lib.js").Include(
                 "~/Scripts/jquery-{version}.js",

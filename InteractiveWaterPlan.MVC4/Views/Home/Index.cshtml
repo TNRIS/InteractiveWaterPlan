@@ -2,23 +2,16 @@
 @using System.Web.Configuration
 
 @{
-    ViewBag.Title = "2012 Texas State Water Plan";
+    ViewBag.Title = "Main";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ShowBackLink = false;
 }
-
-<header class="page-header">
-    <h1>
-        Texas State Water Plan 2012
-    </h1>
-    <p class="lead">Texas Water Development Board</p>
-</header>
 
 <div class="row">
     <div class="span12">
         <div class="alert alert-block alert-warning-border">
             <h4><i class="icon-warning-sign"></i> Warning!</h4>
-            This site is currently in beta testing and is undergoing QA/QC.  
-            In some cases, the data are known to be inaccurate.  
+            The site is currently in beta testing and is undergoing QA/QC. In some cases, the graphic representation may not reflect a complete and accurate portrayal of actual State Water Plan data.
             For definitive data see the <a href="http://www.twdb.state.tx.us/waterplanning/swp/2012/" title="2012 State Water Plan">2012 State Water Plan</a>
             or <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/" title="2011 Regional Water Plans">2011 Regional Water Plans</a>.
         </div>

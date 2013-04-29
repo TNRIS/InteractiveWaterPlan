@@ -6,15 +6,37 @@ body
     padding-top: 8px;
 }
 
-h2, h3 
+.page-header h1
+{
+    font-size: 40px;
+}
+
+h2
 {
     font-size: 22px;
     line-height: 22px;
 }
 
+h3
+{
+    font-size: 18px;
+    line-height: 18px;
+}
+
 hr.space
 {
     border: none;
+}
+
+.btn:hover .caret
+{
+    border-top: 4px solid #fff;
+}
+
+
+p.indent
+{
+    margin-left:20px;
 }
 
 #mapContainer
@@ -26,6 +48,37 @@ hr.space
 {
     padding-bottom: 0px;
     margin-bottom: 10px;    
+    position: relative;
+}
+
+.page-header h1 a
+{
+    color:#000;
+}
+
+.page-header h1 a:hover
+{
+    text-decoration:none;
+}
+
+
+.page-header .menu
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.page-header .menu .dropdown-menu
+{
+    left:auto;
+    right:0;
+}
+
+h1.page-title
+{
+    font-size: 32px;
+    border-bottom: 1px solid #aa;wa
 }
 
 .container 
