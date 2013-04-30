@@ -106,7 +106,10 @@ namespace InteractiveWaterPlan.MVC4.Formatters
             writer.WriteLine("# or 2011 Regional Water Plans (http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/).");
             writer.WriteLine("#");
             writer.WriteLine("# All supply amounts are in acre-feet/year.");
-            writer.WriteLine("# Downloaded from: " + HttpContext.Current.Request.Url + " on " + DateTime.UtcNow.ToString());
+            writer.WriteLine("# Downloaded from: {0} at {1}",
+                HttpContext.Current.Request.Url,
+                DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")
+            );
             writer.WriteLine();
         }
 
