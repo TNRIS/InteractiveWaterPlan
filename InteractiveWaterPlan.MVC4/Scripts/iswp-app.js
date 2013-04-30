@@ -2600,7 +2600,11 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       if (this.onFetchDataSuccess(this.strategyCollection) === false) {
         return;
       }
-      this.viewName(this.sourceModel.attributes.name);
+      if (this.sourceModel.attributes.sourceType === "GROUNDWATER") {
+        this.viewName(this.sourceModel.attributes.name + " in county shown");
+      } else {
+        this.viewName(this.sourceModel.attributes.name);
+      }
       this.showSourceFeature();
       this.trigger("table:endload");
     };

@@ -78,7 +78,11 @@ define([
             #only continuing if that returned non-false
             
             #update @viewName with the name of the source 
-            @viewName(@sourceModel.attributes.name)
+            if @sourceModel.attributes.sourceType is "GROUNDWATER"
+                @viewName(@sourceModel.attributes.name + " in county shown")
+            else
+                @viewName(@sourceModel.attributes.name)
+
 
             #and show the feature on the map
             this.showSourceFeature()
