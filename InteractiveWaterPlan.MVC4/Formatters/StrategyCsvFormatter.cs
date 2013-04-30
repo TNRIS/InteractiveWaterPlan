@@ -76,6 +76,7 @@ namespace InteractiveWaterPlan.MVC4.Formatters
                     var firstObj = objects.FirstOrDefault();
                     if (firstObj != null)
                     {
+                        WriteComments(writer);
                         WriteHeaders(firstObj, writer);
                     }
 
@@ -95,6 +96,18 @@ namespace InteractiveWaterPlan.MVC4.Formatters
                 }
             }
             writeStream.Close();
+        }
+
+        private void WriteComments(StreamWriter writer)
+        {
+            writer.WriteLine("# These data are currently undergoing QA/QC and may not reflect a complete");
+            writer.WriteLine("# and accurate portrayal of actual State Water Plan Data.");
+            writer.WriteLine("# For definitive data see the 2012 State Water Plan (http://www.twdb.state.tx.us/waterplanning/swp/2012/)");
+            writer.WriteLine("# or 2011 Regional Water Plans (http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/).");
+            writer.WriteLine("#");
+            writer.WriteLine("# All supply amounts are in acre-feet/year.");
+            writer.WriteLine("# Downloaded from: " + HttpContext.Current.Request.Url + " on " + DateTime.UtcNow.ToString());
+            writer.WriteLine();
         }
 
         private void WriteHeaders(object obj, StreamWriter writer)
