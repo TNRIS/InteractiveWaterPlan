@@ -27,6 +27,8 @@
     <property column="SS2050" name="Supply2050" />
     <property column="SS2060" name="Supply2060" />
 
+    <property column="wmsRedundantSupply" name="IsRedundantSupply" />
+
     <property column="wmsRecipientEntityId" name="RecipientEntityId" />
     <property column="wmsRecipientEntityName" name="RecipientEntityName" />
     <property column="wmsRecipientEntityType" name="RecipientEntityType" />

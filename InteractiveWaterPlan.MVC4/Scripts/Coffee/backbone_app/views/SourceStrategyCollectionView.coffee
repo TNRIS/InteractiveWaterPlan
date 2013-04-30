@@ -49,7 +49,6 @@ define([
             $.when(
                 @strategyCollection.fetch( {data: params} ),
                 
-                #TODO fetch the source feature collection
                 @sourceModel.fetch()
             )
             .then(
