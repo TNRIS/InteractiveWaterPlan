@@ -21,6 +21,9 @@
 </head>
 
 <body lang="en">
+    
+    @RenderSection("BeforeContainer", required: false)
+
     <div class="container">
         <header class="page-header">
             <h1>
@@ -28,10 +31,7 @@
             </h1>
             <p class="lead">Texas Water Development Board</p>
             <div class="menu ">
-                @if (@ViewBag.ShowBackLink)
-                { 
-                    <a href="@Url.Action("Index", "Home")" title="Back to Viewer" class="btn">Back to Viewer</a>
-                }
+                @RenderSection("MenuLinks", required: false)
                 <div class="btn-group">
                     <a href='#' class="btn dropdown-toggle" data-toggle="dropdown">
                         About <span class="caret"></span>

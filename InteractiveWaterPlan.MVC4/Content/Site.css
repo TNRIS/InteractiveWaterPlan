@@ -39,6 +39,31 @@ p.indent
     margin-left:20px;
 }
 
+.about-nav 
+{
+    width:200px;
+}
+
+.about-nav li
+{
+    border-bottom: 1px solid #ccc;
+}
+
+.about-nav li.nav-header,
+.about-nav li a
+{
+    margin-left:0;
+    margin-right:0;
+    padding-right:0;
+    padding-left:4px;
+}
+
+.about-nav li a i 
+{
+    float:right;
+    margin-top:6px;
+}
+
 #mapContainer
 {
     height: 400px;
