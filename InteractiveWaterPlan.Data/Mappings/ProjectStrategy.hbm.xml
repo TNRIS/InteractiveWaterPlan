@@ -15,8 +15,8 @@
 
     <property column="wmsRecipientEntityRegion" name="RegionLetter" />
     
-    <property column="wmsRecipientEntityCounty" name="CountyName" />
-    <property column="wmsRecipientEntityCountyId" name="CountyId" />
+    <!--<property column="wmsRecipientEntityCounty" name="CountyName" />
+    <property column="wmsRecipientEntityCountyId" name="CountyId" />-->
 
     <property column="WS_Volume_2010" name="Supply2010" />
     <property column="WS_Volume_2020" name="Supply2020" />

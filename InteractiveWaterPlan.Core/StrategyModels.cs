@@ -35,7 +35,6 @@
         public virtual int CountyId { get; set; }
 
         public virtual string IsRedundantSupply { get; set; }
-
         //public virtual double CapitalCost { get; set; }
 
         public virtual string SponsorName { get; set; }
@@ -56,10 +55,22 @@
         }
     }
 
-    public class ProjectStrategy : Strategy
+    public class ProjectStrategy : BaseStrategy
     {
-        //REMOVED: public virtual double CapitalCost { get; set; }
+        public virtual string RegionLetter { get; set; }
+
+        public virtual string SourceName { get; set; }
+        public virtual int SourceId { get; set; }
+
+        public virtual int RecipientEntityId { get; set; }
+        public virtual string RecipientEntityName { get; set; }
+        public virtual string RecipientEntityType { get; set; }
+        public virtual string RecipientEntityWktGeog { get; set; }
+
+        public virtual string SponsorName { get; set; }
         public virtual int SponsorId { get; set; }
+
+        public virtual string OnlineYear { get; set; }
 
         public virtual ProjectStrategy Clone()
         {
