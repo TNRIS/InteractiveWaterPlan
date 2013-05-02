@@ -59,14 +59,22 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesInRegion",
-                "api/strategies/region",
-                new { controller = "Strategy", action = "GetStrategiesInRegion" }
+                "api/strategies/region/{regionLetter}",
+                new { 
+                    controller = "Strategy", 
+                    regionLetter = RouteParameter.Optional,
+                    action = "GetStrategiesInRegion" 
+                }
             );
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesInCounty",
-                "api/strategies/county",
-                new { controller = "Strategy", action = "GetStrategiesInCounty" }
+                "api/strategies/county/{countyId}",
+                new { 
+                    controller = "Strategy", 
+                    countyId = RouteParameter.Optional,
+                    action = "GetStrategiesInCounty" 
+                }
             );
 
             /* TODO: REMOVED until data queries can be properly resolved
@@ -84,32 +92,51 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesByType",
-                "api/strategies/type",
-                new { controller = "Strategy", action = "GetStrategiesByType" }
+                "api/strategies/type/{typeId}",
+                new { 
+                    controller = "Strategy", 
+                    typeId = RouteParameter.Optional,
+                    action = "GetStrategiesByType" 
+                }
             );
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesForEntity",
-                "api/strategies/entity",
-                new { controller = "Strategy", action = "GetStrategiesForEntity" }
+                "api/strategies/entity/{entityId}",
+                new { 
+                    controller = "Strategy", 
+                    entityId = RouteParameter.Optional,
+                    action = "GetStrategiesForEntity" 
+                }
             );
             
             config.Routes.MapHttpRoute(
                 "GetStrategiesByProjectIdRoute",
-                "api/strategies/project",
-                new { controller = "Strategy", action = "GetStrategiesByProjectId" }
+                "api/strategies/project/{projectId}",
+                new { 
+                    controller = "Strategy", 
+                    projectId = RouteParameter.Optional,
+                    action = "GetStrategiesByProjectId" 
+                }
             );
 
             config.Routes.MapHttpRoute(
                 "GetStrategiesBySource",
-                "api/strategies/source",
-                new { controller = "Strategy", action = "GetStrategiesBySource" }
+                "api/strategies/source/{sourceId}",
+                new { 
+                    controller = "Strategy", 
+                    sourceId = RouteParameter.Optional,
+                    action = "GetStrategiesBySource" 
+                }
             );
 
             config.Routes.MapHttpRoute(
                 "GetStrategyTypesRoute",
                 "api/strategy/types",
-                new { controller = "Strategy", action = "GetStrategyTypes" }
+                new { 
+                    controller = "Strategy", 
+                    action = "GetStrategyTypes" 
+                }
             );
 
             #endregion
@@ -214,8 +241,6 @@ namespace InteractiveWaterPlan.MVC4
             );
 
             #endregion
-
-
 
             /*Don't need default route
             config.Routes.MapHttpRoute(
