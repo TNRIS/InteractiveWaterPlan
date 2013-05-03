@@ -16,14 +16,12 @@ _.extend(
     })
 
 
-BASE_PATH = "/"
-BASE_CONTENT_PATH = "/"
+BASE_PATH = base_path || "/"
+BASE_CONTENT_PATH = base_content_path || "/"
+BING_MAPS_KEY = bing_maps_key || ""
 
 #Launch-point for the application
 $(()->
-    BASE_PATH = $("#base_path").val()
-    BASE_CONTENT_PATH = $("#base_content_path").val()
-
     #Config for RequireJS
     require.config(
         baseUrl: "#{BASE_PATH}Scripts/Compiled/backbone_app"

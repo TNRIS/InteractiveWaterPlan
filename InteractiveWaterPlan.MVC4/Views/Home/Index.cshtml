@@ -74,11 +74,12 @@
     </div>
 </div>
 
-
-<input type="hidden" id="base_script_path" value="@Url.Content("~/Scripts")" />
-<input type="hidden" id="base_content_path" value="@Url.Content("~/Content")" />
-<input type="hidden" id="base_path" value="@Url.Content("~/")" />
-<input type="hidden" id="bing_maps_key" value="@WebConfigurationManager.AppSettings["BingMapsKey"]" />
+<script type="text/javascript">
+    var base_content_path = "@Url.Content("~/Content")",
+        base_path = "@Url.Content("~/")",
+        bing_maps_key = "@WebConfigurationManager.AppSettings["BingMapsKey"]"
+        ;
+</script>
 
 @if (HttpContext.Current.IsDebuggingEnabled)
 {

@@ -69,7 +69,7 @@ define([
                 this.$('.has-popover').popover(trigger: 'hover')
 
                 this._setupDataTable()
-                this._createDownloadLink()
+                # this._createDownloadLink()
 
                 #get the region features out of the namespace
                 @regionCollection = namespace.regionFeatures

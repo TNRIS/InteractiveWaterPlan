@@ -19,7 +19,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
       this.tableContainer = $('#tableContainer')[0];
       this.mapView = new MapView({
         mapContainerId: 'mapContainer',
-        bingApiKey: $('#bing_maps_key').val()
+        bingApiKey: BING_MAPS_KEY
       });
       namespace.mapView = this.mapView;
       this.mapView.render();

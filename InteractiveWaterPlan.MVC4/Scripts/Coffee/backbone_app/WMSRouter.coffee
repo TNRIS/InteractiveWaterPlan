@@ -45,7 +45,7 @@ define([
 
             @mapView = new MapView(
                 mapContainerId: 'mapContainer'
-                bingApiKey: $('#bing_maps_key').val()
+                bingApiKey: BING_MAPS_KEY
             )
             #save it into the namespace b/c we will use it a lot
             namespace.mapView = @mapView 
