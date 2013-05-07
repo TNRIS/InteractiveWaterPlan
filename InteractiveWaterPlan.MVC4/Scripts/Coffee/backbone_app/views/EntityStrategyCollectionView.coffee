@@ -121,12 +121,11 @@ define([
                     sourcePoint = wktFormat.read(source.attributes.wktMappingPoint)
                     @mapView.transformToWebMerc(sourcePoint.geometry)
 
-                    lineFeatures.push new OpenLayers.Feature.Vector(
-                        new OpenLayers.Geometry.LineString(
-                                [sourcePoint.geometry, wugFeature.geometry]
-                        )
-                        ,{ featureType: "connector" }
-                    )
+                    curveFeature = this._createBezierConnector(
+                        wugFeature.geometry, sourcePoint.geometry)
+
+                    lineFeatures.push(curveFeature)
+
 
                 #we don't need to carry around the large wktGeog
                 delete newFeature.attributes.wktGeog

@@ -72,7 +72,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
     };
 
     SourceStrategyCollectionView.prototype.showSourceFeature = function() {
-      var bounds, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref1, _ref2;
+      var bounds, curveFeature, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref1, _ref2;
 
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
@@ -108,9 +108,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
           wugPoint = wktFormat.read(wugPointText);
           this.mapView.transformToWebMerc(sourcePoint.geometry);
           this.mapView.transformToWebMerc(wugPoint.geometry);
-          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugPoint.geometry]), {
-            featureType: "connector"
-          }));
+          curveFeature = this._createBezierConnector(sourcePoint.geometry, wugPoint.geometry);
+          lineFeatures.push(curveFeature);
         }
       }
       this.sourceLayer = new OpenLayers.Layer.Vector("Source Feature Layer", {

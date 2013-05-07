@@ -135,10 +135,11 @@ define([
                     wugPoint = wktFormat.read(wugPointText)
                     @mapView.transformToWebMerc(sourcePoint.geometry)
                     @mapView.transformToWebMerc(wugPoint.geometry)
-                    lineFeatures.push new OpenLayers.Feature.Vector(
-                        new OpenLayers.Geometry.LineString([sourcePoint.geometry, 
-                            wugPoint.geometry]), {featureType: "connector"}
-                        )
+                    curveFeature = this._createBezierConnector(
+                        sourcePoint.geometry, wugPoint.geometry)
+
+                    lineFeatures.push(curveFeature)
+
 
             #create and add the sourceLayer
             @sourceLayer = new OpenLayers.Layer.Vector(

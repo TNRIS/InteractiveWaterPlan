@@ -18,7 +18,7 @@ define(['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature', '_createBezierConnector');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -472,6 +472,48 @@ define(['namespace'], function(namespace) {
       }
       scaled_val = (scale_max - scale_min) * (val - min) / (max - min) + scale_min;
       return scaled_val;
+    };
+
+    BaseStrategyCollectionView.prototype._createBezierConnector = function(start, finish) {
+      var arcHeight, distance, firstTerm, midX, midY, numSegments, points, secondTerm, skew, t, tDelta, thirdTerm, x, y, _i, _ref1;
+
+      if (start.y > finish.y) {
+        _ref1 = [finish, start], start = _ref1[0], finish = _ref1[1];
+      }
+      distance = start.distanceTo(finish);
+      arcHeight = distance / 2;
+      skew = distance / 3;
+      if (start.y < finish.y) {
+        skew = -skew;
+      }
+      numSegments = 50;
+      midY = (finish.y - start.y) / 2.0;
+      midX = (finish.x - start.x) / 2.0;
+      if (Math.abs(start.y - finish.y) < 0.0001) {
+        midX -= arcHeight;
+        midY += skew;
+      } else {
+        midY += arcHeight;
+        midX += skew;
+      }
+      tDelta = 1.0 / numSegments;
+      points = [];
+      points.push(new OpenLayers.Geometry.Point(start.x, start.y));
+      for (t = _i = 0; tDelta > 0 ? _i <= 1.0 : _i >= 1.0; t = _i += tDelta) {
+        firstTerm = (1.0 - t * t) * start.y;
+        secondTerm = 2.0 * (1.0 - t) * t * midY;
+        thirdTerm = t * t * finish.y;
+        y = firstTerm + secondTerm + thirdTerm;
+        firstTerm = (1.0 - t * t) * start.x;
+        secondTerm = 2.0 * (1.0 - t) * t * midX;
+        thirdTerm = t * t * finish.x;
+        x = firstTerm + secondTerm + thirdTerm;
+        points.push(new OpenLayers.Geometry.Point(x, y));
+      }
+      points.push(new OpenLayers.Geometry.Point(finish.x, finish.y));
+      return new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points), {
+        featureType: 'connector'
+      });
     };
 
     BaseStrategyCollectionView.prototype._wugStyleMap = new OpenLayers.StyleMap({

@@ -77,7 +77,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
     };
 
     EntityStrategyCollectionView.prototype.showSourceFeatures = function() {
-      var bounds, lineFeatures, newFeature, source, sourceFeatures, sourcePoint, wktFormat, wugFeat, wugFeature, _i, _len, _ref1;
+      var bounds, curveFeature, lineFeatures, newFeature, source, sourceFeatures, sourcePoint, wktFormat, wugFeat, wugFeature, _i, _len, _ref1;
 
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
@@ -98,9 +98,8 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         if (source.attributes.wktMappingPoint != null) {
           sourcePoint = wktFormat.read(source.attributes.wktMappingPoint);
           this.mapView.transformToWebMerc(sourcePoint.geometry);
-          lineFeatures.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([sourcePoint.geometry, wugFeature.geometry]), {
-            featureType: "connector"
-          }));
+          curveFeature = this._createBezierConnector(wugFeature.geometry, sourcePoint.geometry);
+          lineFeatures.push(curveFeature);
         }
         delete newFeature.attributes.wktGeog;
         delete newFeature.attributes.wktMappingPoint;

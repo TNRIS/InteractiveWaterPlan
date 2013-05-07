@@ -15,7 +15,7 @@ define([
                 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl',
-                '_clickFeature' #, '_createDownloadLink'
+                '_clickFeature', '_createBezierConnector' #, '_createDownloadLink'
             )
 
             options = options || {}
@@ -558,6 +558,56 @@ define([
             scaled_val = (scale_max - scale_min)*(val - min)/(max-min) + scale_min
             
             return scaled_val
+
+        _createBezierConnector: (start, finish) ->
+
+            if start.y > finish.y
+                [start, finish] = [finish, start]
+
+            distance = start.distanceTo(finish)
+            arcHeight = distance/2
+
+            skew = distance/3
+
+            if start.y < finish.y
+                skew = -skew
+
+            numSegments = 50
+
+            midY = (finish.y - start.y) / 2.0
+            midX = (finish.x - start.x) / 2.0
+
+            if Math.abs(start.y - finish.y) < 0.0001 # nearly vertical
+                midX -= arcHeight
+                midY += skew
+            else #normal case, not vertical
+                midY += arcHeight
+                midX += skew
+
+            tDelta = 1.0 / numSegments
+
+            points = []
+            points.push new OpenLayers.Geometry.Point(start.x, start.y)
+            for t in [0..1.0] by tDelta
+                # Do y
+                firstTerm = (1.0 - t * t) * start.y
+                secondTerm = 2.0 * (1.0 - t) * t * midY
+                thirdTerm = t * t * finish.y
+                y = firstTerm + secondTerm + thirdTerm
+
+                # Do x
+                firstTerm = (1.0 - t * t) * start.x;
+                secondTerm = 2.0 * (1.0 - t) * t * midX;
+                thirdTerm = t * t * finish.x;
+                x = firstTerm + secondTerm + thirdTerm;
+
+                points.push new OpenLayers.Geometry.Point(x, y)
+            points.push new OpenLayers.Geometry.Point(finish.x, finish.y)
+
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.LineString(points),
+                { featureType: 'connector' }
+            )
 
         #Sweet style map for wugs
         _wugStyleMap: new OpenLayers.StyleMap(
