@@ -1550,15 +1550,12 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     };
 
     BaseStrategyCollectionView.prototype._createBezierConnector = function(start, finish) {
-      var arcHeight, distance, firstTerm, midX, midY, numSegments, points, secondTerm, skew, t, tDelta, thirdTerm, x, y, _i, _ref1;
+      var arcHeight, distance, firstTerm, midX, midY, numSegments, points, secondTerm, skew, t, tDelta, thirdTerm, x, y, _i;
 
-      if (start.y > finish.y) {
-        _ref1 = [finish, start], start = _ref1[0], finish = _ref1[1];
-      }
       distance = start.distanceTo(finish);
       arcHeight = distance / 4;
       skew = distance / 4;
-      if (start.y < finish.y) {
+      if (start.x > finish.x) {
         skew = -skew;
       }
       numSegments = 50;
