@@ -17,6 +17,8 @@ define([
             
             @viewName = ko.observable()
 
+            @qualifier = ko.observable()
+
             @mapView = namespace.mapView
 
             fetchParams = {sourceId: @sourceId}
@@ -78,12 +80,11 @@ define([
             #only continuing if that returned non-false
             
             #update @viewName with the name of the source 
-            if @sourceModel.attributes.sourceType is "GROUNDWATER"
-                @viewName(@sourceModel.attributes.name + " in county shown")
-            else
-                @viewName(@sourceModel.attributes.name)
+            @viewName(@sourceModel.attributes.name)
 
-
+            if @sourceModel.attributes.sourceType is "GROUNDWATER"                
+                @qualifier("in county shown")
+            
             #and show the feature on the map
             this.showSourceFeature()
 

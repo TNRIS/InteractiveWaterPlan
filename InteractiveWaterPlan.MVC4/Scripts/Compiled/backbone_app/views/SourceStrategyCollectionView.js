@@ -19,6 +19,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       _.bindAll(this, 'onFetchBothCollectionSuccess', 'showSourceFeature', '_registerHighlightEvents');
       this.sourceId = options.id;
       this.viewName = ko.observable();
+      this.qualifier = ko.observable();
       this.mapView = namespace.mapView;
       fetchParams = {
         sourceId: this.sourceId
@@ -62,10 +63,9 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       if (this.onFetchDataSuccess(this.strategyCollection) === false) {
         return;
       }
+      this.viewName(this.sourceModel.attributes.name);
       if (this.sourceModel.attributes.sourceType === "GROUNDWATER") {
-        this.viewName(this.sourceModel.attributes.name + " in county shown");
-      } else {
-        this.viewName(this.sourceModel.attributes.name);
+        this.qualifier("in county shown");
       }
       this.showSourceFeature();
       this.trigger("table:endload");
