@@ -1556,8 +1556,8 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
         _ref1 = [finish, start], start = _ref1[0], finish = _ref1[1];
       }
       distance = start.distanceTo(finish);
-      arcHeight = distance / 2;
-      skew = distance / 3;
+      arcHeight = distance / 4;
+      skew = distance / 4;
       if (start.y < finish.y) {
         skew = -skew;
       }

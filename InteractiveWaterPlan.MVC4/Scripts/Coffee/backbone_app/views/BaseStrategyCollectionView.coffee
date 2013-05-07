@@ -565,9 +565,9 @@ define([
                 [start, finish] = [finish, start]
 
             distance = start.distanceTo(finish)
-            arcHeight = distance/2
+            arcHeight = distance/4
 
-            skew = distance/3
+            skew = distance/4
 
             if start.y < finish.y
                 skew = -skew
