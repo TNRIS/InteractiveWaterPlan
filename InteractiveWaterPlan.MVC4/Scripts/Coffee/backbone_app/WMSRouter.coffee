@@ -111,7 +111,7 @@ define([
 
         onTableFetchError: () ->
             $('#errorMessage').show() #TODO: is there are more centralized way to do this?
-            #alert "An error has occured.  Please reload this page or go back."
+            #alert "An error has occurred.  Please reload this page or go back."
             return
 
         onTableNothingFound: () ->

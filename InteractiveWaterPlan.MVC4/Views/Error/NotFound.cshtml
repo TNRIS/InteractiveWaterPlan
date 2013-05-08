@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "NotFound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MenuLinks {
+    <a href="@Url.Action("Index", "Home")" title="Back to Viewer" class="btn">Back to Viewer</a>            
+}
+
+<div class="row">
+    <div class="span9">
+        <h1 class="page-title">Page Not Found</h1>
+        <p>The page you requested could not be found.</p>
+        <p>
+            Please go to the <a href="@Url.Action("Index", "Home")" title="Main Page">main page</a> 
+            or visit the <a href="http://twdb.texas.gov" title="TWDB Home">Texas Water Development Board's 
+            home page</a>.
+        </p>
+    </div>
+</div>

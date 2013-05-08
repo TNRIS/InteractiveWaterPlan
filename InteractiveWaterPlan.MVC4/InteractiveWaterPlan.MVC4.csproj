@@ -139,6 +139,7 @@
     <Compile Include="Controllers\BoundaryController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SourceController.cs" />
     <Compile Include="Controllers\CountyNetSupplyController.cs" />
     <Compile Include="Controllers\EntityController.cs" />
@@ -388,6 +389,8 @@
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Popup.Cosmo.coffee" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\Error\Error.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -430,7 +433,6 @@
     <None Include="Scripts\Coffee\backbone_app\views\YearNavView.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Control.GetFeature.coffee" />
     <None Include="Scripts\Coffee\OpenLayers\OpenLayers.Layer.QuadKey.coffee" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
