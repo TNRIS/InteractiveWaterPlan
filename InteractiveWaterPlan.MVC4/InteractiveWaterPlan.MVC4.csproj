@@ -171,6 +171,7 @@
     <Content Include="Content\FontAwesome\css\font-awesome-ie7.min.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.css" />
     <Content Include="Content\FontAwesome\css\font-awesome.min.css" />
+    <Content Include="Content\images\closeicon.png" />
     <Content Include="Content\images\iswp.jpg" />
     <Content Include="Content\images\layer-switcher-maximize.png" />
     <Content Include="Content\images\loading-36.gif" />
