@@ -15,7 +15,8 @@ define([
                 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl',
                 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol',
                 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl',
-                '_clickFeature', '_createBezierConnector' #, '_createDownloadLink'
+                '_clickFeature', '_createBezierConnector', '_formatDisplayName' 
+                #, '_createDownloadLink'
             )
 
             options = options || {}
@@ -558,6 +559,21 @@ define([
             scaled_val = (scale_max - scale_min)*(val - min)/(max-min) + scale_min
             
             return scaled_val
+
+        _formatDisplayName: (displayName, maxLen = 30) ->
+            if displayName.length > maxLen
+                nameArr = displayName.split(' ')
+                letterCount = 0
+                arrIdx = 0
+                for namePart in nameArr
+                    if letterCount >= maxLen
+                        break
+                    letterCount += namePart.length
+                    arrIdx++
+                if arrIdx < nameArr.length
+                    nameArr.splice(arrIdx, 0, '<br/>')
+                    displayName = nameArr.join(' ')
+            return displayName
 
         _createBezierConnector: (start, finish) ->
             # Based on tutorial at http://msdn.microsoft.com/en-us/magazine/hh205758.aspx

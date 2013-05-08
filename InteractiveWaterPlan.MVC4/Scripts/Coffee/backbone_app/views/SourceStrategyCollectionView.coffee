@@ -195,10 +195,13 @@ define([
 
                 sourceFeature = event.feature
 
+                sourceDisplayName = this._formatDisplayName(
+                    sourceFeature.attributes.name)
+
                 popup = new OpenLayers.Popup.FramedCloud("sourcepopup",
                     @mapView.getMouseLonLat(),
                     null, #contentSize
-                    "<strong>#{sourceFeature.attributes.name}</strong>",
+                    "<strong>#{sourceDisplayName}</strong>",
                     null, #anchor
                     true, #closeBox
                     #closeBoxCallback

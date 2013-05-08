@@ -1093,7 +1093,7 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
     BaseStrategyCollectionView.prototype.MIN_WUG_RADIUS = 6;
 
     BaseStrategyCollectionView.prototype.initialize = function(ModelView, StrategyCollection, tpl, options) {
-      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature', '_createBezierConnector');
+      _.bindAll(this, 'render', 'unrender', 'fetchData', 'appendModel', 'hideLoading', 'showLoading', 'onFetchDataSuccess', 'fetchCallback', '_setupDataTable', '_connectTableRowsToWugFeatures', 'showNothingFound', 'hideNothingFound', '_setupClickFeatureControl', 'showWugFeatures', '_clearWugFeaturesAndControls', '_setupWugClickControl', 'selectWugFeature', 'unselectWugFeatures', '_setupWugHighlightContol', 'highlightStratTypeWugs', 'unhighlightStratTypeWugs', '_setupHighlightFeatureControl', '_clickFeature', '_createBezierConnector', '_formatDisplayName');
       options = options || {};
       this.fetchParams = options.fetchParams || {};
       this.mapView = namespace.mapView;
@@ -1547,6 +1547,32 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       }
       scaled_val = (scale_max - scale_min) * (val - min) / (max - min) + scale_min;
       return scaled_val;
+    };
+
+    BaseStrategyCollectionView.prototype._formatDisplayName = function(displayName, maxLen) {
+      var arrIdx, letterCount, nameArr, namePart, _i, _len;
+
+      if (maxLen == null) {
+        maxLen = 30;
+      }
+      if (displayName.length > maxLen) {
+        nameArr = displayName.split(' ');
+        letterCount = 0;
+        arrIdx = 0;
+        for (_i = 0, _len = nameArr.length; _i < _len; _i++) {
+          namePart = nameArr[_i];
+          if (letterCount >= maxLen) {
+            break;
+          }
+          letterCount += namePart.length;
+          arrIdx++;
+        }
+        if (arrIdx < nameArr.length) {
+          nameArr.splice(arrIdx, 0, '<br/>');
+          displayName = nameArr.join(' ');
+        }
+      }
+      return displayName;
     };
 
     BaseStrategyCollectionView.prototype._createBezierConnector = function(start, finish) {
@@ -2377,13 +2403,14 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         return true;
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
-        var popup, sourceFeature;
+        var popup, sourceDisplayName, sourceFeature;
 
         if ((event.feature.layer == null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return;
         }
         sourceFeature = event.feature;
-        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "<strong>" + sourceFeature.attributes.name + "</strong>", null, true);
+        sourceDisplayName = _this._formatDisplayName(sourceFeature.attributes.name);
+        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "<strong>" + sourceDisplayName + "</strong>", null, true);
         popup.autoSize = true;
         sourceFeature.popup = popup;
         _this.mapView.map.addPopup(popup);
@@ -2707,13 +2734,14 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         return true;
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
-        var popup, sourceFeature;
+        var popup, sourceDisplayName, sourceFeature;
 
         if ((event.feature.layer == null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;
-        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "<strong>" + sourceFeature.attributes.name + "</strong>", null, true);
+        sourceDisplayName = _this._formatDisplayName(sourceFeature.attributes.name);
+        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "<strong>" + sourceDisplayName + "</strong>", null, true);
         popup.autoSize = true;
         sourceFeature.popup = popup;
         _this.mapView.map.addPopup(popup);

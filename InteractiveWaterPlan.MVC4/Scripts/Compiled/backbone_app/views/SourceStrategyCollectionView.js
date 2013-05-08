@@ -143,13 +143,14 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         return true;
       });
       this.highlightFeatureControl.events.register('featurehighlighted', null, function(event) {
-        var popup, sourceFeature;
+        var popup, sourceDisplayName, sourceFeature;
 
         if ((event.feature.layer == null) || event.feature.layer.id !== _this.sourceLayer.id) {
           return false;
         }
         sourceFeature = event.feature;
-        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "<strong>" + sourceFeature.attributes.name + "</strong>", null, true);
+        sourceDisplayName = _this._formatDisplayName(sourceFeature.attributes.name);
+        popup = new OpenLayers.Popup.FramedCloud("sourcepopup", _this.mapView.getMouseLonLat(), null, "<strong>" + sourceDisplayName + "</strong>", null, true);
         popup.autoSize = true;
         sourceFeature.popup = popup;
         _this.mapView.map.addPopup(popup);
