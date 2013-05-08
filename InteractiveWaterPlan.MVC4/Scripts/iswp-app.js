@@ -1316,20 +1316,19 @@ define('views/BaseStrategyCollectionView',['namespace'], function(namespace) {
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
       }
-      if (this.wugCollection.models.length < 1) {
-        return;
-      }
       this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
         styleMap: this._wugStyleMap,
         displayInLayerSwitcher: false
       });
       wktFormat = new OpenLayers.Format.WKT();
-      max_supply = this.wugCollection.max(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
-      min_supply = this.wugCollection.min(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
+      if (this.wugCollection.models.length > 1) {
+        max_supply = this.wugCollection.max(function(m) {
+          return m.get("totalSupply");
+        }).get("totalSupply");
+        min_supply = this.wugCollection.min(function(m) {
+          return m.get("totalSupply");
+        }).get("totalSupply");
+      }
       bounds = null;
       wugFeatures = [];
       _ref1 = this.wugCollection.models;
@@ -2663,12 +2662,11 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
     };
 
     SourceStrategyCollectionView.prototype.showSourceFeature = function() {
-      var bounds, curveFeature, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref1, _ref2;
+      var bounds, curveFeature, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeature, wugPoint, wugPointText, _i, _j, _len, _len1, _ref1, _ref2;
 
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       lineFeatures = [];
-      wugFeatures = this.wugLayer.features;
       if (this.sourceModel.get('wktGeog') == null) {
         return;
       }
@@ -2681,14 +2679,9 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       delete sourceFeature.attributes.wktMappingPoint;
       this.mapView.transformToWebMerc(sourceFeature.geometry);
       bounds = sourceFeature.geometry.getBounds().clone();
-      _ref1 = this.wugLayer.features;
+      _ref1 = this.strategyCollection.models;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        wugFeature = _ref1[_i];
-        bounds.extend(wugFeature.geometry.getBounds());
-      }
-      _ref2 = this.strategyCollection.models;
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        stratModel = _ref2[_j];
+        stratModel = _ref1[_i];
         if (stratModel.get("recipientEntityType") === "WWP") {
           continue;
         }
@@ -2713,9 +2706,14 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._registerHighlightEvents();
       this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
+      if ((bounds != null) && (this.wugLayer != null) && this.wugLayer.features.length > 0) {
+        _ref2 = this.wugLayer.features;
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          wugFeature = _ref2[_j];
+          bounds.extend(wugFeature.geometry.getBounds());
+        }
+      }
       if (bounds != null) {
-        wugFeat = this.wugLayer.features[0];
-        bounds.extend(wugFeat.geometry.getBounds());
         this.mapView.zoomToExtent(bounds);
       }
     };

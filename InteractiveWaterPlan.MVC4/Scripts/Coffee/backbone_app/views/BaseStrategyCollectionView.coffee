@@ -295,7 +295,7 @@ define([
             #TODO: ??? this._clearWugFeaturesAndControls()
             if @wugLayer? then @wugLayer.destroy()
 
-            if @wugCollection.models.length < 1 then return
+            #if @wugCollection.models.length < 1 then return
 
             @wugLayer = new OpenLayers.Layer.Vector(
                 "Water User Groups",
@@ -307,13 +307,14 @@ define([
             wktFormat = new OpenLayers.Format.WKT()
 
             #Size based on source supply (need to pass source supply to model)
-            max_supply = @wugCollection.max((m) ->
-                return m.get("totalSupply")
-            ).get("totalSupply")
-            
-            min_supply = @wugCollection.min((m) ->
-                return m.get("totalSupply")
-            ).get("totalSupply")
+            if @wugCollection.models.length > 1
+                max_supply = @wugCollection.max((m) ->
+                    return m.get("totalSupply")
+                ).get("totalSupply")
+                
+                min_supply = @wugCollection.min((m) ->
+                    return m.get("totalSupply")
+                ).get("totalSupply")
  
             bounds = null
             wugFeatures = []

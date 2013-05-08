@@ -241,20 +241,19 @@ define(['namespace'], function(namespace) {
       if (this.wugLayer != null) {
         this.wugLayer.destroy();
       }
-      if (this.wugCollection.models.length < 1) {
-        return;
-      }
       this.wugLayer = new OpenLayers.Layer.Vector("Water User Groups", {
         styleMap: this._wugStyleMap,
         displayInLayerSwitcher: false
       });
       wktFormat = new OpenLayers.Format.WKT();
-      max_supply = this.wugCollection.max(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
-      min_supply = this.wugCollection.min(function(m) {
-        return m.get("totalSupply");
-      }).get("totalSupply");
+      if (this.wugCollection.models.length > 1) {
+        max_supply = this.wugCollection.max(function(m) {
+          return m.get("totalSupply");
+        }).get("totalSupply");
+        min_supply = this.wugCollection.min(function(m) {
+          return m.get("totalSupply");
+        }).get("totalSupply");
+      }
       bounds = null;
       wugFeatures = [];
       _ref1 = this.wugCollection.models;

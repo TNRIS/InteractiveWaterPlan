@@ -72,12 +72,11 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
     };
 
     SourceStrategyCollectionView.prototype.showSourceFeature = function() {
-      var bounds, curveFeature, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeat, wugFeature, wugFeatures, wugPoint, wugPointText, _i, _j, _len, _len1, _ref1, _ref2;
+      var bounds, curveFeature, lineFeatures, sourceFeature, sourcePoint, sourcePointText, stratModel, wktFormat, wugFeature, wugPoint, wugPointText, _i, _j, _len, _len1, _ref1, _ref2;
 
       wktFormat = new OpenLayers.Format.WKT();
       bounds = null;
       lineFeatures = [];
-      wugFeatures = this.wugLayer.features;
       if (this.sourceModel.get('wktGeog') == null) {
         return;
       }
@@ -90,14 +89,9 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       delete sourceFeature.attributes.wktMappingPoint;
       this.mapView.transformToWebMerc(sourceFeature.geometry);
       bounds = sourceFeature.geometry.getBounds().clone();
-      _ref1 = this.wugLayer.features;
+      _ref1 = this.strategyCollection.models;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        wugFeature = _ref1[_i];
-        bounds.extend(wugFeature.geometry.getBounds());
-      }
-      _ref2 = this.strategyCollection.models;
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        stratModel = _ref2[_j];
+        stratModel = _ref1[_i];
         if (stratModel.get("recipientEntityType") === "WWP") {
           continue;
         }
@@ -122,9 +116,14 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
       this.mapView.map.setLayerIndex(this.wugLayer, +this.mapView.map.getLayerIndex(this.sourceLayer) + 1);
       this._registerHighlightEvents();
       this._addLayerToControl(this.clickFeatureControl, this.sourceLayer);
+      if ((bounds != null) && (this.wugLayer != null) && this.wugLayer.features.length > 0) {
+        _ref2 = this.wugLayer.features;
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          wugFeature = _ref2[_j];
+          bounds.extend(wugFeature.geometry.getBounds());
+        }
+      }
       if (bounds != null) {
-        wugFeat = this.wugLayer.features[0];
-        bounds.extend(wugFeat.geometry.getBounds());
         this.mapView.zoomToExtent(bounds);
       }
     };

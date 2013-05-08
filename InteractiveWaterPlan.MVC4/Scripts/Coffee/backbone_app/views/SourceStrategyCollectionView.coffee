@@ -98,8 +98,7 @@ define([
             bounds = null
             
             lineFeatures = []
-            wugFeatures = @wugLayer.features
-
+           
             #skip sources with no geog
             if not @sourceModel.get('wktGeog')? then return
 
@@ -116,10 +115,6 @@ define([
             @mapView.transformToWebMerc(sourceFeature.geometry)
     
             bounds = sourceFeature.geometry.getBounds().clone()
-
-            #iterate through wugs, and create line features, and extend the bounds
-            for wugFeature in @wugLayer.features
-                bounds.extend(wugFeature.geometry.getBounds())
 
             #iterate through the strategy models, grab the source points and wug points
             # to make connector lines
@@ -162,11 +157,12 @@ define([
             this._addLayerToControl(@clickFeatureControl, @sourceLayer)
             
             #And zoom the map to include the bounds of the sources as well
-            # as the wugFeatures (should only be one)
-            if bounds?
-                wugFeat = @wugLayer.features[0]
-                bounds.extend(wugFeat.geometry.getBounds())
-                @mapView.zoomToExtent(bounds)
+            # as the wugFeatures 
+            if bounds? and @wugLayer? and @wugLayer.features.length > 0
+                for wugFeature in @wugLayer.features
+                    bounds.extend(wugFeature.geometry.getBounds())
+                
+            @mapView.zoomToExtent(bounds) if bounds?
             
             return
 
