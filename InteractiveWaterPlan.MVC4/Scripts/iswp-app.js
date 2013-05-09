@@ -2323,7 +2323,7 @@ define('views/EntityStrategyCollectionView',['namespace', 'config/WmsThemeConfig
           continue;
         }
         newFeature = wktFormat.read(source.get('wktGeog'));
-        if (newFeature == null) {
+        if ((newFeature == null) || (newFeature.geometry == null)) {
           continue;
         }
         newFeature.attributes = _.clone(source.attributes);
@@ -2671,7 +2671,7 @@ define('views/SourceStrategyCollectionView',['namespace', 'config/WmsThemeConfig
         return;
       }
       sourceFeature = wktFormat.read(this.sourceModel.get('wktGeog'));
-      if (sourceFeature == null) {
+      if ((sourceFeature == null) || (sourceFeature.geometry == null)) {
         return;
       }
       sourceFeature.attributes = _.clone(this.sourceModel.attributes);

@@ -112,7 +112,7 @@ define([
                 if not source.get('wktGeog')? then continue
 
                 newFeature = wktFormat.read(source.get('wktGeog'))
-                if not newFeature? then continue
+                continue if not newFeature? or not newFeature.geometry?
 
                 newFeature.attributes = _.clone(source.attributes)
 
@@ -125,7 +125,6 @@ define([
                         wugFeature.geometry, sourcePoint.geometry)
 
                     lineFeatures.push(curveFeature)
-
 
                 #we don't need to carry around the large wktGeog
                 delete newFeature.attributes.wktGeog

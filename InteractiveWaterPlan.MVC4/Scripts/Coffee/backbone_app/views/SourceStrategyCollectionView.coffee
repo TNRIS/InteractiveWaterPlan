@@ -103,7 +103,8 @@ define([
             if not @sourceModel.get('wktGeog')? then return
 
             sourceFeature = wktFormat.read(@sourceModel.get('wktGeog'))
-            if not sourceFeature? then return
+            if not sourceFeature? or not sourceFeature.geometry?
+                return
 
             sourceFeature.attributes = _.clone(@sourceModel.attributes)
 

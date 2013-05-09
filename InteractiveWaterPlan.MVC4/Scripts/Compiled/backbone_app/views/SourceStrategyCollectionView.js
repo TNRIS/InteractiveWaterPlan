@@ -81,7 +81,7 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         return;
       }
       sourceFeature = wktFormat.read(this.sourceModel.get('wktGeog'));
-      if (sourceFeature == null) {
+      if ((sourceFeature == null) || (sourceFeature.geometry == null)) {
         return;
       }
       sourceFeature.attributes = _.clone(this.sourceModel.attributes);
