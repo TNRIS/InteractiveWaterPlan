@@ -9,11 +9,11 @@ namespace InteractiveWaterPlan.MVC4.Filters
     {
         public override void OnException(HttpActionExecutedContext context)
         {
-            //TODO: replace with generic exception mesage
-            string message = context.Exception.Message;
+            string message = "Sorry, an error has occurred and has been logged.";
 
             // If it is an argument exception, let the user know
-            if (context.Exception is ArgumentException){
+            if (context.Exception is ArgumentException)
+            {
                 message = context.Exception.Message;
             }
 
