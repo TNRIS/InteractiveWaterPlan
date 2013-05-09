@@ -103,7 +103,7 @@ p.indent
 h1.page-title
 {
     font-size: 32px;
-    border-bottom: 1px solid #aa;wa
+    border-bottom: 1px solid #aa;
 }
 
 .container 
@@ -115,6 +115,9 @@ footer
 {
     text-align: center;
     font-size: small;
+    border-top: 1px solid #ccc;
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .btn
