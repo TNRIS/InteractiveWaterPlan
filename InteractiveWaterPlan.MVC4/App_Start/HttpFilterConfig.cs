@@ -11,7 +11,7 @@ namespace InteractiveWaterPlan.MVC4
     {
         public static void RegisterGlobalHttpFilters(HttpFilterCollection filters)
         {
-            //filters.Add(new GenericExceptionFilterAttribute());
+            filters.Add(new GenericExceptionFilterAttribute());
         }
     }
 }
