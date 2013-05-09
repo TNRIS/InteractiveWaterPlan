@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InteractiveWaterPlan.Core;
 using NHibernate;
-using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
-using InteractiveWaterPlan.Data.Utils;
 
 namespace InteractiveWaterPlan.Data
 {
@@ -103,29 +101,18 @@ namespace InteractiveWaterPlan.Data
         }
 
         /// <summary>
-        /// Returns the PlaceFeature for the given placeId.  The Geography of the 
-        /// returned PlaceFeature will be reduced by reduceFactor.
+        /// Returns the PlaceFeature for the given placeId.
         /// </summary>
         /// <param name="placeId"></param>
-        /// <param name="reduceFactor"></param>
         /// <returns></returns>
-        public PlaceFeature GetPlaceFeature(int placeId, int reduceFactor = 400)
+        public PlaceFeature GetPlaceFeature(int placeId)
         {
             var placeFeature = Session.GetNamedQuery("GetPlaceFeature")
                 .SetParameter("var_PlaceID", placeId)
                 .UniqueResult<PlaceFeature>();
-
-            SqlGeography geog = SqlGeography.Parse(placeFeature.WktGeog);
-            SqlGeography reducedGeog = geog.Reduce(reduceFactor);
-
-            //TODO: Would be better to have this reduction done in the Database.
             
-            //Sometimes reducing the geometry of a complex polygon will leave artifacts
-            //such as points and linestrings.  This is a problem for drawing.
-            //So, remove those artifacts if the original was of type MultiPolygon.
-            reducedGeog = DataUtils.CleanUpPolygonGeography(reducedGeog);
-            
-            placeFeature.WktGeog = reducedGeog.ToString();
+            //TODO: Might want DB to reduce the place geographies before
+            // they are sent to the app.
 
             return placeFeature;
         }
@@ -143,10 +130,8 @@ namespace InteractiveWaterPlan.Data
                 .SetParameter("var_PlaceID", placeId)
                 .UniqueResult<PlaceFeature>();
 
-            SqlGeography geog = SqlGeography.Parse(placeFeature.WktGeog);
-            var centerGeog = geog.EnvelopeCenter();
-
-            placeFeature.WktGeog = centerGeog.ToString();
+            //TODO: Might want DB to reduce the place geographies before
+            // they are sent to the app.
 
             return placeFeature;
         }

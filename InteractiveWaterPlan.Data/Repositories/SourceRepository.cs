@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using InteractiveWaterPlan.Core;
-using Microsoft.SqlServer.Types;
 using NHibernate;
-using InteractiveWaterPlan.Data.Utils;
 
 namespace InteractiveWaterPlan.Data
 {
@@ -23,7 +21,7 @@ namespace InteractiveWaterPlan.Data
         /// Returns details for a specific entity
         /// </summary>
         /// <returns></returns>
-        public IList<Source> GetSourcesForEntity(int entityId, string year, int polygonReduceFactor = 200)
+        public IList<Source> GetSourcesForEntity(int entityId, string year)
         {
             var sources = Session.GetNamedQuery("GetSourcesForEntity")
                 .SetParameter("entityId", entityId)
@@ -31,46 +29,16 @@ namespace InteractiveWaterPlan.Data
                 .List<Source>()
                 .ToList();
 
-            foreach (var src in sources)
-            {
-                if (src.WktGeog.StartsWith("POLYGON") || src.WktGeog.StartsWith("MULTIPOLYGON")) //only need to reduce polygons
-                {
-                    SqlGeography geog = SqlGeography.Parse(src.WktGeog);
-                    SqlGeography reducedGeog = geog.Reduce(polygonReduceFactor);
-
-                    //Sometimes reducing the geometry of a complex polygon will leave artifacts
-                    //such as points and linestrings.  This is a problem for drawing.
-                    //So, remove those artifacts if the original was of type MultiPolygon.
-                    reducedGeog = DataUtils.CleanUpPolygonGeography(reducedGeog);
-
-                    src.WktGeog = reducedGeog.ToString();
-                }
-            }
-
             return sources;
         }
 
-        public SourceDetail GetSource(int sourceId, int polygonReduceFactor = 200)
+        public SourceDetail GetSource(int sourceId)
         {
             var source = Session.GetNamedQuery("GetSource")
                 .SetParameter("sourceId", sourceId)
                 .UniqueResult<SourceDetail>();
 
-            if (source != null && source.WktGeog != null && source.WktGeog.Length > 0)
-            {
-                SqlGeography geog = SqlGeography.Parse(source.WktGeog);
-                SqlGeography reducedGeog = geog.Reduce(polygonReduceFactor);
-
-                //Sometimes reducing the geometry of a complex polygon will leave artifacts
-                //such as points and linestrings.  This is a problem for drawing.
-                //So, remove those artifacts if the original was of type MultiPolygon.
-                reducedGeog = DataUtils.CleanUpPolygonGeography(reducedGeog);
-
-                source.WktGeog = reducedGeog.ToString();
-            }
-
             return source;
-
         }
     }
 }
