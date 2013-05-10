@@ -27,6 +27,15 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetSourcesForEntity(entityId, year);
         }
 
+        // api/project/{projectId}/sources?year=20X0
+        public IList<SourceDetail> GetSourcesForProject(int projectId, string year)
+        {
+            if (!CommonConstants.VALID_YEARS.Contains(year))
+                throw new ArgumentException("Specified year is not valid.");
+
+            return _repo.GetSourcesForProject(projectId, year);
+        }
+
         // api/source/feature/{sourceId}
         public SourceDetail GetSource(int sourceId)
         {

@@ -37,6 +37,13 @@
     exec dbo.usp_Select_Sources_By_Entity_Year__tbl_DB12_Sources :entityId, :year
   </sql-query>
 
+  <sql-query name="GetSourcesForProject">
+    <query-param name="projectId" type="int" />
+    <query-param name="year" type="string" />
+    <return class="SourceDetail"/>
+    exec dbo.usp_Select_Sources_By_ProjectID_Year__tbl_DB12_Sources :projectId, :year
+  </sql-query>
+
   <sql-query name="GetSource">
     <query-param name="sourceId" type="int" />
     <return class="SourceDetail"/>

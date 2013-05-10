@@ -1,7 +1,8 @@
 define([
     'namespace'
+    'config/WmsThemeConfig'
 ],
-(namespace) ->
+(namespace, WmsThemeConfig) ->
     class BaseStrategyCollectionView extends Backbone.View
 
         MAX_WUG_RADIUS: 18
@@ -680,6 +681,48 @@ define([
                 fillOpacity: 0
                 strokeOpacity: 0
             )
+        )
+
+        _sourceStyleMap: new OpenLayers.StyleMap(
+            "default" : new OpenLayers.Style( 
+                strokeColor: "${getStrokeColor}"
+                strokeWidth: "${getStrokeWidth}"
+                fillColor: "${getFillColor}"
+                pointRadius: 6
+                fillOpacity: 0.8
+                {   #lookup style attributes from WmsThemeConfig
+                    context:
+                        getStrokeColor: (feature) ->
+                            if feature.attributes.featureType? and 
+                                feature.attributes.featureType == "connector"
+                                    return "#ee9900" #orange
+
+                            style = _.find(WmsThemeConfig.SourceStyles, (style) ->
+                                return style.id == feature.attributes.sourceTypeId
+                            )
+                            if style? then return style.strokeColor
+                            return WmsThemeConfig.SourceStyles[0].strokeColor
+
+                        getStrokeWidth: (feature) ->
+                            style = _.find(WmsThemeConfig.SourceStyles, (style) ->
+                                return style.id == feature.attributes.sourceTypeId
+                            )
+                            if style? then return style.strokeWidth
+                            return WmsThemeConfig.SourceStyles[0].strokeWidth
+
+                        getFillColor: (feature) ->
+                            style = _.find(WmsThemeConfig.SourceStyles, (style) ->
+                                return style.id == feature.attributes.sourceTypeId
+                            )
+                            if style? then return style.fillColor
+                            return WmsThemeConfig.SourceStyles[0].fillColor
+                }
+            )
+            "select" : new OpenLayers.Style(
+                fillColor: "cyan"
+                strokeColor: "blue"
+            )
+
         )
 
 )

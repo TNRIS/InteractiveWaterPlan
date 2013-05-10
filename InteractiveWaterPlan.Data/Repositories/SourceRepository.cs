@@ -32,6 +32,17 @@ namespace InteractiveWaterPlan.Data
             return sources;
         }
 
+        public IList<SourceDetail> GetSourcesForProject(int projectId, string year)
+        {
+            var sources = Session.GetNamedQuery("GetSourcesForProject")
+                .SetParameter("projectId", projectId)
+                .SetParameter("year", year)
+                .List<SourceDetail>()
+                .ToList();
+
+            return sources;
+        }
+
         public SourceDetail GetSource(int sourceId)
         {
             var source = Session.GetNamedQuery("GetSource")

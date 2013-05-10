@@ -2,7 +2,7 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView', 'views/SourceStrategyView', 'scripts/text!templates/sourceStrategyTable.html'], function(namespace, WmsThemeConfig, BaseStrategyCollectionView, SourceStrategyView, tpl) {
+define(['namespace', 'views/BaseStrategyCollectionView', 'views/SourceStrategyView', 'scripts/text!templates/sourceStrategyTable.html'], function(namespace, BaseStrategyCollectionView, SourceStrategyView, tpl) {
   var SourceStrategyCollectionView, _ref;
 
   return SourceStrategyCollectionView = (function(_super) {
@@ -168,59 +168,6 @@ define(['namespace', 'config/WmsThemeConfig', 'views/BaseStrategyCollectionView'
         }
       });
     };
-
-    SourceStrategyCollectionView.prototype._sourceStyleMap = new OpenLayers.StyleMap({
-      "default": new OpenLayers.Style({
-        strokeColor: "${getStrokeColor}",
-        strokeWidth: "${getStrokeWidth}",
-        fillColor: "${getFillColor}",
-        pointRadius: 6,
-        fillOpacity: 0.8
-      }, {
-        context: {
-          getStrokeColor: function(feature) {
-            var style;
-
-            if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
-              return "#ee9900";
-            }
-            style = _.find(WmsThemeConfig.SourceStyles, function(style) {
-              return style.id === feature.attributes.sourceTypeId;
-            });
-            if (style != null) {
-              return style.strokeColor;
-            }
-            return WmsThemeConfig.SourceStyles[0].strokeColor;
-          },
-          getStrokeWidth: function(feature) {
-            var style;
-
-            style = _.find(WmsThemeConfig.SourceStyles, function(style) {
-              return style.id === feature.attributes.sourceTypeId;
-            });
-            if (style != null) {
-              return style.strokeWidth;
-            }
-            return WmsThemeConfig.SourceStyles[0].strokeWidth;
-          },
-          getFillColor: function(feature) {
-            var style;
-
-            style = _.find(WmsThemeConfig.SourceStyles, function(style) {
-              return style.id === feature.attributes.sourceTypeId;
-            });
-            if (style != null) {
-              return style.fillColor;
-            }
-            return WmsThemeConfig.SourceStyles[0].fillColor;
-          }
-        }
-      }),
-      "select": new OpenLayers.Style({
-        fillColor: "cyan",
-        strokeColor: "blue"
-      })
-    });
 
     return SourceStrategyCollectionView;
 

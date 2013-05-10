@@ -230,8 +230,14 @@ namespace InteractiveWaterPlan.MVC4
 
             config.Routes.MapHttpRoute(
                 "GetSourcesForEntityRoute",
-                "api/entity/{entityId}/sources", /* Note: entity route */
+                "api/entity/{entityId}/sources", 
                 new { controller = "Source", action = "GetSourcesForEntity" }
+            );
+
+            config.Routes.MapHttpRoute(
+                "GetSourcesForProjectRoute",
+                "api/project/{projectId}/sources",
+                new { controller = "Source", action = "GetSourcesForProject" }
             );
 
             config.Routes.MapHttpRoute(
