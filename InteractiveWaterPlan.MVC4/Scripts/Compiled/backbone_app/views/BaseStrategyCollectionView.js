@@ -120,12 +120,20 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
         var entity;
 
         entity = _.reduce(group, function(memo, m) {
+          var isRedundantSupply;
+
           memo.entityId = m.get("recipientEntityId");
           memo.name = m.get("recipientEntityName");
           memo.wktGeog = m.get("recipientEntityWktGeog");
           memo.type = m.get("recipientEntityType");
           memo.strategyTypes.push(m.get("typeId"));
-          memo.totalSupply += m.get("supply" + namespace.currYear);
+          isRedundantSupply = m.get('isRedundantSupply');
+          if ((isRedundantSupply != null) && isRedundantSupply !== 'Y') {
+            memo.totalSupply += m.get("supply" + namespace.currYear);
+          }
+          if (isRedundantSupply == null) {
+            memo.totalSupply += m.get("supply" + namespace.currYear);
+          }
           return memo;
         }, {
           totalSupply: 0,
@@ -356,7 +364,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
           return;
         }
         wugFeature = event.feature;
-        popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                        <b>" + wugFeature.attributes.name + "</b><br/>                        Total " + namespace.currYear + " Supply: " + ($.number(wugFeature.attributes.totalSupply)) + " ac-ft/yr                    ", null, true);
+        popup = new OpenLayers.Popup.FramedCloud("wugpopup", wugFeature.geometry.getBounds().getCenterLonLat(), null, "                        <b>" + wugFeature.attributes.name + "</b><br/>                    ", null, true);
         popup.autoSize = true;
         wugFeature.popup = popup;
         _this.mapView.map.addPopup(popup);
@@ -505,7 +513,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       distance = start.distanceTo(finish);
       arcHeight = distance / 4;
       skew = distance / 4;
-      if (start.x > finish.x) {
+      if (start.x > finish.x && start.y > finish.y) {
         skew = -skew;
       }
       numSegments = 50;

@@ -149,7 +149,12 @@ define([
                             memo.strategyTypes.push(m.get("typeId"))
 
                             #add to the calculated total supply
-                            memo.totalSupply += m.get("supply#{namespace.currYear}")
+                            # do not add if isRedundantSupply is Y
+                            isRedundantSupply = m.get('isRedundantSupply') 
+                            if isRedundantSupply? and isRedundantSupply isnt 'Y'
+                                memo.totalSupply += m.get("supply#{namespace.currYear}")
+                            if not isRedundantSupply?
+                                memo.totalSupply += m.get("supply#{namespace.currYear}")
 
                             return memo
                         {
@@ -424,8 +429,7 @@ define([
                     null, #contentSize
                     "
                         <b>#{wugFeature.attributes.name}</b><br/>
-                        Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
-                    ",
+                    ", #    Total #{namespace.currYear} Supply: #{$.number(wugFeature.attributes.totalSupply)} ac-ft/yr
                     null, #anchor
                     true, #closeBox
                     #closeBoxCallback
@@ -587,7 +591,7 @@ define([
 
             skew = distance/4
 
-            if start.x > finish.x
+            if start.x > finish.x and start.y > finish.y
                 skew = -skew
 
             numSegments = 50
