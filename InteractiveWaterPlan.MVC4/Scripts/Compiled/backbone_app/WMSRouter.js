@@ -71,6 +71,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
 
     WMSRouter.prototype.onTableFetchError = function() {
       $('#errorMessage').show();
+      $('.contentContainer').hide();
     };
 
     WMSRouter.prototype.onTableNothingFound = function() {
@@ -119,6 +120,7 @@ define(['namespace', 'views/MapView', 'views/ThemeNavToolbarView', 'views/YearNa
     WMSRouter.prototype.before = {
       '': function() {
         $('#errorMessage').hide();
+        $('.contentContainer').show();
       },
       '^[0-9]{4}/wms': function(year) {
         if (this.currStrategyView != null) {

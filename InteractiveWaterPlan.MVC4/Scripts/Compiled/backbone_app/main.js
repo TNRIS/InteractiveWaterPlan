@@ -55,6 +55,7 @@ $(function() {
       Backbone.history.start();
     }).fail(function() {
       $('#errorMessage').show();
+      $('.contentContainer').hide();
     }).always(function() {
       $('.tableLoading').hide();
     });

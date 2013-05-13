@@ -111,7 +111,7 @@ define([
 
         onTableFetchError: () ->
             $('#errorMessage').show() #TODO: is there are more centralized way to do this?
-            #alert "An error has occurred.  Please reload this page or go back."
+            $('.contentContainer').hide()
             return
 
         onTableNothingFound: () ->
@@ -154,6 +154,7 @@ define([
         before:
             '': () ->
                 $('#errorMessage').hide() #hide in case it was shown
+                $('.contentContainer').show()
                 return
 
             '^[0-9]{4}/wms': (year) ->

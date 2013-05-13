@@ -63,6 +63,7 @@ $(()->
                         return
                 ).fail(() ->
                     $('#errorMessage').show() #TODO: is there a more 'centralized' way to handle this?
+                    $('.contentContainer').hide()
                     return
                 ).always(() ->
                     $('.tableLoading').hide()
