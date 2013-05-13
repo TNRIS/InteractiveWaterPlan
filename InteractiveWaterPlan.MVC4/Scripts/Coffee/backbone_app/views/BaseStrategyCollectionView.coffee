@@ -583,9 +583,7 @@ define([
 
         _createBezierConnector: (start, finish) ->
             # Based on tutorial at http://msdn.microsoft.com/en-us/magazine/hh205758.aspx
-            #if start.y > finish.y
-            #    [start, finish] = [finish, start]
-
+            
             distance = start.distanceTo(finish)
             arcHeight = distance/4
 
