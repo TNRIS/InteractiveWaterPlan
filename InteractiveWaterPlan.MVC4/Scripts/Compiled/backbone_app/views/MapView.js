@@ -128,7 +128,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
     };
 
     MapView.prototype.zoomToExtent = function(bounds) {
-      if (!this.isMapLocked) {
+      if (!this.isMapLocked && (bounds != null)) {
         this.map.zoomToExtent(bounds);
       }
     };

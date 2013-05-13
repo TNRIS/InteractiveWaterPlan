@@ -400,7 +400,7 @@ define('views/MapView',['namespace', 'config/WmsThemeConfig'], function(namespac
     };
 
     MapView.prototype.zoomToExtent = function(bounds) {
-      if (!this.isMapLocked) {
+      if (!this.isMapLocked && (bounds != null)) {
         this.map.zoomToExtent(bounds);
       }
     };
@@ -1358,7 +1358,9 @@ define('views/BaseStrategyCollectionView',['namespace', 'config/WmsThemeConfig']
       this.mapView.map.addLayer(this.wugLayer);
       this._setupWugHighlightContol();
       this._setupWugClickControl();
-      this.mapView.zoomToExtent(bounds);
+      if (bounds != null) {
+        this.mapView.zoomToExtent(bounds);
+      }
     };
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {
@@ -2061,7 +2063,9 @@ define('views/RegionStrategyCollectionView',['namespace', 'views/BaseSelectableR
       });
       this.regionHighlightControl.select(matchedRegion);
       bounds = matchedRegion.geometry.getBounds();
-      this.mapView.zoomToExtent(bounds);
+      if (bounds != null) {
+        this.mapView.zoomToExtent(bounds);
+      }
     };
 
     return RegionStrategyCollectionView;
@@ -3289,6 +3293,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
 
     WMSRouter.prototype.onTableFetchError = function() {
       $('#errorMessage').show();
+      $('.contentContainer').hide();
     };
 
     WMSRouter.prototype.onTableNothingFound = function() {
@@ -3337,6 +3342,7 @@ define('WMSRouter',['namespace', 'views/MapView', 'views/ThemeNavToolbarView', '
     WMSRouter.prototype.before = {
       '': function() {
         $('#errorMessage').hide();
+        $('.contentContainer').show();
       },
       '^[0-9]{4}/wms': function(year) {
         if (this.currStrategyView != null) {
@@ -3577,6 +3583,7 @@ $(function() {
       Backbone.history.start();
     }).fail(function() {
       $('#errorMessage').show();
+      $('.contentContainer').hide();
     }).always(function() {
       $('.tableLoading').hide();
     });

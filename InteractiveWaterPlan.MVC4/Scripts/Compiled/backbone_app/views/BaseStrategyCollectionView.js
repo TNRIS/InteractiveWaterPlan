@@ -283,7 +283,9 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       this.mapView.map.addLayer(this.wugLayer);
       this._setupWugHighlightContol();
       this._setupWugClickControl();
-      this.mapView.zoomToExtent(bounds);
+      if (bounds != null) {
+        this.mapView.zoomToExtent(bounds);
+      }
     };
 
     BaseStrategyCollectionView.prototype.selectWugFeature = function(wugId, projId) {

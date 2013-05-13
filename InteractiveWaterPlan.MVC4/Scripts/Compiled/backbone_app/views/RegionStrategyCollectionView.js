@@ -40,7 +40,9 @@ define(['namespace', 'views/BaseSelectableRegionStrategyView', 'views/RegionStra
       });
       this.regionHighlightControl.select(matchedRegion);
       bounds = matchedRegion.geometry.getBounds();
-      this.mapView.zoomToExtent(bounds);
+      if (bounds != null) {
+        this.mapView.zoomToExtent(bounds);
+      }
     };
 
     return RegionStrategyCollectionView;

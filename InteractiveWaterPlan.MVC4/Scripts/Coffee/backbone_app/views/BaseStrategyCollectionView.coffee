@@ -353,7 +353,7 @@ define([
             #Add control to view entity details view on click
             this._setupWugClickControl()
             
-            @mapView.zoomToExtent(bounds)
+            @mapView.zoomToExtent(bounds) if bounds?
             return
 
         selectWugFeature: (wugId, projId) ->

@@ -40,7 +40,7 @@ define([
             @regionHighlightControl.select(matchedRegion)
 
             bounds = matchedRegion.geometry.getBounds()
-            @mapView.zoomToExtent(bounds)
+            @mapView.zoomToExtent(bounds) if bounds?
 
             return
 )

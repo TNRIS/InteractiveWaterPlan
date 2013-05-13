@@ -136,7 +136,7 @@ define([
 
         zoomToExtent: (bounds) ->
             #only zoom if the mapView is not 'locked'
-            if not @isMapLocked then @map.zoomToExtent(bounds)
+            if not @isMapLocked and bounds? then @map.zoomToExtent(bounds)
             return
 
         showPlaceFeature: (placeFeature) ->
