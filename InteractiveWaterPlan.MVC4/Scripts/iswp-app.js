@@ -1588,7 +1588,7 @@ define('views/BaseStrategyCollectionView',['namespace', 'config/WmsThemeConfig']
       distance = start.distanceTo(finish);
       arcHeight = distance / 4;
       skew = distance / 4;
-      if (start.x > finish.x && start.y > finish.y) {
+      if (start.x > finish.x) {
         skew = -skew;
       }
       numSegments = 50;
