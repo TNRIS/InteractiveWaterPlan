@@ -169,15 +169,35 @@ define('config/WmsThemeConfig',[], function() {
       }, {
         id: 0,
         name: "SURFACE WATER",
-        strokeColor: "white",
-        fillColor: "#1E90FF",
-        strokeWidth: 1
+        "default": {
+          strokeColor: "white",
+          fillColor: "#1E90FF",
+          strokeWidth: 1
+        },
+        LineString: {
+          strokeWidth: 2,
+          strokeColor: "#1E90FF"
+        },
+        MultiLineString: {
+          strokeWidth: 2,
+          strokeColor: "#1E90FF"
+        }
       }, {
         id: 1,
         name: "GROUNDWATER",
-        strokeColor: "white",
-        fillColor: "#4682B4",
-        strokeWidth: 1
+        "default": {
+          strokeColor: "white",
+          fillColor: "#4682B4",
+          strokeWidth: 1
+        },
+        LineString: {
+          strokeWidth: 2,
+          strokeColor: "#4682B4"
+        },
+        MultiLineString: {
+          strokeWidth: 2,
+          strokeColor: "#4682B4"
+        }
       }
     ],
     Layers: [
@@ -1688,7 +1708,7 @@ define('views/BaseStrategyCollectionView',['namespace', 'config/WmsThemeConfig']
       }, {
         context: {
           getStrokeColor: function(feature) {
-            var style;
+            var geom_type, style;
 
             if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
               return "#ee9900";
@@ -1697,29 +1717,41 @@ define('views/BaseStrategyCollectionView',['namespace', 'config/WmsThemeConfig']
               return style.id === feature.attributes.sourceTypeId;
             });
             if (style != null) {
-              return style.strokeColor;
+              geom_type = feature.geometry.CLASS_NAME.split('.')[2];
+              if (style[geom_type] != null) {
+                return style[geom_type].strokeColor;
+              }
+              return style["default"].strokeColor;
             }
             return WmsThemeConfig.SourceStyles[0].strokeColor;
           },
           getStrokeWidth: function(feature) {
-            var style;
+            var geom_type, style;
 
             style = _.find(WmsThemeConfig.SourceStyles, function(style) {
               return style.id === feature.attributes.sourceTypeId;
             });
             if (style != null) {
-              return style.strokeWidth;
+              geom_type = feature.geometry.CLASS_NAME.split('.')[2];
+              if (style[geom_type] != null) {
+                return style[geom_type].strokeWidth;
+              }
+              return style["default"].strokeWidth;
             }
             return WmsThemeConfig.SourceStyles[0].strokeWidth;
           },
           getFillColor: function(feature) {
-            var style;
+            var geom_type, style;
 
             style = _.find(WmsThemeConfig.SourceStyles, function(style) {
               return style.id === feature.attributes.sourceTypeId;
             });
             if (style != null) {
-              return style.fillColor;
+              geom_type = feature.geometry.CLASS_NAME.split('.')[2];
+              if (style[geom_type] != null) {
+                return style[geom_type].fillColor;
+              }
+              return style["default"].fillColor;
             }
             return WmsThemeConfig.SourceStyles[0].fillColor;
           }

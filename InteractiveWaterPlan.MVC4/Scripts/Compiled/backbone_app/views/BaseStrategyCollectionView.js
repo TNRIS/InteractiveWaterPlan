@@ -613,7 +613,7 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
       }, {
         context: {
           getStrokeColor: function(feature) {
-            var style;
+            var geom_type, style;
 
             if ((feature.attributes.featureType != null) && feature.attributes.featureType === "connector") {
               return "#ee9900";
@@ -622,29 +622,41 @@ define(['namespace', 'config/WmsThemeConfig'], function(namespace, WmsThemeConfi
               return style.id === feature.attributes.sourceTypeId;
             });
             if (style != null) {
-              return style.strokeColor;
+              geom_type = feature.geometry.CLASS_NAME.split('.')[2];
+              if (style[geom_type] != null) {
+                return style[geom_type].strokeColor;
+              }
+              return style["default"].strokeColor;
             }
             return WmsThemeConfig.SourceStyles[0].strokeColor;
           },
           getStrokeWidth: function(feature) {
-            var style;
+            var geom_type, style;
 
             style = _.find(WmsThemeConfig.SourceStyles, function(style) {
               return style.id === feature.attributes.sourceTypeId;
             });
             if (style != null) {
-              return style.strokeWidth;
+              geom_type = feature.geometry.CLASS_NAME.split('.')[2];
+              if (style[geom_type] != null) {
+                return style[geom_type].strokeWidth;
+              }
+              return style["default"].strokeWidth;
             }
             return WmsThemeConfig.SourceStyles[0].strokeWidth;
           },
           getFillColor: function(feature) {
-            var style;
+            var geom_type, style;
 
             style = _.find(WmsThemeConfig.SourceStyles, function(style) {
               return style.id === feature.attributes.sourceTypeId;
             });
             if (style != null) {
-              return style.fillColor;
+              geom_type = feature.geometry.CLASS_NAME.split('.')[2];
+              if (style[geom_type] != null) {
+                return style[geom_type].fillColor;
+              }
+              return style["default"].fillColor;
             }
             return WmsThemeConfig.SourceStyles[0].fillColor;
           }

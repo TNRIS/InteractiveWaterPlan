@@ -702,21 +702,40 @@ define([
                             style = _.find(WmsThemeConfig.SourceStyles, (style) ->
                                 return style.id == feature.attributes.sourceTypeId
                             )
-                            if style? then return style.strokeColor
+
+                            if style?
+                                #Get the geometry type
+                                geom_type = feature.geometry.CLASS_NAME.split('.')[2]
+                                if style[geom_type]?
+                                    return style[geom_type].strokeColor
+                                return style.default.strokeColor
+
                             return WmsThemeConfig.SourceStyles[0].strokeColor
 
                         getStrokeWidth: (feature) ->
                             style = _.find(WmsThemeConfig.SourceStyles, (style) ->
                                 return style.id == feature.attributes.sourceTypeId
                             )
-                            if style? then return style.strokeWidth
+                            if style?
+                                #Get the geometry type
+                                geom_type = feature.geometry.CLASS_NAME.split('.')[2]
+                                if style[geom_type]?
+                                    return style[geom_type].strokeWidth
+                                return style.default.strokeWidth
+
                             return WmsThemeConfig.SourceStyles[0].strokeWidth
 
                         getFillColor: (feature) ->
                             style = _.find(WmsThemeConfig.SourceStyles, (style) ->
                                 return style.id == feature.attributes.sourceTypeId
                             )
-                            if style? then return style.fillColor
+                            if style?
+                                #Get the geometry type
+                                geom_type = feature.geometry.CLASS_NAME.split('.')[2]
+                                if style[geom_type]?
+                                    return style[geom_type].fillColor
+                                return style.default.fillColor
+
                             return WmsThemeConfig.SourceStyles[0].fillColor
                 }
             )

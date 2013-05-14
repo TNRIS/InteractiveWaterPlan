@@ -13,15 +13,35 @@ define([], function() {
       }, {
         id: 0,
         name: "SURFACE WATER",
-        strokeColor: "white",
-        fillColor: "#1E90FF",
-        strokeWidth: 1
+        "default": {
+          strokeColor: "white",
+          fillColor: "#1E90FF",
+          strokeWidth: 1
+        },
+        LineString: {
+          strokeWidth: 2,
+          strokeColor: "#1E90FF"
+        },
+        MultiLineString: {
+          strokeWidth: 2,
+          strokeColor: "#1E90FF"
+        }
       }, {
         id: 1,
         name: "GROUNDWATER",
-        strokeColor: "white",
-        fillColor: "#4682B4",
-        strokeWidth: 1
+        "default": {
+          strokeColor: "white",
+          fillColor: "#4682B4",
+          strokeWidth: 1
+        },
+        LineString: {
+          strokeWidth: 2,
+          strokeColor: "#4682B4"
+        },
+        MultiLineString: {
+          strokeWidth: 2,
+          strokeColor: "#4682B4"
+        }
       }
     ],
     Layers: [
