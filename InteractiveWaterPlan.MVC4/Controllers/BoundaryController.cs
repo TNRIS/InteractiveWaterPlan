@@ -2,14 +2,15 @@
 using System.Web.Http;
 using InteractiveWaterPlan.Core;
 using InteractiveWaterPlan.Data;
+using InteractiveWaterPlan.MVC4.Filters;
 
 
 namespace InteractiveWaterPlan.MVC4.Controllers
 {
     [NHibernateSession(CommonConstants.SWP_SESSION_NAME)]
+    [CachedResponse]
     public class BoundaryController : ApiController
     {
-
         private BoundaryRepository _repo;
 
         public BoundaryController()
@@ -72,7 +73,5 @@ namespace InteractiveWaterPlan.MVC4.Controllers
             return _repo.GetSenateDistrictNames();
         }
 
-        
-        
     }
 }

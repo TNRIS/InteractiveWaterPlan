@@ -1,11 +1,11 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using InteractiveWaterPlan.Data;
 using InteractiveWaterPlan.Core;
+using InteractiveWaterPlan.Data;
 using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
 
 namespace InteractiveWaterPlan.MVC4
 {
@@ -22,7 +22,7 @@ namespace InteractiveWaterPlan.MVC4
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HttpFilterConfig.RegisterGlobalHttpFilters(GlobalConfiguration.Configuration.Filters);
-
+           
             List<HibernateConnection> hibernateConnections = new List<HibernateConnection>();
             hibernateConnections.Add(new HibernateConnection(CommonConstants.PLACES_SESSION_NAME, Server.MapPath("~/PlacesDB_Hibernate.config")));
             hibernateConnections.Add(new HibernateConnection(CommonConstants.SWP_SESSION_NAME, Server.MapPath("~/WaterPlanDB_Hibernate.config")));
