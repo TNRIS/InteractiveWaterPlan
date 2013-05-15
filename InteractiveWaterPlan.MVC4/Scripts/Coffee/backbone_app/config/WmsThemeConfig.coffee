@@ -52,7 +52,7 @@
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 viewType: "Regions"
                 service_params:
-                    layers: "4,7" #7 is the annotation layer
+                    layers: "4,7"
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -65,7 +65,7 @@
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 viewType: "Counties"
                 service_params:
-                    layers: "1,13" #13 is the annotation layer
+                    layers: "1,9"
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -78,7 +78,7 @@
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 viewType: "CountyNames"
                 service_params:
-                    layers: "13" #13 is the annotation layer
+                    layers: "9"
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -91,7 +91,7 @@
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 viewType: "SenateDistricts"
                 service_params:
-                    layers: "3,9" #9 is the annotation layer
+                    layers: "3,13"
                     transparent: true
                 layer_params:
                     isBaseLayer: false
@@ -104,7 +104,7 @@
                 url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer"
                 viewType: "HouseDistricts"
                 service_params:
-                    layers: "2,11" #11 is the annotation layer
+                    layers: "2,11"
                     transparent: true
                 layer_params:
                     isBaseLayer: false

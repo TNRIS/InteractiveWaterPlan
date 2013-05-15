@@ -65,7 +65,7 @@ define([], function() {
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         viewType: "Counties",
         service_params: {
-          layers: "1,13",
+          layers: "1,9",
           transparent: true
         },
         layer_params: {
@@ -79,7 +79,7 @@ define([], function() {
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         viewType: "CountyNames",
         service_params: {
-          layers: "13",
+          layers: "9",
           transparent: true
         },
         layer_params: {
@@ -93,7 +93,7 @@ define([], function() {
         url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
         viewType: "SenateDistricts",
         service_params: {
-          layers: "3,9",
+          layers: "3,13",
           transparent: true
         },
         layer_params: {
