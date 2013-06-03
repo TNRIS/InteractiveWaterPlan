@@ -221,6 +221,11 @@ ul.typeahead .catName
     text-align: left !important;
 }
 
+.sourceText
+{
+    color: #419cf5;
+}
+
 i.wugIcon 
 {
     color: Green;

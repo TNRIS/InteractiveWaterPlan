@@ -7,6 +7,8 @@ namespace InteractiveWaterPlan.Core
 {
     public class CountyNetSupply
     {
+        public virtual int RowId { get; set; }
+
         public virtual string CountyName { get; set; }
         public virtual int CountyId { get; set; }
 

@@ -3,10 +3,11 @@
 
   <class name="CountyNetSupply" mutable="false">
     
-    <id name="CountyId">
-      <column name="County_ID"/>
+    <id name="RowId">
+      <column name="SQL_ID"/>
     </id>
 
+    <property column="County_Id" name="CountyId" />
     <property column="County_Name" name="CountyName" />
     
     <property column="Region_Letter" name="RegionLetter" />
