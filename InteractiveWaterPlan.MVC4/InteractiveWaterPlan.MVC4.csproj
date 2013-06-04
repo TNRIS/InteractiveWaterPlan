@@ -180,7 +180,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Content\topojson\swp_basins_s05.json" />
-    <None Include="Scripts\build-iswp-app.bat" />
+    <None Include="Gruntfile.coffee" />
+    <None Include="package.json" />
+    <None Include="Scripts\Coffee\backbone_app\bootstrap_app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNamesCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\HouseNamesCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\RegionFeatureCollection.coffee" />
@@ -228,9 +230,7 @@
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Control.GetFeature.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.JsonVector.js" />
     <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Layer.QuadKey.js" />
-    <Content Include="Scripts\Compiled\OpenLayers\OpenLayers.Popup.Cosmo.js" />
-    <Content Include="Scripts\iswp-app.js" />
-    <Content Include="Scripts\iswp-app.min.js" />
+    <Content Include="Scripts\Release\iswp-app.js" />
     <Content Include="Scripts\lib\knockback-defaults.js" />
     <Content Include="Scripts\lib\knockback-defaults.min.js" />
     <Content Include="Scripts\lib\knockback-formatting.js" />
@@ -477,13 +477,17 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>call coffee.cmd -o $(ProjectDir)Scripts\Compiled\ -bc $(ProjectDir)Scripts\Coffee
-call $(ProjectDir)Scripts\build-iswp-app.bat $(ProjectDir)</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug (
+    cd $(ProjectDir)
+    node_modules\.bin\grunt
+) ELSE (
+    cd $(ProjectDir)
+    node_modules\.bin\grunt release
+)</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>npm install</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -96,7 +96,16 @@ else
 @if (HttpContext.Current.IsDebuggingEnabled)
 {
     @* only load the bootstrap file, and require.js will load modules as needed *@
-    @Scripts.Render("~/Scripts/Compiled/backbone_app/main.js")
+    <script type="text/javascript">
+        require.config({
+          baseUrl: "@Url.Content("~/Scripts/Compiled/backbone_app/")",
+          paths: {
+            "scripts": "../..",
+            "templates": "../../templates"
+          }
+        });
+    </script>
+    @Scripts.Render("~/Scripts/Compiled/backbone_app/bootstrap_app.js")
 }
 else
 {
