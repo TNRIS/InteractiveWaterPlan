@@ -151,6 +151,7 @@ ul.nav > li.nav-label
     -moz-box-shadow: none;
     box-shadow: none;
     border: 2px solid black;
+    z-index: 5000;
 }
 
 .nav-pills .dropdown-menu li.nav-category 
