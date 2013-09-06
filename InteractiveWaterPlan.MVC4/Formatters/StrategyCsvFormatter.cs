@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Web;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using InteractiveWaterPlan.Core;
-using System.IO;
 using System.Reflection;
-using System.Text;
+using System.Web;
+using InteractiveWaterPlan.Core;
 
 namespace InteractiveWaterPlan.MVC4.Formatters
 {
