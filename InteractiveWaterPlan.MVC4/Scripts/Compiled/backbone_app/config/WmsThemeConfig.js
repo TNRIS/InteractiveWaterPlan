@@ -46,7 +46,7 @@ define([], function() {
       {
         name: "Regional Water Planning Areas",
         type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        url: "http://services.tnris.org/ags/services/swp/swp/MapServer/WMSServer",
         viewType: "Regions",
         service_params: {
           layers: "4,7",
@@ -60,7 +60,7 @@ define([], function() {
       }, {
         name: "Texas Counties",
         type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        url: "http://services.tnris.org/ags/services/swp/swp/MapServer/WMSServer",
         viewType: "Counties",
         service_params: {
           layers: "1,9",
@@ -74,7 +74,7 @@ define([], function() {
       }, {
         name: "Texas County Names",
         type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        url: "http://services.tnris.org/ags/services/swp/swp/MapServer/WMSServer",
         viewType: "CountyNames",
         service_params: {
           layers: "9",
@@ -88,7 +88,7 @@ define([], function() {
       }, {
         name: "Texas Senate Districts (2011)",
         type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        url: "http://services.tnris.org/ags/services/swp/swp/MapServer/WMSServer",
         viewType: "SenateDistricts",
         service_params: {
           layers: "3,13",
@@ -102,23 +102,10 @@ define([], function() {
       }, {
         name: "Texas House Districts (2011)",
         type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/swp/MapServer/WMSServer",
+        url: "http://services.tnris.org/ags/services/swp/swp/MapServer/WMSServer",
         viewType: "HouseDistricts",
         service_params: {
           layers: "2,11",
-          transparent: true
-        },
-        layer_params: {
-          isBaseLayer: false,
-          visibility: false,
-          opacity: 0.6
-        }
-      }, {
-        name: "Water System Service Areas",
-        type: "WMS",
-        url: "http://services.tnris.org/arcgis/services/swp/SWP_Boundaries/MapServer/WMSServer",
-        service_params: {
-          layers: "0",
           transparent: true
         },
         layer_params: {

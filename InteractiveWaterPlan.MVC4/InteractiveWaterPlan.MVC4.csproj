@@ -18,6 +18,10 @@
     <UseIISExpress>false</UseIISExpress>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -182,6 +186,9 @@
     <None Include="Content\topojson\swp_basins_s05.json" />
     <None Include="Gruntfile.coffee" />
     <None Include="package.json" />
+    <None Include="Properties\PublishProfiles\Dev2.pubxml" />
+    <None Include="Properties\PublishProfiles\DevPublish.pubxml" />
+    <None Include="Properties\PublishProfiles\Staging %28Pippen%29.pubxml" />
     <None Include="Scripts\Coffee\backbone_app\bootstrap_app.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\CountyNamesCollection.coffee" />
     <None Include="Scripts\Coffee\backbone_app\collections\HouseNamesCollection.coffee" />
