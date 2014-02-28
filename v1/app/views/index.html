@@ -13,6 +13,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(app) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/leaflet-dist/leaflet.css">
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -51,6 +52,9 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/leaflet-dist/leaflet.js"></script>
+    <script src="bower_components/Leaflet.MakiMarkers/Leaflet.MakiMarkers.js"></script>
+    <script src="bower_components/lodash/dist/lodash.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -58,6 +62,9 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
+        <script src="scripts/controllers/map.js"></script>
+        <script src="scripts/controllers/table.js"></script>
+        <script src="scripts/directives/mainMap.js"></script>
         <!-- endbuild -->
 </body>
 </html>
