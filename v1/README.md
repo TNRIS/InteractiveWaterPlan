@@ -22,15 +22,15 @@ See [here](https://github.com/yeoman/generator-angular#generators) for generator
 
 Available generators:
 
-* angular-fullstack:controller
-* angular-fullstack:directive
-* angular-fullstack:filter
-* angular-fullstack:route
-* angular-fullstack:service
-* angular-fullstack:provider
-* angular-fullstack:factory
-* angular-fullstack:value
-* angular-fullstack:constant
-* angular-fullstack:decorator
-* angular-fullstack:view
+* `angular-fullstack:controller`
+* `angular-fullstack:directive`
+* `angular-fullstack:filter`
+* `angular-fullstack:route`
+* `angular-fullstack:service`
+* `angular-fullstack:provider`
+* `angular-fullstack:factory`
+* `angular-fullstack:value`
+* `angular-fullstack:constant`
+* `angular-fullstack:decorator`
+* `angular-fullstack:view`
 
