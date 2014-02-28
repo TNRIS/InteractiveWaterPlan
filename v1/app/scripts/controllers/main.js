@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('v1App')
+angular.module('iswpApp')
   .controller('MainCtrl', function ($scope, $http) {
     $http.get('/api/awesomeThings').success(function(awesomeThings) {
       $scope.awesomeThings = awesomeThings;

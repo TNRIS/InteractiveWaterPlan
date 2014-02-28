@@ -3,7 +3,7 @@
 describe('Controller: MainCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('v1App'));
+  beforeEach(module('iswpApp'));
 
   var MainCtrl,
     scope,
