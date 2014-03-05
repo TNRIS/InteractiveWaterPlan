@@ -1,14 +1,25 @@
 <div ng-include="'partials/navbar'"></div>
 
-<div ng-controller="MapCtrl">
-  <div main-map id="main-map"></div>
+<div>
+  <ul class="theme-nav nav nav-pills">
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        Water Needs <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="#">Municipal</a></li>
+        <li><a href="#">Manufacturing</a></li>
+        <li><a href="#">Mining</a></li>
+        <li><a href="#">Steam Electric</a></li>
+        <li><a href="#">Livestock</a></li>
+        <li><a href="#">Irrigation</a></li>
+      </ul>
+    </li>
+  </ul>
 </div>
 
-<div class="row marketing">
-  <div ng-repeat="thing in awesomeThings">
-      <h4>{{thing.name}}</h4>
-      <p>{{thing.info}}</p>
-  </div>
+<div ng-controller="MapCtrl">
+  <div main-map id="main-map"></div>
 </div>
 
 <div class="footer">
