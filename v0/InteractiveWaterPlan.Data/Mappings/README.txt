@@ -1,1 +1,0 @@
-﻿Remember to set all hbm.xml files as Embedded Resource
