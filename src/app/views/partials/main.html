@@ -1,18 +1,15 @@
 <div ng-include="'partials/navbar'"></div>
 
-<div>
+<div ng-controller="ThemeCtrl">
   <ul class="theme-nav nav nav-pills">
     <li class="dropdown">
-      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+      <a class="dropdown-toggle" href="#">
         Water Needs <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="#">Municipal</a></li>
-        <li><a href="#">Manufacturing</a></li>
-        <li><a href="#">Mining</a></li>
-        <li><a href="#">Steam Electric</a></li>
-        <li><a href="#">Livestock</a></li>
-        <li><a href="#">Irrigation</a></li>
+        <li ng-repeat="theme in needsThemes">
+          <a href="#">{{theme.name}}</a>
+        </li>
       </ul>
     </li>
   </ul>
@@ -20,6 +17,15 @@
 
 <div ng-controller="MapCtrl">
   <div main-map id="main-map"></div>
+</div>
+
+<div ng-controller="YearSelectCtrl">
+  <span class="decade-label">DECADE:</span>
+  <ul class="year-nav nav nav-pills">
+    <li ng-repeat="decade in decades" ng-class="{'active': decade == selectedDecade}">
+      <a href="#">{{decade}}</a>
+    </li>
+  </li>
 </div>
 
 <div class="footer">
