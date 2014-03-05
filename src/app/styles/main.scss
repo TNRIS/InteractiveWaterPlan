@@ -1,7 +1,5 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
-/*@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';*/
-
 @import 'bootstrap';
 
 .browsehappy {
@@ -15,6 +13,10 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 body {
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.dropdown-menu {
+  z-index: 1001;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
