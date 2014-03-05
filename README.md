@@ -2,9 +2,9 @@
 
 Generated with the [angular-fullstack](https://github.com/DaftMonk/generator-angular-fullstack) Yeoman generator.
 
-Client files are in app/
+Client files are in `src/app/`
 
-Backend files are in lib/
+Backend files are in `src/lib/`
 
 ## Building
 
