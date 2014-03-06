@@ -462,7 +462,7 @@ module.exports = function (grunt) {
     if (target === 'debug') {
       return grunt.task.run([
         'clean:server',
-        'bower-install',
+        // 'bower-install',
         'concurrent:server',
         'autoprefixer',
         'concurrent:debug'
@@ -471,7 +471,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'bower-install',
+      // 'bower-install',
       'concurrent:server',
       'autoprefixer',
       'express:dev',
@@ -514,7 +514,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'bower-install',
+    // 'bower-install',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
