@@ -6,3 +6,5 @@ app/bower_components
 heroku
 /views
 dist
+*.pyc
+scripts/db_config.py
