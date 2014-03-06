@@ -14,6 +14,10 @@ angular.module('iswpApp', [
         templateUrl: 'partials/main',
         controller: 'MainCtrl'
       })
+      .when('/:theme/:year/:subtheme?/:area?', {
+        templateUrl: 'partials/main',
+        controller: 'MainCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
