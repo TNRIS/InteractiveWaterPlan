@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('iswpApp', [
+  'iswpApp.config',
   'ngCookies',
   'ngResource',
   'ngSanitize',
