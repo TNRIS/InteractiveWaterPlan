@@ -76,7 +76,7 @@ module.exports = function (grunt) {
           '{.tmp,<%= yeoman.app %>}/scripts/{,*//*}*.js',
           '<%= yeoman.app %>/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
         ],
-      
+
         options: {
           livereload: true
         }
@@ -130,16 +130,6 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      heroku: {
-        files: [{
-          dot: true,
-          src: [
-            'heroku/*',
-            '!heroku/.git*',
-            '!heroku/Procfile'
-          ]
-        }]
-      },
       server: '.tmp'
     },
 
@@ -185,7 +175,7 @@ module.exports = function (grunt) {
             nodemon.on('config:update', function () {
               setTimeout(function () {
                 require('open')('http://localhost:8080/debug?port=5858');
-              }, 500);              
+              }, 500);
             });
           }
         }
@@ -353,6 +343,12 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }, {
           expand: true,
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.dist %>/public/styles/images',
+          flatten: true,
+          src: ['bower_components/**/*.{png,jpg,jpeg,gif,webp,svg}']
+        }, {
+          expand: true,
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
@@ -466,7 +462,7 @@ module.exports = function (grunt) {
     if (target === 'debug') {
       return grunt.task.run([
         'clean:server',
-        'bower-install',
+        // 'bower-install',
         'concurrent:server',
         'autoprefixer',
         'concurrent:debug'
@@ -475,7 +471,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'bower-install',
+      // 'bower-install',
       'concurrent:server',
       'autoprefixer',
       'express:dev',
@@ -514,28 +510,23 @@ module.exports = function (grunt) {
       'autoprefixer',
       'karma'
     ]);
-  });  
+  });
 
   grunt.registerTask('build', [
     'clean:dist',
-    'bower-install',
+    // 'bower-install',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
     'concat',
     'ngmin',
     'copy:dist',
-    'cdnify',
+    // 'cdnify',
     'cssmin',
     'uglify',
     'rev',
     'usemin'
   ]);
-
-  grunt.registerTask('heroku', function () {
-    grunt.log.warn('The `heroku` task has been deprecated. Use `grunt build` to build for deployment.');
-    grunt.task.run(['build']);
-  });
 
   grunt.registerTask('default', [
     'newer:jshint',

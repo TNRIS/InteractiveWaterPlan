@@ -1,7 +1,5 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
-/*@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';*/
-
 @import 'bootstrap';
 
 .browsehappy {
@@ -17,9 +15,12 @@ body {
   padding-bottom: 20px;
 }
 
+.dropdown-menu {
+  z-index: 1001;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
-.marketing,
 .footer {
   padding-left: 15px;
   padding-right: 15px;
@@ -45,13 +46,14 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     padding-bottom: 19px;
-    font-size: 24px
+    font-size: 18px
   }
 }
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
+  padding-top: 10px;
+  margin-top: 20px;
   color: #777;
   border-top: 1px solid #e5e5e5;
   text-align: center;
@@ -61,34 +63,56 @@ body {
   margin: 30px 0;
 }
 
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.jumbotron .btn {
-  font-size: 21px;
-  padding: 14px 24px;
-}
-
 
 #main-map {
   height: 200px;
+}
+
+.leaflet-control-layers label {
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+.theme-nav {
+  margin-bottom: 8px;
+}
+
+.year-nav {
+  margin-top: 8px;
+
+  > li > a {
+    padding: 6px 10px;
+  }
+}
+
+.decade-label {
+  float: left;
+  height: 30px;
+  padding-top: 6px;
+  padding-right: 10px;
+}
+
+.year-select-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.table-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     /* Remove the padding we set earlier */
     .header,
-    .marketing,
     .footer {
         padding-left: 0;
         padding-right: 0;
     }
     /* Space out the masthead */
     .header {
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
 
     #main-map {

@@ -24,3 +24,11 @@ exports.awesomeThings = function(req, res) {
     }
   ]);
 };
+
+exports.regions = function(req, res) {
+  res.json(["Travis", "Zavala"]);
+};
+
+exports.counties = function(req, res) {
+  res.json(["Travis", "Zavala"]);
+};

@@ -1,17 +1,38 @@
-<div ng-include="'partials/navbar'"></div>
+
+<div ng-controller="ThemeCtrl">
+  <ul class="theme-nav nav nav-pills">
+    <li class="dropdown">
+      <a class="dropdown-toggle" href="#">
+        Water Needs <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li ng-repeat="theme in needsThemes">
+          <a href="#">{{theme.name}}</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
 
 <div ng-controller="MapCtrl">
   <div main-map id="main-map"></div>
 </div>
 
-<div class="row marketing">
-  <div ng-repeat="thing in awesomeThings">
-      <h4>{{thing.name}}</h4>
-      <p>{{thing.info}}</p>
-  </div>
+<div ng-controller="YearSelectCtrl" class="year-select-container">
+  <span class="decade-label">DECADE:</span>
+  <ul class="year-nav nav nav-pills">
+    <li ng-repeat="decade in decades" ng-class="{'active': decade == selectedDecade}">
+      <a href="#">{{decade}}</a>
+    </li>
+  </li>
 </div>
 
-<div class="footer">
-  <p>This website is brought to you by the <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a></p>
-  <p>Site Policies | Texas Online | Homeland Security | TRAIL | Contact Us</p>
+<div class="area-select-container">
+  <p>Select an area or water user group from the following dropdowns</p>
+</div>
+
+<div class="table-container">
+  <h3>Results Heading</h3>
+  <p>Table description</p>
+  <table></table>
 </div>
