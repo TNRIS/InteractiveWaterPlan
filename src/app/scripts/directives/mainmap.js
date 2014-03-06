@@ -8,28 +8,28 @@ angular.module('iswpApp')
       link: function postLink(scope, element, attrs) {
         var map = L.map(element[0], {
             center: [31.780548049237414, -99.02290684869513],
-            zoom: 5
+            zoom: 5,
+            attributionControl: false
           });
+
+        L.control.attribution({prefix: false}).addTo(map);
 
         // Base Layers
         var esriGray = L.esri.basemapLayer("Gray");
 
         var mqOpen = L.tileLayer(
-          'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
-          name: 'MapQuest Open',
+          'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
           subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
           attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,' +
               '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.' +
-              'Tiles courtesy MapQuest <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
+              'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
         });
 
         var mqAerial = L.tileLayer(
-          'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
-          name: 'MapQuest Open',
+          'http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png', {
           subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
-          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,' +
-              '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.' +
-              'Tiles courtesy MapQuest <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
+          attribution: 'Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency. ' +
+              'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
         });
 
         var bingRoad = L.bingLayer(BING_API_KEY, {type: 'Road'});
@@ -87,6 +87,8 @@ angular.module('iswpApp')
         //Start with esriGray and planningAreas selected
         esriGray.addTo(map);
         planningAreas.addTo(map);
+
+        //Add controls
         L.control.layers(baseMaps, overlayLayers).addTo(map);
       }
     };

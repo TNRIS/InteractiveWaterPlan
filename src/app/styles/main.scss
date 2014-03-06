@@ -46,13 +46,14 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     padding-bottom: 19px;
-    font-size: 24px
+    font-size: 18px
   }
 }
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
+  padding-top: 10px;
+  margin-top: 20px;
   color: #777;
   border-top: 1px solid #e5e5e5;
   text-align: center;
@@ -82,7 +83,7 @@ body {
     }
     /* Space out the masthead */
     .header {
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
 
     #main-map {
