@@ -73,6 +73,25 @@ body {
   font-weight: normal;
 }
 
+.theme-nav {
+  margin-bottom: 8px;
+}
+
+.year-nav {
+  margin-top: 8px;
+
+  > li > a {
+    padding: 6px 10px;
+  }
+}
+
+.decade-label {
+  float: left;
+  height: 30px;
+  padding-top: 6px;
+  padding-right: 10px;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     /* Remove the padding we set earlier */
@@ -89,20 +108,4 @@ body {
     #main-map {
       height: 400px;
     }
-
-    .theme-nav {
-      margin-bottom: 8px;
-    }
-
-    .year-nav {
-      margin-top: 8px;
-    }
-
-    .decade-label {
-      float: left;
-      height: 30px;
-      padding-top: 10px;
-      padding-right: 10px;
-    }
-
 }
