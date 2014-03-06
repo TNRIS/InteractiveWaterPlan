@@ -8,6 +8,10 @@ var express = require('express'),
  * Express configuration
  */
 module.exports = function(app) {
+  // app.locals({
+  //   title: 'This is a title'
+  // });
+
   app.configure('development', function(){
     app.use(require('connect-livereload')());
 
