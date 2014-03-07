@@ -12,8 +12,16 @@ var places = require('./controllers/api/places'),
  */
 module.exports = function(app) {
 
-  // Server API Routes
   var apiPre = '/api/v1/';
+
+  // Enable CORS
+  app.all(apiPre + '*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+  });
+
+  // Server API Routes
   app.get(apiPre + 'regions', places.getRegionList);
   app.get(apiPre + 'counties', places.getCountyList);
   app.get(apiPre + 'regions.topojson', places.getRegionTopoJson);
