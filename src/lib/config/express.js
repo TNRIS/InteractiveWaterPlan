@@ -2,6 +2,7 @@
 
 var express = require('express'),
     path = require('path'),
+    validator = require('express-validator'),
     config = require('./config');
 
 /**
@@ -43,6 +44,9 @@ module.exports = function(app) {
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
+    app.use(express.compress());
+    // app.use(express.bodyParser());
+    app.use(validator());
     // Router (only error handlers should come after this)
     app.use(app.router);
   });
