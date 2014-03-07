@@ -41,11 +41,9 @@ module.exports = function(app) {
     app.engine('html', require('ejs').renderFile);
     app.set('view engine', 'html');
     app.use(express.logger('dev'));
-    app.use(express.json());
-    app.use(express.urlencoded());
-    app.use(express.methodOverride());
     app.use(express.compress());
-    // app.use(express.bodyParser());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
     app.use(validator());
     // Router (only error handlers should come after this)
     app.use(app.router);
