@@ -1,12 +1,14 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('MainCtrl', function ($scope, $http, $routeParams, ROUTE_DEFAULTS) {
+  .controller('MainCtrl',
+    function ($scope, $http, $routeParams, PlacesService, NeedsService) {
 
-    var routeParams = angular.extend({}, ROUTE_DEFAULTS, $routeParams);
+      PlacesService.fetch();
+      NeedsService.fetch();
 
-    console.log("routeParams", routeParams);
+      console.log("MainCtrl $routeParams", $routeParams);
 
-    return;
-
-  });
+      return;
+    }
+  );

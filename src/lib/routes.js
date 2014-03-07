@@ -22,9 +22,9 @@ module.exports = function(app) {
   });
 
   // Server API Routes
-  app.get(apiPre + 'regions', places.getRegionList);
-  app.get(apiPre + 'counties', places.getCountyList);
-  app.get(apiPre + 'regions.topojson', places.getRegionTopoJson);
+  app.get(apiPre + 'places/regions', places.getRegionList);
+  app.get(apiPre + 'places/counties', places.getCountyList);
+  app.get(apiPre + 'places/regions.topojson', places.getRegionTopoJson);
 
   app.get(apiPre + 'needs', needs.getAllNeeds);
   app.get(apiPre + 'needs/region/:region', needs.getNeedsForRegion);

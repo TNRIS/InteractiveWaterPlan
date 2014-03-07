@@ -7,11 +7,11 @@ var should = require('should'),
 
 var apiPath = '/api/v1/';
 
-describe('GET /regions', function() {
+describe('GET places/regions', function() {
 
   it('Should respond with array of regions', function(done) {
     request(app)
-      .get(apiPath + 'regions')
+      .get(apiPath + 'places/regions')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
@@ -25,11 +25,11 @@ describe('GET /regions', function() {
 });
 
 
-describe('GET /regions.topojson', function() {
+describe('GET places/regions.topojson', function() {
 
   it('Should respond with TopoJSON of regions', function(done) {
     request(app)
-      .get(apiPath + 'regions.topojson')
+      .get(apiPath + 'places/regions.topojson')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
@@ -48,11 +48,11 @@ describe('GET /regions.topojson', function() {
 
 });
 
-describe('GET /counties', function() {
+describe('GET places/counties', function() {
 
   it('Should respond with array of counties', function(done) {
     request(app)
-      .get(apiPath + 'counties')
+      .get(apiPath + 'places/counties')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {

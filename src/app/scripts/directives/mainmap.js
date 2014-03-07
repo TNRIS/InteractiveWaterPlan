@@ -1,19 +1,11 @@
+/* global omnivore */
 'use strict';
 
 angular.module('iswpApp')
-  .directive('mainMap', function ($log, BING_API_KEY, SWP_WMS_URL) {
-    return {
-      template: '<div></div>',
-      restrict: 'AE',
-      link: function postLink(scope, element, attrs) {
-        var map = L.map(element[0], {
-            center: [31.780548049237414, -99.02290684869513],
-            zoom: 5,
-            attributionControl: false
-          });
+  .directive('mainMap',
+    function ($log, PlacesService, BING_API_KEY, SWP_WMS_URL) {
 
-        L.control.attribution({prefix: false}).addTo(map);
-
+      function _setupLayers(map) {
         // Base Layers
         var esriGray = L.esri.basemapLayer("Gray");
 
@@ -91,5 +83,33 @@ angular.module('iswpApp')
         //Add controls
         L.control.layers(baseMaps, overlayLayers).addTo(map);
       }
-    };
-  });
+
+      return {
+        template: '<div></div>',
+        restrict: 'AE',
+        link: function postLink(scope, element, attrs) {
+          var map = L.map(element[0], {
+              center: [31.780548049237414, -99.02290684869513],
+              zoom: 5,
+              attributionControl: false
+            });
+
+          L.control.attribution({prefix: false}).addTo(map);
+
+          _setupLayers(map);
+
+          scope.regionsTopo = PlacesService.regions.topojson;
+          var unbind = scope.$watch('regionsTopo', function(){
+            if (_.isEmpty(scope.regionsTopo)) {
+              return;
+            }
+
+            var layer = omnivore.topojson.parse(scope.regionsTopo);
+            console.log(layer);
+            L.geoJson(layer).addTo(map);
+            unbind();
+          }, true);
+        }
+      };
+    }
+  );

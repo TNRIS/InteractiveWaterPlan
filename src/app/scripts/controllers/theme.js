@@ -5,6 +5,9 @@ angular.module('iswpApp')
 
     $scope.needsThemes = [
       {
+        name: 'View All'
+      },
+      {
         name: 'Municipal'
       },
       {
@@ -14,7 +17,7 @@ angular.module('iswpApp')
         name: 'Mining'
       },
       {
-        name: 'Steam Electric'
+        name: 'Steam-Electric'
       },
       {
         name: 'Livestock'

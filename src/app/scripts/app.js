@@ -10,16 +10,14 @@ angular.module('iswpApp', [
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
-      .when('/', {
+      .when('/needs/:year/:subtheme?/:area?', {
         templateUrl: 'partials/main',
         controller: 'MainCtrl'
       })
-      .when('/:theme/:year/:subtheme?/:area?', {
-        templateUrl: 'partials/main',
-        controller: 'MainCtrl'
-      })
+      //TODO: Other themes (demands, strategies, population, etc)
       .otherwise({
-        redirectTo: '/'
+        // default to needs theme for 2010 decade
+        redirectTo: '/needs/2010'
       });
 
     $locationProvider.html5Mode(false);
