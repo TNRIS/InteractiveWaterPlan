@@ -1,7 +1,8 @@
 'use strict';
 
-var api = require('./controllers/api'),
-about = require('./controllers/about'),
+var places = require('./controllers/api/places'),
+    needs = require('./controllers/api/needs'),
+    about = require('./controllers/about'),
     index = require('./controllers');
 
 /**
@@ -11,9 +12,14 @@ module.exports = function(app) {
 
   // Server API Routes
   var apiPre = '/api/v1/';
-  app.get(apiPre + 'awesomeThings', api.awesomeThings);
-  app.get(apiPre + 'regions', api.regions);
-  app.get(apiPre + 'counties', api.counties);
+  app.get(apiPre + 'regions', places.getRegionList);
+  app.get(apiPre + 'counties', places.getCountyList);
+  app.get(apiPre + 'regions.topojson', places.getRegionTopoJson);
+
+  app.get(apiPre + 'needs', needs.getAllNeeds);
+  app.get(apiPre + 'needs/region/:region', needs.getNeedsForRegion);
+  app.get(apiPre + 'needs/county/:county', needs.getNeedsForCounty);
+  app.get(apiPre + 'needs/entity/:entityId', needs.getNeedsForEntity);
 
   // All undefined api routes should return a 404
   app.get('/api/*', function(req, res) {

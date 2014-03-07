@@ -349,6 +349,12 @@ module.exports = function (grunt) {
           src: ['bower_components/**/*.{png,jpg,jpeg,gif,webp,svg}']
         }, {
           expand: true,
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.dist %>/public/fonts',
+          flatten: true,
+          src: ['bower_components/**/*.{eot,svg,ttf,woff,otf}']
+        }, {
+          expand: true,
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
