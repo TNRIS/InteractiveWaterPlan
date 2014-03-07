@@ -14,6 +14,7 @@
     <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />
     <!-- build:css(app) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -21,11 +22,7 @@
     <!-- endbuild -->
   </head>
   <body ng-app="iswpApp">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
 
-    <!-- Add your site or application content here -->
     <div class="container">
         <div class="header">
             <ul class="nav nav-pills pull-right">
@@ -39,6 +36,29 @@
             <h1>Texas State Water Plan 2012</h1>
             <h2 class="text-muted">Texas Water Development Board</h2>
         </div>
+
+        <div class="callout callout-warning">
+            <h4><i class="fa fa-warning"></i> Warning!</h4>
+            <p>
+                The site is currently in beta testing and is undergoing QA/QC. In some cases, the graphic representation and nomenclature may not reflect a complete and accurate portrayal of actual State Water Plan data.
+            </p>
+            <p>
+                For definitive data see the <a href="http://www.twdb.state.tx.us/waterplanning/swp/2012/" title="2012 State Water Plan">2012 State Water Plan</a> or <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/" title="2011 Regional Water Plans">2011 Regional Water Plans</a>.
+            </p>
+        </div>
+
+        <noscript>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="callout callout-danger">
+                        <h4><i class="fa fa-warning"></i> Error: Javascript is Required!</h4>
+                        Javascript is required to use the Interactive State Water Plan Application. <br />
+                        Please enable Javascript in your browser, or visit <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
+                        to view Regional Water Plan data in the traditional viewer.
+                    </div>
+                </div>
+            </div>
+        </noscript>
 
         <div ng-view=""></div>
 
