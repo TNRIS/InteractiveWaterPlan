@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($log, RegionService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($location, $routeParams, RegionService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -104,7 +104,39 @@ angular.module('iswpApp')
           if (scope.showRegions) {
             var regionFeats = omnivore.topojson.parse(
               ISWP_VARS.regionsTopo);
-            L.geoJson(regionFeats).addTo(map);
+
+            var regionLayer = L.geoJson(regionFeats, {
+              style: {
+                stroke: false,
+                color: '#ffcc00',
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0
+              },
+              onEachFeature: function (feature, layer) {
+                layer.on('click', function () {
+                  //TODO: Use current subtheme
+                  $location.path('/needs/' +
+                    $routeParams.year + '/' +
+                    layer.feature.properties.region);
+                  scope.$apply();
+                });
+                
+                layer.on('mouseover', function () {
+                  layer.setStyle({
+                    stroke: true
+                  });
+                });
+
+                layer.on('mouseout', function () {
+                  layer.setStyle({
+                    stroke: false
+                  });
+                });
+              }
+            });
+
+            regionLayer.addTo(map);
           }
         }
       };
