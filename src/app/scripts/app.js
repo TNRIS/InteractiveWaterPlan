@@ -12,7 +12,8 @@ angular.module('iswpApp', [
     $routeProvider
       .when('/needs/:year/:area/:subtheme?', {
         templateUrl: 'partials/main',
-        controller: 'NeedsCtrl'
+        controller: 'NeedsCtrl',
+        reloadOnSearch: false
       })
       //TODO: Other themes (demands, strategies, population, etc)
       .otherwise({

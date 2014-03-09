@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($location, $routeParams, RegionService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($location, $routeParams, $timeout, RegionService, SearchParamService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -84,58 +84,84 @@ angular.module('iswpApp')
         L.control.layers(baseMaps, overlayLayers).addTo(map);
       }
 
+      function _setupRegionLayer(scope) {
+        var regionFeats = omnivore.topojson.parse(
+          ISWP_VARS.regionsTopo);
+
+        var regionLayer = L.geoJson(regionFeats, {
+          style: {
+            stroke: false,
+            color: '#ffcc00',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0
+          },
+          onEachFeature: function (feature, layer) {
+            layer.on('click', function () {
+              //TODO: Use current subtheme
+              $location.path('/needs/' +
+                $routeParams.year + '/' +
+                layer.feature.properties.region);
+              scope.$apply();
+            });
+            
+            layer.on('mouseover', function () {
+              layer.setStyle({
+                stroke: true
+              });
+            });
+
+            layer.on('mouseout', function () {
+              layer.setStyle({
+                stroke: false
+              });
+            });
+          }
+        });
+
+        return regionLayer;
+      }
+
       return {
         template: '<div></div>',
         restrict: 'AE',
         scope: {
-          showRegions: '='
+          showRegions: '=',
+          zoom: '=',
+          centerLat: '=',
+          centerLng: '='
         },
         link: function postLink(scope, element, attrs) {
           var map = L.map(element[0], {
-              center: [31.780548049237414, -99.02290684869513],
-              zoom: 5,
+              center: [scope.centerLat, scope.centerLng],
+              zoom: scope.zoom,
               attributionControl: false
             });
 
+          //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
+
+          var updateHash = _.debounce(function() {
+            var center = map.getCenter(),
+                zoom = map.getZoom(),
+                precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
+                latLng = ''+[center.lat.toFixed(precision), 
+                  center.lng.toFixed(precision)];
+
+            $location.search({
+              zoom: zoom,
+              center: latLng
+            });
+
+            scope.$apply();
+          }, 250, {trailing: true});
+
+          map.on('moveend', updateHash);
 
           _setupLayers(map);
 
           if (scope.showRegions) {
-            var regionFeats = omnivore.topojson.parse(
-              ISWP_VARS.regionsTopo);
-
-            var regionLayer = L.geoJson(regionFeats, {
-              style: {
-                stroke: false,
-                color: '#ffcc00',
-                weight: 3,
-                opacity: 1,
-                fillOpacity: 0
-              },
-              onEachFeature: function (feature, layer) {
-                layer.on('click', function () {
-                  //TODO: Use current subtheme
-                  $location.path('/needs/' +
-                    $routeParams.year + '/' +
-                    layer.feature.properties.region);
-                  scope.$apply();
-                });
-                
-                layer.on('mouseover', function () {
-                  layer.setStyle({
-                    stroke: true
-                  });
-                });
-
-                layer.on('mouseout', function () {
-                  layer.setStyle({
-                    stroke: false
-                  });
-                });
-              }
-            });
-
+            var regionLayer = _setupRegionLayer(scope);
             regionLayer.addTo(map);
           }
         }

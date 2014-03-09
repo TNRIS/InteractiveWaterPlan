@@ -2,7 +2,7 @@
 
 angular.module('iswpApp')
   .controller('NeedsCtrl',
-    function ($scope, $http, $routeParams, $location,
+    function ($scope, $http, $routeParams, $location, SearchParamService,
       RegionService, NeedsService, ISWP_VARS) {
 
         //Validate routeParams, redirect when invalid
@@ -17,11 +17,12 @@ angular.module('iswpApp')
         if (!_.contains(ISWP_VARS.years, $routeParams.year)) {
           $location.path('/');
         }
-
         //TODO: validate $routeParams.subtheme
 
-
         $scope.showRegions = false;
+        $scope.zoom = 5;
+        $scope.centerLat = 31.780548;
+        $scope.centerLng = -99.022907;
 
         NeedsService.fetch();
 
@@ -30,6 +31,13 @@ angular.module('iswpApp')
         if ($routeParams.area === 'state') {
           $scope.showRegions = true;
         }
+
+        var centerZoom = SearchParamService.getCenterZoomParams();     
+        if (centerZoom) {
+          $scope.zoom = centerZoom.zoom;
+          $scope.centerLat = centerZoom.centerLat;
+          $scope.centerLng = centerZoom.centerLng;
+        }   
 
         return;
       }
