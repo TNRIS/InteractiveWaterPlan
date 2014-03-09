@@ -3,7 +3,7 @@
 angular.module('iswpApp')
   .controller('NeedsCtrl',
     function ($scope, $http, $routeParams,
-      RegionService, NeedsService) {
+      RegionService, NeedsService, ISWP_VARS) {
 
         //TODO: Somehow validate routeParams
 
