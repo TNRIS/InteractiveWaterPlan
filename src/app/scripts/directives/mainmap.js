@@ -87,6 +87,9 @@ angular.module('iswpApp')
       return {
         template: '<div></div>',
         restrict: 'AE',
+        scope: {
+          showRegions: '='
+        },
         link: function postLink(scope, element, attrs) {
           var map = L.map(element[0], {
               center: [31.780548049237414, -99.02290684869513],
@@ -98,9 +101,11 @@ angular.module('iswpApp')
 
           _setupLayers(map);
 
-          scope.$watch('RegionService.showRegions', function() {
-            console.log("showRegions", RegionService.showRegions);
-          });
+          if (scope.showRegions) {
+            var regionFeats = omnivore.topojson.parse(
+              ISWP_VARS.regionsTopo);
+            L.geoJson(regionFeats).addTo(map);
+          }
         }
       };
     }
