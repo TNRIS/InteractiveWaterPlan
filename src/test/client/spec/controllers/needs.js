@@ -1,11 +1,11 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: NeedsCtrl', function () {
 
   // load the controller's module
   beforeEach(module('iswpApp'));
 
-  var MainCtrl,
+  var NeedsCtrl,
     scope,
     $httpBackend;
 
@@ -15,7 +15,7 @@ describe('Controller: MainCtrl', function () {
     // $httpBackend.expectGET('/api/awesomeThings')
     //   .respond(['HTML5 Boilerplate', 'AngularJS', 'Karma', 'Express']);
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    NeedsCtrl = $controller('NeedsCtrl', {
       $scope: scope
     });
   }));

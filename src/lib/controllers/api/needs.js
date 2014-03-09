@@ -13,7 +13,7 @@ exports.getAllNeeds = function(req, res) {
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds';
 
-  utils.sqlAllAsJson(res, db, statement);
+  utils.sqlAllAsJsonResponse(res, db, statement);
 };
 
 exports.getNeedsForRegion = function(req, res) {
@@ -34,7 +34,7 @@ exports.getNeedsForRegion = function(req, res) {
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds WHERE WugRegion == ?';
 
-  utils.sqlAllAsJson(res, db, statement, [region]);
+  utils.sqlAllAsJsonResponse(res, db, statement, [region]);
 };
 
 exports.getNeedsForCounty = function(req, res) {
@@ -53,7 +53,7 @@ exports.getNeedsForCounty = function(req, res) {
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds WHERE WugCounty == ?';
 
-  utils.sqlAllAsJson(res, db, statement, [county]);
+  utils.sqlAllAsJsonResponse(res, db, statement, [county]);
 };
 
 exports.getNeedsForEntityType = function(req, res) {
@@ -72,7 +72,7 @@ exports.getNeedsForEntityType = function(req, res) {
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds WHERE WugType == ?';
 
-  utils.sqlAllAsJson(res, db, statement, [entityType]);
+  utils.sqlAllAsJsonResponse(res, db, statement, [entityType]);
 };
 
 exports.getNeedsForEntity = function(req, res) {
@@ -92,5 +92,5 @@ exports.getNeedsForEntity = function(req, res) {
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds WHERE EntityId == ?';
 
-  utils.sqlAllAsJson(res, db, statement, [entityId]);
+  utils.sqlAllAsJsonResponse(res, db, statement, [entityId]);
 };

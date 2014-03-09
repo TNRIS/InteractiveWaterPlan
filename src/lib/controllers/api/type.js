@@ -5,7 +5,7 @@ var config = require('./../../config/config'),
 
 exports.getEntityTypes = function(req, res) {
   var filePath = config.dataPath + 'entityTypes.json';
-  utils.fileAsJson(res, filePath);
+  utils.fileAsJsonResponse(res, filePath);
 };
 
 

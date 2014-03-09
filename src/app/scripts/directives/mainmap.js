@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($log, PlacesService, BING_API_KEY, SWP_WMS_URL) {
+    function ($log, RegionService, BING_API_KEY, SWP_WMS_URL) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -98,17 +98,9 @@ angular.module('iswpApp')
 
           _setupLayers(map);
 
-          scope.regionsTopo = PlacesService.regions.topojson;
-          var unbind = scope.$watch('regionsTopo', function(){
-            if (_.isEmpty(scope.regionsTopo)) {
-              return;
-            }
-
-            var layer = omnivore.topojson.parse(scope.regionsTopo);
-            console.log(layer);
-            L.geoJson(layer).addTo(map);
-            unbind();
-          }, true);
+          scope.$watch('RegionService.showRegions', function() {
+            console.log("showRegions", RegionService.showRegions);
+          });
         }
       };
     }
