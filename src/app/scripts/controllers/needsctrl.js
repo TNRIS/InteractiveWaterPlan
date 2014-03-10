@@ -3,7 +3,7 @@
 angular.module('iswpApp')
   .controller('NeedsCtrl',
     function ($scope, $http, $routeParams, $location, SearchParamService,
-      RegionService, NeedsService, YearService, ISWP_VARS) {
+      RegionService, NeedsService, YearService, CurrentDataService, ISWP_VARS) {
 
         //Validate routeParams, redirect when invalid
         var validAreas = ['state']
@@ -29,7 +29,11 @@ angular.module('iswpApp')
         $scope.viewTitle = 'Needs for ' + YearService.getCurrentYear();
 
         //Get all the needs data
-        NeedsService.fetch();
+        NeedsService.fetch()
+          .then(function() {
+            //and set it into the CurrentDataService
+            angular.copy(NeedsService.needs, CurrentDataService.data);
+          });
 
         console.log("NeedsCtrl $routeParams", $routeParams);
 
@@ -39,12 +43,16 @@ angular.module('iswpApp')
         }
 
         //Try to get map center and zoom from search params
-        var centerZoom = SearchParamService.getCenterZoomParams();     
+        //TODO: Maybe use the leaflet-hash plugin, but overwrite
+        // the setHash and parseHash methods to use $location
+        // otherwise need to set mapview when manual url change (or via
+        // browser back/forward)
+        var centerZoom = SearchParamService.getCenterZoomParams();
         if (centerZoom) {
           $scope.zoom = centerZoom.zoom;
           $scope.centerLat = centerZoom.centerLat;
           $scope.centerLng = centerZoom.centerLng;
-        }   
+        }
 
         $scope.$watch(YearService.getCurrentYear, function() {
           console.log("YEAR CHANGED", YearService.getCurrentYear());

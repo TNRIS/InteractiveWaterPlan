@@ -8,7 +8,9 @@
     "Leaflet.MakiMarkers": "~1.0.1",
     "lodash": "~2.4.0",
     "angular-bootstrap": "~0.10.0",
-    "font-awesome": "~4.0.3"
+    "font-awesome": "~4.0.3",
+    "crossfilter": "~1.3.7",
+    "ng-crossfilter": "*"
   },
   "devDependencies": {
     "angular-mocks": "1.2.11",

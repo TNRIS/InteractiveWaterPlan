@@ -6,7 +6,8 @@ angular.module('iswpApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngCrossfilter'
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
