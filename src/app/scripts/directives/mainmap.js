@@ -1,19 +1,11 @@
+/* global omnivore */
 'use strict';
 
 angular.module('iswpApp')
-  .directive('mainMap', function ($log, BING_API_KEY, SWP_WMS_URL) {
-    return {
-      template: '<div></div>',
-      restrict: 'AE',
-      link: function postLink(scope, element, attrs) {
-        var map = L.map(element[0], {
-            center: [31.780548049237414, -99.02290684869513],
-            zoom: 5,
-            attributionControl: false
-          });
+  .directive('mainMap',
+    function ($location, $routeParams, $timeout, RegionService, SearchParamService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
-        L.control.attribution({prefix: false}).addTo(map);
-
+      function _setupLayers(map) {
         // Base Layers
         var esriGray = L.esri.basemapLayer("Gray");
 
@@ -32,21 +24,31 @@ angular.module('iswpApp')
               'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
         });
 
-        var bingRoad = L.bingLayer(BING_API_KEY, {type: 'Road'});
-        var bingHybrid = L.bingLayer(BING_API_KEY, {type: 'AerialWithLabels'});
-        var bingAerial = L.bingLayer(BING_API_KEY, {type: 'Aerial'});
+        var bingRoad = L.bingLayer(BING_API_KEY, {
+          type: 'Road'
+        });
+        
+        var bingHybrid = L.bingLayer(BING_API_KEY, {
+          type: 'AerialWithLabels'
+        });
+        
+        var bingAerial = L.bingLayer(BING_API_KEY, {
+          type: 'Aerial'
+        });
 
         // Overlay WMS Layers
         var planningAreas = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '4,7',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var counties = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '1,9',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var countyLabels = L.tileLayer.wms(SWP_WMS_URL, {
@@ -58,13 +60,15 @@ angular.module('iswpApp')
         var senateDistricts = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '3,13',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var houseDistricts = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '2,11',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var baseMaps = {
@@ -91,5 +95,88 @@ angular.module('iswpApp')
         //Add controls
         L.control.layers(baseMaps, overlayLayers).addTo(map);
       }
-    };
-  });
+
+      function _setupRegionLayer(scope) {
+        var regionFeats = omnivore.topojson.parse(
+          ISWP_VARS.regionsTopo);
+
+        var regionLayer = L.geoJson(regionFeats, {
+          style: {
+            stroke: false,
+            color: '#ffcc00',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0
+          },
+          onEachFeature: function (feature, layer) {
+            layer.on('click', function () {
+              //TODO: Use current subtheme
+              $location.path('/needs/' +
+                $routeParams.year + '/' +
+                layer.feature.properties.region);
+              scope.$apply();
+            });
+            
+            layer.on('mouseover', function () {
+              layer.setStyle({
+                stroke: true
+              });
+            });
+
+            layer.on('mouseout', function () {
+              layer.setStyle({
+                stroke: false
+              });
+            });
+          }
+        });
+
+        return regionLayer;
+      }
+
+      return {
+        template: '<div></div>',
+        restrict: 'AE',
+        scope: {
+          showRegions: '=',
+          zoom: '=',
+          centerLat: '=',
+          centerLng: '='
+        },
+        link: function postLink(scope, element, attrs) {
+          var map = L.map(element[0], {
+              center: [scope.centerLat, scope.centerLng],
+              zoom: scope.zoom,
+              attributionControl: false
+            });
+
+          //Use attribution control without 'Leaflet' prefix
+          L.control.attribution({prefix: false}).addTo(map);
+
+          var updateHash = _.debounce(function() {
+            var center = map.getCenter(),
+                zoom = map.getZoom(),
+                precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
+                latLng = ''+[center.lat.toFixed(precision), 
+                  center.lng.toFixed(precision)];
+
+            $location.search({
+              zoom: zoom,
+              center: latLng
+            });
+
+            scope.$apply();
+          }, 250, {trailing: true});
+
+          map.on('moveend', updateHash);
+
+          _setupLayers(map);
+
+          if (scope.showRegions) {
+            var regionLayer = _setupRegionLayer(scope);
+            regionLayer.addTo(map);
+          }
+        }
+      };
+    }
+  );

@@ -11,18 +11,28 @@
         </li>
       </ul>
     </li>
+
+    <li class="pull-right">
+      <a href=""><i class="fa fa-unlock-alt"></i> Lock Map</a>
+    </li>
+    <li class="pull-right">
+      <a href="">Statewide View</a>
+    </li>
   </ul>
+
 </div>
 
-<div ng-controller="MapCtrl">
-  <div main-map id="main-map"></div>
+<div main-map id="main-map"
+  ng-hide="hideMap"
+  zoom="zoom" center-lat="centerLat" center-lng="centerLng"
+  show-regions="showRegions">
 </div>
 
 <div ng-controller="YearSelectCtrl" class="year-select-container">
   <span class="decade-label">DECADE:</span>
   <ul class="year-nav nav nav-pills">
-    <li ng-repeat="decade in decades" ng-class="{'active': decade == selectedDecade}">
-      <a href="#">{{decade}}</a>
+    <li ng-repeat="year in years" ng-class="{'active': year == selectedYear}">
+      <a href="" ng-click="selectYear(year)">{{year}}</a>
     </li>
   </li>
 </div>
@@ -31,8 +41,18 @@
   <p>Select an area or water user group from the following dropdowns</p>
 </div>
 
-<div class="table-container">
-  <h3>Results Heading</h3>
+<div ng-controller="TableCtrl" class="table-container">
+  <h3>{{viewTitle}}</h3>
   <p>Table description</p>
-  <table></table>
+  <table>
+    <thead>
+
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in currentData">
+        <td>{{row.EntityId}}</td>
+        <td>{{row.EntityName}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

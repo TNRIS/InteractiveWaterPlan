@@ -9,7 +9,7 @@ var config = require('./../../config/config'),
  */
 exports.getRegionList = function(req, res) {
   var filePath = config.dataPath + 'regions.json';
-  utils.fileAsJson(res, filePath);
+  utils.fileAsJsonResponse(res, filePath);
 };
 
 /**
@@ -17,7 +17,7 @@ exports.getRegionList = function(req, res) {
  */
 exports.getRegionTopoJson = function(req, res) {
   var filePath = config.dataPath + 'regions.topojson';
-  utils.fileAsJson(res, filePath);
+  utils.fileAsJsonResponse(res, filePath);
 };
 
 /**
@@ -25,6 +25,6 @@ exports.getRegionTopoJson = function(req, res) {
  */
 exports.getCountyList = function(req, res) {
   var filePath = config.dataPath + 'counties.json';
-  utils.fileAsJson(res, filePath);
+  utils.fileAsJsonResponse(res, filePath);
 };
 

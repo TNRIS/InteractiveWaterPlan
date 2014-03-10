@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Service: Yearservice', function () {
+describe('Service: YearService', function () {
 
   // load the service's module
   beforeEach(module('iswpApp'));
 
   // instantiate service
-  var Yearservice;
-  beforeEach(inject(function (_Yearservice_) {
-    Yearservice = _Yearservice_;
+  var YearService;
+  beforeEach(inject(function (_YearService_) {
+    YearService = _YearService_;
   }));
 
   it('should do something', function () {
-    expect(!!Yearservice).toBe(true);
+    expect(!!YearService).toBe(true);
   });
 
 });

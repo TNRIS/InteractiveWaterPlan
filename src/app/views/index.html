@@ -37,7 +37,7 @@
             <h2 class="text-muted">Texas Water Development Board</h2>
         </div>
 
-        <div class="callout callout-warning">
+        <!-- div class="callout callout-warning">
             <h4><i class="fa fa-warning"></i> Warning!</h4>
             <p>
                 The site is currently in beta testing and is undergoing QA/QC. In some cases, the graphic representation and nomenclature may not reflect a complete and accurate portrayal of actual State Water Plan data.
@@ -45,7 +45,7 @@
             <p>
                 For definitive data see the <a href="http://www.twdb.state.tx.us/waterplanning/swp/2012/" title="2012 State Water Plan">2012 State Water Plan</a> or <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/" title="2011 Regional Water Plans">2011 Regional Water Plans</a>.
             </p>
-        </div>
+        </div -->
 
         <noscript>
             <div class="row">
@@ -85,6 +85,11 @@
        ga('send', 'pageview');
     </script>
 
+    <!-- Bootstrapped variables -->
+    <script>
+        var ISWP_VARS = <%- ISWP_VARS %>;
+    </script>
+
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
@@ -109,6 +114,8 @@
     <script src="bower_components/Leaflet.MakiMarkers/Leaflet.MakiMarkers.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/crossfilter/crossfilter.js"></script>
+    <script src="bower_components/ng-crossfilter/module/ngCrossfilter.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -117,13 +124,17 @@
     <script src="scripts/vendor/bingLayer.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/map.js"></script>
-    <script src="scripts/controllers/table.js"></script>
-    <script src="scripts/directives/mainMap.js"></script>
-    <script src="scripts/controllers/theme.js"></script>
-    <script src="scripts/controllers/yearSelect.js"></script>
-    <script src="scripts/services/yearService.js"></script>
+    <script src="scripts/controllers/needsctrl.js"></script>
+    <script src="scripts/controllers/tablectrl.js"></script>
+    <script src="scripts/controllers/themectrl.js"></script>
+    <script src="scripts/controllers/yearSelectctrl.js"></script>
+    <script src="scripts/directives/mainmap.js"></script>
+    <script src="scripts/services/yearservice.js"></script>
+    <script src="scripts/services/needsservice.js"></script>
+    <script src="scripts/services/searchparamservice.js"></script>
+    <script src="scripts/services/entityservice.js"></script>
+    <script src="scripts/services/regionservice.js"></script>
+    <script src="scripts/services/currentdataservice.js"></script>
     <!-- endbuild -->
 </body>
 </html>
