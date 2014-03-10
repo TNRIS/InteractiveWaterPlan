@@ -31,7 +31,6 @@ angular.module('iswpApp')
     ];
 
     $scope.showTheme = function(theme) {
-      console.log("showing", theme);
-      $changeRoute({area: theme.name.toUpperCase()});
+      console.log("Show Type", theme);
     };
   });
