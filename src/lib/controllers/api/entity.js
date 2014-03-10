@@ -4,7 +4,7 @@ var config = require('./../../config/config'),
     sqlite3 = require('sqlite3'),
     utils = require('./../../utils');
 
-var db = new sqlite3.Database(config.dbPath);
+var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
 
 exports.getEntities = function(req, res) {
   var statement = 'SELECT EntityId, EntityName, Latitude, Longitude ' +
