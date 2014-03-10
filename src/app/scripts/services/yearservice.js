@@ -2,8 +2,16 @@
 
 angular.module('iswpApp')
   .service('YearService', function YearService() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    var currentYear;
     var service = {};
-    service.currentYear = '';
+
+    service.getCurrentYear = function() {
+      return currentYear;
+    };
+
+    service.setCurrentYear = function(year) {
+      currentYear = year;
+    };
+
     return service;
   });

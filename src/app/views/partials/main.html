@@ -23,8 +23,8 @@
 <div ng-controller="YearSelectCtrl" class="year-select-container">
   <span class="decade-label">DECADE:</span>
   <ul class="year-nav nav nav-pills">
-    <li ng-repeat="decade in decades" ng-class="{'active': decade == selectedDecade}">
-      <a href="#">{{decade}}</a>
+    <li ng-repeat="year in years" ng-class="{'active': year == selectedYear}">
+      <a href="" ng-click="selectYear(year)">{{year}}</a>
     </li>
   </li>
 </div>
@@ -34,7 +34,7 @@
 </div>
 
 <div class="table-container">
-  <h3>Results Heading</h3>
+  <h3>{{viewTitle}}</h3>
   <p>Table description</p>
   <table></table>
 </div>
