@@ -24,21 +24,31 @@ angular.module('iswpApp')
               'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
         });
 
-        var bingRoad = L.bingLayer(BING_API_KEY, {type: 'Road'});
-        var bingHybrid = L.bingLayer(BING_API_KEY, {type: 'AerialWithLabels'});
-        var bingAerial = L.bingLayer(BING_API_KEY, {type: 'Aerial'});
+        var bingRoad = L.bingLayer(BING_API_KEY, {
+          type: 'Road'
+        });
+        
+        var bingHybrid = L.bingLayer(BING_API_KEY, {
+          type: 'AerialWithLabels'
+        });
+        
+        var bingAerial = L.bingLayer(BING_API_KEY, {
+          type: 'Aerial'
+        });
 
         // Overlay WMS Layers
         var planningAreas = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '4,7',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var counties = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '1,9',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var countyLabels = L.tileLayer.wms(SWP_WMS_URL, {
@@ -50,13 +60,15 @@ angular.module('iswpApp')
         var senateDistricts = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '3,13',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var houseDistricts = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '2,11',
           format: 'image/png',
-          transparent: true
+          transparent: true,
+          opacity: 0.6
         });
 
         var baseMaps = {
