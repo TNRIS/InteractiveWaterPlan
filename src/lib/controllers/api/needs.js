@@ -38,9 +38,9 @@ exports.getSummary = function(req, res) {
 
   _.each(years, function(year) {
     _.each(regions, function(region) {
-      var stmnt = getNeedsStatement(year, region);
+      var stmnt = getNeedsStatement(year, region),
+          deferred = Q.defer();
 
-      var deferred = Q.defer();
       db.all(stmnt, {}, function(err, rows) {
         deferred.resolve({
           region: region,
@@ -48,8 +48,8 @@ exports.getSummary = function(req, res) {
           needs: rows
         });
       });
-      promises.push(deferred.promise);
 
+      promises.push(deferred.promise);
     });
   });
 
