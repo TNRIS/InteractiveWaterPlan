@@ -27,6 +27,7 @@ module.exports = function(app) {
   app.get(apiPre + 'places/regions.topojson', places.getRegionTopoJson);
 
   app.get(apiPre + 'needs', needs.getAllNeeds);
+  app.get(apiPre + 'needs/summary', needs.getSummary);
   app.get(apiPre + 'needs/region/:region', needs.getNeedsForRegion);
   app.get(apiPre + 'needs/county/:county', needs.getNeedsForCounty);
   app.get(apiPre + 'needs/entity/:entityId', needs.getNeedsForEntity);

@@ -1,22 +1,26 @@
 
 <div ng-controller="ThemeCtrl">
   <ul class="theme-nav nav nav-pills">
-    <li class="dropdown">
+    <li class="dropdown active">
       <a class="dropdown-toggle" href="#">
         Water Needs <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li ng-repeat="theme in needsThemes">
-          <a href="#">{{theme.name}}</a>
+        <li ng-repeat="theme in needsThemes" ng-class="{'divider': theme.type=='divider'}">
+          <a ng-if="theme.name" href="" ng-click="showTheme(theme)">{{theme.name}}</a>
         </li>
       </ul>
     </li>
 
+
     <li class="pull-right">
-      <a href=""><i class="fa fa-unlock-alt"></i> Lock Map</a>
+      <a href="">Hide Map</a>
     </li>
     <li class="pull-right">
-      <a href="">Statewide View</a>
+      <a href="">Zoom To Texas</a>
+    </li>
+    <li class="pull-right">
+      <a href=""><i class="fa fa-unlock-alt"></i> Lock Map</a>
     </li>
   </ul>
 
@@ -49,10 +53,7 @@
 
     </thead>
     <tbody>
-      <tr ng-repeat="row in currentData">
-        <td>{{row.EntityId}}</td>
-        <td>{{row.EntityName}}</td>
-      </tr>
+
     </tbody>
   </table>
 </div>

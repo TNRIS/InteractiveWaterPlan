@@ -1,18 +1,13 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('YearSelectCtrl', function ($scope, YearService) {
+  .controller('YearSelectCtrl', function ($scope, $routeParams, $changeRoute) {
     $scope.years = ['2010', '2020', '2030', '2040', '2050'];
 
-    $scope.selectedYear = YearService.getCurrentYear();
-
-    $scope.$watch(YearService.getCurrentYear, function() {
-      console.log("YearSelect year changed", YearService.getCurrentYear()); 
-      $scope.selectedYear = YearService.getCurrentYear();
-    });
+    $scope.selectedYear = $routeParams.year;
 
     $scope.selectYear = function(year) {
-      console.log("selected year", year);
-      YearService.setCurrentYear(year);
+      console.log("YearSelectCtrl select year", year);
+      $changeRoute({year: year});
     };
   });

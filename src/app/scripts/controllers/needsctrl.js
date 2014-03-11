@@ -2,8 +2,8 @@
 
 angular.module('iswpApp')
   .controller('NeedsCtrl',
-    function ($scope, $http, $routeParams, $location, SearchParamService,
-      RegionService, NeedsService, YearService, CurrentDataService, ISWP_VARS) {
+    function ($scope, $http, $routeParams, $location, localStorageService,
+      RegionService, NeedsService, CurrentDataService, ISWP_VARS) {
 
         //Validate routeParams, redirect when invalid
         var validAreas = ['state']
@@ -19,14 +19,15 @@ angular.module('iswpApp')
         }
         //TODO: validate $routeParams.subtheme
 
-        YearService.setCurrentYear($routeParams.year);
-
         //Setup defaults
         $scope.showRegions = false;
         $scope.zoom = 5;
         $scope.centerLat = 31.780548;
         $scope.centerLng = -99.022907;
-        $scope.viewTitle = 'Needs for ' + YearService.getCurrentYear();
+        $scope.viewTitle = 'Needs for {area} - {year}'.assign({
+          area: $routeParams.area,
+          year: $routeParams.year
+        });
 
         //Get all the needs data
         NeedsService.fetch()
@@ -47,17 +48,14 @@ angular.module('iswpApp')
         // the setHash and parseHash methods to use $location
         // otherwise need to set mapview when manual url change (or via
         // browser back/forward)
-        var centerZoom = SearchParamService.getCenterZoomParams();
-        if (centerZoom) {
-          $scope.zoom = centerZoom.zoom;
-          $scope.centerLat = centerZoom.centerLat;
-          $scope.centerLng = centerZoom.centerLng;
-        }
 
-        $scope.$watch(YearService.getCurrentYear, function() {
-          console.log("YEAR CHANGED", YearService.getCurrentYear());
-          $scope.viewTitle = 'Needs for ' + YearService.getCurrentYear();
-        });
+        //TODO: location from localStorage
+        var mapLoc = localStorageService.get('mapLocation');
+        if (mapLoc) {
+          $scope.zoom = mapLoc.zoom;
+          $scope.centerLat = mapLoc.centerLat;
+          $scope.centerLng = mapLoc.centerLng;
+        }
 
         return;
       }

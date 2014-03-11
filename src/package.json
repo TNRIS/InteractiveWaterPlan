@@ -6,7 +6,10 @@
     "lodash": "~2.4.1",
     "ejs": "~0.8.4",
     "sqlite3": "^2.2.0",
-    "express-validator": "^1.0.1"
+    "express-validator": "^1.0.1",
+    "string": "^1.8.0",
+    "sugar": "^1.4.1",
+    "q": "^1.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

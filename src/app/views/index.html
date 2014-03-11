@@ -30,7 +30,7 @@
                     <a href="#">Home</a>
                 </li>
                 <li>
-                    <a href="/about">About</a>
+                    <a target="_self" href="/about">About</a>
                 </li>
             </ul>
             <h1>Texas State Water Plan 2012</h1>
@@ -111,8 +111,10 @@
 
     <!-- build:js(app) scripts/vendor.js -->
     <!-- bower:js -->
+    <script src="bower_components/sugar/release/sugar-full.min.js"></script>
     <script src="bower_components/Leaflet.MakiMarkers/Leaflet.MakiMarkers.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angular-local-storage/angular-local-storage.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/crossfilter/crossfilter.js"></script>
     <script src="bower_components/ng-crossfilter/module/ngCrossfilter.js"></script>
@@ -129,9 +131,8 @@
     <script src="scripts/controllers/themectrl.js"></script>
     <script src="scripts/controllers/yearSelectctrl.js"></script>
     <script src="scripts/directives/mainmap.js"></script>
-    <script src="scripts/services/yearservice.js"></script>
     <script src="scripts/services/needsservice.js"></script>
-    <script src="scripts/services/searchparamservice.js"></script>
+    <script src="scripts/services/changeroute.js"></script>
     <script src="scripts/services/entityservice.js"></script>
     <script src="scripts/services/regionservice.js"></script>
     <script src="scripts/services/currentdataservice.js"></script>
