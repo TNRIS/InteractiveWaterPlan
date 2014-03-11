@@ -8,6 +8,10 @@ Backend files are in `src/lib/`
 
 ## Building
 
+1. Install `bower` and `grunt` globally: `npm install -g bower grunt`
+2. Navigate to `src/` and run `bower install` and `npm install`
+3. Now you should be able to use any of the `grunt` tasks defined in `Gruntfile.js`
+
 `grunt serve` will launch express in dev mode and watch files in app/ and lib/
 
 `grunt serve:dist` will launch express in production mode
