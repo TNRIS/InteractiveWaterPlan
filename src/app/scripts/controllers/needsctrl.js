@@ -24,7 +24,10 @@ angular.module('iswpApp')
         $scope.zoom = 5;
         $scope.centerLat = 31.780548;
         $scope.centerLng = -99.022907;
-        $scope.viewTitle = 'Needs for XXXX';
+        $scope.viewTitle = 'Needs for {area} - {year}'.assign({
+          area: $routeParams.area,
+          year: $routeParams.year
+        });
 
         //Get all the needs data
         NeedsService.fetch()
@@ -45,7 +48,7 @@ angular.module('iswpApp')
         // the setHash and parseHash methods to use $location
         // otherwise need to set mapview when manual url change (or via
         // browser back/forward)
-        
+
         //TODO: location from localStorage
         var mapLoc = localStorageService.get('mapLocation');
         if (mapLoc) {
