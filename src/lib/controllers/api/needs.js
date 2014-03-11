@@ -22,41 +22,10 @@ exports.getAllNeeds = function(req, res) {
 
 
 exports.getSummary = function(req, res) {
-
-  var promises = [],
-      years = ['2010', '2020', '2030', '2040', '2050'];
-
-  var regions = utils.fileAsJson(config.dataPath + 'regions.json');
-
-  var getNeedsStatement = function(year, region) {
-    var tpl = "SELECT WugType as 'type', SUM(N{year}) as 'total' " +
-      "FROM vwMapWugNeeds WHERE WugRegion=='{region}' " +
-      "GROUP BY WugType";
-
-    return tpl.assign({region: region, year: year});
-  };
-
-  _.each(years, function(year) {
-    _.each(regions, function(region) {
-      var stmnt = getNeedsStatement(year, region),
-          deferred = Q.defer();
-
-      db.all(stmnt, {}, function(err, rows) {
-        deferred.resolve({
-          region: region,
-          year: year,
-          needs: rows
-        });
-      });
-
-      promises.push(deferred.promise);
-    });
-  });
-
-  Q.all(promises)
-    .then(function(data) {
-      res.json(data);
-    });
+  var statement = 'SELECT REGION, DECADE, MUNICIPAL, IRRIGATION, ' +
+    'MANUFACTURING, MINING, `STEAM-ELECTRIC`, LIVESTOCK, TOTAL ' +
+    'FROM vwMapWugNeedsA1';
+  utils.sqlAllAsJsonResponse(res, db, statement);
 };
 
 exports.getNeedsForRegion = function(req, res) {

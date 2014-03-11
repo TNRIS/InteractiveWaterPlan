@@ -6,10 +6,10 @@ angular.module('iswpApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
+  'ngTable',
   'ui.router',
   'ui.bootstrap',
-  'LocalStorageModule',
-  'ngCrossfilter'
+  'LocalStorageModule'
 ])
   .config(function(localStorageServiceProvider) {
     localStorageServiceProvider.setPrefix('iswp');
