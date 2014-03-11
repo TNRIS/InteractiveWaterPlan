@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($location, $routeParams, $timeout, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($changeRoute, $routeParams, $timeout, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -27,11 +27,11 @@ angular.module('iswpApp')
         var bingRoad = L.bingLayer(BING_API_KEY, {
           type: 'Road'
         });
-        
+
         var bingHybrid = L.bingLayer(BING_API_KEY, {
           type: 'AerialWithLabels'
         });
-        
+
         var bingAerial = L.bingLayer(BING_API_KEY, {
           type: 'Aerial'
         });
@@ -110,13 +110,10 @@ angular.module('iswpApp')
           },
           onEachFeature: function (feature, layer) {
             layer.on('click', function () {
-              //TODO: Use current subtheme
-              $location.path('/needs/' +
-                $routeParams.year + '/' +
-                layer.feature.properties.region);
+              $changeRoute({area: layer.feature.properties.region});
               scope.$apply();
             });
-            
+
             layer.on('mouseover', function () {
               layer.setStyle({
                 stroke: true
@@ -157,7 +154,7 @@ angular.module('iswpApp')
             var center = map.getCenter(),
                 zoom = map.getZoom(),
                 precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-                lat = center.lat.toFixed(precision), 
+                lat = center.lat.toFixed(precision),
                 lng = center.lng.toFixed(precision);
 
             //Set in LocalStorage
@@ -166,7 +163,7 @@ angular.module('iswpApp')
               centerLat: lat,
               centerLng: lng
             });
-           
+
             scope.$apply();
           }, 250, {trailing: true});
 
