@@ -7,9 +7,13 @@ angular.module('iswpApp', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
+  'LocalStorageModule',
   'ngCrossfilter'
 ])
-  .config(function ($routeProvider, $locationProvider) {
+  .config(function(localStorageServiceProvider) {
+    localStorageServiceProvider.setPrefix('iswp');
+  })
+  .config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/needs/:year/:area/:subtheme?', {
         templateUrl: 'partials/main',

@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($location, $routeParams, $timeout, RegionService, SearchParamService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($location, $routeParams, $timeout, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -153,22 +153,24 @@ angular.module('iswpApp')
           //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
 
-          var updateHash = _.debounce(function() {
+          var updateStoredMapLocation = _.debounce(function() {
             var center = map.getCenter(),
                 zoom = map.getZoom(),
                 precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-                latLng = ''+[center.lat.toFixed(precision), 
-                  center.lng.toFixed(precision)];
+                lat = center.lat.toFixed(precision), 
+                lng = center.lng.toFixed(precision);
 
-            $location.search({
+            //Set in LocalStorage
+            localStorageService.set('mapLocation', {
               zoom: zoom,
-              center: latLng
+              centerLat: lat,
+              centerLng: lng
             });
-
+           
             scope.$apply();
           }, 250, {trailing: true});
 
-          map.on('moveend', updateHash);
+          map.on('moveend', updateStoredMapLocation);
 
           _setupLayers(map);
 
