@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($changeRoute, $routeParams, $timeout, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($timeout, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -114,7 +114,8 @@ angular.module('iswpApp')
 
             //view data for region on click
             layer.on('click', function () {
-              $changeRoute({area: layer.feature.properties.region});
+              // $changeRoute({area: layer.feature.properties.region});
+              console.log("Route to Region", layer.feature.properties.region);
               scope.$apply();
             });
 

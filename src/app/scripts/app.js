@@ -6,6 +6,7 @@ angular.module('iswpApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
+  'ui.router',
   'ui.bootstrap',
   'LocalStorageModule',
   'ngCrossfilter'
@@ -13,18 +14,22 @@ angular.module('iswpApp', [
   .config(function(localStorageServiceProvider) {
     localStorageServiceProvider.setPrefix('iswp');
   })
-  .config(function($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/needs/:year/:area/:subtheme?', {
-        templateUrl: 'partials/main',
-        controller: 'NeedsCtrl',
-        reloadOnSearch: false
-      })
-      //TODO: Other themes (demands, strategies, population, etc)
-      .otherwise({
-        // default to needs theme for 2010 decade
-        redirectTo: '/needs/2010/state'
-      });
-
-    $locationProvider.html5Mode(true);
+  .run(function($rootScope, $state, $stateParams) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
   });
+  // .config(function($routeProvider, $locationProvider) {
+  //   $routeProvider
+  //     .when('/needs/:year/:area/:subtheme?', {
+  //       templateUrl: 'partials/main',
+  //       controller: 'NeedsCtrl',
+  //       reloadOnSearch: false
+  //     })
+  //     //TODO: Other themes (demands, strategies, population, etc)
+  //     .otherwise({
+  //       // default to needs theme for 2010 decade
+  //       redirectTo: '/needs/2010/state'
+  //     });
+
+  //   $locationProvider.html5Mode(true);
+  // });

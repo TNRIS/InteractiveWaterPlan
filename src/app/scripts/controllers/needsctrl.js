@@ -2,21 +2,22 @@
 
 angular.module('iswpApp')
   .controller('NeedsCtrl',
-    function ($scope, $http, $routeParams, $location, localStorageService,
+    function ($scope, $http, $location, localStorageService,
       RegionService, NeedsService, CurrentDataService, ISWP_VARS) {
 
+        console.log("NEEDS CTRL");
         //Validate routeParams, redirect when invalid
         var validAreas = ['state']
           .concat(ISWP_VARS.regions)
           .concat(ISWP_VARS.counties);
 
-        if (!_.contains(validAreas, $routeParams.area)) {
-          $location.path('/');
-        }
+        // if (!_.contains(validAreas, $routeParams.area)) {
+        //   $location.path('/');
+        // }
 
-        if (!_.contains(ISWP_VARS.years, $routeParams.year)) {
-          $location.path('/');
-        }
+        // if (!_.contains(ISWP_VARS.years, $routeParams.year)) {
+        //   $location.path('/');
+        // }
         //TODO: validate $routeParams.subtheme
 
         //Setup defaults
@@ -24,10 +25,10 @@ angular.module('iswpApp')
         $scope.zoom = 5;
         $scope.centerLat = 31.780548;
         $scope.centerLng = -99.022907;
-        $scope.viewTitle = 'Needs for {area} - {year}'.assign({
-          area: $routeParams.area,
-          year: $routeParams.year
-        });
+        // $scope.viewTitle = 'Needs for {area} - {year}'.assign({
+        //   area: $routeParams.area,
+        //   year: $routeParams.year
+        // });
 
         //Get all the needs data
         NeedsService.fetch()
@@ -36,12 +37,10 @@ angular.module('iswpApp')
             angular.copy(NeedsService.needs, CurrentDataService.data);
           });
 
-        console.log("NeedsCtrl $routeParams", $routeParams);
-
         //Turn on regions if in the statewide view
-        if ($routeParams.area === 'state') {
-          $scope.showRegions = true;
-        }
+        // if ($routeParams.area === 'state') {
+        //   $scope.showRegions = true;
+        // }
 
         //Try to get map center and zoom from search params
         //TODO: Maybe use the leaflet-hash plugin, but overwrite
