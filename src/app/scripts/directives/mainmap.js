@@ -109,17 +109,23 @@ angular.module('iswpApp')
             fillOpacity: 0
           },
           onEachFeature: function (feature, layer) {
+            //add leaflet-label (from plugin)
+            layer.bindLabel("Region "+layer.feature.properties.region);
+
+            //view data for region on click
             layer.on('click', function () {
               $changeRoute({area: layer.feature.properties.region});
               scope.$apply();
             });
 
+            //highlight on mouseover
             layer.on('mouseover', function () {
               layer.setStyle({
                 stroke: true
               });
             });
 
+            //unhighlight on mouseout
             layer.on('mouseout', function () {
               layer.setStyle({
                 stroke: false
