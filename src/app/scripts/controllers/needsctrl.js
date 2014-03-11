@@ -6,29 +6,33 @@ angular.module('iswpApp')
       RegionService, NeedsService, CurrentDataService, ISWP_VARS) {
 
         console.log("NEEDS CTRL");
-        //Validate routeParams, redirect when invalid
-        var validAreas = ['state']
-          .concat(ISWP_VARS.regions)
-          .concat(ISWP_VARS.counties);
 
-        // if (!_.contains(validAreas, $routeParams.area)) {
-        //   $location.path('/');
-        // }
+        //TODO: route validation (maybe this should be done in states.js?)
+        // var validateRouteParams = function(evt, toState, toParams, fromState, fromParams) {
+        //   console.log("validateRouteParams")
 
-        // if (!_.contains(ISWP_VARS.years, $routeParams.year)) {
-        //   $location.path('/');
-        // }
-        //TODO: validate $routeParams.subtheme
+        //   var validAreas = ['state']
+        //     .concat(ISWP_VARS.regions)
+        //     .concat(ISWP_VARS.counties);
+
+        //   // if (!_.contains(validAreas, $routeParams.area)) {
+        //   //   evt.preventDefault();
+        //   // }
+
+        //   if (!_.contains(ISWP_VARS.years, toParams.year)) {
+        //     evt.preventDefault();
+        //   }
+        //   //TODO: validate $routeParams.subtheme
+        // };
+
+        // //Validate routeParams, redirect when invalid
+        // $scope.$on('$stateChangeStart', validateRouteParams);
 
         //Setup defaults
         $scope.showRegions = false;
         $scope.zoom = 5;
         $scope.centerLat = 31.780548;
         $scope.centerLng = -99.022907;
-        // $scope.viewTitle = 'Needs for {area} - {year}'.assign({
-        //   area: $routeParams.area,
-        //   year: $routeParams.year
-        // });
 
         //Get all the needs data
         NeedsService.fetch()

@@ -11,9 +11,9 @@ angular.module('iswpApp')
 
     $stateProvider
       .state('needs', {
-        abstract: false,
+        abstract: true,
         url: '/needs',
-        templateUrl: 'partials/needs.html',
+        templateUrl: 'partials/needs/needs_index.html',
         // //Resolves promises prior to loading the state
         // // seems pretty helpful
         // resolve: {
@@ -24,10 +24,25 @@ angular.module('iswpApp')
         controller: 'NeedsCtrl'
 
       })
-      .state('needs.whatever', {
-        url: '/:year/:area', // appended to /needs
+      .state('needs.summary', {
+        url: '/:year/state', // appended to /needs
         controller: 'TableCtrl',
-        templateUrl: 'partials/needs_table.html'
+        templateUrl: 'partials/needs/needs_summary.html'
+      })
+      .state('needs.region', {
+        url: '/:year/region/:region', // appended to /needs
+        controller: 'TableCtrl',
+        templateUrl: 'partials/needs/needs_region.html'
+      })
+      .state('needs.county', {
+        url: '/:year/county/:county', // appended to /needs
+        controller: 'TableCtrl',
+        templateUrl: 'partials/needs/needs_county.html'
+      })
+      .state('needs.entity', {
+        url: '/:year/entity/:entityId', // appended to /needs
+        controller: 'TableCtrl',
+        templateUrl: 'partials/needs/needs_entity.html'
       });
 
   });

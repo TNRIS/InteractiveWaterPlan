@@ -18,18 +18,3 @@ angular.module('iswpApp', [
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
   });
-  // .config(function($routeProvider, $locationProvider) {
-  //   $routeProvider
-  //     .when('/needs/:year/:area/:subtheme?', {
-  //       templateUrl: 'partials/main',
-  //       controller: 'NeedsCtrl',
-  //       reloadOnSearch: false
-  //     })
-  //     //TODO: Other themes (demands, strategies, population, etc)
-  //     .otherwise({
-  //       // default to needs theme for 2010 decade
-  //       redirectTo: '/needs/2010/state'
-  //     });
-
-  //   $locationProvider.html5Mode(true);
-  // });
