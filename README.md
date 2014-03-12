@@ -48,3 +48,54 @@ Available generators:
 * `angular-fullstack:decorator`
 * `angular-fullstack:view`
 
+## Deploying
+
+1. Make sure you can build locally.
+2. Install [ansible](https://github.com/ansible/ansible)
+
+### Vagrant
+
+[Vagrant](http://www.vagrantup.com) creates a virtual machine that mirrors the
+production environment. It's a good idea to set up and test deployments on
+vagrant before deploying to production. This will catch most of the things that
+will go wrong.
+
+1. Install vagrant
+2. Add the base box (only accessible from TWDB internal network): `vagrant box add ubuntu-12.04-web http://greylin/vbox/ubuntu-12.04-web.box`
+3. Navigate to `deploy/` and run `vagrant up`
+
+
+To re-run the deploy, you can either use `vagrant provision` or run the ansible
+playbook manually:
+
+    ansible-playbook -i vagrant_ansible_inventory_default --user=vagrant site.yml
+
+
+### Production
+
+Deploying to production works mainly the same way, but you'll need to create a
+production inventory file and set up your authorized_keys file (vagrant does
+these things for you).
+
+The inventory file should look something like this (with the actual ip address
+to the production server):
+
+    # inventory file for pushing to production
+    default ansible_ssh_host=<insert ip address here> ansible_ssh_port=22
+
+
+To set up your authorized_keys file:
+
+1. Find your public key from your local machine (e.g. `~/.ssh/id_rsa.pub`)
+2. Log on to the production server and add the public key as a new line to
+   `~/.ssh/authorized_keys`. If the authorized_keys file doesn't exist, you may
+   need to create it. Also, permissions MUST be set to 0644 for it and the
+   `~/.ssh/` directory and you must be the owner and group or sshd will ignore
+   the file it.
+
+
+For deploying to production, run the ansible playbook with your inventory file
+and username:
+
+    ansible-playbook -i <production_inventory_file> --user=<username> site.yml
+
