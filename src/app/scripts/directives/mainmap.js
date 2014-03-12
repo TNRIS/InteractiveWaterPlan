@@ -152,7 +152,10 @@ angular.module('iswpApp')
           var map = L.map(element[0], {
               center: [scope.centerLat, scope.centerLng],
               zoom: scope.zoom,
-              attributionControl: false
+              attributionControl: false,
+              maxBounds: [[-16, -170], [68, -20]],
+              minZoom: 3,
+              maxZoom: 12
             });
 
           //Use attribution control without 'Leaflet' prefix
