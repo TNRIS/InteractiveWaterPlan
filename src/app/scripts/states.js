@@ -1,8 +1,12 @@
 'use strict';
 
-angular.module('iswpApp')
-  .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+angular.module('iswpApp').config(
+  function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider) {
+    //use html5 urls
     $locationProvider.html5Mode(true);
+
+    //disable whacky auto-scroll behavior
+    $uiViewScrollProvider.useAnchorScroll();
 
     //redirect any bad/unmapped route to the beginning
     $urlRouterProvider
@@ -55,5 +59,4 @@ angular.module('iswpApp')
         controller: 'TableCtrl',
         templateUrl: 'partials/needs/needs_entity.html'
       });
-
   });
