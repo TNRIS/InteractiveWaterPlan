@@ -23,6 +23,5 @@
   },
   "_source": "git://github.com/andrewplummer/Sugar.git",
   "_target": "~1.4.1",
-  "_originalSource": "sugar",
-  "_direct": true
+  "_originalSource": "sugar"
 }

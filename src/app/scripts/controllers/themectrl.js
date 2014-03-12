@@ -2,7 +2,6 @@
 
 angular.module('iswpApp')
   .controller('ThemeCtrl', function ($scope, $location, $routeParams) {
-
     $scope.needsThemes = [
       {
         name: 'View All'

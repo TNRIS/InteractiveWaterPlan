@@ -1,13 +1,18 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('YearSelectCtrl', function ($scope, $routeParams, $changeRoute) {
-    $scope.years = ['2010', '2020', '2030', '2040', '2050'];
+  .controller('YearSelectCtrl', function ($scope, ISWP_VARS) {
+    $scope.years = ISWP_VARS.years;
 
-    $scope.selectedYear = $routeParams.year;
+    $scope.$on('$stateChangeSuccess', function() {
+      $scope.selectedYear = $scope.$stateParams.year;
+    });
 
     $scope.selectYear = function(year) {
-      console.log("YearSelectCtrl select year", year);
-      $changeRoute({year: year});
+      var params = _.defaults({year:year},
+        $scope.$stateParams);
+
+      $scope.$state.go($scope.$state.current.name,
+        params);
     };
   });

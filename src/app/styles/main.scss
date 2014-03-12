@@ -42,9 +42,6 @@ body {
   }
 }
 
-
-
-
 .footer {
   padding-top: 10px;
   margin-top: 20px;
@@ -103,6 +100,10 @@ body {
   margin-bottom: 10px;
 }
 
+.note-marker {
+  color: #007fff;
+}
+
 .callout {
   margin: 10px 0;
   padding: 10px;
@@ -124,6 +125,10 @@ body {
 .callout-danger {
   background-color: #fdf7f7;
   border-color: #d9534f;
+}
+
+.pagination-container {
+  text-align: center;
 }
 
 /* Responsive: Portrait tablets and up */

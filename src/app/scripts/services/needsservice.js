@@ -7,10 +7,21 @@ angular.module('iswpApp')
 
     service.needs = [];
 
-    service.fetch = function() {
-      var prom = $http.get(API_PATH + 'needs', {cache: true})
-        .success(function(data) {
-          angular.copy(data, service.needs);
+    service.fetch = function(type, typeId) {
+
+      if (_.isEmpty(typeId)) {
+        typeId = "";
+      }
+
+      var requestPath =  '{API_PATH}needs/{type}/{typeId}'.assign({
+        API_PATH: API_PATH,
+        type: type,
+        typeId: typeId
+      });
+
+      var prom = $http.get(requestPath, {cache: true})
+        .then(function(resp) {
+          return resp.data;
         });
 
       return prom;
