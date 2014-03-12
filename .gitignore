@@ -12,3 +12,4 @@ scripts/build
 scripts/Include
 scripts/Lib
 scripts/Scripts
+scripts/venv
