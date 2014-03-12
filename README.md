@@ -6,6 +6,14 @@ Client files are in `src/app/`
 
 Backend files are in `src/lib/`
 
+## Initial setup
+
+First make sure these are installed:
+ - nodejs
+ - ruby and rubygems (gem usually comes with ruby but might not on some
+   platforms, depending on how it is installed)
+ - compass (`gem install compass`)
+
 ## Building
 
 1. Install `bower` and `grunt` globally: `npm install -g bower grunt`
