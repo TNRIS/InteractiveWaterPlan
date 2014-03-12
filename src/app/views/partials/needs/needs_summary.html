@@ -6,30 +6,12 @@
   <p>
     Table summarizes identified water needs<span class="note-marker">*</span> by region and water use category (click on region or category for summary).
   </p>
-  <table class="table table-striped table-condensed" ng-table="tableParams">
-    <thead>
-      <tr>
-        <th>Region</th>
-        <th>Municipal</th>
-        <th>Manufacturing</th>
-        <th>Mining</th>
-        <th>Steam-Electric</th>
-        <th>Livestock</th>
-        <th>Irrigation</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="row in tableRows">
-        <td data-title="'Region'" sortable="'region'">{{row['REGION']}}</td>
-        <td>{{row['MUNICIPAL']}}</td>
-        <td>{{row['MANUFACTURING']}}</td>
-        <td>{{row['MINING']}}</td>
-        <td>{{row['STEAM-ELECTRIC']}}</td>
-        <td>{{row['LIVESTOCK']}}</td>
-        <td>{{row['IRRIGATION']}}</td>
-        <td>{{row['TOTAL']}}</td>
-      </tr>
-    </tbody>
-  </table>
+
+  <smart-table class="table table-striped table-condensed table-bordered"
+    columns="tableColumns" rows="tableRows" config="tableConfig"></smart-table>
+
+  <p>
+    <span class="note-marker">*</span>
+    Projected water demands in excess of existing water supplies (i.e., potential shortage if no strategy is implemented).
+  </p>
 </div>

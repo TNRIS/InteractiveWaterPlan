@@ -19,8 +19,6 @@ angular.module('iswpApp')
         typeId: typeId
       });
 
-      console.log("requestPath", requestPath);
-
       var prom = $http.get(requestPath, {cache: true})
         .then(function(resp) {
           return resp.data;

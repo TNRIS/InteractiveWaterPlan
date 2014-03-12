@@ -23,7 +23,7 @@ exports.getAllNeeds = function(req, res) {
 
 exports.getSummary = function(req, res) {
   var statement = 'SELECT REGION, DECADE, MUNICIPAL, IRRIGATION, ' +
-    'MANUFACTURING, MINING, `STEAM-ELECTRIC`, LIVESTOCK, TOTAL ' +
+    'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
     'FROM vwMapWugNeedsA1';
   utils.sqlAllAsJsonResponse(res, db, statement);
 };
