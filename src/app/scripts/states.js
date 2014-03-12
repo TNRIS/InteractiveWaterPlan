@@ -32,7 +32,7 @@ angular.module('iswpApp').config(
       .state('needs.summary', {
         url: '/:year/state', // appended to /needs
         resolve: needsResolver('summary'),
-        controller: 'NeedsTableCtrl',
+        controller: 'NeedsSummaryTableCtrl',
         templateUrl: 'partials/needs/needs_summary.html'
       })
       .state('needs.region', {

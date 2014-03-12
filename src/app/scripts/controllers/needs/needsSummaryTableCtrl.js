@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsTableCtrl', function ($scope, needsData) {
+  .controller('NeedsSummaryTableCtrl', function ($scope, needsData) {
 
     $scope.$on('$stateChangeSuccess', function() {
       $scope.currentYear = $scope.$stateParams.year;
