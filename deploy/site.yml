@@ -1,0 +1,89 @@
+---
+- hosts: all
+  sudo: yes
+
+  vars:
+    app_dir: /var/www/water-plan
+    log_file: /var/log/water-plan.log
+    node_port: 8080
+    server: server.js
+    upstart_cmd: water-plan-app
+    water_plan_user: waterplan
+    vagrant: false
+    varnish_port: 80
+
+  tasks:
+  - name: Add public key to vagrant's authorized_keys file
+    authorized_key: user=vagrant key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    when: vagrant
+    sudo: no
+
+  - name: add vagrant sudoers file
+    copy: src=vagrant_sudoers dest=/etc/sudoers.d/vagrant validate='visudo -cf %s' group=root owner=root mode=440
+    when: vagrant
+
+    # required for adding PPAs
+  - name: install python software properties package
+    apt: pkg=python-software-properties state=installed update_cache=yes cache_valid_time=86400
+
+  - name: add nodejs ppa
+    apt_repository: repo=ppa:chris-lea/node.js state=present
+
+  - name: install node js
+    apt: pkg=nodejs state=present
+
+  - name: install monit
+    apt: pkg=monit state=present
+
+  - name: install upstart
+    apt: pkg=monit state=present
+
+  - name: install varnish
+    apt: pkg=varnish state=present
+
+  - name: install ruby
+    apt: pkg=ruby state=present
+
+  - name: install gem
+    apt: pkg=rubygems state=present
+
+  - name: install sass
+    gem: name=sass state=present user_install=no
+
+  - name: set up upstart config for water plan app
+    template: src=upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+
+  - name: set up monit config for water plan app
+    template: src=monit-conf.j2 dest=/etc/monit/conf.d/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+
+  - name: set up varnish config for water plan app
+    template: src=varnish-conf.j2 dest=/etc/default/varnish owner=root group=root mode=0644
+
+  - name: set up varnish vcl for water plan app
+    template: src=varnish-vcl.j2 dest=/etc/varnish/{{ upstart_cmd }}.vcl owner=root group=root mode=0644
+
+  - name: create {{ water_plan_user }} account
+    user: name={{ water_plan_user }}
+
+  - name: create app dir
+    file: path={{ app_dir }} state=directory recurse=yes owner={{ water_plan_user }} group={{ water_plan_user }}
+
+  - name: build app dist
+    local_action: command chdir=../src grunt build
+    sudo: no
+
+  - name: send app dist to server
+    synchronize: src=../src/dist/ dest={{ app_dir }} archive=no recursive=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
+
+  - name: install npm packages
+    npm: path={{ app_dir }}
+    sudo_user: "{{ water_plan_user }}"
+
+  - name: restart monit
+    service: name=monit state=restarted
+
+  - name: restart {{ upstart_cmd }}
+    service: name={{ upstart_cmd }} state=restarted
+
+  - name: restart varnish
+    service: name=varnish state=restarted
