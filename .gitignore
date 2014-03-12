@@ -8,3 +8,7 @@ heroku
 dist
 *.pyc
 scripts/db_config.py
+scripts/build
+scripts/Include
+scripts/Lib
+scripts/Scripts
