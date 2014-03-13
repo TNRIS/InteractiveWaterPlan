@@ -3,8 +3,12 @@
 angular.module('iswpApp')
   .controller('NeedsSummaryTableCtrl', function ($scope, needsData) {
 
+    $scope.heading = 'Regional Water Needs Summary';
+    $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
+    $scope.tableDescription = 'Table summarizes identified water needs<span class="note-marker">*</span> by region and water use category (click on region or category for summary).';
+
     $scope.tableColumns = [
-      {map: 'REGION', label: 'Region'},
+      {map: 'REGION', label: 'Region'}, //TODO: link
       {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number'},
       {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number'},
       {map: 'MINING', label: 'Mining', formatFunction: 'number'},
@@ -17,6 +21,8 @@ angular.module('iswpApp')
     $scope.tableConfig = {
       isPaginationEnabled: false
     };
+
+    //TODO: Remember the sort order when changing Year
 
     $scope.$on('$stateChangeSuccess', function() {
       $scope.currentYear = $scope.$stateParams.year;

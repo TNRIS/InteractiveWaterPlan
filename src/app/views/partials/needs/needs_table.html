@@ -1,11 +1,8 @@
 <div class="table-container">
-  <h3>Regional Water Needs Summary - {{currentYear}}</h3>
-  <p>
-    Map shows Regional Water Planning Areas that may be selected using cursor.
-  </p>
-  <p>
-    Table summarizes identified water needs<span class="note-marker">*</span> by region and water use category (click on region or category for summary).
-  </p>
+
+  <h3>{{heading}} - {{currentYear}}</h3>
+  <p ng-bind-html='mapDescription'></p>
+  <p ng-bind-html='tableDescription'></p>
 
   <smart-table class="table table-striped table-condensed table-bordered"
     columns="tableColumns" rows="tableRows" config="tableConfig"></smart-table>

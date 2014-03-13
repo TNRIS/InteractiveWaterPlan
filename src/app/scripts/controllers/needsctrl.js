@@ -43,9 +43,10 @@ angular.module('iswpApp')
 
         //Turn on regions if in the statewide view
         //TODO: also watch for $stateChangeSuccess
-        if ($scope.$state.current.name === 'needs.summary') {
-          $scope.showRegions = true;
-        }
+        $scope.$on('$stateChangeSuccess', function() {
+          $scope.showRegions = ($scope.$state.current.name === 'needs.summary');
+        });
+
 
         //Get location from localStorage
         var mapLoc = localStorageService.get('mapLocation');
