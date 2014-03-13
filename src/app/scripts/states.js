@@ -55,7 +55,7 @@ angular.module('iswpApp').config(
       .state('needs.type', {
         url: '/:year/type/:entityType', // appended to /needs
         resolve: needsResolver('type', 'entityType'),
-        controller: 'NeedsTableCtrl',
+        controller: 'NeedsEntityTypeTableCtrl',
         templateUrl: 'partials/needs/needs_table.html'
       })
       .state('needs.entity', {
