@@ -26,6 +26,11 @@ angular.module('iswpApp').config(
       .state('needs', {
         abstract: true,
         url: '/needs',
+        resolve: {
+          entities: function(EntityService) {
+            return EntityService.fetch();
+          }
+        },
         templateUrl: 'partials/needs/needs_index.html',
         controller: 'NeedsCtrl'
       })
@@ -44,7 +49,7 @@ angular.module('iswpApp').config(
       .state('needs.county', {
         url: '/:year/county/:county', // appended to /needs
         resolve: needsResolver('county', 'county'),
-        controller: 'NeedsTableCtrl',
+        controller: 'NeedsCountyTableCtrl',
         templateUrl: 'partials/needs/needs_table.html'
       })
       .state('needs.type', {

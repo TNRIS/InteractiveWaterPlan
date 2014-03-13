@@ -1,4 +1,3 @@
-/* global omnivore */
 'use strict';
 
 angular.module('iswpApp')
@@ -97,8 +96,7 @@ angular.module('iswpApp')
       }
 
       function _setupRegionLayer(scope) {
-        var regionFeats = omnivore.topojson.parse(
-          ISWP_VARS.regionsTopo);
+        var regionFeats = RegionService.regionFeatures;
 
         var regionLayer = L.geoJson(regionFeats, {
           style: {
