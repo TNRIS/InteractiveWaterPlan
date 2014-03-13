@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsEntityTypeTableCtrl', function ($scope, needsData) {
+  .controller('NeedsEntityTableCtrl', function ($scope, needsData, EntityService) {
 
-    var entityType = $scope.$stateParams.entityType.titleize();
+    var entityId = $scope.$stateParams.entityId,
+      entity = EntityService.getEntity(entityId),
+      entityName = entity.EntityName.titleize();
 
-    $scope.heading = '' + entityType;
-    $scope.mapDescription = 'Map shows geographic center of Mstrong>' + entityType + '</strong> entities with identified water needs<span class="note-marker">*</span>.';
+    $scope.heading = '' + entityName;
+    $scope.mapDescription = 'Map shows geographic center of <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists <strong>' + entityType + '</strong> entities with identified water needs in {year}';
+    var tableDescTpl = 'Table lists identified water needs<span class="note-marker">*</span> of <strong>'+ entityName + '</strong> in {year}.';
 
     var needsCol = {
       map: 'N2010',
@@ -17,9 +19,10 @@ angular.module('iswpApp')
     };
 
     $scope.tableColumns = [
-      {map: 'WugType', label: 'Entity Type'}, //TODO: link
-      {map: 'EntityName', label: 'Name'}, //TODO: link
+      {map: 'EntityName', label: 'Name'},
+      {map: 'WugRegion', label: 'Region'}, //TODO: link
       {map: 'WugCounty', label: 'County'}, //TODO: link
+      {map: 'WugType', label: 'Entity Type'}, //TODO: link
       needsCol
       //TODO: Get % Needs into API return {map: '', label: 'Entity Need As % of Demand'}, //TODO: % formatFunction
     ];

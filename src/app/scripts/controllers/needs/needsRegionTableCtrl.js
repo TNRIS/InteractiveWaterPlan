@@ -10,6 +10,12 @@ angular.module('iswpApp')
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>Region '+region+'</strong> in {year}';
 
+    var needsCol = {
+      map: 'N2010',
+      label: 'Need (acre-feet/yr) in Region',
+      formatFunction: 'number'
+    };
+
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region'},
       {map: 'EntityName', label: 'Name'}, //TODO: link
@@ -32,7 +38,6 @@ angular.module('iswpApp')
       $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
-      var needsCol = _.find($scope.tableColumns, {id: 'needsColumn'});
       needsCol.map = 'N'+$scope.currentYear;
     });
     return;

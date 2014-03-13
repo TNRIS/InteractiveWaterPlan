@@ -61,7 +61,9 @@ angular.module('iswpApp').config(
       .state('needs.entity', {
         url: '/:year/entity/:entityId', // appended to /needs
         resolve: needsResolver('entity', 'entityId'),
-        controller: 'NeedsTableCtrl',
+        controller: 'NeedsEntityTableCtrl',
         templateUrl: 'partials/needs/needs_table.html'
       });
+
+      //TODO demands, supplies, wms (later phases)
   });

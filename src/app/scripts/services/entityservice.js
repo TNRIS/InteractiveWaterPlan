@@ -21,13 +21,24 @@ angular.module('iswpApp')
       return prom;
     };
 
+    service.getEntity = function(entityId) {
+      console.log("GETTING");
+      return _.first(service.getEntitiesByIds(entityId));
+    };
+
     service.getEntitiesByIds = function(entityIds) {
+      var idArr,
+        toInt = _.partialRight(parseInt, 10);
+
       if (!_.isArray(entityIds)) {
-        entityIds = [entityIds];
+        idArr = [toInt(entityIds)];
+      }
+      else {
+        idArr = _.map(entityIds, toInt);
       }
 
       return _.where(service.entities, function (e) {
-        return _.contains(entityIds, e.EntityId);
+        return _.contains(idArr, e.EntityId);
       });
     };
 
