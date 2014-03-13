@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path');
-
 /**
  * Send About page
  */

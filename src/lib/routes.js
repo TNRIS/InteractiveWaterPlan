@@ -5,6 +5,7 @@ var places = require('./controllers/api/places'),
     entity = require('./controllers/api/entity'),
     type = require('./controllers/api/type'),
     about = require('./controllers/about'),
+    error = require('./controllers/error'),
     index = require('./controllers');
 
 /**
@@ -39,15 +40,19 @@ module.exports = function(app) {
   app.get(apiPre + 'type/entity', type.getEntityTypes);
 
   // All undefined api routes should return a 404
-  app.get('/api/*', function(req, res) {
-    res.status(404);
-    //TODO: Better looking 404 page
-    res.render('404');
-  });
+  app.get('/api/*', error.index);
 
   app.get('/about', about.about);
 
-  // All other routes to use Angular routing in app/scripts/app.js
   app.get('/partials/*', index.partials);
-  app.get('/*', index.index);
+
+  //Routes that correspond to the front-end Angular app
+  app.get('/needs/*', index.index);
+  app.get('/demands/*', index.index);   //TODO: Phase 2
+  app.get('/supplies/*', index.index);  //TODO: Phase 3
+  app.get('/wms/*', index.index);       //TODO: Phase 4
+  app.get('/', index.index);
+
+  //Anything else is a 404
+  app.get('/*', error.index);
 };
