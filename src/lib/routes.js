@@ -40,7 +40,9 @@ module.exports = function(app) {
 
   // All undefined api routes should return a 404
   app.get('/api/*', function(req, res) {
-    res.send(404);
+    res.status(404);
+    //TODO: Better looking 404 page
+    res.render('404');
   });
 
   app.get('/about', about.about);
