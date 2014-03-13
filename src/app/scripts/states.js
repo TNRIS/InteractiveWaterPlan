@@ -26,6 +26,11 @@ angular.module('iswpApp').config(
       .state('needs', {
         abstract: true,
         url: '/needs',
+        resolve: {
+          entities: function(EntityService) {
+            return EntityService.fetch();
+          }
+        },
         templateUrl: 'partials/needs/needs_index.html',
         controller: 'NeedsCtrl'
       })
@@ -33,30 +38,32 @@ angular.module('iswpApp').config(
         url: '/:year/state', // appended to /needs
         resolve: needsResolver('summary'),
         controller: 'NeedsSummaryTableCtrl',
-        templateUrl: 'partials/needs/needs_summary.html'
+        templateUrl: 'partials/needs/needs_table.html'
       })
       .state('needs.region', {
         url: '/:year/region/:region', // appended to /needs
         resolve: needsResolver('region', 'region'),
-        controller: 'NeedsTableCtrl',
-        templateUrl: 'partials/needs/needs_region.html'
+        controller: 'NeedsRegionTableCtrl',
+        templateUrl: 'partials/needs/needs_table.html'
       })
       .state('needs.county', {
         url: '/:year/county/:county', // appended to /needs
         resolve: needsResolver('county', 'county'),
-        controller: 'NeedsTableCtrl',
-        templateUrl: 'partials/needs/needs_county.html'
+        controller: 'NeedsCountyTableCtrl',
+        templateUrl: 'partials/needs/needs_table.html'
       })
       .state('needs.type', {
         url: '/:year/type/:entityType', // appended to /needs
         resolve: needsResolver('type', 'entityType'),
-        controller: 'NeedsTableCtrl',
-        templateUrl: 'partials/needs/needs_type.html'
+        controller: 'NeedsEntityTypeTableCtrl',
+        templateUrl: 'partials/needs/needs_table.html'
       })
       .state('needs.entity', {
         url: '/:year/entity/:entityId', // appended to /needs
         resolve: needsResolver('entity', 'entityId'),
-        controller: 'NeedsTableCtrl',
-        templateUrl: 'partials/needs/needs_entity.html'
+        controller: 'NeedsEntityTableCtrl',
+        templateUrl: 'partials/needs/needs_table.html'
       });
+
+      //TODO demands, supplies, wms (later phases)
   });

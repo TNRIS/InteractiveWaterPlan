@@ -34,19 +34,6 @@ angular.module('iswpApp')
         $scope.centerLat = 31.780548;
         $scope.centerLng = -99.022907;
 
-        //Get all the needs data
-        // NeedsService.fetch()
-        //   .then(function() {
-        //     //and set it into the CurrentDataService
-        //     angular.copy(NeedsService.needs, CurrentDataService.data);
-        //   });
-
-        //Turn on regions if in the statewide view
-        //TODO: also watch for $stateChangeSuccess
-        if ($scope.$state.current.name === 'needs.summary') {
-          $scope.showRegions = true;
-        }
-
         //Get location from localStorage
         var mapLoc = localStorageService.get('mapLocation');
         if (mapLoc) {
@@ -54,6 +41,18 @@ angular.module('iswpApp')
           $scope.centerLat = mapLoc.centerLat;
           $scope.centerLng = mapLoc.centerLng;
         }
+
+        //Turn on regions if in the statewide view
+        //TODO: also watch for $stateChangeSuccess
+        $scope.$on('$stateChangeSuccess', function() {
+          $scope.showRegions = ($scope.$state.current.name === 'needs.summary');
+
+
+
+        });
+
+
+
 
         return;
       }

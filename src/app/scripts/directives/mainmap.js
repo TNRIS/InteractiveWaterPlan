@@ -1,4 +1,3 @@
-/* global omnivore */
 'use strict';
 
 angular.module('iswpApp')
@@ -97,8 +96,7 @@ angular.module('iswpApp')
       }
 
       function _setupRegionLayer(scope) {
-        var regionFeats = omnivore.topojson.parse(
-          ISWP_VARS.regionsTopo);
+        var regionFeats = RegionService.regionFeatures;
 
         var regionLayer = L.geoJson(regionFeats, {
           style: {
@@ -152,7 +150,10 @@ angular.module('iswpApp')
           var map = L.map(element[0], {
               center: [scope.centerLat, scope.centerLng],
               zoom: scope.zoom,
-              attributionControl: false
+              attributionControl: false,
+              maxBounds: [[-16, -170], [68, -20]],
+              minZoom: 3,
+              maxZoom: 12
             });
 
           //Use attribution control without 'Leaflet' prefix
@@ -179,10 +180,17 @@ angular.module('iswpApp')
 
           _setupLayers(map);
 
-          if (scope.showRegions) {
-            var regionLayer = _setupRegionLayer(scope);
-            regionLayer.addTo(map);
-          }
+          var regionLayer = _setupRegionLayer(scope);
+
+          scope.$watch('showRegions', function() {
+            if (scope.showRegions) {
+              regionLayer.addTo(map);
+            }
+            else if (map.hasLayer(regionLayer)) {
+              map.removeLayer(regionLayer);
+            }
+          });
+
         }
       };
     }

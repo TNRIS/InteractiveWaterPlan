@@ -1,15 +1,11 @@
 node_modules
-public
 .tmp
 .sass-cache
-app/bower_components
-heroku
-/views
-src/dist
+*.pyc
+/dist
 deploy/.vagrant/
 deploy/production_inventory
 deploy/vagrant_ansible_inventory_default
-*.pyc
 scripts/db_config.py
 scripts/build
 scripts/Include

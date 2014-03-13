@@ -2,10 +2,7 @@
 
 angular.module('iswpApp')
   .service('NeedsService', function NeedsService($http, API_PATH) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
     var service = {};
-
-    service.needs = [];
 
     service.fetch = function(type, typeId) {
 

@@ -4,32 +4,51 @@ angular.module('iswpApp')
   .controller('ThemeCtrl', function ($scope, $location, $routeParams) {
     $scope.needsThemes = [
       {
-        name: 'View All'
+        name: 'Regional Summary',
+        type: 'ALL'
       },
       {
         type: "divider"
       },
       {
-        name: 'Municipal'
+        name: 'Municipal',
+        type: 'MUNICIPAL'
       },
       {
-        name: 'Manufacturing'
+        name: 'Manufacturing',
+        type: 'MANUFACTURING'
       },
       {
-        name: 'Mining'
+        name: 'Mining',
+        type: 'MINING'
       },
       {
-        name: 'Steam-Electric'
+        name: 'Steam-Electric',
+        type: 'STEAM-ELECTRIC'
       },
       {
-        name: 'Livestock'
+        name: 'Livestock',
+        type: 'LIVESTOCK'
       },
       {
-        name: 'Irrigation'
+        name: 'Irrigation',
+        type: 'IRRIGATION'
       }
     ];
 
     $scope.showTheme = function(theme) {
-      console.log("Show Type", theme);
+      var currYear = $scope.$stateParams.year;
+      //if the Regional Summary is selected, go to it
+      if (theme.type === "ALL") {
+        $scope.$state.go('needs.summary',
+          {year: currYear});
+        return;
+      }
+
+      //otherwise go to the Needs by EntityType view
+      $scope.$state.go('needs.type', {
+        entityType: theme.type,
+        year: currYear
+      });
     };
   });
