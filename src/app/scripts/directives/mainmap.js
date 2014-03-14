@@ -2,7 +2,8 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($state, $stateParams, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($rootScope, $state, $stateParams, RegionService, localStorageService, 
+      BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
 
       function _setupLayers(map) {
         // Base Layers
@@ -141,15 +142,13 @@ angular.module('iswpApp')
         template: '<div></div>',
         restrict: 'AE',
         scope: {
-          showRegions: '=',
-          zoom: '=',
-          centerLat: '=',
-          centerLng: '='
+          showRegions: '='
         },
         link: function postLink(scope, element, attrs) {
+
           var map = L.map(element[0], {
-              center: [scope.centerLat, scope.centerLng],
-              zoom: scope.zoom,
+              center: [31.780548, -99.022907],
+              zoom: 5,
               attributionControl: false,
               maxBounds: [[-16, -170], [68, -20]],
               minZoom: 3,
@@ -181,6 +180,20 @@ angular.module('iswpApp')
           _setupLayers(map);
 
           var regionLayer = _setupRegionLayer(scope);
+
+          //TODO: Use bound attributes instead of event listeners?
+          $rootScope.$on('map:zoomto:centerzoom', 
+            function(event, mapLoc) {
+              map.setView([mapLoc.centerLat, mapLoc.centerLng], 
+                mapLoc.zoom);
+            }
+          );
+
+          $rootScope.$on('map:zoomto:bounds', 
+            function(event, bounds) {
+              map.fitBounds(bounds);
+            }
+          );
 
           scope.$watch('showRegions', function() {
             if (scope.showRegions) {
