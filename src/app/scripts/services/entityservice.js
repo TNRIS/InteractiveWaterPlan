@@ -22,7 +22,6 @@ angular.module('iswpApp')
     };
 
     service.getEntity = function(entityId) {
-      console.log("GETTING");
       return _.first(service.getEntitiesByIds(entityId));
     };
 
