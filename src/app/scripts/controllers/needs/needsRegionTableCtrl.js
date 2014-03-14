@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsRegionTableCtrl', function ($scope, needsData) {
+  .controller('NeedsRegionTableCtrl', function ($scope, $rootScope, needsData) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
