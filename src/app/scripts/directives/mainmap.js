@@ -182,7 +182,11 @@ angular.module('iswpApp')
 
           var regionLayer = _setupRegionLayer(scope);
           
-          var entityLayer = new L.MarkerClusterGroup();
+          //TODO: figure out how to spiderfy at zoom level 12 always
+          var entityLayer = new L.MarkerClusterGroup({
+            showCoverageOnHover: false,
+            disableClusteringAtZoom: 12
+          });
           entityLayer.addTo(map);
 
           //TODO: Use bound attributes instead of event listeners?
