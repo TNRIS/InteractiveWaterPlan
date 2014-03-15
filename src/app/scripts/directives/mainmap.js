@@ -218,6 +218,7 @@ angular.module('iswpApp')
               //TODO: Lat/Lon columns are incorrectly labeled in source
               // database. Need Sabrina to fix.
               L.circleMarker([entity.Longitude, entity.Latitude])
+                .bindPopup('' + entity.EntityName)
                 .addTo(entityLayer);
             });
 

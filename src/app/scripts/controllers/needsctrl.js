@@ -51,8 +51,6 @@ angular.module('iswpApp')
           var currNeeds = NeedsService.getCurrent();
           $scope.entities = EntityService.getEntities(
             _.pluck(currNeeds, 'EntityId'));
-
-
         }
 
         //TODO: For needs.county, will need county bounds
