@@ -3,9 +3,7 @@
 angular.module('iswpApp')
   .controller('NeedsCtrl',
     function ($scope, $rootScope, $http, $location, localStorageService,
-      RegionService, NeedsService, ISWP_VARS) {
-
-      console.log("NEEDS CTRL");
+      RegionService, EntityService, NeedsService, ISWP_VARS) {
 
       //TODO: route validation (maybe this should be done in states.js?)
       // var validateRouteParams = function(evt, toState, toParams, fromState, fromParams) {
@@ -42,10 +40,19 @@ angular.module('iswpApp')
 
         if (currentState === 'needs.region') {
           //Set view to Region bounds
+          //TODO: Since some of the region entities fall outside
+          // the region's bounds, we might want to extend the bounds
+          // of the region with the bounds of all the entities.
           var regionFeat = RegionService.getRegion(stateParams.region);
           $rootScope.$emit('map:zoomto:bounds', regionFeat.getBounds());
           
           //TODO: And show the entities in that region
+          //TODO: Make sure values change when year changes
+          var currNeeds = NeedsService.getCurrent();
+          $scope.entities = EntityService.getEntities(
+            _.pluck(currNeeds, 'EntityId'));
+
+
         }
 
         //TODO: For needs.county, will need county bounds

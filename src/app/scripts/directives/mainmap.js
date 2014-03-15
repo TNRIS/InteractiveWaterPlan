@@ -142,7 +142,8 @@ angular.module('iswpApp')
         template: '<div></div>',
         restrict: 'AE',
         scope: {
-          showRegions: '='
+          showRegions: '=',
+          entities: '='
         },
         link: function postLink(scope, element, attrs) {
 
@@ -180,6 +181,7 @@ angular.module('iswpApp')
           _setupLayers(map);
 
           var regionLayer = _setupRegionLayer(scope);
+          var entityLayer = L.featureGroup().addTo(map);
 
           //TODO: Use bound attributes instead of event listeners?
           $rootScope.$on('map:zoomto:centerzoom', 
@@ -202,6 +204,25 @@ angular.module('iswpApp')
             else if (map.hasLayer(regionLayer)) {
               map.removeLayer(regionLayer);
             }
+          });
+
+          //TODO: Make sure values change when year changes
+          scope.$watchCollection('entities', function() {
+            if (!scope.entities || scope.entities.length === 0) {
+              return;
+            }
+
+            entityLayer.clearLayers();
+            _.each(scope.entities, function(entity) {
+
+              //TODO: Lat/Lon columns are incorrectly labeled in source
+              // database. Need Sabrina to fix.
+              L.circleMarker([entity.Longitude, entity.Latitude])
+                .addTo(entityLayer);
+            });
+
+            entityLayer.bringToFront();
+
           });
 
         }

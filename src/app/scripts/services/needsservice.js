@@ -4,6 +4,12 @@ angular.module('iswpApp')
   .service('NeedsService', function NeedsService($http, API_PATH) {
     var service = {};
 
+    var currentData = [];
+
+    service.getCurrent = function() {
+      return currentData;
+    };
+
     service.fetch = function(type, typeId) {
 
       if (_.isEmpty(typeId)) {
@@ -18,7 +24,8 @@ angular.module('iswpApp')
 
       var prom = $http.get(requestPath, {cache: true})
         .then(function(resp) {
-          return resp.data;
+          currentData = resp.data;
+          return currentData;
         });
 
       return prom;

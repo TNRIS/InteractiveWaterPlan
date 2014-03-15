@@ -22,10 +22,10 @@ angular.module('iswpApp')
     };
 
     service.getEntity = function(entityId) {
-      return _.first(service.getEntitiesByIds(entityId));
+      return _.first(service.getEntities(entityId));
     };
 
-    service.getEntitiesByIds = function(entityIds) {
+    service.getEntities = function(entityIds) {
       var idArr,
         toInt = _.partialRight(parseInt, 10);
 
