@@ -181,7 +181,9 @@ angular.module('iswpApp')
           _setupLayers(map);
 
           var regionLayer = _setupRegionLayer(scope);
-          var entityLayer = L.featureGroup().addTo(map);
+          
+          var entityLayer = new L.MarkerClusterGroup();
+          entityLayer.addTo(map);
 
           //TODO: Use bound attributes instead of event listeners?
           $rootScope.$on('map:zoomto:centerzoom', 
