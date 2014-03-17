@@ -5,6 +5,16 @@ angular.module('iswpApp')
   .directive('mainMap',
     function ($rootScope, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
 
+      var entityColors = [
+          {limit: 10, color: '#1A9641'}, //green
+          {limit: 25, color: '#A6D96A'},
+          {limit: 50, color: '#FFFFBF'},
+          {limit: 75, color: '#FDAE61'},
+          {limit: 100, color: '#D7191C'} //red
+        ],
+        minRadius = 6,
+        maxRadius = 14;
+
       function _calculateScaledValue(max, min, scaleMax, scaleMin, val) {
         var scaledVal;
         if (max === min) {
@@ -56,14 +66,13 @@ angular.module('iswpApp')
 
           MapLayerService.setupBaseLayers(map);
 
-          var regionLayer = MapLayerService.setupRegionLayer();
-
-          var entityLayer = L.featureGroup().addTo(map);
-
-          var oms = new OverlappingMarkerSpiderfier(map, {
-            keepSpiderfied: true,
-            nearbyDistance: 5
-          });
+          var currentYear = $stateParams.year,
+            regionLayer = MapLayerService.setupRegionLayer(),
+            entityLayer = L.featureGroup().addTo(map),
+            oms = new OverlappingMarkerSpiderfier(map, {
+              keepSpiderfied: true,
+              nearbyDistance: 5
+            });
 
           //TODO: Use bound attributes instead of event listeners?
           $rootScope.$on('map:zoomto:centerzoom',
@@ -88,18 +97,7 @@ angular.module('iswpApp')
             }
           });
 
-          var currentYear = $stateParams.year;
 
-          //TODO: Color by needs as % of demands
-          var entityColors = [
-              {limit: 10, color: '#1A9641'}, //green
-              {limit: 25, color: '#A6D96A'},
-              {limit: 50, color: '#FFFFBF'},
-              {limit: 75, color: '#FDAE61'},
-              {limit: 100, color: '#D7191C'} //red
-            ],
-            minRadius = 6,
-            maxRadius = 18;
 
           var updateMapEntities = function() {
             oms.clearMarkers();

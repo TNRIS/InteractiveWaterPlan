@@ -43,8 +43,8 @@ angular.module('iswpApp')
       $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
-      needsCol.map = 'N'+$scope.currentYear;
-      percentCol.map = 'NPD'+$scope.currentYear;
+      needsCol.map = 'N' + $scope.currentYear;
+      percentCol.map = 'NPD' + $scope.currentYear;
     });
     return;
   });
