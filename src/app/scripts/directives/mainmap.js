@@ -44,6 +44,33 @@ angular.module('iswpApp')
           //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
 
+          //Create a legend for the Needs colors
+          //TODO: generalize for other non-Needs Themes
+          var legend = L.control({
+            position: 'bottomleft'
+          });
+
+          legend.onAdd = function(map) {
+            this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs');
+            this._update();
+            return this._div;
+          };
+
+          legend._update = function() {
+            for (var i=entityColors.length-1; i >= 0; i--) {
+              var colorEntry = entityColors[i],
+                legendEntry = L.DomUtil.create('p', 'legend-entry', this._div);
+
+              legendEntry.innerHTML = '<svg height="12" width="12">' +
+              '  <circle cx="6" cy="6" r="6" stroke="black" stroke-width="1"' +
+                  'fill="' + colorEntry.color + '" /></svg>';
+
+              legendEntry.innerHTML+= ' Need &le; ' + colorEntry.limit + '% of Demand';
+            }
+          };
+
+          legend.addTo(map);
+
           //TODO: Are we using this?
           // var updateStoredMapLocation = _.debounce(function() {
           //   var center = map.getCenter(),
