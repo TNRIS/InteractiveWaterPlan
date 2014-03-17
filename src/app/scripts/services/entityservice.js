@@ -27,8 +27,8 @@ angular.module('iswpApp')
 
     service.getEntities = function(entityIds) {
       var idArr,
-        toInt = function(n) { 
-          return parseInt(n, 10); 
+        toInt = function(n) {
+          return parseInt(n, 10);
         };
 
       if (!_.isArray(entityIds)) {
