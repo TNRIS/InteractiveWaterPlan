@@ -328,8 +328,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
-            'fonts/**/*',
-            'scripts/**/*'
+            'fonts/**/*'
           ]
         }, {
           expand: true,
@@ -337,6 +336,11 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>/views',
           dest: '<%= yeoman.dist %>/views',
           src: '**/*.jade'
+        }, {
+          expand: true,
+          cwd: '.tmp/concat/scripts',
+          dest: '<%= yeoman.dist %>/public/scripts',
+          src: ['*']
         }, {
           expand: true,
           cwd: '.tmp/images',
@@ -529,10 +533,10 @@ module.exports = function (grunt) {
     'ngmin',
     'copy:dist',
     // 'cdnify',
-    'cssmin',
-    // 'uglify',
-    // 'rev',
-    // 'usemin'
+    //'cssmin',
+    //'uglify',
+    'rev',
+    'usemin'
   ]);
 
   grunt.registerTask('default', [
