@@ -69,7 +69,7 @@
     file: path={{ app_dir }} state=directory recurse=yes owner={{ water_plan_user }} group={{ water_plan_user }}
 
   - name: build app dist
-    local_action: command chdir=../src grunt build
+    local_action: command chdir=../src grunt build --force
     sudo: no
 
   - name: send app dist to server
