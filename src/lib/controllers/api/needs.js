@@ -42,9 +42,13 @@ exports.getNeedsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
-    'FROM vwMapWugNeeds WHERE WugRegion == ?';
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
+    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
+    'FROM vwMapWugNeeds ' +
+    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
+    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+    'WHERE WugRegion == ?';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [region]);
 };
@@ -61,9 +65,13 @@ exports.getNeedsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
-    'FROM vwMapWugNeeds WHERE WugCounty == ?';
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
+    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
+    'FROM vwMapWugNeeds ' +
+    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
+    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+    'WHERE WugCounty == ?';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [county]);
 };
@@ -80,9 +88,13 @@ exports.getNeedsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
-    'FROM vwMapWugNeeds WHERE WugType == ?';
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
+    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
+    'FROM vwMapWugNeeds ' +
+    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
+    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+    'WHERE WugType == ?';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [entityType]);
 };
@@ -100,9 +112,14 @@ exports.getNeedsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
-    'FROM vwMapWugNeeds WHERE EntityId == ?';
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
+    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
+    'FROM vwMapWugNeeds ' +
+    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
+    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+    'WHERE vwMapWugNeeds.EntityId == ?';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [entityId]);
 };
+

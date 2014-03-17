@@ -3,7 +3,6 @@
 angular.module('iswpApp')
   .directive('mainMap',
     function ($rootScope, localStorageService, MapLayerService) {
-
       return {
         template: '<div></div>',
         restrict: 'AE',
@@ -25,24 +24,25 @@ angular.module('iswpApp')
           //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
 
-          var updateStoredMapLocation = _.debounce(function() {
-            var center = map.getCenter(),
-                zoom = map.getZoom(),
-                precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-                lat = center.lat.toFixed(precision),
-                lng = center.lng.toFixed(precision);
+          //TODO: Are we using this?
+          // var updateStoredMapLocation = _.debounce(function() {
+          //   var center = map.getCenter(),
+          //       zoom = map.getZoom(),
+          //       precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
+          //       lat = center.lat.toFixed(precision),
+          //       lng = center.lng.toFixed(precision);
 
-            //Set in LocalStorage
-            localStorageService.set('mapLocation', {
-              zoom: zoom,
-              centerLat: lat,
-              centerLng: lng
-            });
+          //   //Set in LocalStorage
+          //   localStorageService.set('mapLocation', {
+          //     zoom: zoom,
+          //     centerLat: lat,
+          //     centerLng: lng
+          //   });
 
-            scope.$apply();
-          }, 250, {trailing: true});
+          //   scope.$apply();
+          // }, 250, {trailing: true});
 
-          map.on('moveend', updateStoredMapLocation);
+          // map.on('moveend', updateStoredMapLocation);
 
           MapLayerService.setupLayers(map);
 
@@ -51,7 +51,26 @@ angular.module('iswpApp')
           //TODO: figure out how to spiderfy at zoom level 12 always
           var entityLayer = new L.MarkerClusterGroup({
             showCoverageOnHover: false,
-            disableClusteringAtZoom: 12
+            iconCreateFunction: function(cluster) {
+              var childCount = cluster.getChildCount();
+
+              var c = ' marker-cluster-';
+              if (childCount < 10) {
+                c += 'small';
+              } else if (childCount < 100) {
+                c += 'medium';
+              } else {
+                c += 'large';
+              }
+
+              return new L.DivIcon(
+                {html: '<div><span>' + childCount + '</span></div>',
+                className: 'marker-cluster' + c,
+                iconSize: new L.Point(24, 24)
+              });
+            },
+            //using small radius so only the county-level entities are clustered
+            maxClusterRadius: 1
           });
           entityLayer.addTo(map);
 
@@ -78,6 +97,17 @@ angular.module('iswpApp')
             }
           });
 
+          //TODO: Color by needs as % of demands
+          var entityColors = [
+              '#1a9641', //green
+              '#a6d96a',
+              '#ffffbf',
+              '#fdae61',
+              '#d7191c' //red
+            ],
+            minRadius = 6,
+            maxRadius = 12;
+
           //TODO: Make sure values change when year changes
           scope.$watchCollection('entities', function() {
             if (!scope.entities || scope.entities.length === 0) {
@@ -89,8 +119,16 @@ angular.module('iswpApp')
 
               //TODO: Lat/Lon columns are incorrectly labeled in source
               // database. Need Sabrina to fix.
-              L.circleMarker([entity.Longitude, entity.Latitude])
-                .bindPopup('' + entity.EntityName)
+              L.circleMarker([entity.Longitude, entity.Latitude], {
+                radius: minRadius,
+                color: entityColors[0],
+                weight: 2,
+                opacity: 1,
+                fillColor: entityColors[0],
+                fillOpacity: 0.6
+
+              })
+                .bindLabel('' + entity.EntityName)
                 .addTo(entityLayer);
             });
 
