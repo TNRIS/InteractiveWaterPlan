@@ -98,7 +98,6 @@ angular.module('iswpApp')
           });
 
 
-
           var updateMapEntities = function() {
             oms.clearMarkers();
             entityLayer.clearLayers();
@@ -134,9 +133,7 @@ angular.module('iswpApp')
               var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
                 maxRadius, minRadius, need[yearNeedKey]);
 
-              //TODO: Lat/Lon columns are incorrectly labeled in source
-              // database. Need Sabrina to fix.
-              var marker = L.circleMarker([entity.Longitude, entity.Latitude], {
+              var marker = L.circleMarker([entity.Latitude, entity.Longitude], {
                 radius: scaledRadius,
                 color: '#000',
                 weight: 1,

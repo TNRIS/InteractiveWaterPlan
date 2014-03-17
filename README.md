@@ -90,8 +90,7 @@ To set up your authorized_keys file:
 2. Log on to the production server and add the public key as a new line to
    `~/.ssh/authorized_keys`. If the authorized_keys file doesn't exist, you may
    need to create it. Also, permissions MUST be set to 0644 for it and the
-   `~/.ssh/` directory and you must be the owner and group or sshd will ignore
-   the file it.
+   `~/.ssh/` directory and you must be the owner and group or sshd will ignore it.
 
 
 For deploying to production, run the ansible playbook with your inventory file
