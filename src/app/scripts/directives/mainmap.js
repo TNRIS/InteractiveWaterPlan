@@ -1,155 +1,40 @@
+/* global OverlappingMarkerSpiderfier:false */
 'use strict';
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($state, $stateParams, RegionService, localStorageService, BING_API_KEY, SWP_WMS_URL, ISWP_VARS) {
+    function ($rootScope, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
 
-      function _setupLayers(map) {
-        // Base Layers
-        var esriGray = L.esri.basemapLayer("Gray");
+      var entityColors = [
+          {limit: 10, color: '#1A9641'}, //green
+          {limit: 25, color: '#A6D96A'},
+          {limit: 50, color: '#FFFFBF'},
+          {limit: 75, color: '#FDAE61'},
+          {limit: 100, color: '#D7191C'} //red
+        ],
+        minRadius = 6,
+        maxRadius = 14;
 
-        var mqOpen = L.tileLayer(
-          'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
-          subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
-          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,' +
-              '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.' +
-              'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
-        });
-
-        var mqAerial = L.tileLayer(
-          'http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png', {
-          subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
-          attribution: 'Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency. ' +
-              'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
-        });
-
-        var bingRoad = L.bingLayer(BING_API_KEY, {
-          type: 'Road'
-        });
-
-        var bingHybrid = L.bingLayer(BING_API_KEY, {
-          type: 'AerialWithLabels'
-        });
-
-        var bingAerial = L.bingLayer(BING_API_KEY, {
-          type: 'Aerial'
-        });
-
-        // Overlay WMS Layers
-        var planningAreas = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '4,7',
-          format: 'image/png',
-          transparent: true,
-          opacity: 0.6
-        });
-
-        var counties = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '1,9',
-          format: 'image/png',
-          transparent: true,
-          opacity: 0.6
-        });
-
-        var countyLabels = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '9',
-          format: 'image/png',
-          transparent: true
-        });
-
-        var senateDistricts = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '3,13',
-          format: 'image/png',
-          transparent: true,
-          opacity: 0.6
-        });
-
-        var houseDistricts = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '2,11',
-          format: 'image/png',
-          transparent: true,
-          opacity: 0.6
-        });
-
-        var baseMaps = {
-          'Esri Gray': esriGray,
-          'MapQuest Open': mqOpen,
-          'MapQuest Open Aerial': mqAerial,
-          'Bing Road': bingRoad,
-          'Bing Hybrid': bingHybrid,
-          'Bing Aerial': bingAerial
-        };
-
-        var overlayLayers = {
-          'Regional Water Planning Areas': planningAreas,
-          'Texas Counties': counties,
-          'Texas County Names': countyLabels,
-          'Texas Senate Districts (2011)': senateDistricts,
-          'Texas House Districts (2011)': houseDistricts
-        };
-
-        //Start with esriGray and planningAreas selected
-        esriGray.addTo(map);
-        planningAreas.addTo(map);
-
-        //Add controls
-        L.control.layers(baseMaps, overlayLayers).addTo(map);
-      }
-
-      function _setupRegionLayer(scope) {
-        var regionFeats = RegionService.regionFeatures;
-
-        var regionLayer = L.geoJson(regionFeats, {
-          style: {
-            stroke: false,
-            color: '#ffcc00',
-            weight: 3,
-            opacity: 1,
-            fillOpacity: 0
-          },
-          onEachFeature: function (feature, layer) {
-            //add leaflet-label (from plugin)
-            layer.bindLabel("Region "+layer.feature.properties.region);
-
-            //view data for region on click
-            layer.on('click', function () {
-              $state.go('^.region', {
-                region: layer.feature.properties.region,
-                year: $stateParams.year
-              });
-            });
-
-            //highlight on mouseover
-            layer.on('mouseover', function () {
-              layer.setStyle({
-                stroke: true
-              });
-            });
-
-            //unhighlight on mouseout
-            layer.on('mouseout', function () {
-              layer.setStyle({
-                stroke: false
-              });
-            });
-          }
-        });
-
-        return regionLayer;
+      function _calculateScaledValue(max, min, scaleMax, scaleMin, val) {
+        var scaledVal;
+        if (max === min) {
+          return scaleMin;
+        }
+        scaledVal = (scaleMax - scaleMin) * (val - min) / (max - min) + scaleMin;
+        return scaledVal;
       }
 
       return {
         template: '<div></div>',
         restrict: 'AE',
         scope: {
-          showRegions: '=',
-          zoom: '=',
-          centerLat: '=',
-          centerLng: '='
+          showRegions: '='
         },
         link: function postLink(scope, element, attrs) {
+
           var map = L.map(element[0], {
-              center: [scope.centerLat, scope.centerLng],
-              zoom: scope.zoom,
+              center: [31.780548, -99.022907],
+              zoom: 5,
               attributionControl: false,
               maxBounds: [[-16, -170], [68, -20]],
               minZoom: 3,
@@ -159,28 +44,49 @@ angular.module('iswpApp')
           //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
 
-          var updateStoredMapLocation = _.debounce(function() {
-            var center = map.getCenter(),
-                zoom = map.getZoom(),
-                precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-                lat = center.lat.toFixed(precision),
-                lng = center.lng.toFixed(precision);
+          //TODO: Are we using this?
+          // var updateStoredMapLocation = _.debounce(function() {
+          //   var center = map.getCenter(),
+          //       zoom = map.getZoom(),
+          //       precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
+          //       lat = center.lat.toFixed(precision),
+          //       lng = center.lng.toFixed(precision);
 
-            //Set in LocalStorage
-            localStorageService.set('mapLocation', {
-              zoom: zoom,
-              centerLat: lat,
-              centerLng: lng
+          //   //Set in LocalStorage
+          //   localStorageService.set('mapLocation', {
+          //     zoom: zoom,
+          //     centerLat: lat,
+          //     centerLng: lng
+          //   });
+
+          //   scope.$apply();
+          // }, 250, {trailing: true});
+
+          // map.on('moveend', updateStoredMapLocation);
+
+          MapLayerService.setupBaseLayers(map);
+
+          var currentYear = $stateParams.year,
+            regionLayer = MapLayerService.setupRegionLayer(),
+            entityLayer = L.featureGroup().addTo(map),
+            oms = new OverlappingMarkerSpiderfier(map, {
+              keepSpiderfied: true,
+              nearbyDistance: 5
             });
 
-            scope.$apply();
-          }, 250, {trailing: true});
+          //TODO: Use bound attributes instead of event listeners?
+          $rootScope.$on('map:zoomto:centerzoom',
+            function(event, mapLoc) {
+              map.setView([mapLoc.centerLat, mapLoc.centerLng],
+                mapLoc.zoom);
+            }
+          );
 
-          map.on('moveend', updateStoredMapLocation);
-
-          _setupLayers(map);
-
-          var regionLayer = _setupRegionLayer(scope);
+          $rootScope.$on('map:zoomto:bounds',
+            function(event, bounds) {
+              map.fitBounds(bounds);
+            }
+          );
 
           scope.$watch('showRegions', function() {
             if (scope.showRegions) {
@@ -191,6 +97,63 @@ angular.module('iswpApp')
             }
           });
 
+
+
+          var updateMapEntities = function() {
+            oms.clearMarkers();
+            entityLayer.clearLayers();
+
+            //TODO: Will need to refactor to generalize for Themes other than Needs
+            var needsData = NeedsService.getCurrent(),
+              entities = EntityService.getEntities(_.pluck(needsData, 'EntityId'));
+
+            if (!entities || entities.length === 0) {
+              return;
+            }
+
+            //grab the current year
+            currentYear = $stateParams.year;
+
+            var yearNeedKey = 'N' + currentYear,
+              yearPctKey = 'NPD' + currentYear,
+              maxNeed = _.max(needsData, yearNeedKey)[yearNeedKey],
+              minNeed = _.min(needsData, yearNeedKey)[yearNeedKey],
+              //sort so that largest will be on bottom when there is overlap
+              // of the county-centroid entities
+              sortedEntities = _.sortBy(entities, yearNeedKey).reverse();
+
+            _.each(sortedEntities, function(entity) {
+              var need = NeedsService.getForEntity(entity.EntityId);
+              var pctOfDemand = parseInt(need[yearPctKey], 10);
+
+              //find the first color with limit >= pctOfDemand
+              var colorEntry = _.find(entityColors, function(c) {
+                return c.limit >= pctOfDemand;
+              });
+
+              var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
+                maxRadius, minRadius, need[yearNeedKey]);
+
+              //TODO: Lat/Lon columns are incorrectly labeled in source
+              // database. Need Sabrina to fix.
+              var marker = L.circleMarker([entity.Longitude, entity.Latitude], {
+                radius: scaledRadius,
+                color: '#000',
+                weight: 1,
+                opacity: 0.5,
+                fillColor: colorEntry.color,
+                fillOpacity: 0.75
+              })
+              .bindLabel('' + entity.EntityName)
+              .addTo(entityLayer);
+
+              //add it to the spiderfier
+              oms.addMarker(marker);
+            });
+
+          };
+
+          scope.$on('$stateChangeSuccess', updateMapEntities);
         }
       };
     }

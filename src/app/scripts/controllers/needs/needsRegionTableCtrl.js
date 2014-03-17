@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsRegionTableCtrl', function ($scope, needsData) {
+  .controller('NeedsRegionTableCtrl', function ($scope, $rootScope, needsData) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
@@ -16,13 +16,18 @@ angular.module('iswpApp')
       formatFunction: 'number'
     };
 
+    var percentCol = {
+      map: 'NPD2010',
+      label: 'Entity Need as % of Demand**'
+    };
+
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region'},
       {map: 'EntityName', label: 'Name'}, //TODO: link
       {map: 'WugCounty', label: 'County'}, //TODO: link
       {map: 'WugType', label: 'Entity Type'}, //TODO: link
-      {id: 'needsColumn', map: 'N2010', label: 'Need (acre-feet/yr) in Region', formatFunction: 'number'}
-      //TODO: Get % Needs into API return {map: '', label: 'Entity Need As % of Demand'}, //TODO: % formatFunction
+      needsCol,
+      percentCol
     ];
 
     $scope.tableConfig = {
@@ -38,7 +43,8 @@ angular.module('iswpApp')
       $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
-      needsCol.map = 'N'+$scope.currentYear;
+      needsCol.map = 'N' + $scope.currentYear;
+      percentCol.map = 'NPD' + $scope.currentYear;
     });
     return;
   });

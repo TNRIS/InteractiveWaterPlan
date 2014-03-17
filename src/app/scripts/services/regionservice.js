@@ -12,9 +12,17 @@ angular.module('iswpApp')
 
     service.getRegion = function(regionLetter) {
       regionLetter = regionLetter.toUpperCase();
-      return _.find(service.regionFeatures, function (f) {
-        return f.properties.region === regionLetter;
-      });
+      var regionObj = _.find(service.regionFeatures, 
+        function (f) {
+          return f.properties.region === regionLetter;
+        }
+      );
+
+      if (regionObj) {
+        return L.geoJson(regionObj); 
+      }
+
+      return null;
     };
 
     return service;
