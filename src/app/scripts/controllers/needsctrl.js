@@ -45,12 +45,6 @@ angular.module('iswpApp')
           // of the region with the bounds of all the entities.
           var regionFeat = RegionService.getRegion(stateParams.region);
           $rootScope.$emit('map:zoomto:bounds', regionFeat.getBounds());
-          
-          //TODO: And show the entities in that region
-          //TODO: Make sure values change when year changes
-          var currNeeds = NeedsService.getCurrent();
-          $scope.entities = EntityService.getEntities(
-            _.pluck(currNeeds, 'EntityId'));
         }
 
         //TODO: For needs.county, will need county bounds

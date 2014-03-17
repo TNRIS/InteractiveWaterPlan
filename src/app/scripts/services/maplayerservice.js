@@ -6,7 +6,7 @@ angular.module('iswpApp')
     function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL) {
       var service = {};
 
-      service.setupLayers = function(map) {
+      service.setupBaseLayers = function(map) {
         // Base Layers
         var esriGray = L.esri.basemapLayer("Gray");
 

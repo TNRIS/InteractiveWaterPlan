@@ -1,14 +1,24 @@
+/* global OverlappingMarkerSpiderfier:false */
 'use strict';
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($rootScope, localStorageService, MapLayerService) {
+    function ($rootScope, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
+
+      function _calculateScaledValue(max, min, scaleMax, scaleMin, val) {
+        var scaledVal;
+        if (max === min) {
+          return scaleMin;
+        }
+        scaledVal = (scaleMax - scaleMin) * (val - min) / (max - min) + scaleMin;
+        return scaledVal;
+      }
+
       return {
         template: '<div></div>',
         restrict: 'AE',
         scope: {
-          showRegions: '=',
-          entities: '='
+          showRegions: '='
         },
         link: function postLink(scope, element, attrs) {
 
@@ -44,35 +54,16 @@ angular.module('iswpApp')
 
           // map.on('moveend', updateStoredMapLocation);
 
-          MapLayerService.setupLayers(map);
+          MapLayerService.setupBaseLayers(map);
 
-          var regionLayer = MapLayerService.setupRegionLayer(scope);
+          var regionLayer = MapLayerService.setupRegionLayer();
 
-          //TODO: figure out how to spiderfy at zoom level 12 always
-          var entityLayer = new L.MarkerClusterGroup({
-            showCoverageOnHover: false,
-            iconCreateFunction: function(cluster) {
-              var childCount = cluster.getChildCount();
+          var entityLayer = L.featureGroup().addTo(map);
 
-              var c = ' marker-cluster-';
-              if (childCount < 10) {
-                c += 'small';
-              } else if (childCount < 100) {
-                c += 'medium';
-              } else {
-                c += 'large';
-              }
-
-              return new L.DivIcon(
-                {html: '<div><span>' + childCount + '</span></div>',
-                className: 'marker-cluster' + c,
-                iconSize: new L.Point(24, 24)
-              });
-            },
-            //using small radius so only the county-level entities are clustered
-            maxClusterRadius: 1
+          var oms = new OverlappingMarkerSpiderfier(map, {
+            keepSpiderfied: true,
+            nearbyDistance: 5
           });
-          entityLayer.addTo(map);
 
           //TODO: Use bound attributes instead of event listeners?
           $rootScope.$on('map:zoomto:centerzoom',
@@ -97,45 +88,74 @@ angular.module('iswpApp')
             }
           });
 
+          var currentYear = $stateParams.year;
+
           //TODO: Color by needs as % of demands
           var entityColors = [
-              '#1a9641', //green
-              '#a6d96a',
-              '#ffffbf',
-              '#fdae61',
-              '#d7191c' //red
+              {limit: 10, color: '#1A9641'}, //green
+              {limit: 25, color: '#A6D96A'},
+              {limit: 50, color: '#FFFFBF'},
+              {limit: 75, color: '#FDAE61'},
+              {limit: 100, color: '#D7191C'} //red
             ],
             minRadius = 6,
-            maxRadius = 12;
+            maxRadius = 18;
 
-          //TODO: Make sure values change when year changes
-          scope.$watchCollection('entities', function() {
-            if (!scope.entities || scope.entities.length === 0) {
+          var updateMapEntities = function() {
+            oms.clearMarkers();
+            entityLayer.clearLayers();
+
+            //TODO: Will need to refactor to generalize for Themes other than Needs
+            var needsData = NeedsService.getCurrent(),
+              entities = EntityService.getEntities(_.pluck(needsData, 'EntityId'));
+
+            if (!entities || entities.length === 0) {
               return;
             }
 
-            entityLayer.clearLayers();
-            _.each(scope.entities, function(entity) {
+            //grab the current year
+            currentYear = $stateParams.year;
+
+            var yearNeedKey = 'N' + currentYear,
+              yearPctKey = 'NPD' + currentYear,
+              maxNeed = _.max(needsData, yearNeedKey)[yearNeedKey],
+              minNeed = _.min(needsData, yearNeedKey)[yearNeedKey],
+              //sort so that largest will be on bottom when there is overlap
+              // of the county-centroid entities
+              sortedEntities = _.sortBy(entities, yearNeedKey).reverse();
+
+            _.each(sortedEntities, function(entity) {
+              var need = NeedsService.getForEntity(entity.EntityId);
+              var pctOfDemand = parseInt(need[yearPctKey], 10);
+
+              //find the first color with limit >= pctOfDemand
+              var colorEntry = _.find(entityColors, function(c) {
+                return c.limit >= pctOfDemand;
+              });
+
+              var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
+                maxRadius, minRadius, need[yearNeedKey]);
 
               //TODO: Lat/Lon columns are incorrectly labeled in source
               // database. Need Sabrina to fix.
-              L.circleMarker([entity.Longitude, entity.Latitude], {
-                radius: minRadius,
-                color: entityColors[0],
-                weight: 2,
-                opacity: 1,
-                fillColor: entityColors[0],
-                fillOpacity: 0.6
-
+              var marker = L.circleMarker([entity.Longitude, entity.Latitude], {
+                radius: scaledRadius,
+                color: '#000',
+                weight: 1,
+                opacity: 0.5,
+                fillColor: colorEntry.color,
+                fillOpacity: 0.75
               })
-                .bindLabel('' + entity.EntityName)
-                .addTo(entityLayer);
+              .bindLabel('' + entity.EntityName)
+              .addTo(entityLayer);
+
+              //add it to the spiderfier
+              oms.addMarker(marker);
             });
 
-            entityLayer.bringToFront();
+          };
 
-          });
-
+          scope.$on('$stateChangeSuccess', updateMapEntities);
         }
       };
     }
