@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('needsMap',
-    function ($rootScope, $state, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
+    function ($rootScope, $state, $stateParams, localStorageService, RegionService, MapLayerService, NeedsService, EntityService) {
 
       var entityColors = [
           {limit: 10, color: '#1A9641'}, //green
@@ -14,6 +14,9 @@ angular.module('iswpApp')
         ],
         minRadius = 6,
         maxRadius = 14;
+
+      var stateCenter = [31.780548, -99.022907],
+        stateZoom = 5;
 
       function _calculateScaledValue(max, min, scaleMax, scaleMin, val) {
         var scaledVal;
@@ -71,8 +74,8 @@ angular.module('iswpApp')
         link: function postLink(scope, element, attrs) {
 
           var map = L.map(element[0], {
-              center: [31.780548, -99.022907],
-              zoom: 5,
+              center: stateCenter,
+              zoom: stateZoom,
               attributionControl: false,
               maxBounds: [[-16, -170], [68, -20]],
               minZoom: 3,
@@ -83,10 +86,7 @@ angular.module('iswpApp')
           L.control.attribution({prefix: false}).addTo(map);
 
           //Create a legend for the Needs colors
-          //TODO: generalize for other non-Needs Themes
-
           var legendControl = _createLegend();
-
 
           //TODO: Are we using this?
           // var updateStoredMapLocation = _.debounce(function() {
@@ -118,7 +118,7 @@ angular.module('iswpApp')
               nearbyDistance: 5
             });
 
-          //TODO: Use bound attributes instead of event listeners?
+
           $rootScope.$on('map:zoomto:centerzoom',
             function(event, mapLoc) {
               map.setView([mapLoc.centerLat, mapLoc.centerLng],
@@ -134,7 +134,7 @@ angular.module('iswpApp')
 
           $rootScope.$on('map:zoomto:state',
             function(event) {
-              map.setView([31.780548, -99.022907], 5);
+              map.setView(stateCenter, stateZoom);
             }
           );
 
@@ -175,6 +175,16 @@ angular.module('iswpApp')
               removeRegions();
               showLegend();
             }
+
+            if (currentState === 'needs.region') {
+              var regionFeat = RegionService.getRegion($stateParams.region);
+              map.fitBounds(regionFeat.getBounds());
+            }
+            else if (currentState === 'needs.type') {
+              map.setView(stateCenter, stateZoom);
+            }
+            //TODO: needs.county
+            //TODO: needs.entity
 
             oms.clearMarkers();
             entityLayer.clearLayers();
