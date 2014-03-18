@@ -2,9 +2,9 @@
 
 Generated with the [angular-fullstack](https://github.com/DaftMonk/generator-angular-fullstack) Yeoman generator.
 
-Client files are in `src/app/`
+AngularJS (client-side app) files are in `application/client/`
 
-Backend files are in `src/lib/`
+Express (server-side app) files are in `application/server/`
 
 ## Initial setup
 
@@ -17,16 +17,16 @@ First make sure these are installed:
 ## Building
 
 1. Install `bower` and `grunt` globally: `npm install -g bower grunt`
-2. Navigate to `src/` and run `bower install` and `npm install`
+2. Navigate to `application/` and run `bower install` and `npm install`
 3. Now you should be able to use any of the `grunt` tasks defined in `Gruntfile.js`
 
-`grunt serve` will launch express in dev mode and watch files in app/ and lib/
+`grunt serve` will launch express in dev mode and watch files in client/ and server/
 
 `grunt serve:dist` will launch express in production mode
 
-`grunt build` will build deployable dist\ folder
+`grunt build` will build deployable dist/ folder
 
-`grunt` will run tests and build deployable dist\ folder
+`grunt` will run tests and build deployable dist/ folder
 
 ## Generators
 

@@ -1,0 +1,153 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base href="/">
+    <title>Texas State Water Plan 2012</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />
+    <!-- build:css(client) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,client}) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="iswpApp">
+    <!--[if lte IE 8]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li class="active">
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a target="_self" href="/about">About</a>
+                </li>
+            </ul>
+            <h1>Texas State Water Plan 2012</h1>
+            <h2 class="text-muted">Texas Water Development Board</h2>
+        </div>
+
+        <!-- div class="callout callout-warning">
+            <h4><i class="fa fa-warning"></i> Warning!</h4>
+            <p>
+                The site is currently in beta testing and is undergoing QA/QC. In some cases, the graphic representation and nomenclature may not reflect a complete and accurate portrayal of actual State Water Plan data.
+            </p>
+            <p>
+                For definitive data see the <a href="http://www.twdb.state.tx.us/waterplanning/swp/2012/" title="2012 State Water Plan">2012 State Water Plan</a> or <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/" title="2011 Regional Water Plans">2011 Regional Water Plans</a>.
+            </p>
+        </div -->
+
+        <noscript>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="callout callout-danger">
+                        <h4><i class="fa fa-warning"></i> Error: Javascript is Required!</h4>
+                        Javascript is required to use the Interactive State Water Plan Application. <br />
+                        Please enable Javascript in your browser, or visit <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
+                        to view Regional Water Plan data in the traditional viewer.
+                    </div>
+                </div>
+            </div>
+        </noscript>
+
+        <div ui-view></div>
+
+        <div class="footer">
+            <p>This website is brought to you by the <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a></p>
+            <p>
+                <a href="/about" target="_self" title="Site Policies">Site Policies</a> |
+                <a href="http://www.texas.gov/" title="Texas Online">Texas Online</a> |
+                <a href="http://www.governor.texas.gov/homeland" title="Homeland Security">Homeland Security</a> |
+                <a href="http://www2.tsl.state.tx.us/trail" title="TRAIL">TRAIL</a> |
+                <a href="mailto:InteractiveSWP@twdb.texas.gov" title="Contact Us">Contact Us</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- Bootstrapped variables -->
+    <script>
+        var ISWP_VARS = <%- ISWP_VARS %>;
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="scripts/shims/es5-shim.js"></script>
+    <script src="scripts/shims/json3.js"></script>
+    <![endif]-->
+
+    <!--[if lte IE 9]>
+    <script src="scripts/shims/typedarray.js"></script>
+    <![endif]-->
+
+    <!-- CDN-hosted scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <script src="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js'></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.1/leaflet-omnivore.min.js'></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-sanitize.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-cookies.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"></script>
+
+    <!-- build:js(client) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/sugar/release/sugar-full.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/angular-local-storage/angular-local-storage.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/smart-table/Smart-Table.min.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,client}) scripts/scripts.js -->
+    <script src="scripts/vendor/esriBasemapLayer.js"></script>
+    <script src="scripts/vendor/bingLayer.js"></script>
+    <script src="scripts/vendor/oms.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/states.js"></script>
+    <script src="scripts/controllers/needsctrl.js"></script>
+    <script src="scripts/controllers/needs/needsSummaryTableCtrl.js"></script>
+    <script src="scripts/controllers/needs/needsRegionTableCtrl.js"></script>
+    <script src="scripts/controllers/needs/needsCountyTableCtrl.js"></script>
+    <script src="scripts/controllers/needs/needsEntityTypeTableCtrl.js"></script>
+    <script src="scripts/controllers/needs/needsEntityTableCtrl.js"></script>
+    <script src="scripts/controllers/themectrl.js"></script>
+    <script src="scripts/controllers/yearselectctrl.js"></script>
+    <script src="scripts/services/needsservice.js"></script>
+    <script src="scripts/services/entityservice.js"></script>
+    <script src="scripts/services/regionservice.js"></script>
+    <script src="scripts/services/maplayerservice.js"></script>
+    <script src="scripts/directives/needslink.js"></script>
+    <script src="scripts/directives/needsmap.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

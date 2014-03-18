@@ -2,7 +2,7 @@ node_modules
 .tmp
 .sass-cache
 *.pyc
-/dist
+application/dist
 deploy/.vagrant/
 deploy/production_inventory
 deploy/vagrant_ansible_inventory_default
