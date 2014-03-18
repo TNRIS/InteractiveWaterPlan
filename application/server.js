@@ -10,15 +10,15 @@ var express = require('express');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Application Config
-var config = require('./lib/config/config');
+var config = require('./server/config/config');
 
 var app = express();
 
 // Express settings
-require('./lib/config/express')(app);
+require('./server/config/express')(app);
 
 // Routing
-require('./lib/routes')(app);
+require('./server/routes')(app);
 
 // Start server
 app.listen(config.port, function () {

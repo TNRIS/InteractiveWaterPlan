@@ -21,8 +21,8 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: {
       // configurable paths
-      app: require('./bower.json').appPath || 'app',
-      dist: '../dist'
+      app: require('./bower.json').appPath || 'client',
+      dist: './dist'
     },
     express: {
       options: {
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
       },
       prod: {
         options: {
-          script: 'dist/server.js',
+          script: './dist/server.js',
           node_env: 'production'
         }
       }
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
       express: {
         files: [
           'server.js',
-          'lib/**/*.{js,json}'
+          'server/**/*.{js,json}'
         ],
         tasks: ['newer:jshint:server', 'express:dev', 'wait'],
         options: {
@@ -102,9 +102,9 @@ module.exports = function (grunt) {
       },
       server: {
         options: {
-          jshintrc: 'lib/.jshintrc'
+          jshintrc: 'server/.jshintrc'
         },
-        src: [ 'lib/{,*/}*.js']
+        src: [ 'server/{,*/}*.js']
       },
       all: [
         '<%= yeoman.app %>/scripts/{,*/}*.js'
@@ -370,7 +370,7 @@ module.exports = function (grunt) {
           src: [
             'package.json',
             'server.js',
-            'lib/**/*'
+            'server/**/*'
           ]
         }]
       }

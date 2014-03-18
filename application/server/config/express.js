@@ -28,8 +28,8 @@ module.exports = function(app) {
 
     app.use(express.compress());
     app.use(express.static(path.join(config.root, '.tmp')));
-    app.use(express.static(path.join(config.root, 'app')));
-    app.set('views', config.root + '/app/views');
+    app.use(express.static(path.join(config.root, 'client')));
+    app.set('views', config.root + '/client/views');
   });
 
   app.configure('production', function(){
