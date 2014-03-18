@@ -66,7 +66,7 @@ body {
 }
 
 
-#main-map {
+.main-map {
   height: 200px;
   width: 100%;
 }
@@ -147,13 +147,19 @@ body {
   box-shadow: 0 1px 5px rgba(0,0,0,0.4);
   background: #fff;
   border-radius: 5px;
-}
-
-.legend-needs {
+  padding: 4px;
   font-size: 14px;
-  p {
+
+  h4 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 4px 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0 0 0 4px;
     margin: 0;
-    padding: 2px 10px;
   }
 }
 
@@ -170,7 +176,7 @@ body {
         margin-bottom: 10px;
     }
 
-    #main-map {
+    .main-map {
       height: 400px;
       width: 100%;
     }

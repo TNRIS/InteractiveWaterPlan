@@ -2,8 +2,8 @@
 
 angular.module('iswpApp').config(
   function($stateProvider, $urlRouterProvider, $locationProvider, $uiViewScrollProvider) {
-    //use html5 urls
-    $locationProvider.html5Mode(true);
+    //don't use html5 urls because lack of support in IE (so sharing URLs will not work well)
+    $locationProvider.html5Mode(false);
 
     //disable whacky auto-scroll behavior
     $uiViewScrollProvider.useAnchorScroll();

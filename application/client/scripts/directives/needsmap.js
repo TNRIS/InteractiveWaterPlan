@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .directive('mainMap',
+  .directive('needsMap',
     function ($rootScope, $state, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
 
       var entityColors = [
@@ -41,15 +41,25 @@ angular.module('iswpApp')
         };
 
         legend._update = function() {
-          for (var i=entityColors.length-1; i >= 0; i--) {
+          L.DomUtil.create('h4', '', this._div)
+            .innerHTML = 'Need as a % of Demand';
+
+          var ul = L.DomUtil.create('ul', '', this._div),
+            tpl = '{lowerBound}% &lt; <svg height="14" width="14">' +
+              '<circle cx="7" cy="7" r="6" stroke="black" stroke-width="1" fill="{color}">' +
+              '</svg> &le; {upperBound}%';
+
+          for (var i = entityColors.length - 1; i >= 0; i--) {
             var colorEntry = entityColors[i],
-              legendEntry = L.DomUtil.create('p', 'legend-entry', this._div);
+              prevColorEntry = entityColors[i-1],
+              legendEntry = L.DomUtil.create('li', 'legend-entry', ul);
 
-            legendEntry.innerHTML = '<svg height="14" width="14">' +
-            '  <circle cx="7" cy="7" r="6" stroke="black" stroke-width="1"' +
-                'fill="' + colorEntry.color + '" /></svg>';
+            legendEntry.innerHTML = tpl.assign({
+              color: colorEntry.color,
+              upperBound: colorEntry.limit,
+              lowerBound: prevColorEntry ? prevColorEntry.limit : 0
+            });
 
-            legendEntry.innerHTML+= ' Need &le; ' + colorEntry.limit + '% of Demand';
           }
         };
 
