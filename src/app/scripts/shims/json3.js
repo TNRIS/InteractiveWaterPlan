@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 /*! JSON v3.2.6 | http://bestiejs.github.io/json3 | Copyright 2012-2013, Kit Cambridge | http://kit.mit-license.org */
 ;(function (window) {
   // Convenience aliases.
@@ -859,3 +860,4 @@
     });
   }
 }(this));
+/* jshint ignore:end */
