@@ -21,10 +21,12 @@ angular.module('iswpApp')
       label: 'Entity Need as % of Demand**'
     };
 
+    var cellTemplateUrl = 'views/partials/needs/needs_link_cell.html';
+
     $scope.tableColumns = [
-      {map: 'WugCounty', label: 'County'}, //TODO: link
-      {map: 'EntityName', label: 'Name'}, //TODO: link
-      {map: 'WugType', label: 'Entity Type'}, //TODO: link
+      {map: 'WugCounty', label: 'County'},
+      {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
+      {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
       needsCol,
       percentCol
     ];

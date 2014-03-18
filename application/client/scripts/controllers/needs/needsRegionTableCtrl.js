@@ -22,11 +22,13 @@ angular.module('iswpApp')
       formatFunction: function(val) { return '' + val + '%'; }
     };
 
+    var cellTemplateUrl = 'views/partials/needs/needs_link_cell.html';
+
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region'},
-      {map: 'EntityName', label: 'Name'}, //TODO: link
-      {map: 'WugCounty', label: 'County'}, //TODO: link
-      {map: 'WugType', label: 'Entity Type'}, //TODO: link
+      {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
+      {map: 'WugCounty', label: 'County', cellTemplateUrl: cellTemplateUrl},
+      {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
       needsCol,
       percentCol
     ];

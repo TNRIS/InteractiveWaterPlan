@@ -7,8 +7,10 @@ angular.module('iswpApp')
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
     $scope.tableDescription = 'Table summarizes identified water needs<span class="note-marker">*</span> by region and water use category (click on region or category for summary).';
 
+    var cellTemplateUrl = 'views/partials/needs/needs_link_cell.html';
+
     $scope.tableColumns = [
-      {map: 'REGION', label: 'Region'}, //TODO: link
+      {map: 'REGION', label: 'Region', cellTemplateUrl: cellTemplateUrl}, //TODO: link
       {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number'},
       {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number'},
       {map: 'MINING', label: 'Mining', formatFunction: 'number'},
