@@ -6,7 +6,7 @@ mssql_connect_string = 'mssql+pymssql://{user}:{password}@{host}'.format(**db_co
 mssql_engine = sa.create_engine(mssql_connect_string, connect_args={'database': db_config.db_name})
 mssql_metadata = sa.MetaData(bind=mssql_engine)
 
-sqlite_file = '../src/lib/cache/cache.db'
+sqlite_file = '../application/server/cache/cache.db'
 sqlite_engine = sa.create_engine('sqlite:///' + sqlite_file)
 sqlite_metadata = sa.MetaData(bind=sqlite_engine)
 

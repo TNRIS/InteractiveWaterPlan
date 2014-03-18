@@ -200,7 +200,7 @@ angular.module('iswpApp')
 
             _.each(sortedEntities, function(entity) {
               var need = NeedsService.getForEntity(entity.EntityId);
-              var pctOfDemand = parseInt(need[yearPctKey], 10);
+              var pctOfDemand = need[yearPctKey];
 
               //find the first color with limit >= pctOfDemand
               var colorEntry = _.find(entityColors, function(c) {
