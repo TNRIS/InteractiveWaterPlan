@@ -1,18 +1,18 @@
-check host node-app with address 127.0.0.1
-    start "/sbin/start {{ upstart_cmd }}"
-    stop "/sbin/stop {{ upstart_cmd }}"
-    if failed port {{ node_port }} protocol HTTP
+check host tilestache with address 127.0.0.1
+    start "/sbin/start tilestache"
+    stop "/sbin/stop tilestache"
+    if failed port {{ tilestache_port }} protocol HTTP
         request /
         with timeout 5 seconds
         then restart
         if 5 restarts within 5 cycles then timeout
 
 
-check host varnish-cache with address 127.0.0.1
+check host varnish-tiles with address 127.0.0.1
     start "/usr/bin/service varnish start"
     stop "/usr/bin/service varnish stop"
     if failed port {{ varnish_port }} protocol HTTP
-        request /
+        request /{{ tilestache_url_root }}
         with timeout 5 seconds
         then restart
         if 5 restarts within 5 cycles then timeout

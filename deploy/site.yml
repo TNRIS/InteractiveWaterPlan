@@ -2,15 +2,8 @@
 - hosts: all
   sudo: yes
 
-  vars:
-    app_dir: /var/www/water-plan
-    log_file: /var/log/water-plan.log
-    node_port: 8080
-    server: server.js
-    upstart_cmd: water-plan-app
-    water_plan_user: waterplan
-    vagrant: false
-    varnish_port: 80
+  vars_files:
+    - variables.yml
 
   tasks:
   - name: Add public key to vagrant's authorized_keys file
@@ -22,8 +15,7 @@
     copy: src=vagrant_sudoers dest=/etc/sudoers.d/vagrant validate='visudo -cf %s' group=root owner=root mode=440
     when: vagrant
 
-    # required for adding PPAs
-  - name: install python software properties package
+  - name: install python software properties package (for installing PPAs)
     apt: pkg=python-software-properties state=installed update_cache=yes cache_valid_time=86400
 
   - name: add nodejs ppa
@@ -51,10 +43,10 @@
     gem: name=sass state=present user_install=no
 
   - name: set up upstart config for water plan app
-    template: src=upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+    template: src=water-plan-app-upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
 
   - name: set up monit config for water plan app
-    template: src=monit-conf.j2 dest=/etc/monit/conf.d/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+    template: src=water-plan-app-monit-conf.j2 dest=/etc/monit/conf.d/{{ upstart_cmd }}.conf owner=root group=root mode=0644
 
   - name: set up varnish config for water plan app
     template: src=varnish-conf.j2 dest=/etc/default/varnish owner=root group=root mode=0644
