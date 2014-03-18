@@ -8,6 +8,21 @@ backend default {
     .host = "127.0.0.1";
     .port = "{{ node_port }}";
 }
+
+backend tilestache {
+    .host = "127.0.0.1";
+    .port = "{{ nginx_port }}";
+}
+
+sub vcl_recv {
+  if (req.url ~ "^{{ tilestache_url_root }}/") {
+    set req.backend = tilestache;
+  }
+  else {
+    set req.backend = default;
+  }
+}
+
 #
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be

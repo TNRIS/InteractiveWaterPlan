@@ -1,0 +1,18 @@
+#/etc/init/tilestache.conf
+description "Tilestache server"
+author "TNRIS app team"
+
+# it's possible to use "net-device-up IFACE=eth0" for starting the process when the ethernet adapter is up 
+start on startup 
+stop on shutdown
+
+script
+    {{ tilestache_virtualenv}}/bin/uwsgi \
+        --master \
+        --harakiri 600 \
+        --socket {{ tilestache_uwsgi_socket }} \
+        --processes {{ tilestache_uwsgi_workers }} \
+        --eval 'import TileStache;application = TileStache.WSGITileServer("{{ tilestache_dir }}/tilestache.conf")' \
+        --logto {{ tilestache_log_file }}
+end script
+

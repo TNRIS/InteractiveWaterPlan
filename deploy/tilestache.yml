@@ -1,0 +1,94 @@
+---
+- hosts: all
+  sudo: yes
+  vars_files:
+    - variables.yml
+
+  tasks:
+  - name: install python software properties package (for installing PPAs)
+    apt: pkg=python-software-properties state=installed update_cache=yes cache_valid_time=86400
+
+  - name: add mapnik ppa
+    apt_repository: repo=ppa:mapnik/v2.2.0 state=present
+
+  - name: install libmapnik
+    apt: pkg=libmapnik state=present
+
+  - name: install mapnik-utils
+    apt: pkg=mapnik-utils state=present
+
+  - name: install python-mapnik
+    apt: pkg=python-mapnik state=present
+
+  - name: install python setuptools package
+    apt: pkg=python-setuptools state=installed
+
+  - name: install python development headers
+    apt: pkg=python-dev state=installed
+
+  - name: install python image library
+    apt: pkg=python-imaging state=installed
+
+  - name: install nginx
+    apt: pkg=nginx state=installed
+
+  - name: copy nginx configuration file
+    template: src=nginx.conf.j2 dest=/etc/nginx/sites-available/tilestache owner=root group=root mode=0644
+
+  - name: symlink nginx config file to sites-enabled
+    file: src=/etc/nginx/sites-available/tilestache path=/etc/nginx/sites-enabled/tilestache state=link
+
+  - name: remove default nginx site
+    file: path=/etc/nginx/sites-enabled/default state=absent
+
+  - name: install pip
+    command: /usr/bin/easy_install --upgrade "pip==1.4"
+
+  - name: install virtualenv
+    pip: name=virtualenv version=1.10.1
+
+  - name: set up upstart config for tilestache
+    template: src=tilestache-upstart-conf.j2 dest=/etc/init/tilestache.conf owner=root group=root mode=0644
+
+  - name: set up monit config for tilestache
+    template: src=tilestache-monit-conf.j2 dest=/etc/monit/conf.d/tilestache.conf owner=root group=root mode=0644
+
+  - name: create {{ tilestache_user }} account
+    user: name={{ tilestache_user }}
+
+  - name: create tilestache directory
+    file: group={{ tilestache_user }} owner={{ tilestache_user }} mode=755 state=directory path={{ tilestache_dir }}
+
+  - name: create mapnik styles directory
+    file: group={{ tilestache_user }} owner={{ tilestache_user }} mode=755 state=directory path={{ mapnik_dir }}
+
+  - name: create tilestache virtualenv
+    shell: "[ -d {{ tilestache_virtualenv }} ] && echo 'pass' || virtualenv --system-site-packages {{ tilestache_virtualenv }}"
+    sudo_user: '{{ tilestache_user }}'
+
+  - name: install tilestache
+    pip: name=tilestache virtualenv={{ tilestache_virtualenv }}
+    sudo_user: '{{ tilestache_user }}'
+
+  - name: install uwsgi
+    pip: name=uwsgi virtualenv={{ tilestache_virtualenv }}
+    sudo_user: '{{ tilestache_user }}'
+
+  - name: copy tilestache.conf file
+    template: src=tilestache.conf.j2 dest={{ tilestache_dir}}/tilestache.conf owner={{ tilestache_user }} group={{ tilestache_user }} mode=0644
+    sudo_user: '{{ tilestache_user }}'
+
+  - name: copy spatial dir to server
+    synchronize: src=../spatial/ dest={{ spatial_dir }} archive=no recursive=yes rsync_path="sudo -u {{ tilestache_user }} rsync"
+
+  - name: copy mapnik xml files
+    template: src=../spatial/mapnik-styles/rwpas.xml.j2 dest={{ mapnik_dir }}/rwpas.xml owner={{ tilestache_user }} group={{ tilestache_user }} mode=0644
+
+  - name: restart tilestache
+    service: name=tilestache state=restarted
+
+  - name: restart nginx
+    service: name=nginx state=restarted
+
+  - name: restart monit
+    service: name=monit state=restarted
