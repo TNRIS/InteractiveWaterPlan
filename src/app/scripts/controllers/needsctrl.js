@@ -27,16 +27,11 @@ angular.module('iswpApp')
       // $scope.$on('$stateChangeStart', validateRouteParams);
 
 
+      //TODO: Just go ahead and move this into mainmap.js
       $scope.$on('$stateChangeSuccess', function() {
         var currentState = $scope.$state.current.name,
           stateParams = $scope.$stateParams;
 
-        $scope.showRegions = false;
-
-        //turn on regions layer if in summary state
-        if (currentState === 'needs.summary') {
-          $scope.showRegions = true;
-        }
 
         if (currentState === 'needs.region') {
           //Set view to Region bounds
@@ -46,15 +41,14 @@ angular.module('iswpApp')
           var regionFeat = RegionService.getRegion(stateParams.region);
           $rootScope.$emit('map:zoomto:bounds', regionFeat.getBounds());
         }
+        else if (currentState === 'needs.type') {
+          $rootScope.$emit('map:zoomto:state');
+        }
 
         //TODO: For needs.county, will need county bounds
         // Could also just use bounds of all the entities in that
         // view, though this may not be ideal
-
       });
-
-
-
 
       return;
     }

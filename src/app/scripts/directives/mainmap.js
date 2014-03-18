@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .directive('mainMap',
-    function ($rootScope, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
+    function ($rootScope, $state, $stateParams, localStorageService, MapLayerService, NeedsService, EntityService) {
 
       var entityColors = [
           {limit: 10, color: '#1A9641'}, //green
@@ -24,12 +24,40 @@ angular.module('iswpApp')
         return scaledVal;
       }
 
+      function _createLegend() {
+        var legend = L.control({
+          position: 'bottomleft'
+        });
+
+        legend.onAdd = function(map) {
+          this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs');
+          this._update();
+          this.isAdded = true;
+          return this._div;
+        };
+
+        legend.onRemove = function() {
+          this.isAdded = false;
+        };
+
+        legend._update = function() {
+          for (var i=entityColors.length-1; i >= 0; i--) {
+            var colorEntry = entityColors[i],
+              legendEntry = L.DomUtil.create('p', 'legend-entry', this._div);
+
+            legendEntry.innerHTML = '<svg height="14" width="14">' +
+            '  <circle cx="7" cy="7" r="6" stroke="black" stroke-width="1"' +
+                'fill="' + colorEntry.color + '" /></svg>';
+
+            legendEntry.innerHTML+= ' Need &le; ' + colorEntry.limit + '% of Demand';
+          }
+        };
+
+        return legend;
+      }
+
       return {
-        template: '<div></div>',
-        restrict: 'AE',
-        scope: {
-          showRegions: '='
-        },
+        restrict: 'A',
         link: function postLink(scope, element, attrs) {
 
           var map = L.map(element[0], {
@@ -46,30 +74,9 @@ angular.module('iswpApp')
 
           //Create a legend for the Needs colors
           //TODO: generalize for other non-Needs Themes
-          var legend = L.control({
-            position: 'bottomleft'
-          });
 
-          legend.onAdd = function(map) {
-            this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs');
-            this._update();
-            return this._div;
-          };
+          var legendControl = _createLegend();
 
-          legend._update = function() {
-            for (var i=entityColors.length-1; i >= 0; i--) {
-              var colorEntry = entityColors[i],
-                legendEntry = L.DomUtil.create('p', 'legend-entry', this._div);
-
-              legendEntry.innerHTML = '<svg height="12" width="12">' +
-              '  <circle cx="6" cy="6" r="6" stroke="black" stroke-width="1"' +
-                  'fill="' + colorEntry.color + '" /></svg>';
-
-              legendEntry.innerHTML+= ' Need &le; ' + colorEntry.limit + '% of Demand';
-            }
-          };
-
-          legend.addTo(map);
 
           //TODO: Are we using this?
           // var updateStoredMapLocation = _.debounce(function() {
@@ -115,17 +122,50 @@ angular.module('iswpApp')
             }
           );
 
-          scope.$watch('showRegions', function() {
-            if (scope.showRegions) {
+          $rootScope.$on('map:zoomto:state',
+            function(event) {
+              map.setView([31.780548, -99.022907], 5);
+            }
+          );
+
+
+          var showRegions = function() {
+            if (!map.hasLayer(regionLayer)) {
               regionLayer.addTo(map);
             }
-            else if (map.hasLayer(regionLayer)) {
+          };
+
+          var removeRegions = function() {
+            if (map.hasLayer(regionLayer)) {
               map.removeLayer(regionLayer);
             }
-          });
+          };
 
+          var showLegend = function() {
+            if (!legendControl.isAdded) {
+              legendControl.addTo(map);
+            }
+          };
 
-          var updateMapEntities = function() {
+          var removeLegend = function() {
+            if (legendControl.isAdded) {
+              legendControl.removeFrom(map);
+            }
+          };
+
+          var updateMapState = function() {
+
+            var currentState = $state.current.name;
+
+            if (currentState === 'needs.summary') {
+              showRegions();
+              removeLegend();
+            }
+            else {
+              removeRegions();
+              showLegend();
+            }
+
             oms.clearMarkers();
             entityLayer.clearLayers();
 
@@ -177,7 +217,7 @@ angular.module('iswpApp')
 
           };
 
-          scope.$on('$stateChangeSuccess', updateMapEntities);
+          scope.$on('$stateChangeSuccess', updateMapState);
         }
       };
     }

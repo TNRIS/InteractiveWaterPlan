@@ -2,6 +2,17 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 
 @import 'bootstrap';
 
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #eee;
+  color: #000;
+  padding: 10px;
+  border-top: 2px solid red;
+  border-bottom: 2px solid red;
+  text-align: center;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
@@ -57,6 +68,7 @@ body {
 
 #main-map {
   height: 200px;
+  width: 100%;
 }
 
 .leaflet-control-layers label {
@@ -161,5 +173,6 @@ body {
 
     #main-map {
       height: 400px;
+      width: 100%;
     }
 }
