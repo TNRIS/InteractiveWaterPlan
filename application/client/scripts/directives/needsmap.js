@@ -94,7 +94,7 @@ angular.module('iswpApp')
           //Create a legend for the Needs colors
           var legendControl = _createLegend();
 
-          //TODO: Are we using this?
+          //TODO: Are we using this? Maybe if mapLock is on
           // var updateStoredMapLocation = _.debounce(function() {
           //   var center = map.getCenter(),
           //       zoom = map.getZoom(),
@@ -195,7 +195,6 @@ angular.module('iswpApp')
             oms.clearMarkers();
             entityLayer.clearLayers();
 
-            //TODO: Will need to refactor to generalize for Themes other than Needs
             var needsData = NeedsService.getCurrent(),
               entities = EntityService.getEntities(_.pluck(needsData, 'EntityId'));
 
@@ -234,7 +233,8 @@ angular.module('iswpApp')
                 fillColor: colorEntry.color,
                 fillOpacity: 0.75
               })
-              .bindLabel('' + entity.EntityName)
+              .bindLabel('' + entity.EntityName + '<br/>' +
+                'Need: ' + need[yearNeedKey].format() + ' ac-ft/yr')
               .addTo(entityLayer);
 
               //add it to the spiderfier
