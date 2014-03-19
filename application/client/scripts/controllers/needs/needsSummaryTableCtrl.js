@@ -7,7 +7,7 @@ angular.module('iswpApp')
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
     $scope.tableDescription = 'Table summarizes identified water needs<span class="note-marker">*</span> by region and water use category (click on region or category for summary).';
 
-    var cellTemplateUrl = 'views/partials/needs/needs_link_cell.html';
+    var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
 
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl}, //TODO: link
