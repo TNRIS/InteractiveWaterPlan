@@ -89,7 +89,7 @@
     - restart tilestache
 
   - name: copy spatial dir to server
-    synchronize: src=../spatial/ dest={{ spatial_dir }} archive=no recursive=yes rsync_path="sudo -u {{ tilestache_user }} rsync"
+    synchronize: src=../spatial/ dest={{ spatial_dir }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ tilestache_user }} rsync"
     notify:
     - restart tilestache
 

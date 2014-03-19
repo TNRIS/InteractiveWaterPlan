@@ -63,7 +63,7 @@
     sudo: no
 
   - name: send app dist to server
-    synchronize: src=../application/dist/ dest={{ app_dir }} archive=no recursive=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
+    synchronize: src=../application/dist/ dest={{ app_dir }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
     notify:
     - restart {{ upstart_cmd }}
     - restart varnish
