@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: yes
+  vars_files:
+    - variables.yml
+  handlers:
+    - include: handlers.yml
+
+  tasks:
+    - include: varnish_tasks.yml

@@ -1,0 +1,15 @@
+---
+  - name: restart monit
+    service: name=monit state=restarted
+
+  - name: restart nginx
+    service: name=nginx state=restarted
+
+  - name: restart tilestache
+    service: name=tilestache state=restarted
+
+  - name: restart {{ upstart_cmd }}
+    service: name={{ upstart_cmd }} state=restarted
+
+  - name: restart varnish
+    service: name=varnish state=restarted

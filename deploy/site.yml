@@ -1,9 +1,10 @@
 ---
 - hosts: all
   sudo: yes
-
   vars_files:
     - variables.yml
+  handlers:
+    - include: handlers.yml
 
   tasks:
   - name: Add public key to vagrant's authorized_keys file
@@ -30,9 +31,6 @@
   - name: install upstart
     apt: pkg=monit state=present
 
-  - name: install varnish
-    apt: pkg=varnish state=present
-
   - name: install ruby
     apt: pkg=ruby state=present
 
@@ -44,15 +42,15 @@
 
   - name: set up upstart config for water plan app
     template: src=water-plan-app-upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+    notify:
+    - restart {{ upstart_cmd }}
+
+  - include: varnish_tasks.yml
 
   - name: set up monit config for water plan app
     template: src=water-plan-app-monit-conf.j2 dest=/etc/monit/conf.d/{{ upstart_cmd }}.conf owner=root group=root mode=0644
-
-  - name: set up varnish config for water plan app
-    template: src=varnish-conf.j2 dest=/etc/default/varnish owner=root group=root mode=0644
-
-  - name: set up varnish vcl for water plan app
-    template: src=varnish-vcl.j2 dest=/etc/varnish/{{ upstart_cmd }}.vcl owner=root group=root mode=0644
+    notify:
+    - restart monit
 
   - name: create {{ water_plan_user }} account
     user: name={{ water_plan_user }}
@@ -66,16 +64,13 @@
 
   - name: send app dist to server
     synchronize: src=../application/dist/ dest={{ app_dir }} archive=no recursive=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
+    notify:
+    - restart {{ upstart_cmd }}
+    - restart varnish
 
   - name: install npm packages
     npm: path={{ app_dir }}
     sudo_user: "{{ water_plan_user }}"
-
-  - name: restart monit
-    service: name=monit state=restarted
-
-  - name: restart {{ upstart_cmd }}
-    service: name={{ upstart_cmd }} state=restarted
-
-  - name: restart varnish
-    service: name=varnish state=restarted
+    notify:
+    - restart {{ upstart_cmd }}
+    - restart varnish

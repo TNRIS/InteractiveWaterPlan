@@ -3,6 +3,8 @@
   sudo: yes
   vars_files:
     - variables.yml
+  handlers:
+    - include: handlers.yml
 
   tasks:
   - name: install python software properties package (for installing PPAs)
@@ -47,11 +49,17 @@
   - name: install virtualenv
     pip: name=virtualenv version=1.10.1
 
+  - include: varnish_tasks.yml
+
   - name: set up upstart config for tilestache
     template: src=tilestache-upstart-conf.j2 dest=/etc/init/tilestache.conf owner=root group=root mode=0644
+    notify:
+    - restart tilestache
 
   - name: set up monit config for tilestache
     template: src=tilestache-monit-conf.j2 dest=/etc/monit/conf.d/tilestache.conf owner=root group=root mode=0644
+    notify:
+    - restart monit
 
   - name: create {{ tilestache_user }} account
     user: name={{ tilestache_user }}
@@ -77,18 +85,15 @@
   - name: copy tilestache.conf file
     template: src=tilestache.conf.j2 dest={{ tilestache_dir}}/tilestache.conf owner={{ tilestache_user }} group={{ tilestache_user }} mode=0644
     sudo_user: '{{ tilestache_user }}'
+    notify:
+    - restart tilestache
 
   - name: copy spatial dir to server
     synchronize: src=../spatial/ dest={{ spatial_dir }} archive=no recursive=yes rsync_path="sudo -u {{ tilestache_user }} rsync"
+    notify:
+    - restart tilestache
 
   - name: copy mapnik xml files
     template: src=../spatial/mapnik-styles/rwpas.xml.j2 dest={{ mapnik_dir }}/rwpas.xml owner={{ tilestache_user }} group={{ tilestache_user }} mode=0644
-
-  - name: restart tilestache
-    service: name=tilestache state=restarted
-
-  - name: restart nginx
-    service: name=nginx state=restarted
-
-  - name: restart monit
-    service: name=monit state=restarted
+    notify:
+    - restart tilestache
