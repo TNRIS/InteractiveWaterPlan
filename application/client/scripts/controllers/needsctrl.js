@@ -5,6 +5,9 @@ angular.module('iswpApp')
     function ($scope, $rootScope, ISWP_VARS) {
 
       //TODO: route validation (maybe this should be done in states.js?)
+      //See: http://angular-ui.github.io/ui-router/site/#/api/ui.router.router.$urlRouter
+
+
       // var validateRouteParams = function(evt, toState, toParams, fromState, fromParams) {
       //   console.log("validateRouteParams")
 
