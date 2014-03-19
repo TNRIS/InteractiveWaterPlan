@@ -68,7 +68,7 @@ will go wrong.
 To re-run the deploy, you can either use `vagrant provision` or run the ansible
 playbook manually:
 
-    ansible-playbook -i vagrant_ansible_inventory_default --user=vagrant site.yml
+    ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --user=vagrant --private-key=~/.vagrant.d/insecure_private_key site.yml
 
 
 ### Production
