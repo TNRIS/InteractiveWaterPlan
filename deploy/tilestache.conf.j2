@@ -1,9 +1,20 @@
 {
-  "cache": {"name": "Test"},
+  "cache": {
+    "name": "Test"
+  },
   "layers": {
     "rwpas": {
-        "provider": {"name": "mapnik", "mapfile": "{{ mapnik_dir }}/rwpas.xml"},
-        "projection": "spherical mercator"
+      "provider": {
+          "name": "mapnik",
+          "mapfile": "{{ mapnik_dir }}/rwpas.xml"
+      },
+      "projection": "spherical mercator",
+      "preview": {
+        "lat": 31.273,
+        "lon": -99.848,
+        "zoom": 6,
+        "ext": "png"
+      }
     }
   }
 }
