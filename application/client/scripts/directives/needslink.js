@@ -13,11 +13,6 @@ angular.module('iswpApp')
         stateParam: 'region',
         stateName: 'needs.region'
       },
-      'REGION': { //duplicate of 'WugRegion' for the Summary table
-        paramField: 'REGION',
-        stateParam: 'region',
-        stateName: 'needs.region'
-      },
       'WugCounty': {
         paramField: 'WugCounty',
         stateParam: 'county',

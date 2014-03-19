@@ -10,7 +10,7 @@ angular.module('iswpApp')
     var cellTemplateUrl = 'views/partials/needs/needs_link_cell.html';
 
     $scope.tableColumns = [
-      {map: 'REGION', label: 'Region', cellTemplateUrl: cellTemplateUrl}, //TODO: link
+      {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl}, //TODO: link
       {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number'},
       {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number'},
       {map: 'MINING', label: 'Mining', formatFunction: 'number'},

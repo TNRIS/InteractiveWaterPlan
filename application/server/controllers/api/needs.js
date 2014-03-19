@@ -1,10 +1,7 @@
 'use strict';
 
 require('sugar');
-var fs = require('fs'),
-    sqlite3 = require('sqlite3'),
-    Q = require('q'),
-    _ = require('lodash'),
+var sqlite3 = require('sqlite3'),
     utils = require('./../../utils'),
     config = require('./../../config/config');
 
@@ -22,7 +19,7 @@ exports.getAllNeeds = function(req, res) {
 
 
 exports.getSummary = function(req, res) {
-  var statement = 'SELECT REGION, DECADE, MUNICIPAL, IRRIGATION, ' +
+  var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
     'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
     'FROM vwMapWugNeedsA1';
   utils.sqlAllAsJsonResponse(res, db, statement);
