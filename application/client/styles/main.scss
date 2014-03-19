@@ -13,6 +13,33 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
   text-align: center;
 }
 
+.esri-attribution-logo {
+  visibility: hidden;
+}
+
+.about-nav {
+  width: 200px;
+  margin-top: 20px;
+
+  > li {
+    border-bottom: 1px solid #ccc;
+
+    + li {
+      margin-top: 0;
+    }
+
+    &.active {
+      background-color: #e6e6e6;
+    }
+  }
+
+  > li > a > i {
+    float: right;
+    margin-top: 4px;
+  }
+
+}
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
