@@ -9,11 +9,12 @@ var express = require('express'),
  * Express configuration
  */
 module.exports = function(app) {
-  app.locals({
-    gaTrackingCode: 'UA-491601-10'
-  });
 
   app.configure('development', function(){
+    app.locals({
+      gaTrackingCode: ''
+    });
+
     app.use(require('connect-livereload')());
 
     // Disable caching of scripts for easier testing
@@ -33,6 +34,10 @@ module.exports = function(app) {
   });
 
   app.configure('production', function(){
+    app.locals({
+      gaTrackingCode: 'UA-491601-10'
+    });
+
     app.use(express.compress());
     app.use(express.favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
