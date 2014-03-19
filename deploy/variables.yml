@@ -11,7 +11,7 @@ tilestache_port: 8091
 tilestache_dir: /var/www/tilestache
 tilestache_log_file: /var/log/tilestache.log
 tilestache_url_root: /tiles
-tilestache_uwsgi_socket: "localhost:{{,tilestache_port }}"
+tilestache_uwsgi_socket: "localhost:{{ tilestache_port }}"
 tilestache_uwsgi_workers: 3
 tilestache_virtualenv: "{{ tilestache_dir }}/env"
 spatial_dir: "{{ tilestache_dir }}/spatial"
