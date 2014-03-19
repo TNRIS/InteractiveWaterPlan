@@ -231,7 +231,8 @@ angular.module('iswpApp')
                 weight: 1,
                 opacity: 0.5,
                 fillColor: colorEntry.color,
-                fillOpacity: 0.75
+                fillOpacity: 0.75,
+                entity: entity //save the entity data in the marker
               })
               .bindLabel('' + entity.EntityName + '<br/>' +
                 'Need: ' + need[yearNeedKey].format() + ' ac-ft/yr')
@@ -241,6 +242,16 @@ angular.module('iswpApp')
               oms.addMarker(marker);
             });
 
+            //Add 'global' event listener to the oms instance
+            // to go to the entity view when clicked
+            oms.addListener('click', function(marker) {
+              if (!marker.options.entity) { return; }
+
+              $state.go('needs.entity', {
+                year: currentYear,
+                entityId: marker.options.entity.EntityId
+              });
+            });
           };
 
           scope.$on('$stateChangeSuccess', updateMapState);
