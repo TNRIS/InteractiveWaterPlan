@@ -6,6 +6,7 @@ angular.module('iswpApp')
     function ($rootScope, $state, $stateParams, localStorageService, RegionService, MapLayerService, NeedsService, EntityService) {
 
       var entityColors = [
+          {limit: 0, color: '#007FFF'}, //blue
           {limit: 10, color: '#1A9641'}, //green
           {limit: 25, color: '#A6D96A'},
           {limit: 50, color: '#FFFFBF'},
@@ -48,21 +49,26 @@ angular.module('iswpApp')
             .innerHTML = 'Need as a % of Demand';
 
           var ul = L.DomUtil.create('ul', '', this._div),
-            tpl = '{lowerBound}% &lt; <svg height="14" width="14">' +
+            circleTpl = '<svg height="14" width="14">' +
               '<circle cx="7" cy="7" r="6" stroke="black" stroke-width="1" fill="{color}">' +
-              '</svg> &le; {upperBound}%';
+              '</svg>',
+            tpl = '{lowerBound}% &lt; ' + circleTpl + ' &le; {upperBound}%';
 
           for (var i = entityColors.length - 1; i >= 0; i--) {
             var colorEntry = entityColors[i],
               prevColorEntry = entityColors[i-1],
               legendEntry = L.DomUtil.create('li', 'legend-entry', ul);
 
-            legendEntry.innerHTML = tpl.assign({
-              color: colorEntry.color,
-              upperBound: colorEntry.limit,
-              lowerBound: prevColorEntry ? prevColorEntry.limit : 0
-            });
-
+            if (colorEntry.limit === 0) {
+              legendEntry.innerHTML = circleTpl.assign({color: colorEntry.color}) + ' = No Need';
+            }
+            else {
+              legendEntry.innerHTML = tpl.assign({
+                color: colorEntry.color,
+                upperBound: colorEntry.limit,
+                lowerBound: prevColorEntry ? prevColorEntry.limit : 0
+              });
+            }
           }
         };
 

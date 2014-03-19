@@ -6,9 +6,9 @@ angular.module('iswpApp')
     var entityType = $scope.$stateParams.entityType.titleize();
 
     $scope.heading = '' + entityType;
-    $scope.mapDescription = 'Map shows geographic center of <strong>' + entityType + '</strong> entities with identified water needs<span class="note-marker">*</span>.';
+    $scope.mapDescription = 'Map shows geographic center of <strong>' + entityType + '</strong> entities and their identified water needs<span class="note-marker">*</span>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists <strong>' + entityType + '</strong> entities with identified water needs in {year}';
+    var tableDescTpl = 'Table lists <strong>' + entityType + '</strong> entities and their identified water needs in {year}';
 
     var needsCol = {
       map: 'N2010',

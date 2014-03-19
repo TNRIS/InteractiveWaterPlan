@@ -35,7 +35,7 @@ exports.index = function(req, res) {
     regionsTopo = utils.fileAsJson(
       config.dataPath + 'regions.topojson'),
 
-    years = ["2010", "2020", "2030", "2040", "2050"];
+    years = ['2010', '2020', '2030', '2040', '2050', '2060'];
 
   // res.render('index', {
   //   regions: JSON.stringify(regions),

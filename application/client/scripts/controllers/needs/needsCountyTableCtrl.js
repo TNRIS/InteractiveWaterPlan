@@ -6,7 +6,7 @@ angular.module('iswpApp')
     var county = $scope.$stateParams.county.titleize();
 
     $scope.heading = '' + county + ' County';
-    $scope.mapDescription = 'Map shows geographic center of entities with identified water needs<span class="note-marker">*</span> within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
+    $scope.mapDescription = 'Map shows geographic center of entities and their identified water needs<span class="note-marker">*</span> within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>'+county+' County</strong> in {year}';
 
