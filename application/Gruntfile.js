@@ -354,6 +354,11 @@ module.exports = function (grunt) {
           src: '{,*/}*.css'
         }, {
           expand: true,
+          cwd: '.tmp/concat/styles',
+          dest: '<%= yeoman.dist %>/public/styles',
+          src: '{,*/}*.css'
+        }, {
+          expand: true,
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>/public/styles/images',
           flatten: true,
