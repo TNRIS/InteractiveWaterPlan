@@ -124,7 +124,7 @@ angular.module('iswpApp')
               nearbyDistance: 5
             });
 
-
+          //setup some event listeners
           $rootScope.$on('map:zoomto:centerzoom',
             function(event, mapLoc) {
               map.setView([mapLoc.centerLat, mapLoc.centerLng],
@@ -144,7 +144,7 @@ angular.module('iswpApp')
             }
           );
 
-
+          //helper functions
           var showRegions = function() {
             if (!map.hasLayer(regionLayer)) {
               regionLayer.addTo(map);
@@ -169,32 +169,29 @@ angular.module('iswpApp')
             }
           };
 
+          //called on stateChangeSuccess to update the map view, entities, etc
           var updateMapState = function() {
+
+            //Clear the spiderfier instance and the entityLayer before creating
+            // the new entity features
+            oms.clearMarkers();
+            entityLayer.clearLayers();
 
             var currentState = $state.current.name;
 
             if (currentState === 'needs.summary') {
               showRegions();
               removeLegend();
+              map.setView(stateCenter, stateZoom);
+              return; //don't have anything else to do
             }
             else {
               removeRegions();
               showLegend();
             }
 
-            if (currentState === 'needs.region') {
-              var regionFeat = RegionService.getRegion($stateParams.region);
-              map.fitBounds(regionFeat.getBounds());
-            }
-            else if (currentState === 'needs.type') {
-              map.setView(stateCenter, stateZoom);
-            }
-            //TODO: needs.county
-            //TODO: needs.entity
 
-            oms.clearMarkers();
-            entityLayer.clearLayers();
-
+            //Grab the current needs data and entities
             var needsData = NeedsService.getCurrent(),
               entities = EntityService.getEntities(_.pluck(needsData, 'EntityId'));
 
@@ -213,6 +210,7 @@ angular.module('iswpApp')
               // of the county-centroid entities
               sortedEntities = _.sortBy(entities, yearNeedKey).reverse();
 
+            //build marker for each entity
             _.each(sortedEntities, function(entity) {
               var need = NeedsService.getForEntity(entity.EntityId);
               var pctOfDemand = need[yearPctKey];
@@ -241,6 +239,27 @@ angular.module('iswpApp')
               //add it to the spiderfier
               oms.addMarker(marker);
             });
+
+
+            //Set the map bounds according to the current needs view
+            var entityLayerBounds = entityLayer.getBounds();
+            if (currentState === 'needs.region') {
+              var regionFeat = RegionService.getRegion($stateParams.region);
+
+              map.fitBounds(entityLayerBounds.extend(regionFeat.getBounds()));
+            }
+            else if (currentState === 'needs.type') {
+              //For needs.type, always just go to state view
+              map.setView(stateCenter, stateZoom);
+            }
+            else if (currentState === 'needs.county') {
+              //TODO: extend bounds with county bounds needs.county
+              map.fitBounds(entityLayerBounds);
+            }
+            else {
+              map.fitBounds(entityLayerBounds);
+            }
+
 
             //Add 'global' event listener to the oms instance
             // to go to the entity view when clicked
