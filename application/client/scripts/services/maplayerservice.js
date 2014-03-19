@@ -3,7 +3,7 @@
 //Service create basemap layers for a Leaflet map
 angular.module('iswpApp')
   .service('MapLayerService',
-    function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL) {
+    function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL, TILES_URL) {
       var service = {};
 
       service.setupBaseLayers = function(map) {
@@ -38,11 +38,10 @@ angular.module('iswpApp')
         });
 
         // Overlay WMS Layers
-        var planningAreas = L.tileLayer.wms(SWP_WMS_URL, {
+        var planningAreas = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
           layers: '4,7',
           format: 'image/png',
-          transparent: true,
-          opacity: 0.6
+          transparent: true
         });
 
         var counties = L.tileLayer.wms(SWP_WMS_URL, {
