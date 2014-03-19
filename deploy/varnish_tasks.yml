@@ -2,12 +2,12 @@
   - name: install varnish
     apt: pkg=varnish state=present
 
-  - name: set up varnish config for water plan app
+  - name: set up varnish config
     template: src=varnish-conf.j2 dest=/etc/default/varnish owner=root group=root mode=0644
     notify:
     - restart varnish
 
-  - name: set up varnish vcl for water plan app
+  - name: set up varnish vcl
     template: src=varnish-vcl.j2 dest=/etc/varnish/{{ upstart_cmd }}.vcl owner=root group=root mode=0644
     notify:
     - restart varnish
