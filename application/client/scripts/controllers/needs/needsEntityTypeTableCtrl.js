@@ -21,7 +21,7 @@ angular.module('iswpApp')
       label: 'Entity Need as % of Demand**'
     };
 
-    var cellTemplateUrl = 'views/partials/needs/needs_link_cell.html';
+    var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
 
     $scope.tableColumns = [
       {map: 'WugType', label: 'Entity Type'},
