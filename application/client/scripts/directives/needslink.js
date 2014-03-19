@@ -25,22 +25,20 @@ angular.module('iswpApp')
       },
     };
 
-    //TODO: Might be better to use ui-sref instead of ng-click handling
     return {
       restrict: 'A',
       require: '^smartTable',
-      template: '<a href="" title="View needs for {{dataRow[column.map]}}" ng-click="changeState()">{{dataRow[column.map]}}</a>',
+      template: '<a ng-href="{{stateRef}}" title="View needs for {{dataRow[column.map]}}">' +
+        '{{dataRow[column.map]}}</a>',
       link: function postLink(scope, element, attrs, ctrl) {
         var mappedField = scope.column.map,
-            pMap = paramsMap[mappedField];
+            pMap = paramsMap[mappedField],
+            params = {year: $stateParams.year};
 
-        scope.changeState = function() {
-          var params = {year: $stateParams.year};
+        params[pMap.stateParam] = scope.dataRow[pMap.paramField];
 
-          params[pMap.stateParam] = scope.dataRow[pMap.paramField];
-
-          $state.go(pMap.stateName, params);
-        };
+        // Build the href based on the paramsMap options
+        scope.stateRef = $state.href(pMap.stateName, params);
       }
     };
   });
