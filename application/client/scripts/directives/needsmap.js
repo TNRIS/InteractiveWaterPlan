@@ -79,6 +79,9 @@ angular.module('iswpApp')
         restrict: 'A',
         link: function postLink(scope, element, attrs) {
 
+          scope.isHidden = false;
+          scope.isLocked = false;
+
           var map = L.map(element[0], {
               center: stateCenter,
               zoom: stateZoom,
@@ -144,6 +147,18 @@ angular.module('iswpApp')
             }
           );
 
+          $rootScope.$on('map:togglelock',
+            function(event, isLocked) {
+              scope.isLocked = isLocked;
+            }
+          );
+
+          $rootScope.$on('map:togglehide',
+            function(event, isHidden) {
+              scope.isHidden = isHidden;
+            }
+          );
+
           //helper functions
           var showRegions = function() {
             if (!map.hasLayer(regionLayer)) {
@@ -169,6 +184,49 @@ angular.module('iswpApp')
             }
           };
 
+          //helper to set view bounds based on current state
+          var setViewBounds = function() {
+            //do nothing if the map isLocked
+            if (scope.isLocked) {
+              return;
+            }
+
+            var currentState = $state.current.name,
+              entityLayerBounds = entityLayer.getBounds();
+
+            //always set animate to false with fitBounds
+            // because it seems to bug-out if caught in two animations
+            var fitBounds = function(bounds) {
+              map.fitBounds(bounds, {animate: false});
+            };
+
+            switch (currentState) {
+              case 'needs.region':
+                var regionFeat = RegionService.getRegion($stateParams.region);
+
+                var extendedBounds = entityLayerBounds.extend(
+                  regionFeat.getBounds());
+
+                fitBounds(extendedBounds);
+                break;
+
+              case 'needs.type':
+                //For needs.type, always just go to state view
+                map.setView(stateCenter, stateZoom);
+                break;
+
+              case 'needs.county':
+                //TODO: extend bounds with county bounds needs.county
+                fitBounds(entityLayerBounds);
+                break;
+
+              default:
+                fitBounds(entityLayerBounds);
+            }
+
+
+          };
+
           //called on stateChangeSuccess to update the map view, entities, etc
           var updateMapState = function() {
 
@@ -182,7 +240,9 @@ angular.module('iswpApp')
             if (currentState === 'needs.summary') {
               showRegions();
               removeLegend();
-              map.setView(stateCenter, stateZoom);
+              if (!scope.isLocked) {
+                map.setView(stateCenter, stateZoom);
+              }
               return; //don't have anything else to do
             }
             else {
@@ -240,27 +300,6 @@ angular.module('iswpApp')
               oms.addMarker(marker);
             });
 
-
-            //Set the map bounds according to the current needs view
-            var entityLayerBounds = entityLayer.getBounds();
-            if (currentState === 'needs.region') {
-              var regionFeat = RegionService.getRegion($stateParams.region);
-
-              map.fitBounds(entityLayerBounds.extend(regionFeat.getBounds()));
-            }
-            else if (currentState === 'needs.type') {
-              //For needs.type, always just go to state view
-              map.setView(stateCenter, stateZoom);
-            }
-            else if (currentState === 'needs.county') {
-              //TODO: extend bounds with county bounds needs.county
-              map.fitBounds(entityLayerBounds);
-            }
-            else {
-              map.fitBounds(entityLayerBounds);
-            }
-
-
             //Add 'global' event listener to the oms instance
             // to go to the entity view when clicked
             oms.addListener('click', function(marker) {
@@ -271,6 +310,10 @@ angular.module('iswpApp')
                 entityId: marker.options.entity.EntityId
               });
             });
+
+            //Set the map bounds according to the current needs view
+            setViewBounds();
+
           };
 
           scope.$on('$stateChangeSuccess', updateMapState);

@@ -1,34 +1,44 @@
 
-<div ng-controller="ThemeCtrl">
-  <ul class="theme-nav nav nav-pills">
-    <li class="dropdown active">
-      <a class="dropdown-toggle" href="#">
-        Water Needs <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li ng-repeat="theme in needsThemes" ng-class="{'divider': theme.type=='divider'}">
-          <a ng-if="theme.name" href="" ng-click="showTheme(theme)">
-            {{theme.name}}
-          </a>
-        </li>
-      </ul>
-    </li>
-
-
-    <li class="pull-right">
-      <a href="">Hide Map</a>
-    </li>
-    <li class="pull-right">
-      <a href="">Zoom To Texas</a>
-    </li>
-    <li class="pull-right">
-      <a href=""><i class="fa fa-unlock-alt"></i> Lock Map</a>
-    </li>
-  </ul>
-
+<div class="row">
+  <div ng-controller="ThemeCtrl" class="col-md-6 pull-left">
+    <ul class="theme-nav nav nav-pills">
+      <li class="dropdown active">
+        <a class="dropdown-toggle" href="#">
+          Water Needs <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="theme in needsThemes" ng-class="{'divider': theme.type=='divider'}">
+            <a ng-if="theme.name" href="" ng-click="showTheme(theme)">
+              {{theme.name}}
+            </a>
+          </li>
+        </ul>
+      </li>
+    <ul>
+  </div>
+  <div ng-controller="MapControlsCtrl" class="col-md-6 ">
+    <ul class="map-controls nav nav-pills pull-right">
+      <li ng-class="{'active': isMapLocked}" ng-hide="isMapHidden">
+        <a href="" ng-click="toggleMapLock()">
+          <i class="fa" ng-class="{'fa-lock': isMapLocked, 'fa-unlock-alt': !isMapLocked}"></i>
+          <span ng-show="isMapLocked">Unlock Map</span>
+          <span ng-show="!isMapLocked">Lock Map</span>
+        </a>
+      </li>
+      <li class="" ng-hide="isMapHidden">
+        <a href="" ng-click="zoomToState()">Zoom To Texas</a>
+      </li>
+      <li class="">
+        <a href="" ng-click="toggleMapHide()">
+          <span ng-show="isMapHidden">Show Map</span>
+          <span ng-show="!isMapHidden">Hide Map</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
 
-<div needs-map class="main-map" ng-hide="hideMap" ></div>
+<div needs-map class="main-map" ng-hide="isHidden" ></div>
 
 <div ng-controller="YearSelectCtrl" class="year-select-container">
   <span class="decade-label">DECADE:</span>

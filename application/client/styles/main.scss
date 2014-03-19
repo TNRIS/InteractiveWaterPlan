@@ -76,7 +76,8 @@ body {
   font-weight: normal;
 }
 
-.theme-nav {
+.theme-nav,
+.map-controls {
   margin-bottom: 8px;
 
   > li > a {
@@ -148,10 +149,10 @@ body {
   background: #fff;
   border-radius: 5px;
   padding: 4px;
-  font-size: 14px;
+  font-size: 12px;
 
   h4 {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     margin: 4px 0;
   }

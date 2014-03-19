@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('ThemeCtrl', function ($scope, $location, $routeParams) {
+  .controller('ThemeCtrl', function ($scope) {
     $scope.needsThemes = [
       {
         name: 'Regional Summary',
