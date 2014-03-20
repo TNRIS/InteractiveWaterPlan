@@ -34,7 +34,7 @@ angular.module('iswpApp')
         });
 
         legend.onAdd = function(map) {
-          this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs');
+          this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs hidden-xs');
           this._update();
           this.isAdded = true;
           return this._div;
