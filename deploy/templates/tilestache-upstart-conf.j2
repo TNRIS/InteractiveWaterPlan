@@ -7,7 +7,7 @@ start on startup
 stop on shutdown
 
 script
-    {{ tilestache_virtualenv}}/bin/uwsgi \
+    exec {{ tilestache_virtualenv}}/bin/uwsgi \
         --master \
         --harakiri 600 \
         --socket {{ tilestache_uwsgi_socket }} \
