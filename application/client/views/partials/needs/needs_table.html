@@ -1,18 +1,28 @@
 <div class="table-container">
 
   <h3>{{heading}} - {{currentYear}}</h3>
-  <p ng-bind-html='mapDescription'></p>
-  <p ng-bind-html='tableDescription'></p>
 
-  <smart-table class="table table-striped table-condensed table-bordered"
-    columns="tableColumns" rows="tableRows" config="tableConfig"></smart-table>
+  <div ng-show="!tableRows.length" class="callout callout-warning">
+    <p>
+      No data found for selected options. Please select a different decade, area, or entity.
+    </p>
+  </div>
 
-  <p>
-    <span class="note-marker">*</span>
-    Identified water <strong>needs</strong> are projected water demands in excess of existing water supplies (i.e., potential
-    shortage if no water management strategy is recommended).
-  </p>
-  <p>
-    ** For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
-  </p>
+  <div ng-hide="!tableRows.length">
+    <p ng-bind-html='mapDescription'></p>
+    <p ng-bind-html='tableDescription'></p>
+
+    <smart-table class="table table-striped table-condensed table-bordered"
+      columns="tableColumns" rows="tableRows" config="tableConfig">
+    </smart-table>
+
+    <p>
+      <span class="note-marker">*</span>
+      Identified water <strong>needs</strong> are projected water demands in excess of existing water supplies (i.e., potential
+      shortage if no water management strategy is recommended).
+    </p>
+    <p>
+      ** For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
+    </p>
+  </div>
 </div>

@@ -1,18 +1,39 @@
 'use strict';
 
 angular.module('iswpApp')
-  .directive('placeSelects', function ($state, $stateParams, ISWP_VARS) {
+  .directive('placeSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
     return {
       restrict: 'A',
       templateUrl: 'partials/placeselects.html',
-      link: function postLink(scope, element, attrs, ctrl) {
+      controller: function ($scope, $element, $attrs) {
 
-        //TODO: Need autocomplete-by-name Entity service
+        $scope.counties = ISWP_VARS.counties;
+        $scope.regions = ISWP_VARS.regions;
 
-        scope.counties = ISWP_VARS.counties;
-        scope.regions = ISWP_VARS.regions;
 
-        scope.$watch('selectedRegion', function(region) {
+        $scope.entitySelectOpts = {
+          minimumInputLength: 3,
+          query: function(query) {
+            EntityService.search(query.term)
+              .then(function(entities) {
+                var results = _.map(entities, function(e) {
+                  return {
+                    id: e.EntityId,
+                    text: e.EntityName
+                  };
+                });
+
+                query.callback({results: results});
+              });
+
+            $scope.$apply();
+          },
+          initSelection: function(el, callback) {
+            callback(null);
+          }
+        };
+
+        $scope.$watch('selectedRegion', function(region) {
           if (!region || region.isBlank()) {
             return;
           }
@@ -24,10 +45,10 @@ angular.module('iswpApp')
             region: region
           });
 
-          scope.selectedRegion = '';
+          $scope.selectedRegion = '';
         });
 
-        scope.$watch('selectedCounty', function(county) {
+        $scope.$watch('selectedCounty', function(county) {
           if (!county || county.isBlank()) {
             return;
           }
@@ -39,7 +60,22 @@ angular.module('iswpApp')
             county: county
           });
 
-          scope.selectedCounty = '';
+          $scope.selectedCounty = '';
+        });
+
+        $scope.$watch('selectedEntity', function(entityId) {
+          if (entityId === null || angular.isUndefined(entityId)) {
+            return;
+          }
+
+          var currentYear = $stateParams.year;
+
+          $state.go('needs.entity', {
+            year: currentYear,
+            entityId: entityId
+          });
+
+          $scope.selectedEntity = null;
         });
       }
     };

@@ -9,19 +9,25 @@
     <div class="col-md-4">
       <select ui-select2 class="place-select" ng-model="selectedRegion" data-placeholder="Select a Region">
           <option value=""></option>
-          <option ng-repeat="region in regions" value="{{region}}">Region {{region}}</option>
+          <option ng-repeat="region in regions" value="{{region}}">
+            Region {{region}}
+          </option>
       </select>
     </div>
 
     <div class="col-md-4">
       <select ui-select2 class="place-select" ng-model="selectedCounty" data-placeholder="Select a County">
           <option value=""></option>
-          <option ng-repeat="county in counties" value="{{county}}">{{county | titleize}}</option>
+          <option ng-repeat="county in counties" value="{{county}}">
+            {{county | titleize}}
+          </option>
       </select>
     </div>
 
     <div class="col-md-4">
-      <p>Entities</p>
+      <input type="text" ui-select2="entitySelectOpts" data-placeholder="Find an Entity"
+        class="place-select" ng-model="selectedEntity">
+      </input>
     </div>
   </div>
 </div>

@@ -21,6 +21,17 @@ angular.module('iswpApp')
       return prom;
     };
 
+    service.search = function(namePart) {
+      var requestPath = API_PATH + 'entity/search?name=' + namePart;
+
+      var prom = $http.get(requestPath)
+        .then(function(resp) {
+          return resp.data;
+        });
+
+      return prom;
+    };
+
     service.getEntity = function(entityId) {
       return _.first(service.getEntities(entityId));
     };
