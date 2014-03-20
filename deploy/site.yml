@@ -7,13 +7,13 @@
     - include: handlers.yml
 
   tasks:
-  - name: Add public key to vagrant's authorized_keys file
+  - name: add public key to vagrant's authorized_keys file
     authorized_key: user=vagrant key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     when: vagrant
     sudo: no
 
   - name: add vagrant sudoers file
-    copy: src=vagrant_sudoers dest=/etc/sudoers.d/vagrant validate='visudo -cf %s' group=root owner=root mode=440
+    copy: src=templates/vagrant_sudoers dest=/etc/sudoers.d/vagrant validate='visudo -cf %s' group=root owner=root mode=440
     when: vagrant
 
   - name: install python software properties package (for installing PPAs)
@@ -41,14 +41,14 @@
     gem: name=sass state=present user_install=no
 
   - name: set up upstart config for water plan app
-    template: src=water-plan-app-upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+    template: src=templates/water-plan-app-upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
     notify:
     - restart {{ upstart_cmd }}
 
   - include: varnish_tasks.yml
 
   - name: set up monit config for water plan app
-    template: src=water-plan-app-monit-conf.j2 dest=/etc/monit/conf.d/{{ upstart_cmd }}.conf owner=root group=root mode=0644
+    template: src=templates/water-plan-app-monit-conf.j2 dest=/etc/monit/conf.d/{{ upstart_cmd }}.conf owner=root group=root mode=0644
     notify:
     - restart monit
 

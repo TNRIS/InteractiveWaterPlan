@@ -2,20 +2,22 @@
 # variables used in playbooks
 app_dir: /var/www/water-plan
 app_log_file: /var/log/water-plan.log
+app_server: server.js
+mapnik_dir: "{{ tilestache_dir }}/mapnik-styles"
 nginx_dir: /var/www/
 nginx_port: 8090
 node_port: 8080
-app_server: server.js
-tilestache_user: tilestache
-tilestache_port: 8091
+redis_port: 6379
+spatial_dir: "{{ tilestache_dir }}/spatial"
 tilestache_dir: /var/www/tilestache
 tilestache_log_file: /var/log/tilestache.log
+tilestache_port: 8091
+tilestache_redis_db: 0
 tilestache_url_root: /tiles
+tilestache_user: tilestache
 tilestache_uwsgi_socket: "localhost:{{ tilestache_port }}"
 tilestache_uwsgi_workers: 3
 tilestache_virtualenv: "{{ tilestache_dir }}/env"
-spatial_dir: "{{ tilestache_dir }}/spatial"
-mapnik_dir: "{{ tilestache_dir }}/mapnik-styles"
 upstart_cmd: water-plan-app
 vagrant: false
 varnish_port: 80
