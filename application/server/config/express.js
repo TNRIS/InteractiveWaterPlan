@@ -27,7 +27,9 @@ module.exports = function(app) {
       next();
     });
 
-    app.use(express.compress());
+    app.use(express.compress({
+      level: 5 //default level 4 seems to fail sometimes
+    }));
     app.use(express.static(path.join(config.root, '.tmp')));
     app.use(express.static(path.join(config.root, 'client')));
     app.set('views', config.root + '/client/views');
@@ -38,7 +40,9 @@ module.exports = function(app) {
       gaTrackingCode: 'UA-491601-10'
     });
 
-    app.use(express.compress());
+    app.use(express.compress({
+      level: 5 //default level 4 seems to fail sometimes
+    }));
     app.use(express.favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
     app.set('views', config.root + '/views');
