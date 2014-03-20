@@ -13,6 +13,12 @@
   - name: add mapnik ppa
     apt_repository: repo=ppa:mapnik/v2.2.0 state=present
 
+  - name: add python-redis ppa
+    apt_repository: repo=ppa:chris-lea/python-redis state=present
+
+  - name: add python-hiredis ppa
+    apt_repository: repo=ppa:chris-lea/python-hiredis state=present
+
   - name: install libmapnik
     apt: pkg=libmapnik state=present
 
@@ -34,6 +40,15 @@
   - name: install nginx
     apt: pkg=nginx state=installed
 
+  - name: install redis
+    apt: pkg=redis-server state=installed
+
+  - name: install python-redis
+    apt: pkg=python-redis state=installed
+
+  - name: install python-hiredis
+    apt: pkg=python-redis state=installed
+
   - name: copy nginx configuration file
     template: src=templates/nginx.conf.j2 dest=/etc/nginx/sites-available/tilestache owner=root group=root mode=0644
 
@@ -43,13 +58,18 @@
   - name: remove default nginx site
     file: path=/etc/nginx/sites-enabled/default state=absent
 
+  - name: copy redis configuration file
+    template: src=templates/redis.conf.j2 dest=/etc/redis/redis.conf owner=root group=root mode=0644
+    notify:
+    - restart redis
+
+  - include: varnish_tasks.yml
+
   - name: install pip
     command: /usr/bin/easy_install --upgrade "pip==1.4"
 
   - name: install virtualenv
     pip: name=virtualenv version=1.10.1
-
-  - include: varnish_tasks.yml
 
   - name: set up upstart config for tilestache
     template: src=templates/tilestache-upstart-conf.j2 dest=/etc/init/tilestache.conf owner=root group=root mode=0644
@@ -76,6 +96,10 @@
 
   - name: install tilestache
     pip: name=tilestache virtualenv={{ tilestache_virtualenv }}
+    sudo_user: '{{ tilestache_user }}'
+
+  - name: install redis python bindings
+    pip: name=redis virtualenv={{ tilestache_virtualenv }}
     sudo_user: '{{ tilestache_user }}'
 
   - name: install uwsgi

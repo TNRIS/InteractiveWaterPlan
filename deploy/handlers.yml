@@ -1,12 +1,19 @@
 ---
+  - name: flush tilestache redis cache
+    redis: command=flush db={{ tilestache_redis_db }} flush_mode=db
+
   - name: restart monit
     service: name=monit state=restarted
 
   - name: restart nginx
     service: name=nginx state=restarted
 
+  - name: restart redis
+    service: name=redis-server state=restarted
+
   - name: restart tilestache
     service: name=tilestache state=restarted
+    notify: flush tilestache redis cache
 
   - name: restart {{ upstart_cmd }}
     service: name={{ upstart_cmd }} state=restarted
