@@ -114,8 +114,6 @@
 
   - name: copy spatial dir to server
     synchronize: src=../spatial/ dest={{ spatial_dir }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ tilestache_user }} rsync"
-    notify:
-    - restart tilestache
 
   - name: copy mapnik xml files
     template: src=../spatial/mapnik-styles/rwpas.xml.j2 dest={{ mapnik_dir }}/rwpas.xml owner={{ tilestache_user }} group={{ tilestache_user }} mode=0644
