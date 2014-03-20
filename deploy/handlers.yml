@@ -2,6 +2,10 @@
   - name: flush tilestache redis cache
     redis: command=flush db={{ tilestache_redis_db }} flush_mode=db
 
+  - name: flush varnish tiles cache
+    command: varnishadm "ban req.url ~ {{ tilestache_url_root }}"
+    sudo: yes
+
   - name: restart monit
     service: name=monit state=restarted
 
@@ -13,7 +17,9 @@
 
   - name: restart tilestache
     service: name=tilestache state=restarted
-    notify: flush tilestache redis cache
+    notify:
+    - flush tilestache redis cache
+    - flush varnish tiles cache
 
   - name: restart {{ upstart_cmd }}
     service: name={{ upstart_cmd }} state=restarted
