@@ -36,4 +36,29 @@ exports.getEntityTypes = function(req, res) {
   utils.fileAsJsonResponse(res, filePath);
 };
 
+exports.getEntitiesByNamePartial = function(req, res) {
+  req.checkQuery('name', 'Must be at least 3 letters long')
+    .notEmpty()
+    .len(3);
 
+  var errors = req.validationErrors();
+  if (errors && errors.length) {
+    return res.json(400, {errors: errors});
+  }
+
+  var nameQuery = req.query.name;
+
+  var statement = 'SELECT EntityId, EntityName ' +
+    'FROM EntityCoordinates ' +
+    'WHERE EntityName LIKE $contains ' +
+    'ORDER BY '  +
+    '  CASE WHEN EntityName LIKE $startsWith THEN 1 ELSE 2 END ' +
+    'LIMIT 10';
+
+  var params = {
+    $contains: '%' + nameQuery + '%',
+    $startsWith: nameQuery + '%'
+  };
+
+  utils.sqlAllAsJsonResponse(res, db, statement, params);
+};

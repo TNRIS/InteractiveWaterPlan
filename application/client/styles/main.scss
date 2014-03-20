@@ -177,6 +177,15 @@ body {
   }
 }
 
+.place-select {
+  width: 75%;
+
+  &.select2-container {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+}
 
 .pagination-container {
   text-align: center;

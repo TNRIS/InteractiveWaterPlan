@@ -5,7 +5,7 @@ angular.module('iswpApp')
 
     var entityId = $scope.$stateParams.entityId,
       entity = EntityService.getEntity(entityId),
-      entityName = entity.EntityName.titleize();
+      entityName = entity.EntityName;
 
     $scope.heading = '' + entityName;
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
