@@ -24,8 +24,10 @@ module.exports = function(app) {
 
   // Server API Routes
   app.get(apiPre + 'places/regions', places.getRegionList);
-  app.get(apiPre + 'places/counties', places.getCountyList);
   app.get(apiPre + 'places/regions.topojson', places.getRegionTopoJson);
+  app.get(apiPre + 'places/county/:name.geojson', places.getCountyGeoJsonByName);
+  app.get(apiPre + 'places/counties', places.getCountyList);
+  app.get(apiPre + 'places/counties.geojson', places.getCountyGeoJson);
 
   app.get(apiPre + 'needs', needs.getAllNeeds);
   app.get(apiPre + 'needs/summary', needs.getSummary);
