@@ -50,15 +50,14 @@ exports.getEntitiesByNamePartial = function(req, res) {
 
   var statement = 'SELECT EntityId, EntityName ' +
     'FROM EntityCoordinates ' +
-    'WHERE EntityName LIKE $startsWith ' +
-    ' OR EntityName LIKE $contains ' +
+    'WHERE EntityName LIKE $contains ' +
     'ORDER BY '  +
     '  CASE WHEN EntityName LIKE $startsWith THEN 1 ELSE 2 END ' +
     'LIMIT 10';
 
   var params = {
-    $startsWith: nameQuery + '%',
-    $contains: '%' + nameQuery + '%'
+    $contains: '%' + nameQuery + '%',
+    $startsWith: nameQuery + '%'
   };
 
   utils.sqlAllAsJsonResponse(res, db, statement, params);
