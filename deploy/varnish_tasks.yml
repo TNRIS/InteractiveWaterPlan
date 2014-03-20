@@ -1,6 +1,6 @@
 ---
   - name: install varnish
-    apt: pkg=varnish state=present
+    apt: pkg=varnish
 
   - name: set up varnish config
     template: src=templates/varnish-conf.j2 dest=/etc/default/varnish owner=root group=root mode=0644

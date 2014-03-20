@@ -8,46 +8,46 @@
 
   tasks:
   - name: install python software properties package (for installing PPAs)
-    apt: pkg=python-software-properties state=installed update_cache=yes cache_valid_time=86400
+    apt: pkg=python-software-properties  update_cache=yes cache_valid_time=86400
 
   - name: add mapnik ppa
-    apt_repository: repo=ppa:mapnik/v2.2.0 state=present
+    apt_repository: repo=ppa:mapnik/v2.2.0
 
   - name: add python-redis ppa
-    apt_repository: repo=ppa:chris-lea/python-redis state=present
+    apt_repository: repo=ppa:chris-lea/python-redis
 
   - name: add python-hiredis ppa
-    apt_repository: repo=ppa:chris-lea/python-hiredis state=present
+    apt_repository: repo=ppa:chris-lea/python-hiredis
 
   - name: install libmapnik
-    apt: pkg=libmapnik state=present
+    apt: pkg=libmapnik
 
   - name: install mapnik-utils
-    apt: pkg=mapnik-utils state=present
+    apt: pkg=mapnik-utils
 
   - name: install python-mapnik
-    apt: pkg=python-mapnik state=present
+    apt: pkg=python-mapnik
 
   - name: install python setuptools package
-    apt: pkg=python-setuptools state=installed
+    apt: pkg=python-setuptools
 
   - name: install python development headers
-    apt: pkg=python-dev state=installed
+    apt: pkg=python-dev
 
   - name: install python image library
-    apt: pkg=python-imaging state=installed
+    apt: pkg=python-imaging
 
   - name: install nginx
-    apt: pkg=nginx state=installed
+    apt: pkg=nginx
 
   - name: install redis
-    apt: pkg=redis-server state=installed
+    apt: pkg=redis-server
 
   - name: install python-redis
-    apt: pkg=python-redis state=installed
+    apt: pkg=python-redis
 
   - name: install python-hiredis
-    apt: pkg=python-redis state=installed
+    apt: pkg=python-redis
 
   - name: copy nginx configuration file
     template: src=templates/nginx.conf.j2 dest=/etc/nginx/sites-available/tilestache owner=root group=root mode=0644
@@ -114,8 +114,6 @@
 
   - name: copy spatial dir to server
     synchronize: src=../spatial/ dest={{ spatial_dir }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ tilestache_user }} rsync"
-    notify:
-    - restart tilestache
 
   - name: copy mapnik xml files
     template: src=../spatial/mapnik-styles/rwpas.xml.j2 dest={{ mapnik_dir }}/rwpas.xml owner={{ tilestache_user }} group={{ tilestache_user }} mode=0644
