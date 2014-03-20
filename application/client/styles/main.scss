@@ -94,7 +94,7 @@ body {
 
 
 .main-map {
-  height: 200px;
+  height: 300px;
   width: 100%;
 }
 
@@ -149,22 +149,42 @@ body {
   padding: 10px;
   border-left: 3px solid #eee;
 
+  p .fa {
+    font-size: 17px;
+  }
+
   h4 {
     font-size: 16px;
     font-weight: bold;
     margin-top: 0;
     margin-bottom: 5px;
   }
+
+  &.callout-warning {
+    background-color: #fcf8f2;
+    border-color: #f0ad4e;
+  }
+
+  &.callout-danger {
+    background-color: #fdf7f7;
+    border-color: #d9534f;
+  }
+
+  &.callout-note {
+    background-color: #f4f8fa;
+    border-color: #5bc0de;
+
+  }
 }
 
-.callout-warning {
-  background-color: #fcf8f2;
-  border-color: #f0ad4e;
-}
+.place-select {
+  width: 75%;
 
-.callout-danger {
-  background-color: #fdf7f7;
-  border-color: #d9534f;
+  &.select2-container {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
 }
 
 .pagination-container {

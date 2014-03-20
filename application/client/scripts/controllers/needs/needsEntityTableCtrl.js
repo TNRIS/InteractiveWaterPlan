@@ -5,10 +5,10 @@ angular.module('iswpApp')
 
     var entityId = $scope.$stateParams.entityId,
       entity = EntityService.getEntity(entityId),
-      entityName = entity.EntityName.titleize();
+      entityName = entity.EntityName;
 
     $scope.heading = '' + entityName;
-    $scope.mapDescription = 'Map shows geographic center of <strong>' + entityName + '</strong>.';
+    $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists identified water needs<span class="note-marker">*</span> of <strong>'+ entityName + '</strong> in {year}.';
 

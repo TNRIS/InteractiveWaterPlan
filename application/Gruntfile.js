@@ -360,7 +360,7 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>/public/styles/images',
+          dest: '<%= yeoman.dist %>/public/styles',
           flatten: true,
           src: ['bower_components/**/*.{png,jpg,jpeg,gif,webp,svg}']
         }, {

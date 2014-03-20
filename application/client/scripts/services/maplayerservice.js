@@ -37,12 +37,8 @@ angular.module('iswpApp')
           type: 'Aerial'
         });
 
-        // Overlay WMS Layers
-        var planningAreas = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
-          layers: '4,7',
-          format: 'image/png',
-          transparent: true
-        });
+        // Overlay Layers
+        var planningAreas = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png');
 
         var counties = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '1,9',
