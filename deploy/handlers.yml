@@ -4,7 +4,6 @@
 
   - name: flush varnish tiles cache
     command: varnishadm "ban req.url ~ {{ tilestache_url_root }}"
-    sudo: yes
 
   - name: restart monit
     service: name=monit state=restarted
