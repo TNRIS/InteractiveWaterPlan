@@ -9,6 +9,7 @@ angular.module('iswpApp', [
   'smartTable.table',
   'ui.router',
   'ui.bootstrap',
+  'ui.select2',
   'LocalStorageModule'
 ])
   .config(function(localStorageServiceProvider) {
