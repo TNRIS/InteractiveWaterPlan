@@ -21,7 +21,7 @@ exports.getAllNeeds = function(req, res) {
 exports.getSummary = function(req, res) {
   var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
     'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
-    'FROM vwMapWugNeedsA1';
+    'FROM vwMapWugNeedsA1 ORDER BY WugRegion';
   utils.sqlAllAsJsonResponse(res, db, statement);
 };
 
@@ -45,7 +45,7 @@ exports.getNeedsForRegion = function(req, res) {
     'FROM vwMapWugNeeds ' +
     'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE WugRegion == ?';
+    'WHERE WugRegion == ? ORDER BY EntityName';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [region]);
 };
@@ -68,7 +68,7 @@ exports.getNeedsForCounty = function(req, res) {
     'FROM vwMapWugNeeds ' +
     'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE WugCounty == ?';
+    'WHERE WugCounty == ? ORDER BY EntityName';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [county]);
 };
@@ -91,7 +91,7 @@ exports.getNeedsForEntityType = function(req, res) {
     'FROM vwMapWugNeeds ' +
     'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE WugType == ?';
+    'WHERE WugType == ? ORDER BY EntityName';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [entityType]);
 };
@@ -115,7 +115,7 @@ exports.getNeedsForEntity = function(req, res) {
     'FROM vwMapWugNeeds ' +
     'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE vwMapWugNeeds.EntityId == ?';
+    'WHERE vwMapWugNeeds.EntityId == ? ORDER BY EntityName';
 
   utils.sqlAllAsJsonResponse(res, db, statement, [entityId]);
 };
