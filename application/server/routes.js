@@ -39,6 +39,7 @@ module.exports = function(app) {
   app.get(apiPre + 'entity', entity.getEntities);
   app.get(apiPre + 'entity/search', entity.getEntitiesByNamePartial);
   app.get(apiPre + 'entity/:entityId', entity.getEntity);
+  app.get(apiPre + 'entity/:entityId/summary', entity.getEntitySummary);
 
   app.get(apiPre + 'type/entity', type.getEntityTypes);
 
