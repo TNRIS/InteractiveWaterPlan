@@ -41,7 +41,6 @@ angular.module('iswpApp')
           L.control.attribution({prefix: false}).addTo(map);
 
           //Create a legend for the Needs colors
-          console.log(LegendService.Needs);
           var legendControl = LegendService.Needs.createLegend();
 
           MapLayerService.setupBaseLayers(map);
