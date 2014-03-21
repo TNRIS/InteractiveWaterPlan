@@ -38,7 +38,7 @@ angular.module('iswpApp')
             circleTpl = '<svg height="14" width="14">' +
               '<circle cx="7" cy="7" r="6" stroke="black" stroke-width="1" fill="{color}">' +
               '</svg>',
-            tpl = '{lowerBound}% &lt; ' + circleTpl + ' &le; {upperBound}%';
+            tpl = '<span class="lower-bound">{lowerBound}% &lt; </span>' + circleTpl + ' &le; {upperBound}%';
 
           for (var i = service.Needs.entityColors.length - 1; i >= 0; i--) {
             var colorEntry = service.Needs.entityColors[i],
@@ -46,7 +46,8 @@ angular.module('iswpApp')
               legendEntry = L.DomUtil.create('li', 'legend-entry', ul);
 
             if (colorEntry.limit === 0) {
-              legendEntry.innerHTML = circleTpl.assign({color: colorEntry.color}) + ' = No Need';
+              legendEntry.innerHTML = '<span class="lower-bound"></span>' +
+                circleTpl.assign({color: colorEntry.color}) + ' = No Need';
             }
             else {
               legendEntry.innerHTML = tpl.assign({
