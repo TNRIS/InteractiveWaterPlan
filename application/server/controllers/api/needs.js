@@ -18,7 +18,7 @@ exports.getAllNeeds = function(req, res) {
 };
 
 
-exports.getSummary = function(req, res) {
+exports.getRegionSummary = function(req, res) {
   var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
     'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
     'FROM vwMapWugNeedsA1 ORDER BY WugRegion';
