@@ -8,10 +8,7 @@ angular.module('iswpApp')
 
       service.setupBaseLayers = function(map) {
         // Base Layers
-        var esriGray = L.layerGroup([
-          L.esri.basemapLayer("Gray"),
-          L.esri.basemapLayer("GrayLabels", {opacity: 0.8})
-        ]);
+        var esriGray = L.esri.basemapLayer("Gray");
 
         var mqOpen = L.tileLayer(
           'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
@@ -67,8 +64,10 @@ angular.module('iswpApp')
           opacity: 0.6
         });
 
+        var grayWithLabels = L.layerGroup([esriGray, countyLabels]);
+
         var baseMaps = {
-          'Esri Gray': esriGray,
+          'Esri Gray': grayWithLabels,
           'MapQuest Open': mqOpen,
           'MapQuest Open Aerial': mqAerial,
           'Bing Road': bingRoad,
@@ -85,8 +84,8 @@ angular.module('iswpApp')
           'Public Water Systems': publicWaterSystems
         };
 
-        //Start with esriGray and planningAreas selected
-        esriGray.addTo(map);
+        //Start with grayWithLabels and planningAreas selected
+        grayWithLabels.addTo(map);
         planningAreas.addTo(map);
 
         //Add controls

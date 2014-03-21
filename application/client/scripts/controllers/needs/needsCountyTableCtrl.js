@@ -6,19 +6,21 @@ angular.module('iswpApp')
     var county = $scope.$stateParams.county.titleize();
 
     $scope.heading = '' + county + ' County';
-    $scope.mapDescription = 'Map displays entities and their identified water needs<span class="note-marker">*</span> within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
+    $scope.mapDescription = 'Map displays entities and their identified water needs within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>'+county+' County</strong> in {year}';
 
     var needsCol = {
       map: 'N2010',
       label: 'Need (acre-feet/yr) in County',
+      cellClass: 'number',
       formatFunction: 'number'
     };
 
     var percentCol = {
       map: 'NPD2010',
-      label: 'Entity Need as % of Demand**',
+      label: 'Overall Entity Need as % of Demand*',
+      cellClass: 'percent',
       formatFunction: function(val) { return '' + val + '%'; }
     };
 

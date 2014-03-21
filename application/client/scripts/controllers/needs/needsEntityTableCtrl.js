@@ -10,17 +10,19 @@ angular.module('iswpApp')
     $scope.heading = '' + entityName;
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists identified water needs<span class="note-marker">*</span> of <strong>'+ entityName + '</strong> in {year}.';
+    var tableDescTpl = 'Table lists identified water needs of <strong>'+ entityName + '</strong> in {year}.';
 
     var needsCol = {
       map: 'N2010',
       label: 'Need (acre-feet/yr)',
+      cellClass: 'number',
       formatFunction: 'number'
     };
 
     var percentCol = {
       map: 'NPD2010',
-      label: 'Entity Need as % of Demand**',
+      label: 'Overall Entity Need as % of Demand*',
+      cellClass: 'percent',
       formatFunction: function(val) { return '' + val + '%'; }
     };
 

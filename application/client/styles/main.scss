@@ -19,7 +19,7 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 
 .about-nav {
   width: 200px;
-  margin-top: 20px;
+  margin-top: 30px;
 
   > li {
     border-bottom: 1px solid #ccc;
@@ -141,7 +141,17 @@ body {
 }
 
 .table-container {
-  overflow-x: scroll;
+  overflow-x: auto;
+}
+
+.smart-table {
+  td.number {
+    text-align: right;
+  }
+
+  td.percent {
+    text-align: center;
+  }
 }
 
 .note-marker {
@@ -213,6 +223,34 @@ body {
     padding: 0 0 0 4px;
     margin: 0;
   }
+
+  .lower-bound {
+    width: 40px;
+    padding-right:4px;
+    display:inline-block;
+    text-align:right;
+  }
+}
+
+.about-content {
+  section {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.glossary {
+  h5 {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #555;
+  }
+
+  p {
+    padding-left: 10px;
+    border-left: 3px solid #eee;
+  }
 }
 
 /* Responsive: Portrait tablets and up */
@@ -231,5 +269,9 @@ body {
     .main-map {
       height: 400px;
       width: 100%;
+    }
+
+    .lead {
+      font-size: 18px;
     }
 }
