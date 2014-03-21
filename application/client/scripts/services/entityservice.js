@@ -3,7 +3,7 @@
 //Service to hold current Water User Group Entities
 // to be show on the map
 angular.module('iswpApp')
-  .service('EntityService', function EntityService($http, API_PATH) {
+  .factory('EntityService', function EntityService($http, API_PATH) {
     var service = {};
 
     service.entities = [];

@@ -135,9 +135,13 @@ body {
   margin-bottom: 10px;
 }
 
-.table-container {
+.table-view {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.table-container {
+  overflow-x: scroll;
 }
 
 .note-marker {

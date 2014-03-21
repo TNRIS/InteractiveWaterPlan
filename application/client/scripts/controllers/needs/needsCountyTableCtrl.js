@@ -18,7 +18,8 @@ angular.module('iswpApp')
 
     var percentCol = {
       map: 'NPD2010',
-      label: 'Entity Need as % of Demand**'
+      label: 'Entity Need as % of Demand**',
+      formatFunction: function(val) { return '' + val + '%'; }
     };
 
     var cellTemplateUrl = 'partials/needs/needs_link_cell.html';

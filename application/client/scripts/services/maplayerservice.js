@@ -2,13 +2,16 @@
 
 //Service create basemap layers for a Leaflet map
 angular.module('iswpApp')
-  .service('MapLayerService',
+  .factory('MapLayerService',
     function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL, TILES_URL) {
       var service = {};
 
       service.setupBaseLayers = function(map) {
         // Base Layers
-        var esriGray = L.esri.basemapLayer("Gray");
+        var esriGray = L.layerGroup([
+          L.esri.basemapLayer("Gray"),
+          L.esri.basemapLayer("GrayLabels", {opacity: 0.8})
+        ]);
 
         var mqOpen = L.tileLayer(
           'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {

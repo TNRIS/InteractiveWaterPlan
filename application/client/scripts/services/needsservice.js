@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .service('NeedsService', function NeedsService($http, API_PATH) {
+  .factory('NeedsService', function NeedsService($http, API_PATH) {
     var service = {};
 
     var currentData = [];
