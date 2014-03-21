@@ -8,7 +8,10 @@ angular.module('iswpApp')
 
       service.setupBaseLayers = function(map) {
         // Base Layers
-        var esriGray = L.esri.basemapLayer("Gray");
+        var esriGray = L.layerGroup([
+          L.esri.basemapLayer("Gray"),
+          L.esri.basemapLayer("GrayLabels", {opacity: 0.8})
+        ]);
 
         var mqOpen = L.tileLayer(
           'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
