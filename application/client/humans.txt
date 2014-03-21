@@ -1,0 +1,18 @@
+/* OWNER */
+
+  TNRIS
+  GitHub Profile: https://github.com/TNRIS
+  Location: Austin, TX
+  Website: www.tnris.org
+
+/* CONTRIBUTORS */
+
+  James Seppi
+  GitHub Profile: https://github.com/jseppi
+  Location: Austin, TX
+  Website: www.coseppikitchen.com
+  Twitter: @hydrologee
+
+  Andy Wilson
+  GitHub Profile: https://github.com/wilsaj
+  Location: Austin, TX
