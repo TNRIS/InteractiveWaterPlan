@@ -19,7 +19,7 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 
 .about-nav {
   width: 200px;
-  margin-top: 20px;
+  margin-top: 30px;
 
   > li {
     border-bottom: 1px solid #ccc;
@@ -141,7 +141,7 @@ body {
 }
 
 .table-container {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .note-marker {
@@ -212,6 +212,27 @@ body {
     list-style: none;
     padding: 0 0 0 4px;
     margin: 0;
+  }
+}
+
+.about-content {
+  section {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.glossary {
+  h5 {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #555;
+  }
+
+  p {
+    padding-left: 10px;
+    border-left: 3px solid #eee;
   }
 }
 
