@@ -2,7 +2,7 @@
 
 //Service create basemap layers for a Leaflet map
 angular.module('iswpApp')
-  .service('MapLayerService',
+  .factory('MapLayerService',
     function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL, TILES_URL) {
       var service = {};
 
