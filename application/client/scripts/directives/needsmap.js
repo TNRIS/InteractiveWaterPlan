@@ -3,7 +3,8 @@
 
 angular.module('iswpApp')
   .directive('needsMap',
-    function ($rootScope, $state, $stateParams, localStorageService, RegionService, MapLayerService, NeedsService, EntityService) {
+    function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
+      NeedsService, EntityService) {
 
       var entityColors = [
           {limit: 0, color: '#007FFF'}, //blue
@@ -96,26 +97,6 @@ angular.module('iswpApp')
 
           //Create a legend for the Needs colors
           var legendControl = _createLegend();
-
-          //TODO: Are we using this? Maybe if mapLock is on
-          // var updateStoredMapLocation = _.debounce(function() {
-          //   var center = map.getCenter(),
-          //       zoom = map.getZoom(),
-          //       precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-          //       lat = center.lat.toFixed(precision),
-          //       lng = center.lng.toFixed(precision);
-
-          //   //Set in LocalStorage
-          //   localStorageService.set('mapLocation', {
-          //     zoom: zoom,
-          //     centerLat: lat,
-          //     centerLng: lng
-          //   });
-
-          //   scope.$apply();
-          // }, 250, {trailing: true});
-
-          // map.on('moveend', updateStoredMapLocation);
 
           MapLayerService.setupBaseLayers(map);
 
