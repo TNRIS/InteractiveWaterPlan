@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Map[]>
-<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" background-color="#00000000" maximum-extent="-20037508.34,-20037508.34,20037508.34,20037508.34" font-directory="{{ tilestache_font_dir }}">
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m
++nadgrids=@null +wktext +no_defs +over" background-color="#00000000"
+maximum-extent="-20037508.34,-20037508.34,20037508.34,20037508.34" font-directory="{{ tilestache_font_dir }}">
 
 <Parameters>
   <Parameter name="bounds">-180,-85.05112877980659,180,85.05112877980659</Parameter>
@@ -11,29 +13,29 @@
 </Parameters>
 
 
-<Style name="counties" filter-mode="first" >
+<Style name="counties-outlines" filter-mode="first" >
   <Rule>
     <PolygonSymbolizer fill="#00000000" />
   </Rule>
 </Style>
-<Style name="counties-line" filter-mode="first" >
+<Style name="counties-outlines-line" filter-mode="first" >
   <Rule>
-    <LineSymbolizer stroke-width="1.5" stroke="#333333" />
+    <LineSymbolizer stroke-width="1" stroke="#666666" />
   </Rule>
 </Style>
-<Style name="counties-case" filter-mode="first" >
+<Style name="counties-outlines-case" filter-mode="first" >
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <LineSymbolizer stroke-width="2.5" stroke="rgba(255, 255, 255, 0.7)" />
   </Rule>
 </Style>
-<Layer name="counties"
+<Layer name="counties-outlines"
   srs="+proj=longlat +ellps=WGS84 +no_defs">
-    <StyleName>counties-case</StyleName>
-    <StyleName>counties-line</StyleName>
-    <StyleName>counties</StyleName>
+    <StyleName>counties-outlines-case</StyleName>
+    <StyleName>counties-outlines-line</StyleName>
+    <StyleName>counties-outlines</StyleName>
     <Datasource>
-       <Parameter name="file"><![CDATA[{{ spatial_dir }}/Counties/Counties.shp]]></Parameter>
+       <Parameter name="file"><![CDATA[{{ spatial_dir}}/Counties/Counties.shp]]></Parameter>
        <Parameter name="type"><![CDATA[shape]]></Parameter>
     </Datasource>
   </Layer>

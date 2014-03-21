@@ -3,7 +3,7 @@ Map {
 }
 
 #counties-labels {
-  text-face-name: 'Open Sans Regular';
+  text-face-name: 'open sans regular';
   text-fill: #333;
   text-size: 10;
   text-name: '';
@@ -11,7 +11,7 @@ Map {
   text-halo-radius: 2.5;
 
   [zoom>7] {
-	  text-name: [COUNTY];
+	  text-name: [county];
   }
   [zoom>8] {
     text-size: 12;

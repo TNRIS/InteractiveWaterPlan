@@ -10,8 +10,8 @@ Map {
   	}
   }
   ::line {
-  	line-width: 1.5;
-  	line-color: #333;
+  	line-width: 1;
+  	line-color: #666;
   }
   polygon-fill: transparent;
 }
