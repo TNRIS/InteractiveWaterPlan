@@ -3,7 +3,8 @@
 
 angular.module('iswpApp')
   .directive('needsMap',
-    function ($rootScope, $state, $stateParams, localStorageService, RegionService, MapLayerService, NeedsService, EntityService) {
+    function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
+      NeedsService, EntityService, CountyService) {
 
       var entityColors = [
           {limit: 0, color: '#007FFF'}, //blue
@@ -97,26 +98,6 @@ angular.module('iswpApp')
           //Create a legend for the Needs colors
           var legendControl = _createLegend();
 
-          //TODO: Are we using this? Maybe if mapLock is on
-          // var updateStoredMapLocation = _.debounce(function() {
-          //   var center = map.getCenter(),
-          //       zoom = map.getZoom(),
-          //       precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-          //       lat = center.lat.toFixed(precision),
-          //       lng = center.lng.toFixed(precision);
-
-          //   //Set in LocalStorage
-          //   localStorageService.set('mapLocation', {
-          //     zoom: zoom,
-          //     centerLat: lat,
-          //     centerLng: lng
-          //   });
-
-          //   scope.$apply();
-          // }, 250, {trailing: true});
-
-          // map.on('moveend', updateStoredMapLocation);
-
           MapLayerService.setupBaseLayers(map);
 
           var currentYear = $stateParams.year,
@@ -204,6 +185,8 @@ angular.module('iswpApp')
               case 'needs.region':
                 var regionFeat = RegionService.getRegion($stateParams.region);
 
+                //Extend with region bounds to make sure we always have a nice view
+                // of the entire region even if there aren't many entities
                 var extendedBounds = entityLayerBounds.extend(
                   regionFeat.getBounds());
 
@@ -216,8 +199,14 @@ angular.module('iswpApp')
                 break;
 
               case 'needs.county':
-                //TODO: extend bounds with county bounds needs.county
-                fitBounds(entityLayerBounds);
+                //Extend with county bounds to make sure we always have a nice view
+                // of the entire region even if there aren't many entities
+                CountyService.fetchCounty($stateParams.county)
+                  .then(function(countyFeat) {
+                    var extendedBounds = entityLayerBounds.extend(
+                      countyFeat.getBounds());
+                    fitBounds(extendedBounds);
+                  });
                 break;
 
               default:
