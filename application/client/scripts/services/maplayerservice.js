@@ -63,6 +63,10 @@ angular.module('iswpApp')
           opacity: 0.6
         });
 
+        var publicWaterSystems = L.tileLayer(TILES_URL + '/public-water-systems/{z}/{x}/{y}.png', {
+          opacity: 0.6
+        });
+
         var baseMaps = {
           'Esri Gray': esriGray,
           'MapQuest Open': mqOpen,
@@ -77,7 +81,8 @@ angular.module('iswpApp')
           'Texas Counties': counties,
           'Texas County Names': countyLabels,
           'Texas Senate Districts (2011)': senateDistricts,
-          'Texas House Districts (2011)': houseDistricts
+          'Texas House Districts (2011)': houseDistricts,
+          'Public Water Systems': publicWaterSystems
         };
 
         //Start with esriGray and planningAreas selected

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m
++nadgrids=@null +wktext +no_defs +over" background-color="#00000000"
+maximum-extent="-20037508.34,-20037508.34,20037508.34,20037508.34" font-directory="{{ tilestache_font_dir }}">
+
+<Parameters>
+  <Parameter name="bounds">-180,-85.05112877980659,180,85.05112877980659</Parameter>
+  <Parameter name="center">0,0,2</Parameter>
+  <Parameter name="format">png</Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="maxzoom">22</Parameter>
+</Parameters>
+
+
+<Style name="publicwatersystems" filter-mode="first" >
+</Style>
+<Style name="publicwatersystems-label" filter-mode="first" >
+  <Rule>
+    <MaxScaleDenominator>400000</MaxScaleDenominator>
+    <TextSymbolizer face-name="Open Sans Regular" fill="#251205" size="10" halo-fill="#ffe9c6" halo-radius="1.5" wrap-width="40" ><![CDATA[[A1NAME]]]></TextSymbolizer>
+  </Rule>
+</Style>
+<Style name="publicwatersystems-outline" filter-mode="first" >
+  <Rule>
+    <LineSymbolizer stroke="#f09d0d" stroke-width="1" stroke-linejoin="round" />
+  </Rule>
+</Style>
+<Style name="publicwatersystems-outline-halo" filter-mode="first" >
+  <Rule>
+    <LineSymbolizer stroke="#eccdb2" stroke-width="3" stroke-linejoin="round" />
+  </Rule>
+</Style>
+<Style name="publicwatersystems-fill" filter-mode="first" >
+  <Rule>
+    <PolygonSymbolizer fill="#ffe9c6" />
+  </Rule>
+</Style>
+<Layer name="publicwatersystems"
+  srs="+proj=longlat +ellps=GRS80 +no_defs">
+    <StyleName>publicwatersystems-fill</StyleName>
+    <StyleName>publicwatersystems-outline-halo</StyleName>
+    <StyleName>publicwatersystems-outline</StyleName>
+    <StyleName>publicwatersystems-label</StyleName>
+    <StyleName>publicwatersystems</StyleName>
+    <Datasource>
+       <Parameter name="file"><![CDATA[{{ spatial_dir }}/PublicWaterSystems/PublicWaterSystems.shp]]></Parameter>
+       <Parameter name="id"><![CDATA[publicwatersystems]]></Parameter>
+       <Parameter name="project"><![CDATA[PublicWaterSystems]]></Parameter>
+       <Parameter name="srs"><![CDATA[]]></Parameter>
+       <Parameter name="type"><![CDATA[shape]]></Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
