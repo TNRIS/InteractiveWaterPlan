@@ -45,18 +45,9 @@ angular.module('iswpApp')
           opacity: 0.6
         });
 
-        var counties = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '1,9',
-          format: 'image/png',
-          transparent: true,
-          opacity: 0.6
-        });
+        var counties = L.tileLayer(TILES_URL + '/counties-outlines/{z}/{x}/{y}.png');
 
-        var countyLabels = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '9',
-          format: 'image/png',
-          transparent: true
-        });
+        var countyLabels = L.tileLayer(TILES_URL + '/counties-labels/{z}/{x}/{y}.png');
 
         var senateDistricts = L.tileLayer.wms(SWP_WMS_URL, {
           layers: '3,13',
