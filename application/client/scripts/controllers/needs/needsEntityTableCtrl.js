@@ -21,7 +21,7 @@ angular.module('iswpApp')
 
     var percentCol = {
       map: 'NPD2010',
-      label: 'Entity Need as % of Demand*',
+      label: 'Overall Entity Need as % of Demand*',
       cellClass: 'percent',
       formatFunction: function(val) { return '' + val + '%'; }
     };
