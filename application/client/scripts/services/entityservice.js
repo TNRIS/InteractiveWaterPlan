@@ -21,16 +21,7 @@ angular.module('iswpApp')
       return prom;
     };
 
-    service.search = function(namePart) {
-      var requestPath = API_PATH + 'entity/search?name=' + namePart;
 
-      var prom = $http.get(requestPath)
-        .then(function(resp) {
-          return resp.data;
-        });
-
-      return prom;
-    };
 
     service.getEntity = function(entityId) {
       return _.first(service.getEntities(entityId));
@@ -52,6 +43,27 @@ angular.module('iswpApp')
       return _.where(service.entities, function (e) {
         return _.contains(idArr, e.EntityId);
       });
+    };
+
+    service.fetchSummary = function(entityId) {
+      var requestPath = API_PATH + 'entity/' + entityId + '/summary';
+      var prom = $http.get(requestPath)
+        .then(function(resp) {
+          return resp.data;
+        });
+
+      return prom;
+    };
+
+    service.search = function(namePart) {
+      var requestPath = API_PATH + 'entity/search?name=' + namePart;
+
+      var prom = $http.get(requestPath)
+        .then(function(resp) {
+          return resp.data;
+        });
+
+      return prom;
     };
 
     return service;
