@@ -144,6 +144,16 @@ body {
   overflow-x: auto;
 }
 
+.smart-table {
+  td.number {
+    text-align: right;
+  }
+
+  td.percent {
+    text-align: center;
+  }
+}
+
 .note-marker {
   color: #007fff;
 }
@@ -213,6 +223,13 @@ body {
     padding: 0 0 0 4px;
     margin: 0;
   }
+
+  .lower-bound {
+    width: 40px;
+    padding-right:4px;
+    display:inline-block;
+    text-align:right;
+  }
 }
 
 .about-content {
@@ -252,5 +269,9 @@ body {
     .main-map {
       height: 400px;
       width: 100%;
+    }
+
+    .lead {
+      font-size: 18px;
     }
 }

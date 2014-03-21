@@ -1,5 +1,4 @@
 <div class="col-md-12">
-
   <h3>{{heading}} - {{currentYear}}</h3>
 
   <div ng-show="!tableRows.length" class="callout callout-warning">
@@ -20,13 +19,8 @@
       </div>
     </div>
 
-    <p>
-      <span class="note-marker">*</span>
-      Identified water <strong>needs</strong> are projected water demands in excess of existing water supplies (i.e., potential
-      shortage if no water management strategy is recommended).
-    </p>
-    <p>
-      ** For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
+    <p ng-hide="{{ 'needs.summary' | isState }}">
+      * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
     </p>
   </div>
 </div>

@@ -6,19 +6,21 @@ angular.module('iswpApp')
     var region = $scope.$stateParams.region.toUpperCase();
 
     $scope.heading = 'Region '+region;
-    $scope.mapDescription = 'Map displays entities and their identified water needs<span class="note-marker">*</span> in <strong>Region '+region+'</strong> (water system service area boundaries may extend outside of region).';
+    $scope.mapDescription = 'Map displays entities and their identified water needs in <strong>Region '+region+'</strong> (water system service area boundaries may extend outside of region).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>Region '+region+'</strong> in {year}';
 
     var needsCol = {
       map: 'N2010',
       label: 'Need (acre-feet/yr) in Region',
+      cellClass: 'number',
       formatFunction: 'number'
     };
 
     var percentCol = {
       map: 'NPD2010',
-      label: 'Entity Need as % of Demand**',
+      label: 'Overall Entity Need as % of Demand*',
+      cellClass: 'percent',
       formatFunction: function(val) { return '' + val + '%'; }
     };
 
