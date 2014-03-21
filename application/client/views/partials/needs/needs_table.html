@@ -1,4 +1,4 @@
-<div class="table-container">
+<div class="col-md-12">
 
   <h3>{{heading}} - {{currentYear}}</h3>
 
@@ -12,9 +12,13 @@
     <p ng-bind-html='mapDescription'></p>
     <p ng-bind-html='tableDescription'></p>
 
-    <smart-table class="table table-striped table-condensed table-bordered"
-      columns="tableColumns" rows="tableRows" config="tableConfig">
-    </smart-table>
+    <div class="row">
+      <div class="col-md-12 table-container ">
+        <smart-table class="table table-striped table-condensed table-bordered"
+          columns="tableColumns" rows="tableRows" config="tableConfig">
+        </smart-table>
+      </div>
+    </div>
 
     <p>
       <span class="note-marker">*</span>
