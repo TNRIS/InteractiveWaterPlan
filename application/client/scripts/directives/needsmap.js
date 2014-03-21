@@ -4,17 +4,9 @@
 angular.module('iswpApp')
   .directive('needsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
-      NeedsService, EntityService, CountyService) {
+      NeedsService, EntityService, CountyService, LegendService) {
 
-      var entityColors = [
-          {limit: 0, color: '#007FFF'}, //blue
-          {limit: 10, color: '#1A9641'}, //green
-          {limit: 25, color: '#A6D96A'},
-          {limit: 50, color: '#FFFFBF'},
-          {limit: 75, color: '#FDAE61'},
-          {limit: 100, color: '#D7191C'} //red
-        ],
-        minRadius = 6,
+      var minRadius = 6,
         maxRadius = 14;
 
       var stateCenter = [31.780548, -99.022907],
@@ -27,53 +19,6 @@ angular.module('iswpApp')
         }
         scaledVal = (scaleMax - scaleMin) * (val - min) / (max - min) + scaleMin;
         return scaledVal;
-      }
-
-      function _createLegend() {
-        var legend = L.control({
-          position: 'bottomleft'
-        });
-
-        legend.onAdd = function(map) {
-          this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs hidden-xs');
-          this._update();
-          this.isAdded = true;
-          return this._div;
-        };
-
-        legend.onRemove = function() {
-          this.isAdded = false;
-        };
-
-        legend._update = function() {
-          L.DomUtil.create('h4', '', this._div)
-            .innerHTML = 'Need as a % of Demand';
-
-          var ul = L.DomUtil.create('ul', '', this._div),
-            circleTpl = '<svg height="14" width="14">' +
-              '<circle cx="7" cy="7" r="6" stroke="black" stroke-width="1" fill="{color}">' +
-              '</svg>',
-            tpl = '{lowerBound}% &lt; ' + circleTpl + ' &le; {upperBound}%';
-
-          for (var i = entityColors.length - 1; i >= 0; i--) {
-            var colorEntry = entityColors[i],
-              prevColorEntry = entityColors[i-1],
-              legendEntry = L.DomUtil.create('li', 'legend-entry', ul);
-
-            if (colorEntry.limit === 0) {
-              legendEntry.innerHTML = circleTpl.assign({color: colorEntry.color}) + ' = No Need';
-            }
-            else {
-              legendEntry.innerHTML = tpl.assign({
-                color: colorEntry.color,
-                upperBound: colorEntry.limit,
-                lowerBound: prevColorEntry ? prevColorEntry.limit : 0
-              });
-            }
-          }
-        };
-
-        return legend;
       }
 
       return {
@@ -96,7 +41,8 @@ angular.module('iswpApp')
           L.control.attribution({prefix: false}).addTo(map);
 
           //Create a legend for the Needs colors
-          var legendControl = _createLegend();
+          console.log(LegendService.Needs);
+          var legendControl = LegendService.Needs.createLegend();
 
           MapLayerService.setupBaseLayers(map);
 
@@ -254,18 +200,17 @@ angular.module('iswpApp')
             var yearNeedKey = 'N' + currentYear,
               yearPctKey = 'NPD' + currentYear,
               maxNeed = _.max(needsData, yearNeedKey)[yearNeedKey],
-              minNeed = _.min(needsData, yearNeedKey)[yearNeedKey],
-              //sort so that largest will be on bottom when there is overlap
-              // of the county-centroid entities
-              sortedEntities = _.sortBy(entities, yearNeedKey).reverse();
+              minNeed = _.min(needsData, yearNeedKey)[yearNeedKey];
 
+
+            //TODO: figure out how to make the larger entities go on the bottom
             //build marker for each entity
-            _.each(sortedEntities, function(entity) {
+            _.each(entities, function(entity) {
               var need = NeedsService.getForEntity(entity.EntityId);
               var pctOfDemand = need[yearPctKey];
 
               //find the first color with limit >= pctOfDemand
-              var colorEntry = _.find(entityColors, function(c) {
+              var colorEntry = _.find(LegendService.Needs.entityColors, function(c) {
                 return c.limit >= pctOfDemand;
               });
 
