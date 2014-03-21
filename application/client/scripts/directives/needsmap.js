@@ -227,7 +227,7 @@ angular.module('iswpApp')
                 entity: entity //save the entity data in the marker
               })
               .bindLabel('' + entity.EntityName + '<br/>' +
-                'Need: ' + need[yearNeedKey].format() + ' ac-ft/yr')
+                'Needs: ' + pctOfDemand + '% of Demands')
               .addTo(entityLayer);
 
               //add it to the spiderfier
