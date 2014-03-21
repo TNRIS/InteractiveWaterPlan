@@ -23,6 +23,37 @@
         "columns": 4,
         "buffer": 64
       }
+    },
+    "counties-outlines": {
+      "provider": {
+          "name": "mapnik",
+          "mapfile": "{{ mapnik_dir }}/counties-outlines.xml"
+      },
+      "projection": "spherical mercator",
+      "preview": {
+        "lat": 31.273,
+        "lon": -99.848,
+        "zoom": 6,
+        "ext": "png"
+      }
+    },
+    "counties-labels": {
+      "provider": {
+          "name": "mapnik",
+          "mapfile": "{{ mapnik_dir }}/counties-labels.xml"
+      },
+      "projection": "spherical mercator",
+      "preview": {
+        "lat": 31.273,
+        "lon": -99.848,
+        "zoom": 8,
+        "ext": "png"
+      },
+      "metatile": {
+        "rows": 4,
+        "columns": 4,
+        "buffer": 64
+      }
     }
   }
 }
