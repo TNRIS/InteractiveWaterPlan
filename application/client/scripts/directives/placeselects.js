@@ -1,5 +1,8 @@
 'use strict';
 
+//TODO: If mobile, just use regular <select> controls instead of select2
+// How to check if mobile?
+
 angular.module('iswpApp')
   .directive('placeSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
     return {
@@ -9,7 +12,6 @@ angular.module('iswpApp')
 
         $scope.counties = ISWP_VARS.counties;
         $scope.regions = ISWP_VARS.regions;
-
 
         $scope.entitySelectOpts = {
           minimumInputLength: 3,

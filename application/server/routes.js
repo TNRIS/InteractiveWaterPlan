@@ -30,7 +30,7 @@ module.exports = function(app) {
   app.get(apiPre + 'places/counties.geojson', places.getCountyGeoJson);
 
   app.get(apiPre + 'needs', needs.getAllNeeds);
-  app.get(apiPre + 'needs/summary', needs.getSummary);
+  app.get(apiPre + 'needs/summary', needs.getRegionSummary);
   app.get(apiPre + 'needs/region/:region', needs.getNeedsForRegion);
   app.get(apiPre + 'needs/county/:county', needs.getNeedsForCounty);
   app.get(apiPre + 'needs/entity/:entityId', needs.getNeedsForEntity);
@@ -39,6 +39,7 @@ module.exports = function(app) {
   app.get(apiPre + 'entity', entity.getEntities);
   app.get(apiPre + 'entity/search', entity.getEntitiesByNamePartial);
   app.get(apiPre + 'entity/:entityId', entity.getEntity);
+  app.get(apiPre + 'entity/:entityId/summary', entity.getEntitySummary);
 
   app.get(apiPre + 'type/entity', type.getEntityTypes);
 

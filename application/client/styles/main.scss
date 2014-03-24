@@ -21,6 +21,11 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
   width: 200px;
   margin-top: 30px;
 
+  .nav-title {
+    padding: 2px 15px;
+    text-transform: uppercase;
+  }
+
   > li {
     border-bottom: 1px solid #ccc;
 
@@ -62,6 +67,13 @@ body {
 
   .nav {
     margin-top: 10px;
+
+    > li.first-time-here {
+      > a:hover {
+        text-decoration: underline;
+        background-color: inherit;
+      }
+    }
   }
 
   h1 {

@@ -31,6 +31,24 @@ exports.getEntity = function(req, res) {
   utils.sqlOneAsJsonResponse(res, db, statement, [entityId]);
 };
 
+exports.getEntitySummary = function(req, res) {
+  req.check('entityId', 'Must be a valid Water User Group Entity ID')
+    .notEmpty()
+    .isInt();
+
+  var errors = req.validationErrors();
+  if (errors && errors.length) {
+    return res.json(400, {errors: errors});
+  }
+
+  req.sanitize('entityId').toInt();
+  var entityId = req.params.entityId;
+
+  var statement = 'SELECT * FROM vwMapEntitySummary WHERE EntityId = ?';
+
+  utils.sqlOneAsJsonResponse(res, db, statement, [entityId]);
+};
+
 exports.getEntityTypes = function(req, res) {
   var filePath = config.dataPath + 'entityTypes.json';
   utils.fileAsJsonResponse(res, filePath);

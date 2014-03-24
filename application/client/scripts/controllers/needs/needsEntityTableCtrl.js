@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsEntityTableCtrl', function ($scope, needsData, EntityService) {
+  .controller('NeedsEntityTableCtrl', function ($scope, needsData, entitySummary, EntityService) {
 
     var entityId = $scope.$stateParams.entityId,
       entity = EntityService.getEntity(entityId),
       entityName = entity.EntityName;
+
+    console.log("entitySummary", entitySummary);
 
     $scope.heading = '' + entityName;
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
@@ -44,14 +46,48 @@ angular.module('iswpApp')
 
     $scope.tableRows = needsData;
 
+    //Method to build the chartConfig object for google-chart directive
+    var buildChart = function(year) {
+      var demand = entitySummary['D'+ year],
+          supply = entitySummary['WS'+ year],
+          needs = entitySummary['N'+ year],
+          strategySupply = entitySummary['SS'+ year];
+
+      var chartConfig = {
+          type: 'ColumnChart',
+          //formatters: 'number'
+          options: {
+            legend: 'none',
+            vAxis: {
+              title: 'acre-feet/yr',
+              titleTextStyle: {
+                italic: false
+              }
+            }
+          },
+          data: [
+            ['Category', 'Amount (acre-ft/yr)', {role: 'style'}, {role: 'tooltip'}],
+            ['Water Demand', demand, '#9954bb', demand.format() + ' acre-feet/yr'],
+            ['Water Supply', supply, '#007fff', supply.format() + ' acre-feet/yr'],
+            ['Water Need', needs, '#ff0039', needs.format() + ' acre-feet/yr'],
+            ['Strategy Supply',strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/yr'],
+          ]
+        };
+
+      return chartConfig;
+    };
+
     //TODO: Remember the sort order when changing Year
 
     $scope.$on('$stateChangeSuccess', function() {
-      $scope.currentYear = $scope.$stateParams.year;
-      $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
+      var year = $scope.currentYear = $scope.$stateParams.year;
+      $scope.tableDescription = tableDescTpl.assign({year: year});
 
-      needsCol.map = 'N' + $scope.currentYear;
-      percentCol.map = 'NPD' + $scope.currentYear;
+      $scope.chartConfig = buildChart(year);
+
+      needsCol.map = 'N' + year;
+      percentCol.map = 'NPD' + year;
+
     });
     return;
   });
