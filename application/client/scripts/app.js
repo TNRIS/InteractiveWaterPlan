@@ -3,13 +3,13 @@
 angular.module('iswpApp', [
   'iswpApp.config',
   'ngCookies',
-  'ngResource',
   'ngSanitize',
   'ngRoute',
   'smartTable.table',
   'ui.router',
   'ui.bootstrap',
   'ui.select2',
+  'googlechart',
   'LocalStorageModule'
 ])
   .config(function(localStorageServiceProvider) {
