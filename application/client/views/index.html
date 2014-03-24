@@ -25,17 +25,21 @@
   </head>
   <body ng-app="iswpApp">
     <!--[if lte IE 8]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" title="browsehappy">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-
+          <li class="first-time-here ">
+            <a target="_self" title="First time here?" href="/about/#FirstTimeHere">
+              First time here?
+            </a>
+          </li>
           <li class="active">
-            <a href="#">Home</a>
+            <a href="#" title="Home">Home</a>
           </li>
           <li>
-            <a target="_self" href="/about">About</a>
+            <a target="_self" title="About" href="/about">About</a>
           </li>
         </ul>
         <h1>2012 Texas State Water Plan</h1>
@@ -46,7 +50,7 @@
         <div class="col-md-12">
           <div callout class="callout-note" closeable="true">
             <p>
-              <i class="fa fa-info-circle"></i> This application graphically displays water planning information from the 2012 State Water Plan. The location of water providers is keyed to the primary location of the provider; therefore, water providers with large service areas may be shown outside of an area of interest.
+              <i class="fa fa-info-circle"></i> This application graphically displays water planning information from the 2012 State Water Plan. The location of water providers is keyed to the primary location of the provider; therefore, water providers with large service areas may be displayed outside of an area of interest.
             </p>
             <p>
               For additional information see the <a href="http://www.twdb.state.tx.us/waterplanning/swp/2012/" title="2012 State Water Plan">2012 State Water Plan</a>
@@ -62,7 +66,7 @@
             <div class="callout callout-danger">
               <h4><i class="fa fa-warning"></i> Error: Javascript is Required!</h4>
               Javascript is required to use the Interactive State Water Plan Application. <br />
-              Please enable Javascript in your browser, or visit <a href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
+              Please enable Javascript in your browser, or visit <a title="2011 Regional Water Plans" href="http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/">http://www.twdb.state.tx.us/waterplanning/rwp/plans/2011/</a>
               to view Regional Water Plan data in the traditional viewer.
             </div>
           </div>
