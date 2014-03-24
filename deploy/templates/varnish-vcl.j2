@@ -24,6 +24,11 @@ sub vcl_recv {
 }
 
 sub vcl_fetch {
+  /* allow sending gzip'd responses for files that are not already in compressed formats */
+  if (req.url !~ "\.(gz|jpeg|jpg|png|woff|zip)$") {
+    set beresp.do_gzip = true;
+  }
+
   /* manually deal with caching tilestache responses since tilestache doesn't handle cache
    * headers */
   if (req.url ~ "^{{ tilestache_url_root }}/") {
