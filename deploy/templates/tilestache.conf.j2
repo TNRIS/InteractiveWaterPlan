@@ -6,24 +6,6 @@
     "db": {{ tilestache_redis_db }}
   },
   "layers": {
-    "rwpas": {
-      "provider": {
-          "name": "mapnik",
-          "mapfile": "{{ mapnik_dir }}/rwpas.xml"
-      },
-      "projection": "spherical mercator",
-      "preview": {
-        "lat": 31.273,
-        "lon": -99.848,
-        "zoom": 6,
-        "ext": "png"
-      },
-      "metatile": {
-        "rows": 4,
-        "columns": 4,
-        "buffer": 64
-      }
-    },
     "counties-outlines": {
       "provider": {
           "name": "mapnik",
@@ -47,6 +29,42 @@
         "lat": 31.273,
         "lon": -99.848,
         "zoom": 8,
+        "ext": "png"
+      },
+      "metatile": {
+        "rows": 4,
+        "columns": 4,
+        "buffer": 64
+      }
+    },
+    "public-water-systems": {
+      "provider": {
+          "name": "mapnik",
+          "mapfile": "{{ mapnik_dir }}/public-water-systems.xml"
+      },
+      "projection": "spherical mercator",
+      "preview": {
+        "lat": 31.273,
+        "lon": -99.848,
+        "zoom": 6,
+        "ext": "png"
+      },
+      "metatile": {
+        "rows": 4,
+        "columns": 4,
+        "buffer": 64
+      }
+    },
+    "rwpas": {
+      "provider": {
+          "name": "mapnik",
+          "mapfile": "{{ mapnik_dir }}/rwpas.xml"
+      },
+      "projection": "spherical mercator",
+      "preview": {
+        "lat": 31.273,
+        "lon": -99.848,
+        "zoom": 6,
         "ext": "png"
       },
       "metatile": {

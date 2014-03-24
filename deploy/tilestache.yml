@@ -120,6 +120,7 @@
     with_items:
     - "counties-labels"
     - "counties-outlines"
+    - "public-water-systems"
     - "rwpas"
     notify:
     - restart tilestache
