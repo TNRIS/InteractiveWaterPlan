@@ -60,7 +60,8 @@ angular.module('iswpApp')
               title: 'acre-feet/year',
               titleTextStyle: {
                 italic: false
-              }
+              },
+              minValue: 0
             }
           },
           data: [
