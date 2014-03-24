@@ -106,7 +106,7 @@ angular.module('iswpApp')
             color: '#ffcc00',
             weight: 3,
             opacity: 1,
-            fillOpacity: 0
+            fill: false
           },
           onEachFeature: function (feature, layer) {
             //add leaflet-label (from plugin)
