@@ -15,7 +15,16 @@ angular.module('iswpApp')
       var prom = $http.get(requestPath, {cache: true})
         .then(function(res) {
           //convert to leaflet feature
-          return L.geoJson(res.data);
+          var countyFeat = L.geoJson(res.data);
+
+          countyFeat.setStyle({
+            fill: false,
+            color: '#ffcc00',
+            weight: 3,
+            opacity: 1
+          });
+
+          return countyFeat;
         });
 
       return prom;

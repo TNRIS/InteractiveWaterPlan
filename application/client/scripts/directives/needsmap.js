@@ -48,6 +48,7 @@ angular.module('iswpApp')
           var currentYear = $stateParams.year,
             regionLayer = MapLayerService.setupRegionLayer(),
             entityLayer = L.featureGroup().addTo(map),
+            countyLayer = L.featureGroup().addTo(map),
             oms = new OverlappingMarkerSpiderfier(map, {
               keepSpiderfied: true,
               nearbyDistance: 5
@@ -111,7 +112,7 @@ angular.module('iswpApp')
             //always set animate to false with fitBounds
             // because it seems to bug-out if caught in two animations
             var fitBounds = function(bounds) {
-              map.fitBounds(bounds, {animate: false});
+              map.fitBounds(bounds, {animate: false, maxZoom: 10});
             };
 
             switch (currentState) {
@@ -138,7 +139,12 @@ angular.module('iswpApp')
                   .then(function(countyFeat) {
                     var extendedBounds = entityLayerBounds.extend(
                       countyFeat.getBounds());
+
                     fitBounds(extendedBounds);
+
+                    //Also show the county feature outline
+                    countyLayer.addLayer(countyFeat)
+                      .bringToBack();
                   });
                 break;
 
@@ -156,6 +162,7 @@ angular.module('iswpApp')
             // the new entity features
             oms.clearMarkers();
             entityLayer.clearLayers();
+            countyLayer.clearLayers();
 
             var currentState = $state.current.name;
 
@@ -220,6 +227,8 @@ angular.module('iswpApp')
               //add it to the spiderfier
               oms.addMarker(marker);
             });
+
+            entityLayer.bringToFront();
 
             //Add 'global' event listener to the oms instance
             // to go to the entity view when clicked
