@@ -60,7 +60,14 @@ angular.module('iswpApp').config(
       })
       .state('needs.entity', {
         url: '/:year/entity/:entityId', // appended to /needs
-        resolve: needsResolver('entity', 'entityId'),
+        resolve: {
+          needsData: function(NeedsService, $stateParams) {
+            return NeedsService.fetch('entity', $stateParams.entityId);
+          },
+          entitySummary: function(EntityService, $stateParams) {
+            return EntityService.fetchSummary($stateParams.entityId);
+          }
+        },
         controller: 'NeedsEntityTableCtrl',
         templateUrl: 'partials/needs/needs_table.html'
       });
