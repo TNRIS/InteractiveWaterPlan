@@ -69,7 +69,7 @@ angular.module('iswpApp').config(
           }
         },
         controller: 'NeedsEntityTableCtrl',
-        templateUrl: 'partials/needs/needs_table.html'
+        templateUrl: 'partials/needs/needs_entity_view.html'
       });
 
       //TODO demands, supplies, wms (later phases)

@@ -9,7 +9,16 @@
 
   <div ng-hide="!tableRows.length">
     <p ng-bind-html='mapDescription'></p>
+    <p ng-bind-html='chartDescription'></p>
     <p ng-bind-html='tableDescription'></p>
+
+    <div class="row">
+      <div class="col-md-12 chart-container">
+        <div google-chart chart="chartConfig"></div>
+
+        <p class="small text-center">NOTE: Not all water needs could be met in all decades for all water use categories due to a lack of feasible water management strategies.</p>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-md-12 table-container ">

@@ -11,6 +11,7 @@ angular.module('iswpApp')
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists identified water needs of <strong>'+ entityName + '</strong> in {year}.';
+    var chartDescTpl = 'Graph displays a summary of: Projected Water Demands, Existing Water Supplies, Identified Water Need, and Recommended Strategy Supply of <strong>'+ entityName + '</strong> in {year}.';
 
     var needsCol = {
       map: 'N2010',
@@ -79,6 +80,7 @@ angular.module('iswpApp')
     $scope.$on('$stateChangeSuccess', function() {
       var year = $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: year});
+      $scope.chartDescription = chartDescTpl.assign({year: year});
 
       $scope.chartConfig = buildChart(year);
 
