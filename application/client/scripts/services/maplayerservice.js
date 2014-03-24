@@ -6,6 +6,10 @@ angular.module('iswpApp')
     function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL, TILES_URL) {
       var service = {};
 
+      var regionFeatureLayer,
+          regionOverlayLayer;
+
+
       service.setupBaseLayers = function(map) {
         // Base Layers
         var esriGray = L.esri.basemapLayer("Gray");
@@ -38,7 +42,7 @@ angular.module('iswpApp')
         });
 
         // Overlay Layers
-        var planningAreas = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
+        regionOverlayLayer = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
           opacity: 0.6
         });
 
@@ -76,7 +80,7 @@ angular.module('iswpApp')
         };
 
         var overlayLayers = {
-          'Regional Water Planning Areas': planningAreas,
+          'Regional Water Planning Areas': regionOverlayLayer,
           'Texas Counties': counties,
           'Texas County Names': countyLabels,
           'Texas Senate Districts (2011)': senateDistricts,
@@ -84,18 +88,19 @@ angular.module('iswpApp')
           'Public Water Systems': publicWaterSystems
         };
 
-        //Start with grayWithLabels and planningAreas selected
+        //Start with grayWithLabels and regionOverlayLayer selected
         grayWithLabels.addTo(map);
-        planningAreas.addTo(map);
+        regionOverlayLayer.addTo(map);
 
         //Add controls
         L.control.layers(baseMaps, overlayLayers).addTo(map);
       };
 
+
       service.setupRegionLayer = function() {
         var regionFeats = RegionService.regionFeatures;
 
-        var regionLayer = L.geoJson(regionFeats, {
+        regionFeatureLayer = L.geoJson(regionFeats, {
           style: {
             stroke: false,
             color: '#ffcc00',
@@ -131,7 +136,24 @@ angular.module('iswpApp')
           }
         });
 
-        return regionLayer;
+        return regionFeatureLayer;
+      };
+
+      service.showRegions = function(map) {
+        if (!map.hasLayer(regionFeatureLayer)) {
+          regionFeatureLayer.addTo(map);
+        }
+        if (!map.hasLayer(regionOverlayLayer)) {
+          regionOverlayLayer.addTo(map);
+        }
+
+
+      };
+
+      service.removeRegions = function(map) {
+        if (map.hasLayer(regionFeatureLayer)) {
+          map.removeLayer(regionFeatureLayer);
+        }
       };
 
       return service;

@@ -86,18 +86,6 @@ angular.module('iswpApp')
           );
 
           //helper functions
-          var showRegions = function() {
-            if (!map.hasLayer(regionLayer)) {
-              regionLayer.addTo(map);
-            }
-          };
-
-          var removeRegions = function() {
-            if (map.hasLayer(regionLayer)) {
-              map.removeLayer(regionLayer);
-            }
-          };
-
           var showLegend = function() {
             if (!legendControl.isAdded) {
               legendControl.addTo(map);
@@ -172,7 +160,7 @@ angular.module('iswpApp')
             var currentState = $state.current.name;
 
             if (currentState === 'needs.summary') {
-              showRegions();
+              MapLayerService.showRegions(map);
               removeLegend();
               if (!scope.isLocked) {
                 map.setView(stateCenter, stateZoom);
@@ -180,7 +168,7 @@ angular.module('iswpApp')
               return; //don't have anything else to do
             }
             else {
-              removeRegions();
+              MapLayerService.removeRegions(map);
               showLegend();
             }
 
