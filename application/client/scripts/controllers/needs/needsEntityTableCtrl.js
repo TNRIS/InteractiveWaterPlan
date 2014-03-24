@@ -16,7 +16,7 @@ angular.module('iswpApp')
 
     var needsCol = {
       map: 'N2010',
-      label: 'Need (acre-feet/yr)',
+      label: 'Need (acre-feet/year)',
       cellClass: 'number',
       formatFunction: 'number'
     };
@@ -55,22 +55,21 @@ angular.module('iswpApp')
 
       var chartConfig = {
           type: 'ColumnChart',
-          //formatters: 'number'
           options: {
             legend: 'none',
             vAxis: {
-              title: 'acre-feet/yr',
+              title: 'acre-feet/year',
               titleTextStyle: {
                 italic: false
               }
             }
           },
           data: [
-            ['Category', 'Amount (acre-ft/yr)', {role: 'style'}, {role: 'tooltip'}],
-            ['Water Demand', demand, '#9954bb', demand.format() + ' acre-feet/yr'],
-            ['Water Supply', supply, '#007fff', supply.format() + ' acre-feet/yr'],
-            ['Water Need', needs, '#ff0039', needs.format() + ' acre-feet/yr'],
-            ['Strategy Supply',strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/yr'],
+            ['Category', 'Amount (acre-ft/year)', {role: 'style'}, {role: 'tooltip'}],
+            ['Water Demand', demand, '#9954bb', demand.format() + ' acre-feet/year'],
+            ['Water Supply', supply, '#007fff', supply.format() + ' acre-feet/year'],
+            ['Water Need', needs, '#ff0039', needs.format() + ' acre-feet/year'],
+            ['Strategy Supply',strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/year'],
           ]
         };
 

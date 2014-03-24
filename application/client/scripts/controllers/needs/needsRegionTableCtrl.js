@@ -12,7 +12,7 @@ angular.module('iswpApp')
 
     var needsCol = {
       map: 'N2010',
-      label: 'Need (acre-feet/yr) in Region',
+      label: 'Need (acre-feet/year) in Region',
       cellClass: 'number',
       formatFunction: 'number'
     };
