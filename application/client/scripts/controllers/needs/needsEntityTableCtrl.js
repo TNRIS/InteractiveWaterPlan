@@ -7,8 +7,6 @@ angular.module('iswpApp')
       entity = EntityService.getEntity(entityId),
       entityName = entity.EntityName;
 
-    console.log("entitySummary", entitySummary);
-
     $scope.heading = '' + entityName;
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler

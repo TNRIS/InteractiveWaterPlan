@@ -1,5 +1,11 @@
 'use strict';
 
+//Just in case we leave in a console.log, this prevents IE9 from breaking
+if (!window.console) {
+  window.console = {};
+  window.console.log = function() {};
+}
+
 angular.module('iswpApp', [
   'iswpApp.config',
   'ngCookies',
