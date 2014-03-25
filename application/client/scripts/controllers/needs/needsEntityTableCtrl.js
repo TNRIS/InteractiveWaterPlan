@@ -56,6 +56,7 @@ angular.module('iswpApp')
           type: 'ColumnChart',
           options: {
             legend: 'none',
+            fontName: '"Open Sans", Arial, "sans serif"',
             vAxis: {
               title: 'acre-feet/year',
               titleTextStyle: {
