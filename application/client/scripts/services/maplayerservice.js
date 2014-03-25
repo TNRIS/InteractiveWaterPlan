@@ -110,9 +110,8 @@ angular.module('iswpApp')
             //add leaflet-label (from plugin)
             layer.bindLabel("Region "+layer.feature.properties.region);
 
-            //view data for region on click (or doubleclick for mobile)
-            var clickEvent = L.Browser.mobile ? 'doubleclick' : 'click';
-            layer.on(clickEvent, function () {
+            //view data for region on click
+            layer.on('click', function () {
               $state.go('^.region', {
                 region: layer.feature.properties.region,
                 year: $stateParams.year
