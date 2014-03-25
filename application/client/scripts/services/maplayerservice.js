@@ -6,9 +6,7 @@ angular.module('iswpApp')
     function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL, TILES_URL) {
       var service = {};
 
-      var regionFeatureLayer,
-          regionOverlayLayer;
-
+      var regionFeatureLayer;
 
       service.setupBaseLayers = function(map) {
         // Base Layers
@@ -42,7 +40,7 @@ angular.module('iswpApp')
         });
 
         // Overlay Layers
-        regionOverlayLayer = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
+        var regions = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
           opacity: 0.6
         });
 
@@ -70,7 +68,7 @@ angular.module('iswpApp')
 
         var grayWithLabels = L.layerGroup([esriGray, countyLabels]);
 
-        var baseMaps = {
+        service.baseMaps = {
           'Esri Gray': grayWithLabels,
           'MapQuest Open': mqOpen,
           'MapQuest Open Aerial': mqAerial,
@@ -79,8 +77,8 @@ angular.module('iswpApp')
           'Bing Aerial': bingAerial
         };
 
-        var overlayLayers = {
-          'Regional Water Planning Areas': regionOverlayLayer,
+        service.overlayLayers = {
+          'Regional Water Planning Areas': regions,
           'Texas Counties': counties,
           'Texas County Names': countyLabels,
           'Texas Senate Districts (2011)': senateDistricts,
@@ -88,12 +86,12 @@ angular.module('iswpApp')
           'Public Water Systems': publicWaterSystems
         };
 
-        //Start with grayWithLabels and regionOverlayLayer selected
+        //Start with grayWithLabels and regions selected
         grayWithLabels.addTo(map);
-        regionOverlayLayer.addTo(map);
+        regions.addTo(map);
 
         //Add controls
-        L.control.layers(baseMaps, overlayLayers).addTo(map);
+        L.control.layers(service.baseMaps, service.overlayLayers).addTo(map);
       };
 
 
@@ -106,7 +104,7 @@ angular.module('iswpApp')
             color: '#ffcc00',
             weight: 3,
             opacity: 1,
-            fill: false
+            fillOpacity: 0
           },
           onEachFeature: function (feature, layer) {
             //add leaflet-label (from plugin)
@@ -140,6 +138,8 @@ angular.module('iswpApp')
       };
 
       service.showRegions = function(map) {
+        var regionOverlayLayer = service.overlayLayers[
+          'Regional Water Planning Areas'];
         if (!map.hasLayer(regionFeatureLayer)) {
           regionFeatureLayer.addTo(map);
         }

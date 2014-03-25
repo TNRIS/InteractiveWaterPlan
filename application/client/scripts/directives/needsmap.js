@@ -43,10 +43,10 @@ angular.module('iswpApp')
           //Create a legend for the Needs colors
           var legendControl = LegendService.Needs.createLegend();
 
+          MapLayerService.setupRegionLayer();
           MapLayerService.setupBaseLayers(map);
 
           var currentYear = $stateParams.year,
-            regionLayer = MapLayerService.setupRegionLayer(),
             entityLayer = L.featureGroup().addTo(map),
             countyLayer = L.featureGroup().addTo(map),
             oms = new OverlappingMarkerSpiderfier(map, {
