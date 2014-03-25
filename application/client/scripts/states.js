@@ -1,14 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .config(function($stateProvider, $urlRouterProvider, $locationProvider,
-    $uiViewScrollProvider, $anchorScrollProvider) {
-      //don't use html5 urls because lack of support in IE (so sharing URLs will not work well)
-      $locationProvider.html5Mode(false);
-
-      //disable whacky auto-scroll behavior
-      $uiViewScrollProvider.useAnchorScroll();
-      $anchorScrollProvider.disableAutoScrolling();
+  .config(function($stateProvider, $urlRouterProvider) {
 
       //redirect any bad/unmapped route to the beginning
       $urlRouterProvider.otherwise('/needs/2010/state');
@@ -20,7 +13,6 @@ angular.module('iswpApp')
           }
         };
       };
-
 
       $stateProvider
         .state('needs', {
@@ -76,7 +68,7 @@ angular.module('iswpApp')
     }
   )
   //Validation logic
-  .run(function($rootScope, $state, $location, ISWP_VARS) {
+  .run(function($rootScope, $location, ISWP_VARS) {
     $rootScope.$on('$stateChangeStart', function(evt, toState, toParams) {
 
       var doesntContain = function() {
