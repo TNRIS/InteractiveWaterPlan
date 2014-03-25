@@ -16,6 +16,8 @@ angular.module('iswpApp', [
   'ui.bootstrap',
   'ui.select2',
   'googlechart',
+  'angulartics',
+  'angulartics.google.analytics',
   'LocalStorageModule'
 ])
   .config(function(localStorageServiceProvider) {
