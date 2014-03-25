@@ -81,8 +81,8 @@ angular.module('iswpApp')
           'Regional Water Planning Areas': regions,
           'Texas Counties': counties,
           'Texas County Names': countyLabels,
-          'Texas Senate Districts (2011)': senateDistricts,
-          'Texas House Districts (2011)': houseDistricts,
+          'Texas Senate Districts (2013-14)': senateDistricts,
+          'Texas House Districts (2013-14)': houseDistricts,
           'Public Water Systems': publicWaterSystems
         };
 
