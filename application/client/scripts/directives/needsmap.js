@@ -220,9 +220,17 @@ angular.module('iswpApp')
                 fillOpacity: 0.75,
                 entity: entity //save the entity data in the marker
               })
-              .bindLabel('' + entity.EntityName + '<br/>' +
-                'Needs: ' + pctOfDemand + '% of Demands')
               .addTo(entityLayer);
+
+              var labelString = entity.EntityName + '<br/>' +
+                'Needs: ' + pctOfDemand + '% of Demands';
+
+              marker.bindLabel(labelString);
+
+              if (currentState === 'needs.entity') {
+                marker.label.options.noHide = true;
+                marker.showLabel();
+              }
 
               //add it to the spiderfier
               oms.addMarker(marker);
