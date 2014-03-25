@@ -5,7 +5,7 @@ angular.module('iswpApp')
 
     $scope.heading = 'Regional Water Needs Summary';
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
-    $scope.tableDescription = 'Table summarizes identified water needs by region and water use category (click on region or category for summary).';
+    $scope.tableDescription = 'Table summarizes identified water needs by region and water use category in acre-feet/year (click on region for summary).';
 
     var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
 
@@ -35,5 +35,4 @@ angular.module('iswpApp')
 
       $scope.tableRows = dataForYear;
     });
-    return;
   });
