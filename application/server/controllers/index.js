@@ -35,7 +35,10 @@ exports.index = function(req, res) {
     regionsTopo = utils.fileAsJson(
       config.dataPath + 'regions.topojson'),
 
-    years = ['2010', '2020', '2030', '2040', '2050', '2060'];
+    years = ['2010', '2020', '2030', '2040', '2050', '2060'],
+
+    entityTypes = utils.fileAsJson(
+      config.dataPath + 'entityTypes.json');
 
   // res.render('index', {
   //   regions: JSON.stringify(regions),
@@ -49,7 +52,8 @@ exports.index = function(req, res) {
       regions: regions,
       counties: counties,
       regionsTopo: regionsTopo,
-      years: years
+      years: years,
+      entityTypes: entityTypes
     })
   });
 };

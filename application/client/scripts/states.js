@@ -1,36 +1,10 @@
 'use strict';
 
 angular.module('iswpApp')
-  .run(function($rootScope, $state, $location, ISWP_VARS) {
-    $rootScope.$on('$stateChangeStart', function(evt, toState, toParams) {
-
-      var doesntContain = function() {
-        return !_.contains.apply(null, arguments);
-      };
-
-      if (doesntContain(ISWP_VARS.years, toParams.year)) {
-        $location.url('/');
-        return;
-      }
-
-      switch (toState.name) {
-        case 'needs.region':
-
-          break;
-
-        case 'needs.county':
-          break;
-
-        case 'needs.type':
-          break;
-      }
-
-    });
-  })
   .config(function($stateProvider, $urlRouterProvider, $locationProvider,
     $uiViewScrollProvider, $anchorScrollProvider) {
       //don't use html5 urls because lack of support in IE (so sharing URLs will not work well)
-      $locationProvider.html5Mode(false);
+      $locationProvider.html5Mode(true);
 
       //disable whacky auto-scroll behavior
       $uiViewScrollProvider.useAnchorScroll();
@@ -38,7 +12,6 @@ angular.module('iswpApp')
 
       //redirect any bad/unmapped route to the beginning
       $urlRouterProvider.otherwise('/needs/2010/state');
-
 
       var needsResolver = function(type, typeIdProperty) {
         return {
@@ -101,4 +74,45 @@ angular.module('iswpApp')
 
         //TODO demands, supplies, wms (later phases)
     }
-  );
+  )
+  //Validation logic
+  .run(function($rootScope, $state, $location, ISWP_VARS) {
+    $rootScope.$on('$stateChangeStart', function(evt, toState, toParams) {
+
+      var doesntContain = function() {
+        return !_.contains.apply(null, arguments);
+      };
+
+      var toHome = function() {
+        $location.url('/');
+        return;
+      };
+
+      if (doesntContain(ISWP_VARS.years, toParams.year)) {
+        return toHome();
+      }
+
+      switch (toState.name) {
+        case 'needs.region':
+          if(doesntContain(ISWP_VARS.regions, toParams.region.toUpperCase())) {
+            return toHome();
+          }
+          break;
+
+        case 'needs.county':
+          if(doesntContain(ISWP_VARS.counties,
+              toParams.county.toUpperCase())) {
+            return toHome();
+          }
+          break;
+
+        case 'needs.type':
+          if(doesntContain(ISWP_VARS.entityTypes,
+              toParams.entityType.toUpperCase())) {
+            return toHome();
+          }
+          break;
+      }
+
+    });
+  });
