@@ -3,6 +3,13 @@
 angular.module('iswpApp')
   .controller('NeedsEntityTableCtrl', function ($scope, needsData, entitySummary, EntityService) {
 
+    //if entitySummary is null then this was called for an invalid entityId
+    // so return to home view
+    if (!entitySummary) {
+      $scope.$state.go('needs.summary', {year: '2010'});
+      return;
+    }
+
     var entityId = $scope.$stateParams.entityId,
       entity = EntityService.getEntity(entityId),
       entityName = entity.EntityName;

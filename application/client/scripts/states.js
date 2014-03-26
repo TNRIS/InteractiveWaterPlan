@@ -68,7 +68,7 @@ angular.module('iswpApp')
     }
   )
   //Validation logic
-  .run(function($rootScope, $location, ISWP_VARS) {
+  .run(function($rootScope, ISWP_VARS) {
     $rootScope.$on('$stateChangeStart', function(evt, toState, toParams) {
 
       var doesntContain = function() {
@@ -76,7 +76,7 @@ angular.module('iswpApp')
       };
 
       var toHome = function() {
-        $location.url('/');
+        $rootScope.$state.go('needs.summary', {year: '2010'});
         return;
       };
 
