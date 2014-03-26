@@ -13,6 +13,10 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
   text-align: center;
 }
 
+html.lt-ie9 {
+  .container { width: 790px; }
+}
+
 .esri-attribution-logo {
   visibility: hidden;
 }
@@ -156,7 +160,14 @@ body {
   margin-bottom: 20px;
 }
 
+.num-items {
+  a.active {
+    color: #333;
+  }
+}
+
 .smart-table {
+
   td.number {
     text-align: right;
   }
