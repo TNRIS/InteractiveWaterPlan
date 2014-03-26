@@ -34,9 +34,12 @@ angular.module('iswpApp')
       percentCol
     ];
 
+    $scope.itemsPerPage = 20; //TODO: get from localStorage
+
     $scope.tableConfig = {
+      isGlobalSearchActivated: true,
       isPaginationEnabled: true,
-      itemsByPage: 20 //TODO: Make user-changeable
+      itemsByPage: $scope.itemsPerPage
     };
 
     $scope.tableRows = needsData;
@@ -50,5 +53,14 @@ angular.module('iswpApp')
       needsCol.map = 'N' + $scope.currentYear;
       percentCol.map = 'NPD' + $scope.currentYear;
     });
+
+    $scope.$watch('itemsPerPage', function() {
+      if (!$scope.itemsPerPage) {
+        return;
+      }
+
+      $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
+    });
+
     return;
   });

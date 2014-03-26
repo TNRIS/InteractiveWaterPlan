@@ -160,6 +160,12 @@ body {
   margin-bottom: 20px;
 }
 
+.num-items {
+  a.active {
+    color: #333;
+  }
+}
+
 .smart-table {
 
   td.number {

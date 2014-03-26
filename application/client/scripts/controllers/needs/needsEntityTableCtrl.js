@@ -46,8 +46,7 @@ angular.module('iswpApp')
     ];
 
     $scope.tableConfig = {
-      isPaginationEnabled: true,
-      itemsByPage: 20 //TODO: Make user-changeable
+      isPaginationEnabled: false
     };
 
     $scope.tableRows = needsData;
