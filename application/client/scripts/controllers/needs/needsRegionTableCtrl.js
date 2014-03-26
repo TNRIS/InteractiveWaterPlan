@@ -36,6 +36,7 @@ angular.module('iswpApp')
     ];
 
     $scope.tableConfig = {
+      isGlobalSearchActivated: true,
       isPaginationEnabled: true,
       itemsByPage: 20 //TODO: Make user-changeable
     };
