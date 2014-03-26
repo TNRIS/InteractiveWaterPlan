@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 /* Column module */
 
 (function (global, angular) {
@@ -86,6 +87,9 @@
                             //add selection box column if required
                             ctrl.insertColumn({cellTemplateUrl: templateList.selectionCheckbox, headerTemplateUrl: templateList.selectAllCheckbox, isSelectionColumn: true}, 0);
                         }
+
+                        //JAS - Added this to redraw (hack) on globalConfig change
+                        ctrl.sortBy();
                     }, true);
 
                     //insert columns from column config
@@ -941,3 +945,4 @@ angular.module("partials/smartTable.html", []).run(["$templateCache", function (
         }]);
 })(angular);
 
+/* jshint ignore:end */
