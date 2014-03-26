@@ -1,4 +1,8 @@
 /* jshint ignore:start */
+/*
+  Smart-Table from https://github.com/lorenzofox3/Smart-Table
+  Modified by James Seppi at TNRIS
+*/
 /* Column module */
 
 (function (global, angular) {
