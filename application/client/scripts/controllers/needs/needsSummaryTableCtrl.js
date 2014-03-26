@@ -10,14 +10,14 @@ angular.module('iswpApp')
     var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
 
     $scope.tableColumns = [
-      {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl},
-      {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number', cellClass: 'number'},
-      {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number', cellClass: 'number'},
-      {map: 'MINING', label: 'Mining', formatFunction: 'number', cellClass: 'number'},
-      {map: 'STEAMELECTRIC', label: 'Steam-Electric', formatFunction: 'number', cellClass: 'number'},
-      {map: 'LIVESTOCK', label: 'Livestock', formatFunction: 'number', cellClass: 'number'},
-      {map: 'IRRIGATION', label: 'Irrigation', formatFunction: 'number', cellClass: 'number'},
-      {map: 'TOTAL', label: 'Total', formatFunction: 'number', cellClass: 'number'},
+      {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl, headerClass: 'text-center', cellClass: 'text-center'},
+      {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'MINING', label: 'Mining', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'STEAMELECTRIC', label: 'Steam-Electric', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'LIVESTOCK', label: 'Livestock', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'IRRIGATION', label: 'Irrigation', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'TOTAL', label: 'Total', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
     ];
 
     $scope.tableConfig = {
