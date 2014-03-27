@@ -27,10 +27,10 @@ angular.module('iswpApp')
     var createTreeMap = function(dataForYear) {
       var treeMapData = [];
       treeMapData.push(['Region', 'Parent', 'Need (acre-feet/year)']);
-      treeMapData.push(['State of Texas', null, 100]); //TODO: Real total
+      treeMapData.push(['State of Texas', null, null]);
 
-      //For each region, generate total
-      // and for each type, generate amount in region
+      //For each region, generate row for region total
+      // and for each category, generate row for amount in region
       _.each(ISWP_VARS.regions, function(region) {
         var regionData = _.find(dataForYear, {'WugRegion': region});
         treeMapData.push([region,
