@@ -74,7 +74,7 @@ angular.module('iswpApp')
           data: [
             ['Category', 'Amount (acre-ft/year)', {role: 'style'}, {role: 'tooltip'}],
             ['Water Demand', demand, '#666', demand.format() + ' acre-feet/year'],
-            ['Water Supply', supply, '#007fff', supply.format() + ' acre-feet/year'],
+            ['Existing Water Supply', supply, '#007fff', supply.format() + ' acre-feet/year'],
             ['Water Need', needs, '#aa0000', needs.format() + ' acre-feet/year'],
             ['Strategy Supply',strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/year'],
           ]
