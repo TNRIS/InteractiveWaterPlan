@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('ThemeCtrl', function ($scope) {
+  .controller('ThemeCtrl', function ($scope, ISWP_VARS) {
     $scope.needsThemes = [
       {
         name: 'Regional Summary',
@@ -9,32 +9,15 @@ angular.module('iswpApp')
       },
       {
         type: "divider"
-      },
-      {
-        name: 'Municipal',
-        type: 'MUNICIPAL'
-      },
-      {
-        name: 'Manufacturing',
-        type: 'MANUFACTURING'
-      },
-      {
-        name: 'Mining',
-        type: 'MINING'
-      },
-      {
-        name: 'Steam-Electric',
-        type: 'STEAM-ELECTRIC'
-      },
-      {
-        name: 'Livestock',
-        type: 'LIVESTOCK'
-      },
-      {
-        name: 'Irrigation',
-        type: 'IRRIGATION'
       }
     ];
+
+    _.each(ISWP_VARS.entityTypes, function(entityType) {
+      $scope.needsThemes.push({
+        name: entityType.titleize(),
+        type: entityType
+      });
+    });
 
     $scope.showTheme = function(theme) {
       var currYear = $scope.$stateParams.year;

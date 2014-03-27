@@ -7,7 +7,7 @@ angular.module('iswpApp')
 
     service.Needs = {
       entityColors: [
-        {limit: 0, color: '#1A9641'}, //green
+        {limit: 0.5, color: '#1A9641'}, //green
         {limit: 10, color: '#A6D96A'},
         {limit: 25, color: '#FFFFBF'},
         {limit: 50, color: '#FDAE61'},
@@ -45,9 +45,9 @@ angular.module('iswpApp')
               prevColorEntry = service.Needs.entityColors[i-1],
               legendEntry = L.DomUtil.create('li', 'legend-entry', ul);
 
-            if (colorEntry.limit === 0) {
+            if (colorEntry.limit === service.Needs.entityColors[0].limit) {
               legendEntry.innerHTML = '<span class="lower-bound"></span>' +
-                circleTpl.assign({color: colorEntry.color}) + ' = No Need';
+                circleTpl.assign({color: colorEntry.color}) + ' &le; 0.5%';
             }
             else {
               legendEntry.innerHTML = tpl.assign({
@@ -57,6 +57,9 @@ angular.module('iswpApp')
               });
             }
           }
+
+          this._div
+            .innerHTML += 'Size indicates relative need amount.';
         };
 
         return legend;

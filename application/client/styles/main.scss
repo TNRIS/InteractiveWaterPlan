@@ -13,6 +13,10 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
   text-align: center;
 }
 
+html.lt-ie9 {
+  .container { width: 790px; }
+}
+
 .esri-attribution-logo {
   visibility: hidden;
 }
@@ -152,21 +156,44 @@ body {
   margin-bottom: 10px;
 }
 
+.tree-map-container,
 .chart-container {
   margin-bottom: 20px;
 }
 
-.table-container {
-  overflow-x: auto;
+.tree-map {
+  height: 500px;
+}
+
+.tree-map-tooltip {
+  background: white;
+  padding: 4px;
+  border: 1px solid #666;
+}
+
+.num-items {
+  a.active {
+    color: #333;
+  }
 }
 
 .smart-table {
+
   td.number {
     text-align: right;
   }
 
   td.percent {
     text-align: center;
+  }
+
+  tbody > tr.selected > td {
+    background-color: #ff7518;
+    color: #fff;
+
+    a {
+      color: #fff;
+    }
   }
 }
 
@@ -222,6 +249,10 @@ body {
 }
 
 .leaflet-legend {
+  &.legend-needs {
+    width: 150px;
+  }
+
   box-shadow: 0 1px 5px rgba(0,0,0,0.4);
   background: #fff;
   border-radius: 5px;
@@ -237,11 +268,11 @@ body {
   ul {
     list-style: none;
     padding: 0 0 0 4px;
-    margin: 0;
+    margin: 5px 12px;
   }
 
   .lower-bound {
-    width: 40px;
+    width: 42px;
     padding-right:4px;
     display:inline-block;
     text-align:right;

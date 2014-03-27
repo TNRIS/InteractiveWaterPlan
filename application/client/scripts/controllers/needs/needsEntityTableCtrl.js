@@ -3,6 +3,13 @@
 angular.module('iswpApp')
   .controller('NeedsEntityTableCtrl', function ($scope, needsData, entitySummary, EntityService) {
 
+    //if entitySummary is null then this was called for an invalid entityId
+    // so return to home view
+    if (!entitySummary) {
+      $scope.$state.go('needs.summary', {year: '2010'});
+      return;
+    }
+
     var entityId = $scope.$stateParams.entityId,
       entity = EntityService.getEntity(entityId),
       entityName = entity.EntityName;
@@ -11,6 +18,7 @@ angular.module('iswpApp')
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists identified water needs of <strong>'+ entityName + '</strong> in {year}.';
+    var chartDescTpl = 'Graph displays a summary of: Projected Water Demands, Existing Water Supplies, Identified Water Need, and Recommended Strategy Supply of <strong>'+ entityName + '</strong> in {year}.';
 
     var needsCol = {
       map: 'N2010',
@@ -30,7 +38,7 @@ angular.module('iswpApp')
 
     $scope.tableColumns = [
       {map: 'EntityName', label: 'Name'},
-      {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl},
+      {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: cellTemplateUrl},
       {map: 'WugCounty', label: 'County', cellTemplateUrl: cellTemplateUrl},
       {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
       needsCol,
@@ -38,8 +46,7 @@ angular.module('iswpApp')
     ];
 
     $scope.tableConfig = {
-      isPaginationEnabled: true,
-      itemsByPage: 20 //TODO: Make user-changeable
+      isPaginationEnabled: false
     };
 
     $scope.tableRows = needsData;
@@ -55,18 +62,20 @@ angular.module('iswpApp')
           type: 'ColumnChart',
           options: {
             legend: 'none',
+            fontName: '"Open Sans", Arial, "sans serif"',
             vAxis: {
               title: 'acre-feet/year',
               titleTextStyle: {
                 italic: false
-              }
+              },
+              minValue: 0
             }
           },
           data: [
             ['Category', 'Amount (acre-ft/year)', {role: 'style'}, {role: 'tooltip'}],
-            ['Water Demand', demand, '#9954bb', demand.format() + ' acre-feet/year'],
-            ['Water Supply', supply, '#007fff', supply.format() + ' acre-feet/year'],
-            ['Water Need', needs, '#ff0039', needs.format() + ' acre-feet/year'],
+            ['Water Demand', demand, '#666', demand.format() + ' acre-feet/year'],
+            ['Existing Water Supply', supply, '#007fff', supply.format() + ' acre-feet/year'],
+            ['Water Need', needs, '#aa0000', needs.format() + ' acre-feet/year'],
             ['Strategy Supply',strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/year'],
           ]
         };
@@ -79,12 +88,13 @@ angular.module('iswpApp')
     $scope.$on('$stateChangeSuccess', function() {
       var year = $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: year});
+      $scope.chartDescription = chartDescTpl.assign({year: year});
 
       $scope.chartConfig = buildChart(year);
 
       needsCol.map = 'N' + year;
       percentCol.map = 'NPD' + year;
-
     });
+
     return;
   });

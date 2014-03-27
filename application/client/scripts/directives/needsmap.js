@@ -2,9 +2,15 @@
 'use strict';
 
 angular.module('iswpApp')
+  .constant('ENTITY_STYLE', {
+    color: '#000',
+    weight: 1,
+    opacity: 0.5,
+    fillOpacity: 0.75
+  })
   .directive('needsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
-      NeedsService, EntityService, CountyService, LegendService) {
+      NeedsService, EntityService, CountyService, LegendService, ENTITY_STYLE) {
 
       var minRadius = 6,
         maxRadius = 14;
@@ -32,8 +38,8 @@ angular.module('iswpApp')
               center: stateCenter,
               zoom: stateZoom,
               attributionControl: false,
-              maxBounds: [[-16, -170], [68, -20]],
-              minZoom: 3,
+              maxBounds: [[15, -150], [45, -50]],
+              minZoom: 5,
               maxZoom: 12
             });
 
@@ -43,11 +49,12 @@ angular.module('iswpApp')
           //Create a legend for the Needs colors
           var legendControl = LegendService.Needs.createLegend();
 
+          MapLayerService.setupRegionLayer();
           MapLayerService.setupBaseLayers(map);
 
           var currentYear = $stateParams.year,
-            regionLayer = MapLayerService.setupRegionLayer(),
             entityLayer = L.featureGroup().addTo(map),
+            countyLayer = L.featureGroup().addTo(map),
             oms = new OverlappingMarkerSpiderfier(map, {
               keepSpiderfied: true,
               nearbyDistance: 5
@@ -85,6 +92,30 @@ angular.module('iswpApp')
             }
           );
 
+          $rootScope.$on('map:togglehighlight',
+            function(event, entity) {
+              var entityFeatures = entityLayer.getLayers();
+              var entityFeature = _.find(entityFeatures, function(e) {
+                return entity.EntityId === e.options.entity.EntityId;
+              });
+
+              if (!entityFeature) { return; }
+
+              if (entity.isSelected) {
+                entityFeature.setStyle({
+                  color: '#ff7518',
+                  weight: 2.5,
+                  opacity: 1,
+                  fillOpacity: 1
+                });
+                entityFeature.bringToFront();
+              }
+              else {
+                entityFeature.setStyle(ENTITY_STYLE);
+              }
+            }
+          );
+
           //helper functions
           var showLegend = function() {
             if (!legendControl.isAdded) {
@@ -111,7 +142,7 @@ angular.module('iswpApp')
             //always set animate to false with fitBounds
             // because it seems to bug-out if caught in two animations
             var fitBounds = function(bounds) {
-              map.fitBounds(bounds, {animate: false});
+              map.fitBounds(bounds, {animate: false, maxZoom: 10});
             };
 
             switch (currentState) {
@@ -138,7 +169,12 @@ angular.module('iswpApp')
                   .then(function(countyFeat) {
                     var extendedBounds = entityLayerBounds.extend(
                       countyFeat.getBounds());
+
                     fitBounds(extendedBounds);
+
+                    //Also show the county feature outline
+                    countyLayer.addLayer(countyFeat)
+                      .bringToBack();
                   });
                 break;
 
@@ -156,6 +192,7 @@ angular.module('iswpApp')
             // the new entity features
             oms.clearMarkers();
             entityLayer.clearLayers();
+            countyLayer.clearLayers();
 
             var currentState = $state.current.name;
 
@@ -204,22 +241,30 @@ angular.module('iswpApp')
               var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
                 maxRadius, minRadius, need[yearNeedKey]);
 
-              var marker = L.circleMarker([entity.Latitude, entity.Longitude], {
+              var featureOpts = _.extend({}, ENTITY_STYLE, {
                 radius: scaledRadius,
-                color: '#000',
-                weight: 1,
-                opacity: 0.5,
                 fillColor: colorEntry.color,
-                fillOpacity: 0.75,
                 entity: entity //save the entity data in the marker
-              })
-              .bindLabel('' + entity.EntityName + '<br/>' +
-                'Needs: ' + pctOfDemand + '% of Demands')
-              .addTo(entityLayer);
+              });
+
+              var marker = L.circleMarker([entity.Latitude, entity.Longitude],
+                featureOpts).addTo(entityLayer);
+
+              var labelString = entity.EntityName + '<br/>' +
+                'Needs: ' + pctOfDemand + '% of Demands';
+
+              marker.bindLabel(labelString);
+
+              if (currentState === 'needs.entity') {
+                marker.label.options.noHide = true;
+                marker.showLabel();
+              }
 
               //add it to the spiderfier
               oms.addMarker(marker);
             });
+
+            entityLayer.bringToFront();
 
             //Add 'global' event listener to the oms instance
             // to go to the entity view when clicked
