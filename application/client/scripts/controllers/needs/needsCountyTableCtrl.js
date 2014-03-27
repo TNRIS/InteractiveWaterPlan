@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsCountyTableCtrl', function ($scope, needsData) {
+  .controller('NeedsCountyTableCtrl', function ($scope, needsData, localStorageService) {
 
     var county = $scope.$stateParams.county.titleize();
 
@@ -34,7 +34,8 @@ angular.module('iswpApp')
       percentCol
     ];
 
-    $scope.itemsPerPage = 20; //TODO: get from localStorage
+    var storedItemsPerPage = localStorageService.get('tableItemsPerPage');
+    $scope.itemsPerPage = storedItemsPerPage || 20;
 
     $scope.tableConfig = {
       isGlobalSearchActivated: true,
@@ -60,6 +61,7 @@ angular.module('iswpApp')
       }
 
       $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
+      localStorageService.set('tableItemsPerPage', $scope.itemsPerPage);
     });
 
     return;
