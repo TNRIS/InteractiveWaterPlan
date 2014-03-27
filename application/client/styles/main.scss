@@ -156,8 +156,19 @@ body {
   margin-bottom: 10px;
 }
 
+.tree-map-container,
 .chart-container {
   margin-bottom: 20px;
+}
+
+.tree-map {
+  height: 500px;
+}
+
+.tree-map-tooltip {
+  background: white;
+  padding: 4px;
+  border: 1px solid #666;
 }
 
 .num-items {
