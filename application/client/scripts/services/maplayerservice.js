@@ -56,17 +56,11 @@ angular.module('iswpApp')
 
         var countyLabels = L.tileLayer(TILES_URL + '/counties-labels/{z}/{x}/{y}.png');
 
-        var senateDistricts = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '3,13',
-          format: 'image/png',
-          transparent: true,
+        var senateDistricts = L.tileLayer(TILES_URL + '/texas-senate-districts/{z}/{x}/{y}.png', {
           opacity: 0.6
         });
 
-        var houseDistricts = L.tileLayer.wms(SWP_WMS_URL, {
-          layers: '2,11',
-          format: 'image/png',
-          transparent: true,
+        var houseDistricts = L.tileLayer(TILES_URL + '/texas-house-districts/{z}/{x}/{y}.png', {
           opacity: 0.6
         });
 
