@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsSummaryTableCtrl', function ($scope, needsData) {
+  .controller('NeedsSummaryTableCtrl', function ($scope, needsData, ISWP_VARS) {
 
     $scope.heading = 'Regional Water Needs Summary';
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
@@ -24,8 +24,57 @@ angular.module('iswpApp')
       isPaginationEnabled: false
     };
 
-    //TODO: Remember the sort order when changing Year
+    var createTreeMap = function(dataForYear) {
+      var treeMapData = [];
+      treeMapData.push(['Region', 'Parent', 'Need (acre-feet/year)']);
+      treeMapData.push(['State of Texas', null, null]);
 
+      //For each region, generate row for region total
+      // and for each category, generate row for amount in region
+      _.each(ISWP_VARS.regions, function(region) {
+        var regionData = _.find(dataForYear, {'WugRegion': region});
+        treeMapData.push([region,
+          'State of Texas',
+          regionData.TOTAL
+        ]);
+
+        _.each($scope.tableColumns, function(tc) {
+          if (tc.map === 'WugRegion' || tc.map === 'TOTAL') {
+            return;
+          }
+
+          treeMapData.push([
+            region + ' - ' + tc.map,
+            region,
+            regionData[tc.map]
+          ]);
+        });
+      });
+
+      var showTooltip = function(rowIndex, needValue) {
+
+        return '<div class="tree-map-tooltip">' +
+          needValue.format() + ' acre-feet/year' +
+          '</div>';
+      };
+
+      //TODO: Needs to be redrawn on year change
+      $scope.treeMapConfig = {
+        options: {
+          maxDepth: 1,
+          maxColor: '#3182bd',
+          midColor: '#9ecae1',
+          minColor: '#deebf7',
+          useWeightedAverageForAggregation: true,
+          fontSize: 14,
+          fontFamily: "'Open Sans', Arial, 'sans serif'",
+          generateTooltip: showTooltip
+        },
+        data: treeMapData
+      };
+    };
+
+    //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       $scope.currentYear = $scope.$stateParams.year;
 
@@ -34,5 +83,8 @@ angular.module('iswpApp')
         $scope.currentYear});
 
       $scope.tableRows = dataForYear;
+      createTreeMap(dataForYear);
     });
+
+
   });
