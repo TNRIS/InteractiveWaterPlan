@@ -2,8 +2,16 @@
 
 //Service create basemap layers for a Leaflet map
 angular.module('iswpApp')
+  .constant('REGION_STYLE', {
+    stroke: false,
+    color: '#ffcc00',
+    weight: 3,
+    opacity: 1,
+    fillOpacity: 0
+  })
   .factory('MapLayerService',
-    function MapLayerService($state, $stateParams, RegionService, BING_API_KEY, SWP_WMS_URL, TILES_URL) {
+    function MapLayerService($state, $stateParams, RegionService, BING_API_KEY,
+      SWP_WMS_URL, TILES_URL, REGION_STYLE) {
       var service = {};
 
       var regionFeatureLayer;
@@ -99,13 +107,7 @@ angular.module('iswpApp')
         var regionFeats = RegionService.regionFeatures;
 
         regionFeatureLayer = L.geoJson(regionFeats, {
-          style: {
-            stroke: false,
-            color: '#ffcc00',
-            weight: 3,
-            opacity: 1,
-            fillOpacity: 0
-          },
+          style: REGION_STYLE,
           onEachFeature: function (feature, layer) {
             //add leaflet-label (from plugin)
             layer.bindLabel("Region "+layer.feature.properties.region);

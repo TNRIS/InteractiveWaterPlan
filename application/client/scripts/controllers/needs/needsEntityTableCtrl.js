@@ -94,7 +94,7 @@ angular.module('iswpApp')
 
       needsCol.map = 'N' + year;
       percentCol.map = 'NPD' + year;
-
     });
+
     return;
   });

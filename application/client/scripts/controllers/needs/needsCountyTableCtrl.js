@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsCountyTableCtrl', function ($scope, needsData, localStorageService) {
+  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, localStorageService) {
 
     var county = $scope.$stateParams.county.titleize();
 
@@ -38,6 +38,7 @@ angular.module('iswpApp')
     $scope.itemsPerPage = storedItemsPerPage || 20;
 
     $scope.tableConfig = {
+      selectionMode: 'single',
       isGlobalSearchActivated: true,
       isPaginationEnabled: true,
       itemsByPage: $scope.itemsPerPage
@@ -62,6 +63,14 @@ angular.module('iswpApp')
 
       $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
       localStorageService.set('tableItemsPerPage', $scope.itemsPerPage);
+    });
+
+    //Watch for selectionChange events from the Smart-Table
+    // and emit a rootScope event to toggle the feature
+    // highlight
+    $scope.$on('selectionChange', function(event, args) {
+      $rootScope.$emit('map:togglehighlight', args.item);
+      return;
     });
 
     return;

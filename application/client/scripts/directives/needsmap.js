@@ -2,9 +2,15 @@
 'use strict';
 
 angular.module('iswpApp')
+  .constant('ENTITY_STYLE', {
+    color: '#000',
+    weight: 1,
+    opacity: 0.5,
+    fillOpacity: 0.75
+  })
   .directive('needsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
-      NeedsService, EntityService, CountyService, LegendService) {
+      NeedsService, EntityService, CountyService, LegendService, ENTITY_STYLE) {
 
       var minRadius = 6,
         maxRadius = 14;
@@ -83,6 +89,30 @@ angular.module('iswpApp')
           $rootScope.$on('map:togglehide',
             function(event, isHidden) {
               scope.isHidden = isHidden;
+            }
+          );
+
+          $rootScope.$on('map:togglehighlight',
+            function(event, entity) {
+              var entityFeatures = entityLayer.getLayers();
+              var entityFeature = _.find(entityFeatures, function(e) {
+                return entity.EntityId === e.options.entity.EntityId;
+              });
+
+              if (!entityFeature) { return; }
+
+              if (entity.isSelected) {
+                entityFeature.setStyle({
+                  color: '#ff7518',
+                  weight: 2.5,
+                  opacity: 1,
+                  fillOpacity: 1
+                });
+                entityFeature.bringToFront();
+              }
+              else {
+                entityFeature.setStyle(ENTITY_STYLE);
+              }
             }
           );
 
@@ -211,16 +241,14 @@ angular.module('iswpApp')
               var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
                 maxRadius, minRadius, need[yearNeedKey]);
 
-              var marker = L.circleMarker([entity.Latitude, entity.Longitude], {
+              var featureOpts = _.extend({}, ENTITY_STYLE, {
                 radius: scaledRadius,
-                color: '#000',
-                weight: 1,
-                opacity: 0.5,
                 fillColor: colorEntry.color,
-                fillOpacity: 0.75,
                 entity: entity //save the entity data in the marker
-              })
-              .addTo(entityLayer);
+              });
+
+              var marker = L.circleMarker([entity.Latitude, entity.Longitude],
+                featureOpts).addTo(entityLayer);
 
               var labelString = entity.EntityName + '<br/>' +
                 'Needs: ' + pctOfDemand + '% of Demands';

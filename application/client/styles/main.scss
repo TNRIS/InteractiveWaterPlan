@@ -175,6 +175,15 @@ body {
   td.percent {
     text-align: center;
   }
+
+  tbody > tr.selected > td {
+    background-color: #ff7518;
+    color: #fff;
+
+    a {
+      color: #fff;
+    }
+  }
 }
 
 .note-marker {
