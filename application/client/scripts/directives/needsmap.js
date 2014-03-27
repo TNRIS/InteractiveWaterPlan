@@ -38,8 +38,8 @@ angular.module('iswpApp')
               center: stateCenter,
               zoom: stateZoom,
               attributionControl: false,
-              maxBounds: [[-16, -170], [68, -20]],
-              minZoom: 3,
+              maxBounds: [[15, -150], [45, -50]],
+              minZoom: 5,
               maxZoom: 12
             });
 
