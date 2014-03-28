@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsSummaryTableCtrl', function ($scope, needsData, ISWP_VARS) {
+  .controller('NeedsSummaryTableCtrl', function ($scope, needsData, ISWP_VARS, API_PATH) {
 
     $scope.heading = 'Regional Water Needs Summary';
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
     $scope.tableDescription = 'Table summarizes identified water needs by region and water use category in acre-feet/year (click on region for summary).';
+
+    $scope.downloadPath = API_PATH + 'needs/summary?format=csv';
 
     var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
 

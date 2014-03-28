@@ -11,7 +11,7 @@ var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
 
 var csvOrJson = function(req, res, db, statement, params) {
   if (utils.isCsv(req)) {
-    utils.sqlAllAsCsvResponse(res, db, statement, params);
+    utils.sqlAllAsCsvResponse(req, res, db, statement, params);
   }
   else {
     utils.sqlAllAsJsonResponse(res, db, statement, params);
@@ -57,7 +57,7 @@ exports.getNeedsForRegion = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE WugRegion == ? ORDER BY EntityName';
 
-  csvOrJson(res, db, statement, [region]);
+  csvOrJson(req, res, db, statement, [region]);
 };
 
 exports.getNeedsForCounty = function(req, res) {
@@ -80,7 +80,7 @@ exports.getNeedsForCounty = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE WugCounty == ? ORDER BY EntityName';
 
-  csvOrJson(res, db, statement, [county]);
+  csvOrJson(req, res, db, statement, [county]);
 };
 
 exports.getNeedsForEntityType = function(req, res) {
@@ -103,7 +103,7 @@ exports.getNeedsForEntityType = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE WugType == ? ORDER BY EntityName';
 
-  csvOrJson(res, db, statement, [entityType]);
+  csvOrJson(req, res, db, statement, [entityType]);
 };
 
 exports.getNeedsForEntity = function(req, res) {
@@ -127,6 +127,6 @@ exports.getNeedsForEntity = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE vwMapWugNeeds.EntityId == ? ORDER BY EntityName';
 
-  csvOrJson(res, db, statement, [entityId]);
+  csvOrJson(req, res, db, statement, [entityId]);
 };
 

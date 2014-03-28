@@ -36,14 +36,6 @@ module.exports = function(app) {
   app.get(apiPre + 'needs/entity/:entityId', needs.getNeedsForEntity);
   app.get(apiPre + 'needs/type/:entityType', needs.getNeedsForEntityType);
 
-  //Also return for requests that end with .csv
-  app.get(apiPre + 'needs.csv', needs.getAllNeeds);
-  app.get(apiPre + 'needs/summary.csv', needs.getRegionSummary);
-  app.get(apiPre + 'needs/region/:region.csv', needs.getNeedsForRegion);
-  app.get(apiPre + 'needs/county/:county.csv', needs.getNeedsForCounty);
-  app.get(apiPre + 'needs/entity/:entityId.csv', needs.getNeedsForEntity);
-  app.get(apiPre + 'needs/type/:entityType.csv', needs.getNeedsForEntityType);
-
   app.get(apiPre + 'entity', entity.getEntities);
   app.get(apiPre + 'entity/search', entity.getEntitiesByNamePartial);
   app.get(apiPre + 'entity/:entityId', entity.getEntity);

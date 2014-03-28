@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsRegionTableCtrl', function ($scope, $rootScope, needsData, localStorageService) {
+  .controller('NeedsRegionTableCtrl', function ($scope, $rootScope, needsData, localStorageService, API_PATH) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
@@ -9,6 +9,8 @@ angular.module('iswpApp')
     $scope.mapDescription = 'Map displays entities and their identified water needs in <strong>Region '+region+'</strong> (water system service area boundaries may extend outside of region).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>Region '+region+'</strong> in {year}';
+
+    $scope.downloadPath = API_PATH + 'needs/region/' + region + '?format=csv';
 
     var needsCol = {
       map: 'N2010',

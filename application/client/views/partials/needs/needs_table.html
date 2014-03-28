@@ -28,6 +28,13 @@
         <smart-table class="clearfix" columns="tableColumns" rows="tableRows" config="tableConfig">
         </smart-table>
 
+        <p class="pull-right small">
+          <a ng-href="{{downloadPath}}" href="" title="Download data">
+            Download data
+          </a> |
+          <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
+        </p>
+
         <p ng-hide="{{ 'needs.summary' | isState }}">
           * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
         </p>

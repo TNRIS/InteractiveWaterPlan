@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsEntityTableCtrl', function ($scope, needsData, entitySummary, EntityService) {
+  .controller('NeedsEntityTableCtrl', function ($scope, needsData, entitySummary, EntityService, API_PATH) {
 
     //if entitySummary is null then this was called for an invalid entityId
     // so return to home view
@@ -19,6 +19,8 @@ angular.module('iswpApp')
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists identified water needs of <strong>'+ entityName + '</strong> in {year}.';
     var chartDescTpl = 'Graph displays a summary of: Projected Water Demands, Existing Water Supplies, Identified Water Need, and Recommended Strategy Supply of <strong>'+ entityName + '</strong> in {year}.';
+
+    $scope.downloadPath = API_PATH + 'needs/entity/' + entityId + '?format=csv';
 
     var needsCol = {
       map: 'N2010',

@@ -1,10 +1,8 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path'),
+    // path = require('path'),
     _ = require('lodash');
-
-require('express-csv');
 
 var jsonResponse = _.curry(function(res, err, data) {
   if (err) { throw err; }
@@ -16,7 +14,8 @@ var readFile = function(path, callback) {
 };
 
 exports.isCsv = function(req) {
-  return ".csv" === path.extname(req.route.path).toLowerCase();
+  return (req.query.format &&
+    req.query.format.toLowerCase() === "csv");
 };
 
 exports.fileAsJson = function(path) {
@@ -28,10 +27,18 @@ exports.fileAsJsonResponse = function(res, filePath) {
   readFile(filePath, jsonResponse(res));
 };
 
-exports.sqlAllAsCsvResponse = function(res, db, statement, params) {
+exports.sqlAllAsCsvResponse = function(req, res, db, statement, params) {
   db.all(statement, params, function(err, rows) {
     if (err) { throw err; }
-    res.csv(rows);
+    res.setHeader("Content-Disposition", "attachment; filename=" + "james.csv");
+
+    console.log(req.route);
+    //TODO: Option to add some descriptive text to the top of each
+    // file (download date, units, where to find more info, etc)
+    res.csv(rows, {
+      //TODO: fileName: path.basename(req.route.path) + ".csv",
+      fields: _.keys(_.first(rows))
+    });
   });
 };
 
