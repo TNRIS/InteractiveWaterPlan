@@ -59,7 +59,7 @@ angular.module('iswpApp')
           }
 
           this._div
-            .innerHTML += 'Size indicates relative need amount.';
+            .innerHTML += 'Size indicates relative need volume.';
         };
 
         return legend;
