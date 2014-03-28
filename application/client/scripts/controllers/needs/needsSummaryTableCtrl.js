@@ -52,8 +52,8 @@ angular.module('iswpApp')
       });
 
       var showTooltip = function(rowIndex, needValue) {
-
         return '<div class="tree-map-tooltip">' +
+          treeMapData[rowIndex+1][0] + '<br>' +
           needValue.format() + ' acre-feet/year' +
           '</div>';
       };
@@ -61,7 +61,6 @@ angular.module('iswpApp')
       //TODO: Needs to be redrawn on year change
       $scope.treeMapConfig = {
         options: {
-          maxDepth: 1,
           maxColor: '#3182bd',
           midColor: '#9ecae1',
           minColor: '#deebf7',
