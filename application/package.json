@@ -9,7 +9,8 @@
     "express-validator": "^1.0.1",
     "string": "^1.8.0",
     "sugar": "^1.4.1",
-    "q": "^1.0.0"
+    "q": "^1.0.0",
+    "express-csv": "^0.6.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
