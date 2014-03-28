@@ -9,12 +9,21 @@ var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
 
 //TODO: Should we validate params against regions and county names?
 
+var csvOrJson = function(req, res, db, statement, params) {
+  if (utils.isCsv(req)) {
+    utils.sqlAllAsCsvResponse(req, res, db, statement, params);
+  }
+  else {
+    utils.sqlAllAsJsonResponse(res, db, statement, params);
+  }
+};
+
 exports.getAllNeeds = function(req, res) {
   var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds';
 
-  utils.sqlAllAsJsonResponse(res, db, statement);
+  csvOrJson(req, res, db, statement);
 };
 
 
@@ -22,7 +31,8 @@ exports.getRegionSummary = function(req, res) {
   var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
     'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
     'FROM vwMapWugNeedsA1 ORDER BY WugRegion';
-  utils.sqlAllAsJsonResponse(res, db, statement);
+
+  csvOrJson(req, res, db, statement);
 };
 
 exports.getNeedsForRegion = function(req, res) {
@@ -47,7 +57,7 @@ exports.getNeedsForRegion = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE WugRegion == ? ORDER BY EntityName';
 
-  utils.sqlAllAsJsonResponse(res, db, statement, [region]);
+  csvOrJson(req, res, db, statement, [region]);
 };
 
 exports.getNeedsForCounty = function(req, res) {
@@ -70,7 +80,7 @@ exports.getNeedsForCounty = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE WugCounty == ? ORDER BY EntityName';
 
-  utils.sqlAllAsJsonResponse(res, db, statement, [county]);
+  csvOrJson(req, res, db, statement, [county]);
 };
 
 exports.getNeedsForEntityType = function(req, res) {
@@ -93,7 +103,7 @@ exports.getNeedsForEntityType = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE WugType == ? ORDER BY EntityName';
 
-  utils.sqlAllAsJsonResponse(res, db, statement, [entityType]);
+  csvOrJson(req, res, db, statement, [entityType]);
 };
 
 exports.getNeedsForEntity = function(req, res) {
@@ -117,6 +127,6 @@ exports.getNeedsForEntity = function(req, res) {
     'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
     'WHERE vwMapWugNeeds.EntityId == ? ORDER BY EntityName';
 
-  utils.sqlAllAsJsonResponse(res, db, statement, [entityId]);
+  csvOrJson(req, res, db, statement, [entityId]);
 };
 

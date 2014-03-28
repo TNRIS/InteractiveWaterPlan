@@ -5,6 +5,9 @@ var express = require('express'),
     validator = require('express-validator'),
     config = require('./config');
 
+//Add .csv method to response objects
+require('../lib/csv-response')(express);
+
 /**
  * Express configuration
  */
