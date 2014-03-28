@@ -6,11 +6,6 @@ Map {
   ::fill {
     polygon-fill: #ffe9c6;
   }
-  ::outline-halo {
-    line-color: #eccdb2;
-    line-width: 3;
-    line-join: round;
-  }
   ::outline {
     line-color: #f09d0d;
     line-width: 1;
