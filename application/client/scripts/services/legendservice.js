@@ -59,7 +59,7 @@ angular.module('iswpApp')
           }
 
           this._div
-            .innerHTML += 'Size indicates relative need volume.';
+            .innerHTML += '<p>Size indicates relative need volume.</p>';
         };
 
         return legend;
