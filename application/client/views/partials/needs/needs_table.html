@@ -24,7 +24,8 @@
     <div class="row">
       <div class="col-md-12 table-responsive ">
         <div ng-show="tableConfig.isPaginationEnabled" items-per-page="itemsPerPage" class="pull-left"></div>
-        <smart-table columns="tableColumns" rows="tableRows" config="tableConfig">
+
+        <smart-table class="clearfix" columns="tableColumns" rows="tableRows" config="tableConfig">
         </smart-table>
 
         <p ng-hide="{{ 'needs.summary' | isState }}">
