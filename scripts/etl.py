@@ -19,6 +19,7 @@ only_tables = [
     'vwMapWugNeeds',
     'vwMapWugPopulation',
     'vwMapWugNeedsA1',
+    'vwMapWugDemandsA1',
 ]
 
 
