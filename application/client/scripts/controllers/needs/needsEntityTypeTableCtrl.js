@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsEntityTypeTableCtrl', function ($scope, $rootScope, needsData, localStorageService, API_PATH) {
+  .controller('NeedsEntityTypeTableCtrl', function ($scope, $rootScope, needsData, localStorageService, ISWP_VARS, API_PATH) {
 
     var entityType = $scope.$stateParams.entityType.titleize();
+    $scope.entityType = entityType;
 
     $scope.heading = '' + entityType;
     $scope.mapDescription = 'Map displays <strong>' + entityType + '</strong> entities and their identified water needs.';
@@ -48,6 +49,50 @@ angular.module('iswpApp')
 
     $scope.tableRows = needsData;
 
+    var createTreeMap = function(currentYear) {
+      var treeMapData = [],
+        parentName = 'All Regions';
+
+      treeMapData.push(['Region', 'Parent', 'Need (acre-feet/year)']);
+      treeMapData.push([parentName, null, null]);
+
+      //For each region,
+      _.each(ISWP_VARS.regions, function(region) {
+
+        var regionData = _.where(needsData, {'WugRegion': region});
+        var regionTotal = _.reduce(regionData, function(sum, curr) {
+          return sum + curr['N'+currentYear];
+        }, 0);
+
+        treeMapData.push([
+          region + ' - ' + entityType.toUpperCase(),
+          parentName,
+          regionTotal
+        ]);
+      });
+
+      var createTooltip = function(rowIndex, needValue) {
+        return '<div class="tree-map-tooltip">' +
+          treeMapData[rowIndex+1][0] + '<br>' +
+          needValue.format() + ' acre-feet/year' +
+          '</div>';
+      };
+
+      return {
+        options: {
+          maxColor: '#3182bd',
+          midColor: '#9ecae1',
+          minColor: '#deebf7',
+          headerHeight: 0,
+          useWeightedAverageForAggregation: true,
+          fontSize: 14,
+          fontFamily: "'Open Sans', Arial, 'sans serif'",
+          generateTooltip: createTooltip
+        },
+        data: treeMapData
+      };
+    };
+
     //TODO: Remember the sort order when changing Year
 
     $scope.$on('$stateChangeSuccess', function() {
@@ -56,6 +101,8 @@ angular.module('iswpApp')
 
       needsCol.map = 'N' + $scope.currentYear;
       percentCol.map = 'NPD' + $scope.currentYear;
+
+      $scope.treeMapConfig = createTreeMap($scope.currentYear);
     });
 
     $scope.$watch('itemsPerPage', function() {

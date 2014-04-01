@@ -50,16 +50,21 @@
           <strong>Right-click</strong> on a category to go back to the statewide tree map.
         </p>
       </div>
-    </div>
 
-    <div class="row" ng-show="{{'needs.summary' | isState}}">
       <div class="col-md-12 tree-map-container">
-        <h4>Tree Map of Water Needs by Water Use Type - {{currentYear}}</h4>
+        <h4>Tree Map of Water Needs by Water Use Category - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="categoryTreeMapConfig"></div>
         <p class="small">
           <strong>Click</strong> a water use category to see the tree map for that water use category in all regions.<br>
           <strong>Right-click</strong> on a region category to go back to the water use category summary tree map.
         </p>
+      </div>
+    </div>
+
+    <div class="row" ng-show="{{'needs.type' | isState}}">
+      <div class="col-md-12 tree-map-container">
+        <h4>Tree Map of Water Needs by Region for {{entityType}} Entities - {{currentYear}}</h4>
+        <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
       </div>
     </div>
 
