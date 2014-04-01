@@ -2,6 +2,7 @@
 
 var places = require('./controllers/api/places'),
     needs = require('./controllers/api/needs'),
+    demands = require('./controllers/api/demands'),
     entity = require('./controllers/api/entity'),
     type = require('./controllers/api/type'),
     about = require('./controllers/about'),
@@ -36,6 +37,13 @@ module.exports = function(app) {
   app.get(apiPre + 'needs/entity/:entityId', needs.getNeedsForEntity);
   app.get(apiPre + 'needs/type/:entityType', needs.getNeedsForEntityType);
 
+  app.get(apiPre + 'demands', demands.getAllDemands);
+  app.get(apiPre + 'demands/summary', demands.getRegionSummary);
+  app.get(apiPre + 'demands/region/:region', demands.getDemandsForRegion);
+  app.get(apiPre + 'demands/county/:county', demands.getDemandsForCounty);
+  app.get(apiPre + 'demands/entity/:entityId', demands.getDemandsForEntity);
+  app.get(apiPre + 'demands/type/:entityType', demands.getDemandsForEntityType);
+
   app.get(apiPre + 'entity', entity.getEntities);
   app.get(apiPre + 'entity/search', entity.getEntitiesByNamePartial);
   app.get(apiPre + 'entity/:entityId', entity.getEntity);
@@ -52,7 +60,7 @@ module.exports = function(app) {
 
   //Routes that correspond to the front-end Angular app
   app.get('/needs/*', index.index);
-  app.get('/demands/*', index.index);   //TODO: Phase 2
+  app.get('/demands/*', index.index);
   app.get('/supplies/*', index.index);  //TODO: Phase 3
   app.get('/wms/*', index.index);       //TODO: Phase 4
   app.get('/', index.index);
