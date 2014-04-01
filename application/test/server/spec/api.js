@@ -1,6 +1,13 @@
 /* global describe,it */
 'use strict';
 
+//TODO: A lot more testing
+// - needs api
+// - demands api
+// - entity api
+// - places api
+// - type api
+
 var should = require('should'),
     app = require('../../../server'),
     request = require('supertest');

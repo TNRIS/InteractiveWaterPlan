@@ -52,3 +52,12 @@ exports.sqlOneAsJsonResponse = function(res, db, statement, params) {
     res.json(row);
   });
 };
+
+exports.csvOrJsonSqlAll = function(req, res, db, statement, params) {
+  if (exports.isCsv(req)) {
+    exports.sqlAllAsCsvResponse(req, res, db, statement, params);
+  }
+  else {
+    exports.sqlAllAsJsonResponse(res, db, statement, params);
+  }
+};

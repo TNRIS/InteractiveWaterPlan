@@ -8,26 +8,24 @@ var sqlite3 = require('sqlite3'),
 
 var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
 
-//TODO: Should we validate params against regions and county names?
 
-exports.getAllNeeds = function(req, res) {
+exports.getAllDemands = function(req, res) {
   var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
-    'FROM vwMapWugNeeds';
+    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
+    'FROM vwMapWugDemand';
 
   utils.csvOrJsonSqlAll(req, res, db, statement);
 };
-
 
 exports.getRegionSummary = function(req, res) {
   var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
     'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
-    'FROM vwMapWugNeedsA1 ORDER BY WugRegion';
+    'FROM vwMapWugDemandsA1 ORDER BY WugRegion';
 
   utils.csvOrJsonSqlAll(req, res, db, statement);
 };
 
-exports.getNeedsForRegion = function(req, res) {
+exports.getDemandsForRegion = function(req, res) {
   req.check('region', 'Must be a single letter')
     .notEmpty()
     .isAlpha()
@@ -41,18 +39,15 @@ exports.getNeedsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
+    'FROM vwMapWugDemand ' +
     'WHERE WugRegion == ? ORDER BY EntityName';
 
   utils.csvOrJsonSqlAll(req, res, db, statement, [region]);
 };
 
-exports.getNeedsForCounty = function(req, res) {
+exports.getDemandsForCounty = function(req, res) {
   req.check('county', 'Must be a valid county name')
     .notEmpty();
 
@@ -64,18 +59,15 @@ exports.getNeedsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
+    'FROM vwMapWugDemand ' +
     'WHERE WugCounty == ? ORDER BY EntityName';
 
   utils.csvOrJsonSqlAll(req, res, db, statement, [county]);
 };
 
-exports.getNeedsForEntityType = function(req, res) {
+exports.getDemandsForEntityType = function(req, res) {
   req.check('entityType', 'Must be a valid Water User Group Entity Type')
     .notEmpty();
 
@@ -87,18 +79,15 @@ exports.getNeedsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
+  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
+    'FROM vwMapWugDemand ' +
     'WHERE WugType == ? ORDER BY EntityName';
 
   utils.csvOrJsonSqlAll(req, res, db, statement, [entityType]);
 };
 
-exports.getNeedsForEntity = function(req, res) {
+exports.getDemandsForEntity = function(req, res) {
   req.check('entityId', 'Must be a valid Water User Group Entity ID')
     .notEmpty()
     .isInt();
@@ -111,14 +100,10 @@ exports.getNeedsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE vwMapWugNeeds.EntityId == ? ORDER BY EntityName';
+  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
+    'FROM vwMapWugDemand ' +
+    'WHERE EntityId == ? ORDER BY EntityName';
 
   utils.csvOrJsonSqlAll(req, res, db, statement, [entityId]);
 };
-
