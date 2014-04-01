@@ -6,6 +6,7 @@ angular.module('iswpApp')
       //redirect any bad/unmapped route to the beginning
       $urlRouterProvider.otherwise('/needs/2010/state');
 
+      //-- NEEDS --
       var needsResolver = function(type, typeIdProperty) {
         return {
           needsData: function(NeedsService, $stateParams) {
@@ -23,8 +24,7 @@ angular.module('iswpApp')
               return EntityService.fetch();
             }
           },
-          templateUrl: 'partials/needs/needs_index.html',
-          controller: 'NeedsCtrl'
+          templateUrl: 'partials/needs/needs_index.html'
         })
         .state('needs.summary', {
           url: '/:year/state', // appended to /needs
@@ -64,7 +64,37 @@ angular.module('iswpApp')
           templateUrl: 'partials/needs/needs_table.html'
         });
 
-        //TODO demands, supplies, wms (later phases)
+
+      //-- DEMANDS --
+      var demandsResolver = function(type, typeIdProperty) {
+        return {
+          demandsResolver: function(DemandsService, $stateParams) {
+            return DemandsService.fetch(type, $stateParams[typeIdProperty]);
+          }
+        };
+      };
+
+      $stateProvider
+        .state('demands', {
+          abstract: true,
+          url: '/demands',
+          resolve: {
+            entities: function(EntityService) {
+              return EntityService.fetch();
+            }
+          },
+          templateUrl: 'partials/demands/demands_index.html'
+        })
+        .state('demands.summary', {
+          url: '/:year/state', // appended to /demands
+          resolve: demandsResolver('summary'),
+          controller: 'DemandsSummaryCtrl',
+          templateUrl: 'partials/demands/demands_table.html'
+        })
+        ;
+
+
+        //TODO: states for supplies, wms (later phases)
     }
   )
   //Validation logic

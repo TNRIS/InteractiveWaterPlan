@@ -1,5 +1,9 @@
 'use strict';
 
+
+//TODO: Actually just use a service to get the paramsMap
+// based on the current top-level state (needs, demands, etc)
+
 angular.module('iswpApp')
   .directive('needsLink', function ($state, $stateParams) {
     var paramsMap = {
