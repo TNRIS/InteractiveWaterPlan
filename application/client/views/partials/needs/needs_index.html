@@ -21,13 +21,23 @@
 
 <div needs-map class="main-map" ng-hide="isHidden" ></div>
 
-<div ng-controller="YearSelectCtrl" class="year-select-container">
-  <span class="decade-label">DECADE:</span>
-  <ul class="year-nav nav nav-pills">
-    <li ng-repeat="year in years" ng-class="{'active': year == selectedYear}">
-      <a href="" ng-click="selectYear(year)">{{year}}</a>
+<div class="row year-select-container">
+  <div ng-controller="YearSelectCtrl" class="col-md-6">
+    <span class="decade-label">DECADE:</span>
+    <ul class="year-nav nav nav-pills">
+      <li ng-repeat="year in years" ng-class="{'active': year == selectedYear}">
+        <a href="" ng-click="selectYear(year)">{{year}}</a>
+      </li>
     </li>
-  </li>
+  </div>
+
+  <div class="col-md-6 map-note">
+    <p class="small">
+      Some entities (e.g., county-wide entities) have overlapping locations.
+      <br>
+      Clicking on such entities will expand the group so that they may be viewed individually.
+    </p>
+  </div>
 </div>
 
 <div place-selects></div>
