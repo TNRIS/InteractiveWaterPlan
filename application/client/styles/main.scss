@@ -142,13 +142,17 @@ body {
 .decade-label {
   float: left;
   height: 30px;
-  padding-top: 6px;
-  padding-right: 10px;
+  margin-top: 12px;
+  margin-right: 10px;
 }
 
 .year-select-container {
-  margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.map-note {
+  margin-top: 5px;
+  color: #666;
 }
 
 .table-view {
