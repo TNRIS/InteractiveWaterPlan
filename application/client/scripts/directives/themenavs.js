@@ -1,6 +1,16 @@
 'use strict';
 
 angular.module('iswpApp')
+  .directive('themeNavs', function() {
+    return {
+      restrict: 'A',
+      replace: true,
+      template: '<div>' +
+        '<div theme-nav="demands"></div>' +
+        '<div theme-nav="needs"></div>' +
+        '</div>'
+    };
+  })
   .directive('themeNav', function($state, $stateParams, ISWP_VARS) {
     return {
       restrict: 'A',
