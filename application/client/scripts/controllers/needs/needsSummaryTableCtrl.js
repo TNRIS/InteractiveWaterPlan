@@ -9,7 +9,7 @@ angular.module('iswpApp')
 
     $scope.downloadPath = API_PATH + 'needs/summary?format=csv';
 
-    var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
+    var cellTemplateUrl = 'partials/linkcell.html';
 
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl, headerClass: 'text-center', cellClass: 'text-center'},
