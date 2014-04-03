@@ -12,9 +12,8 @@ state.
 
 
 # check that the current git branch is clean
-clean_msg="nothing to commit, working directory clean"
-clean_check=`git status | grep "${clean_msg}"`
-if [[ $clean_check != "${clean_msg}" ]]; then
+clean_check=`git status -s`
+if [[ -n ${clean_check} ]]; then
     echo "
 The working directory is not clean, so deployment is stopping. This is done to
 avoid deployment artifacts from uncommitted work or changed files.
