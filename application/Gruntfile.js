@@ -227,7 +227,7 @@ module.exports = function (grunt) {
           src: [
             '<%= yeoman.dist %>/public/scripts/{,*/}*.js',
             '<%= yeoman.dist %>/public/styles/{,*/}*.css',
-            '<%= yeoman.dist %>/public/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            // '<%= yeoman.dist %>/public/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.dist %>/public/styles/fonts/*'
           ]
         }
@@ -327,7 +327,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             'bower_components/**/*',
-            'images/{,*/}*.{webp}',
+            'images/**/*',
             'fonts/**/*',
             'scripts/shims/*'
           ]
@@ -400,7 +400,7 @@ module.exports = function (grunt) {
       },
       dist: [
         'compass:dist',
-        'imagemin',
+        // 'imagemin',
         'svgmin',
         'htmlmin'
       ]
