@@ -62,14 +62,15 @@
     local_action: command chdir=../application grunt build --force
     sudo: no
 
-  - name: send app dist to server
-    synchronize: src=../application/dist/ dest={{ app_dir }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
-    notify:
-    - restart {{ upstart_cmd }}
-    - restart varnish
+  - name: send dist build to tmp server directory
+    synchronize: src=../application/dist/ dest={{ tmp_dist }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
 
   - name: install npm packages
-    npm: path={{ app_dir }}
+    npm: path={{ tmp_dist }}
+    sudo_user: "{{ water_plan_user }}"
+
+  - name: move tmp server directory into production
+    command: cp -RT {{ tmp_dist }}/ {{ app_dir }}/
     sudo_user: "{{ water_plan_user }}"
     notify:
     - restart {{ upstart_cmd }}
