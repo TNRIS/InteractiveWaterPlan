@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() {
     echo "Usage: ${0} [any arguments to pass to ansible-playbook] <branch_or_commit>
