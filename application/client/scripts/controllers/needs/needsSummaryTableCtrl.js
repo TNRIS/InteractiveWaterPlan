@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsSummaryTableCtrl', function ($scope, needsData, ISWP_VARS) {
+  .controller('NeedsSummaryTableCtrl', function ($scope, needsData, ISWP_VARS, API_PATH) {
 
     $scope.heading = 'Regional Water Needs Summary';
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
     $scope.tableDescription = 'Table summarizes identified water needs by region and water use category in acre-feet/year (click on region for summary).';
+
+    $scope.downloadPath = API_PATH + 'needs/summary?format=csv';
 
     var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
 
@@ -24,17 +26,76 @@ angular.module('iswpApp')
       isPaginationEnabled: false
     };
 
-    var createTreeMap = function(dataForYear) {
-      var treeMapData = [];
+    var createCategoryTreeMap = function(dataForYear) {
+
+      var treeMapData = [],
+        parentName = 'All Water Use Categories';
+
+      treeMapData.push(['Category', 'Parent', 'Need (acre-feet/year)']);
+      treeMapData.push([parentName, null, null]);
+
+      //For each water use category, calculate the total across regions
+      _.each($scope.tableColumns, function(tc) {
+        if (tc.map === 'WugRegion' || tc.map === 'TOTAL') {
+          return;
+        }
+
+        var category = tc.map,
+            categorySum = _.reduce(dataForYear, function(sum, data) {
+              return sum + data[category];
+            }, 0);
+
+        treeMapData.push([
+          category,
+          parentName,
+          categorySum
+        ]);
+
+        _.each(ISWP_VARS.regions, function(region) {
+          var regionData = _.find(dataForYear, {'WugRegion': region});
+          treeMapData.push([
+            region + ' - ' + category,
+            category,
+            regionData[category]
+          ]);
+        });
+      });
+
+      var createTooltip = function(rowIndex, needValue) {
+        return '<div class="tree-map-tooltip">' +
+          treeMapData[rowIndex+1][0] + '<br>' +
+          needValue.format() + ' acre-feet/year' +
+          '</div>';
+      };
+
+      return {
+        options: {
+          maxColor: '#3182bd',
+          midColor: '#9ecae1',
+          minColor: '#deebf7',
+          useWeightedAverageForAggregation: true,
+          fontSize: 14,
+          fontFamily: "'Open Sans', Arial, 'sans serif'",
+          generateTooltip: createTooltip
+        },
+        data: treeMapData
+      };
+    };
+
+    var createRegionTreeMap = function(dataForYear) {
+      var treeMapData = [],
+        parentName = 'All Regions';
+
       treeMapData.push(['Region', 'Parent', 'Need (acre-feet/year)']);
-      treeMapData.push(['State of Texas', null, null]);
+      treeMapData.push([parentName, null, null]);
 
       //For each region, generate row for region total
       // and for each category, generate row for amount in region
       _.each(ISWP_VARS.regions, function(region) {
         var regionData = _.find(dataForYear, {'WugRegion': region});
-        treeMapData.push([region,
-          'State of Texas',
+        treeMapData.push([
+          region,
+          parentName,
           regionData.TOTAL
         ]);
 
@@ -51,15 +112,14 @@ angular.module('iswpApp')
         });
       });
 
-      var showTooltip = function(rowIndex, needValue) {
+      var createTooltip = function(rowIndex, needValue) {
         return '<div class="tree-map-tooltip">' +
           treeMapData[rowIndex+1][0] + '<br>' +
           needValue.format() + ' acre-feet/year' +
           '</div>';
       };
 
-      //TODO: Needs to be redrawn on year change
-      $scope.treeMapConfig = {
+      return {
         options: {
           maxColor: '#3182bd',
           midColor: '#9ecae1',
@@ -67,13 +127,14 @@ angular.module('iswpApp')
           useWeightedAverageForAggregation: true,
           fontSize: 14,
           fontFamily: "'Open Sans', Arial, 'sans serif'",
-          generateTooltip: showTooltip
+          generateTooltip: createTooltip
         },
         data: treeMapData
       };
     };
 
     //TODO: Remember the sort order when changing Year
+    //Refresh stuff when the year changes
     $scope.$on('$stateChangeSuccess', function() {
       $scope.currentYear = $scope.$stateParams.year;
 
@@ -82,7 +143,8 @@ angular.module('iswpApp')
         $scope.currentYear});
 
       $scope.tableRows = dataForYear;
-      createTreeMap(dataForYear);
+      $scope.treeMapConfig = createRegionTreeMap(dataForYear);
+      $scope.categoryTreeMapConfig = createCategoryTreeMap(dataForYear);
     });
 
 
