@@ -24,7 +24,7 @@ angular.module('iswpApp')
               return EntityService.fetch();
             }
           },
-          templateUrl: 'partials/needs/needs_index.html'
+          template: '<div ui-view class="row"></div>'
         })
         .state('needs.summary', {
           url: '/:year/state', // appended to /needs
@@ -68,7 +68,7 @@ angular.module('iswpApp')
       //-- DEMANDS --
       var demandsResolver = function(type, typeIdProperty) {
         return {
-          demandsResolver: function(DemandsService, $stateParams) {
+          demandsData: function(DemandsService, $stateParams) {
             return DemandsService.fetch(type, $stateParams[typeIdProperty]);
           }
         };
@@ -83,7 +83,7 @@ angular.module('iswpApp')
               return EntityService.fetch();
             }
           },
-          templateUrl: 'partials/demands/demands_index.html'
+          template: '<div ui-view class="row"></div>'
         })
         .state('demands.summary', {
           url: '/:year/state', // appended to /demands
@@ -114,21 +114,23 @@ angular.module('iswpApp')
         return toHome();
       }
 
-      switch (toState.name) {
-        case 'needs.region':
+      var stateSuffix = _.last(toState.name.split('.'));
+
+      switch (stateSuffix) {
+        case 'region':
           if(doesntContain(ISWP_VARS.regions, toParams.region.toUpperCase())) {
             return toHome();
           }
           break;
 
-        case 'needs.county':
+        case 'county':
           if(doesntContain(ISWP_VARS.counties,
               toParams.county.toUpperCase())) {
             return toHome();
           }
           break;
 
-        case 'needs.type':
+        case 'type':
           if(doesntContain(ISWP_VARS.entityTypes,
               toParams.entityType.toUpperCase())) {
             return toHome();

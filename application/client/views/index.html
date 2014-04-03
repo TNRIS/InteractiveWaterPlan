@@ -26,11 +26,11 @@
 
     <link type="text/plain" rel="author" href="/humans.txt" />
   </head>
-  <body ng-app="iswpApp">
+  <body ng-app="iswpApp" ng-cloak>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" title="browsehappy">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="container">
+    <div class="container"  ng-controller="StateCtrl">
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="first-time-here ">
@@ -75,6 +75,39 @@
           </div>
         </div>
       </noscript>
+
+      <div class="row">
+        <div class="col-md-12">
+          <p ng-if="isState('needs')" class="lead">
+            Identified water <strong>needs</strong> are projected water demands in excess of existing water supplies during drought of record conditions (i.e., potential shortage if no water management strategy is implemented).
+          </p>
+          <p ng-if="isState('demands')" class="lead">
+            Projected water <strong>demand</strong> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div theme-navs class="col-md-6 pull-left"></div>
+        <div map-controls class="col-md-6"></div>
+      </div>
+
+      <div needs-map ng-if="isState('needs')" class="main-map" ng-hide="isHidden"></div>
+      <div demands-map ng-if="isState('demands')" class="main-map" ng-hide="isHidden"></div>
+
+      <div class="row year-select-container">
+        <div year-select class="col-md-6"></div>
+
+        <div class="col-md-6 map-note">
+          <p class="small">
+            Some entities (e.g., county-wide entities) have overlapping locations.
+            <br>
+            Clicking on such entities will expand the group so that they may be viewed individually.
+          </p>
+        </div>
+      </div>
+
+      <div place-selects></div>
 
       <div ui-view></div>
 
@@ -152,6 +185,7 @@
     <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/states.js"></script>
+    <script src="scripts/controllers/statectrl.js"></script>
     <script src="scripts/controllers/needs/needsSummaryTableCtrl.js"></script>
     <script src="scripts/controllers/needs/needsRegionTableCtrl.js"></script>
     <script src="scripts/controllers/needs/needsCountyTableCtrl.js"></script>
@@ -173,6 +207,7 @@
     <script src="scripts/directives/placeselects.js"></script>
     <script src="scripts/directives/linkcell.js"></script>
     <script src="scripts/directives/needsmap.js"></script>
+    <script src="scripts/directives/demandsmap.js"></script>
     <script src="scripts/directives/itemsperpage.js"></script>
     <!-- endbuild -->
 </body>
