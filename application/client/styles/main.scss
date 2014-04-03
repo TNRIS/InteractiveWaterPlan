@@ -21,6 +21,10 @@ html.lt-ie9 {
   visibility: hidden;
 }
 
+.popover {
+  max-width: 340px;
+}
+
 .about-nav {
   width: 200px;
   margin-top: 30px;
@@ -70,7 +74,7 @@ body {
   border-bottom: 1px solid #e5e5e5;
 
   .nav {
-    margin-top: 10px;
+    margin-top: 50px;
 
     > li.first-time-here {
       > a:hover {
@@ -305,6 +309,11 @@ body {
     padding-left: 10px;
     border-left: 3px solid #eee;
   }
+}
+
+img.graphic {
+  display: inline;
+  margin-bottom: 6px;
 }
 
 /* Responsive: Portrait tablets and up */
