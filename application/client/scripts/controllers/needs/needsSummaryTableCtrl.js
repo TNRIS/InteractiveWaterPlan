@@ -61,10 +61,10 @@ angular.module('iswpApp')
         });
       });
 
-      var createTooltip = function(rowIndex, needValue) {
+      var createTooltip = function(rowIndex, value) {
         return '<div class="tree-map-tooltip">' +
           treeMapData[rowIndex+1][0] + '<br>' +
-          needValue.format() + ' acre-feet/year' +
+          value.format() + ' acre-feet/year' +
           '</div>';
       };
 
@@ -112,10 +112,10 @@ angular.module('iswpApp')
         });
       });
 
-      var createTooltip = function(rowIndex, needValue) {
+      var createTooltip = function(rowIndex, value) {
         return '<div class="tree-map-tooltip">' +
           treeMapData[rowIndex+1][0] + '<br>' +
-          needValue.format() + ' acre-feet/year' +
+          value.format() + ' acre-feet/year' +
           '</div>';
       };
 
