@@ -74,8 +74,10 @@ To set up your authorized_keys file:
    `~/.ssh/` directory, and you must be the owner and group or sshd will ignore it.
 
 
-For deploying to production, run the ansible playbook with your inventory file
-and username:
+For deploying to production use the `deploy.sh` script, which allows you to
+deploy from a specific commit or branch and has some sanity checks to ensure the
+deploy is free of any uncommitted artifacts. All command-line arguments except
+the last are passed to ansible-playbook, so the script can be used to test
+deploys on vagrant VMs prior to pushing to production.
 
-    ansible-playbook -i <production_inventory_file> --user=<username> site.yml
-
+    ./deploy.sh -i <production_inventory_file> --user=<username> <commit_or_branch>
