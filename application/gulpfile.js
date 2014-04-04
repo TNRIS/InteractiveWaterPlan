@@ -68,6 +68,9 @@ gulp.task('dist', function () {
     .pipe(gulp.dest(dirs.build + '/server/'));
   gulp.src('server.js')
     .pipe(gulp.dest(dirs.build + '/'));
+
+  gulp.src(dirs.tmp)
+    .pipe(rimraf());
 });
 
 gulp.task('clean', function () {
