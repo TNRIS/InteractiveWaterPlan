@@ -19,6 +19,7 @@ tilestache_user: tilestache
 tilestache_uwsgi_socket: "localhost:{{ tilestache_port }}"
 tilestache_uwsgi_workers: 3
 tilestache_virtualenv: "{{ tilestache_dir }}/env"
+tmp_dist: "/tmp/deploy-dist-{{ lookup('env', 'USER') }}"
 upstart_cmd: water-plan-app
 vagrant: false
 varnish_port: 80
