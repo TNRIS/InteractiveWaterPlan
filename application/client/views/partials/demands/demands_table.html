@@ -13,7 +13,7 @@
     <p ng-bind-html='tableDescription'></p>
 
 
-    <div class="row" ng-show="{{ 'needs.entity' | isState }}">
+    <div class="row" ng-show="{{ 'demands.entity' | isState }}">
       <div class="col-md-12 chart-container">
         <div google-chart chart="chartConfig"></div>
 
@@ -35,13 +35,13 @@
           <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
         </p>
 
-        <p ng-hide="{{ 'needs.summary' | isState }}">
+        <p ng-hide="{{ 'demands.summary' | isState }}">
           * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
         </p>
       </div>
     </div>
 
-    <div class="row" ng-show="{{'needs.summary' | isState}}">
+    <div class="row" ng-show="{{'demands.summary' | isState}}">
       <div class="col-md-12 tree-map-container">
         <h4>Tree Map of Water Needs by Region - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
@@ -52,7 +52,7 @@
       </div>
 
       <div class="col-md-12 tree-map-container">
-        <h4>Tree Map of Water Needs by Water Use Category - {{currentYear}}</h4>
+        <h4>Tree Map of Water Demands by Water Use Category - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="categoryTreeMapConfig"></div>
         <p class="small">
           <strong>Click</strong> a water use category to see the tree map for that water use category in all regions.<br>
@@ -61,9 +61,9 @@
       </div>
     </div>
 
-    <div class="row" ng-show="{{'needs.type' | isState}}">
+    <div class="row" ng-show="{{'demands.type' | isState}}">
       <div class="col-md-12 tree-map-container">
-        <h4>Tree Map of Water Needs by Region for {{entityType}} Entities - {{currentYear}}</h4>
+        <h4>Tree Map of Water Demands by Region for {{entityType}} Entities - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
       </div>
     </div>

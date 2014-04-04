@@ -31,23 +31,8 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" title="browsehappy">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div class="container"  ng-controller="StateCtrl">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="first-time-here ">
-            <a target="_self" title="First time here?" href="/about/#Introduction">
-              First time here?
-            </a>
-          </li>
-          <li class="active">
-            <a href="#" title="Home">Home</a>
-          </li>
-          <li>
-            <a target="_self" title="About" href="/about">About</a>
-          </li>
-        </ul>
-        <img src="/images/twdb_logo_color.png" alt="TWDB logo" height="60"/>
-        <h1>2012 Texas State Water Plan</h1>
-      </div>
+
+      <% include partials/_header.html %>
 
       <div class="row">
         <div class="col-md-12">
@@ -80,11 +65,11 @@
         <div class="col-md-12">
           <p ng-if="isState('needs')" class="lead">
             Identified water
-            <a href="/about#needs" target="_blank"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
+            <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
             are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
           </p>
           <p ng-if="isState('demands')" class="lead">
-            Projected water <strong>demand</strong> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
+            Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
           </p>
         </div>
       </div>
@@ -113,16 +98,8 @@
 
       <div ui-view></div>
 
-      <div class="footer">
-        <p>This website is brought to you by the <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a></p>
-        <p>
-          <a href="/about#SitePolicies" target="_self" title="Site Policies">Site Policies</a> |
-          <a href="http://www.texas.gov/" title="Texas Online">Texas Online</a> |
-          <a href="http://www.governor.texas.gov/homeland" title="Homeland Security">Homeland Security</a> |
-          <a href="http://www2.tsl.state.tx.us/trail" title="TRAIL">TRAIL</a> |
-          <a href="mailto:InteractiveSWP@twdb.texas.gov" title="Contact Us">Contact Us</a>
-        </p>
-      </div>
+      <% include partials/_footer.html %>
+
     </div>
 
     <script>
