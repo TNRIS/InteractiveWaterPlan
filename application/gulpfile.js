@@ -74,3 +74,13 @@ gulp.task('clean', function () {
   return gulp.src(dirs.build)
     .pipe(rimraf());
 });
+
+gulp.task('serve', function () {
+  gulp.watch(dirs.client + '/styles/*.scss', ['compass']);
+
+  var app = require('./server.js');
+});
+
+gulp.task('serve-dist', function () {
+  var app = require('./' + dirs.build + '/server.js');
+});
