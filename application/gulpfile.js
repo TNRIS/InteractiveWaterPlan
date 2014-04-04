@@ -53,6 +53,8 @@ gulp.task('dist', function () {
 
   gulp.src(dirs.client + '/scripts/shims/*')
     .pipe(gulp.dest(dirs.pub + '/scripts/shims/'));
+  gulp.src(dirs.client + '/bower_components/**/*')
+    .pipe(gulp.dest(dirs.pub + '/'));
   gulp.src(dirs.client + '/bower_components/**/*.{eot,svg,ttf,woff,otf}')
     .pipe(flatten())
     .pipe(gulp.dest(dirs.pub + '/fonts/'));
