@@ -66,7 +66,7 @@
     synchronize: src=../application/dist/ dest={{ tmp_dist }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
 
   - name: install npm packages
-    npm: path={{ tmp_dist }}
+    npm: path={{ tmp_dist }} production=yes
     sudo_user: "{{ water_plan_user }}"
 
   - name: move tmp server directory into production
