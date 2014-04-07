@@ -10,13 +10,11 @@ angular.module('iswpApp')
   })
   .directive('needsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
-      NeedsService, EntityService, CountyService, LegendService, NEEDS_ENTITY_STYLE) {
+      NeedsService, EntityService, CountyService, LegendService, STATE_MAP_CONFIG,
+      NEEDS_ENTITY_STYLE) {
 
       var minRadius = 6,
         maxRadius = 14;
-
-      var stateCenter = [31.780548, -99.022907],
-        stateZoom = 5;
 
       function _calculateScaledValue(max, min, scaleMax, scaleMin, val) {
         var scaledVal;
@@ -29,14 +27,18 @@ angular.module('iswpApp')
 
       return {
         restrict: 'A',
+        scope: {
+          mapLocked: '=',
+          mapHidden: '=',
+          mapCenterLat: '=',
+          mapCenterLng: '=',
+          mapZoom: '='
+        },
         link: function postLink(scope, element, attrs) {
 
-          scope.isHidden = false;
-          scope.isLocked = false;
-
           var map = L.map(element[0], {
-              center: stateCenter,
-              zoom: stateZoom,
+              center: [scope.mapCenterLat, scope.mapCenterLng],
+              zoom: scope.mapZoom,
               attributionControl: false,
               maxBounds: [[15, -150], [45, -50]],
               minZoom: 5,
@@ -45,6 +47,16 @@ angular.module('iswpApp')
 
           //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
+
+          map.on('moveend', function() {
+            $rootScope.$safeApply(function() {
+              var center = map.getCenter();
+              scope.mapCenterLat = center.lat;
+              scope.mapCenterLng = center.lng;
+
+              scope.mapZoom = map.getZoom();
+            });
+          });
 
           //Create a legend for the Needs colors
           var legendControl = LegendService.Needs.createLegend();
@@ -64,7 +76,7 @@ angular.module('iswpApp')
           $rootScope.$on('map:zoomto:centerzoom',
             function(event, mapLoc) {
               map.setView([mapLoc.centerLat, mapLoc.centerLng],
-                mapLoc.zoom);
+                mapLoc.zoom, {animate: false});
             }
           );
 
@@ -76,19 +88,20 @@ angular.module('iswpApp')
 
           $rootScope.$on('map:zoomto:state',
             function(event) {
-              map.setView(stateCenter, stateZoom);
+              map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
+                STATE_MAP_CONFIG.zoom, {animate: false});
             }
           );
 
           $rootScope.$on('map:togglelock',
             function(event, isLocked) {
-              scope.isLocked = isLocked;
+              scope.mapLocked = isLocked;
             }
           );
 
           $rootScope.$on('map:togglehide',
             function(event, isHidden) {
-              scope.isHidden = isHidden;
+              scope.mapHidden = isHidden;
             }
           );
 
@@ -131,8 +144,8 @@ angular.module('iswpApp')
 
           //helper to set view bounds based on current state
           var setViewBounds = function() {
-            //do nothing if the map isLocked
-            if (scope.isLocked) {
+            //do nothing if the map is locked
+            if (scope.mapLocked) {
               return;
             }
 
@@ -159,7 +172,8 @@ angular.module('iswpApp')
 
               case 'needs.type':
                 //For needs.type, always just go to state view
-                map.setView(stateCenter, stateZoom);
+                map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
+                  STATE_MAP_CONFIG.zoom, {animate: false});
                 break;
 
               case 'needs.county':
@@ -199,8 +213,9 @@ angular.module('iswpApp')
             if (currentState === 'needs.summary') {
               MapLayerService.showRegions(map);
               removeLegend();
-              if (!scope.isLocked) {
-                map.setView(stateCenter, stateZoom);
+              if (!scope.mapLocked) {
+                map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
+                  STATE_MAP_CONFIG.zoom, {animate: false});
               }
               return; //don't have anything else to do
             }

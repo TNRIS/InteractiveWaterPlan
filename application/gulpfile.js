@@ -110,7 +110,6 @@ gulp.task('scripts-client', function () {
   return gulp.src(paths.clientScripts)
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
-    .pipe(jshint.reporter('fail'))
     .pipe(gutil.env.type === 'production' ? ngmin() : gutil.noop())
     .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
     .pipe(concat('scripts.js'))
