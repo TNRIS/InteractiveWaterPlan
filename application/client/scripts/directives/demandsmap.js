@@ -3,7 +3,7 @@
 
 angular.module('iswpApp')
   .constant('DEMANDS_ENTITY_STYLE', {
-    color: '#000',
+    color: '#fff',
     weight: 1,
     opacity: 0.5,
     fillOpacity: 0.75,
