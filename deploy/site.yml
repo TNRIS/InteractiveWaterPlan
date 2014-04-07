@@ -59,14 +59,14 @@
     file: path={{ app_dir }} state=directory recurse=yes owner={{ water_plan_user }} group={{ water_plan_user }}
 
   - name: build app dist
-    local_action: command chdir=../application grunt build --force
+    local_action: command chdir=../application gulp dist --type production
     sudo: no
 
   - name: send dist build to tmp server directory
     synchronize: src=../application/dist/ dest={{ tmp_dist }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
 
   - name: install npm packages
-    npm: path={{ tmp_dist }}
+    npm: path={{ tmp_dist }} production=yes
     sudo_user: "{{ water_plan_user }}"
 
   - name: move tmp server directory into production
