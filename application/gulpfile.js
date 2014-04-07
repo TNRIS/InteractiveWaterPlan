@@ -7,9 +7,7 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var minifyCSS = require('gulp-minify-css');
 var ngmin = require('gulp-ngmin');
-var rev = require('gulp-rev');
 var rimraf = require('gulp-rimraf');
-var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 
 var dirs = {
