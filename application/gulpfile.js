@@ -1,6 +1,7 @@
 'use strict';
 
 var compass = require('gulp-compass');
+var concat = require('gulp-concat');
 var flatten = require('gulp-flatten');
 var gulp = require('gulp');
 var minifyHtml = require('gulp-minify-html');
@@ -10,19 +11,46 @@ var rev = require('gulp-rev');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
-var usemin = require('gulp-usemin');
 
 var dirs = {
+    bower: 'client/bower_components',
     build: 'build',
     client: 'client',
+    clientScripts: 'client/scripts',
     pub: 'build/public',
+    scripts: 'build/public/scripts',
+    styles: 'build/public/styles',
     server: 'server',
-    tmp: 'build/.tmp',
-    usemin: 'build/.tmp/usemin'
-}
+    tmp: '.tmp'
+  };
+
+var paths = {
+    clientScripts: [
+      dirs.clientScripts + '/**/*.js',
+      '!' + dirs.clientScripts + '/shims/*.js'
+    ],
+    compass: dirs.client + '/styles/main.scss',
+    serverDir: dirs.server + '/**/*',
+    serverFile: 'server.js',
+    views: dirs.client + '/views/**/*.html'
+  };
+
+gulp.task('build', ['misc', 'scripts', 'styles', 'views']);
+
+gulp.task('clean', ['clean-build', 'clean-tmp']);
+
+gulp.task('clean-build', function () {
+  return gulp.src(dirs.build)
+    .pipe(rimraf());
+});
+
+gulp.task('clean-tmp', function () {
+  return gulp.src(dirs.tmp)
+    .pipe(rimraf());
+});
 
 gulp.task('compass', function () {
-  return gulp.src(dirs.client + '/styles/main.scss')
+  return gulp.src(paths.compass)
     .pipe(compass({
       css: dirs.tmp + '/styles',
       font: dirs.client + '/styles/fonts',
@@ -33,59 +61,112 @@ gulp.task('compass', function () {
     .pipe(gulp.dest(dirs.tmp));
 });
 
-gulp.task('usemin', ['compass'], function () {
-  return gulp.src(dirs.client + '/views/**/*.html')
-    .pipe(usemin({
-      css: [minifyCSS(), 'concat', rev()],
-      //html: [minifyHtml({empty: true})],
-      js: [ngmin(), uglify(), rev()]
-    }))
-    .pipe(gulp.dest(dirs.usemin));
-});
+gulp.task('misc', ['misc-fonts', 'misc-ico-and-txt', 'misc-images']);
 
-gulp.task('dist', function () {
-  gulp.src(dirs.usemin + '/scripts/*')
-    .pipe(gulp.dest(dirs.pub + '/scripts/'));
-  gulp.src(dirs.usemin + '/styles/*')
-    .pipe(gulp.dest(dirs.pub + '/styles/'));
-  gulp.src(dirs.usemin + '/**/*.html')
-    .pipe(gulp.dest(dirs.build + '/views/'));
-
-  gulp.src(dirs.client + '/scripts/shims/*')
-    .pipe(gulp.dest(dirs.pub + '/scripts/shims/'));
-  gulp.src(dirs.client + '/bower_components/**/*')
-    .pipe(gulp.dest(dirs.pub + '/'));
-  gulp.src(dirs.client + '/bower_components/**/*.{eot,svg,ttf,woff,otf}')
+gulp.task('misc-fonts', function () {
+  return gulp.src(dirs.client + '/bower_components/**/*.{eot,svg,ttf,woff,otf}')
     .pipe(flatten())
     .pipe(gulp.dest(dirs.pub + '/fonts/'));
-  gulp.src(dirs.client + '/bower_components/**/*.{png,jpg,jpeg,gif,webp,svg}')
+});
+
+gulp.task('misc-ico-and-txt', function () {
+  return gulp.src(dirs.client + '/*.{ico,txt}')
+    .pipe(gulp.dest(dirs.pub + '/'));
+});
+
+gulp.task('misc-images', function () {
+  return gulp.src(dirs.client + '/images/*.{jpg,png}')
+    .pipe(gulp.dest(dirs.pub + '/images/'));
+});
+
+gulp.task('scripts', ['scripts-bower', 'scripts-client', 'scripts-server', 'scripts-shims']);
+
+gulp.task('scripts-bower', function () {
+  var bower_dir = dirs.client + '/bower_components';
+
+  var vendor_scripts = [
+      dirs.bower + "/sugar/release/sugar-full.min.js",
+      dirs.bower + "/lodash/dist/lodash.compat.js",
+      dirs.bower + "/select2/select2.min.js",
+      dirs.bower + "/angular-ui-select2/src/select2.js",
+      dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
+      dirs.bower + "/angular-local-storage/angular-local-storage.min.js",
+      dirs.bower + "/angular-bootstrap/ui-bootstrap-tpls.js",
+      dirs.bower + "/angulartics/dist/angulartics.min.js",
+      dirs.bower + "/angulartics/dist/angulartics-ga.min.js"
+    ];
+
+  return gulp.src(vendor_scripts)
+    .pipe(concat('vendor.js'))
+    .pipe(gulp.dest(dirs.scripts));
+});
+
+gulp.task('scripts-client', function () {
+  return gulp.src(paths.clientScripts)
+    .pipe(ngmin())
+    .pipe(concat('scripts.js'))
+    .pipe(gulp.dest(dirs.scripts));
+});
+
+gulp.task('scripts-server', ['scripts-server-dir', 'scripts-server-file']);
+
+gulp.task('scripts-server-dir', function () {
+  return gulp.src(paths.serverDir)
+    .pipe(gulp.dest(dirs.build + '/server/'));
+});
+
+gulp.task('scripts-server-file', function () {
+  return gulp.src(paths.serverFile)
+    .pipe(gulp.dest(dirs.build + '/'));
+});
+
+gulp.task('scripts-shims', function () {
+  return gulp.src(dirs.client + '/scripts/shims/*')
+    .pipe(gulp.dest(dirs.pub + '/scripts/shims/'));
+});
+
+gulp.task('styles', ['styles-compass', 'styles-images', 'styles-vendor']);
+
+gulp.task('styles-compass', ['compass'], function () {
+  return gulp.src(dirs.tmp + '/main.css')
+    .pipe(gulp.dest(dirs.styles));
+});
+
+gulp.task('styles-images', function () {
+  return gulp.src(dirs.client + '/bower_components/**/*.{png,jpg,jpeg,gif,webp,svg}')
     .pipe(flatten())
     .pipe(gulp.dest(dirs.pub + '/styles/'));
-  gulp.src(dirs.client + '/*.{ico,txt}')
-    .pipe(gulp.dest(dirs.pub + '/'));
-  gulp.src(dirs.client + '/images/*.jpg')
-    .pipe(gulp.dest(dirs.pub + '/images/'));
-
-  gulp.src(dirs.server + '/**/*')
-    .pipe(gulp.dest(dirs.build + '/server/'));
-  gulp.src('server.js')
-    .pipe(gulp.dest(dirs.build + '/'));
-
-  gulp.src(dirs.tmp)
-    .pipe(rimraf());
 });
 
-gulp.task('clean', function () {
-  return gulp.src(dirs.build)
-    .pipe(rimraf());
+gulp.task('styles-vendor', function () {
+  var vendor_styles = [
+    dirs.bower + "/font-awesome/css/font-awesome.min.css",
+    dirs.bower + "/select2/select2.css"
+  ];
+
+  return gulp.src(vendor_styles)
+    .pipe(concat('vendor.css'))
+    .pipe(minifyCSS())
+    .pipe(gulp.dest(dirs.styles));
 });
 
-gulp.task('serve', function () {
-  gulp.watch(dirs.client + '/styles/*.scss', ['compass']);
-
-  var app = require('./server.js');
+gulp.task('views', function () {
+  return gulp.src(paths.views)
+    .pipe(gulp.dest(dirs.build + '/views/'));
 });
 
-gulp.task('serve-dist', function () {
+gulp.task('serve', ['build', 'serve-build']);
+
+gulp.task('serve-build', ['scripts-server'], function () {
   var app = require('./' + dirs.build + '/server.js');
 });
+
+gulp.task('watch', function () {
+  gulp.watch(paths.clientScripts, ['scripts-client']);
+  gulp.watch(paths.compass, ['styles-compass']);
+  gulp.watch(paths.serverDir, ['scripts-server-dir', 'serve-build']);
+  gulp.watch(paths.serverFile, ['scripts-server-file', 'serve-build']);
+  gulp.watch(paths.views, ['views']);
+});
+
+gulp.task('default', ['watch', 'serve']);

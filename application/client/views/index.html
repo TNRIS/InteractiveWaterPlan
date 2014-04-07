@@ -13,15 +13,8 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />
-    <!-- build:css(client) styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="bower_components/select2/select2.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(build/.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/vendor.css">
     <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
   </head>
   <body ng-app="iswpApp">
     <!--[if lte IE 8]>
@@ -103,12 +96,12 @@
     </script>
 
     <!--[if lt IE 9]>
-    <script src="scripts/shims/es5-shim.js"></script>
-    <script src="scripts/shims/json3.js"></script>
+      <script src="scripts/shims/es5-shim.js"></script>
+      <script src="scripts/shims/json3.js"></script>
     <![endif]-->
 
     <!--[if lte IE 9]>
-    <script src="scripts/shims/typedarray.js"></script>
+      <script src="scripts/shims/typedarray.js"></script>
     <![endif]-->
 
     <!-- CDN-hosted scripts -->
@@ -125,51 +118,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-cookies.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"></script>
 
-    <!-- build:js(client) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/sugar/release/sugar-full.min.js"></script>
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-    <script src="bower_components/select2/select2.min.js"></script>
-    <script src="bower_components/angular-ui-select2/src/select2.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="bower_components/angular-local-storage/angular-local-storage.min.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
-    <script src="bower_components/angulartics/dist/angulartics-ga.min.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js(client) scripts/scripts.js -->
-    <script src="scripts/vendor/esriBasemapLayer.js"></script>
-    <script src="scripts/vendor/bingLayer.js"></script>
-    <script src="scripts/vendor/oms.js"></script>
-    <script src="scripts/vendor/ng-google-chart.js"></script>
-    <script src="scripts/vendor/ng-google-viz.js"></script>
-    <script src="scripts/vendor/Smart-Table.debug.js"></script>
-    <script src="scripts/config.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/states.js"></script>
-    <script src="scripts/controllers/needsctrl.js"></script>
-    <script src="scripts/controllers/needs/needsSummaryTableCtrl.js"></script>
-    <script src="scripts/controllers/needs/needsRegionTableCtrl.js"></script>
-    <script src="scripts/controllers/needs/needsCountyTableCtrl.js"></script>
-    <script src="scripts/controllers/needs/needsEntityTypeTableCtrl.js"></script>
-    <script src="scripts/controllers/needs/needsEntityTableCtrl.js"></script>
-    <script src="scripts/controllers/themectrl.js"></script>
-    <script src="scripts/controllers/mapcontrolsctrl.js"></script>
-    <script src="scripts/controllers/yearselectctrl.js"></script>
-    <script src="scripts/services/needsservice.js"></script>
-    <script src="scripts/services/entityservice.js"></script>
-    <script src="scripts/services/regionservice.js"></script>
-    <script src="scripts/services/countyservice.js"></script>
-    <script src="scripts/services/legendservice.js"></script>
-    <script src="scripts/services/maplayerservice.js"></script>
-    <script src="scripts/filters/filters.js"></script>
-    <script src="scripts/directives/callout.js"></script>
-    <script src="scripts/directives/placeselects.js"></script>
-    <script src="scripts/directives/needslink.js"></script>
-    <script src="scripts/directives/needsmap.js"></script>
-    <script src="scripts/directives/itemsperpage.js"></script>
-    <!-- endbuild -->
+    <script src="scripts/vendor.js"></script>
+    <script src="scripts/scripts.js"></script>
 </body>
 </html>
