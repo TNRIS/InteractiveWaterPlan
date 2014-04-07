@@ -18,8 +18,6 @@ module.exports = function(app) {
       gaTrackingCode: ''
     });
 
-    app.use(require('connect-livereload')());
-
     // Disable caching of scripts for easier testing
     app.use(function noCache(req, res, next) {
       if (req.url.indexOf('/scripts/') === 0) {
@@ -32,8 +30,8 @@ module.exports = function(app) {
 
     // app.use(express.compress());
     app.use(express.static(path.join(config.root, '.tmp')));
-    app.use(express.static(path.join(config.root, 'client')));
-    app.set('views', config.root + '/client/views');
+    app.use(express.static(path.join(config.root, 'public')));
+    app.set('views', config.root + '/views');
   });
 
   app.configure('production', function(){
