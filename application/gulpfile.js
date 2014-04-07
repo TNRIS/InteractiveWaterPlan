@@ -4,7 +4,7 @@ var compass = require('gulp-compass');
 var concat = require('gulp-concat');
 var flatten = require('gulp-flatten');
 var gulp = require('gulp');
-var minifyHtml = require('gulp-minify-html');
+var gutil = require('gulp-util');
 var minifyCSS = require('gulp-minify-css');
 var ngmin = require('gulp-ngmin');
 var rev = require('gulp-rev');
@@ -103,7 +103,8 @@ gulp.task('scripts-bower', function () {
 
 gulp.task('scripts-client', function () {
   return gulp.src(paths.clientScripts)
-    .pipe(ngmin())
+    .pipe(gutil.env.type === 'production' ? ngmin() : gutil.noop())
+    .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
     .pipe(concat('scripts.js'))
     .pipe(gulp.dest(dirs.scripts));
 });
@@ -129,6 +130,7 @@ gulp.task('styles', ['styles-compass', 'styles-images', 'styles-vendor']);
 
 gulp.task('styles-compass', ['compass'], function () {
   return gulp.src(dirs.tmp + '/main.css')
+    .pipe(gutil.env.type === 'production' ? minifyCSS() : gutil.noop())
     .pipe(gulp.dest(dirs.styles));
 });
 
@@ -146,7 +148,7 @@ gulp.task('styles-vendor', function () {
 
   return gulp.src(vendor_styles)
     .pipe(concat('vendor.css'))
-    .pipe(minifyCSS())
+    .pipe(gutil.env.type === 'production' ? minifyCSS() : gutil.noop())
     .pipe(gulp.dest(dirs.styles));
 });
 
