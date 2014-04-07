@@ -14,12 +14,12 @@ var uglify = require('gulp-uglify');
 
 var dirs = {
     bower: 'client/bower_components',
-    build: 'build',
     client: 'client',
     clientScripts: 'client/scripts',
-    pub: 'build/public',
-    scripts: 'build/public/scripts',
-    styles: 'build/public/styles',
+    dist: 'dist',
+    pub: 'dist/public',
+    scripts: 'dist/public/scripts',
+    styles: 'dist/public/styles',
     server: 'server',
     tmp: '.tmp'
   };
@@ -35,12 +35,12 @@ var paths = {
     views: dirs.client + '/views/**/*.html'
   };
 
-gulp.task('build', ['misc', 'scripts', 'styles', 'views']);
+gulp.task('dist', ['misc', 'scripts', 'styles', 'views']);
 
-gulp.task('clean', ['clean-build', 'clean-tmp']);
+gulp.task('clean', ['clean-dist', 'clean-tmp']);
 
-gulp.task('clean-build', function () {
-  return gulp.src(dirs.build)
+gulp.task('clean-dist', function () {
+  return gulp.src(dirs.dist)
     .pipe(rimraf());
 });
 
@@ -113,12 +113,12 @@ gulp.task('scripts-server', ['scripts-server-dir', 'scripts-server-file']);
 
 gulp.task('scripts-server-dir', function () {
   return gulp.src(paths.serverDir)
-    .pipe(gulp.dest(dirs.build + '/server/'));
+    .pipe(gulp.dest(dirs.dist + '/server/'));
 });
 
 gulp.task('scripts-server-file', function () {
   return gulp.src(paths.serverFile)
-    .pipe(gulp.dest(dirs.build + '/'));
+    .pipe(gulp.dest(dirs.dist + '/'));
 });
 
 gulp.task('scripts-shims', function () {
@@ -154,20 +154,20 @@ gulp.task('styles-vendor', function () {
 
 gulp.task('views', function () {
   return gulp.src(paths.views)
-    .pipe(gulp.dest(dirs.build + '/views/'));
+    .pipe(gulp.dest(dirs.dist + '/views/'));
 });
 
-gulp.task('serve', ['build', 'serve-build']);
+gulp.task('serve', ['dist', 'serve-dist']);
 
-gulp.task('serve-build', ['scripts-server'], function () {
-  var app = require('./' + dirs.build + '/server.js');
+gulp.task('serve-dist', ['scripts-server'], function () {
+  var app = require('./' + dirs.dist + '/server.js');
 });
 
 gulp.task('watch', function () {
   gulp.watch(paths.clientScripts, ['scripts-client']);
   gulp.watch(paths.compass, ['styles-compass']);
-  gulp.watch(paths.serverDir, ['scripts-server-dir', 'serve-build']);
-  gulp.watch(paths.serverFile, ['scripts-server-file', 'serve-build']);
+  gulp.watch(paths.serverDir, ['scripts-server-dir', 'serve-dist']);
+  gulp.watch(paths.serverFile, ['scripts-server-file', 'serve-dist']);
   gulp.watch(paths.views, ['views']);
 });
 
