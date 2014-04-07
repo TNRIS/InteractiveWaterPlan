@@ -2,15 +2,16 @@
 'use strict';
 
 angular.module('iswpApp')
-  .constant('NEEDS_ENTITY_STYLE', {
-    color: '#000',
+  .constant('DEMANDS_ENTITY_STYLE', {
+    color: '#fff',
     weight: 1,
     opacity: 0.5,
-    fillOpacity: 0.75
+    fillOpacity: 0.75,
+    fillColor: '#444'
   })
-  .directive('needsMap',
+  .directive('demandsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
-      NeedsService, EntityService, CountyService, LegendService, NEEDS_ENTITY_STYLE) {
+      DemandsService, EntityService, CountyService, LegendService, DEMANDS_ENTITY_STYLE) {
 
       var minRadius = 6,
         maxRadius = 14;
@@ -45,9 +46,6 @@ angular.module('iswpApp')
 
           //Use attribution control without 'Leaflet' prefix
           L.control.attribution({prefix: false}).addTo(map);
-
-          //Create a legend for the Needs colors
-          var legendControl = LegendService.Needs.createLegend();
 
           MapLayerService.setupRegionLayer();
           MapLayerService.setupBaseLayers(map);
@@ -111,23 +109,10 @@ angular.module('iswpApp')
                 entityFeature.bringToFront();
               }
               else {
-                entityFeature.setStyle(NEEDS_ENTITY_STYLE);
+                entityFeature.setStyle(DEMANDS_ENTITY_STYLE);
               }
             }
           );
-
-          //helper functions
-          var showLegend = function() {
-            if (!legendControl.isAdded) {
-              legendControl.addTo(map);
-            }
-          };
-
-          var removeLegend = function() {
-            if (legendControl.isAdded) {
-              legendControl.removeFrom(map);
-            }
-          };
 
           //helper to set view bounds based on current state
           var setViewBounds = function() {
@@ -146,7 +131,7 @@ angular.module('iswpApp')
             };
 
             switch (currentState) {
-              case 'needs.region':
+              case 'demands.region':
                 var regionFeat = RegionService.getRegion($stateParams.region);
 
                 //Extend with region bounds to make sure we always have a nice view
@@ -157,12 +142,12 @@ angular.module('iswpApp')
                 fitBounds(extendedBounds);
                 break;
 
-              case 'needs.type':
-                //For needs.type, always just go to state view
+              case 'demands.type':
+                //For demands.type, always just go to state view
                 map.setView(stateCenter, stateZoom);
                 break;
 
-              case 'needs.county':
+              case 'demands.county':
                 //Extend with county bounds to make sure we always have a nice view
                 // of the entire region even if there aren't many entities
                 CountyService.fetchCounty($stateParams.county)
@@ -196,9 +181,8 @@ angular.module('iswpApp')
 
             var currentState = $state.current.name;
 
-            if (currentState === 'needs.summary') {
+            if (currentState === 'demands.summary') {
               MapLayerService.showRegions(map);
-              removeLegend();
               if (!scope.isLocked) {
                 map.setView(stateCenter, stateZoom);
               }
@@ -206,13 +190,12 @@ angular.module('iswpApp')
             }
             else {
               MapLayerService.removeRegions(map);
-              showLegend();
             }
 
 
-            //Grab the current needs data and entities
-            var needsData = NeedsService.getCurrent(),
-              entities = EntityService.getEntities(_.pluck(needsData, 'EntityId'));
+            //Grab the current demands data and entities
+            var demandsData = DemandsService.getCurrent(),
+              entities = EntityService.getEntities(_.pluck(demandsData, 'EntityId'));
 
             if (!entities || entities.length === 0) {
               return;
@@ -221,41 +204,33 @@ angular.module('iswpApp')
             //grab the current year
             currentYear = $stateParams.year;
 
-            var yearNeedKey = 'N' + currentYear,
-              yearPctKey = 'NPD' + currentYear,
-              maxNeed = _.max(needsData, yearNeedKey)[yearNeedKey],
-              minNeed = _.min(needsData, yearNeedKey)[yearNeedKey];
+            var yearDemandKey = 'D' + currentYear,
+              maxDemand = _.max(demandsData, yearDemandKey)[yearDemandKey],
+              minDemand = _.min(demandsData, yearDemandKey)[yearDemandKey];
 
 
             //TODO: figure out how to make the larger entities go on the bottom
             //build marker for each entity
             _.each(entities, function(entity) {
-              var need = NeedsService.getForEntity(entity.EntityId);
-              var pctOfDemand = need[yearPctKey];
+              var demand = DemandsService.getForEntity(entity.EntityId);
 
-              //find the first color with limit >= pctOfDemand
-              var colorEntry = _.find(LegendService.Needs.entityColors, function(c) {
-                return c.limit >= pctOfDemand;
-              });
+              var scaledRadius = _calculateScaledValue(maxDemand, minDemand,
+                maxRadius, minRadius, demand[yearDemandKey]);
 
-              var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
-                maxRadius, minRadius, need[yearNeedKey]);
-
-              var featureOpts = _.extend({}, NEEDS_ENTITY_STYLE, {
+              var featureOpts = _.extend({}, DEMANDS_ENTITY_STYLE, {
                 radius: scaledRadius,
-                fillColor: colorEntry.color,
                 entity: entity //save the entity data in the marker
               });
 
               var marker = L.circleMarker([entity.Latitude, entity.Longitude],
                 featureOpts).addTo(entityLayer);
 
-              var labelString = entity.EntityName + '<br/>' +
-                'Needs: ' + pctOfDemand + '% of Demands';
+              var labelString = entity.EntityName;
+              //TODO: Show demands acre-feet?
 
               marker.bindLabel(labelString);
 
-              if (currentState === 'needs.entity') {
+              if (currentState === 'demands.entity') {
                 marker.label.options.noHide = true;
                 marker.showLabel();
               }
@@ -271,13 +246,13 @@ angular.module('iswpApp')
             oms.addListener('click', function(marker) {
               if (!marker.options.entity) { return; }
 
-              $state.go('needs.entity', {
+              $state.go('demands.entity', {
                 year: currentYear,
                 entityId: marker.options.entity.EntityId
               });
             });
 
-            //Set the map bounds according to the current needs view
+            //Set the map bounds according to the current demands view
             setViewBounds();
 
           };

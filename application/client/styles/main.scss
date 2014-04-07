@@ -17,6 +17,10 @@ html.lt-ie9 {
   .container { width: 790px; }
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .esri-attribution-logo {
   visibility: hidden;
 }
@@ -133,6 +137,10 @@ body {
   }
 }
 
+ul.theme-nav {
+  display: inline-block;
+}
+
 .year-nav {
   margin-top: 8px;
 
@@ -171,6 +179,7 @@ body {
 
 .tree-map {
   height: 500px;
+  text-align: center;
 }
 
 .tree-map-tooltip {

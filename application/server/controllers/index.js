@@ -48,6 +48,7 @@ exports.index = function(req, res) {
   // });
 
   res.render('index', {
+    pageName: 'home',
     ISWP_VARS: JSON.stringify({
       regions: regions,
       counties: counties,

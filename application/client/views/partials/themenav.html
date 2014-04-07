@@ -1,0 +1,16 @@
+<ul class="theme-nav nav nav-pills">
+  <li class="dropdown" ng-class="{'active': isActive()}">
+    <a class="dropdown-toggle" href="#">
+      {{themeTitle}} <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="" ng-click="showSummary()">Regional Summary</a></li>
+      <li class="divider"></li>
+      <li ng-repeat="type in entityTypes">
+        <a href="" ng-click="showEntityType(type)">
+          {{type.name}}
+        </a>
+      </li>
+    </ul>
+  </li>
+<ul>

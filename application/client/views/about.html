@@ -10,21 +10,12 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/styles/main.css">
+    <link type="text/plain" rel="author" href="/humans.txt" />
   </head>
   <body data-spy="scroll" data-target=".about-nav-container">
     <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li>
-              <a href="/">Home</a>
-          </li>
-          <li class="active">
-              <a href="/about">About</a>
-          </li>
-        </ul>
-        <img src="/images/twdb_logo_color.png" alt="TWDB logo" height="60"/>
-        <h1>2012 Texas State Water Plan</h1>
-      </div>
+
+      <% include partials/_header.html %>
 
       <div class="row">
         <div class="col-md-3 hidden-sm hidden-xs about-nav-container">
@@ -311,16 +302,8 @@
         </div>
       </div>
 
-      <div class="footer">
-        <p>This website is brought to you by the <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a></p>
-        <p>
-          <a href="/about#SitePolicies" title="Site Policies">Site Policies</a> |
-          <a href="http://www.texas.gov/" title="Texas Online">Texas Online</a> |
-          <a href="http://www.governor.texas.gov/homeland" title="Homeland Security">Homeland Security</a> |
-          <a href="http://www2.tsl.state.tx.us/trail" title="TRAIL">TRAIL</a> |
-          <a href="mailto:InteractiveSWP@twdb.texas.gov" title="Contact Us">Contact Us</a>
-        </p>
-      </div>
+      <% include partials/_footer.html %>
+
     </div>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

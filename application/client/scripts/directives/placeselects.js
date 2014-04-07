@@ -41,8 +41,9 @@ angular.module('iswpApp')
           }
 
           var currentYear = $stateParams.year;
+          var statePrefix = _.first($state.current.name.split('.'));
 
-          $state.go('needs.region', {
+          $state.go(statePrefix + '.region', {
             year: currentYear,
             region: region
           });
@@ -56,8 +57,9 @@ angular.module('iswpApp')
           }
 
           var currentYear = $stateParams.year;
+          var statePrefix = _.first($state.current.name.split('.'));
 
-          $state.go('needs.county', {
+          $state.go(statePrefix + '.county', {
             year: currentYear,
             county: county
           });
@@ -71,8 +73,9 @@ angular.module('iswpApp')
           }
 
           var currentYear = $stateParams.year;
+          var statePrefix = _.first($state.current.name.split('.'));
 
-          $state.go('needs.entity', {
+          $state.go(statePrefix + '.entity', {
             year: currentYear,
             entityId: entityId
           });
