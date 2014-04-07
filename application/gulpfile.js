@@ -61,7 +61,7 @@ gulp.task('compass', function () {
     .pipe(gulp.dest(dirs.tmp));
 });
 
-gulp.task('misc', ['misc-fonts', 'misc-ico-and-txt', 'misc-images']);
+gulp.task('misc', ['misc-fonts', 'misc-ico-and-txt', 'misc-images', 'misc-package-json']);
 
 gulp.task('misc-fonts', function () {
   return gulp.src(dirs.client + '/bower_components/**/*.{eot,svg,ttf,woff,otf}')
@@ -77,6 +77,11 @@ gulp.task('misc-ico-and-txt', function () {
 gulp.task('misc-images', function () {
   return gulp.src(dirs.client + '/images/*.{jpg,png}')
     .pipe(gulp.dest(dirs.pub + '/images/'));
+});
+
+gulp.task('misc-package-json', function () {
+  return gulp.src('package.json')
+    .pipe(gulp.dest(dirs.dist));
 });
 
 gulp.task('scripts', ['scripts-bower', 'scripts-client', 'scripts-server', 'scripts-shims']);
