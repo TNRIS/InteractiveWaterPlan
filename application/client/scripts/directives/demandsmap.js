@@ -7,7 +7,7 @@ angular.module('iswpApp')
     weight: 1,
     opacity: 0.5,
     fillOpacity: 0.75,
-    fillColor: '#a00' //TODO
+    fillColor: '#444'
   })
   .directive('demandsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,

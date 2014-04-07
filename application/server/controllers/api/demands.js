@@ -8,9 +8,11 @@ var sqlite3 = require('sqlite3'),
 
 var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
 
+//The source db has 'EntityId' formatted as entityID for the demands
+// data so we need to select it as `EntityId` in each SQL statement
 
 exports.getAllDemands = function(req, res) {
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand';
 
@@ -39,7 +41,7 @@ exports.getDemandsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE WugRegion == ? ORDER BY EntityName';
@@ -59,7 +61,7 @@ exports.getDemandsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE WugCounty == ? ORDER BY EntityName';
@@ -79,7 +81,7 @@ exports.getDemandsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE WugType == ? ORDER BY EntityName';
@@ -100,7 +102,7 @@ exports.getDemandsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE EntityId == ? ORDER BY EntityName';

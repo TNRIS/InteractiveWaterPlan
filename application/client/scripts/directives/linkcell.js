@@ -28,7 +28,7 @@ angular.module('iswpApp')
     return {
       restrict: 'A',
       require: '^smartTable',
-      template: '<a ng-href="{{stateRef}}" title="View needs for {{dataRow[column.map]}}">' +
+      template: '<a ng-href="{{stateRef}}" title="View data for {{dataRow[column.map]}}">' +
         '{{dataRow[column.map]}}</a>',
       link: function postLink(scope, element, attrs, ctrl) {
         var mappedField = scope.column.map,

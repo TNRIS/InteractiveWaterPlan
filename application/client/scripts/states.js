@@ -4,7 +4,7 @@ angular.module('iswpApp')
   .config(function($stateProvider, $urlRouterProvider) {
 
       //redirect any bad/unmapped route to the beginning
-      $urlRouterProvider.otherwise('/needs/2010/state');
+      $urlRouterProvider.otherwise('/demands/2010/state');
 
       //-- NEEDS --
       var needsResolver = function(type, typeIdProperty) {
@@ -91,8 +91,37 @@ angular.module('iswpApp')
           controller: 'DemandsSummaryCtrl',
           templateUrl: 'partials/demands/demands_table.html'
         })
-        ;
-
+        .state('demands.region', {
+          url: '/:year/region/:region', // appended to /demands
+          resolve: demandsResolver('region', 'region'),
+          controller: 'DemandsRegionCtrl',
+          templateUrl: 'partials/demands/demands_table.html'
+        })
+        .state('demands.county', {
+          url: '/:year/county/:county', // appended to /demands
+          resolve: demandsResolver('county', 'county'),
+          controller: 'DemandsCountyCtrl',
+          templateUrl: 'partials/demands/demands_table.html'
+        })
+        .state('demands.type', {
+          url: '/:year/type/:entityType', // appended to /demands
+          resolve: demandsResolver('type', 'entityType'),
+          controller: 'DemandsEntityTypeCtrl',
+          templateUrl: 'partials/demands/demands_table.html'
+        })
+        .state('demands.entity', {
+          url: '/:year/entity/:entityId', // appended to /demands
+          resolve: {
+            demandsData: function(DemandsService, $stateParams) {
+              return DemandsService.fetch('entity', $stateParams.entityId);
+            },
+            entitySummary: function(EntityService, $stateParams) {
+              return EntityService.fetchSummary($stateParams.entityId);
+            }
+          },
+          controller: 'DemandsEntityCtrl',
+          templateUrl: 'partials/demands/demands_table.html'
+        });
 
         //TODO: states for supplies, wms (later phases)
     }
