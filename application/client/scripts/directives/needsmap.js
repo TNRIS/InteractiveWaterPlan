@@ -183,8 +183,14 @@ angular.module('iswpApp')
             //TODO: figure out how to make the larger entities go on the bottom
             //build marker for each entity
             _.each(entities, function(entity) {
-              var need = NeedsService.getForEntity(entity.EntityId);
-              var pctOfDemand = need[yearPctKey];
+              var entityTotalNeed = _.reduce(
+                _.where(needsData, {'EntityId': entity.EntityId}),
+                function (sum, data) {
+                  return sum + data[yearNeedKey];
+                },
+              0);
+
+              var pctOfDemand = _.find(needsData, {'EntityId': entity.EntityId})[yearPctKey];
 
               //find the first color with limit >= pctOfDemand
               var colorEntry = _.find(LegendService.Needs.entityColors, function(c) {
@@ -192,7 +198,7 @@ angular.module('iswpApp')
               });
 
               var scaledRadius = _calculateScaledValue(maxNeed, minNeed,
-                maxRadius, minRadius, need[yearNeedKey]);
+                maxRadius, minRadius, entityTotalNeed);
 
               var featureOpts = _.extend({}, NEEDS_ENTITY_STYLE, {
                 radius: scaledRadius,

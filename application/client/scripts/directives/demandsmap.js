@@ -165,10 +165,17 @@ angular.module('iswpApp')
             //TODO: figure out how to make the larger entities go on the bottom
             //build marker for each entity
             _.each(entities, function(entity) {
-              var demand = DemandsService.getForEntity(entity.EntityId);
+              var entityTotalDemand = _.reduce(
+                _.where(demandsData, {'EntityId': entity.EntityId}),
+                function (sum, data) {
+                  return sum + data[yearDemandKey];
+                },
+              0);
+
+              console.log(entityTotalDemand);
 
               var scaledRadius = _calculateScaledValue(maxDemand, minDemand,
-                maxRadius, minRadius, demand[yearDemandKey]);
+                maxRadius, minRadius, entityTotalDemand);
 
               var featureOpts = _.extend({}, DEMANDS_ENTITY_STYLE, {
                 radius: scaledRadius,

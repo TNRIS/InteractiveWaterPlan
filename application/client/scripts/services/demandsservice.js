@@ -31,13 +31,5 @@ angular.module('iswpApp')
       return prom;
     };
 
-    service.getForEntity = function(entityId) {
-      if (!currentData || currentData.length === 0) {
-        return null;
-      }
-
-      return _.find(currentData, {'EntityId': entityId});
-    };
-
     return service;
   });
