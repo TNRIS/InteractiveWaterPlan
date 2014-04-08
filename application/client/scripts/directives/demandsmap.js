@@ -118,13 +118,10 @@ angular.module('iswpApp')
               default:
                 fitBounds(entityLayerBounds);
             }
-
-
           };
 
           //called on stateChangeSuccess to update the map view, entities, etc
           var updateMapState = function() {
-
             //Clear the spiderfier instance and the entityLayer before creating
             // the new entity features
             oms.clearMarkers();
@@ -157,22 +154,16 @@ angular.module('iswpApp')
             //grab the current year
             currentYear = $stateParams.year;
 
-            var yearDemandKey = 'D' + currentYear,
-              maxDemand = _.max(demandsData, yearDemandKey)[yearDemandKey],
-              minDemand = _.min(demandsData, yearDemandKey)[yearDemandKey];
+            var sumsByEntityId = DemandsService.getSumsByEntityId(currentYear);
 
+            var maxDemand = _.max(sumsByEntityId, 'sum').sum,
+              minDemand = _.min(sumsByEntityId, 'sum').sum;
 
             //TODO: figure out how to make the larger entities go on the bottom
             //build marker for each entity
             _.each(entities, function(entity) {
-              var entityTotalDemand = _.reduce(
-                _.where(demandsData, {'EntityId': entity.EntityId}),
-                function (sum, data) {
-                  return sum + data[yearDemandKey];
-                },
-              0);
-
-              console.log(entityTotalDemand);
+              var entityTotalDemand = _.find(
+                sumsByEntityId, {'EntityId': '' + entity.EntityId}).sum;
 
               var scaledRadius = _calculateScaledValue(maxDemand, minDemand,
                 maxRadius, minRadius, entityTotalDemand);

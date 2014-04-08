@@ -31,5 +31,22 @@ angular.module('iswpApp')
       return prom;
     };
 
+    service.getSumsByEntityId = function(year) {
+      if (!currentData || currentData.length === 0) {
+        return null;
+      }
+
+      return _(currentData).groupBy('EntityId').map(function (rows, entityId) {
+        var sumForProp = _.reduce(rows, function(sum, curr) {
+          return sum + curr['D' + year];
+        }, 0);
+
+        return {
+          'EntityId': entityId,
+          'sum': sumForProp
+        };
+      }).value();
+    };
+
     return service;
   });

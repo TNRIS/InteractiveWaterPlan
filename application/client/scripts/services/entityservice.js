@@ -21,8 +21,6 @@ angular.module('iswpApp')
       return prom;
     };
 
-
-
     service.getEntity = function(entityId) {
       return _.first(service.getEntities(entityId));
     };

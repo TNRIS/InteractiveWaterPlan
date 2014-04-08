@@ -133,13 +133,10 @@ angular.module('iswpApp')
               default:
                 fitBounds(entityLayerBounds);
             }
-
-
           };
 
           //called on stateChangeSuccess to update the map view, entities, etc
           var updateMapState = function() {
-
             //Clear the spiderfier instance and the entityLayer before creating
             // the new entity features
             oms.clearMarkers();
@@ -174,21 +171,18 @@ angular.module('iswpApp')
             //grab the current year
             currentYear = $stateParams.year;
 
-            var yearNeedKey = 'N' + currentYear,
-              yearPctKey = 'NPD' + currentYear,
-              maxNeed = _.max(needsData, yearNeedKey)[yearNeedKey],
-              minNeed = _.min(needsData, yearNeedKey)[yearNeedKey];
+            var yearPctKey = 'NPD' + currentYear;
 
+            var sumsByEntityId = NeedsService.getSumsByEntityId(currentYear);
+
+            var maxNeed = _.max(sumsByEntityId, 'sum').sum,
+              minNeed = _.min(sumsByEntityId, 'sum').sum;
 
             //TODO: figure out how to make the larger entities go on the bottom
             //build marker for each entity
             _.each(entities, function(entity) {
-              var entityTotalNeed = _.reduce(
-                _.where(needsData, {'EntityId': entity.EntityId}),
-                function (sum, data) {
-                  return sum + data[yearNeedKey];
-                },
-              0);
+              var entityTotalNeed = _.find(
+                sumsByEntityId, {'EntityId': '' + entity.EntityId}).sum;
 
               var pctOfDemand = _.find(needsData, {'EntityId': entity.EntityId})[yearPctKey];
 
