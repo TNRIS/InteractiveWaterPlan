@@ -4,11 +4,7 @@ angular.module('iswpApp')
   .factory('ChartService', function ChartService($http, API_PATH, ISWP_VARS) {
     var service = {};
 
-
     service.buildEntityChartConfig = function(entitySummary, year) {
-
-      console.log("here");
-
       var demand = entitySummary['D'+ year],
           supply = entitySummary['WS'+ year],
           needs = entitySummary['N'+ year],
