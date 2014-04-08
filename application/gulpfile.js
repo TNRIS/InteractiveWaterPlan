@@ -111,8 +111,8 @@ gulp.task('scripts-client', function () {
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
     .pipe(gutil.env.type === 'production' ? ngmin() : gutil.noop())
-    .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
     .pipe(concat('scripts.js'))
+    .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
     .pipe(gulp.dest(dirs.scripts));
 });
 
