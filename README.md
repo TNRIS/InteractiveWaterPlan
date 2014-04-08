@@ -1,7 +1,5 @@
 # InteractiveStateWaterPlan App
 
-Generated with the [angular-fullstack](https://github.com/DaftMonk/generator-angular-fullstack) Yeoman generator.
-
 AngularJS (client-side app) files are in `application/client/`
 
 Express (server-side app) files are in `application/server/`
@@ -16,18 +14,13 @@ First make sure these are installed:
 
 ## Building
 
-1. Install `bower` and `grunt` globally: `npm install -g bower grunt`
+1. Install `bower` and `gulp` globally: `npm install -g bower gulp`
 2. Navigate to `application/` and run `bower install` and `npm install`
-3. Now you should be able to use any of the `grunt` tasks defined in `Gruntfile.js`
+3. Now you should be able to use any of the `gulp` tasks defined in `gulpfile.js`
 
-`grunt serve` will launch express in dev mode and watch files in client/ and server/
+`gulpe` will launch express and watch files for changes
 
-`grunt serve:dist` will launch express in production mode
-
-`grunt build` will build deployable dist/ folder
-
-`grunt` will run tests and build deployable dist/ folder
-
+`gulp dist` will build the app for production
 
 ## Deploying
 
