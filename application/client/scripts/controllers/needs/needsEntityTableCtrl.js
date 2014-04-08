@@ -67,6 +67,22 @@ angular.module('iswpApp')
         percentCol.map = 'NPD' + year;
       });
 
+      $scope.chartSelect = function(selectedItem) {
+        var rowId = $scope.chartConfig.data[selectedItem.row+1][4];
+
+        switch (rowId) {
+          case 'needs':
+            $scope.$state.go('needs.entity', $scope.$stateParams);
+            break;
+          case 'demands':
+            $scope.$state.go('demands.entity', $scope.$stateParams);
+            break;
+          //TODO: existing and supply
+          default:
+            break;
+        }
+      };
+
       return;
     }
   );
