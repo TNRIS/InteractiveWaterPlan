@@ -2,16 +2,10 @@
 'use strict';
 
 angular.module('iswpApp')
-  .constant('NEEDS_ENTITY_STYLE', {
-    color: '#000',
-    weight: 1,
-    opacity: 0.5,
-    fillOpacity: 0.75
-  })
   .directive('needsMap',
     function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
-      NeedsService, EntityService, CountyService, LegendService, STATE_MAP_CONFIG,
-      NEEDS_ENTITY_STYLE) {
+      NeedsService, EntityService, CountyService, LegendService, MapFactory,
+      STATE_MAP_CONFIG, NEEDS_ENTITY_STYLE) {
 
       var minRadius = 6,
         maxRadius = 14;
@@ -36,33 +30,10 @@ angular.module('iswpApp')
         },
         link: function postLink(scope, element, attrs) {
 
-          var map = L.map(element[0], {
-              center: [scope.mapCenterLat, scope.mapCenterLng],
-              zoom: scope.mapZoom,
-              attributionControl: false,
-              maxBounds: [[15, -150], [45, -50]],
-              minZoom: 5,
-              maxZoom: 12
-            });
-
-          //Use attribution control without 'Leaflet' prefix
-          L.control.attribution({prefix: false}).addTo(map);
-
-          map.on('moveend', function() {
-            $rootScope.$safeApply(function() {
-              var center = map.getCenter();
-              scope.mapCenterLat = center.lat;
-              scope.mapCenterLng = center.lng;
-
-              scope.mapZoom = map.getZoom();
-            });
-          });
+          var map = MapFactory.createMap(scope, element[0]);
 
           //Create a legend for the Needs colors
           var legendControl = LegendService.Needs.createLegend();
-
-          MapLayerService.setupRegionLayer();
-          MapLayerService.setupBaseLayers(map);
 
           var currentYear = $stateParams.year,
             entityLayer = L.featureGroup().addTo(map),
@@ -71,39 +42,6 @@ angular.module('iswpApp')
               keepSpiderfied: true,
               nearbyDistance: 5
             });
-
-          //setup some event listeners
-          $rootScope.$on('map:zoomto:centerzoom',
-            function(event, mapLoc) {
-              map.setView([mapLoc.centerLat, mapLoc.centerLng],
-                mapLoc.zoom, {animate: false});
-            }
-          );
-
-          $rootScope.$on('map:zoomto:bounds',
-            function(event, bounds) {
-              map.fitBounds(bounds);
-            }
-          );
-
-          $rootScope.$on('map:zoomto:state',
-            function(event) {
-              map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
-                STATE_MAP_CONFIG.zoom, {animate: false});
-            }
-          );
-
-          $rootScope.$on('map:togglelock',
-            function(event, isLocked) {
-              scope.mapLocked = isLocked;
-            }
-          );
-
-          $rootScope.$on('map:togglehide',
-            function(event, isHidden) {
-              scope.mapHidden = isHidden;
-            }
-          );
 
           $rootScope.$on('map:togglehighlight',
             function(event, entity) {
@@ -142,6 +80,12 @@ angular.module('iswpApp')
             }
           };
 
+          //always set animate to false with fitBounds
+          // because it seems to bug-out if caught in two animations
+          var fitBounds = function(bounds) {
+            map.fitBounds(bounds, {animate: false, maxZoom: 10});
+          };
+
           //helper to set view bounds based on current state
           var setViewBounds = function() {
             //do nothing if the map is locked
@@ -151,12 +95,6 @@ angular.module('iswpApp')
 
             var currentState = $state.current.name,
               entityLayerBounds = entityLayer.getBounds();
-
-            //always set animate to false with fitBounds
-            // because it seems to bug-out if caught in two animations
-            var fitBounds = function(bounds) {
-              map.fitBounds(bounds, {animate: false, maxZoom: 10});
-            };
 
             switch (currentState) {
               case 'needs.region':
