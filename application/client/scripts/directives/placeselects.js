@@ -7,7 +7,7 @@ angular.module('iswpApp')
   .directive('placeSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
     return {
       restrict: 'A',
-      templateUrl: 'partials/placeselects.html',
+      templateUrl: 'templates/placeselects.html',
       controller: function ($scope, $element, $attrs) {
 
         $scope.counties = ISWP_VARS.counties;

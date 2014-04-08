@@ -19,7 +19,7 @@ angular.module('iswpApp')
       formatFunction: 'number'
     };
 
-    var cellTemplateUrl = 'partials/linkcell.html';
+    var cellTemplateUrl = 'templates/linkcell.html';
 
     $scope.tableColumns = [
       {map: 'WugCounty', label: 'County'},

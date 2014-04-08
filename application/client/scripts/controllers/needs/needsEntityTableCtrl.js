@@ -37,7 +37,7 @@ angular.module('iswpApp')
         formatFunction: function(val) { return '' + val + '%'; }
       };
 
-      var cellTemplateUrl = 'partials/linkcell.html';
+      var cellTemplateUrl = 'templates/linkcell.html';
 
       $scope.tableColumns = [
         {map: 'EntityName', label: 'Name'},

@@ -16,7 +16,7 @@ angular.module('iswpApp')
       restrict: 'A',
       replace: true,
       scope: true,
-      templateUrl: 'partials/themenav.html',
+      templateUrl: 'templates/themenav.html',
       link: function postLink(scope, element, attrs) {
 
         var thisTheme = attrs.themeNav.toLowerCase();

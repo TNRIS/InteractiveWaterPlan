@@ -57,6 +57,7 @@ module.exports = function(app) {
   app.get('/about', about.about);
 
   app.get('/partials/*', index.partials);
+  app.get('/templates/*', index.templates);
 
   //Routes that correspond to the front-end Angular app
   app.get('/needs/*', index.index);

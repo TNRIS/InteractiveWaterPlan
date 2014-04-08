@@ -22,6 +22,23 @@ exports.partials = function(req, res) {
 };
 
 /**
+ * Send template, or 404 if it doesn't exist
+ */
+exports.templates = function(req, res) {
+  var stripped = req.url.split('.')[0];
+  var requestedView = path.join('./', stripped);
+  res.render(requestedView, function(err, html) {
+    if(err) {
+      console.log("Error retrieving template '" + requestedView + "'\n", err);
+      res.status(404);
+      res.send(404);
+    } else {
+      res.send(html);
+    }
+  });
+};
+
+/**
  * Send our single page app
  */
 exports.index = function(req, res) {

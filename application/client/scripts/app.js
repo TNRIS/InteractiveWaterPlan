@@ -8,6 +8,7 @@ if (!window.console) {
 
 angular.module('iswpApp', [
   'iswpApp.config',
+  'iswpApp.templates',
   'Scope.safeApply',
   'ngCookies',
   'ngSanitize',
