@@ -17,7 +17,8 @@ angular.module('iswpApp')
       map: 'D2010',
       label: 'Demand (acre-feet/year)',
       cellClass: 'number',
-      formatFunction: 'number'
+      formatFunction: 'number',
+      headerClass: 'text-center'
     };
 
     var cellTemplateUrl = 'templates/linkcell.html';
