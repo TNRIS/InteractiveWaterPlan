@@ -18,7 +18,7 @@ First make sure these are installed:
 2. Navigate to `application/` and run `bower install` and `npm install`
 3. Now you should be able to use any of the `gulp` tasks defined in `gulpfile.js`
 
-`gulpe` will launch express and watch files for changes
+`gulp` will launch express and watch files for changes
 
 `gulp dist` will build the app for production
 
