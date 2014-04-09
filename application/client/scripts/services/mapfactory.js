@@ -4,17 +4,10 @@ angular.module('iswpApp')
   .factory('MapFactory',
     function MapFactory($rootScope, MapLayerService, STATE_MAP_CONFIG) {
 
-      //scope must have:
-      //  mapCenterLat: double
-      //  mapCenterLng: double
-      //  mapZoom: int
-      //  mapLocked: bool
-      //  mapHidden: bool
-
-      function createMap(scope, element) {
+      function createMap(element, options) {
         var map = L.map(element, {
-          center: [scope.mapCenterLat, scope.mapCenterLng],
-          zoom: scope.mapZoom,
+          center: [options.centerLat, options.centerLng],
+          zoom: options.zoom,
           attributionControl: false,
           maxBounds: [[15, -150], [45, -50]],
           minZoom: 5,
@@ -26,16 +19,6 @@ angular.module('iswpApp')
 
         MapLayerService.setupRegionLayer();
         MapLayerService.setupBaseLayers(map);
-
-        map.on('moveend', function() {
-          $rootScope.$safeApply(function() {
-            var center = map.getCenter();
-            scope.mapCenterLat = center.lat;
-            scope.mapCenterLng = center.lng;
-
-            scope.mapZoom = map.getZoom();
-          });
-        });
 
         $rootScope.$on('map:zoomto:centerzoom',
           function(event, mapLoc) {
@@ -54,18 +37,6 @@ angular.module('iswpApp')
           function(event) {
             map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
               STATE_MAP_CONFIG.zoom, {animate: false});
-          }
-        );
-
-        $rootScope.$on('map:togglelock',
-          function(event, isLocked) {
-            scope.mapLocked = isLocked;
-          }
-        );
-
-        $rootScope.$on('map:togglehide',
-          function(event, isHidden) {
-            scope.mapHidden = isHidden;
           }
         );
 

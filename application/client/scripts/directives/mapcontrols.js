@@ -5,10 +5,6 @@ angular.module('iswpApp')
     return {
       restrict: 'A',
       replace: true,
-      scope: {
-        mapLocked: '=',
-        mapHidden: '='
-      },
       template: '' +
         '<div>' +
           '<ul class="map-controls nav nav-pills pull-right">' +
@@ -31,6 +27,9 @@ angular.module('iswpApp')
           '</ul>' +
         '</div>',
       link: function postLink(scope, element, attrs) {
+
+        scope.mapLocked = false;
+        scope.mapHidden = false;
 
         scope.toggleMapLock = function() {
           scope.mapLocked = !scope.mapLocked;
