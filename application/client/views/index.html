@@ -53,6 +53,8 @@
         </div>
       </noscript>
 
+      <div view-selects></div>
+
       <div class="row">
         <div class="col-md-12">
           <p ng-if="isState('needs')" class="lead">
@@ -105,9 +107,7 @@
         </div>
       </div>
 
-      <div place-selects></div>
-
-      <div ui-view></div>
+      <div class="data-view-container" ui-view></div>
 
       <% include partials/_footer.html %>
 

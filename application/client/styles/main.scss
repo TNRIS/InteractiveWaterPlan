@@ -117,6 +117,13 @@ body {
 }
 
 
+
+.data-view-container {
+  h3 {
+    margin-top: 10px;
+  }
+}
+
 .main-map {
   height: 300px;
   width: 100%;
@@ -253,11 +260,14 @@ ul.theme-nav {
   &.callout-note {
     background-color: #f4f8fa;
     border-color: #5bc0de;
-
   }
 }
 
-.place-select {
+.view-select-container {
+  margin-bottom: 16px;
+}
+
+.view-select {
   width: 75%;
 
   &.select2-container {

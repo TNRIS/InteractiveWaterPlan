@@ -4,10 +4,10 @@
 // How to check if mobile?
 
 angular.module('iswpApp')
-  .directive('placeSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
+  .directive('viewSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
     return {
       restrict: 'A',
-      templateUrl: 'templates/placeselects.html',
+      templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
         $scope.counties = ISWP_VARS.counties;
