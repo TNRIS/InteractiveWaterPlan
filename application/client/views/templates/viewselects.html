@@ -1,24 +1,27 @@
 <div class="view-select-container">
   <div class="row">
     <div class="col-md-12 hidden-xs">
-      <p>Select an area or entity from the following dropdowns:</p>
+      <p class="small">Select a type, area, or entity:</p>
     </div>
     <div class="col-md-12 visible-xs">
-      <p>Select an area from the following dropdowns:</p>
+      <p class="small">Select a type or area:</p>
     </div>
   </div>
 
   <div class="row hidden-xs">
-    <div class="col-md-3">
-      <select ui-select2 class="view-select" ng-model="selectedRegion" data-placeholder="Select a Type">
+    <div class="col-sm-3">
+      <select ui-select2 class="view-select" ng-model="selectedType" data-placeholder="Select a Type">
           <option value=""></option>
-          <option ng-repeat="region in regions" value="{{region}}">
-            Region {{region}}
-          </option>
+          <option value="summary">Regional Summary</option>
+          <optgroup label="Entity Types">
+            <option ng-repeat="type in entityTypes" value="{{type}}">
+              {{type | titleize}}
+            </option>
+          </optgroup>
       </select>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <select ui-select2 class="view-select" ng-model="selectedRegion" data-placeholder="Select a Region">
           <option value=""></option>
           <option ng-repeat="region in regions" value="{{region}}">
@@ -27,7 +30,7 @@
       </select>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <select ui-select2 class="view-select" ng-model="selectedCounty" data-placeholder="Select a County">
           <option value=""></option>
           <option ng-repeat="county in counties" value="{{county}}">
@@ -36,7 +39,7 @@
       </select>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <input type="text" ui-select2="entitySelectOpts" data-placeholder="Find an Entity"
         class="view-select" ng-model="selectedEntity">
       </input>
@@ -45,11 +48,14 @@
 
   <div class="row visible-xs">
     <div class="col-sm-4 text-center">
-      <select class="view-select" ng-model="selectedRegion" data-placeholder="Select a Region">
+      <select class="view-select" ng-model="selectedType" data-placeholder="Select a Type">
           <option value="" disabled>Select a Type</option>
-          <option ng-repeat="region in regions" value="{{region}}">
-            Region {{region}}
-          </option>
+          <option value="summary">Regional Summary</option>
+          <optgroup label="Entity Types">
+            <option ng-repeat="type in entityTypes" value="{{type}}">
+              {{type | titleize}}
+            </option>
+          </optgroup>
       </select>
     </div>
 
