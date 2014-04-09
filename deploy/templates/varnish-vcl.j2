@@ -31,7 +31,7 @@ sub vcl_fetch {
 
   /* manually deal with caching tilestache responses since tilestache doesn't handle cache
    * headers */
-  if (req.url ~ "^{{ tilestache_url_root }}/") {
+  if (req.url ~ "^{{ tilestache_url_root }}/" && beresp.status == 200) {
     /* Remove Expires from backend, it's not long enough */
     unset beresp.http.expires;
 
