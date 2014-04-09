@@ -10,11 +10,11 @@ angular.module('iswpApp.config', [])
     centerLng: -99.022907
   })
   .constant('DEMANDS_ENTITY_STYLE', {
-    color: '#fff',
+    color: '#000',
     weight: 1,
     opacity: 0.5,
     fillOpacity: 0.75,
-    fillColor: '#444'
+    fillColor: '#0AC763'
   })
   .constant('NEEDS_ENTITY_STYLE', {
     color: '#000',
