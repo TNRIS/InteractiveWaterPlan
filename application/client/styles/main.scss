@@ -117,6 +117,16 @@ body {
 }
 
 
+.map-top-container {
+  margin-bottom: 6px;
+}
+
+.data-view-container {
+  h3 {
+    margin-top: 10px;
+  }
+}
+
 .main-map {
   height: 300px;
   width: 100%;
@@ -143,9 +153,6 @@ body {
   }
 }
 
-ul.theme-nav {
-  display: inline-block;
-}
 
 .year-nav {
   margin-top: 8px;
@@ -165,7 +172,7 @@ ul.theme-nav {
 }
 
 .year-select-container {
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
 }
 
 .map-note {
@@ -253,11 +260,14 @@ ul.theme-nav {
   &.callout-note {
     background-color: #f4f8fa;
     border-color: #5bc0de;
-
   }
 }
 
-.place-select {
+.view-select-container {
+  margin-bottom: 16px;
+}
+
+.view-select {
   width: 75%;
 
   &.select2-container {
@@ -351,5 +361,9 @@ img.graphic {
 
     .lead {
       font-size: 18px;
+    }
+
+    .view-select {
+      width: 100%;
     }
 }

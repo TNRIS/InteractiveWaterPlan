@@ -1,61 +1,32 @@
 'use strict';
 
 angular.module('iswpApp')
-  .directive('themeNavs', function() {
+  .directive('themeNavs', function($state, $stateParams) {
     return {
       restrict: 'A',
       replace: true,
       template: '<div>' +
-        '<div theme-nav="demands"></div>' +
-        '<div theme-nav="needs"></div>' +
-        '</div>'
-    };
-  })
-  .directive('themeNav', function($state, $stateParams, ISWP_VARS) {
-    return {
-      restrict: 'A',
-      replace: true,
-      scope: true,
-      templateUrl: 'templates/themenav.html',
+        '<ul class="nav nav-pills theme-nav">' +
+          '<li ng-class="{active: parentState == \'demands\'}">' +
+            '<a ng-href="{{demandsRef}}" title="Demands">Demands</a>' +
+          '</li>' +
+          '<li ng-class="{active: parentState == \'needs\'}">' +
+            '<a ng-href="{{needsRef}}" title="Needs">Needs</a>' +
+            '</li>' +
+        '</ul>' +
+        '</div>',
       link: function postLink(scope, element, attrs) {
 
-        var thisTheme = attrs.themeNav.toLowerCase();
+        scope.$on('$stateChangeSuccess', function() {
 
-        var themeTitles = {
-          'needs': 'Water Needs',
-          'demands': 'Water Demands'
-        };
+          var splitState = $state.current.name.split('.');
+          scope.parentState = _.first(splitState);
+          var childStateName = _.last(splitState);
 
-        scope.themeTitle = themeTitles[thisTheme];
+          scope.demandsRef = $state.href('demands.' + childStateName, $stateParams);
+          scope.needsRef = $state.href('needs.' + childStateName, $stateParams);
+        });
 
-        scope.entityTypes = _.map(ISWP_VARS.entityTypes,
-          function(entityType) {
-            return {
-              name: entityType.titleize(),
-              type: entityType
-            };
-          }
-        );
-
-        scope.isActive = function() {
-          return $state.includes(thisTheme);
-        };
-
-        scope.showSummary = function() {
-          var currYear = $stateParams.year;
-
-          $state.go(thisTheme + '.summary', {year: currYear});
-          return;
-        };
-
-        scope.showEntityType = function(entityType) {
-          var currYear = $stateParams.year;
-
-          $state.go(thisTheme + '.type', {
-            entityType: entityType.type,
-            year: currYear
-          });
-        };
 
       }
     };

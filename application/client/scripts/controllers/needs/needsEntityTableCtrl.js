@@ -34,6 +34,7 @@ angular.module('iswpApp')
         map: 'NPD2010',
         label: 'Overall Entity Need as % of Demand*',
         cellClass: 'percent',
+        headerClass: 'text-center',
         formatFunction: function(val) { return '' + val + '%'; }
       };
 

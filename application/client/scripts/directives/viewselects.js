@@ -4,12 +4,14 @@
 // How to check if mobile?
 
 angular.module('iswpApp')
-  .directive('placeSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
+  .directive('viewSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
     return {
       restrict: 'A',
-      templateUrl: 'templates/placeselects.html',
+      templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
+
+        $scope.entityTypes = ISWP_VARS.entityTypes;
         $scope.counties = ISWP_VARS.counties;
         $scope.regions = ISWP_VARS.regions;
 
@@ -34,6 +36,29 @@ angular.module('iswpApp')
             callback(null);
           }
         };
+
+        $scope.$watch('selectedType', function(type) {
+          if (!type || type.isBlank()) {
+            return;
+          }
+
+          var currentYear = $stateParams.year;
+          var statePrefix = _.first($state.current.name.split('.'));
+
+          if (type.toLowerCase() === 'summary') {
+            $state.go(statePrefix + '.summary', {
+              year: currentYear
+            });
+          }
+          else {
+            $state.go(statePrefix + '.type', {
+              year: currentYear,
+              entityType: type
+            });
+          }
+
+          $scope.selectedType = '';
+        });
 
         $scope.$watch('selectedRegion', function(region) {
           if (!region || region.isBlank()) {
