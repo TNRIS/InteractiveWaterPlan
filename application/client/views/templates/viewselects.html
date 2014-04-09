@@ -10,7 +10,7 @@
 
   <div class="row hidden-xs">
     <div class="col-sm-3">
-      <select ui-select2 class="view-select" ng-model="selectedType" data-placeholder="Select a Type">
+      <select ui-select2 class="view-select" ng-model="selectedType" data-placeholder="Select a Water User Type">
           <option value=""></option>
           <option value="summary">Regional Summary</option>
           <optgroup label="Entity Types">
@@ -48,8 +48,8 @@
 
   <div class="row visible-xs">
     <div class="col-sm-4 text-center">
-      <select class="view-select" ng-model="selectedType" data-placeholder="Select a Type">
-          <option value="" disabled>Select a Type</option>
+      <select class="view-select" ng-model="selectedType" data-placeholder="Select a Water User Type">
+          <option value="" disabled>Select a Water User Type</option>
           <option value="summary">Regional Summary</option>
           <optgroup label="Entity Types">
             <option ng-repeat="type in entityTypes" value="{{type}}">
