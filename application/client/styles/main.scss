@@ -130,8 +130,16 @@ body {
 .theme-nav,
 .map-controls {
   > li > a {
+    color: #000;
     background-color: #eee;
-    color: black;
+  }
+}
+
+.map-controls {
+  margin-top: 8px;
+
+  > li > a {
+    padding: 6px 10px;
   }
 }
 

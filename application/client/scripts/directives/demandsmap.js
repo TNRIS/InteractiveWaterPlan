@@ -68,16 +68,16 @@ angular.module('iswpApp')
           //always set animate to false with fitBounds
           // because it seems to bug-out if caught in two animations
           var fitBounds = function(bounds) {
-            map.fitBounds(bounds, {animate: false, maxZoom: 10});
-          };
-
-          //helper to set view bounds based on current state
-          var setViewBounds = function() {
             //do nothing if the map is locked
             if (scope.mapLocked) {
               return;
             }
 
+            map.fitBounds(bounds, {animate: false, maxZoom: 10});
+          };
+
+          //helper to set view bounds based on current state
+          var setViewBounds = function() {
             var currentState = $state.current.name,
               entityLayerBounds = entityLayer.getBounds();
 
