@@ -14,7 +14,6 @@ tilestache_font_dir: "{{ spatial_dir }}/fonts"
 tilestache_log_file: /var/log/tilestache.log
 tilestache_port: 8091
 tilestache_redis_db: 0
-tilestache_url_root: /tiles
 tilestache_user: tilestache
 tilestache_uwsgi_socket: "localhost:{{ tilestache_port }}"
 tilestache_uwsgi_workers: 3
