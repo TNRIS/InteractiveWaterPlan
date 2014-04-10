@@ -5,14 +5,3 @@ check host node-app with address 127.0.0.1
         request /
         with timeout 5 seconds
         then restart
-        if 5 restarts within 5 cycles then timeout
-
-
-check host varnish-node with address 127.0.0.1
-    start "/usr/bin/service varnish start"
-    stop "/usr/bin/service varnish stop"
-    if failed port {{ varnish_port }} protocol HTTP
-        request /
-        with timeout 5 seconds
-        then restart
-        if 5 restarts within 5 cycles then timeout

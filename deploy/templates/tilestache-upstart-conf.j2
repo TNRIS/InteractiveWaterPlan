@@ -13,6 +13,7 @@ script
         --socket {{ tilestache_uwsgi_socket }} \
         --processes {{ tilestache_uwsgi_workers }} \
         --eval 'import TileStache;application = TileStache.WSGITileServer("{{ tilestache_dir }}/tilestache.conf")' \
-        --logto {{ tilestache_log_file }}
+        --logto {{ tilestache_log_file }} \
+        --stats :{{ tilestache_uwsgi_stats_port }}
 end script
 
