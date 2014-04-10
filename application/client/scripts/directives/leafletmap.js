@@ -118,6 +118,10 @@ angular.module('iswpApp')
 
             case 'type':
               //For demands.type, always just go to state view
+              if (scope.mapLocked) {
+                //unless map is locked
+                return;
+              }
               map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
                 STATE_MAP_CONFIG.zoom, {animate: false});
               break;
