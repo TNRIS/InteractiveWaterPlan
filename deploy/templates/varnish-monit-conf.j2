@@ -1,0 +1,7 @@
+check host varnish with address 127.0.0.1
+    start "/usr/bin/service varnish start"
+    stop "/usr/bin/service varnish stop"
+    if failed port {{ varnish_port }} protocol HTTP
+        request /
+        with timeout 5 seconds
+        then restart

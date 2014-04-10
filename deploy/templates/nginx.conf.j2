@@ -4,9 +4,8 @@ server {
     port_in_redirect off;
     server_tokens off;
 
-    location {{ tilestache_url_root}} {
+    location / {
         include uwsgi_params;
-        uwsgi_param SCRIPT_NAME {{ tilestache_url_root }};
         uwsgi_modifier1 30;
 
         uwsgi_pass {{ tilestache_uwsgi_socket }};
