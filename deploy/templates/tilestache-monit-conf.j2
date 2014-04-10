@@ -1,18 +1,15 @@
-check host tilestache with address 127.0.0.1
+check host tilestache-uwsgi with address 127.0.0.1
     start "/sbin/start tilestache"
     stop "/sbin/stop tilestache"
-    if failed port {{ tilestache_port }} protocol HTTP
+    if failed port {{ tilestache_uwsgi_stats_port }}
+        with timeout 5 seconds
+        then restart
+
+
+check host tilestache-nginx with address 127.0.0.1
+    start "/usr/bin/service nginx start"
+    stop "/usr/bin/service nginx stop"
+    if failed port {{ nginx_port }} protocol HTTP
         request /
         with timeout 5 seconds
         then restart
-        if 5 restarts within 5 cycles then timeout
-
-
-check host varnish-tiles with address 127.0.0.1
-    start "/usr/bin/service varnish start"
-    stop "/usr/bin/service varnish stop"
-    if failed port {{ varnish_port }} protocol HTTP
-        request /{{ tilestache_url_root }}
-        with timeout 5 seconds
-        then restart
-        if 5 restarts within 5 cycles then timeout
