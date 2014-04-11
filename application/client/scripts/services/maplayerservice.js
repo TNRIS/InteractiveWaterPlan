@@ -53,6 +53,11 @@ angular.module('iswpApp')
           subdomains: '123'
         });
 
+        var rwpd_teams = L.tileLayer(TILES_URL + '/rwpd-teams/{z}/{x}/{y}.png', {
+          opacity: 0.9,
+          subdomains: '123'
+        });
+
         var counties = L.tileLayer(TILES_URL + '/counties-outlines/{z}/{x}/{y}.png', {
           subdomains: '123'
         });
@@ -89,6 +94,7 @@ angular.module('iswpApp')
 
         service.overlayLayers = {
           'Regional Water Planning Areas': regions,
+          'Regional Water Planning District Teams': rwpd_teams,
           'Texas Counties': counties,
           'Texas County Names': countyLabels,
           'Texas Senate Districts (2013-14)': senateDistricts,
