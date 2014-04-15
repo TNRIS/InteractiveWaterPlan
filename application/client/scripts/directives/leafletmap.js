@@ -159,6 +159,14 @@ angular.module('iswpApp')
             parentState = _.first(currentState.split('.')),
             childState = _.last(currentState.split('.'));
 
+          //show or hide the legend
+          if (parentState === 'needs' && childState !== 'summary') {
+            showLegend();
+          }
+          else {
+            removeLegend();
+          }
+
           if (childState === 'summary') {
             MapLayerService.showRegions(map);
             if (!scope.mapLocked) {
@@ -166,15 +174,11 @@ angular.module('iswpApp')
                 STATE_MAP_CONFIG.zoom, {animate: false});
             }
 
-            removeLegend();
             return; //don't have anything else to do
           }
-          else {
-            MapLayerService.removeRegions(map);
-            if (parentState === 'needs') {
-              showLegend();
-            }
-          }
+
+          //else...
+          MapLayerService.removeRegions(map);
 
           //grab the current year
           var currentYear = $stateParams.year;
