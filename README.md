@@ -38,11 +38,9 @@ will go wrong.
 2. Add the base box (only accessible from TWDB internal network): `vagrant box add ubuntu-12.04-web http://greylin/vbox/ubuntu-12.04-web.box`
 3. Navigate to `deploy/` and run `vagrant up`
 
+To re-run the deploy, you can either use `vagrant provision` or using the `deploy.sh` script in `/deploy`:
 
-To re-run the deploy, you can either use `vagrant provision` or run the ansible
-playbook manually:
-
-    ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --user=vagrant --private-key=~/.vagrant.d/insecure_private_key site.yml
+    ./deploy.sh -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --user=vagrant --private-key=~/.vagrant.d/insecure_private_key site.yml <<git-branch-or-tag>>
 
 
 ### Production
