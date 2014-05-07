@@ -10,7 +10,7 @@ angular.module('iswpApp')
     fillOpacity: 0
   })
   .factory('MapLayerService',
-    function MapLayerService($state, $stateParams, RegionService, BING_API_KEY,
+    function MapLayerService($state, $stateParams, RegionService,
       SWP_WMS_URL, TILES_URL, REGION_STYLE) {
       var service = {};
 
@@ -33,18 +33,6 @@ angular.module('iswpApp')
           subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
           attribution: 'Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency. ' +
               'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
-        });
-
-        var bingRoad = L.bingLayer(BING_API_KEY, {
-          type: 'Road'
-        });
-
-        var bingHybrid = L.bingLayer(BING_API_KEY, {
-          type: 'AerialWithLabels'
-        });
-
-        var bingAerial = L.bingLayer(BING_API_KEY, {
-          type: 'Aerial'
         });
 
         // Overlay Layers
@@ -86,10 +74,7 @@ angular.module('iswpApp')
         service.baseMaps = {
           'Esri Gray': grayWithLabels,
           'MapQuest Open': mqOpen,
-          'MapQuest Open Aerial': mqAerial,
-          'Bing Road': bingRoad,
-          'Bing Hybrid': bingHybrid,
-          'Bing Aerial': bingAerial
+          'MapQuest Open Aerial': mqAerial
         };
 
         service.overlayLayers = {
