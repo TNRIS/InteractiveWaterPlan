@@ -10,34 +10,21 @@
     <title>2012 Texas State Water Plan</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <meta name="google-site-verification" content="32ucpvdYP24Ur2zsdU4w9GUZ5ivQ01wWiCN2bpDIBcg" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />
     <link rel="stylesheet" href="styles/vendor.css">
     <link rel="stylesheet" href="styles/main.css">
+    <link type="text/plain" rel="author" href="/humans.txt" />
   </head>
-  <body ng-app="iswpApp">
+  <body ng-app="iswpApp" ng-cloak>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" title="browsehappy">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="first-time-here ">
-            <a target="_self" title="First time here?" href="/about/#WhatIsThis">
-              First time here?
-            </a>
-          </li>
-          <li class="active">
-            <a href="#" title="Home">Home</a>
-          </li>
-          <li>
-            <a target="_self" title="About" href="/about">About</a>
-          </li>
-        </ul>
-        <img src="/images/twdb_logo_color.png" alt="TWDB logo" height="60"/>
-        <h1>2012 Texas State Water Plan</h1>
-      </div>
+    <div class="container"  ng-controller="StateCtrl">
+
+      <% include partials/_header.html %>
 
       <div class="row">
         <div class="col-md-12">
@@ -66,18 +53,46 @@
         </div>
       </noscript>
 
-      <div ui-view></div>
+      <div view-selects></div>
 
-      <div class="footer">
-        <p>This website is brought to you by the <a href="http://www.twdb.texas.gov" title="Texas Water Development Board">Texas Water Development Board</a></p>
-        <p>
-          <a href="/about#SitePolicies" target="_self" title="Site Policies">Site Policies</a> |
-          <a href="http://www.texas.gov/" title="Texas Online">Texas Online</a> |
-          <a href="http://www.governor.texas.gov/homeland" title="Homeland Security">Homeland Security</a> |
-          <a href="http://www2.tsl.state.tx.us/trail" title="TRAIL">TRAIL</a> |
-          <a href="mailto:InteractiveSWP@twdb.texas.gov" title="Contact Us">Contact Us</a>
-        </p>
+      <div class="row">
+        <div class="col-md-12">
+          <p ng-if="isState('needs')" class="lead">
+            Identified water
+            <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
+            are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
+          </p>
+          <p ng-if="isState('demands')" class="lead">
+            Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
+          </p>
+        </div>
       </div>
+
+      <div class="row map-top-container" >
+        <div theme-navs class="col-md-6 pull-left"></div>
+        <div map-controls class="col-md-6"></div>
+      </div>
+
+      <div leaflet-map class="main-map"
+        ng-hide="mapHidden">
+      </div>
+
+      <div class="row year-select-container">
+        <div year-select class="col-md-6"></div>
+
+        <div class="col-md-6 map-note">
+          <p class="small">
+            Some entities (e.g., county-wide entities) have overlapping locations.
+            <br>
+            Clicking on such entities will expand the group so that they may be viewed individually.
+          </p>
+        </div>
+      </div>
+
+      <div class="data-view-container" ui-view></div>
+
+      <% include partials/_footer.html %>
+
     </div>
 
     <script>

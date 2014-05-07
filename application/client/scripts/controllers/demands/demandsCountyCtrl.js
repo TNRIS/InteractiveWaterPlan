@@ -1,30 +1,23 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, localStorageService, API_PATH) {
+  .controller('DemandsCountyCtrl', function ($scope, $rootScope, demandsData, localStorageService, API_PATH) {
 
     var county = $scope.$stateParams.county.titleize();
 
     $scope.heading = '' + county + ' County';
-    $scope.mapDescription = 'Map displays entities and their identified water needs within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
+    $scope.mapDescription = 'Map displays entities and their projected water demands within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>'+county+' County</strong> in {year}';
+    var tableDescTpl = 'Table lists the share of entities\' projected water demands within <strong>'+county+' County</strong> in {year}';
 
-    $scope.downloadPath = API_PATH + 'needs/county/' + county + '?format=csv';
+    $scope.downloadPath = API_PATH + 'demands/county/' + county + '?format=csv';
 
-    var needsCol = {
-      map: 'N2010',
-      label: 'Need (acre-feet/year) in County',
+    var demandsCol = {
+      map: 'D2010',
+      label: 'Demand (acre-feet/year) in County',
       cellClass: 'number',
-      formatFunction: 'number'
-    };
-
-    var percentCol = {
-      map: 'NPD2010',
-      label: 'Overall Entity Need as % of Demand*',
-      cellClass: 'percent',
-      headerClass: 'text-center',
-      formatFunction: function(val) { return '' + val + '%'; }
+      formatFunction: 'number',
+      headerClass: 'text-center'
     };
 
     var cellTemplateUrl = 'templates/linkcell.html';
@@ -33,8 +26,7 @@ angular.module('iswpApp')
       {map: 'WugCounty', label: 'County'},
       {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
       {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
-      needsCol,
-      percentCol
+      demandsCol
     ];
 
     var storedItemsPerPage = localStorageService.get('tableItemsPerPage');
@@ -47,7 +39,7 @@ angular.module('iswpApp')
       itemsByPage: $scope.itemsPerPage
     };
 
-    $scope.tableRows = needsData;
+    $scope.tableRows = demandsData;
 
     //TODO: Remember the sort order when changing Year
 
@@ -55,8 +47,7 @@ angular.module('iswpApp')
       $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
-      needsCol.map = 'N' + $scope.currentYear;
-      percentCol.map = 'NPD' + $scope.currentYear;
+      demandsCol.map = 'D' + $scope.currentYear;
     });
 
     $scope.$watch('itemsPerPage', function() {

@@ -9,11 +9,15 @@ var minifyCSS = require('gulp-minify-css');
 var ngmin = require('gulp-ngmin');
 var rimraf = require('gulp-rimraf');
 var uglify = require('gulp-uglify');
+var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
+var templateCache = require('gulp-angular-templatecache');
 
 var dirs = {
     bower: 'client/bower_components',
     client: 'client',
     clientScripts: 'client/scripts',
+    ngTemplates: 'client/views/templates',
     dist: 'dist',
     pub: 'dist/public',
     scripts: 'dist/public/scripts',
@@ -27,9 +31,10 @@ var paths = {
       dirs.clientScripts + '/**/*.js',
       '!' + dirs.clientScripts + '/shims/*.js'
     ],
+    ngTemplates: dirs.ngTemplates + '/**/*.html',
     compass: dirs.client + '/styles/main.scss',
     serverDir: dirs.server + '/**/*',
-    serverFile: 'server.js',
+    serverFile: './server.js',
     views: dirs.client + '/views/**/*.html'
   };
 
@@ -85,9 +90,9 @@ gulp.task('misc-package-json', function () {
 gulp.task('scripts', ['scripts-bower', 'scripts-client', 'scripts-server', 'scripts-shims']);
 
 gulp.task('scripts-bower', function () {
-  var bower_dir = dirs.client + '/bower_components';
+  var bowerDir = dirs.client + '/bower_components';
 
-  var vendor_scripts = [
+  var vendorScripts = [
       dirs.bower + "/sugar/release/sugar-full.min.js",
       dirs.bower + "/lodash/dist/lodash.compat.js",
       dirs.bower + "/select2/select2.min.js",
@@ -99,29 +104,51 @@ gulp.task('scripts-bower', function () {
       dirs.bower + "/angulartics/dist/angulartics-ga.min.js"
     ];
 
-  return gulp.src(vendor_scripts)
+  return gulp.src(vendorScripts)
     .pipe(concat('vendor.js'))
     .pipe(gulp.dest(dirs.scripts));
 });
 
-gulp.task('scripts-client', function () {
-  return gulp.src(paths.clientScripts)
+gulp.task('scripts-templates', function() {
+  return gulp.src(paths.ngTemplates)
+    .pipe(templateCache('templates.js', {
+      root: 'templates',
+      module: 'iswpApp.templates',
+      standalone: true
+    }))
+    .pipe(gulp.dest(dirs.tmp));
+});
+
+gulp.task('scripts-client', ['scripts-jshint', 'scripts-templates'], function () {
+  var scriptsAndTemplates = [].concat(paths.clientScripts,
+    [dirs.tmp + '/templates.js']);
+
+  return gulp.src(scriptsAndTemplates)
     .pipe(gutil.env.type === 'production' ? ngmin() : gutil.noop())
-    .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
     .pipe(concat('scripts.js'))
+    .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
     .pipe(gulp.dest(dirs.scripts));
 });
 
 gulp.task('scripts-server', ['scripts-server-dir', 'scripts-server-file']);
 
-gulp.task('scripts-server-dir', function () {
+gulp.task('scripts-server-dir', ['scripts-jshint'], function () {
   return gulp.src(paths.serverDir)
     .pipe(gulp.dest(dirs.dist + '/server/'));
 });
 
 gulp.task('scripts-server-file', function () {
   return gulp.src(paths.serverFile)
-    .pipe(gulp.dest(dirs.dist + '/'));
+    .pipe(gulp.dest(dirs.dist));
+});
+
+gulp.task('scripts-jshint', function () {
+  var clientAndServerScripts = [].concat(paths.clientScripts,
+    paths.serverDir + '.js');
+
+  return gulp.src(clientAndServerScripts)
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
 });
 
 gulp.task('scripts-shims', function () {
@@ -144,12 +171,12 @@ gulp.task('styles-images', function () {
 });
 
 gulp.task('styles-vendor', function () {
-  var vendor_styles = [
+  var vendorStyles = [
     dirs.bower + "/font-awesome/css/font-awesome.min.css",
     dirs.bower + "/select2/select2.css"
   ];
 
-  return gulp.src(vendor_styles)
+  return gulp.src(vendorStyles)
     .pipe(concat('vendor.css'))
     .pipe(gutil.env.type === 'production' ? minifyCSS() : gutil.noop())
     .pipe(gulp.dest(dirs.styles));
@@ -168,9 +195,10 @@ gulp.task('serve-dist', ['scripts-server'], function () {
 
 gulp.task('watch', function () {
   gulp.watch(paths.clientScripts, ['scripts-client']);
+  gulp.watch(paths.ngTemplates, ['scripts-client']);
   gulp.watch(paths.compass, ['styles-compass']);
   gulp.watch(paths.serverDir, ['scripts-server-dir', 'serve-dist']);
-  gulp.watch(paths.serverFile, ['scripts-server-file', 'serve-dist']);
+  // gulp.watch(paths.serverFile, ['scripts-server-file', 'serve-dist']);
   gulp.watch(paths.views, ['views']);
 });
 

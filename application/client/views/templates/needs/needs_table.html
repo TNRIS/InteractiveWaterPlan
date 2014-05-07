@@ -1,0 +1,72 @@
+<div class="col-md-12">
+  <h3>{{heading}} - {{currentYear}}</h3>
+
+  <div ng-show="!tableRows.length" class="callout callout-warning">
+    <p>
+      No data found for selected options. Please select a different decade, area, or entity.
+    </p>
+  </div>
+
+  <div ng-hide="!tableRows.length">
+    <p ng-bind-html='mapDescription'></p>
+    <p ng-bind-html='chartDescription'></p>
+    <p ng-bind-html='tableDescription'></p>
+
+
+    <div class="row" ng-show="{{ 'needs.entity' | isState }}">
+      <div class="col-md-12 chart-container">
+        <div google-chart chart="chartConfig" select="chartSelect(selectedItem)"></div>
+
+        <p class="small text-center">NOTE: Not all water needs could be met in all decades for all water use categories due to a lack of feasible water management strategies.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 table-responsive ">
+        <div ng-show="tableConfig.isPaginationEnabled" items-per-page="itemsPerPage" class="pull-left"></div>
+
+        <smart-table class="clearfix" columns="tableColumns" rows="tableRows" config="tableConfig">
+        </smart-table>
+
+        <p class="pull-right small">
+          <a ng-href="{{downloadPath}}" href="" title="Download data">
+            Download data
+          </a> |
+          <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
+        </p>
+
+        <p ng-hide="{{ 'needs.summary' | isState }}">
+          * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
+        </p>
+      </div>
+    </div>
+
+    <div class="row" ng-show="{{'needs.summary' | isState}}">
+      <div class="col-md-12 tree-map-container">
+        <h4>Tree Map of Water Needs by Region - {{currentYear}}</h4>
+        <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
+        <p class="small">
+          <strong>Click</strong> a region to see the tree map for water use categories in that region.<br>
+          <strong>Right-click</strong> on a category to go back to the statewide tree map.
+        </p>
+      </div>
+
+      <div class="col-md-12 tree-map-container">
+        <h4>Tree Map of Water Needs by Water Use Category - {{currentYear}}</h4>
+        <div class="tree-map" google-tree-map tree-map-config="categoryTreeMapConfig"></div>
+        <p class="small">
+          <strong>Click</strong> a water use category to see the tree map for that water use category in all regions.<br>
+          <strong>Right-click</strong> on a region category to go back to the water use category summary tree map.
+        </p>
+      </div>
+    </div>
+
+    <div class="row" ng-show="{{'needs.type' | isState}}">
+      <div class="col-md-12 tree-map-container">
+        <h4>Tree Map of Water Needs by Region for {{entityType}} Entities - {{currentYear}}</h4>
+        <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
+      </div>
+    </div>
+
+  </div>
+</div>

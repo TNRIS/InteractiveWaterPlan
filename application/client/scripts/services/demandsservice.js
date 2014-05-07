@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .factory('NeedsService', function NeedsService($http, API_PATH) {
+  .factory('DemandsService', function DemandsService($http, API_PATH) {
     var service = {};
 
     var currentData = [];
@@ -16,7 +16,7 @@ angular.module('iswpApp')
         typeId = "";
       }
 
-      var requestPath =  '{API_PATH}needs/{type}/{typeId}'.assign({
+      var requestPath =  '{API_PATH}demands/{type}/{typeId}'.assign({
         API_PATH: API_PATH,
         type: type,
         typeId: typeId
@@ -38,7 +38,7 @@ angular.module('iswpApp')
 
       return _(currentData).groupBy('EntityId').map(function (rows, entityId) {
         var sumForProp = _.reduce(rows, function(sum, curr) {
-          return sum + curr['N' + year];
+          return sum + curr['D' + year];
         }, 0);
 
         return {

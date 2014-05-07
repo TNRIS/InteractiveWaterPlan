@@ -5,7 +5,7 @@ angular.module('iswpApp')
 
     var region = $scope.$stateParams.region.toUpperCase();
 
-    $scope.heading = 'Region '+region;
+    $scope.heading = 'Region ' + region;
     $scope.mapDescription = 'Map displays entities and their identified water needs in <strong>Region '+region+'</strong> (water system service area boundaries may extend outside of region).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>Region '+region+'</strong> in {year}';
@@ -23,10 +23,11 @@ angular.module('iswpApp')
       map: 'NPD2010',
       label: 'Overall Entity Need as % of Demand*',
       cellClass: 'percent',
+      headerClass: 'text-center',
       formatFunction: function(val) { return '' + val + '%'; }
     };
 
-    var cellTemplateUrl = 'partials/needs/needs_link_cell.html';
+    var cellTemplateUrl = 'templates/linkcell.html';
 
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region', cellClass: 'text-center'},

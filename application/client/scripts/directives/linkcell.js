@@ -1,34 +1,34 @@
 'use strict';
 
 angular.module('iswpApp')
-  .directive('needsLink', function ($state, $stateParams) {
+  .directive('linkCell', function ($state, $stateParams) {
     var paramsMap = {
       'EntityName': {
         paramField: 'EntityId',
         stateParam: 'entityId',
-        stateName: 'needs.entity'
+        stateSuffix: '.entity'
       },
       'WugRegion': {
         paramField: 'WugRegion',
         stateParam: 'region',
-        stateName: 'needs.region'
+        stateSuffix: '.region'
       },
       'WugCounty': {
         paramField: 'WugCounty',
         stateParam: 'county',
-        stateName: 'needs.county'
+        stateSuffix: '.county'
       },
       'WugType': {
         paramField: 'WugType',
         stateParam: 'entityType',
-        stateName: 'needs.type'
+        stateSuffix: '.type'
       },
     };
 
     return {
       restrict: 'A',
       require: '^smartTable',
-      template: '<a ng-href="{{stateRef}}" title="View needs for {{dataRow[column.map]}}">' +
+      template: '<a ng-href="{{stateRef}}" title="View data for {{dataRow[column.map]}}">' +
         '{{dataRow[column.map]}}</a>',
       link: function postLink(scope, element, attrs, ctrl) {
         var mappedField = scope.column.map,
@@ -38,7 +38,9 @@ angular.module('iswpApp')
         params[pMap.stateParam] = scope.dataRow[pMap.paramField];
 
         // Build the href based on the paramsMap options
-        scope.stateRef = $state.href(pMap.stateName, params);
+        var statePrefix = _.first($state.current.name.split('.'));
+        var stateName = statePrefix + pMap.stateSuffix;
+        scope.stateRef = $state.href(stateName, params);
       }
     };
   });

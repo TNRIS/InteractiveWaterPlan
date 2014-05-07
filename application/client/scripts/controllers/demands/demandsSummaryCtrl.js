@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsSummaryTableCtrl', function ($scope, needsData, ISWP_VARS, API_PATH) {
+  .controller('DemandsSummaryCtrl', function ($scope, demandsData, ISWP_VARS, API_PATH) {
 
-    $scope.heading = 'Regional Water Needs (Potential Shortage) Summary';
+    $scope.heading = 'Regional Water Demand Summary';
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
-    $scope.tableDescription = 'Table summarizes identified water needs by region and water use category in acre-feet/year (click on region for summary).';
+    $scope.tableDescription = 'Table summarizes projected water demands by region and water use category in acre-feet/year (click on region for summary).';
 
-    $scope.downloadPath = API_PATH + 'needs/summary?format=csv';
+    $scope.downloadPath = API_PATH + 'demands/summary?format=csv';
 
     var cellTemplateUrl = 'templates/linkcell.html';
 
@@ -31,7 +31,7 @@ angular.module('iswpApp')
       var treeMapData = [],
         parentName = 'All Water Use Categories';
 
-      treeMapData.push(['Category', 'Parent', 'Need (acre-feet/year)']);
+      treeMapData.push(['Category', 'Parent', 'Demand (acre-feet/year)']);
       treeMapData.push([parentName, null, null]);
 
       //For each water use category, calculate the total across regions
@@ -86,7 +86,7 @@ angular.module('iswpApp')
       var treeMapData = [],
         parentName = 'All Regions';
 
-      treeMapData.push(['Region', 'Parent', 'Need (acre-feet/year)']);
+      treeMapData.push(['Region', 'Parent', 'Demand (acre-feet/year)']);
       treeMapData.push([parentName, null, null]);
 
       //For each region, generate row for region total
@@ -133,13 +133,14 @@ angular.module('iswpApp')
       };
     };
 
+
     //TODO: Remember the sort order when changing Year
     //Refresh stuff when the year changes
     $scope.$on('$stateChangeSuccess', function() {
       $scope.currentYear = $scope.$stateParams.year;
 
-      //Get only the needsData for the currentYear
-      var dataForYear = _.where(needsData, {DECADE:
+      //Get only the demandsData for the currentYear
+      var dataForYear = _.where(demandsData, {DECADE:
         $scope.currentYear});
 
       $scope.tableRows = dataForYear;
@@ -147,5 +148,5 @@ angular.module('iswpApp')
       $scope.categoryTreeMapConfig = createCategoryTreeMap(dataForYear);
     });
 
-
+    return;
   });

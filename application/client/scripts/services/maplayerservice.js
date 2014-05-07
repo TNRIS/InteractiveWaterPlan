@@ -157,6 +157,11 @@ angular.module('iswpApp')
           regionOverlayLayer.addTo(map);
         }
 
+        //turn off the stroke for each region feature
+        // otherwise it can get 'stuck' on
+        regionFeatureLayer.eachLayer(function(lyr) {
+          lyr.setStyle({stroke: false});
+        });
 
       };
 

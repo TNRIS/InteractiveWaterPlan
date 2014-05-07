@@ -17,6 +17,10 @@ html.lt-ie9 {
   .container { width: 790px; }
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .esri-attribution-logo {
   visibility: hidden;
 }
@@ -113,6 +117,16 @@ body {
 }
 
 
+.map-top-container {
+  margin-bottom: 6px;
+}
+
+.data-view-container {
+  h3 {
+    margin-top: 10px;
+  }
+}
+
 .main-map {
   height: 300px;
   width: 100%;
@@ -125,13 +139,20 @@ body {
 
 .theme-nav,
 .map-controls {
-  margin-bottom: 8px;
-
   > li > a {
+    color: #000;
     background-color: #eee;
-    color: black;
   }
 }
+
+.map-controls {
+  margin-top: 8px;
+
+  > li > a {
+    padding: 6px 10px;
+  }
+}
+
 
 .year-nav {
   margin-top: 8px;
@@ -151,7 +172,7 @@ body {
 }
 
 .year-select-container {
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
 }
 
 .map-note {
@@ -171,6 +192,7 @@ body {
 
 .tree-map {
   height: 500px;
+  text-align: center;
 }
 
 .tree-map-tooltip {
@@ -238,11 +260,14 @@ body {
   &.callout-note {
     background-color: #f4f8fa;
     border-color: #5bc0de;
-
   }
 }
 
-.place-select {
+.view-select-container {
+  margin-bottom: 16px;
+}
+
+.view-select {
   width: 75%;
 
   &.select2-container {
@@ -336,5 +361,9 @@ img.graphic {
 
     .lead {
       font-size: 18px;
+    }
+
+    .view-select {
+      width: 100%;
     }
 }
