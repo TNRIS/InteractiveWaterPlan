@@ -57,13 +57,6 @@ exports.index = function(req, res) {
     entityTypes = utils.fileAsJson(
       config.dataPath + 'entityTypes.json');
 
-  // res.render('index', {
-  //   regions: JSON.stringify(regions),
-  //   counties: JSON.stringify(counties),
-  //   regionsTopo: JSON.stringify(regionsTopo),
-  //   years: JSON.stringify(years)
-  // });
-
   res.render('index', {
     pageName: 'home',
     ISWP_VARS: JSON.stringify({
