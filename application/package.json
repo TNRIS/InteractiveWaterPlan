@@ -1,6 +1,11 @@
 {
   "name": "iswp",
-  "version": "0.0.0",
+  "description": "Interactive Texas State Water Plan web site",
+  "version": "1.2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TNRIS/InteractiveWaterPlan"
+  },
   "dependencies": {
     "express": "~3.5.0",
     "lodash": "~2.4.1",

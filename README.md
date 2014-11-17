@@ -12,13 +12,15 @@ First make sure these are installed:
    platforms, depending on how it is installed)
  - compass (`gem install compass`)
 
-## Building
+## Developing
 
 1. Install `bower` and `gulp` globally: `npm install -g bower gulp`
 2. Navigate to `application/` and run `bower install` and `npm install`
 3. Now you should be able to use any of the `gulp` tasks defined in `gulpfile.js`
 
 `gulp` will launch express and watch files for changes
+
+## Building
 
 `gulp dist` will build the app for production
 
