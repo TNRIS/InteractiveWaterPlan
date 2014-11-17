@@ -192,4 +192,4 @@ gulp.task('watch', function () {
   console.log('  In debug mode: `npm run debug` and `node-inspector` in two separate shells');
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['dist', 'watch']);

@@ -2,6 +2,7 @@ node_modules
 .tmp
 .sass-cache
 *.pyc
+npm-debug.log
 application/dist
 deploy/.vagrant/
 deploy/production_inventory

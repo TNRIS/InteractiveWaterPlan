@@ -1,8 +1,10 @@
 'use strict';
 
 var express = require('express'),
+    morgan = require('morgan'),
     path = require('path'),
     validator = require('express-validator'),
+    favicon = require('serve-favicon'),
     config = require('./config');
 
 //Add .csv method to response objects
@@ -13,21 +15,18 @@ require('../lib/csv-response')(express);
  */
 module.exports = function(app) {
 
-  switch (app.settings.env) {
-    case 'production':
-      app.locals({
-        gaTrackingCode: 'UA-491601-10'
-      });
+  var env = process.env.NODE_ENV || 'development';
 
-      // app.use(express.compress());
-      app.use(express.favicon(path.join(config.root, 'public', 'favicon.ico')));
+  switch (env) {
+    case 'production':
+      app.locals.gaTrackingCode = 'UA-491601-10';
+
+      app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
       app.use(express.static(path.join(config.root, 'public')));
       break;
 
     default: //i.e., development
-      app.locals({
-        gaTrackingCode: ''
-      });
+      app.locals.gaTrackingCode = '';
 
       // Disable caching of scripts for easier testing
       app.use(function noCache(req, res, next) {
@@ -50,15 +49,7 @@ module.exports = function(app) {
   app.set('views', config.root + '/server/views');
 
   app.disable('x-powered-by');
-  app.use(express.logger('dev'));
-  // app.use(express.bodyParser());
-  // app.use(express.methodOverride());
+  app.use(morgan('combined')); //logging
+
   app.use(validator());
-
-  // Router (only error handlers should come after this)
-  app.use(app.router);
-
-  if (app.settings.env !== 'production') {
-    app.use(express.errorHandler());
-  }
 };

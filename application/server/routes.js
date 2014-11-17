@@ -1,6 +1,7 @@
 'use strict';
 
-var places = require('./controllers/api/places'),
+var express = require('express'),
+    places = require('./controllers/api/places'),
     needs = require('./controllers/api/needs'),
     demands = require('./controllers/api/demands'),
     entity = require('./controllers/api/entity'),
@@ -14,60 +15,63 @@ var places = require('./controllers/api/places'),
  */
 module.exports = function(app) {
 
+  var router = express.Router();
+
   var apiPre = '/api/v1';
 
   // Enable CORS
-  app.all(apiPre + '*', function(req, res, next) {
+  router.all(apiPre + '*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
   });
 
   // Server API Routes
-  app.get(apiPre, about.api);
+  router.get(apiPre, about.api);
 
-  app.get(apiPre + '/places/regions', places.getRegionList);
-  app.get(apiPre + '/places/regions.topojson', places.getRegionTopoJson);
-  app.get(apiPre + '/places/county/:name.geojson', places.getCountyGeoJsonByName);
-  app.get(apiPre + '/places/counties', places.getCountyList);
-  app.get(apiPre + '/places/counties.geojson', places.getCountyGeoJson);
+  router.get(apiPre + '/places/regions', places.getRegionList);
+  router.get(apiPre + '/places/regions.topojson', places.getRegionTopoJson);
+  router.get(apiPre + '/places/county/:name.geojson', places.getCountyGeoJsonByName);
+  router.get(apiPre + '/places/counties', places.getCountyList);
+  router.get(apiPre + '/places/counties.geojson', places.getCountyGeoJson);
 
-  app.get(apiPre + '/needs', needs.getAllNeeds);
-  app.get(apiPre + '/needs/summary', needs.getRegionSummary);
-  app.get(apiPre + '/needs/region/:region', needs.getNeedsForRegion);
-  app.get(apiPre + '/needs/county/:county', needs.getNeedsForCounty);
-  app.get(apiPre + '/needs/entity/:entityId', needs.getNeedsForEntity);
-  app.get(apiPre + '/needs/type/:entityType', needs.getNeedsForEntityType);
+  router.get(apiPre + '/needs', needs.getAllNeeds);
+  router.get(apiPre + '/needs/summary', needs.getRegionSummary);
+  router.get(apiPre + '/needs/region/:region', needs.getNeedsForRegion);
+  router.get(apiPre + '/needs/county/:county', needs.getNeedsForCounty);
+  router.get(apiPre + '/needs/entity/:entityId', needs.getNeedsForEntity);
+  router.get(apiPre + '/needs/type/:entityType', needs.getNeedsForEntityType);
 
-  app.get(apiPre + '/demands', demands.getAllDemands);
-  app.get(apiPre + '/demands/summary', demands.getRegionSummary);
-  app.get(apiPre + '/demands/region/:region', demands.getDemandsForRegion);
-  app.get(apiPre + '/demands/county/:county', demands.getDemandsForCounty);
-  app.get(apiPre + '/demands/entity/:entityId', demands.getDemandsForEntity);
-  app.get(apiPre + '/demands/type/:entityType', demands.getDemandsForEntityType);
+  router.get(apiPre + '/demands', demands.getAllDemands);
+  router.get(apiPre + '/demands/summary', demands.getRegionSummary);
+  router.get(apiPre + '/demands/region/:region', demands.getDemandsForRegion);
+  router.get(apiPre + '/demands/county/:county', demands.getDemandsForCounty);
+  router.get(apiPre + '/demands/entity/:entityId', demands.getDemandsForEntity);
+  router.get(apiPre + '/demands/type/:entityType', demands.getDemandsForEntityType);
 
-  app.get(apiPre + '/entity', entity.getEntities);
-  app.get(apiPre + '/entity/search', entity.getEntitiesByNamePartial);
-  app.get(apiPre + '/entity/:entityId', entity.getEntity);
-  app.get(apiPre + '/entity/:entityId/summary', entity.getEntitySummary);
+  router.get(apiPre + '/entity', entity.getEntities);
+  router.get(apiPre + '/entity/search', entity.getEntitiesByNamePartial);
+  router.get(apiPre + '/entity/:entityId', entity.getEntity);
+  router.get(apiPre + '/entity/:entityId/summary', entity.getEntitySummary);
 
-  app.get(apiPre + '/type/entity', type.getEntityTypes);
+  router.get(apiPre + '/type/entity', type.getEntityTypes);
 
   // All undefined api routes should return a 404
-  app.get('/api/*', error.index);
+  router.get('/api/*', error.index);
 
-  app.get('/about', about.about);
+  router.get('/about', about.about);
 
-  app.get('/partials/*', index.partials);
-  app.get('/templates/*', index.templates);
+  router.get('/templates/*', index.templates);
 
   //Routes that correspond to the front-end Angular app
-  app.get('/needs/*', index.index);
-  app.get('/demands/*', index.index);
-  app.get('/supplies/*', index.index);  //TODO: Phase 3
-  app.get('/wms/*', index.index);       //TODO: Phase 4
-  app.get('/', index.index);
+  router.get('/needs/*', index.index);
+  router.get('/demands/*', index.index);
+  router.get('/supplies/*', index.index);  //TODO: Phase 3
+  router.get('/wms/*', index.index);       //TODO: Phase 4
+  router.get('/', index.index);
 
   //Anything else is a 404
-  app.get('/*', error.index);
+  router.get('/*', error.index);
+
+  app.use('/', router);
 };
