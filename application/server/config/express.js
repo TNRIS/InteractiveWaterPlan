@@ -13,52 +13,52 @@ require('../lib/csv-response')(express);
  */
 module.exports = function(app) {
 
-  app.configure('development', function(){
-    app.locals({
-      gaTrackingCode: ''
-    });
+  switch (app.settings.env) {
+    case 'production':
+      app.locals({
+        gaTrackingCode: 'UA-491601-10'
+      });
 
-    // Disable caching of scripts for easier testing
-    app.use(function noCache(req, res, next) {
-      if (req.url.indexOf('/scripts/') === 0) {
-        res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.header('Pragma', 'no-cache');
-        res.header('Expires', 0);
-      }
-      next();
-    });
+      // app.use(express.compress());
+      app.use(express.favicon(path.join(config.root, 'public', 'favicon.ico')));
+      app.use(express.static(path.join(config.root, 'public')));
+      break;
 
-    // app.use(express.compress());
-    app.use(express.static(path.join(config.root, '.tmp')));
-    app.use(express.static(path.join(config.root, 'public')));
-    app.set('views', config.root + '/views');
-  });
+    default: //i.e., development
+      app.locals({
+        gaTrackingCode: ''
+      });
 
-  app.configure('production', function(){
-    app.locals({
-      gaTrackingCode: 'UA-491601-10'
-    });
+      // Disable caching of scripts for easier testing
+      app.use(function noCache(req, res, next) {
+        if (req.url.indexOf('/scripts/') === 0) {
+          res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
+          res.header('Pragma', 'no-cache');
+          res.header('Expires', 0);
+        }
+        next();
+      });
 
-    // app.use(express.compress());
-    app.use(express.favicon(path.join(config.root, 'public', 'favicon.ico')));
-    app.use(express.static(path.join(config.root, 'public')));
-    app.set('views', config.root + '/views');
-  });
+      app.use(express.static(path.join(config.root, '.tmp')));
+      app.use(express.static(path.join(config.root, 'public')));
+      break;
+  }
 
-  app.configure(function(){
-    app.engine('html', require('ejs').renderFile);
-    app.set('view engine', 'html');
-    app.disable('x-powered-by');
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(validator());
-    // Router (only error handlers should come after this)
-    app.use(app.router);
-  });
+  app.engine('html', require('swig').renderFile);
+  app.set('view engine', 'html');
 
-  // Error handler
-  app.configure('development', function(){
+  app.set('views', config.root + '/server/views');
+
+  app.disable('x-powered-by');
+  app.use(express.logger('dev'));
+  // app.use(express.bodyParser());
+  // app.use(express.methodOverride());
+  app.use(validator());
+
+  // Router (only error handlers should come after this)
+  app.use(app.router);
+
+  if (app.settings.env !== 'production') {
     app.use(express.errorHandler());
-  });
+  }
 };

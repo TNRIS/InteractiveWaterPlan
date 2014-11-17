@@ -1,16 +1,16 @@
 <div class="header">
   <ul class="nav nav-pills pull-right">
-    <% if (pageName == 'home') { %>
+    {% if (pageName == 'home') %}
       <li class="first-time-here ">
         <a target="_self" title="First time here?" href="/about/#WhatIsThis">
           First time here?
         </a>
       </li>
-    <% } %>
-    <li class="<%= pageName == 'home' ? 'active' : '' %>">
+    {% endif %}
+    <li class="{% if pageName == 'home' %} active {% endif %}">
       <a target="_self" title="Home" href="/">Home</a>
     </li>
-    <li class="<%= pageName == 'about' ? 'active' : '' %>">
+    <li class="{% if pageName == 'about' %} active {% endif %}">
       <a target="_self" title="About" href="/about">About</a>
     </li>
   </ul>

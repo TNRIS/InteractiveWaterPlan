@@ -9,7 +9,7 @@ angular.module('iswpApp')
       //-- NEEDS --
       var needsResolver = function(type, typeIdProperty) {
         return {
-          needsData: function(NeedsService, $stateParams) {
+          needsData: /* @ngInject */ function(NeedsService, $stateParams) {
             return NeedsService.fetch(type, $stateParams[typeIdProperty]);
           }
         };
@@ -20,7 +20,7 @@ angular.module('iswpApp')
           abstract: true,
           url: '/needs',
           resolve: {
-            entities: function(EntityService) {
+            entities: /* @ngInject */ function(EntityService) {
               return EntityService.fetch();
             }
           },
@@ -53,10 +53,10 @@ angular.module('iswpApp')
         .state('needs.entity', {
           url: '/:year/entity/:entityId', // appended to /needs
           resolve: {
-            needsData: function(NeedsService, $stateParams) {
+            needsData: /* @ngInject */ function(NeedsService, $stateParams) {
               return NeedsService.fetch('entity', $stateParams.entityId);
             },
-            entitySummary: function(EntityService, $stateParams) {
+            entitySummary: /* @ngInject */ function(EntityService, $stateParams) {
               return EntityService.fetchSummary($stateParams.entityId);
             }
           },
@@ -68,7 +68,7 @@ angular.module('iswpApp')
       //-- DEMANDS --
       var demandsResolver = function(type, typeIdProperty) {
         return {
-          demandsData: function(DemandsService, $stateParams) {
+          demandsData: /* @ngInject */ function(DemandsService, $stateParams) {
             return DemandsService.fetch(type, $stateParams[typeIdProperty]);
           }
         };
@@ -79,7 +79,7 @@ angular.module('iswpApp')
           abstract: true,
           url: '/demands',
           resolve: {
-            entities: function(EntityService) {
+            entities: /* @ngInject */ function(EntityService) {
               return EntityService.fetch();
             }
           },
@@ -112,10 +112,10 @@ angular.module('iswpApp')
         .state('demands.entity', {
           url: '/:year/entity/:entityId', // appended to /demands
           resolve: {
-            demandsData: function(DemandsService, $stateParams) {
+            demandsData: /* @ngInject */ function(DemandsService, $stateParams) {
               return DemandsService.fetch('entity', $stateParams.entityId);
             },
-            entitySummary: function(EntityService, $stateParams) {
+            entitySummary: /* @ngInject */ function(EntityService, $stateParams) {
               return EntityService.fetchSummary($stateParams.entityId);
             }
           },

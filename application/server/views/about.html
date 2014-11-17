@@ -5,17 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>About | 2012 Texas State Water Plan</title>
-    <meta name="description" content="">
+    <meta name="description" content="Interactive Texas State Water Plan from the Texas Water Development Board">
     <meta name="viewport" content="width=device-width">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="styles/vendor.css">
     <link rel="stylesheet" href="/styles/main.css">
     <link type="text/plain" rel="author" href="/humans.txt" />
   </head>
   <body data-spy="scroll" data-target=".about-nav-container">
     <div class="container">
 
-      <% include partials/_header.html %>
+      {% include "partials/_header.html" %}
 
       <div class="row">
         <div class="col-md-3 hidden-sm hidden-xs about-nav-container">
@@ -305,7 +305,7 @@
         </div>
       </div>
 
-      <% include partials/_footer.html %>
+      {% include "partials/_footer.html" %}
 
     </div>
     <script>
@@ -314,7 +314,7 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', '<%= gaTrackingCode %>', 'texasstatewaterplan.org');
+      ga('create', '{{ gaTrackingCode }}', 'texasstatewaterplan.org');
       ga('send', 'pageview');
     </script>
 

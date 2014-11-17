@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
     <title>2012 Texas State Water Plan</title>
-    <meta name="description" content="">
+    <meta name="description" content="Interactive Texas State Water Plan from the Texas Water Development Board">
     <meta name="viewport" content="width=device-width">
     <meta name="google-site-verification" content="32ucpvdYP24Ur2zsdU4w9GUZ5ivQ01wWiCN2bpDIBcg" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -23,9 +23,9 @@
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" title="browsehappy">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="container"  ng-controller="StateCtrl">
+    <div class="container" ng-controller="StateCtrl">
 
-      <% include partials/_header.html %>
+      {% include "partials/_header.html" %}
 
       <div class="row">
         <div class="col-md-12">
@@ -92,7 +92,7 @@
 
       <div class="data-view-container" ui-view></div>
 
-      <% include partials/_footer.html %>
+      {% include "partials/_footer.html" %}
 
     </div>
 
@@ -102,13 +102,13 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', '<%= gaTrackingCode %>', 'texasstatewaterplan.org');
+      ga('create', '{{ gaTrackingCode }}', 'texasstatewaterplan.org');
       // ga('send', 'pageview'); //Removed for angulartics
     </script>
 
     <!-- Bootstrapped variables -->
     <script>
-      var ISWP_VARS = <%- ISWP_VARS %>;
+      var ISWP_VARS = {{ ISWP_VARS | safe }};
     </script>
 
     <!--[if lt IE 9]>
