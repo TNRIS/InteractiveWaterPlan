@@ -24,7 +24,7 @@ angular.module('iswpApp')
               return EntityService.fetch();
             }
           },
-          template: '<div ui-view class="row"></div>'
+          templateUrl: 'templates/main.html'
         })
         .state('needs.summary', {
           url: '/:year/state', // appended to /needs
@@ -83,7 +83,7 @@ angular.module('iswpApp')
               return EntityService.fetch();
             }
           },
-          template: '<div ui-view class="row"></div>'
+          templateUrl: 'templates/main.html'
         })
         .state('demands.summary', {
           url: '/:year/state', // appended to /demands
