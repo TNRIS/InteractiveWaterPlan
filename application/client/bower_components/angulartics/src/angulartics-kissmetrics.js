@@ -1,5 +1,5 @@
 /**
- * @license Angulartics v0.14.15
+ * @license Angulartics v0.17.0
  * (c) 2013 Luis Farzati http://luisfarzati.github.io/angulartics
  * License: MIT
  */
@@ -12,21 +12,26 @@
  * Enables analytics support for KISSmetrics (http://kissmetrics.com)
  */
 angular.module('angulartics.kissmetrics', ['angulartics'])
-.config(['$analyticsProvider', '$window', function ($analyticsProvider, $window) {
+.config(['$analyticsProvider', function ($analyticsProvider) {
 
   // KM already supports buffered invocations so we don't need
   // to wrap these inside angulartics.waitForVendorApi
 
   // Creates the _kqm array if it doesn't exist already
   // Useful if you want to load angulartics before kissmetrics
-  $window._kmq = _kmq || [];
+  
+  if (typeof(_kmq) == "undefined") {
+    window._kmq = [];
+  } else {
+    window._kmq = _kmq;
+  }
 
   $analyticsProvider.registerPageTrack(function (path) {
-    $window._kmq.push(['record', 'Pageview', { 'Page': path }]);
+    window._kmq.push(['record', 'Pageview', { 'Page': path }]);
   });
 
   $analyticsProvider.registerEventTrack(function (action, properties) {
-    $window._kmq.push(['record', action, properties]);
+    window._kmq.push(['record', action, properties]);
   });
 
 }]);

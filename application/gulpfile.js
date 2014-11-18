@@ -80,16 +80,16 @@ gulp.task('scripts-bower', function () {
   var bowerDir = dirs.client + '/bower_components';
 
   var vendorScripts = [
-      dirs.bower + "/sugar/release/sugar-full.min.js",
-      dirs.bower + "/lodash/dist/lodash.compat.js",
-      dirs.bower + "/select2/select2.min.js",
-      dirs.bower + "/angular-ui-select2/src/select2.js",
-      dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
-      dirs.bower + "/angular-local-storage/angular-local-storage.min.js",
-      dirs.bower + "/angular-bootstrap/ui-bootstrap-tpls.js",
-      dirs.bower + "/angulartics/dist/angulartics.min.js",
-      dirs.bower + "/angulartics/dist/angulartics-ga.min.js"
-    ];
+    dirs.bower + "/sugar/release/sugar-full.min.js",
+    dirs.bower + "/lodash/dist/lodash.compat.js",
+    dirs.bower + "/select2/select2.min.js",
+    dirs.bower + "/angular-ui-select2/src/select2.js",
+    dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
+    dirs.bower + "/angular-local-storage/angular-local-storage.min.js",
+    dirs.bower + "/angular-bootstrap/ui-bootstrap-tpls.js",
+    dirs.bower + "/angulartics/dist/angulartics.min.js",
+    dirs.bower + "/angulartics/dist/angulartics-ga.min.js"
+  ];
 
   return gulp.src(vendorScripts)
     .pipe(concat('vendor.js'))
