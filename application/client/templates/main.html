@@ -1,0 +1,45 @@
+
+<div ng-controller="StateCtrl" class="col-md-12">
+  <div class="row">
+    <div theme-navs class="col-md-6"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 view-intro-text">
+      <p ng-if="isState('needs')">
+        Identified water
+        <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
+        are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
+      </p>
+      <p ng-if="isState('demands')">
+        Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
+      </p>
+    </div>
+  </div>
+
+  <div view-selects></div>
+
+  <div class="row map-top-container" >
+    <div class="year-select-container">
+      <div year-select class="col-md-6"></div>
+    </div>
+
+    <div map-controls class="col-md-6"></div>
+  </div>
+
+  <div leaflet-map class="main-map" ng-hide="mapHidden">
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-12 map-note">
+      <p class="small">
+        Some entities (e.g., county-wide entities) have overlapping locations.
+        Clicking on such entities will expand the group so that they may be viewed individually.
+      </p>
+    </div>
+  </div>
+
+  <div class="data-view-container row" ui-view></div>
+
+</div>

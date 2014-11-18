@@ -23,7 +23,7 @@
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" title="browsehappy">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="container" ng-controller="StateCtrl">
+    <div class="container">
 
       {% include "partials/_header.html" %}
 
@@ -54,43 +54,7 @@
         </div>
       </noscript>
 
-      <div view-selects></div>
-
-      <div class="row">
-        <div class="col-md-12">
-          <p ng-if="isState('needs')" class="lead">
-            Identified water
-            <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
-            are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
-          </p>
-          <p ng-if="isState('demands')" class="lead">
-            Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
-          </p>
-        </div>
-      </div>
-
-      <div class="row map-top-container" >
-        <div theme-navs class="col-md-6 pull-left"></div>
-        <div map-controls class="col-md-6"></div>
-      </div>
-
-      <div leaflet-map class="main-map"
-        ng-hide="mapHidden">
-      </div>
-
-      <div class="row year-select-container">
-        <div year-select class="col-md-6"></div>
-
-        <div class="col-md-6 map-note">
-          <p class="small">
-            Some entities (e.g., county-wide entities) have overlapping locations.
-            <br>
-            Clicking on such entities will expand the group so that they may be viewed individually.
-          </p>
-        </div>
-      </div>
-
-      <div class="data-view-container" ui-view></div>
+      <div class="row" ui-view></div>
 
       {% include "partials/_footer.html" %}
 
