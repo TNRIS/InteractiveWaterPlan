@@ -17,6 +17,7 @@ angular.module('iswpApp')
       label: 'Demand (acre-feet/year) in County',
       cellClass: 'number',
       formatFunction: 'number',
+      formatParameter: 0,
       headerClass: 'text-center'
     };
 

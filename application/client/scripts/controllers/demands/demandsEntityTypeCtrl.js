@@ -18,6 +18,7 @@ angular.module('iswpApp')
       label: 'Demand (acre-feet/year)',
       cellClass: 'number',
       formatFunction: 'number',
+      formatParameter: 0,
       headerClass: 'text-center'
     };
 

@@ -13,13 +13,13 @@ angular.module('iswpApp')
 
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region', cellTemplateUrl: cellTemplateUrl, headerClass: 'text-center', cellClass: 'text-center'},
-      {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
-      {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
-      {map: 'MINING', label: 'Mining', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
-      {map: 'STEAMELECTRIC', label: 'Steam-Electric', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
-      {map: 'LIVESTOCK', label: 'Livestock', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
-      {map: 'IRRIGATION', label: 'Irrigation', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
-      {map: 'TOTAL', label: 'Total', formatFunction: 'number', headerClass: 'text-center', cellClass: 'number'},
+      {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+      {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+      {map: 'MINING', label: 'Mining', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+      {map: 'STEAMELECTRIC', label: 'Steam-Electric', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+      {map: 'LIVESTOCK', label: 'Livestock', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+      {map: 'IRRIGATION', label: 'Irrigation', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+      {map: 'TOTAL', label: 'Total', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
     ];
 
     $scope.tableConfig = {

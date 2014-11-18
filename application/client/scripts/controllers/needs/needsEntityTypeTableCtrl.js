@@ -17,7 +17,8 @@ angular.module('iswpApp')
       map: 'N2010',
       label: 'Need (acre-feet/year)',
       cellClass: 'number',
-      formatFunction: 'number'
+      formatFunction: 'number',
+      formatParameter: 0
     };
 
     var percentCol = {
