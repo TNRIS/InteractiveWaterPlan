@@ -10,32 +10,77 @@ angular.module('iswpApp')
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
+        $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t, i) {
+          return {value: t, text: t.titleize(), '$order': i+1};
+        });
+        $scope.entityTypes.unshift({value: 'summary', text: 'Regional Summary', '$order': 0});
+        $scope.typeSelectOptions = {
+          maxItems: 1,
+          placeholder: 'Select a Water User Type'
+        };
 
-        $scope.entityTypes = ISWP_VARS.entityTypes;
-        $scope.counties = ISWP_VARS.counties;
-        $scope.regions = ISWP_VARS.regions;
+        $scope.counties = _.map(ISWP_VARS.counties, function (c) {
+          return {value: c, text: c.titleize()};
+        });
+        $scope.countySelectOptions = {
+          maxItems: 1,
+          sortField: 'text',
+          placeholder: 'Select a County'
+        };
 
-        $scope.entitySelectOpts = {
-          minimumInputLength: 3,
-          query: function(query) {
-            EntityService.search(query.term)
+        $scope.regions = _.map(ISWP_VARS.regions, function (r) {
+          return {value: r, text: "Region " + r};
+        });
+        $scope.regionSelectOptions = {
+          maxItems: 1,
+          sortField: 'text',
+          placeholder: "Select a Region"
+        };
+
+        $scope.entitySelectOptions = {
+          maxItems: 1,
+          sortField: 'text',
+          placeholder: "Find an Entity",
+          load: function (query, cb) {
+            if (!query || query.length < 3) { return cb(); }
+            EntityService.search(query)
               .then(function(entities) {
                 var results = _.map(entities, function(e) {
                   return {
-                    id: e.EntityId,
+                    value: e.EntityId,
                     text: e.EntityName
                   };
                 });
 
-                query.callback({results: results});
+                cb(results);
               });
 
             $scope.$apply();
-          },
-          initSelection: function(el, callback) {
-            callback(null);
           }
         };
+
+        //TODO: delete
+        // $scope.entitySelectOpts = {
+        //   minimumInputLength: 3,
+        //   query: function(query) {
+        //     EntityService.search(query.term)
+        //       .then(function(entities) {
+        //         var results = _.map(entities, function(e) {
+        //           return {
+        //             id: e.EntityId,
+        //             text: e.EntityName
+        //           };
+        //         });
+
+        //         query.callback({results: results});
+        //       });
+
+        //     $scope.$apply();
+        //   },
+        //   initSelection: function(el, callback) {
+        //     callback(null);
+        //   }
+        // };
 
         $scope.$watch('selectedType', function(type) {
           if (!type || type.isBlank()) {
@@ -57,10 +102,10 @@ angular.module('iswpApp')
             });
           }
 
-          $scope.selectedType = '';
+          $scope.selectedType = null;
         });
 
-        $scope.$watch('selectedRegion', function(region) {
+        $scope.$watch('selectedRegion', function (region) {
           if (!region || region.isBlank()) {
             return;
           }
@@ -73,10 +118,10 @@ angular.module('iswpApp')
             region: region
           });
 
-          $scope.selectedRegion = '';
+          $scope.selectedRegion = null;
         });
 
-        $scope.$watch('selectedCounty', function(county) {
+        $scope.$watch('selectedCounty', function (county) {
           if (!county || county.isBlank()) {
             return;
           }
@@ -89,11 +134,12 @@ angular.module('iswpApp')
             county: county
           });
 
-          $scope.selectedCounty = '';
+          $scope.selectedCounty = null;
         });
 
-        $scope.$watch('selectedEntity', function(entityId) {
-          if (entityId === null || angular.isUndefined(entityId)) {
+        $scope.$watch('selectedEntity', function (entityId) {
+
+          if (entityId === null || _.isEmpty(entityId)) {
             return;
           }
 

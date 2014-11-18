@@ -1,0 +1,42 @@
+{
+  "name": "selectize-ng",
+  "main": "selectize-ng.js",
+  "version": "0.1.0",
+  "authors": [
+    "Kelly Banman <kelly.banman@gmail.com>"
+  ],
+  "description": "Selectize directive for AngularJS with two-way bindings for both values and options",
+  "keywords": [
+    "selectize",
+    "angular",
+    "angularjs",
+    "angular-selectize",
+    "ng-selectize",
+    "select2",
+    "chosen"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/kbanman/selectize-ng",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "lib",
+    "test"
+  ],
+  "devDependencies": {
+    "selectize": "~0.8.5",
+    "jquery": "~2.1.0",
+    "angular": "~1.2.14",
+    "angular-mocks": "~1.2.14"
+  },
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.0",
+    "commit": "3c0e317e24da086c1534a3271bc1a4f1de558ded"
+  },
+  "_source": "git://github.com/kbanman/selectize-ng.git",
+  "_target": "~0.1.0",
+  "_originalSource": "selectize-ng",
+  "_direct": true
+}

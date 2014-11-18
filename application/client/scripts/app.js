@@ -16,12 +16,12 @@ angular.module('iswpApp', [
   'smartTable.table',
   'ui.router',
   'ui.bootstrap',
-  'ui.select2',
   'googlechart',
   'googleviz',
   'angulartics',
   'angulartics.google.analytics',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'selectize-ng'
 ])
   .config(function(localStorageServiceProvider) {
     localStorageServiceProvider.setPrefix('iswp');

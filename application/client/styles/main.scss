@@ -269,6 +269,10 @@ body {
 
 .view-select-container {
   margin-bottom: 10px;
+
+  .selectize-dropdown {
+    z-index: 1001;
+  }
 }
 
 .view-select {

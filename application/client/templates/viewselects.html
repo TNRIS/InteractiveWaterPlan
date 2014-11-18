@@ -1,88 +1,27 @@
 <div class="view-select-container">
   <div class="row">
-    <div class="col-md-12 hidden-xs">
-      <p class="small">Select a type, area, or entity:</p>
-    </div>
-    <div class="col-md-12 visible-xs">
-      <p class="small">Select a type or area:</p>
+    <div class="col-md-12">
+      <p>View data by:</p>
     </div>
   </div>
 
-  <div class="row hidden-xs">
+  <div class="row">
     <div class="col-sm-3">
-      <select ui-select2 class="view-select" ng-model="selectedType" data-placeholder="Select a Water User Type">
-          <option value=""></option>
-          <option value="summary">Regional Summary</option>
-          <optgroup label="Entity Types">
-            <option ng-repeat="type in entityTypes" value="{{type}}">
-              {{type | titleize}}
-            </option>
-          </optgroup>
-      </select>
+      <select selectize="typeSelectOptions" ng-model="selectedType" options="entityTypes"></select>
     </div>
 
     <div class="col-sm-3">
-      <select ui-select2 class="view-select" ng-model="selectedRegion" data-placeholder="Select a Region">
-          <option value=""></option>
-          <option ng-repeat="region in regions" value="{{region}}">
-            Region {{region}}
-          </option>
-      </select>
+      <select selectize="regionSelectOptions" ng-model="selectedRegion" options="regions"></select>
     </div>
 
     <div class="col-sm-3">
-      <select ui-select2 class="view-select" ng-model="selectedCounty" data-placeholder="Select a County">
-          <option value=""></option>
-          <option ng-repeat="county in counties" value="{{county}}">
-            {{county | titleize}}
-          </option>
-      </select>
+      <select selectize="countySelectOptions" ng-model="selectedCounty" options="counties"></select>
     </div>
 
     <div class="col-sm-3">
-      <input type="text" ui-select2="entitySelectOpts" data-placeholder="Find an Entity"
-        class="view-select" ng-model="selectedEntity">
-      </input>
+      <select selectize="entitySelectOptions" ng-model="selectedEntity"></select>
+
     </div>
-  </div>
-
-  <div class="row visible-xs">
-    <div class="col-sm-4 text-center">
-      <select class="view-select" ng-model="selectedType" data-placeholder="Select a Water User Type">
-          <option value="" disabled>Select a Water User Type</option>
-          <option value="summary">Regional Summary</option>
-          <optgroup label="Entity Types">
-            <option ng-repeat="type in entityTypes" value="{{type}}">
-              {{type | titleize}}
-            </option>
-          </optgroup>
-      </select>
-    </div>
-
-    <br>
-
-    <div class="col-sm-4 text-center">
-      <select class="view-select" ng-model="selectedRegion" data-placeholder="Select a Region">
-          <option value="" disabled>Select a Region</option>
-          <option ng-repeat="region in regions" value="{{region}}">
-            Region {{region}}
-          </option>
-      </select>
-    </div>
-
-    <br>
-
-    <div class="col-sm-4 text-center">
-      <select class="view-select" ng-model="selectedCounty" data-placeholder="Select a County">
-          <option value="" disabled>Select a County</option>
-          <option ng-repeat="county in counties" value="{{county}}">
-            {{county | titleize}}
-          </option>
-      </select>
-    </div>
-
-
-
   </div>
 </div>
 

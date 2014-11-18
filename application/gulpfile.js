@@ -77,18 +77,15 @@ gulp.task('misc-package-json', function () {
 gulp.task('scripts', ['scripts-bower', 'scripts-client', 'scripts-server', 'scripts-shims']);
 
 gulp.task('scripts-bower', function () {
-  var bowerDir = dirs.client + '/bower_components';
-
   var vendorScripts = [
     dirs.bower + "/sugar/release/sugar-full.min.js",
     dirs.bower + "/lodash/dist/lodash.compat.js",
-    dirs.bower + "/select2/select2.min.js",
-    dirs.bower + "/angular-ui-select2/src/select2.js",
     dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
     dirs.bower + "/angular-local-storage/angular-local-storage.min.js",
     dirs.bower + "/angular-bootstrap/ui-bootstrap-tpls.js",
     dirs.bower + "/angulartics/dist/angulartics.min.js",
-    dirs.bower + "/angulartics/dist/angulartics-ga.min.js"
+    dirs.bower + "/angulartics/dist/angulartics-ga.min.js",
+    dirs.bower + "/selectize-ng/dist/standalone/selectize-ng.min.js"
   ];
 
   return gulp.src(vendorScripts)
@@ -172,7 +169,7 @@ gulp.task('styles-images', function () {
 gulp.task('styles-vendor', function () {
   var vendorStyles = [
     dirs.bower + "/font-awesome/css/font-awesome.min.css",
-    dirs.bower + "/select2/select2.css"
+    dirs.bower + "/selectize/dist/css/selectize.bootstrap3.css"
   ];
 
   return gulp.src(vendorStyles)
