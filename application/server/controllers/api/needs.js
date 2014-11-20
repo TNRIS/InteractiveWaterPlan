@@ -2,16 +2,14 @@
 
 require('sugar');
 
-var sqlite3 = require('sqlite3'),
-    utils = require('./../../utils'),
-    config = require('./../../config/config');
-
-var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
+var express = require('express');
+var db = require('./../../db');
+var utils = require('./../../utils');
 
 //TODO: Should we validate params against regions and county names?
 
 exports.getAllNeeds = function(req, res) {
-  var statement = 'SELECT EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId, EntityName, WugType, ' +
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
     'FROM vwMapWugNeeds';
 
@@ -41,7 +39,7 @@ exports.getNeedsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
     'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
     'FROM vwMapWugNeeds ' +
@@ -64,7 +62,7 @@ exports.getNeedsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
     'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
     'FROM vwMapWugNeeds ' +
@@ -87,7 +85,7 @@ exports.getNeedsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
     'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
     'FROM vwMapWugNeeds ' +
@@ -111,7 +109,7 @@ exports.getNeedsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
     'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
     'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
     'FROM vwMapWugNeeds ' +
@@ -122,3 +120,15 @@ exports.getNeedsForEntity = function(req, res) {
   utils.csvOrJsonSqlAll(req, res, db, statement, [entityId]);
 };
 
+
+/**
+ * Expose a router object
+ */
+var router = express.Router();
+router.get('/', exports.getAllNeeds);
+router.get('/summary', exports.getRegionSummary);
+router.get('/region/:region', exports.getNeedsForRegion);
+router.get('/county/:county', exports.getNeedsForCounty);
+router.get('/entity/:entityId', exports.getNeedsForEntity);
+router.get('/type/:entityType', exports.getNeedsForEntityType);
+exports.router = router;

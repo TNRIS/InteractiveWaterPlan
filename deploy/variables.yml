@@ -2,7 +2,7 @@
 # variables used in playbooks
 app_dir: /var/www/water-plan
 app_log_file: /var/log/water-plan.log
-app_server: server.js
+app_server: server/index.js
 mapnik_dir: "{{ tilestache_dir }}/mapnik-styles"
 nginx_dir: /var/www/
 nginx_port: 8090

@@ -2,17 +2,15 @@
 
 require('sugar');
 
-var sqlite3 = require('sqlite3'),
-    utils = require('./../../utils'),
-    config = require('./../../config/config');
-
-var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
+var express = require('express');
+var db = require('./../../db');
+var utils = require('./../../utils');
 
 //The source db has 'EntityId' formatted as entityID for the demands
 // data so we need to select it as `EntityId` in each SQL statement
 
 exports.getAllDemands = function(req, res) {
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand';
 
@@ -41,7 +39,7 @@ exports.getDemandsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE WugRegion == ? ORDER BY EntityName';
@@ -61,7 +59,7 @@ exports.getDemandsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE WugCounty == ? ORDER BY EntityName';
@@ -81,7 +79,7 @@ exports.getDemandsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE WugType == ? ORDER BY EntityName';
@@ -102,10 +100,22 @@ exports.getDemandsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
+  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
     'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
     'FROM vwMapWugDemand ' +
     'WHERE EntityId == ? ORDER BY EntityName';
 
   utils.csvOrJsonSqlAll(req, res, db, statement, [entityId]);
 };
+
+/**
+ * Expose a router object
+ */
+var router = express.Router();
+router.get('/', exports.getAllDemands);
+router.get('/summary', exports.getRegionSummary);
+router.get('/region/:region', exports.getDemandsForRegion);
+router.get('/county/:county', exports.getDemandsForCounty);
+router.get('/entity/:entityId', exports.getDemandsForEntity);
+router.get('/type/:entityType', exports.getDemandsForEntityType);
+exports.router = router;

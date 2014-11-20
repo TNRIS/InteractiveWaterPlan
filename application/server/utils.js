@@ -30,8 +30,6 @@ exports.fileAsJsonResponse = function(res, filePath) {
 exports.sqlAllAsCsvResponse = function(req, res, db, statement, params) {
   db.all(statement, params, function(err, rows) {
     if (err) { throw err; }
-    //TODO: Option to add some descriptive text to the top of each
-    // file (download date, units, where to find more info, etc)
     res.csv(rows, {
       //TODO: fileName: path.basename(req.route.path) + ".csv",
       fields: _.keys(_.first(rows))

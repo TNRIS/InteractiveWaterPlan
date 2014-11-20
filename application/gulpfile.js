@@ -34,7 +34,7 @@ var paths = {
     ngTemplates: dirs.ngTemplates + '/**/*.html',
     compass: dirs.client + '/styles/main.scss',
     serverDir: dirs.server + '/**/*',
-    serverFile: './server.js',
+    serverFile: './server/index.js',
     views: dirs.server + '/views/**/*.html'
   };
 

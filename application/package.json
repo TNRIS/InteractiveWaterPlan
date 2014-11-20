@@ -7,6 +7,7 @@
     "url": "https://github.com/TNRIS/InteractiveWaterPlan"
   },
   "dependencies": {
+    "cors": "^2.5.2",
     "express": "^4.10.2",
     "express-validator": "^1.0.1",
     "json2csv": "^2.2.1",
@@ -53,6 +54,6 @@
   },
   "scripts": {
     "test": "grunt test",
-    "start": "nodemon --cwd ./dist --watch server/ server.js"
+    "start": "nodemon --cwd ./dist --watch server/ server/index.js"
   }
 }

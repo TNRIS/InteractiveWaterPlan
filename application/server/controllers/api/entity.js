@@ -1,10 +1,11 @@
 'use strict';
 
-var config = require('./../../config/config'),
-    sqlite3 = require('sqlite3'),
-    utils = require('./../../utils');
+require('sugar');
 
-var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
+var express = require('express');
+var db = require('./../../db');
+var utils = require('./../../utils');
+var config = require('./../../config/config');
 
 exports.getEntities = function(req, res) {
   var statement = 'SELECT EntityId, EntityName, Latitude, Longitude ' +
@@ -80,3 +81,14 @@ exports.getEntitiesByNamePartial = function(req, res) {
 
   utils.sqlAllAsJsonResponse(res, db, statement, params);
 };
+
+
+/**
+ * Expose a router object
+ */
+var router = express.Router();
+router.get('/', exports.getEntities);
+router.get('/search', exports.getEntitiesByNamePartial);
+router.get('/:entityId', exports.getEntity);
+router.get('/:entityId/summary', exports.getEntitySummary);
+exports.router = router;
