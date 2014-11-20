@@ -10,6 +10,28 @@ angular.module('iswpApp')
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
+        //TODO: Put in constants?
+        $scope.viewTypes = [
+          {text: 'Regional Summary', value: 'summary', showSub: false},
+          {text: 'Usage Type', value: 'type', showSub: true},
+          {text: 'Regions', value: 'region', showSub: true},
+          {text: 'Counties', value: 'county', showSub: true},
+          {text: 'Water User Group', value: 'entity', showSub: true},
+        ];
+
+        //TODO: grab selectedViewType from route
+        $scope.selectedViewType = null;
+        
+        if (!$scope.selectedViewType) {
+          $scope.showViewTypeSelect = true;
+        }
+
+        $scope.$watch('selectedViewType', function (val) {
+          if (!val) { return; }
+          $scope.showViewTypeSelect = false;
+        });
+
+
         $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t, i) {
           return {value: t, text: t.titleize(), '$order': i+1};
         });
@@ -58,29 +80,6 @@ angular.module('iswpApp')
             $scope.$apply();
           }
         };
-
-        //TODO: delete
-        // $scope.entitySelectOpts = {
-        //   minimumInputLength: 3,
-        //   query: function(query) {
-        //     EntityService.search(query.term)
-        //       .then(function(entities) {
-        //         var results = _.map(entities, function(e) {
-        //           return {
-        //             id: e.EntityId,
-        //             text: e.EntityName
-        //           };
-        //         });
-
-        //         query.callback({results: results});
-        //       });
-
-        //     $scope.$apply();
-        //   },
-        //   initSelection: function(el, callback) {
-        //     callback(null);
-        //   }
-        // };
 
         $scope.$watch('selectedType', function(type) {
           if (!type || type.isBlank()) {
@@ -138,7 +137,6 @@ angular.module('iswpApp')
         });
 
         $scope.$watch('selectedEntity', function (entityId) {
-
           if (entityId === null || _.isEmpty(entityId)) {
             return;
           }

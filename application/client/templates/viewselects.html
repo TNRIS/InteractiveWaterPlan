@@ -5,23 +5,34 @@
     </div>
   </div>
 
+
   <div class="row">
-    <div class="col-sm-3">
-      <select selectize="typeSelectOptions" ng-model="selectedType" options="entityTypes"></select>
+    <div ng-class="showViewTypeSelect ? 'col-sm-3' : 'col-sm-2'">
+      <a class="selected-view" ng-hide="showViewTypeSelect" ng-click="showViewTypeSelect=true" href="">
+        {{selectedViewType.text}}
+      </a>
+      <div ng-show="showViewTypeSelect">
+        <select class="form-control" ng-model="selectedViewType" ng-options="v.text for v in viewTypes"></select>
+      </div>
     </div>
+    <div ng-show="selectedViewType.showSub" ng-hide="showViewTypeSelect" class="col-sm-4">
+      <div ng-show="selectedViewType.value == 'region'">
+        <select selectize="regionSelectOptions" ng-model="selectedRegion" options="regions"></select>
+      </div>
 
-    <div class="col-sm-3">
-      <select selectize="regionSelectOptions" ng-model="selectedRegion" options="regions"></select>
-    </div>
+      <div ng-show="selectedViewType.value == 'type'">
+        <select selectize="typeSelectOptions" ng-model="selectedType" options="entityTypes"></select>
+      </div>
 
-    <div class="col-sm-3">
-      <select selectize="countySelectOptions" ng-model="selectedCounty" options="counties"></select>
-    </div>
+      <div ng-show="selectedViewType.value == 'county'">
+        <select selectize="countySelectOptions" ng-model="selectedCounty" options="counties"></select>
+      </div>
 
-    <div class="col-sm-3">
-      <select selectize="entitySelectOptions" ng-model="selectedEntity"></select>
-
+      <div ng-show="selectedViewType.value == 'entity'">
+        <select selectize="entitySelectOptions" ng-model="selectedEntity"></select>
+      </div>
     </div>
   </div>
+
 </div>
 
