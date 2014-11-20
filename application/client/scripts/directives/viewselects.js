@@ -19,12 +19,9 @@ angular.module('iswpApp')
           {text: 'Water User Group', value: 'entity', showSub: true},
         ];
 
-        //TODO: grab selectedViewType from route
-        $scope.selectedViewType = null;
-
-        if (!$scope.selectedViewType) {
-          $scope.showViewTypeSelect = true;
-        }
+        //grab selectedViewType from route
+        var currViewValue = $state.current.name.split('.')[1];
+        $scope.selectedViewType = _.find($scope.viewTypes, {value: currViewValue});
 
         $scope.$watch('selectedViewType', function (selected) {
           if (!selected) { return; }
@@ -69,7 +66,7 @@ angular.module('iswpApp')
         $scope.entitySelectOptions = {
           maxItems: 1,
           sortField: 'text',
-          placeholder: "Find an Entity",
+          placeholder: "Search for a Water User Group",
           load: function (query, cb) {
             if (!query || query.length < 3) { return cb(); }
             EntityService.search(query)

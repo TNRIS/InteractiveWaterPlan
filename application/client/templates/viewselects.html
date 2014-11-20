@@ -1,21 +1,17 @@
 <div class="view-select-container">
-  <div class="row">
-    <div class="col-md-12">
-      <p>View data by:</p>
-    </div>
-  </div>
-
 
   <div class="row">
-    <div ng-class="showViewTypeSelect ? 'col-sm-3' : 'col-sm-2'">
-      <a class="selected-view" ng-hide="showViewTypeSelect" ng-click="showViewTypeSelect=true" href="">
-        {{selectedViewType.text}}
-      </a>
+    <div class="col-sm-3">
+      <p>View data by:
+        <a class="selected-view" ng-hide="showViewTypeSelect" ng-click="showViewTypeSelect=true" href="">
+          {{selectedViewType.text}}
+        </a>
+      </p>
       <div ng-show="showViewTypeSelect">
         <select class="form-control" ng-model="selectedViewType" ng-options="v.text for v in viewTypes"></select>
       </div>
     </div>
-    <div ng-show="selectedViewType.showSub" ng-hide="showViewTypeSelect" class="col-sm-4">
+    <div ng-show="selectedViewType.showSub" ng-hide="showViewTypeSelect" class="col-sm-3">
       <div ng-show="selectedViewType.value == 'region'">
         <select selectize="regionSelectOptions" ng-model="selectedRegion" options="regions"></select>
       </div>
