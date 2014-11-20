@@ -27,7 +27,7 @@ angular.module('iswpApp')
       {map: 'WugRegion', label: 'Region', cellClass: 'text-center'},
       {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
       {map: 'WugCounty', label: 'County', cellTemplateUrl: cellTemplateUrl},
-      {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
+      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: cellTemplateUrl},
       demandsCol
     ];
 

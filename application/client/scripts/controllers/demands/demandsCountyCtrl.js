@@ -26,7 +26,7 @@ angular.module('iswpApp')
     $scope.tableColumns = [
       {map: 'WugCounty', label: 'County'},
       {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
-      {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
+      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: cellTemplateUrl},
       demandsCol
     ];
 
