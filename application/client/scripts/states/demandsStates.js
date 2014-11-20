@@ -14,7 +14,7 @@ angular.module('iswpApp').config(function ($stateProvider) {
       abstract: true,
       url: '/demands',
       resolve: {
-        entities: /* @ngInject */ function(EntityService) {
+        entities: /* @ngInject */ function (EntityService) {
           return EntityService.fetch();
         }
       },
