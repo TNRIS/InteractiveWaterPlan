@@ -21,21 +21,28 @@ angular.module('iswpApp')
 
         //TODO: grab selectedViewType from route
         $scope.selectedViewType = null;
-        
+
         if (!$scope.selectedViewType) {
           $scope.showViewTypeSelect = true;
         }
 
-        $scope.$watch('selectedViewType', function (val) {
-          if (!val) { return; }
+        $scope.$watch('selectedViewType', function (selected) {
+          if (!selected) { return; }
           $scope.showViewTypeSelect = false;
-        });
 
+          if (selected.value === 'summary') {
+            var currentYear = $stateParams.year;
+            var statePrefix = _.first($state.current.name.split('.'));
+
+            $state.go(statePrefix + '.summary', {
+              year: currentYear
+            });
+          }
+        });
 
         $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t, i) {
-          return {value: t, text: t.titleize(), '$order': i+1};
+          return {value: t, text: t.titleize(), '$order': i};
         });
-        $scope.entityTypes.unshift({value: 'summary', text: 'Regional Summary', '$order': 0});
         $scope.typeSelectOptions = {
           maxItems: 1,
           placeholder: 'Select a Water User Type'
@@ -89,17 +96,10 @@ angular.module('iswpApp')
           var currentYear = $stateParams.year;
           var statePrefix = _.first($state.current.name.split('.'));
 
-          if (type.toLowerCase() === 'summary') {
-            $state.go(statePrefix + '.summary', {
-              year: currentYear
-            });
-          }
-          else {
-            $state.go(statePrefix + '.type', {
-              year: currentYear,
-              entityType: type
-            });
-          }
+          $state.go(statePrefix + '.type', {
+            year: currentYear,
+            entityType: type
+          });
 
           $scope.selectedType = null;
         });
