@@ -7,30 +7,25 @@ var express = require('express');
 var db = require('./../../db');
 var utils = require('./../../utils');
 var config = require('./../../config/config');
+var validators = require('./../../lib/validators');
+
+function selectEntities() {
+  return db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
+    .from('EntityCoordinates');
+}
 
 exports.getEntities = function(req, res) {
-  db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
-    .from('EntityCoordinates')
+  selectEntities()
     .then(function (result) {
       return res.json(result);
     });
 };
 
 exports.getEntity = function(req, res) {
-  req.check('entityId', 'Must be a valid Water User Group Entity ID')
-    .notEmpty()
-    .isInt();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
-    .from('EntityCoordinates')
+  selectEntities()
     .where('EntityId', entityId)
     .then(function (result) {
       return res.json(_.first(result));
@@ -38,15 +33,6 @@ exports.getEntity = function(req, res) {
 };
 
 exports.getEntitySummary = function(req, res) {
-  req.check('entityId', 'Must be a valid Water User Group Entity ID')
-    .notEmpty()
-    .isInt();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
@@ -70,14 +56,13 @@ exports.getEntitiesByNamePartial = function(req, res) {
 
   var errors = req.validationErrors();
   if (errors && errors.length) {
-    return res.json(400, {errors: errors});
+    return res.status(400).json({errors: errors});
   }
 
   var nameQuery = '%' + req.query.name + '%';
   var startsWithName = req.query.name + '%';
 
-  db.select('EntityId', 'EntityName')
-    .from('EntityCoordinates')
+  selectEntities()
     .where('EntityName', 'like', nameQuery)
     .orderByRaw('CASE WHEN EntityName LIKE "' + startsWithName + '" THEN 1 ELSE 2 END')
     .limit(10)
@@ -93,6 +78,6 @@ exports.getEntitiesByNamePartial = function(req, res) {
 var router = express.Router();
 router.get('/', exports.getEntities);
 router.get('/search', exports.getEntitiesByNamePartial);
-router.get('/:entityId', exports.getEntity);
-router.get('/:entityId/summary', exports.getEntitySummary);
+router.get('/:entityId', validators.validateEntityId, exports.getEntity);
+router.get('/:entityId/summary', validators.validateEntityId, exports.getEntitySummary);
 exports.router = router;

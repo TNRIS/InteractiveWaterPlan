@@ -38,7 +38,7 @@ exports.getCountyGeoJsonByName = function(req, res) {
 
   var errors = req.validationErrors();
   if (errors && errors.length) {
-    return res.json(400, {errors: errors});
+    return res.status(400).json({errors: errors});
   }
 
   var countyName = req.params.name.toUpperCase();
@@ -50,7 +50,7 @@ exports.getCountyGeoJsonByName = function(req, res) {
   });
 
   if (!countyFeat) {
-    return res.json(404, {errors: 'Not Found'});
+    return res.status(400).json({errors: 'Not Found'});
   }
 
   res.json(countyFeat);
