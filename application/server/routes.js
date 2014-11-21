@@ -6,6 +6,7 @@ var cors = require('cors');
 var places = require('./controllers/api/places');
 var needs = require('./controllers/api/needs');
 var demands = require('./controllers/api/demands');
+var strategies = require('./controllers/api/strategies');
 var entity = require('./controllers/api/entity');
 var type = require('./controllers/api/type');
 var about = require('./controllers/about');
@@ -25,6 +26,7 @@ module.exports = function(app) {
   apiRouter.use('/demands', demands.router);
   apiRouter.use('/entity', entity.router);
   apiRouter.use('/type', type.router);
+  apiRouter.use('/strategies', strategies.router);
   apiRouter.get('/', about.api); // api documentation page
   apiRouter.get('*', error.index); //404 on all undefined routes
 

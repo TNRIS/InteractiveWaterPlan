@@ -6,23 +6,23 @@ var express = require('express');
 var db = require('./../../db');
 var utils = require('./../../utils');
 
-//TODO: Should we validate params against regions and county names?
+var viewName = 'vwMapWugNeeds';
 
 exports.getAllNeeds = function(req, res) {
-  var statement = 'SELECT EntityId, EntityName, WugType, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060 ' +
-    'FROM vwMapWugNeeds';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement);
+  db.select('EntityId', 'EntityName', 'WugType', 'WugRegion', 'WugCounty',
+    'N2010', 'N2020', 'N2030', 'N2040', 'N2050', 'N2060')
+    .from(viewName)
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 
 exports.getRegionSummary = function(req, res) {
-  var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
-    'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
-    'FROM vwMapWugNeedsA1 ORDER BY WugRegion';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement);
+  db.select('REGION as WugRegion', 'DECADE', 'MUNICIPAL', 'IRRIGATION',
+    'MANUFACTURING', 'MINING', 'STEAM-ELECTRIC as STEAMELECTRIC', 'LIVESTOCK',
+    'TOTAL')
+    .from('vwMapWugNeedsA1')
+    .orderBy('WugRegion')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getNeedsForRegion = function(req, res) {
@@ -39,15 +39,14 @@ exports.getNeedsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE WugRegion == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [region]);
+  db.select('vwMapWugNeeds.EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'N2010', 'N2020', 'N2030', 'N2040', 'N2050', 'N2060',
+    'NPD2010', 'NPD2020', 'NPD2030', 'NPD2040', 'NPD2050', 'NPD2060')
+    .from(viewName)
+    .innerJoin('vwMapEntityNeedsAsPctOfDemand', 'vwMapWugNeeds.EntityId', 'vwMapEntityNeedsAsPctOfDemand.EntityId')
+    .where('WugRegion', region)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getNeedsForCounty = function(req, res) {
@@ -62,15 +61,14 @@ exports.getNeedsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE WugCounty == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [county]);
+  db.select('vwMapWugNeeds.EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'N2010', 'N2020', 'N2030', 'N2040', 'N2050', 'N2060',
+    'NPD2010', 'NPD2020', 'NPD2030', 'NPD2040', 'NPD2050', 'NPD2060')
+    .from(viewName)
+    .innerJoin('vwMapEntityNeedsAsPctOfDemand', 'vwMapWugNeeds.EntityId', 'vwMapEntityNeedsAsPctOfDemand.EntityId')
+    .where('WugCounty', county)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getNeedsForEntityType = function(req, res) {
@@ -85,15 +83,14 @@ exports.getNeedsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE WugType == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [entityType]);
+  db.select('vwMapWugNeeds.EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'N2010', 'N2020', 'N2030', 'N2040', 'N2050', 'N2060',
+    'NPD2010', 'NPD2020', 'NPD2030', 'NPD2040', 'NPD2050', 'NPD2060')
+    .from(viewName)
+    .innerJoin('vwMapEntityNeedsAsPctOfDemand', 'vwMapWugNeeds.EntityId', 'vwMapEntityNeedsAsPctOfDemand.EntityId')
+    .where('WugType', entityType)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getNeedsForEntity = function(req, res) {
@@ -109,15 +106,14 @@ exports.getNeedsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT vwMapWugNeeds.EntityId, EntityName, WugType, ' +
-    'WugRegion, WugCounty, N2010, N2020, N2030, N2040, N2050, N2060, ' +
-    'NPD2010, NPD2020, NPD2030, NPD2040, NPD2050, NPD2060 ' +
-    'FROM vwMapWugNeeds ' +
-    'INNER JOIN vwMapEntityNeedsAsPctOfDemand ' +
-    'ON vwMapWugNeeds.EntityId == vwMapEntityNeedsAsPctOfDemand.EntityId ' +
-    'WHERE vwMapWugNeeds.EntityId == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [entityId]);
+  db.select('vwMapWugNeeds.EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'N2010', 'N2020', 'N2030', 'N2040', 'N2050', 'N2060',
+    'NPD2010', 'NPD2020', 'NPD2030', 'NPD2040', 'NPD2050', 'NPD2060')
+    .from(viewName)
+    .innerJoin('vwMapEntityNeedsAsPctOfDemand', 'vwMapWugNeeds.EntityId', 'vwMapEntityNeedsAsPctOfDemand.EntityId')
+    .where('vwMapWugNeeds.EntityId', entityId)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 

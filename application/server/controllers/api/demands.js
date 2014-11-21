@@ -6,23 +6,25 @@ var express = require('express');
 var db = require('./../../db');
 var utils = require('./../../utils');
 
+var viewName = 'vwMapWugDemand';
+
 //The source db has 'EntityId' formatted as entityID for the demands
 // data so we need to select it as `EntityId` in each SQL statement
 
 exports.getAllDemands = function(req, res) {
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement);
+  db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'D2010', 'D2020', 'D2030', 'D2040', 'D2050', 'D2060')
+    .from(viewName)
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getRegionSummary = function(req, res) {
-  var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
-    'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
-    'FROM vwMapWugDemandsA1 ORDER BY WugRegion';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement);
+  db.select('REGION as WugRegion', 'DECADE', 'MUNICIPAL', 'IRRIGATION',
+    'MANUFACTURING', 'MINING', 'STEAM-ELECTRIC as STEAMELECTRIC', 'LIVESTOCK',
+    'TOTAL')
+    .from('vwMapWugDemandsA1')
+    .orderBy('WugRegion')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForRegion = function(req, res) {
@@ -39,12 +41,12 @@ exports.getDemandsForRegion = function(req, res) {
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE WugRegion == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [region]);
+  db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'D2010', 'D2020', 'D2030', 'D2040', 'D2050', 'D2060')
+    .from(viewName)
+    .where('WugRegion', region)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForCounty = function(req, res) {
@@ -59,12 +61,12 @@ exports.getDemandsForCounty = function(req, res) {
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE WugCounty == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [county]);
+  db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'D2010', 'D2020', 'D2030', 'D2040', 'D2050', 'D2060')
+    .from(viewName)
+    .where('WugCounty', county)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForEntityType = function(req, res) {
@@ -79,12 +81,12 @@ exports.getDemandsForEntityType = function(req, res) {
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE WugType == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [entityType]);
+  db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'D2010', 'D2020', 'D2030', 'D2040', 'D2050', 'D2060')
+    .from(viewName)
+    .where('WugType', entityType)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForEntity = function(req, res) {
@@ -100,12 +102,12 @@ exports.getDemandsForEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE EntityId == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [entityId]);
+  db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'D2010', 'D2020', 'D2030', 'D2040', 'D2050', 'D2060')
+    .from(viewName)
+    .where('EntityId', entityId)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 /**

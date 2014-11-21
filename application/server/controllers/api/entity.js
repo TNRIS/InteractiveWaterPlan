@@ -2,15 +2,18 @@
 
 require('sugar');
 
+var _ = require('lodash');
 var express = require('express');
 var db = require('./../../db');
 var utils = require('./../../utils');
 var config = require('./../../config/config');
 
 exports.getEntities = function(req, res) {
-  var statement = 'SELECT EntityId, EntityName, Latitude, Longitude ' +
-    'FROM EntityCoordinates';
-  utils.sqlAllAsJsonResponse(res, db, statement);
+  db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
+    .from('EntityCoordinates')
+    .then(function (result) {
+      return res.json(result);
+    });
 };
 
 exports.getEntity = function(req, res) {
@@ -26,10 +29,12 @@ exports.getEntity = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId, EntityName, Latitude, Longitude ' +
-    'FROM EntityCoordinates WHERE EntityId = ?';
-
-  utils.sqlOneAsJsonResponse(res, db, statement, [entityId]);
+  db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
+    .from('EntityCoordinates')
+    .where('EntityId', entityId)
+    .then(function (result) {
+      return res.json(_.first(result));
+    });
 };
 
 exports.getEntitySummary = function(req, res) {
@@ -45,9 +50,12 @@ exports.getEntitySummary = function(req, res) {
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT * FROM vwMapEntitySummary WHERE EntityId = ?';
-
-  utils.sqlOneAsJsonResponse(res, db, statement, [entityId]);
+  db.select().from('vwMapEntitySummary')
+    .where('EntityId', entityId)
+    .limit(1)
+    .then(function (result) {
+      return res.json(_.first(result));
+    });
 };
 
 exports.getEntityTypes = function(req, res) {
@@ -65,21 +73,17 @@ exports.getEntitiesByNamePartial = function(req, res) {
     return res.json(400, {errors: errors});
   }
 
-  var nameQuery = req.query.name;
+  var nameQuery = '%' + req.query.name + '%';
+  var startsWithName = req.query.name + '%';
 
-  var statement = 'SELECT EntityId, EntityName ' +
-    'FROM EntityCoordinates ' +
-    'WHERE EntityName LIKE $contains ' +
-    'ORDER BY '  +
-    '  CASE WHEN EntityName LIKE $startsWith THEN 1 ELSE 2 END ' +
-    'LIMIT 10';
-
-  var params = {
-    $contains: '%' + nameQuery + '%',
-    $startsWith: nameQuery + '%'
-  };
-
-  utils.sqlAllAsJsonResponse(res, db, statement, params);
+  db.select('EntityId', 'EntityName')
+    .from('EntityCoordinates')
+    .where('EntityName', 'like', nameQuery)
+    .orderByRaw('CASE WHEN EntityName LIKE "' + startsWithName + '" THEN 1 ELSE 2 END')
+    .limit(10)
+    .then(function (results) {
+      return res.json(results);
+    });
 };
 
 
