@@ -34,7 +34,7 @@ var paths = {
     ngTemplates: dirs.ngTemplates + '/**/*.html',
     compass: dirs.client + '/styles/main.scss',
     serverDir: dirs.server + '/**/*',
-    serverFile: './server.js',
+    serverFile: './server/index.js',
     views: dirs.server + '/views/**/*.html'
   };
 
@@ -168,8 +168,7 @@ gulp.task('styles-images', function () {
 
 gulp.task('styles-vendor', function () {
   var vendorStyles = [
-    dirs.bower + "/font-awesome/css/font-awesome.min.css",
-    dirs.bower + "/selectize/dist/css/selectize.bootstrap3.css"
+    dirs.bower + "/font-awesome/css/font-awesome.min.css"
   ];
 
   return gulp.src(vendorStyles)

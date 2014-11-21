@@ -45,7 +45,7 @@ angular.module('iswpApp')
         {map: 'EntityName', label: 'Name'},
         {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: cellTemplateUrl},
         {map: 'WugCounty', label: 'County', cellTemplateUrl: cellTemplateUrl},
-        {map: 'WugType', label: 'Entity Type', cellTemplateUrl: cellTemplateUrl},
+        {map: 'WugType', label: 'Water User Type', cellTemplateUrl: cellTemplateUrl},
         needsCol,
         percentCol
       ];

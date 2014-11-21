@@ -1,52 +1,47 @@
 'use strict';
 
-var config = require('./../../config/config'),
-    sqlite3 = require('sqlite3'),
-    utils = require('./../../utils');
+require('sugar');
 
-var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
+var _ = require('lodash');
+var express = require('express');
+var db = require('./../../db');
+var utils = require('./../../utils');
+var config = require('./../../config/config');
+var validators = require('./../../lib/validators');
+
+function selectEntities() {
+  return db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
+    .from('EntityCoordinates');
+}
 
 exports.getEntities = function(req, res) {
-  var statement = 'SELECT EntityId, EntityName, Latitude, Longitude ' +
-    'FROM EntityCoordinates';
-  utils.sqlAllAsJsonResponse(res, db, statement);
+  selectEntities()
+    .then(function (result) {
+      return res.json(result);
+    });
 };
 
 exports.getEntity = function(req, res) {
-  req.check('entityId', 'Must be a valid Water User Group Entity ID')
-    .notEmpty()
-    .isInt();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId, EntityName, Latitude, Longitude ' +
-    'FROM EntityCoordinates WHERE EntityId = ?';
-
-  utils.sqlOneAsJsonResponse(res, db, statement, [entityId]);
+  selectEntities()
+    .where('EntityId', entityId)
+    .then(function (result) {
+      return res.json(_.first(result));
+    });
 };
 
 exports.getEntitySummary = function(req, res) {
-  req.check('entityId', 'Must be a valid Water User Group Entity ID')
-    .notEmpty()
-    .isInt();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT * FROM vwMapEntitySummary WHERE EntityId = ?';
-
-  utils.sqlOneAsJsonResponse(res, db, statement, [entityId]);
+  db.select().from('vwMapEntitySummary')
+    .where('EntityId', entityId)
+    .limit(1)
+    .then(function (result) {
+      return res.json(_.first(result));
+    });
 };
 
 exports.getEntityTypes = function(req, res) {
@@ -61,22 +56,28 @@ exports.getEntitiesByNamePartial = function(req, res) {
 
   var errors = req.validationErrors();
   if (errors && errors.length) {
-    return res.json(400, {errors: errors});
+    return res.status(400).json({errors: errors});
   }
 
-  var nameQuery = req.query.name;
+  var nameQuery = '%' + req.query.name + '%';
+  var startsWithName = req.query.name + '%';
 
-  var statement = 'SELECT EntityId, EntityName ' +
-    'FROM EntityCoordinates ' +
-    'WHERE EntityName LIKE $contains ' +
-    'ORDER BY '  +
-    '  CASE WHEN EntityName LIKE $startsWith THEN 1 ELSE 2 END ' +
-    'LIMIT 10';
-
-  var params = {
-    $contains: '%' + nameQuery + '%',
-    $startsWith: nameQuery + '%'
-  };
-
-  utils.sqlAllAsJsonResponse(res, db, statement, params);
+  selectEntities()
+    .where('EntityName', 'like', nameQuery)
+    .orderByRaw('CASE WHEN EntityName LIKE "' + startsWithName + '" THEN 1 ELSE 2 END')
+    .limit(10)
+    .then(function (results) {
+      return res.json(results);
+    });
 };
+
+
+/**
+ * Expose a router object
+ */
+var router = express.Router();
+router.get('/', exports.getEntities);
+router.get('/search', exports.getEntitiesByNamePartial);
+router.get('/:entityId', validators.validateEntityId, exports.getEntity);
+router.get('/:entityId/summary', validators.validateEntityId, exports.getEntitySummary);
+exports.router = router;

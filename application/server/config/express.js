@@ -19,15 +19,11 @@ module.exports = function(app) {
 
   switch (env) {
     case 'production':
-      app.locals.gaTrackingCode = 'UA-491601-10';
-
       app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
       app.use(express.static(path.join(config.root, 'public')));
       break;
 
     default: //i.e., development
-      app.locals.gaTrackingCode = '';
-
       // Disable caching of scripts for easier testing
       app.use(function noCache(req, res, next) {
         if (req.url.indexOf('/scripts/') === 0) {
@@ -43,6 +39,9 @@ module.exports = function(app) {
       break;
   }
 
+  app.locals.gaTrackingCode = config.gaTrackingCode;
+
+  //Use SWIG
   app.engine('html', require('swig').renderFile);
   app.set('view engine', 'html');
 

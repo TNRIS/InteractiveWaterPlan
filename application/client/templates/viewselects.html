@@ -7,7 +7,7 @@
           {{selectedViewType.text}}
         </a>
       </p>
-      <div ng-show="showViewTypeSelect">
+      <div ng-show="showViewTypeSelect" style="display:inline-block;">
         <select class="form-control" ng-model="selectedViewType" ng-options="v.text for v in viewTypes"></select>
       </div>
     </div>
