@@ -8,5 +8,6 @@ module.exports = {
   root: rootPath,
   dataPath: rootPath + '/server/data/',
   dbPath: rootPath + '/server/cache/cache.db',
-  port: process.env.PORT || 3000
+  port: process.env.PORT || 3000,
+  gaTrackingCode: ''
 };
