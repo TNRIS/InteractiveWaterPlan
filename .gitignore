@@ -7,9 +7,3 @@ application/dist
 deploy/.vagrant/
 deploy/production_inventory
 deploy/vagrant_ansible_inventory_default
-scripts/db_config.py
-scripts/build
-scripts/Include
-scripts/Lib
-scripts/Scripts
-scripts/venv
