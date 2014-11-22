@@ -14,9 +14,9 @@ First make sure these are installed:
 
 ## Developing
 
-1. Install `bower` and `gulp` globally: `npm install -g bower gulp`
-2. Navigate to `application/` and run `bower install` and `npm install`
-3. Now you should be able to use any of the `gulp` tasks defined in `gulpfile.js`
+1. Install `nodemon` and `gulp` globally: `npm install -g nodemon gulp`
+2. Navigate to `application/` and run `npm install`
+3. In one terminal, run `gulp` to watch and build sources. In another terminal run `npm start` to launch the app server.
 
 `gulp` will launch express and watch files for changes
 
