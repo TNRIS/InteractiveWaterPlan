@@ -14,7 +14,9 @@
 
           <div ng-show="selectedViewType.value == 'region'">
             <div ui-select theme="bootstrap" ng-model="region.selected">
-              <div ui-select-match placeholder="Select a Region">{{$select.selected.text}}</div>
+              <div ui-select-match placeholder="Select a Region">
+                {{$select.selected.text}}
+              </div>
               <div ui-select-choices repeat="region in regions | filter: $select.search">
                 <span ng-bind-html="region.text | highlight: $select.search"></span>
               </div>
@@ -23,7 +25,9 @@
 
          <div ng-show="selectedViewType.value == 'type'">
             <div ui-select theme="bootstrap" ng-model="type.selected">
-              <div ui-select-match placeholder="Select a Water User Type">{{$select.selected.text}}</div>
+              <div ui-select-match placeholder="Select a Water User Type">
+                {{$select.selected.text}}
+              </div>
               <div ui-select-choices repeat="type in entityTypes | filter: $select.search">
                 <span ng-bind-html="type.text | highlight: $select.search"></span>
               </div>
@@ -33,7 +37,9 @@
 
           <div ng-show="selectedViewType.value == 'county'">
             <div ui-select theme="bootstrap" ng-model="county.selected">
-              <div ui-select-match placeholder="Select a County">{{$select.selected.text}}</div>
+              <div ui-select-match placeholder="Select a County">
+                {{$select.selected.text}}
+              </div>
               <div ui-select-choices repeat="county in counties | filter: $select.search">
                 <span ng-bind-html="county.text | highlight: $select.search"></span>
               </div>
@@ -42,7 +48,9 @@
 
           <div ng-show="selectedViewType.value == 'entity'">
             <div ui-select theme="bootstrap" ng-model="entity.selected">
-              <div ui-select-match placeholder="Search for a Water User Group">{{$select.selected.text}}</div>
+              <div ui-select-match placeholder="Search for a Water User Group">
+                {{$select.selected.text}}
+              </div>
               <div ui-select-choices repeat="entity in entities"
                 refresh="loadEntities($select.search)" refresh-delay="0">
                 <span ng-bind-html="entity.text | highlight: $select.search"></span>
