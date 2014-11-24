@@ -22,7 +22,7 @@ angular.module('iswpApp', [
   'angulartics',
   'angulartics.google.analytics',
   'LocalStorageModule',
-  'selectize-ng'
+  'ui.select'
 ])
   .config(function (localStorageServiceProvider) {
     localStorageServiceProvider.setPrefix('iswp');
