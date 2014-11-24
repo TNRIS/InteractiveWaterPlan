@@ -1,7 +1,6 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
 @import 'bootstrap';
-@import 'selectize-bootstrap';
 
 .browsehappy {
   margin: 0.2em 0;
@@ -270,8 +269,16 @@ body {
 .view-select-container {
   margin-bottom: 10px;
 
-  .selectize-dropdown {
-    z-index: 1001;
+  .form-horizontal .control-label {
+    text-align: left;
+  }
+
+  .ui-select-bootstrap {
+    .btn-default, .btn-default:hover {
+      color: inherit;
+      background-color: inherit;
+      border: 1px solid #ccc;
+    }
   }
 }
 
