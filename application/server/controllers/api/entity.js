@@ -5,7 +5,6 @@ require('sugar');
 var _ = require('lodash');
 var express = require('express');
 var db = require('./../../db');
-var utils = require('./../../utils');
 var config = require('./../../config/config');
 var validators = require('./../../lib/validators');
 
@@ -45,8 +44,7 @@ exports.getEntitySummary = function(req, res) {
 };
 
 exports.getEntityTypes = function(req, res) {
-  var filePath = config.dataPath + 'entityTypes.json';
-  utils.fileAsJsonResponse(res, filePath);
+  res.json(config.entityTypes);
 };
 
 exports.getEntitiesByNamePartial = function(req, res) {

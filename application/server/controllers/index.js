@@ -1,8 +1,9 @@
 'use strict';
 
-var path = require('path'),
-    config = require('./../config/config'),
-    utils = require('./../utils');
+var path = require('path');
+var bluebird = require('bluebird');
+var config = require('./../config/config');
+var places = require('./api/places');
 
 /**
  * Send template, or 404 if it doesn't exist
@@ -25,29 +26,25 @@ exports.templates = function(req, res) {
  * Send our single page app
  */
 exports.index = function(req, res) {
-  //TODO: Consolidate these and the related API methods
-  var regions = utils.fileAsJson(
-    config.dataPath + 'regions.json'),
 
-    counties = utils.fileAsJson(
-      config.dataPath + 'counties.json'),
+  bluebird.all([
+    places.selectRegionLetters(),
+    places.selectCountyNames(),
+    places.selectRegionsTopoJson()
+  ]).then(function (results) {
+    var regions = results[0];
+    var counties = results[1];
+    var regionsTopo = results[2];
 
-    regionsTopo = utils.fileAsJson(
-      config.dataPath + 'regions.topojson'),
-
-    years = ['2010', '2020', '2030', '2040', '2050', '2060'],
-
-    entityTypes = utils.fileAsJson(
-      config.dataPath + 'entityTypes.json');
-
-  res.render('index', {
-    pageName: 'home',
-    ISWP_VARS: JSON.stringify({
-      regions: regions,
-      counties: counties,
-      regionsTopo: regionsTopo,
-      years: years,
-      entityTypes: entityTypes
-    })
+    res.render('index', {
+      pageName: 'home',
+      ISWP_VARS: JSON.stringify({
+        regions: regions,
+        counties: counties,
+        regionsTopo: regionsTopo,
+        years: config.years,
+        entityTypes: config.entityTypes
+      })
+    });
   });
 };

@@ -7,17 +7,19 @@
     "url": "https://github.com/TNRIS/InteractiveWaterPlan"
   },
   "dependencies": {
+    "bluebird": "^2.3.11",
     "cors": "^2.5.2",
     "express": "^4.10.2",
     "express-validator": "^1.0.1",
     "json2csv": "^2.2.1",
+    "knex": "~0.7.3",
     "lodash": "~2.4.1",
     "morgan": "^1.5.0",
     "serve-favicon": "^2.1.6",
     "sqlite3": "^2.2.0",
     "sugar": "^1.4.1",
     "swig": "^1.4.2",
-    "knex": "~0.7.3"
+    "topojson": "^1.6.18"
   },
   "devDependencies": {
     "bower": "^1.2.8",

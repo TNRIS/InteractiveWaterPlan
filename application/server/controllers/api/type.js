@@ -2,11 +2,9 @@
 
 var express = require('express');
 var config = require('./../../config/config');
-var utils = require('./../../utils');
 
 exports.getEntityTypes = function(req, res) {
-  var filePath = config.dataPath + 'entityTypes.json';
-  utils.fileAsJsonResponse(res, filePath);
+  res.json(config.entityTypes);
 };
 
 
