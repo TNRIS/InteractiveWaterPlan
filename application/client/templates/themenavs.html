@@ -1,14 +1,38 @@
-<nav class="theme-nav-container btn-group btn-group-justified">
-  <a ng-href="{{demandsRef}}" ng-class="{active: parentState == 'demands'}" title="Demands" class="btn theme-nav-link link-demands">
-    Demands
-  </a>
-  <a ng-href="{{needsRef}}" ng-class="{active: parentState == 'needs'}" title="Needs" class="btn theme-nav-link link-needs">
-    Needs (Potential Shortages)
-  </a>
-  <a ng-href="{{strategiesRef}}" ng-class="{active: parentState == 'strategies'}" title="Recommended Strategy Supplies" class="btn theme-nav-link link-strategies">
-    Recommended Strategy Supplies
-  </a>
-  <a ng-href="{{suppliesRef}}" ng-class="{active: parentState == 'supplies'}" title="Existing Supplies" class="btn theme-nav-link link-supplies">
-    Existing Supplies
-  </a>
+<nav class="theme-nav-container">
+  <div class="btn-group btn-group-justified visible-lg">
+    <a ng-href="{{demandsRef}}" ng-class="{active: parentState == 'demands'}" title="Demands" class="btn theme-nav-link link-demands">
+      Demands
+    </a>
+    <a ng-href="{{needsRef}}" ng-class="{active: parentState == 'needs'}" title="Needs" class="btn theme-nav-link link-needs">
+      Needs (Potential Shortages)
+    </a>
+    <a ng-href="{{strategiesRef}}" ng-class="{active: parentState == 'strategies'}" title="Recommended Strategy Supplies" class="btn theme-nav-link link-strategies">
+      Recommended Strategy Supplies
+    </a>
+    <a ng-href="{{suppliesRef}}" ng-class="{active: parentState == 'supplies'}" title="Existing Supplies" class="btn theme-nav-link link-supplies">
+      Existing Supplies
+    </a>
+  </div>
+  <div class="hidden-lg">
+    <div class="col-md-3 theme-nav-col">
+      <a ng-href="{{demandsRef}}" ng-class="{active: parentState == 'demands'}" title="Demands" class="theme-nav-link link-demands">
+        Demands
+      </a>
+    </div>
+    <div class="col-md-3 theme-nav-col">
+      <a ng-href="{{needsRef}}" ng-class="{active: parentState == 'needs'}" title="Needs" class="theme-nav-link link-needs">
+        Needs
+      </a>
+    </div>
+    <div class="col-md-3 theme-nav-col">
+      <a ng-href="{{strategiesRef}}" ng-class="{active: parentState == 'strategies'}" title="Recommended Strategy Supplies" class="theme-nav-link link-strategies">
+        Strategy Supplies
+      </a>
+    </div>
+    <div class="col-md-3 theme-nav-col">
+      <a ng-href="{{suppliesRef}}" ng-class="{active: parentState == 'supplies'}" title="Existing Supplies" class="theme-nav-link link-supplies">
+        Existing Supplies
+      </a>
+    </div>
+  </div>
 </nav>

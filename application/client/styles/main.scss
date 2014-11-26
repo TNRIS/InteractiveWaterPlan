@@ -191,6 +191,25 @@ $suppliesColor: #FF7518;
   }
 }
 
+.theme-nav-col {
+
+  > a {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #eee;
+    color: #000;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &.active {
+      color: #fff;
+    }
+  }
+}
+
 .map-controls {
   > li > a {
     color: #000;
