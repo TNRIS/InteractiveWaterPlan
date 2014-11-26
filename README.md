@@ -12,6 +12,8 @@ First make sure these are installed:
    platforms, depending on how it is installed)
  - compass (`gem install compass`)
 
+Download the sqlite database `cache.db` from https://s3-us-west-2.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
+
 ## Developing
 
 1. Install `nodemon` and `gulp` globally: `npm install -g nodemon gulp`
