@@ -136,7 +136,61 @@ body {
   font-weight: normal;
 }
 
-.theme-nav,
+$demandsColor: #0AC763;
+$needsColor: #aa0000;
+$strategiesColor: #007fff;
+$suppliesColor: #FF7518;
+
+.theme-nav-link {
+  background-color: #eee;
+  color: #000;
+  border-right: 2px solid #fff;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+
+  &:hover {
+    color: #fff;
+
+    &.link-demands {
+      background-color: lighten($demandsColor, 5%);
+    }
+    &.link-needs {
+      background-color: lighten($needsColor, 20%);
+    }
+    &.link-strategies {
+      background-color: lighten($strategiesColor, 10%);
+    }
+    &.link-supplies {
+      background-color: lighten($suppliesColor, 5%);
+    }
+  }
+
+  &.active {
+    color: #fff;
+    box-shadow: none;
+    font-weight: bold;
+
+    &.link-demands {
+      background-color: $demandsColor;
+    }
+    &.link-needs {
+      background-color: $needsColor;
+    }
+    &.link-strategies {
+      background-color: $strategiesColor;
+    }
+    &.link-supplies {
+      background-color: $suppliesColor;
+    }
+  }
+}
+
 .map-controls {
   > li > a {
     color: #000;
