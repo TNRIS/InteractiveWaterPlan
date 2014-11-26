@@ -1,4 +1,5 @@
 node_modules
+cache.db
 .tmp
 .sass-cache
 *.pyc
