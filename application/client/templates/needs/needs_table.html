@@ -12,7 +12,7 @@
     <p ng-bind-html='chartDescription'></p>
     <p ng-bind-html='tableDescription'></p>
 
-    <div class="row" ng-show="{{ 'needs.entity' | isState }}">
+    <div class="row" ng-show="{{ 'entity' | isChildState }}">
       <div class="col-md-12 chart-container">
         <div google-chart chart="chartConfig" select="chartSelect(selectedItem)"></div>
 
@@ -34,13 +34,13 @@
           <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
         </p>
 
-        <p ng-hide="{{ 'needs.summary' | isState }}">
+        <p ng-hide="{{ 'summary' | isChildState }}">
           * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
         </p>
       </div>
     </div>
 
-    <div class="row" ng-show="{{'needs.summary' | isState}}">
+    <div class="row" ng-show="{{'summary' | isChildState}}">
       <div class="col-md-12 tree-map-container">
         <h4>Tree Map of Water Needs by Region - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="row" ng-show="{{'needs.type' | isState}}">
+    <div class="row" ng-show="{{'type' | isChildState}}">
       <div class="col-md-12 tree-map-container">
         <h4>Tree Map of Water Needs by Region for {{entityType}} Entities - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
