@@ -53,8 +53,13 @@ module.exports = function(app) {
 
   app.use(validator({
     customValidators: {
-      isIntList: function isIntList(value) {
+      isIntList: function isIntList(value, maxItems) {
         var arr = value.split(',');
+
+        if (maxItems && arr.length > maxItems) {
+          return false;
+        }
+
         return arr.all(function (v) {
           return tryparse.int(v);
         });
