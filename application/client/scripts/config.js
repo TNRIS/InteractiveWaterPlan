@@ -21,6 +21,34 @@ angular.module('iswpApp.config', [])
     opacity: 0.5,
     fillOpacity: 0.75
   })
+  .constant('SOURCE_STYLES', {
+    //TODO
+    'groundwater': {
+
+    },
+    'indirect': {
+
+    },
+    'river': {
+
+    },
+    'reservoir': {
+
+    },
+    'system': {
+
+    }
+  })
+  .constant('SUMMARY_TABLE_COLS', [
+    {map: 'WugRegion', label: 'Region', cellTemplateUrl: 'templates/linkcell.html', headerClass: 'text-center', cellClass: 'text-center'},
+    {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+    {map: 'MANUFACTURING', label: 'Manufacturing', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+    {map: 'MINING', label: 'Mining', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+    {map: 'STEAMELECTRIC', label: 'Steam-Electric', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+    {map: 'LIVESTOCK', label: 'Livestock', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+    {map: 'IRRIGATION', label: 'Irrigation', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
+    {map: 'TOTAL', label: 'Total', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'}
+  ])
   .constant('ISWP_VARS', ISWP_VARS) //boostrapped variables
   .constant('API_PATH', '/api/v1/')
 ;
