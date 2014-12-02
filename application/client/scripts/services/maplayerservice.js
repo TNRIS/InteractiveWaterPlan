@@ -20,6 +20,10 @@ angular.module('iswpApp')
         // Base Layers
         var esriGray = L.esri.basemapLayer("Gray");
 
+        var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        });
+
         var mqOpen = L.tileLayer(
           'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
           subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
@@ -72,6 +76,7 @@ angular.module('iswpApp')
         var grayWithLabels = L.layerGroup([esriGray, countyLabels]);
 
         service.baseMaps = {
+          'CartoDB Light': positron,
           'Esri Gray': grayWithLabels,
           'MapQuest Open': mqOpen,
           'MapQuest Open Aerial': mqAerial
@@ -87,8 +92,8 @@ angular.module('iswpApp')
           'Public Water Systems': publicWaterSystems
         };
 
-        //Start with grayWithLabels and regions selected
-        grayWithLabels.addTo(map);
+        //Start with positron and regions selected
+        positron.addTo(map);
         regions.addTo(map);
 
         //Add controls
