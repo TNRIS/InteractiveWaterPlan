@@ -145,6 +145,7 @@ $suppliesColor: #FF7518;
   background-color: #eee;
   color: #000;
   border-right: 2px solid #fff;
+  transition: background-color 1s ease;
 
   &:last-child {
     border-right: none;
@@ -296,6 +297,10 @@ $suppliesColor: #FF7518;
     a {
       color: #fff;
     }
+  }
+
+  span.header-content {
+    cursor: pointer;
   }
 }
 
