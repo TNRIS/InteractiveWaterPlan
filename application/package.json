@@ -10,7 +10,8 @@
     "bluebird": "^2.3.11",
     "cors": "^2.5.2",
     "express": "^4.10.2",
-    "express-validator": "^1.0.1",
+    "express-validator": "^2.7.0",
+    "geojson-merge": "^0.1.0",
     "json2csv": "^2.2.1",
     "knex": "~0.7.3",
     "lodash": "~2.4.1",
@@ -19,7 +20,8 @@
     "sqlite3": "^2.2.0",
     "sugar": "^1.4.1",
     "swig": "^1.4.2",
-    "topojson": "^1.6.18"
+    "topojson": "^1.6.18",
+    "tryparse": "0.0.2"
   },
   "devDependencies": {
     "bower": "^1.2.8",

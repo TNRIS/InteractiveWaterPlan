@@ -5,6 +5,7 @@ var express = require('express'),
     path = require('path'),
     validator = require('express-validator'),
     favicon = require('serve-favicon'),
+    tryparse = require('tryparse'),
     config = require('./config');
 
 //Add .csv method to response objects
@@ -50,5 +51,14 @@ module.exports = function(app) {
   app.disable('x-powered-by');
   app.use(morgan('combined')); //logging
 
-  app.use(validator());
+  app.use(validator({
+    customValidators: {
+      isIntList: function isIntList(value) {
+        var arr = value.split(',');
+        return arr.all(function (v) {
+          return tryparse.int(v);
+        });
+      }
+    }
+  }));
 };

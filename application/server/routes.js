@@ -9,6 +9,7 @@ var demands = require('./controllers/api/demands');
 var strategies = require('./controllers/api/strategies');
 var entity = require('./controllers/api/entity');
 var type = require('./controllers/api/type');
+var sources = require('./controllers/api/sources');
 var about = require('./controllers/about');
 var error = require('./controllers/error');
 var index = require('./controllers');
@@ -27,6 +28,7 @@ module.exports = function(app) {
   apiRouter.use('/entity', entity.router);
   apiRouter.use('/type', type.router);
   apiRouter.use('/strategies', strategies.router);
+  apiRouter.use('/sources', sources.router);
   apiRouter.get('/', about.api); // api documentation page
   apiRouter.get('*', error.index); //404 on all undefined routes
 

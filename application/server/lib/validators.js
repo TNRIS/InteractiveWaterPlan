@@ -52,3 +52,30 @@ exports.validateEntityType = function validateEntityType(req, res, next) {
 
   next();
 };
+
+exports.validateSourceId = function validateSourceId(req, res, next) {
+  req.check('sourceId', 'Must be a valid Source ID')
+    .notEmpty()
+    .isInt();
+
+  var errors = req.validationErrors();
+  if (errors && errors.length) {
+    return res.status(400).json({errors: errors});
+  }
+
+  next();
+};
+
+
+exports.validateSourceIds = function validateSourceIds(req, res, next) {
+  req.checkQuery('ids', 'Must be a comma-separated list of ids')
+    .notEmpty()
+    .isIntList();
+
+  var errors = req.validationErrors();
+  if (errors && errors.length) {
+    return res.status(400).json({errors: errors});
+  }
+
+  next();
+};
