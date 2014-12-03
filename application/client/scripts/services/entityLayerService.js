@@ -84,7 +84,7 @@ angular.module('iswpApp').factory('EntityLayerService',
 
         marker.bindLabel(labelString);
 
-        if (currentState === 'demands.entity') {
+        if (childState === 'entity') {
           marker.label.options.noHide = true;
           marker.showLabel();
         }
