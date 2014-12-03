@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('iswpApp')
-  .factory('ChartService', function ChartService($http, API_PATH, ISWP_VARS) {
+  .factory('ChartService', function ChartService($http, DATA_VALUE_PREFIXES, API_PATH, ISWP_VARS) {
     var service = {};
 
-    service.buildEntityChartConfig = function(entitySummary, year) {
-      var demand = entitySummary['D'+ year],
-          supply = entitySummary['WS'+ year],
-          needs = entitySummary['N'+ year],
-          strategySupply = entitySummary['SS'+ year];
+    service.buildEntityChartConfig = function (entitySummary, year) {
+      var demand = entitySummary[DATA_VALUE_PREFIXES.demands + year],
+          supply = entitySummary[DATA_VALUE_PREFIXES.supplies + year],
+          needs = entitySummary[DATA_VALUE_PREFIXES.needs + year],
+          strategySupply = entitySummary[DATA_VALUE_PREFIXES.strategies + year];
 
       var chartConfig = {
           type: 'ColumnChart',

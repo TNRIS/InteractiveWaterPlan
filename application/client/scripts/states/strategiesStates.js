@@ -19,7 +19,7 @@ angular.module('iswpApp').config(function ($stateProvider) {
           return EntityService.fetch();
         }
       },
-      controller: 'StrategiesMainCtrl',
+      controller: 'WrapCtrl',
       templateUrl: 'templates/main.html'
     })
     .state('strategies.summary', {
@@ -27,6 +27,13 @@ angular.module('iswpApp').config(function ($stateProvider) {
       resolve: strategiesResolver('summary'),
       controller: 'StrategiesSummaryCtrl',
       templateUrl: 'templates/data_table.html'
-    });
+    })
+    .state('strategies.region', {
+      url: '/:year/region/:region',
+      resolve: strategiesResolver('region', 'region'),
+      controller: 'StrategiesRegionCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
+    ;
 
 });

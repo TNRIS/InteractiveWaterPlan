@@ -17,11 +17,8 @@ angular.module('iswpApp').controller('NeedsSummaryTableCtrl',
 
     //Refresh data when the year changes
     $scope.$on('$stateChangeSuccess', function() {
-      $scope.currentYear = $scope.$stateParams.year;
-
       //Get only the needsData for the currentYear
-      var dataForYear = _.where(needsData, {DECADE:
-        $scope.currentYear});
+      var dataForYear = _.where(needsData, {DECADE: $scope.currentYear});
 
       $scope.tableRows = dataForYear;
       $scope.treeMapConfig = TreeMapFactory.regionSummaryTreeMap(dataForYear);

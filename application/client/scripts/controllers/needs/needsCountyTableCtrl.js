@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, localStorageService, API_PATH) {
+  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, API_PATH) {
 
     var county = $scope.$stateParams.county.titleize();
 
@@ -38,35 +38,14 @@ angular.module('iswpApp')
       percentCol
     ];
 
-    var storedItemsPerPage = localStorageService.get('tableItemsPerPage');
-    $scope.itemsPerPage = storedItemsPerPage || 20;
-
-    $scope.tableConfig = {
-      selectionMode: 'single',
-      isGlobalSearchActivated: true,
-      isPaginationEnabled: true,
-      itemsByPage: $scope.itemsPerPage
-    };
-
     $scope.tableRows = needsData;
 
     //TODO: Remember the sort order when changing Year
-
     $scope.$on('$stateChangeSuccess', function() {
-      $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
       needsCol.map = 'N' + $scope.currentYear;
       percentCol.map = 'NPD' + $scope.currentYear;
-    });
-
-    $scope.$watch('itemsPerPage', function() {
-      if (!$scope.itemsPerPage) {
-        return;
-      }
-
-      $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
-      localStorageService.set('tableItemsPerPage', $scope.itemsPerPage);
     });
 
     //Watch for selectionChange events from the Smart-Table

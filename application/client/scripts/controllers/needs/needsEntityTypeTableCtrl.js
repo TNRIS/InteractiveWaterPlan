@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsEntityTypeTableCtrl', function ($scope, $rootScope, needsData, localStorageService, ISWP_VARS, API_PATH) {
+  .controller('NeedsEntityTypeTableCtrl', function ($scope, $rootScope, needsData, ISWP_VARS, API_PATH) {
 
     var entityType = $scope.$stateParams.entityType.titleize();
     $scope.entityType = entityType;
@@ -39,16 +39,6 @@ angular.module('iswpApp')
       percentCol
     ];
 
-    var storedItemsPerPage = localStorageService.get('tableItemsPerPage');
-    $scope.itemsPerPage = storedItemsPerPage || 20;
-
-    $scope.tableConfig = {
-      selectionMode: 'single',
-      isGlobalSearchActivated: true,
-      isPaginationEnabled: true,
-      itemsByPage: $scope.itemsPerPage
-    };
-
     $scope.tableRows = needsData;
 
     var createTreeMap = function(currentYear) {
@@ -58,7 +48,6 @@ angular.module('iswpApp')
       treeMapData.push(['Region', 'Parent', 'Need (acre-feet/year)']);
       treeMapData.push([parentName, null, null]);
 
-      //For each region,
       _.each(ISWP_VARS.regions, function(region) {
 
         var regionData = _.where(needsData, {'WugRegion': region});
@@ -96,24 +85,13 @@ angular.module('iswpApp')
     };
 
     //TODO: Remember the sort order when changing Year
-
     $scope.$on('$stateChangeSuccess', function() {
-      $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
       needsCol.map = 'N' + $scope.currentYear;
       percentCol.map = 'NPD' + $scope.currentYear;
 
       $scope.treeMapConfig = createTreeMap($scope.currentYear);
-    });
-
-    $scope.$watch('itemsPerPage', function() {
-      if (!$scope.itemsPerPage) {
-        return;
-      }
-
-      $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
-      localStorageService.set('tableItemsPerPage', $scope.itemsPerPage);
     });
 
     //Watch for selectionChange events from the Smart-Table

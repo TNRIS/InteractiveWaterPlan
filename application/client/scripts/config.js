@@ -8,6 +8,15 @@ angular.module('iswpApp.config', [])
     centerLat: 31.780548,
     centerLng: -99.022907
   })
+  .constant('ENTITY_MAX_RADIUS', 18)
+  .constant('ENTITY_MIN_RADIUS', 4)
+  .constant('REGION_STYLE', {
+    stroke: false,
+    color: '#ffcc00',
+    weight: 3,
+    opacity: 1,
+    fillOpacity: 0
+  })
   .constant('DEMANDS_ENTITY_STYLE', {
     color: '#000',
     weight: 1,
@@ -39,6 +48,18 @@ angular.module('iswpApp.config', [])
 
     }
   })
+  .constant('DATA_VALUE_PREFIXES', {
+    'needs': 'N',
+    'demands': 'D',
+    'strategies': 'SS',
+    'supplies': 'WS'
+  })
+  .constant('TREE_MAP_SUBJECTS', {
+    'needs': 'Water Needs',
+    'demands': 'Water Demands',
+    'strategies': 'Recommended Supply Strategies',
+    'supplies': 'Existing Water Supplies'
+  })
   .constant('SUMMARY_TABLE_COLS', [
     {map: 'WugRegion', label: 'Region', cellTemplateUrl: 'templates/linkcell.html', headerClass: 'text-center', cellClass: 'text-center'},
     {map: 'MUNICIPAL', label: 'Municipal', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
@@ -48,6 +69,12 @@ angular.module('iswpApp.config', [])
     {map: 'LIVESTOCK', label: 'Livestock', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
     {map: 'IRRIGATION', label: 'Irrigation', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'},
     {map: 'TOTAL', label: 'Total', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'}
+  ])
+  .constant('REGION_TABLE_COLS', [
+    {map: 'WugRegion', label: 'Region', cellClass: 'text-center'},
+    {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
+    {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
+    {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
   ])
   .constant('ISWP_VARS', ISWP_VARS) //boostrapped variables
   .constant('API_PATH', '/api/v1/')
