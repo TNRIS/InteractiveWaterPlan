@@ -17,18 +17,34 @@ angular.module('iswpApp.config', [])
     opacity: 1,
     fillOpacity: 0
   })
-  .constant('DEMANDS_ENTITY_STYLE', {
-    color: '#000',
-    weight: 1,
-    opacity: 0.5,
-    fillOpacity: 0.75,
-    fillColor: '#0AC763'
-  })
-  .constant('NEEDS_ENTITY_STYLE', {
-    color: '#000',
-    weight: 1,
-    opacity: 0.5,
-    fillOpacity: 0.75
+  .constant('ENTITY_STYLES', {
+    'demands': {
+      color: '#000',
+      weight: 1,
+      opacity: 0.5,
+      fillOpacity: 0.75,
+      fillColor: '#0AC763'
+    },
+    'needs': {
+      color: '#000',
+      weight: 1,
+      opacity: 0.5,
+      fillOpacity: 0.75
+    },
+    'strategies': {
+      color: '#000',
+      weight: 1,
+      opacity: 0.5,
+      fillOpacity: 0.75,
+      fillColor: '#FFA84B'
+    },
+    'supplies': {
+      color: '#000',
+      weight: 1,
+      opacity: 0.5,
+      fillOpacity: 0.75,
+      fillColor: '#FFA84B'
+    }
   })
   .constant('SOURCE_STYLES', {
     //TODO

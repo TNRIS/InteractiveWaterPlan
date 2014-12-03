@@ -1,11 +1,10 @@
-/* global OverlappingMarkerSpiderfier:false */
 'use strict';
 
 angular.module('iswpApp').directive('leafletMap',
   function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
-    StrategiesService, SuppliesService, MapFactory, Utils,
-    STATE_MAP_CONFIG, NEEDS_ENTITY_STYLE, DEMANDS_ENTITY_STYLE) {
+    EntityLayerService, StrategiesService, SuppliesService, MapFactory,
+    STATE_MAP_CONFIG) {
 
     function postLink(scope, element, attrs) {
 
@@ -21,12 +20,8 @@ angular.module('iswpApp').directive('leafletMap',
       //Create a legend for the Needs colors
       var legendControl = LegendService.Needs.createLegend();
 
-      var entityLayer = L.featureGroup().addTo(map),
-        countyLayer = L.featureGroup().addTo(map),
-        oms = new OverlappingMarkerSpiderfier(map, {
-          keepSpiderfied: true,
-          nearbyDistance: 5
-        });
+      var countyLayer = L.featureGroup().addTo(map);
+      var entityLayer = EntityLayerService.createLayer(map);
 
       $rootScope.$on('map:togglelock',
         function(event, isLocked) {
@@ -50,6 +45,7 @@ angular.module('iswpApp').directive('leafletMap',
           if (!entityFeature) { return; }
 
           if (entity.isSelected) {
+            entityFeature.origStyle = entityFeature.options;
             entityFeature.setStyle({
               color: '#ff7518',
               weight: 2.5,
@@ -57,9 +53,11 @@ angular.module('iswpApp').directive('leafletMap',
               fillOpacity: 1
             });
             entityFeature.bringToFront();
+            entityFeature.showLabel();
           }
           else {
-            entityFeature.setStyle(DEMANDS_ENTITY_STYLE);
+            entityFeature.setStyle(entityFeature.origStyle);
+            entityFeature.hideLabel();
           }
         }
       );
@@ -139,15 +137,14 @@ angular.module('iswpApp').directive('leafletMap',
       var updateMapState = function() {
         //Clear the spiderfier instance and the entityLayer before creating
         // the new entity features
-        oms.clearMarkers();
-        entityLayer.clearLayers();
+        EntityLayerService.clearLayer();
         countyLayer.clearLayers();
 
         var currentYear = $stateParams.year;
 
-        var currentState = $state.current.name,
-          parentState = _.first(currentState.split('.')),
-          childState = _.last(currentState.split('.'));
+        var currentState = $state.current.name;
+        var parentState = _.first(currentState.split('.'));
+        var childState = _.last(currentState.split('.'));
 
         //show or hide the legend
         if (parentState === 'needs' && childState !== 'summary') {
@@ -200,96 +197,11 @@ angular.module('iswpApp').directive('leafletMap',
           return;
         }
 
-        var maxValue = _.max(sumsByEntityId, 'sum').sum;
-        var minValue = _.min(sumsByEntityId, 'sum').sum;
-
-        //TODO: figure out how to make the larger entities go on the bottom
-
-        //build marker for each entity
-        if (parentState === 'demands') {
-          _.each(entities, function(entity) {
-            var entityTotalDemand = _.find(
-              sumsByEntityId, {'EntityId': '' + entity.EntityId}).sum;
-
-            var scaledRadius = Utils.scaleRadius(maxValue, minValue, entityTotalDemand);
-
-            var featureOpts = _.extend({}, DEMANDS_ENTITY_STYLE, {
-              radius: scaledRadius,
-              entity: entity //save the entity data in the marker
-            });
-
-            var marker = L.circleMarker([entity.Latitude, entity.Longitude],
-              featureOpts).addTo(entityLayer);
-
-            var labelString = entity.EntityName;
-
-            marker.bindLabel(labelString);
-
-            if (currentState === 'demands.entity') {
-              marker.label.options.noHide = true;
-              marker.showLabel();
-            }
-
-            //add it to the spiderfier
-            oms.addMarker(marker);
-          });
-        }
-        else if (parentState === 'needs') {
-          _.each(entities, function(entity) {
-
-            var entityTotalNeed = _.find(
-                sumsByEntityId, {'EntityId': '' + entity.EntityId}).sum;
-
-            var pctOfDemand = _.find(currentData,
-              {'EntityId': entity.EntityId})['NPD' + currentYear];
-
-            //find the first color with limit >= pctOfDemand
-            var colorEntry = _.find(LegendService.Needs.entityColors, function(c) {
-              return c.limit >= pctOfDemand;
-            });
-
-            var scaledRadius = Utils.scaleRadius(maxValue, minValue, entityTotalNeed);
-
-            var featureOpts = _.extend({}, NEEDS_ENTITY_STYLE, {
-              radius: scaledRadius,
-              fillColor: colorEntry.color,
-              entity: entity //save the entity data in the marker
-            });
-
-            var marker = L.circleMarker([entity.Latitude, entity.Longitude],
-              featureOpts).addTo(entityLayer);
-
-            var labelString = entity.EntityName + '<br/>' +
-              'Needs: ' + pctOfDemand + '% of Demands';
-
-            marker.bindLabel(labelString);
-
-            if (currentState === 'needs.entity') {
-              marker.label.options.noHide = true;
-              marker.showLabel();
-            }
-
-            //add it to the spiderfier
-            oms.addMarker(marker);
-          });
-        }
-
-        entityLayer.bringToFront();
-
-        //Add 'global' event listener to the oms instance
-        // to go to the entity view when clicked
-        oms.addListener('click', function(marker) {
-          if (!marker.options.entity) { return; }
-
-          $state.go(parentState + '.entity', {
-            year: currentYear,
-            entityId: marker.options.entity.EntityId
-          });
-        });
+        //add entity markers
+        EntityLayerService.addEntities(entities, currentData, sumsByEntityId);
 
         //Set the map bounds according to the current view
         setViewBounds();
-
       };
 
       //Update map state every time the state changes
