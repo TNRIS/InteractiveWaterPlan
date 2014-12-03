@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('DemandsEntityTypeCtrl', function ($scope, $rootScope, demandsData, localStorageService, ISWP_VARS, API_PATH) {
+  .controller('DemandsEntityTypeCtrl', function ($scope, $rootScope, demandsData, ISWP_VARS, API_PATH) {
 
     var entityType = $scope.$stateParams.entityType.titleize();
     $scope.entityType = entityType;
@@ -30,16 +30,6 @@ angular.module('iswpApp')
       {map: 'WugCounty', label: 'County', cellTemplateUrl: cellTemplateUrl},
       demandsCol
     ];
-
-    var storedItemsPerPage = localStorageService.get('tableItemsPerPage');
-    $scope.itemsPerPage = storedItemsPerPage || 20;
-
-    $scope.tableConfig = {
-      selectionMode: 'single',
-      isGlobalSearchActivated: true,
-      isPaginationEnabled: true,
-      itemsByPage: $scope.itemsPerPage
-    };
 
     $scope.tableRows = demandsData;
 
@@ -88,23 +78,12 @@ angular.module('iswpApp')
     };
 
     //TODO: Remember the sort order when changing Year
-
     $scope.$on('$stateChangeSuccess', function() {
-      $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
       demandsCol.map = 'D' + $scope.currentYear;
 
       $scope.treeMapConfig = createTreeMap($scope.currentYear);
-    });
-
-    $scope.$watch('itemsPerPage', function() {
-      if (!$scope.itemsPerPage) {
-        return;
-      }
-
-      $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
-      localStorageService.set('tableItemsPerPage', $scope.itemsPerPage);
     });
 
     //Watch for selectionChange events from the Smart-Table

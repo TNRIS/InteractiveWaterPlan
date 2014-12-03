@@ -2,7 +2,8 @@
 
 angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS, ISWP_VARS) {
 
-  this.categorySummaryTreeMap = function categorySummaryTreeMap(dataForYear) {
+  var service = {};
+  service.categorySummaryTreeMap = function categorySummaryTreeMap(dataForYear) {
     var treeMapData = [],
       parentName = 'All Water Use Categories';
 
@@ -57,7 +58,7 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
     };
   };
 
-  this.regionSummaryTreeMap = function regionSummaryTreeMap(dataForYear) {
+  service.regionSummaryTreeMap = function regionSummaryTreeMap(dataForYear) {
     var treeMapData = [],
       parentName = 'All Regions';
 
@@ -108,5 +109,5 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
     };
   };
 
-  return this;
+  return service;
 });

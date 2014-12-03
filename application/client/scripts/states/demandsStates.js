@@ -18,7 +18,7 @@ angular.module('iswpApp').config(function ($stateProvider) {
           return EntityService.fetch();
         }
       },
-      controller: 'DemandsMainCtrl',
+      controller: 'WrapCtrl',
       templateUrl: 'templates/main.html'
     })
     .state('demands.summary', {

@@ -3,7 +3,6 @@
 angular.module('iswpApp')
   .controller('DemandsEntityCtrl',
     function ($scope, demandsData, entitySummary, ChartService, EntityService, API_PATH) {
-
       //if entitySummary is null then this was called for an invalid entityId
       // so return to home view
       if (!entitySummary) {
@@ -42,19 +41,17 @@ angular.module('iswpApp')
         demandsCol
       ];
 
+      //override the tableConfig from WrapCtrl
       $scope.tableConfig = {
         isPaginationEnabled: false
       };
 
       $scope.tableRows = demandsData;
 
-      //Method to build the chartConfig object for google-chart directive
-
-
       //TODO: Remember the sort order when changing Year
 
       $scope.$on('$stateChangeSuccess', function() {
-        var year = $scope.currentYear = $scope.$stateParams.year;
+        var year = $scope.currentYear;
         $scope.tableDescription = tableDescTpl.assign({year: year});
         $scope.chartDescription = chartDescTpl.assign({year: year});
 

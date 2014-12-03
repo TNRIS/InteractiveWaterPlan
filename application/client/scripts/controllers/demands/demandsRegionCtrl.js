@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('DemandsRegionCtrl', function ($scope, $rootScope, demandsData, localStorageService, API_PATH) {
+  .controller('DemandsRegionCtrl', function ($scope, $rootScope, demandsData, REGION_TABLE_COLS, API_PATH) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
@@ -21,44 +21,14 @@ angular.module('iswpApp')
       headerClass: 'text-center'
     };
 
-    var cellTemplateUrl = 'templates/linkcell.html';
-
-    $scope.tableColumns = [
-      {map: 'WugRegion', label: 'Region', cellClass: 'text-center'},
-      {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
-      {map: 'WugCounty', label: 'County', cellTemplateUrl: cellTemplateUrl},
-      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: cellTemplateUrl},
-      demandsCol
-    ];
-
-    var storedItemsPerPage = localStorageService.get('tableItemsPerPage');
-    $scope.itemsPerPage = storedItemsPerPage || 20;
-
-    $scope.tableConfig = {
-      selectionMode: 'single',
-      isGlobalSearchActivated: true,
-      isPaginationEnabled: true,
-      itemsByPage: $scope.itemsPerPage
-    };
+    $scope.tableColumns = REGION_TABLE_COLS.concat(demandsCol);
 
     $scope.tableRows = demandsData;
 
     //TODO: Remember the sort order when changing Year
-
     $scope.$on('$stateChangeSuccess', function() {
-      $scope.currentYear = $scope.$stateParams.year;
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
-
       demandsCol.map = 'D' + $scope.currentYear;
-    });
-
-    $scope.$watch('itemsPerPage', function() {
-      if (!$scope.itemsPerPage) {
-        return;
-      }
-
-      $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
-      localStorageService.set('tableItemsPerPage', $scope.itemsPerPage);
     });
 
     //Watch for selectionChange events from the Smart-Table
