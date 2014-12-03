@@ -19,31 +19,32 @@ angular.module('iswpApp').config(function ($stateProvider) {
           return EntityService.fetch();
         }
       },
+      controller: 'NeedsMainCtrl',
       templateUrl: 'templates/main.html'
     })
     .state('needs.summary', {
       url: '/:year/state', // appended to /needs
       resolve: needsResolver('summary'),
       controller: 'NeedsSummaryTableCtrl',
-      templateUrl: 'templates/needs/needs_table.html'
+      templateUrl: 'templates/data_table.html'
     })
     .state('needs.region', {
       url: '/:year/region/:region', // appended to /needs
       resolve: needsResolver('region', 'region'),
       controller: 'NeedsRegionTableCtrl',
-      templateUrl: 'templates/needs/needs_table.html'
+      templateUrl: 'templates/data_table.html'
     })
     .state('needs.county', {
       url: '/:year/county/:county', // appended to /needs
       resolve: needsResolver('county', 'county'),
       controller: 'NeedsCountyTableCtrl',
-      templateUrl: 'templates/needs/needs_table.html'
+      templateUrl: 'templates/data_table.html'
     })
     .state('needs.type', {
       url: '/:year/type/:entityType', // appended to /needs
       resolve: needsResolver('type', 'entityType'),
       controller: 'NeedsEntityTypeTableCtrl',
-      templateUrl: 'templates/needs/needs_table.html'
+      templateUrl: 'templates/data_table.html'
     })
     .state('needs.entity', {
       url: '/:year/entity/:entityId', // appended to /needs
@@ -56,7 +57,7 @@ angular.module('iswpApp').config(function ($stateProvider) {
         }
       },
       controller: 'NeedsEntityTableCtrl',
-      templateUrl: 'templates/needs/needs_table.html'
+      templateUrl: 'templates/data_table.html'
     });
 
 });

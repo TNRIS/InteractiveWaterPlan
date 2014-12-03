@@ -12,7 +12,7 @@
     <p ng-bind-html='chartDescription'></p>
     <p ng-bind-html='tableDescription'></p>
 
-    <div class="row" ng-show="{{ 'demands.entity' | isState }}">
+    <div class="row" ng-show="{{ 'entity' | isSubState }}">
       <div class="col-md-12 chart-container">
         <div google-chart chart="chartConfig" select="chartSelect(selectedItem)"></div>
 
@@ -34,15 +34,15 @@
           <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
         </p>
 
-        <p ng-hide="{{ 'demands.summary' | isState }}">
+        <p ng-hide="{{ 'summary' | isSubState }}">
           * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
         </p>
       </div>
     </div>
 
-    <div class="row" ng-show="{{'demands.summary' | isState}}">
+    <div class="row" ng-show="{{'summary' | isSubState}}">
       <div class="col-md-12 tree-map-container">
-        <h4>Tree Map of Water Demands by Region - {{currentYear}}</h4>
+        <h4>Tree Map of {{treeMapSubject}} by Region - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
         <p class="small">
           <strong>Click</strong> a region to see the tree map for water use categories in that region.<br>
@@ -51,7 +51,7 @@
       </div>
 
       <div class="col-md-12 tree-map-container">
-        <h4>Tree Map of Water Demands by Water Use Category - {{currentYear}}</h4>
+        <h4>Tree Map of {{treeMapSubject}} by Water Use Category - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="categoryTreeMapConfig"></div>
         <p class="small">
           <strong>Click</strong> a water use category to see the tree map for that water use category in all regions.<br>
@@ -60,9 +60,9 @@
       </div>
     </div>
 
-    <div class="row" ng-show="{{'demands.type' | isState}}">
+    <div class="row" ng-show="{{'type' | isSubState}}">
       <div class="col-md-12 tree-map-container">
-        <h4>Tree Map of Water Demands by Region for {{entityType}} Entities - {{currentYear}}</h4>
+        <h4>Tree Map of {{treeMapSubject}} by Region for {{entityType}} Entities - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="treeMapConfig"></div>
       </div>
     </div>

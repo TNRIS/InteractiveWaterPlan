@@ -19,13 +19,14 @@ angular.module('iswpApp').config(function ($stateProvider) {
           return EntityService.fetch();
         }
       },
+      controller: 'StrategiesMainCtrl',
       templateUrl: 'templates/main.html'
     })
     .state('strategies.summary', {
       url: '/:year/state',
       resolve: strategiesResolver('summary'),
       controller: 'StrategiesSummaryCtrl',
-      templateUrl: 'templates/strategies/strategies_table.html'
+      templateUrl: 'templates/data_table.html'
     });
 
 });
