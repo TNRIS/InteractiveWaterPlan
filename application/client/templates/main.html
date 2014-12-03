@@ -1,17 +1,16 @@
 
-<div ng-controller="StateCtrl" class="col-md-12">
+<div class="col-md-12">
 
   <div theme-navs></div>
 
-
   <div class="row">
     <div class="col-md-12 view-intro-text">
-      <p ng-if="isState('needs')">
+      <p ng-show="{{ 'needs' | includedByState }}">
         Identified water
         <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
         are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
       </p>
-      <p ng-if="isState('demands')">
+      <p ng-show="{{ 'demands' | includedByState }}">
         Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
       </p>
     </div>
