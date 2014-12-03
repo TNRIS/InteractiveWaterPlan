@@ -1,7 +1,7 @@
 'use strict';
 /* global OverlappingMarkerSpiderfier:false */
 angular.module('iswpApp').factory('EntityLayerService',
-  function ($state, $stateParams, Utils, LegendService, ENTITY_STYLES) {
+  function ($state, $stateParams, Utils, LegendService, ENTITY_SINGLE_RADIUS, ENTITY_STYLES) {
 
     var service = {};
     var entityLayer;
@@ -51,7 +51,7 @@ angular.module('iswpApp').factory('EntityLayerService',
         }).sum;
 
         var radius = useScaledRadius ?
-          Utils.scaleRadius(maxValue, minValue, entityTotalVal) : 6;
+          Utils.scaleRadius(maxValue, minValue, entityTotalVal) : ENTITY_SINGLE_RADIUS;
 
         var entityStyle = ENTITY_STYLES[parentState];
         if (!entityStyle) {

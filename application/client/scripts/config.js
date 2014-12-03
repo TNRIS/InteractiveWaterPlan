@@ -8,6 +8,7 @@ angular.module('iswpApp.config', [])
     centerLat: 31.780548,
     centerLng: -99.022907
   })
+  .constant('ENTITY_SINGLE_RADIUS', 6)
   .constant('ENTITY_MAX_RADIUS', 18)
   .constant('ENTITY_MIN_RADIUS', 4)
   .constant('REGION_STYLE', {
