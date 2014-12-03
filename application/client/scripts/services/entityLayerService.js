@@ -29,6 +29,10 @@ angular.module('iswpApp').factory('EntityLayerService',
     };
 
     service.addEntities = function (entities, currentData, sumsByEntityId) {
+      if (!entityLayer || !oms) {
+        throw new Error('Must call createLayer() first');
+      }
+
       var currentState = $state.current.name;
       var parentState = _.first(currentState.split('.'));
       var childState = _.last(currentState.split('.'));
