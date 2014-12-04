@@ -12,8 +12,6 @@ angular.module('iswpApp').controller('StrategiesCountyCtrl',
 
     $scope.downloadPath = API_PATH + 'strategies/county/' + county + '?format=csv';
 
-    console.log(strategiesData);
-
     var sourceCol = {
       map: 'SourceName',
       label: 'Source',
