@@ -88,10 +88,15 @@ angular.module('iswpApp.config', [])
     {map: 'TOTAL', label: 'Total', formatFunction: 'number', formatParameter: 0, headerClass: 'text-center', cellClass: 'number'}
   ])
   .constant('REGION_TABLE_COLS', [
-    {map: 'WugRegion', label: 'Region', cellClass: 'text-center'},
+    // {map: 'WugRegion', label: 'Region', cellClass: 'text-center'},
     {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
     {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
     {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
+  ])
+  .constant('COUNTY_TABLE_COLS', [
+      // {map: 'WugCounty', label: 'County'},
+      {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
+      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
   ])
   .constant('ISWP_VARS', ISWP_VARS) //boostrapped variables
   .constant('API_PATH', '/api/v1/')

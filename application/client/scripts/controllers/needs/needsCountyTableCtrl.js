@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, API_PATH) {
+  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, COUNTY_TABLE_COLS, API_PATH) {
 
     var county = $scope.$stateParams.county.titleize();
 
@@ -28,15 +28,7 @@ angular.module('iswpApp')
       formatFunction: function(val) { return '' + val + '%'; }
     };
 
-    var cellTemplateUrl = 'templates/linkcell.html';
-
-    $scope.tableColumns = [
-      {map: 'WugCounty', label: 'County'},
-      {map: 'EntityName', label: 'Name', cellTemplateUrl: cellTemplateUrl},
-      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: cellTemplateUrl},
-      needsCol,
-      percentCol
-    ];
+    $scope.tableColumns = COUNTY_TABLE_COLS.concat([needsCol, percentCol]);
 
     $scope.tableRows = needsData;
 

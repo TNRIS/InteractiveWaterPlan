@@ -34,6 +34,12 @@ angular.module('iswpApp').config(function ($stateProvider) {
       controller: 'StrategiesRegionCtrl',
       templateUrl: 'templates/data_table.html'
     })
+    .state('strategies.county', {
+      url: '/:year/county/:county',
+      resolve: strategiesResolver('county', 'county'),
+      controller: 'StrategiesCountyCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
     ;
 
 });
