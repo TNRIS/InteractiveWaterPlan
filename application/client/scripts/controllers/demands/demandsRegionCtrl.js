@@ -30,14 +30,4 @@ angular.module('iswpApp')
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
       demandsCol.map = 'D' + $scope.currentYear;
     });
-
-    //Watch for selectionChange events from the Smart-Table
-    // and emit a rootScope event to toggle the feature
-    // highlight
-    $scope.$on('selectionChange', function(event, args) {
-      $rootScope.$emit('map:togglehighlight', args.item);
-      return;
-    });
-
-    return;
   });
