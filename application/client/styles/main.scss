@@ -372,6 +372,10 @@ $suppliesColor: #FF7518;
 
 .pagination-container {
   text-align: center;
+
+  .pagination a {
+    cursor: pointer;
+  }
 }
 
 .leaflet-legend {
