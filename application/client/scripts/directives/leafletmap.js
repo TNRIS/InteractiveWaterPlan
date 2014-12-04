@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('iswpApp').directive('leafletMap',
-  function ($rootScope, $state, $stateParams, RegionService, MapLayerService,
+  function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
-    STATE_MAP_CONFIG) {
+    SourceService, STATE_MAP_CONFIG) {
 
     function postLink(scope, element, attrs) {
 
@@ -21,6 +21,7 @@ angular.module('iswpApp').directive('leafletMap',
       var legendControl = LegendService.Needs.createLegend();
 
       var countyLayer = L.featureGroup().addTo(map);
+      var sourceLayer = L.featureGroup().addTo(map);
       var entityLayer = EntityLayerService.createLayer(map);
 
       $rootScope.$on('map:togglelock',
@@ -62,33 +63,69 @@ angular.module('iswpApp').directive('leafletMap',
         }
       );
 
-      var showLegend = function() {
+      function showLegend() {
         if (!legendControl.isAdded) {
           legendControl.addTo(map);
         }
-      };
+      }
 
-      var removeLegend = function() {
+      function removeLegend() {
         if (legendControl.isAdded) {
           legendControl.removeFrom(map);
         }
-      };
+      }
 
       //always set animate to false with fitBounds
       // because it seems to bug-out if caught in two animations
-      var fitBounds = function(bounds) {
+      function fitBounds(bounds) {
         //do nothing if the map is locked
         if (scope.mapLocked) {
           return;
         }
 
         map.fitBounds(bounds, {animate: false, maxZoom: 10});
-      };
+      }
+
+      function addViewFeatures(currentData) {
+        var currentState = $state.current.name;
+        var parentState = _.first(currentState.split('.'));
+        var childState = _.last(currentState.split('.'));
+
+        var promises = [];
+
+        if (childState === 'county') {
+          var countyProm = CountyService.fetchCounty($stateParams.county)
+            .then(function (countyFeat) {
+              countyLayer.addLayer(countyFeat)
+                .bringToBack();
+              return;
+            });
+          promises.push(countyProm);
+        }
+
+        var hasSources = ['strategies.county', 'strategies.entity',
+          'sources.county', 'sources.entity'];
+
+        if (_.contains(hasSources, currentState)) {
+          var sourceIds = _(currentData).pluck('MapSourceId').filter().value();
+          var sourceProm = SourceService.fetchSources(sourceIds)
+            .then(function (sourcesFeat) {
+              sourceLayer.addLayer(sourcesFeat)
+                .bringToBack();
+              return;
+            });
+          promises.push(sourceProm);
+        }
+
+
+        return $q.all(promises);
+      }
 
       //helper to set view bounds based on current state
-      var setViewBounds = function() {
-        var childState = _.last($state.current.name.split('.')),
-          entityLayerBounds = entityLayer.getBounds();
+      function setViewBounds() {
+        var childState = _.last($state.current.name.split('.'));
+        var entityLayerBounds = entityLayer.getBounds();
+        var extendedBounds;
 
         switch (childState) {
           case 'region':
@@ -96,7 +133,7 @@ angular.module('iswpApp').directive('leafletMap',
 
             //Extend with region bounds to make sure we always have a nice view
             // of the entire region even if there aren't many entities
-            var extendedBounds = entityLayerBounds.extend(
+            extendedBounds = entityLayerBounds.extend(
               regionFeat.getBounds());
 
             fitBounds(extendedBounds);
@@ -115,30 +152,26 @@ angular.module('iswpApp').directive('leafletMap',
           case 'county':
             //Extend with county bounds to make sure we always have a nice view
             // of the entire region even if there aren't many entities
-            CountyService.fetchCounty($stateParams.county)
-              .then(function(countyFeat) {
-                var extendedBounds = entityLayerBounds.extend(
-                  countyFeat.getBounds());
+            extendedBounds = entityLayerBounds.extend(
+              countyLayer.getBounds());
 
-                fitBounds(extendedBounds);
+            extendedBounds.extend(sourceLayer.getBounds());
 
-                //Also show the county feature outline
-                countyLayer.addLayer(countyFeat)
-                  .bringToBack();
-              });
+            fitBounds(extendedBounds);
             break;
 
           default:
             fitBounds(entityLayerBounds);
         }
-      };
+      }
 
       //called on stateChangeSuccess to update the map view, entities, etc
-      var updateMapState = function() {
+      function updateMapState() {
         //Clear the spiderfier instance and the entityLayer before creating
         // the new entity features
         EntityLayerService.clearLayer();
         countyLayer.clearLayers();
+        sourceLayer.clearLayers();
 
         var currentYear = $stateParams.year;
 
@@ -200,9 +233,14 @@ angular.module('iswpApp').directive('leafletMap',
         //add entity markers
         EntityLayerService.addEntities(entities, currentData, sumsByEntityId);
 
-        //Set the map bounds according to the current view
-        setViewBounds();
-      };
+        //add additional features
+        addViewFeatures(currentData)
+          .then(function () {
+            //Set the map bounds according to the current view
+            setViewBounds();
+          });
+
+      }
 
       //Update map state every time the state changes
       scope.$on('$stateChangeSuccess', updateMapState);

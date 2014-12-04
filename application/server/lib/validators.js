@@ -52,9 +52,9 @@ exports.validateSourceId = function validateSourceId(req, res, next) {
 
 
 exports.validateSourceIds = function validateSourceIds(req, res, next) {
-  req.checkQuery('ids', 'Must be a comma-separated list of ids (max 10)')
+  req.checkQuery('ids', 'Must be a comma-separated list of ids (max 50)')
     .notEmpty()
-    .isIntList(10);
+    .isIntList(50);
 
   return errOrNext(req, res, next);
 };

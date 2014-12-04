@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('WrapCtrl',
-  function ($scope, $state, $stateParams, TableSettingsService, TREE_MAP_SUBJECTS) {
+  function ($scope, $rootScope, $state, $stateParams, TableSettingsService, TREE_MAP_SUBJECTS) {
 
     $scope.itemsPerPage = TableSettingsService.getItemsPerPage();
 
@@ -25,9 +25,15 @@ angular.module('iswpApp').controller('WrapCtrl',
 
     $scope.$on('$stateChangeSuccess', function () {
       var parentState = $state.current.name.split('.')[0];
-      $scope.treeMapSubject = TREE_MAP_SUBJECTS[parentState];
 
+      $scope.treeMapSubject = TREE_MAP_SUBJECTS[parentState];
       $scope.currentYear = $scope.$stateParams.year;
-      return;
+    });
+
+    //Watch for selectionChange events from the Smart-Table
+    // and emit a rootScope event to toggle the feature
+    // highlight
+    $scope.$on('selectionChange', function (event, args) {
+      $rootScope.$emit('map:togglehighlight', args.item);
     });
 });
