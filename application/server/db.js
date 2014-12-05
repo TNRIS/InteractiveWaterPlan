@@ -1,13 +1,14 @@
 'use strict';
 
+var path = require('path');
 var config = require('./config/config');
 
-var knex = require('knex')({
+var db = require('knex')({
   client: 'sqlite3',
   connection: {
-    filename: config.dbPath
+    filename: path.normalize(__dirname + '/cache/cache.db')
   },
   debug: config.env !== 'production'
 });
 
-module.exports = knex;
+module.exports = db;
