@@ -1,5 +1,10 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
+$demandsColor: #0AC763;
+$needsColor: #aa0000;
+$strategiesColor: #007fff;
+$suppliesColor: #FF7518;
+
 @import 'bootstrap';
 
 .browsehappy {
@@ -136,10 +141,14 @@ body {
   font-weight: normal;
 }
 
-$demandsColor: #0AC763;
-$needsColor: #aa0000;
-$strategiesColor: #007fff;
-$suppliesColor: #FF7518;
+.leaflet-label {
+  border-color: #777;
+  background: rgb(235, 235, 235);
+}
+
+.leaflet-label.sourceLabel {
+  border-color: rgba($strategiesColor, 0.75);
+}
 
 .theme-nav-link {
   background-color: #eee;

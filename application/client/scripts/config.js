@@ -18,6 +18,48 @@ angular.module('iswpApp.config', [])
     opacity: 1,
     fillOpacity: 0
   })
+  .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
+  .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
+  .constant('SOURCE_CARTOCSS', [
+    '#iswp_sourcefeatures[sourcetype="groundwater"] {',
+      'polygon-fill: #003369;',
+      'polygon-opacity: 0.7;',
+      'line-color: #FFF;',
+      'line-width: 2;',
+      'line-opacity: 0.5;',
+      '[featuretype="point"]{',
+        'marker-fill: #003369; ',
+        'marker-line-color: #FFF;',
+      '}',
+    '}',
+    '#iswp_sourcefeatures[sourcetype="reservoir"],',
+    '#iswp_sourcefeatures[sourcetype="system"]{',
+      '::glow {',
+        'line-width: 1;',
+        'line-color: #fff;',
+        'line-opacity: 0.8;',
+      '}',
+      'polygon-fill: #007DFF;',
+      'polygon-opacity: 1;',
+      'line-color: #007DFF;',
+      'line-width: 1;',
+      'line-opacity: 0.8;',
+
+      '[featuretype="point"]{',
+        'marker-fill: #007DFF; ',
+        'marker-line-color: #FFF;',
+      '}',
+    '}',
+    '#iswp_sourcefeatures[sourcetype="river"],',
+    '#iswp_sourcefeatures[sourcetype="indirect"] {',
+      'line-width: 4;',
+      'line-color: #00236C;',
+      '[featuretype="point"] {',
+        'marker-fill: #00236C; ',
+        'marker-line-color: #FFF;',
+      '}',
+    '}'
+  ].join(''))
   .constant('ENTITY_STYLES', {
     'demands': {
       color: '#000',
