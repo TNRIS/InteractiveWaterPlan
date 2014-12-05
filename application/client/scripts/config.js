@@ -34,7 +34,7 @@ angular.module('iswpApp.config', [])
     '}',
     '#iswp_sourcefeatures[sourcetype="reservoir"],',
     '#iswp_sourcefeatures[sourcetype="system"]{',
-      '::glow {',
+      '::glow[zoom>9] {',
         'line-width: 1;',
         'line-color: #fff;',
         'line-opacity: 0.8;',

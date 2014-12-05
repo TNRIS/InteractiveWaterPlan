@@ -14,6 +14,8 @@ angular.module('iswpApp').directive('leafletMap',
         zoom: STATE_MAP_CONFIG.zoom
       });
 
+      window.map = map;
+
       scope.mapLocked = false;
       scope.mapHidden = false;
 
