@@ -29,7 +29,8 @@ angular.module('iswpApp').factory('SourceLayerService',
     };
 
     service.createLayer = function createLayer(sourceIds, map) {
-      var sql = "select * from {table} where sourceid in ({sourceIds})";
+      var sql = "select * from {table} where sourceid in ({sourceIds}) " +
+        "order by drawingorder";
       sql = sql.assign({
         table: CARTODB_SOURCE_TBL,
         sourceIds: sourceIds.join(",")
