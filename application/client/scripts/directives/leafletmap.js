@@ -4,7 +4,7 @@ angular.module('iswpApp').directive('leafletMap',
   function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
-    SourceService, STATE_MAP_CONFIG) {
+    SourceLayerService, STATE_MAP_CONFIG, $http) {
 
     function postLink(scope, element, attrs) {
 
@@ -20,8 +20,8 @@ angular.module('iswpApp').directive('leafletMap',
       //Create a legend for the Needs colors
       var legendControl = LegendService.Needs.createLegend();
 
+      var sourceLayer;
       var countyLayer = L.featureGroup().addTo(map);
-      var sourceLayer = L.featureGroup().addTo(map);
       var entityLayer = EntityLayerService.createLayer(map);
 
       $rootScope.$on('map:togglelock',
@@ -108,15 +108,20 @@ angular.module('iswpApp').directive('leafletMap',
 
         if (_.contains(hasSources, currentState)) {
           var sourceIds = _(currentData).pluck('MapSourceId').filter().value();
-          var sourceProm = SourceService.fetchSources(sourceIds)
-            .then(function (sourcesFeat) {
-              sourceLayer.addLayer(sourcesFeat)
-                .bringToBack();
-              return;
+          //create and add the new sourceLayer to the map
+          var sourceProm = SourceLayerService.createLayer(sourceIds, map)
+            .then(function (newSourceLayer) {
+              sourceLayer = newSourceLayer;
+              //also get the bounds of the source layer features
+              // and save them intou sourceLayer
+              return SourceLayerService.getBounds(sourceIds)
+                .then(function (bounds) {
+                  sourceLayer.layerBounds = bounds;
+                  return sourceLayer;
+                });
             });
           promises.push(sourceProm);
         }
-
 
         return $q.all(promises);
       }
@@ -155,7 +160,10 @@ angular.module('iswpApp').directive('leafletMap',
             extendedBounds = entityLayerBounds.extend(
               countyLayer.getBounds());
 
-            extendedBounds.extend(sourceLayer.getBounds());
+            //layerBounds is saved into the layer during sourceLayer creation
+            if (sourceLayer && sourceLayer.layerBounds) {
+              extendedBounds = extendedBounds.extend(sourceLayer.layerBounds);
+            }
 
             fitBounds(extendedBounds);
             break;
@@ -171,7 +179,10 @@ angular.module('iswpApp').directive('leafletMap',
         // the new entity features
         EntityLayerService.clearLayer();
         countyLayer.clearLayers();
-        sourceLayer.clearLayers();
+        if (sourceLayer && map.hasLayer(sourceLayer)) {
+          map.removeLayer(sourceLayer);
+          sourceLayer = null;
+        }
 
         var currentYear = $stateParams.year;
 

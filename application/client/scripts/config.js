@@ -18,6 +18,11 @@ angular.module('iswpApp.config', [])
     opacity: 1,
     fillOpacity: 0
   })
+  .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
+  .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
+  .constant('SOURCE_CARTOCSS',
+    '#wms_sources { polygon-fill: #FFF;  line-color: #000; line-width: 2;}'
+  )
   .constant('ENTITY_STYLES', {
     'demands': {
       color: '#000',

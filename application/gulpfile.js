@@ -80,6 +80,7 @@ gulp.task('scripts-bower', function () {
   var vendorScripts = [
     dirs.bower + "/sugar/release/sugar-full.min.js",
     dirs.bower + "/lodash/dist/lodash.compat.js",
+    dirs.bower + "/Leaflet.utfgrid/dist/leaflet.utfgrid.js",
     dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
     dirs.bower + "/angular-ui-select/dist/select.min.js",
     dirs.bower + "/angular-local-storage/angular-local-storage.min.js",

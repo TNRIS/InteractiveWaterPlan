@@ -89,6 +89,14 @@ angular.module('iswpApp').factory('EntityLayerService',
           marker.showLabel();
         }
 
+        //kind of a hacky way to get the click event
+        // into the oms click handler
+        marker.on('click', function (e) {
+          var evt = e.originalEvent || e;
+          marker.clickEvent = evt;
+          return;
+        });
+
         //add it to the spiderfier
         oms.addMarker(marker);
       });
@@ -97,13 +105,20 @@ angular.module('iswpApp').factory('EntityLayerService',
 
       //Add 'global' event listener to the oms instance
       // to go to the entity view when clicked
-      oms.addListener('click', function(marker) {
+      oms.addListener('click', function (marker) {
         if (!marker.options.entity) { return; }
+        if (marker.clickEvent) {
+          //stop click even propagation so that
+          // utfGrid click events don't trigger
+          //this clickEvent is added above
+          marker.clickEvent.stopPropagation();
+        }
 
         $state.go(parentState + '.entity', {
           year: currentYear,
           entityId: marker.options.entity.EntityId
         });
+
       });
 
     };
