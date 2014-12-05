@@ -78,14 +78,14 @@ angular.module('iswpApp.config', [])
       color: '#000',
       weight: 1,
       opacity: 0.5,
-      fillOpacity: 0.75,
+      fillOpacity: 0.9,
       fillColor: '#FFA84B'
     },
     'supplies': {
       color: '#000',
       weight: 1,
       opacity: 0.5,
-      fillOpacity: 0.75,
+      fillOpacity: 0.9,
       fillColor: '#FFA84B'
     }
   })
