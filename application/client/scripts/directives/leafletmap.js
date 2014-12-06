@@ -109,7 +109,8 @@ angular.module('iswpApp').directive('leafletMap',
           'sources.county', 'sources.entity'];
 
         if (_.contains(hasSources, currentState)) {
-          var sourceIds = _(currentData).pluck('MapSourceId').filter().value();
+          var sourceIds = _(currentData).pluck('MapSourceId')
+            .filter().unique().value();
           //create and add the new sourceLayer to the map
           var sourceProm = SourceLayerService.createLayer(sourceIds, map)
             .then(function (newSourceLayer) {
