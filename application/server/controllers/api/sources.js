@@ -6,7 +6,7 @@ var db = require('./../../db');
 var validators = require('./../../lib/validators');
 
 function selectSources() {
-  return db.select('sourceId', 'type', 'geojson')
+  return db.select('sourceId', 'type', 'geojson', 'mappingPoint')
     .from('SourceFeatures');
 }
 
@@ -44,14 +44,18 @@ exports.getSourcesById = function getSourcesById(req, res) {
 };
 
 
+function toIntArr(str) {
+  return str.split(',').map(function (v) {
+    return parseInt(v, 10);
+  });
+}
+
 // Get a GeoJSON FeatureCollection of all the source features
 // identified in the array of sourceIds
 exports.getSourcesByIds = function getSourcesByIds(req, res) {
   var sourceIds = req.query.ids;
 
-  sourceIds = sourceIds.split(',').map(function (v) {
-    return parseInt(v, 10);
-  });
+  sourceIds = toIntArr(sourceIds);
 
   selectSources()
     .whereIn('sourceId', sourceIds)
@@ -65,8 +69,21 @@ exports.getSourcesByIds = function getSourcesByIds(req, res) {
     });
 };
 
+exports.getSourceMappingPoints = function getSourceMappingPoints(req, res) {
+  var sourceIds = req.query.ids;
+
+  sourceIds = toIntArr(sourceIds);
+
+  return db.select('sourceId', 'mappingPoint', 'geojson')
+    .from('SourceFeatures')
+    .whereIn('sourceId', sourceIds)
+    .then(function (result) {
+      res.json(result);
+    });
+};
 
 var router = express.Router();
+router.get('/points', validators.validateSourceIds, exports.getSourceMappingPoints);
 router.get('/:sourceId', validators.validateSourceId, exports.getSourcesById);
 router.get('/', validators.validateSourceIds, exports.getSourcesByIds);
 exports.router = router;
