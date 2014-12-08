@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('iswpApp').directive('leafletMap',
+angular.module('iswpApp').directive('iswpMap',
   function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
