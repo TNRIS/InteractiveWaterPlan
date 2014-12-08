@@ -7,7 +7,9 @@ angular.module('iswpApp')
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
-        //TODO: Put in constants?
+        //TODO: Read stateParams and to show currently selected
+        // view and subview (also modify on $stateChangeSuccess)
+
         $scope.viewTypes = [
           {text: 'Regional Summary', value: 'summary', showSub: false},
           {text: 'Usage Type', value: 'type', showSub: true},
@@ -44,9 +46,7 @@ angular.module('iswpApp')
           return {value: r, text: "Region " + r};
         });
 
-
         $scope.loadEntities = function(query) {
-
           if (!query || query.length < 3) {
             $scope.entities = [];
             return;
@@ -90,8 +90,6 @@ angular.module('iswpApp')
             year: currentYear,
             entityType: type.value
           });
-
-          // $scope.selectedType = null;
         });
 
         $scope.$watch('region.selected', function (region) {
@@ -104,8 +102,6 @@ angular.module('iswpApp')
             year: currentYear,
             region: region.value
           });
-
-          // $scope.selectedRegion = null;
         });
 
         $scope.$watch('county.selected', function (county) {
@@ -118,8 +114,6 @@ angular.module('iswpApp')
             year: currentYear,
             county: county.value
           });
-
-          // $scope.selectedCounty = null;
         });
 
         $scope.$watch('entity.selected', function (entity) {
@@ -132,8 +126,6 @@ angular.module('iswpApp')
             year: currentYear,
             entityId: entity.value
           });
-
-          // $scope.selectedEntity = null;
         });
       }
     };
