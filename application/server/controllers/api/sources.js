@@ -6,7 +6,7 @@ var db = require('./../../db');
 var validators = require('./../../lib/validators');
 
 function selectSources() {
-  return db.select('id', 'type', 'geojson', 'mappingPoint')
+  return db.select('id', 'type', 'geojson')
     .from('SourceFeatures');
 }
 
@@ -69,8 +69,31 @@ exports.getSourcesByIds = function getSourcesByIds(req, res) {
     });
 };
 
+exports.getMappingPoints = function getMappingPoints(req, res) {
+  var sourceIds = req.query.ids;
+
+  sourceIds = toIntArr(sourceIds);
+
+  return db.select('id', 'type', 'mappingPoint')
+    .from('SourceFeatures')
+    .whereIn('id', sourceIds)
+    .then(function (results) {
+      results = results.map(function (result) {
+        var coords = result.mappingPoint.split(',').map(parseFloat);
+        result.mappingPoint = {
+          type: 'Point',
+          coordinates: coords
+        };
+        return result;
+      });
+
+      res.json(results);
+    });
+};
+
 
 var router = express.Router();
+router.get('/points', validators.validateSourceIds, exports.getMappingPoints);
 router.get('/:sourceId', validators.validateSourceId, exports.getSourcesById);
 router.get('/', validators.validateSourceIds, exports.getSourcesByIds);
 exports.router = router;
