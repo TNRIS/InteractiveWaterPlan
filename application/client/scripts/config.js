@@ -18,6 +18,11 @@ angular.module('iswpApp.config', [])
     opacity: 1,
     fillOpacity: 0
   })
+  .constant('LINE_STYLE', {
+    color: 'cyan',
+    weight: 1.5,
+    opacity: 1
+  })
   .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
   .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
   .constant('SOURCE_CARTOCSS', [

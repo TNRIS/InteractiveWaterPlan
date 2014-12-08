@@ -4,7 +4,7 @@ angular.module('iswpApp').directive('iswpMap',
   function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
-    SourceLayerService, STATE_MAP_CONFIG, $http) {
+    SourceLayerService, LinesLayerService, STATE_MAP_CONFIG) {
 
     function postLink(scope, element, attrs) {
 
@@ -23,6 +23,7 @@ angular.module('iswpApp').directive('iswpMap',
       var legendControl = LegendService.Needs.createLegend();
 
       var sourceLayer;
+      var linesLayer;
       var countyLayer = L.featureGroup().addTo(map);
       var entityLayer = EntityLayerService.createLayer(map);
 
@@ -77,6 +78,19 @@ angular.module('iswpApp').directive('iswpMap',
         }
       }
 
+      function clearLayers() {
+        EntityLayerService.clearLayer();
+        countyLayer.clearLayers();
+        if (sourceLayer && map.hasLayer(sourceLayer)) {
+          map.removeLayer(sourceLayer);
+          sourceLayer = null;
+        }
+        if (linesLayer && map.hasLayer(linesLayer)) {
+          map.removeLayer(linesLayer);
+          linesLayer = null;
+        }
+      }
+
       //always set animate to false with fitBounds
       // because it seems to bug-out if caught in two animations
       function fitBounds(bounds) {
@@ -88,10 +102,11 @@ angular.module('iswpApp').directive('iswpMap',
         map.fitBounds(bounds, {animate: false, maxZoom: 10});
       }
 
-      function addViewFeatures(currentData) {
+      function addViewFeatures(currentData, entities) {
         var currentState = $state.current.name;
         var parentState = _.first(currentState.split('.'));
         var childState = _.last(currentState.split('.'));
+        var currentYear = $stateParams.year;
 
         var promises = [];
 
@@ -109,14 +124,23 @@ angular.module('iswpApp').directive('iswpMap',
           'sources.county', 'sources.entity'];
 
         if (_.contains(hasSources, currentState)) {
-          var sourceIds = _(currentData).pluck('MapSourceId')
-            .filter().unique().value();
+          //Get all the sourceIds of the sources to show
+          var sourceIds = _(currentData)
+            //only where SS of current year is > 0
+            .where(function (r) { return r['SS' + currentYear] > 0;})
+            .pluck('MapSourceId')
+            .compact()
+            .unique()
+            .value();
+
           //create and add the new sourceLayer to the map
           var sourceProm = SourceLayerService.createLayer(sourceIds, map)
             .then(function (newSourceLayer) {
               sourceLayer = newSourceLayer;
               //also get the bounds of the source layer features
               // and save them intou sourceLayer
+
+              //TODO: maybe bound by the lines layer instead of source layer
               return SourceLayerService.getBounds(sourceIds)
                 .then(function (bounds) {
                   sourceLayer.layerBounds = bounds;
@@ -124,6 +148,15 @@ angular.module('iswpApp').directive('iswpMap',
                 });
             });
           promises.push(sourceProm);
+
+          var linesProm = SourceLayerService.getMappingPoints(sourceIds)
+            .then(function (results) {
+              linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
+                results);
+              map.addLayer(linesLayer);
+              return;
+            });
+          promises.push(linesProm);
         }
 
         return $q.all(promises);
@@ -178,14 +211,8 @@ angular.module('iswpApp').directive('iswpMap',
 
       //called on stateChangeSuccess to update the map view, entities, etc
       function updateMapState() {
-        //Clear the spiderfier instance and the entityLayer before creating
-        // the new entity features
-        EntityLayerService.clearLayer();
-        countyLayer.clearLayers();
-        if (sourceLayer && map.hasLayer(sourceLayer)) {
-          map.removeLayer(sourceLayer);
-          sourceLayer = null;
-        }
+
+        clearLayers();
 
         var currentYear = $stateParams.year;
 
@@ -248,7 +275,7 @@ angular.module('iswpApp').directive('iswpMap',
         EntityLayerService.addEntities(entities, currentData, sumsByEntityId);
 
         //add additional features
-        addViewFeatures(currentData)
+        addViewFeatures(currentData, entities)
           .then(function () {
             //Set the map bounds according to the current view
             setViewBounds();
