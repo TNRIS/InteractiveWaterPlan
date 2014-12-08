@@ -16,7 +16,6 @@ angular.module('iswpApp')
         '<div ng-transclude></div>' +
         '</div>',
       link: function postLink(scope, element, attrs) {
-        //TODO: maybe remember isClosed in localStorage
       }
     };
   });

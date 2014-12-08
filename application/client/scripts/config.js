@@ -44,7 +44,6 @@ angular.module('iswpApp.config', [])
       'line-color: #007DFF;',
       'line-width: 1;',
       'line-opacity: 0.8;',
-
       '[featuretype="point"]{',
         'marker-fill: #007DFF; ',
         'marker-line-color: #FFF;',
