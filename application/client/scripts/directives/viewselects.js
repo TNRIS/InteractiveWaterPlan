@@ -30,9 +30,14 @@ angular.module('iswpApp')
           $scope.entity = {};
         };
 
-        //grab selectedViewType from route
-        var currViewValue = $state.current.name.split('.')[1];
-        $scope.selectedViewType = _.find($scope.viewTypes, {value: currViewValue});
+        function setToCurrentState() {
+          //grab selectedViewType from route
+          var currViewValue = $state.current.name.split('.')[1];
+          $scope.selectedViewType = _.find($scope.viewTypes, {value: currViewValue});
+        }
+
+        setToCurrentState(); //run at start
+        $scope.$on('$stateChangeSuccess', setToCurrentState);
 
         $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t, i) {
           return {value: t, text: t.titleize()};
@@ -63,6 +68,8 @@ angular.module('iswpApp')
             });
 
         };
+
+
 
         $scope.$watch('selectedViewType', function (selected) {
           if (!selected) { return; }
