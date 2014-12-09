@@ -23,6 +23,14 @@ angular.module('iswpApp.config', [])
     weight: 1.5,
     opacity: 1
   })
+  .constant('LINE_MARKER_STYLE', {
+    color: 'white',
+    weight: 1,
+    radius: 3,
+    opacity: 0.8,
+    fillOpacity: 0.75,
+    fillColor: 'cyan'
+  })
   .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
   .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
   .constant('SOURCE_CARTOCSS', [
@@ -93,24 +101,6 @@ angular.module('iswpApp.config', [])
       fillColor: '#FFA84B'
     }
   })
-  .constant('SOURCE_STYLES', {
-    //TODO
-    'groundwater': {
-
-    },
-    'indirect': {
-
-    },
-    'river': {
-
-    },
-    'reservoir': {
-
-    },
-    'system': {
-
-    }
-  })
   .constant('DATA_VALUE_PREFIXES', {
     'needs': 'N',
     'demands': 'D',
@@ -148,6 +138,12 @@ angular.module('iswpApp.config', [])
     // {map: 'WugType', label: 'Water User Type'},
     {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
     {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'}
+  ])
+  .constant('ENTITY_TABLE_COLS', [
+      // {map: 'EntityName', label: 'Name'},
+      {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
+      {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
+      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
   ])
   .constant('ISWP_VARS', ISWP_VARS) //boostrapped variables
   .constant('API_PATH', '/api/v1/')

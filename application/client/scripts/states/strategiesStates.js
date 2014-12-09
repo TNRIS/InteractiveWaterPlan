@@ -46,6 +46,19 @@ angular.module('iswpApp').config(function ($stateProvider) {
       controller: 'StrategiesEntityTypeCtrl',
       templateUrl: 'templates/data_table.html'
     })
+    .state('strategies.entity', {
+      url: '/:year/entity/:entityId',
+      resolve: {
+        strategiesData: /* @ngInject */ function (StrategiesService, $stateParams) {
+          return StrategiesService.fetch('entity', $stateParams.entityId);
+        },
+        entitySummary: /* @ngInject */ function (EntityService, $stateParams) {
+          return EntityService.fetchSummary($stateParams.entityId);
+        }
+      },
+      controller: 'StrategiesEntityCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
     ;
 
 });
