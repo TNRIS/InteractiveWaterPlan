@@ -51,7 +51,8 @@ To re-run the deploy, you can either use `vagrant provision` or using the `deplo
 
 Deploying to production works mainly the same way, but you'll need to create a
 production inventory file and set up your authorized_keys file (vagrant does
-these things for you).
+these things for you). You will also need passwordless sudo access for the
+account you are deploying with.
 
 The inventory file should look something like this (with the actual ip address
 to the production server):
