@@ -44,8 +44,11 @@ angular.module('iswpApp').factory('EntityLayerService',
 
       var currentYear = $stateParams.year;
 
-      //TODO: figure out how to make the larger entities go on the bottom
-      _.each(entities, function (entity) {
+      _(entities).sort(function (entity) {
+        return _.find(sumsByEntityId, {
+          'EntityId': '' + entity.EntityId
+        }).sum;
+      }).each(function (entity) {
         var entityTotalVal = _.find(sumsByEntityId, {
           'EntityId': '' + entity.EntityId
         }).sum;
