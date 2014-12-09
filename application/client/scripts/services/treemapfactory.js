@@ -109,5 +109,50 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
     };
   };
 
+  //valueKey should be something like N2010 or SS2030 (value prefix + current year)
+  service.entityTypeTreeMap = function entityTypeTreeMap(entityType, data, valueKey) {
+    var treeMapData = [];
+    var parentName = 'All Regions';
+
+    treeMapData.push(['Region', 'Parent', 'Amount (acre-feet/year)']);
+    treeMapData.push([parentName, null, null]);
+
+    //For each region,
+    _.each(ISWP_VARS.regions, function (region) {
+
+      var regionData = _.where(data, {'WugRegion': region});
+      var regionTotal = _.reduce(regionData, function (sum, curr) {
+        return sum + curr[valueKey];
+      }, 0);
+
+      treeMapData.push([
+        region + ' - ' + entityType.toUpperCase(),
+        parentName,
+        regionTotal
+      ]);
+    });
+
+    var createTooltip = function (rowIndex, value) {
+      return '<div class="tree-map-tooltip">' +
+        treeMapData[rowIndex+1][0] + '<br>' +
+        value.format() + ' acre-feet/year' +
+        '</div>';
+    };
+
+    return {
+      options: {
+        maxColor: '#3182bd',
+        midColor: '#9ecae1',
+        minColor: '#deebf7',
+        headerHeight: 0,
+        useWeightedAverageForAggregation: true,
+        fontSize: 14,
+        fontFamily: "'Open Sans', Arial, 'sans serif'",
+        generateTooltip: createTooltip
+      },
+      data: treeMapData
+    };
+  };
+
   return service;
 });
