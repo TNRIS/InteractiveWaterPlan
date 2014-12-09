@@ -133,30 +133,32 @@ angular.module('iswpApp').directive('iswpMap',
             .unique()
             .value();
 
-          //create and add the new sourceLayer to the map
-          var sourceProm = SourceLayerService.createLayer(sourceIds, map)
-            .then(function (newSourceLayer) {
-              sourceLayer = newSourceLayer;
-              //also get the bounds of the source layer features
-              // and save them intou sourceLayer
+          if (!_.isEmpty(sourceIds)) {
+            //create and add the new sourceLayer to the map
+            var sourceProm = SourceLayerService.createLayer(sourceIds, map)
+              .then(function (newSourceLayer) {
+                sourceLayer = newSourceLayer;
+                //also get the bounds of the source layer features
+                // and save them intou sourceLayer
 
-              //TODO: maybe bound by the lines layer instead of source layer
-              return SourceLayerService.getBounds(sourceIds)
-                .then(function (bounds) {
-                  sourceLayer.layerBounds = bounds;
-                  return sourceLayer;
-                });
-            });
-          promises.push(sourceProm);
+                //TODO: maybe bound by the lines layer instead of source layer
+                return SourceLayerService.getBounds(sourceIds)
+                  .then(function (bounds) {
+                    sourceLayer.layerBounds = bounds;
+                    return sourceLayer;
+                  });
+              });
+            promises.push(sourceProm);
 
-          var linesProm = SourceLayerService.getMappingPoints(sourceIds)
-            .then(function (results) {
-              linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
-                results);
-              map.addLayer(linesLayer);
-              return;
-            });
-          promises.push(linesProm);
+            var linesProm = SourceLayerService.getMappingPoints(sourceIds)
+              .then(function (results) {
+                linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
+                  results);
+                map.addLayer(linesLayer);
+                return linesLayer;
+              });
+            promises.push(linesProm);
+          }
         }
 
         return $q.all(promises);
