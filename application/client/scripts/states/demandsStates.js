@@ -22,31 +22,31 @@ angular.module('iswpApp').config(function ($stateProvider) {
       templateUrl: 'templates/main.html'
     })
     .state('demands.summary', {
-      url: '/:year/state', // appended to /demands
+      url: '/:year/state',
       resolve: demandsResolver('summary'),
       controller: 'DemandsSummaryCtrl',
       templateUrl: 'templates/data_table.html'
     })
     .state('demands.region', {
-      url: '/:year/region/:region', // appended to /demands
+      url: '/:year/region/:region',
       resolve: demandsResolver('region', 'region'),
       controller: 'DemandsRegionCtrl',
       templateUrl: 'templates/data_table.html'
     })
     .state('demands.county', {
-      url: '/:year/county/:county', // appended to /demands
+      url: '/:year/county/:county',
       resolve: demandsResolver('county', 'county'),
       controller: 'DemandsCountyCtrl',
       templateUrl: 'templates/data_table.html'
     })
     .state('demands.type', {
-      url: '/:year/type/:entityType', // appended to /demands
+      url: '/:year/type/:entityType',
       resolve: demandsResolver('type', 'entityType'),
       controller: 'DemandsEntityTypeCtrl',
       templateUrl: 'templates/data_table.html'
     })
     .state('demands.entity', {
-      url: '/:year/entity/:entityId', // appended to /demands
+      url: '/:year/entity/:entityId',
       resolve: {
         demandsData: /* @ngInject */ function (DemandsService, $stateParams) {
           return DemandsService.fetch('entity', $stateParams.entityId);

@@ -206,6 +206,16 @@ angular.module('iswpApp').directive('iswpMap',
             fitBounds(extendedBounds);
             break;
 
+          case 'entity':
+            if (sourceLayer && sourceLayer.layerBounds) {
+              extendedBounds = entityLayerBounds.extend(sourceLayer.layerBounds);
+
+              fitBounds(extendedBounds);
+            }
+            else {
+              fitBounds(entityLayerBounds);
+            }
+            break;
           default:
             fitBounds(entityLayerBounds);
         }
