@@ -52,6 +52,11 @@ angular.module('iswpApp').controller('StrategiesEntityCtrl',
 
     $scope.tableRows = strategiesData;
 
+    $scope.chartSelect = function (selectedItem) {
+      var rowId = $scope.chartConfig.data[selectedItem.row+1][4];
+      $scope.$state.go(rowId + '.entity', $scope.$stateParams);
+    };
+
     //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       var year = $scope.currentYear;
