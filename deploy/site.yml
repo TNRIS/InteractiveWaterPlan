@@ -34,9 +34,6 @@
   - name: install ruby
     apt: pkg=ruby
 
-  - name: install gem
-    apt: pkg=rubygems
-
   - name: install sass
     gem: name=sass state=present user_install=no
 
