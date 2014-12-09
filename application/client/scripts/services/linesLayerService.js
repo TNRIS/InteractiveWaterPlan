@@ -52,11 +52,12 @@ angular.module('iswpApp').factory('LinesLayerService', function(LINE_STYLE) {
         return row.MapSourceId === sourceMp.id;
       }).map(function (row) {
         return _.find(entities, {EntityId: row.EntityId});
-      }).each(function (entity) {
+      })
+        .compact()
+        .each(function (entity) {
         var start = L.latLng([entity.Latitude, entity.Longitude]);
         var end = L.latLng([sourceMp.mappingPoint.coordinates[1],
           sourceMp.mappingPoint.coordinates[0]]);
-
         lines.push(curvedLine(start, end));
         return;
       });
