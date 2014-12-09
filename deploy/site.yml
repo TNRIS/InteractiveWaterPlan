@@ -35,7 +35,7 @@
     apt: pkg=ruby
 
   - name: install sass
-    gem: name=sass state=present user_install=no
+    apt: pkg=ruby-sass
 
   - name: set up upstart config for water plan app
     template: src=templates/water-plan-app-upstart-conf.j2 dest=/etc/init/{{ upstart_cmd }}.conf owner=root group=root mode=0644
