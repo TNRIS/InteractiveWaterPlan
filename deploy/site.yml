@@ -16,6 +16,9 @@
     copy: src=templates/vagrant_sudoers dest=/etc/sudoers.d/vagrant validate='visudo -cf %s' group=root owner=root mode=440
     when: vagrant
 
+  - name: install build-essential
+    apt: pkg=build-essential
+
   - name: install python software properties package (for installing PPAs)
     apt: pkg=python-software-properties
 
@@ -60,7 +63,10 @@
     sudo: no
 
   - name: send dist build to tmp server directory
-    synchronize: src=../application/dist/ dest={{ tmp_dist }} archive=no recursive=yes delete=yes rsync_path="sudo -u {{ water_plan_user }} rsync"
+    synchronize: src=../application/dist/ dest={{ tmp_dist }} archive=no recursive=yes delete=yes
+
+  - name: change tmp directory owner to the app user
+    command: chown -R {{ water_plan_user }}:{{ water_plan_user }} {{ tmp_dist }}
 
   - name: install npm packages
     npm: path={{ tmp_dist }} production=yes
