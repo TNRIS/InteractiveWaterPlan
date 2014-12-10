@@ -83,25 +83,17 @@ angular.module('iswpApp').factory('SourceLayerService',
             }
           });
 
-          var clearLabel = function () {
+          utfGridLayer.on('mouseout', function () {
             if (label && map.hasLayer(label)) {
               map.removeLayer(label);
               label = null;
             }
-          };
-
-          utfGridLayer.on('mouseout', function () {
-            clearLabel();
           });
 
           utfGridLayer.on('click', function (e) {
             if (!e || !e.data) {
               return;
             }
-
-            //need to remove the layer before transitioning
-            // states, otherwise it gets 'stuck'
-            clearLabel();
 
             $state.go('^.source', {
               year: $stateParams.year,

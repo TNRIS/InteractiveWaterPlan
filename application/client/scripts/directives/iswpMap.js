@@ -89,6 +89,14 @@ angular.module('iswpApp').directive('iswpMap',
           map.removeLayer(linesLayer);
           linesLayer = null;
         }
+
+        //clear all labels on state change
+        map.eachLayer(function (lyr) {
+          if (lyr instanceof L.Label) {
+            map.removeLayer(lyr);
+          }
+        });
+
       }
 
       //always set animate to false with fitBounds
@@ -127,8 +135,6 @@ angular.module('iswpApp').directive('iswpMap',
         if (_.contains(hasSources, currentState)) {
           //Get all the sourceIds of the sources to show
           var sourceIds = _(currentData)
-            //only where SS of current year is > 0
-            .where(function (r) { return r['SS' + currentYear] > 0;})
             .pluck('MapSourceId')
             .compact()
             .unique()
