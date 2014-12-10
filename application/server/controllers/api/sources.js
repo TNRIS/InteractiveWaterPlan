@@ -91,10 +91,15 @@ exports.getMappingPoints = function getMappingPoints(req, res) {
     });
 };
 
-exports.getStrategySourceList = function getStrategySourceList(req, res) {
-  db.distinct('SourceName', 'MapSourceId')
+function selectStrategySources() {
+  return db.distinct('SourceName', 'MapSourceId')
     .from('vwMapWugWms')
-    .orderBy('SourceName')
+    .orderBy('SourceName');
+}
+exports.selectStrategySources = selectStrategySources;
+
+exports.getStrategySourceList = function getStrategySourceList(req, res) {
+  selectStrategySources()
     .then(function (results) {
       return res.json(results);
     });
