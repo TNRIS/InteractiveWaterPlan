@@ -164,7 +164,7 @@ body {
     box-shadow: none;
   }
 
-  &:hover {
+  &:hover, &:active {
     color: #fff;
 
     &.link-demands {
