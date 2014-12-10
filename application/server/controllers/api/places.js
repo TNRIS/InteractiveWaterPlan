@@ -128,9 +128,14 @@ exports.getCountyGeoJsonByName = function(req, res) {
 
     res.json(countyFeat);
   });
-
 };
 
+exports.getStrategySources = function(req, res) {
+  db.distinct('SourceName', 'MapSourceId')
+    .from('vwMapWugWms')
+    .orderBy('SourceName')
+    .then(utils.asJsonOrCsv(req, res));
+  };
 
 
 /**
@@ -142,5 +147,6 @@ router.get('/regions.topojson', exports.getRegionTopoJson);
 router.get('/county/:county.geojson', validators.validateCounty, exports.getCountyGeoJsonByName);
 router.get('/counties', exports.getCountyList);
 router.get('/counties.geojson', exports.getCountyGeoJson);
+router.get('/sources/strategy', exports.getStrategySources);
 
 exports.router = router;

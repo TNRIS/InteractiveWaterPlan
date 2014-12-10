@@ -68,6 +68,16 @@ exports.getStrategiesForEntityType = function getStrategiesForEntityType(req, re
     .then(utils.asJsonOrCsv(req, res));
 };
 
+exports.getStrategiesForSource = function getStrategiesForSource(req, res) {
+  req.sanitize('sourceId').toInt();
+  var sourceId = req.params.sourceId;
+
+  selectStrategies()
+    .where('MapSourceId', sourceId)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
+};
+
 var router = express.Router();
 router.get('/', exports.getAllStrategies);
 router.get('/summary', exports.getRegionSummary);
@@ -75,5 +85,6 @@ router.get('/region/:region', validators.validateRegion, exports.getStrategiesFo
 router.get('/county/:county', validators.validateCounty, exports.getStrategiesForCounty);
 router.get('/entity/:entityId', validators.validateEntityId, exports.getStrategiesForEntity);
 router.get('/type/:entityType', validators.validateEntityType, exports.getStrategiesForEntityType);
+router.get('/source/:sourceId', validators.validateSourceId, exports.getStrategiesForSource);
 exports.router = router;
 
