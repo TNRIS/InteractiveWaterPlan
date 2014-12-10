@@ -58,6 +58,28 @@
             </div>
           </div>
 
+          <div ng-show="selectedViewType.value == 'strategyType'">
+            <div ui-select theme="bootstrap" ng-model="strategyType.selected">
+              <div ui-select-match placeholder="Select a Strategy Type">
+                {{$select.selected.text}}
+              </div>
+              <div ui-select-choices repeat="strategy in strategyTypes | filter: $select.search">
+                <span ng-bind-html="strategy.text | highlight: $select.search"></span>
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="selectedViewType.value == 'source'">
+            <div ui-select theme="bootstrap" ng-model="source.selected">
+              <div ui-select-match placeholder="Select a Water Source">
+                {{$select.selected.text}}
+              </div>
+              <div ui-select-choices repeat="source in sources | filter: $select.search">
+                <span ng-bind-html="source.text | highlight: $select.search"></span>
+              </div>
+            </div>
+          </div>
+
       </div>
     </div>
   </div>

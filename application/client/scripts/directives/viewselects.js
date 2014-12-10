@@ -1,33 +1,42 @@
 'use strict';
 
-angular.module('iswpApp')
-  .directive('viewSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
+angular.module('iswpApp').directive('viewSelects',
+  function ($state, $stateParams, EntityService, StrategySourceService, StrategiesService, ISWP_VARS) {
     return {
       restrict: 'A',
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
-
-        //TODO: Read stateParams and to show currently selected
-        // view and subview (also modify on $stateChangeSuccess)
 
         $scope.viewTypes = [
           {text: 'Regional Summary', value: 'summary', showSub: false},
           {text: 'Usage Type', value: 'type', showSub: true},
           {text: 'Region', value: 'region', showSub: true},
           {text: 'County', value: 'county', showSub: true},
-          {text: 'Water User Group', value: 'entity', showSub: true},
+          {text: 'Water User Group', value: 'entity', showSub: true}
         ];
+
+        if ($state.includes('strategies')) {
+          $scope.viewTypes.push(
+            // {text: 'Type of Strategy', value: 'strategyType', showSub: true},
+            {text: 'Water Source', value: 'source', showSub: true}
+          );
+        }
+
 
         $scope.region = {};
         $scope.county = {};
         $scope.type = {};
         $scope.entity = {};
+        $scope.strategyType = {};
+        $scope.source = {};
 
         var resetSelected = function () {
           $scope.region = {};
           $scope.county = {};
           $scope.type = {};
           $scope.entity = {};
+          $scope.strategyType = {};
+          $scope.source = {};
         };
 
         function setToCurrentState() {
@@ -51,6 +60,13 @@ angular.module('iswpApp')
           return {value: r, text: "Region " + r};
         });
 
+        //TODO: Might have to modify to have different lists for strategy sources
+        // and existing supply sources
+        $scope.sources = _.map(ISWP_VARS.sources, function (s) {
+          return {value: s.MapSourceId, text: s.SourceName.titleize()};
+        });
+
+
         $scope.loadEntities = function(query) {
           if (!query || query.length < 3) {
             $scope.entities = [];
@@ -66,9 +82,7 @@ angular.module('iswpApp')
               });
               $scope.entities = results;
             });
-
         };
-
 
 
         $scope.$watch('selectedViewType', function (selected) {
@@ -133,6 +147,19 @@ angular.module('iswpApp')
             year: currentYear,
             entityId: entity.value
           });
+        });
+
+        $scope.$watch('source.selected', function (source) {
+          if (!source) { return; }
+
+          var currentYear = $stateParams.year;
+          var statePrefix = _.first($state.current.name.split('.'));
+
+          $state.go(statePrefix + '.source', {
+            year: currentYear,
+            sourceId: source.value
+          });
+
         });
       }
     };
