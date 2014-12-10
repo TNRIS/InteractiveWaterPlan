@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').factory('SourceLayerService',
-  function ($http, API_PATH, CARTODB_URL, CARTODB_SOURCE_TBL, SOURCE_CARTOCSS) {
+  function ($http, $state, $stateParams, API_PATH, CARTODB_URL, CARTODB_SOURCE_TBL, SOURCE_CARTOCSS) {
 
     var service = {};
 
@@ -90,7 +90,11 @@ angular.module('iswpApp').factory('SourceLayerService',
 
           utfGridLayer.on('click', function (e) {
             if (!e || !e.data) { return; }
-            console.log('utf click', e.data);
+            $state.go('^.source', {
+              year: $stateParams.year,
+              sourceId: e.data.sourceid
+            });
+            return;
           });
 
           var layerGroup = L.featureGroup([tileLayer, utfGridLayer]);
