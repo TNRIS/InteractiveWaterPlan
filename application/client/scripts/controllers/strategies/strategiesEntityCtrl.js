@@ -24,7 +24,8 @@ angular.module('iswpApp').controller('StrategiesEntityCtrl',
     var sourceCol = {
       map: 'SourceName',
       label: 'Source',
-      headerClass: 'text-center'
+      headerClass: 'text-center',
+      cellTemplateUrl: 'templates/linkcell.html'
     };
 
     var strategyNameCol = {
