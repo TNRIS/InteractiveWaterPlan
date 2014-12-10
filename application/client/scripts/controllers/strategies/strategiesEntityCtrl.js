@@ -14,7 +14,7 @@ angular.module('iswpApp').controller('StrategiesEntityCtrl',
     var entityName = entity.EntityName;
 
     $scope.heading = entityName;
-    $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong> with recommended water management strategy supplies.';
+    $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong> with recommended water management strategy supplies and associated sources of water.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists recommended water management strategy supplies for <strong>'+ entityName + '</strong> in {year}.';
     var chartDescTpl = 'Graph displays a summary of: Projected Water Demands, Existing Water Supplies, Identified Water Need, and Recommended Strategy Supply of <strong>'+ entityName + '</strong> in {year}.';
