@@ -18,7 +18,9 @@ angular.module('iswpApp').factory('SourceLayerService',
 
       var prom = $http.get(sqlApiUrl).then(function (response) {
         var result = _.first(response.data.rows);
-        if (!result) { return null; }
+        if (!result || !result.extent) {
+          return null;
+        }
         var boxStr = result.extent.remove('BOX(').remove(')');
         var boundsPoints = boxStr.split(/\s|,/).map(parseFloat);
         return L.latLngBounds([boundsPoints[1], boundsPoints[0]],
@@ -86,7 +88,7 @@ angular.module('iswpApp').factory('SourceLayerService',
               map.removeLayer(label);
               label = null;
             }
-          }
+          };
 
           utfGridLayer.on('mouseout', function () {
             clearLabel();
