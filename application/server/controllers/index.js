@@ -1,9 +1,10 @@
 'use strict';
 
 var path = require('path');
-var bluebird = require('bluebird');
+var Bluebird = require('bluebird');
 var config = require('./../config/config');
 var places = require('./api/places');
+var sources = require('./api/sources');
 
 /**
  * Send template, or 404 if it doesn't exist
@@ -27,23 +28,24 @@ exports.templates = function(req, res) {
  */
 exports.index = function(req, res) {
 
-  bluebird.all([
+  Bluebird.all([
     places.selectRegionLetters(),
     places.selectCountyNames(),
-    places.selectRegionsTopoJson()
-  ]).then(function (results) {
-    var regions = results[0];
-    var counties = results[1];
-    var regionsTopo = results[2];
+    places.selectRegionsTopoJson(),
+    sources.selectStrategySources()
+  ]).spread(function (regions, counties, regionsTopo, strategySources) {
 
-    res.render('index', {
+    return res.render('index', {
       pageName: 'home',
       ISWP_VARS: JSON.stringify({
         regions: regions,
         counties: counties,
         regionsTopo: regionsTopo,
         years: config.years,
-        entityTypes: config.entityTypes
+        entityTypes: config.entityTypes,
+        //TODO: Might have to modify to have different lists for strategy sources
+        // and existing supply sources
+        sources: strategySources
       })
     });
   });

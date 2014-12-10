@@ -91,9 +91,25 @@ exports.getMappingPoints = function getMappingPoints(req, res) {
     });
 };
 
+function selectStrategySources() {
+  return db.distinct('SourceName', 'MapSourceId')
+    .from('vwMapWugWms')
+    .orderBy('SourceName');
+}
+exports.selectStrategySources = selectStrategySources;
+
+exports.getStrategySourceList = function getStrategySourceList(req, res) {
+  selectStrategySources()
+    .then(function (results) {
+      return res.json(results);
+    });
+};
+
+
 
 var router = express.Router();
 router.get('/points', validators.validateSourceIds, exports.getMappingPoints);
+router.get('/strategy', exports.getStrategySourceList);
 router.get('/:sourceId', validators.validateSourceId, exports.getSourcesById);
 router.get('/', validators.validateSourceIds, exports.getSourcesByIds);
 exports.router = router;

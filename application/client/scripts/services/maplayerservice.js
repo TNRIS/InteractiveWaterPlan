@@ -83,9 +83,8 @@ angular.module('iswpApp').factory('MapLayerService',
         'Public Water Systems': publicWaterSystems
       };
 
-      //Start with positron and regions selected
+      //Start with positron selected
       positron.addTo(map);
-      regions.addTo(map);
 
       //Add controls
       L.control.layers(service.baseMaps, service.overlayLayers).addTo(map);

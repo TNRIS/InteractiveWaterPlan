@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').factory('SourceLayerService',
-  function ($http, API_PATH, CARTODB_URL, CARTODB_SOURCE_TBL, SOURCE_CARTOCSS) {
+  function ($http, $state, $stateParams, API_PATH, CARTODB_URL, CARTODB_SOURCE_TBL, SOURCE_CARTOCSS) {
 
     var service = {};
 
@@ -18,7 +18,9 @@ angular.module('iswpApp').factory('SourceLayerService',
 
       var prom = $http.get(sqlApiUrl).then(function (response) {
         var result = _.first(response.data.rows);
-        if (!result) { return null; }
+        if (!result || !result.extent) {
+          return null;
+        }
         var boxStr = result.extent.remove('BOX(').remove(')');
         var boundsPoints = boxStr.split(/\s|,/).map(parseFloat);
         return L.latLngBounds([boundsPoints[1], boundsPoints[0]],
@@ -89,8 +91,15 @@ angular.module('iswpApp').factory('SourceLayerService',
           });
 
           utfGridLayer.on('click', function (e) {
-            if (!e || !e.data) { return; }
-            console.log('utf click', e.data);
+            if (!e || !e.data) {
+              return;
+            }
+
+            $state.go('^.source', {
+              year: $stateParams.year,
+              sourceId: e.data.sourceid
+            });
+            return;
           });
 
           var layerGroup = L.featureGroup([tileLayer, utfGridLayer]);

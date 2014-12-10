@@ -138,6 +138,11 @@ angular.module('iswpApp.config', [])
       {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
       {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
   ])
+  .constant('SOURCE_TABLE_COLS', [
+    {map: 'StrategyName', label: 'Strategy Name'},
+    {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
+    {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'}
+  ])
   .constant('ISWP_VARS', ISWP_VARS) //boostrapped variables
   .constant('API_PATH', '/api/v1/')
 ;
