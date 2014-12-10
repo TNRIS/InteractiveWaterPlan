@@ -23,6 +23,11 @@ angular.module('iswpApp')
         stateParam: 'entityType',
         stateSuffix: '.type'
       },
+      'SourceName': {
+        paramField: 'MapSourceId',
+        stateParam: 'sourceId',
+        stateSuffix: '.source'
+      },
     };
 
     return {
