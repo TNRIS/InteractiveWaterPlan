@@ -19,17 +19,9 @@ angular.module('iswpApp.config', [])
     fillOpacity: 0
   })
   .constant('LINE_STYLE', {
-    color: 'cyan',
+    color: 'orange',
     weight: 1.5,
-    opacity: 1
-  })
-  .constant('LINE_MARKER_STYLE', {
-    color: 'white',
-    weight: 1,
-    radius: 3,
-    opacity: 0.8,
-    fillOpacity: 0.75,
-    fillColor: 'cyan'
+    opacity: 0.75
   })
   .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
   .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
@@ -64,10 +56,11 @@ angular.module('iswpApp.config', [])
     '}',
     '#iswp_sourcefeatures[sourcetype="river"],',
     '#iswp_sourcefeatures[sourcetype="indirect"] {',
-      'line-width: 4;',
-      'line-color: #00236C;',
+      'line-width: 2;',
+      'line-color: #33B0FF;',
+      'line-opacity: 1.0;',
       '[featuretype="point"] {',
-        'marker-fill: #00236C; ',
+        'marker-fill: #33B0FF; ',
         'marker-line-color: #FFF;',
       '}',
     '}'

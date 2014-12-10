@@ -150,14 +150,16 @@ angular.module('iswpApp').directive('iswpMap',
               });
             promises.push(sourceProm);
 
-            var linesProm = SourceLayerService.getMappingPoints(sourceIds)
-              .then(function (results) {
-                linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
-                  results);
-                map.addLayer(linesLayer);
-                return linesLayer;
-              });
-            promises.push(linesProm);
+            if (childState !== 'county') {
+              var linesProm = SourceLayerService.getMappingPoints(sourceIds)
+                .then(function (results) {
+                  linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
+                    results);
+                  map.addLayer(linesLayer);
+                  return linesLayer;
+                });
+              promises.push(linesProm);
+            }
           }
         }
 

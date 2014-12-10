@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').factory('LinesLayerService',
-  function (LINE_STYLE, LINE_MARKER_STYLE) {
+  function (LINE_STYLE) {
 
     var service = {};
 
@@ -59,7 +59,6 @@ angular.module('iswpApp').factory('LinesLayerService',
           var start = L.latLng([entity.Latitude, entity.Longitude]);
           var end = L.latLng([sourceMp.mappingPoint.coordinates[1],
             sourceMp.mappingPoint.coordinates[0]]);
-          lines.push(L.circleMarker(end, LINE_MARKER_STYLE));
           lines.push(curvedLine(start, end));
           return;
         });
