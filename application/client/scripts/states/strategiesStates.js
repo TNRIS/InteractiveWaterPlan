@@ -17,6 +17,9 @@ angular.module('iswpApp').config(function ($stateProvider) {
       resolve: {
         entities: /* @ngInject */ function (EntityService) {
           return EntityService.fetch();
+        },
+        sources: /* ngInject */ function (StrategySourceService) {
+          return StrategySourceService.fetch();
         }
       },
       controller: 'WrapCtrl',
@@ -57,6 +60,12 @@ angular.module('iswpApp').config(function ($stateProvider) {
         }
       },
       controller: 'StrategiesEntityCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
+    .state('strategies.source', {
+      url: '/:year/source/:sourceId',
+      resolve: strategiesResolver('source', 'sourceId'),
+      controller: 'StrategiesSourceCtrl',
       templateUrl: 'templates/data_table.html'
     })
     ;
