@@ -120,8 +120,9 @@ angular.module('iswpApp').directive('iswpMap',
           promises.push(countyProm);
         }
 
-        var hasSources = ['strategies.county', 'strategies.entity',
-          'sources.county', 'sources.entity'];
+        var hasSources = [
+          'strategies.county', 'strategies.entity', 'strategies.source',
+          'sources.county', 'sources.entity', 'sources.source'];
 
         if (_.contains(hasSources, currentState)) {
           //Get all the sourceIds of the sources to show
@@ -172,6 +173,16 @@ angular.module('iswpApp').directive('iswpMap',
         var entityLayerBounds = entityLayer.getBounds();
         var extendedBounds;
 
+        var extendSourceLayerBounds = function (otherBounds) {
+          //layerBounds is saved into the layer during sourceLayer creation
+          if (sourceLayer && sourceLayer.layerBounds) {
+            extendedBounds = otherBounds.extend(sourceLayer.layerBounds);
+            return extendedBounds;
+          }
+
+          return otherBounds;
+        };
+
         switch (childState) {
           case 'region':
             var regionFeat = RegionService.getRegion($stateParams.region);
@@ -200,23 +211,19 @@ angular.module('iswpApp').directive('iswpMap',
             extendedBounds = entityLayerBounds.extend(
               countyLayer.getBounds());
 
-            //layerBounds is saved into the layer during sourceLayer creation
-            if (sourceLayer && sourceLayer.layerBounds) {
-              extendedBounds = extendedBounds.extend(sourceLayer.layerBounds);
-            }
+            extendedBounds = extendSourceLayerBounds(extendedBounds);
 
             fitBounds(extendedBounds);
             break;
 
           case 'entity':
-            if (sourceLayer && sourceLayer.layerBounds) {
-              extendedBounds = entityLayerBounds.extend(sourceLayer.layerBounds);
+            extendedBounds =  extendSourceLayerBounds(entityLayerBounds);
+            fitBounds(entityLayerBounds);
+            break;
 
-              fitBounds(extendedBounds);
-            }
-            else {
-              fitBounds(entityLayerBounds);
-            }
+          case 'source':
+            extendedBounds =  extendSourceLayerBounds(entityLayerBounds);
+            fitBounds(entityLayerBounds);
             break;
           default:
             fitBounds(entityLayerBounds);

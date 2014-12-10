@@ -81,15 +81,26 @@ angular.module('iswpApp').factory('SourceLayerService',
             }
           });
 
-          utfGridLayer.on('mouseout', function () {
+          var clearLabel = function () {
             if (label && map.hasLayer(label)) {
               map.removeLayer(label);
               label = null;
             }
+          }
+
+          utfGridLayer.on('mouseout', function () {
+            clearLabel();
           });
 
           utfGridLayer.on('click', function (e) {
-            if (!e || !e.data) { return; }
+            if (!e || !e.data) {
+              return;
+            }
+
+            //need to remove the layer before transitioning
+            // states, otherwise it gets 'stuck'
+            clearLabel();
+
             $state.go('^.source', {
               year: $stateParams.year,
               sourceId: e.data.sourceid
