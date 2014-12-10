@@ -8,14 +8,24 @@ angular.module('iswpApp')
       templateUrl: 'templates/themenavs.html',
       link: function postLink(scope, element, attrs) {
 
+        function stateRefOrDefault(parent, child) {
+          var sref = $state.href(parent + '.' + child, $stateParams);
+          if (sref) {
+            return sref;
+          }
+
+          return $state.href(parent + '.summary', {year: $stateParams.year});
+        }
+
         function updateNavLinks() {
           var splitState = $state.current.name.split('.');
           scope.parentState = _.first(splitState);
           var childStateName = _.last(splitState);
 
-          scope.demandsRef = $state.href('demands.' + childStateName, $stateParams);
-          scope.needsRef = $state.href('needs.' + childStateName, $stateParams);
-          scope.strategiesRef = $state.href('strategies.' + childStateName, $stateParams);
+          scope.demandsRef = stateRefOrDefault('demands', childStateName);
+          scope.needsRef = stateRefOrDefault('needs', childStateName);
+          scope.strategiesRef = stateRefOrDefault('strategies', childStateName);
+          // TODO: scope.suppliesRef
         }
 
         updateNavLinks();
