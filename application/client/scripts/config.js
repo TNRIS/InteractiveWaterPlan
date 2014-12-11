@@ -37,6 +37,7 @@ angular.module('iswpApp.config', [])
         'marker-line-color: #FFF;',
       '}',
     '}',
+    '#iswp_sourcefeatures[sourcetype="seawater"],',
     '#iswp_sourcefeatures[sourcetype="reservoir"],',
     '#iswp_sourcefeatures[sourcetype="system"]{',
       '::glow[zoom>9] {',
