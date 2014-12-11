@@ -49,7 +49,7 @@ angular.module('iswpApp').factory('LinesLayerService',
 
       _.each(sourceMappingPoints, function (sourceMp) {
 
-        _(currentData).where(function (row) {
+        _(currentData).filter(function (row) {
           return row.MapSourceId === sourceMp.id;
         }).map(function (row) {
           return _.find(entities, {EntityId: row.EntityId});
