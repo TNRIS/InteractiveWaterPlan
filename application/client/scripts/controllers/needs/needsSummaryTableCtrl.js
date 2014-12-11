@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('iswpApp').controller('NeedsSummaryTableCtrl',
-  function ($scope, needsData, TreeMapFactory, SUMMARY_TABLE_COLS, ISWP_VARS, API_PATH) {
+  function ($scope, needsData, TreeMapFactory, HeadingService, SUMMARY_TABLE_COLS, ISWP_VARS, API_PATH) {
 
-    $scope.heading = 'Regional Water Needs (Potential Shortage) Summary';
+    HeadingService.current =  'Regional Water Needs (Potential Shortage) Summary';
     $scope.mapDescription = 'Map shows Regional Water Planning Areas that may be selected using cursor.';
     $scope.tableDescription = 'Table summarizes identified water needs by region and water use category in acre-feet/year (click on region for summary).';
 

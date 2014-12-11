@@ -1,7 +1,11 @@
 'use strict';
 
 angular.module('iswpApp').controller('WrapCtrl',
-  function ($scope, $rootScope, $state, $stateParams, TableSettingsService, TREE_MAP_SUBJECTS) {
+  function ($scope, $rootScope, $state, $stateParams, HeadingService, TableSettingsService, TREE_MAP_SUBJECTS) {
+
+    $scope.$watch(HeadingService.get, function (val) {
+      $scope.heading = val;
+    });
 
     $scope.itemsPerPage = TableSettingsService.getItemsPerPage();
 

@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('DemandsRegionCtrl', function ($scope, $rootScope, demandsData, REGION_TABLE_COLS, API_PATH) {
+  .controller('DemandsRegionCtrl', function ($scope, $rootScope, demandsData, HeadingService, REGION_TABLE_COLS, API_PATH) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
-    $scope.heading = 'Region ' + region;
+    HeadingService.current =  'Region ' + region;
     $scope.mapDescription = 'Map displays entities and their projected water demands in <strong>Region '+region+'</strong> (water system service area boundaries may extend outside of region).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' projected water demands within <strong>Region '+region+'</strong> in {year}';
