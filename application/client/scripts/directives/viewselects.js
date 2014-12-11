@@ -62,7 +62,7 @@ angular.module('iswpApp').directive('viewSelects',
 
         //TODO: Might have to modify to have different lists for strategy sources
         // and existing supply sources
-        $scope.sources = _.map(ISWP_VARS.sources, function (s) {
+        $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
           return {value: s.MapSourceId, text: s.SourceName.titleize()};
         });
 

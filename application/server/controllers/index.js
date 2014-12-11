@@ -45,7 +45,7 @@ exports.index = function(req, res) {
         entityTypes: config.entityTypes,
         //TODO: Might have to modify to have different lists for strategy sources
         // and existing supply sources
-        sources: strategySources
+        strategySources: strategySources
       })
     });
   });
