@@ -16,6 +16,8 @@ exports.getRegionSummary = function getRegionSummary(req, res) {
     .then(utils.asJsonOrCsv(req, res));
 };
 
+
+//TODO: StrategyType
 function selectStrategies() {
   return db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
     'WugCounty', 'MapSourceId', 'SourceName', 'StrategyName',

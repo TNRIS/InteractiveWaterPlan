@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesSourceCtrl',
-  function ($scope, strategiesData, StrategySourceService, SOURCE_TABLE_COLS, API_PATH) {
+  function ($scope, strategiesData, StrategySourceService, HeadingService, SOURCE_TABLE_COLS, API_PATH) {
 
     var sourceId = $scope.$stateParams.sourceId;
     var source = StrategySourceService.getSource(sourceId);
@@ -15,7 +15,7 @@ angular.module('iswpApp').controller('StrategiesSourceCtrl',
 
     var sourceName = source.SourceName;
 
-    $scope.heading = sourceName;
+    HeadingService.current =  sourceName;
     $scope.mapDescription = 'Map displays a schematic representation of all entities with recommended strategies that rely on water from this water source.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists recommended water management strategies along with entities using water from <strong>'+ sourceName + '</strong> in {year}.';

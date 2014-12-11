@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, COUNTY_TABLE_COLS, API_PATH) {
+  .controller('NeedsCountyTableCtrl', function ($scope, $rootScope, needsData, HeadingService, COUNTY_TABLE_COLS, API_PATH) {
 
     var county = $scope.$stateParams.county.titleize();
 
-    $scope.heading = '' + county + ' County';
+    HeadingService.current =  county + ' County';
     $scope.mapDescription = 'Map displays entities and their identified water needs within <strong>'+county+' County</strong> (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>'+county+' County</strong> in {year}';

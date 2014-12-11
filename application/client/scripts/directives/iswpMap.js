@@ -130,7 +130,7 @@ angular.module('iswpApp').directive('iswpMap',
 
         var hasSources = [
           'strategies.county', 'strategies.entity', 'strategies.source',
-          'sources.county', 'sources.entity', 'sources.source'];
+          'supplies.county', 'supplies.entity', 'supplies.source'];
 
         if (_.contains(hasSources, currentState)) {
           //Get all the sourceIds of the sources to show

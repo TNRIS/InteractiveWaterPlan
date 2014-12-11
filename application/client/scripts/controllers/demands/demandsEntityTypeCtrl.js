@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('iswpApp')
-  .controller('DemandsEntityTypeCtrl', function ($scope, $rootScope, demandsData, TreeMapFactory, TYPE_TABLE_COLS, ISWP_VARS, API_PATH) {
+  .controller('DemandsEntityTypeCtrl', function ($scope, $rootScope, demandsData, HeadingService, TreeMapFactory, TYPE_TABLE_COLS, ISWP_VARS, API_PATH) {
 
     var entityType = $scope.$stateParams.entityType.titleize();
     $scope.entityType = entityType;
 
-    $scope.heading = entityType;
+    HeadingService.current =  entityType;
     $scope.mapDescription = 'Map displays <strong>' + entityType + '</strong> water user groups and their projected water demands.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists <strong>' + entityType + '</strong> water user groups and projected water demands in {year}';

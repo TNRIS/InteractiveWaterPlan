@@ -120,6 +120,10 @@ body {
   margin: 30px 0;
 }
 
+.view-title {
+  margin-top: 5px;
+  margin-bottom: 14px;
+}
 
 .map-top-container {
   margin-bottom: 6px;
@@ -365,6 +369,15 @@ body {
       color: inherit;
       background-color: inherit;
       border: 1px solid #ccc;
+    }
+
+    .btn-default {
+      @extend .btn-sm;
+      @extend .input-sm;
+    }
+
+    .ui-select-search {
+      @extend .input-sm;
     }
   }
 }

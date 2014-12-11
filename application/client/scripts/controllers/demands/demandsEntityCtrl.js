@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('DemandsEntityCtrl',
-  function ($scope, demandsData, entitySummary, ChartService, EntityService, ENTITY_TABLE_COLS, API_PATH) {
+  function ($scope, demandsData, entitySummary, ChartService, EntityService, HeadingService, ENTITY_TABLE_COLS, API_PATH) {
     //if entitySummary is null then this was called for an invalid entityId
     // so return to home view
     if (!entitySummary) {
@@ -13,7 +13,7 @@ angular.module('iswpApp').controller('DemandsEntityCtrl',
     var entity = EntityService.getEntity(entityId);
     var entityName = entity.EntityName;
 
-    $scope.heading = entityName;
+    HeadingService.current = entityName;
     $scope.mapDescription = 'Map displays <strong>' + entityName + '</strong>.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists projected water demands of <strong>'+ entityName + '</strong> in {year}.';
