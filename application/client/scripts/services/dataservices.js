@@ -50,7 +50,18 @@ angular.module('iswpApp')
     return DataServiceFactory.createService('needs');
   })
   .factory('StrategiesService', function (DataServiceFactory) {
-    return DataServiceFactory.createService('strategies');
+    var service = DataServiceFactory.createService('strategies');
+
+    //override getSumsByEntityId to filter out 0-valued sums for this view
+    var origGetSums = service.getSumsByEntityId;
+    service.getSumsByEntityId = function(year) {
+      var sums = origGetSums(year);
+      return _.omit(sums, function (val) {
+        return val === 0;
+      });
+    };
+
+    return service;
   })
   .factory('SuppliesService', function (DataServiceFactory) {
     return DataServiceFactory.createService('supplies');

@@ -8,27 +8,32 @@ angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_M
       return null;
     }
 
-    return _(data).groupBy('EntityId').map(function (rows, entityId) {
-      var sumForProp = _.reduce(rows, function(sum, curr) {
-        return sum + curr['' + valuePrefix + year];
+    var results = {};
+
+    _(data).groupBy('EntityId').each(function (rows, entityId) {
+      var sumForProp = _.reduce(rows, function(sum, row) {
+        var val = row['' + valuePrefix + year];
+        if (angular.isDefined(val)) {
+          return sum + val;
+        }
+        return sum;
       }, 0);
 
-      return {
-        'EntityId': entityId,
-        'sum': sumForProp
-      };
-    }).value();
+      results[entityId] = sumForProp;
+    });
+
+    return results;
   };
 
   service.scaleRadius = function scaleRadius(max, min, val) {
-    var scaledVal;
-    var scaleMax = ENTITY_MAX_RADIUS;
-    var scaleMin = ENTITY_MIN_RADIUS;
-    if (max === min) {
-      return scaleMin;
+    if (!angular.isNumber(max) || !angular.isNumber(min) || !angular.isNumber(val)) {
+      throw new Error("max, min, and val must all be numbers");
     }
-    scaledVal = (scaleMax - scaleMin) * (val - min) / (max - min) + scaleMin;
-    return scaledVal;
+
+    if (max === min) {
+      return ENTITY_MIN_RADIUS;
+    }
+    return (ENTITY_MAX_RADIUS - ENTITY_MIN_RADIUS) * (val - min) / (max - min) + ENTITY_MIN_RADIUS;
   };
 
   return service;

@@ -2,6 +2,7 @@
 
 require('sugar');
 
+var _ = require('lodash');
 var express = require('express');
 var db = require('./../../db');
 var utils = require('./../../utils');
@@ -25,9 +26,23 @@ function selectStrategies() {
     .from('vwMapWugWms');
 }
 
+//Removes all SS properties that are 0-valued
+function filterZeroValues(results) {
+  var ssFields = {
+    'SS2010': true, 'SS2020': true,
+    'SS2030': true, 'SS2040': true,
+    'SS2050': true, 'SS2060': true
+  };
+  return _.map(results, function (row) {
+    return _.omit(row, function (val, key) {
+      return ssFields[key] && val === 0;
+    });
+  });
+}
+
 exports.getAllStrategies = function getAllStrategies(req, res) {
   selectStrategies()
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getStrategiesForRegion = function getStrategiesForRegion(req, res) {
@@ -37,7 +52,7 @@ exports.getStrategiesForRegion = function getStrategiesForRegion(req, res) {
   selectStrategies()
     .where('WugRegion', region)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getStrategiesForCounty = function getStrategiesForCounty(req, res) {
@@ -47,7 +62,7 @@ exports.getStrategiesForCounty = function getStrategiesForCounty(req, res) {
   selectStrategies()
     .where('WugCounty', county)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getStrategiesForEntity = function getStrategiesForEntity(req, res) {
@@ -57,7 +72,7 @@ exports.getStrategiesForEntity = function getStrategiesForEntity(req, res) {
   selectStrategies()
     .where('EntityId', entityId)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getStrategiesForEntityType = function getStrategiesForEntityType(req, res) {
@@ -67,7 +82,7 @@ exports.getStrategiesForEntityType = function getStrategiesForEntityType(req, re
   selectStrategies()
     .where('WugType', entityType)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getStrategiesForSource = function getStrategiesForSource(req, res) {
@@ -77,7 +92,7 @@ exports.getStrategiesForSource = function getStrategiesForSource(req, res) {
   selectStrategies()
     .where('MapSourceId', sourceId)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 var router = express.Router();

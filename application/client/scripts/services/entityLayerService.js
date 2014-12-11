@@ -37,72 +37,78 @@ angular.module('iswpApp').factory('EntityLayerService',
       var parentState = _.first(currentState.split('.'));
       var childState = _.last(currentState.split('.'));
 
-      var maxValue = _.max(sumsByEntityId, 'sum').sum;
-      var minValue = _.min(sumsByEntityId, 'sum').sum;
+      var maxValue = _.max(sumsByEntityId);
+      var minValue = _.min(sumsByEntityId);
 
       var useScaledRadius = childState !== 'entity';
 
       var currentYear = $stateParams.year;
 
-      _(entities).sort(function (entity) {
-        return _.find(sumsByEntityId, {
-          'EntityId': '' + entity.EntityId
-        }).sum;
-      }).each(function (entity) {
-        var entityTotalVal = _.find(sumsByEntityId, {
-          'EntityId': '' + entity.EntityId
-        }).sum;
+      _(entities)
+        .sort(function (entity) {
+          return sumsByEntityId[entity.EntityId];
+        })
+        .reverse()
+        .each(function (entity) {
+          var entityTotalVal = sumsByEntityId[entity.EntityId];
 
-        var radius = useScaledRadius ?
-          Utils.scaleRadius(maxValue, minValue, entityTotalVal) : ENTITY_SINGLE_RADIUS;
+          if (angular.isUndefined(entityTotalVal)) {
+            return;
+          }
 
-        var entityStyle = ENTITY_STYLES[parentState];
-        if (!entityStyle) {
-          throw new Error('Undefined ENTITY_STYLE for state ' + parentState);
-        }
+          var radius = useScaledRadius ?
+            Utils.scaleRadius(maxValue, minValue, entityTotalVal) : ENTITY_SINGLE_RADIUS;
 
-        var featureOpts = _.extend({}, entityStyle, {
-          radius: radius,
-          entity: entity //save the entity data in the marker
-        });
+          var entityStyle = ENTITY_STYLES[parentState];
+          if (!entityStyle) {
+            throw new Error('Undefined ENTITY_STYLE for state ' + parentState);
+          }
 
-        var labelString = entity.EntityName;
-
-        if (parentState === 'needs') {
-          var pctOfDemand = _.find(currentData,
-            {'EntityId': entity.EntityId})['NPD' + currentYear];
-
-          var colorEntry = _.find(LegendService.Needs.entityColors, function(c) {
-            return c.limit >= pctOfDemand;
+          var featureOpts = _.extend({}, entityStyle, {
+            radius: radius,
+            entity: entity //save the entity data in the marker
           });
 
-          featureOpts.fillColor = colorEntry.color;
+          var labelString = entity.EntityName;
 
-          labelString = entity.EntityName + '<br/>' +
-            'Needs: ' + pctOfDemand + '% of Demands';
-        }
+          if (parentState === 'needs') {
+            var pctOfDemand = _.find(currentData,
+              {'EntityId': entity.EntityId})['NPD' + currentYear];
 
-        var marker = L.circleMarker([entity.Latitude, entity.Longitude],
-          featureOpts).addTo(entityLayer);
+            var colorEntry = _.find(LegendService.Needs.entityColors, function(c) {
+              return c.limit >= pctOfDemand;
+            });
 
-        marker.bindLabel(labelString);
+            featureOpts.fillColor = colorEntry.color;
 
-        if (childState === 'entity') {
-          marker.label.options.noHide = true;
-          marker.showLabel();
-        }
+            labelString = entity.EntityName + '<br/>' +
+              'Needs: ' + pctOfDemand + '% of Demands';
+          }
 
-        //kind of a hacky way to get the click event
-        // into the oms click handler
-        marker.on('click', function (e) {
-          var evt = e.originalEvent || e;
-          marker.clickEvent = evt;
+          var marker = L.circleMarker([entity.Latitude, entity.Longitude],
+            featureOpts).addTo(entityLayer);
+
+          marker.bindLabel(labelString);
+
+          if (childState === 'entity') {
+            marker.label.options.noHide = true;
+            marker.showLabel();
+          }
+
+          //kind of a hacky way to get the click event
+          // into the oms click handler
+          marker.on('click', function (e) {
+            var evt = e.originalEvent || e;
+            marker.clickEvent = evt;
+            return;
+          });
+
+          //add it to the spiderfier
+          oms.addMarker(marker);
+
           return;
-        });
-
-        //add it to the spiderfier
-        oms.addMarker(marker);
-      });
+        }
+      );
 
       entityLayer.bringToFront();
 
