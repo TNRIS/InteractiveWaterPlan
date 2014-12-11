@@ -7,6 +7,7 @@ var places = require('./controllers/api/places');
 var needs = require('./controllers/api/needs');
 var demands = require('./controllers/api/demands');
 var strategies = require('./controllers/api/strategies');
+var supplies = require('./controllers/api/supplies');
 var entity = require('./controllers/api/entity');
 var type = require('./controllers/api/type');
 var sources = require('./controllers/api/sources');
@@ -28,6 +29,7 @@ module.exports = function(app) {
   apiRouter.use('/entity', entity.router);
   apiRouter.use('/type', type.router);
   apiRouter.use('/strategies', strategies.router);
+  apiRouter.use('/supplies', supplies.router);
   apiRouter.use('/sources', sources.router);
   apiRouter.get('/', about.api); // api documentation page
   apiRouter.get('*', error.index); //404 on all undefined routes
@@ -41,10 +43,6 @@ module.exports = function(app) {
   siteRouter.get('/templates/*', index.templates);
 
   //Routes that correspond to the front-end Angular app
-  siteRouter.get('/needs/*', index.index);
-  siteRouter.get('/demands/*', index.index);
-  siteRouter.get('/supplies/*', index.index);  //TODO: Phase 3
-  siteRouter.get('/wms/*', index.index);       //TODO: Phase 4
   siteRouter.get('/', index.index);
   siteRouter.get('*', error.index); //404 on undefined routes
 
