@@ -135,6 +135,9 @@ angular.module('iswpApp').directive('iswpMap',
         if (_.contains(hasSources, currentState)) {
           //Get all the sourceIds of the sources to show
           var sourceIds = _(currentData)
+            .filter(function (d) {
+              return angular.isDefined(d['SS' + currentYear]); }
+            )
             .pluck('MapSourceId')
             .compact()
             .unique()
@@ -305,11 +308,7 @@ angular.module('iswpApp').directive('iswpMap',
 
         //add additional features
         addViewFeatures(currentData, entities)
-          .then(function () {
-            //Set the map bounds according to the current view
-            setViewBounds();
-          });
-
+          .then(setViewBounds); //Set the map bounds according to the current view
       }
 
       //Update map state every time the state changes
