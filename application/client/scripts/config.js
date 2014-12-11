@@ -35,6 +35,7 @@ angular.module('iswpApp.config', [])
       '[featuretype="point"]{',
         'marker-fill: #003369; ',
         'marker-line-color: #FFF;',
+        'marker-width: 12;',
       '}',
     '}',
     '#iswp_sourcefeatures[sourcetype="seawater"],',
@@ -53,6 +54,7 @@ angular.module('iswpApp.config', [])
       '[featuretype="point"]{',
         'marker-fill: #007DFF; ',
         'marker-line-color: #FFF;',
+        'marker-width: 12;',
       '}',
     '}',
     '#iswp_sourcefeatures[sourcetype="river"],',
@@ -63,6 +65,7 @@ angular.module('iswpApp.config', [])
       '[featuretype="point"] {',
         'marker-fill: #33B0FF; ',
         'marker-line-color: #FFF;',
+        'marker-width: 12;',
       '}',
     '}'
   ].join(''))
