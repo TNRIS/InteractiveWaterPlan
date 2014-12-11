@@ -52,6 +52,10 @@ angular.module('iswpApp').factory('EntityLayerService',
         .each(function (entity) {
           var entityTotalVal = sumsByEntityId[entity.EntityId];
 
+          if (angular.isUndefined(entityTotalVal)) {
+            return;
+          }
+
           var radius = useScaledRadius ?
             Utils.scaleRadius(maxValue, minValue, entityTotalVal) : ENTITY_SINGLE_RADIUS;
 

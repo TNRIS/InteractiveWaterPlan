@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('WrapCtrl',
-  function ($scope, $rootScope, $state, $stateParams, HeadingService, TableSettingsService, TREE_MAP_SUBJECTS) {
+  function ($scope, $rootScope, $state, $stateParams, HeadingService, TableSettingsService, DATA_VALUE_PREFIXES, TREE_MAP_SUBJECTS) {
 
     $scope.$watch(HeadingService.get, function (val) {
       $scope.heading = val;
@@ -26,6 +26,19 @@ angular.module('iswpApp').controller('WrapCtrl',
       $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
       TableSettingsService.setItemsPerPage($scope.itemsPerPage);
     });
+
+    $scope.hasValues = function (tableRows) {
+      if (!tableRows.length) {
+        return false;
+      }
+
+      var parentState = $state.current.name.split('.')[0];
+      var valueKey = DATA_VALUE_PREFIXES[parentState] + $scope.currentYear;
+
+      return _.some(tableRows, function (r) {
+        return angular.isDefined(r[valueKey]);
+      });
+    };
 
     $scope.$on('$stateChangeSuccess', function () {
       var parentState = $state.current.name.split('.')[0];

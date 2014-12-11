@@ -26,6 +26,10 @@ angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_M
   };
 
   service.scaleRadius = function scaleRadius(max, min, val) {
+    if (!angular.isNumber(max) || !angular.isNumber(min) || !angular.isNumber(val)) {
+      throw new Error("max, min, and val must all be numbers");
+    }
+
     if (max === min) {
       return ENTITY_MIN_RADIUS;
     }

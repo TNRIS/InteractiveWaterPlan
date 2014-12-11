@@ -1,12 +1,12 @@
 <div class="col-md-12">
 
-  <div ng-show="!tableRows.length" class="callout callout-warning">
+  <div ng-show="!hasValues(tableRows)" class="callout callout-warning">
     <p>
       No data found for selected options. Please select a different decade, area, or entity.
     </p>
   </div>
 
-  <div ng-hide="!tableRows.length">
+  <div ng-show="hasValues(tableRows)">
     <p ng-bind-html='mapDescription'></p>
     <p ng-bind-html='chartDescription'></p>
     <p ng-bind-html='tableDescription'></p>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="row">
-      <div class="col-md-12 table-responsive ">
+      <div class="col-md-12 table-responsive">
         <div ng-show="tableConfig.isPaginationEnabled" items-per-page="itemsPerPage" class="pull-left"></div>
 
         <smart-table class="clearfix" columns="tableColumns" rows="tableRows" config="tableConfig">
