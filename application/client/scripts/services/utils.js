@@ -13,7 +13,7 @@ angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_M
     _(data).groupBy('EntityId').each(function (rows, entityId) {
       var sumForProp = _.reduce(rows, function(sum, row) {
         var val = row['' + valuePrefix + year];
-        if (angular.isDefined(val)) {
+        if (angular.isDefined(val) && val > 0) {
           return sum + val;
         }
         return sum;
