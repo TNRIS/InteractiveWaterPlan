@@ -370,6 +370,15 @@ body {
       background-color: inherit;
       border: 1px solid #ccc;
     }
+
+    .btn-default {
+      @extend .btn-sm;
+      @extend .input-sm;
+    }
+
+    .ui-select-search {
+      @extend .input-sm;
+    }
   }
 }
 
