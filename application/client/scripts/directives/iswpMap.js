@@ -129,8 +129,8 @@ angular.module('iswpApp').directive('iswpMap',
         }
 
         var hasSources = [
-          'strategies.county', 'strategies.entity', 'strategies.source',
-          'supplies.county', 'supplies.entity', 'supplies.source'];
+          'strategies.region', 'strategies.county', 'strategies.entity', 'strategies.source',
+          'supplies.region', 'supplies.county', 'supplies.entity', 'supplies.source'];
 
         if (_.contains(hasSources, currentState)) {
           //Get all the sourceIds of the sources to show
@@ -146,7 +146,7 @@ angular.module('iswpApp').directive('iswpMap',
               .then(function (newSourceLayer) {
                 sourceLayer = newSourceLayer;
                 //also get the bounds of the source layer features
-                // and save them intou sourceLayer
+                // and save them into sourceLayer
 
                 //TODO: maybe bound by the lines layer instead of source layer
                 return SourceLayerService.getBounds(sourceIds)
@@ -157,7 +157,7 @@ angular.module('iswpApp').directive('iswpMap',
               });
             promises.push(sourceProm);
 
-            if (childState !== 'county') {
+            if (childState !== 'county' && childState !== 'region') {
               var linesProm = SourceLayerService.getMappingPoints(sourceIds)
                 .then(function (results) {
                   linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
@@ -197,6 +197,8 @@ angular.module('iswpApp').directive('iswpMap',
             // of the entire region even if there aren't many entities
             extendedBounds = entityLayerBounds.extend(
               regionFeat.getBounds());
+
+            extendedBounds = extendSourceLayerBounds(extendedBounds);
 
             fitBounds(extendedBounds);
             break;
