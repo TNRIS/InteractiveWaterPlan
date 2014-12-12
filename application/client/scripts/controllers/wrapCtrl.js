@@ -33,7 +33,12 @@ angular.module('iswpApp').controller('WrapCtrl',
       }
 
       var parentState = $state.current.name.split('.')[0];
+      var childState = $state.current.name.split('.')[1];
       var valueKey = DATA_VALUE_PREFIXES[parentState] + $scope.currentYear;
+
+      if (childState === 'summary') {
+        return true;
+      }
 
       return _.some(tableRows, function (r) {
         return angular.isDefined(r[valueKey]);
