@@ -14,7 +14,7 @@ angular.module('iswpApp').controller('SuppliesRegionCtrl',
 
     $scope.downloadPath = API_PATH + 'supplies/region/' + region + '?format=csv';
 
-    var strategySupplyCol = {
+    var existingSupplyCol = {
       map: 'WS2010',
       label: 'Existing Water Supply (acre-feet/year)',
       cellClass: 'number',
@@ -23,13 +23,13 @@ angular.module('iswpApp').controller('SuppliesRegionCtrl',
       headerClass: 'text-center'
     };
 
-    $scope.tableColumns = REGION_TABLE_COLS.concat(strategySupplyCol);
+    $scope.tableColumns = REGION_TABLE_COLS.concat(existingSupplyCol);
 
     $scope.tableRows = suppliesData;
 
     //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
-      strategySupplyCol.map = 'WS' + $scope.currentYear;
+      existingSupplyCol.map = 'WS' + $scope.currentYear;
     });
   });
