@@ -27,7 +27,8 @@
         </smart-table>
 
         <p class="pull-right small">
-          <a ng-href="{{downloadPath}}" href="" title="Download data">
+          <a ng-href="{{downloadPath}}" href="" title="Download data"
+            analytics-on analytics-event="DownloadData" analytics-label="{{downloadPath}}">
             Download data
           </a> |
           <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
