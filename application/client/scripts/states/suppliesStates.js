@@ -18,8 +18,8 @@ angular.module('iswpApp').config(function ($stateProvider) {
         entities: /* @ngInject */ function (EntityService) {
           return EntityService.fetch();
         },
-        sources: /* ngInject */ function (SupplySourceService) {
-          return SupplySourceService.fetch();
+        sources: /* ngInject */ function (ExistingSourceService) {
+          return ExistingSourceService.fetch();
         }
       },
       controller: 'WrapCtrl',
@@ -62,12 +62,12 @@ angular.module('iswpApp').config(function ($stateProvider) {
       controller: 'SuppliesEntityCtrl',
       templateUrl: 'templates/data_table.html'
     })
-    // .state('supplies.source', {
-    //   url: '/:year/source/:sourceId',
-    //   resolve: suppliesResolver('source', 'sourceId'),
-    //   controller: 'SuppliesSourceCtrl',
-    //   templateUrl: 'templates/data_table.html'
-    // })
+    .state('supplies.source', {
+      url: '/:year/source/:sourceId',
+      resolve: suppliesResolver('source', 'sourceId'),
+      controller: 'SuppliesSourceCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
     ;
 
 });

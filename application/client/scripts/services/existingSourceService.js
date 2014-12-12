@@ -3,7 +3,7 @@
 //Service to hold current Water User Group Entities
 // to be show on the map
 angular.module('iswpApp')
-  .factory('SupplySourceService', function SupplySourceService($http, API_PATH) {
+  .factory('ExistingSourceService', function ExistingSourceService($http, API_PATH) {
     var service = {};
 
     service.sources = [];

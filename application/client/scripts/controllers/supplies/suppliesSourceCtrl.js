@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('iswpApp').controller('StrategiesSourceCtrl',
-  function ($scope, strategiesData, StrategySourceService, HeadingService, API_PATH) {
+angular.module('iswpApp').controller('SuppliesSourceCtrl',
+  function ($scope, suppliesData, ExistingSourceService, HeadingService, API_PATH) {
 
     var sourceId = $scope.$stateParams.sourceId;
-    var source = StrategySourceService.getSource(sourceId);
+    var source = ExistingSourceService.getSource(sourceId);
 
     //if source is null then this was called for an invalid sourceId
     //so return to home view
@@ -16,15 +16,15 @@ angular.module('iswpApp').controller('StrategiesSourceCtrl',
     var sourceName = source.SourceName;
 
     HeadingService.current =  sourceName;
-    $scope.mapDescription = 'Map displays a schematic representation of all entities with recommended strategies that rely on water from this water source.';
+    $scope.mapDescription = 'Map displays a schematic representation of all entities with projected existing water supply from this water source.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists recommended water management strategies along with entities using water from <strong>'+ sourceName + '</strong> in {year}.';
+    var tableDescTpl = 'Table lists entities using water from <strong>'+ sourceName + '</strong> in {year}.';
 
-    $scope.downloadPath = API_PATH + 'strategies/source/' + sourceId + '?format=csv';
+    $scope.downloadPath = API_PATH + 'supplies/source/' + sourceId + '?format=csv';
 
-    var strategiesCol = {
-      map: 'SS2010',
-      label: 'Recommended Strategy Supply (acre-feet/year)',
+    var suppliesCol = {
+      map: 'WS2010',
+      label: 'Existing Water Supply (acre-feet/year)',
       cellClass: 'number',
       formatFunction: 'number',
       formatParameter: 0,
@@ -32,20 +32,19 @@ angular.module('iswpApp').controller('StrategiesSourceCtrl',
     };
 
     $scope.tableColumns = [
-      {map: 'StrategyName', label: 'Strategy Name'},
       {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
       {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
-      strategiesCol
+      suppliesCol
     ];
 
-    $scope.tableRows = strategiesData;
+    $scope.tableRows = suppliesData;
 
     //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       var year = $scope.currentYear;
       $scope.tableDescription = tableDescTpl.assign({year: year});
 
-      strategiesCol.map = 'SS' + year;
+      suppliesCol.map = 'WS' + year;
     });
 
   }
