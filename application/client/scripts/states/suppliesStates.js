@@ -37,12 +37,12 @@ angular.module('iswpApp').config(function ($stateProvider) {
       controller: 'SuppliesRegionCtrl',
       templateUrl: 'templates/data_table.html'
     })
-    // .state('supplies.county', {
-    //   url: '/:year/county/:county',
-    //   resolve: suppliesResolver('county', 'county'),
-    //   controller: 'SuppliesCountyCtrl',
-    //   templateUrl: 'templates/data_table.html'
-    // })
+    .state('supplies.county', {
+      url: '/:year/county/:county',
+      resolve: suppliesResolver('county', 'county'),
+      controller: 'SuppliesCountyCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
     // .state('supplies.type', {
     //   url: '/:year/type/:entityType',
     //   resolve: suppliesResolver('type', 'entityType'),
