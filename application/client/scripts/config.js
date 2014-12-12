@@ -95,7 +95,7 @@ angular.module('iswpApp.config', [])
       weight: 1,
       opacity: 0.5,
       fillOpacity: 0.9,
-      fillColor: '#FFA84B'
+      fillColor: '#FFB90D'
     }
   })
   .constant('DATA_VALUE_PREFIXES', {
