@@ -4,7 +4,7 @@ angular.module('iswpApp').directive('iswpMap',
   function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
-    SourceLayerService, LinesLayerService, DATA_VALUE_PREFIXES, STATE_MAP_CONFIG) {
+    SourceLayerService, DATA_VALUE_PREFIXES, STATE_MAP_CONFIG) {
 
     function postLink(scope, element, attrs) {
 
@@ -23,7 +23,6 @@ angular.module('iswpApp').directive('iswpMap',
       var legendControl = LegendService.Needs.createLegend();
 
       var sourceLayer;
-      var linesLayer;
       var countyLayer = L.featureGroup().addTo(map);
       var entityLayer = EntityLayerService.createLayer(map);
 
@@ -84,10 +83,6 @@ angular.module('iswpApp').directive('iswpMap',
         if (sourceLayer && map.hasLayer(sourceLayer)) {
           map.removeLayer(sourceLayer);
           sourceLayer = null;
-        }
-        if (linesLayer && map.hasLayer(linesLayer)) {
-          map.removeLayer(linesLayer);
-          linesLayer = null;
         }
 
         //clear all labels on state change
@@ -152,7 +147,6 @@ angular.module('iswpApp').directive('iswpMap',
                 //also get the bounds of the source layer features
                 // and save them into sourceLayer
 
-                //TODO: maybe bound by the lines layer instead of source layer
                 return SourceLayerService.getBounds(sourceIds)
                   .then(function (bounds) {
                     sourceLayer.layerBounds = bounds;
@@ -160,20 +154,6 @@ angular.module('iswpApp').directive('iswpMap',
                   });
               });
             promises.push(sourceProm);
-
-            if (childState !== 'county' && childState !== 'region') {
-              var linesProm = SourceLayerService.getMappingPoints(sourceIds)
-                .then(function (mappingPointsResults) {
-                  var valKey = DATA_VALUE_PREFIXES[parentState] + currentYear;
-                  linesLayer = LinesLayerService.createLinesLayer(entities,
-                    currentData,
-                    valKey,
-                    mappingPointsResults);
-                  map.addLayer(linesLayer);
-                  return linesLayer;
-                });
-              promises.push(linesProm);
-            }
           }
         }
 
