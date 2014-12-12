@@ -42,6 +42,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "start": "nodemon --cwd ./dist --watch server/ server/index.js"
+    "start": "nodemon --cwd ./dist --watch server/ server/index.js",
+    "production-dist": "gulp clean && gulp dist --type production"
   }
 }
