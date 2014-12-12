@@ -45,6 +45,9 @@ angular.module('iswpApp').factory('EntityLayerService',
       var currentYear = $stateParams.year;
 
       _(entities)
+        .filter(function (entity) {
+          return angular.isDefined(sumsByEntityId[entity.EntityId]);
+        })
         .sort(function (entity) {
           return sumsByEntityId[entity.EntityId];
         })

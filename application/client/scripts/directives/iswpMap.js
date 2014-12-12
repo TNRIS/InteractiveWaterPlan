@@ -162,9 +162,12 @@ angular.module('iswpApp').directive('iswpMap',
 
             if (childState !== 'county' && childState !== 'region') {
               var linesProm = SourceLayerService.getMappingPoints(sourceIds)
-                .then(function (results) {
-                  linesLayer = LinesLayerService.createLinesLayer(entities, currentData,
-                    results);
+                .then(function (mappingPointsResults) {
+                  var valueKey = 'SS' + currentYear;
+                  linesLayer = LinesLayerService.createLinesLayer(entities,
+                    currentData,
+                    valueKey,
+                    mappingPointsResults);
                   map.addLayer(linesLayer);
                   return linesLayer;
                 });
