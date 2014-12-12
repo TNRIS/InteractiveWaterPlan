@@ -12,7 +12,7 @@ angular.module('iswpApp').controller('StrategiesRegionCtrl',
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' recommended strategy supplies within <strong>Region ' + region + '</strong> in {year}';
 
-    $scope.downloadPath = API_PATH + 'strategies/region' + region + '?format=csv';
+    $scope.downloadPath = API_PATH + 'strategies/region/' + region + '?format=csv';
 
     var strategySupplyCol = {
       map: 'SS2010',
