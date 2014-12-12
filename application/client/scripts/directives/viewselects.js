@@ -15,7 +15,7 @@ angular.module('iswpApp').directive('viewSelects',
           {text: 'Water User Group', value: 'entity', showSub: true}
         ];
 
-        if ($state.includes('strategies')) {
+        if ($state.includes('strategies') || $state.includes('supplies')) {
           $scope.viewTypes.push(
             // {text: 'Type of Strategy', value: 'strategyType', showSub: true},
             {text: 'Water Source', value: 'source', showSub: true}
@@ -62,9 +62,16 @@ angular.module('iswpApp').directive('viewSelects',
 
         //TODO: Might have to modify to have different lists for strategy sources
         // and existing supply sources
-        $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
-          return {value: s.MapSourceId, text: s.SourceName.titleize()};
-        });
+        if ($state.includes('strategies')) {
+          $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
+            return {value: s.MapSourceId, text: s.SourceName.titleize()};
+          });
+        }
+        else if ($state.includes('supplies')) {
+          $scope.sources = _.map(ISWP_VARS.existingSources, function (s) {
+            return {value: s.MapSourceId, text: s.SourceName.titleize()};
+          });
+        }
 
 
         $scope.loadEntities = function(query) {

@@ -54,7 +54,7 @@ angular.module('iswpApp', [
       };
 
       var toHome = function() {
-        $rootScope.$state.go('needs.summary', {year: '2010'});
+        $rootScope.$state.go('demands.summary', {year: '2010'});
         return;
       };
 
@@ -62,24 +62,24 @@ angular.module('iswpApp', [
         return toHome();
       }
 
-      var stateSuffix = _.last(toState.name.split('.'));
+      var childState = _.last(toState.name.split('.'));
 
-      switch (stateSuffix) {
+      switch (childState) {
         case 'region':
-          if(doesntContain(ISWP_VARS.regions, toParams.region.toUpperCase())) {
+          if (doesntContain(ISWP_VARS.regions, toParams.region.toUpperCase())) {
             return toHome();
           }
           break;
 
         case 'county':
-          if(doesntContain(ISWP_VARS.counties,
+          if (doesntContain(ISWP_VARS.counties,
               toParams.county.toUpperCase())) {
             return toHome();
           }
           break;
 
         case 'type':
-          if(doesntContain(ISWP_VARS.entityTypes,
+          if (doesntContain(ISWP_VARS.entityTypes,
               toParams.entityType.toUpperCase())) {
             return toHome();
           }

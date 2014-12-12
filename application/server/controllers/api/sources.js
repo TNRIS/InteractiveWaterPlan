@@ -106,10 +106,26 @@ exports.getStrategySourceList = function getStrategySourceList(req, res) {
 };
 
 
+function selectExistingSources() {
+  return db.distinct('SourceName', 'MapSourceId')
+    .from('vwMapExistingWugSupply')
+    .orderBy('SourceName');
+}
+exports.selectExistingSources = selectExistingSources;
+
+exports.getExistingSourceList = function getExistingSourceList(req, res) {
+  selectExistingSources()
+    .then(function (results) {
+      return res.json(results);
+    });
+};
+
+
 
 var router = express.Router();
 router.get('/points', validators.validateSourceIds, exports.getMappingPoints);
 router.get('/strategy', exports.getStrategySourceList);
+router.get('/existing', exports.getExistingSourceList);
 router.get('/:sourceId', validators.validateSourceId, exports.getSourcesById);
 router.get('/', validators.validateSourceIds, exports.getSourcesByIds);
 exports.router = router;

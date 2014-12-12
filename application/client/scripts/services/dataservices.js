@@ -13,7 +13,6 @@ angular.module('iswpApp')
       };
 
       service.fetch = function(type, typeId) {
-
         if (_.isEmpty(typeId)) {
           typeId = "";
         }

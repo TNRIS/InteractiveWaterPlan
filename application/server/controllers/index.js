@@ -32,8 +32,9 @@ exports.index = function(req, res) {
     places.selectRegionLetters(),
     places.selectCountyNames(),
     places.selectRegionsTopoJson(),
-    sources.selectStrategySources()
-  ]).spread(function (regions, counties, regionsTopo, strategySources) {
+    sources.selectStrategySources(),
+    sources.selectExistingSources()
+  ]).spread(function (regions, counties, regionsTopo, strategySources, existingSources) {
 
     return res.render('index', {
       pageName: 'home',
@@ -45,7 +46,8 @@ exports.index = function(req, res) {
         entityTypes: config.entityTypes,
         //TODO: Might have to modify to have different lists for strategy sources
         // and existing supply sources
-        strategySources: strategySources
+        strategySources: strategySources,
+        existingSources: existingSources
       })
     });
   });

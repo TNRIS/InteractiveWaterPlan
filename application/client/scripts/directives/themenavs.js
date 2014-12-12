@@ -25,7 +25,7 @@ angular.module('iswpApp')
           scope.demandsRef = stateRefOrDefault('demands', childStateName);
           scope.needsRef = stateRefOrDefault('needs', childStateName);
           scope.strategiesRef = stateRefOrDefault('strategies', childStateName);
-          // TODO: scope.suppliesRef
+          scope.suppliesRef = stateRefOrDefault('supplies', childStateName);
         }
 
         updateNavLinks();
