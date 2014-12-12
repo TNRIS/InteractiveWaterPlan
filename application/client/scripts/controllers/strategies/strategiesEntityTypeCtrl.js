@@ -14,7 +14,7 @@ angular.module('iswpApp').controller('StrategiesEntityTypeCtrl',
     $scope.downloadPath = API_PATH + 'strategies/type/' + entityType + '?format=csv';
 
     var strategiesCol = {
-      map: 'SSS2010',
+      map: 'SS2010',
       label: 'Recommended Strategy Supply (acre-feet/year)',
       cellClass: 'number',
       formatFunction: 'number',
@@ -28,7 +28,7 @@ angular.module('iswpApp').controller('StrategiesEntityTypeCtrl',
 
 
     //TODO: Remember the sort order when changing Year
-    $scope.$on('$stateChangeSuccess', function() {
+    $scope.$on('$stateChangeSuccess', function () {
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
       strategiesCol.map = 'SS' + $scope.currentYear;
