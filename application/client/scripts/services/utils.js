@@ -3,7 +3,7 @@
 angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_MAX_RADIUS) {
   var service = {};
 
-  service.sumsByEntityId = function sumsByEntityId(data, year, valuePrefix) {
+  service.sumsByEntityId = function sumsByEntityId(data, valueKey) {
     if (!data || data.length === 0) {
       return null;
     }
@@ -11,9 +11,19 @@ angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_M
     var results = {};
 
     _(data).groupBy('EntityId').each(function (rows, entityId) {
-      var sumForProp = _.reduce(rows, function(sum, row) {
-        var val = row['' + valuePrefix + year];
-        if (angular.isDefined(val) && val > 0) {
+
+      var filteredRows = _.filter(rows, function (row) {
+        return angular.isDefined(row[valueKey]);
+      });
+
+      if (!filteredRows.length) {
+        return;
+      }
+
+      var sumForProp = _.reduce(filteredRows, function (sum, row) {
+        var val = row[valueKey];
+        //only include positive values in sum
+        if (val > 0) {
           return sum + val;
         }
         return sum;
