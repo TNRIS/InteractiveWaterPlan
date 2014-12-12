@@ -26,19 +26,7 @@ function selectStrategies() {
     .from('vwMapWugWms');
 }
 
-//Removes all SS properties that are 0-valued
-function filterZeroValues(results) {
-  var ssFields = {
-    'SS2010': true, 'SS2020': true,
-    'SS2030': true, 'SS2040': true,
-    'SS2050': true, 'SS2060': true
-  };
-  return _.map(results, function (row) {
-    return _.omit(row, function (val, key) {
-      return ssFields[key] && val === 0;
-    });
-  });
-}
+var filterZeroValues = utils.makeZeroValueFilter('SS');
 
 exports.getAllStrategies = function getAllStrategies(req, res) {
   selectStrategies()

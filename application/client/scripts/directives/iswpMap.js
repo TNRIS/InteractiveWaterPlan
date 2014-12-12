@@ -4,7 +4,7 @@ angular.module('iswpApp').directive('iswpMap',
   function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
-    SourceLayerService, LinesLayerService, STATE_MAP_CONFIG) {
+    SourceLayerService, LinesLayerService, DATA_VALUE_PREFIXES, STATE_MAP_CONFIG) {
 
     function postLink(scope, element, attrs) {
 
@@ -136,7 +136,8 @@ angular.module('iswpApp').directive('iswpMap',
           //Get all the sourceIds of the sources to show
           var sourceIds = _(currentData)
             .filter(function (d) {
-              return angular.isDefined(d['SS' + currentYear]); }
+              var valKey = DATA_VALUE_PREFIXES[parentState] + currentYear;
+              return angular.isDefined(d[valKey]); }
             )
             .pluck('MapSourceId')
             .compact()
@@ -163,10 +164,10 @@ angular.module('iswpApp').directive('iswpMap',
             if (childState !== 'county' && childState !== 'region') {
               var linesProm = SourceLayerService.getMappingPoints(sourceIds)
                 .then(function (mappingPointsResults) {
-                  var valueKey = 'SS' + currentYear;
+                  var valKey = DATA_VALUE_PREFIXES[parentState] + currentYear;
                   linesLayer = LinesLayerService.createLinesLayer(entities,
                     currentData,
-                    valueKey,
+                    valKey,
                     mappingPointsResults);
                   map.addLayer(linesLayer);
                   return linesLayer;

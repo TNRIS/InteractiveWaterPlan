@@ -2,6 +2,7 @@
 
 require('sugar');
 
+var _ = require('lodash');
 var express = require('express');
 var db = require('./../../db');
 var utils = require('./../../utils');
@@ -23,9 +24,12 @@ function selectSupplies() {
     .from('vwMapExistingWugSupply');
 }
 
+
+var filterZeroValues = utils.makeZeroValueFilter('WS');
+
 exports.getAllSupplies = function getAllSupplies(req, res) {
   selectSupplies()
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getSuppliesForRegion = function getSuppliesForRegion(req, res) {
@@ -35,7 +39,7 @@ exports.getSuppliesForRegion = function getSuppliesForRegion(req, res) {
   selectSupplies()
     .where('WugRegion', region)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getSuppliesForCounty = function getSuppliesForCounty(req, res) {
@@ -45,7 +49,7 @@ exports.getSuppliesForCounty = function getSuppliesForCounty(req, res) {
   selectSupplies()
     .where('WugCounty', county)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getSuppliesForEntity = function getSuppliesForEntity(req, res) {
@@ -55,7 +59,7 @@ exports.getSuppliesForEntity = function getSuppliesForEntity(req, res) {
   selectSupplies()
     .where('EntityId', entityId)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 exports.getSuppliesForEntityType = function getSuppliesForEntityType(req, res) {
@@ -65,7 +69,7 @@ exports.getSuppliesForEntityType = function getSuppliesForEntityType(req, res) {
   selectSupplies()
     .where('WugType', entityType)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
   };
 
 exports.getSuppliesForSource = function getSuppliesForSource(req, res) {
@@ -75,7 +79,7 @@ exports.getSuppliesForSource = function getSuppliesForSource(req, res) {
   selectSupplies()
     .where('MapSourceId', sourceId)
     .orderBy('EntityName')
-    .then(utils.asJsonOrCsv(req, res));
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
 var router = express.Router();
