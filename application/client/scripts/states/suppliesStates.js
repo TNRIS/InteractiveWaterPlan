@@ -49,19 +49,19 @@ angular.module('iswpApp').config(function ($stateProvider) {
       controller: 'SuppliesEntityTypeCtrl',
       templateUrl: 'templates/data_table.html'
     })
-    // .state('supplies.entity', {
-    //   url: '/:year/entity/:entityId',
-    //   resolve: {
-    //     suppliesData: /* @ngInject */ function (SuppliesService, $stateParams) {
-    //       return SuppliesService.fetch('entity', $stateParams.entityId);
-    //     },
-    //     entitySummary: /* @ngInject */ function (EntityService, $stateParams) {
-    //       return EntityService.fetchSummary($stateParams.entityId);
-    //     }
-    //   },
-    //   controller: 'SuppliesEntityCtrl',
-    //   templateUrl: 'templates/data_table.html'
-    // })
+    .state('supplies.entity', {
+      url: '/:year/entity/:entityId',
+      resolve: {
+        suppliesData: /* @ngInject */ function (SuppliesService, $stateParams) {
+          return SuppliesService.fetch('entity', $stateParams.entityId);
+        },
+        entitySummary: /* @ngInject */ function (EntityService, $stateParams) {
+          return EntityService.fetchSummary($stateParams.entityId);
+        }
+      },
+      controller: 'SuppliesEntityCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
     // .state('supplies.source', {
     //   url: '/:year/source/:sourceId',
     //   resolve: suppliesResolver('source', 'sourceId'),
