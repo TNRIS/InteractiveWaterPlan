@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var config = require('./config/config');
 
 function isCsv(req) {
   return (req.query.format &&
@@ -18,5 +19,30 @@ exports.asJsonOrCsv = function asJsonOrCsv(req, res) {
     }
     //else
     return res.json(queryResult);
+  };
+};
+
+
+exports.makeZeroValueFilter = function makeZeroValueFilter(valueKeyPrefix) {
+  if (!valueKeyPrefix) {
+    throw new Error('Must provide valueKeyPrefix');
+  }
+
+  var years = config.years;
+  var toValueKey = function (year) {
+    return valueKeyPrefix + year;
+  };
+
+  var valueFields = _.zipObject(
+    _.map(years, toValueKey),
+    _.times(years.length, _.constant(true))
+  );
+
+  return function zeroValueFilter(results) {
+    return _.map(results, function (row) {
+      return _.omit(row, function (val, key) {
+        return valueFields[key] && val === 0;
+      });
+    });
   };
 };
