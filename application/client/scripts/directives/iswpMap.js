@@ -103,7 +103,7 @@ angular.module('iswpApp').directive('iswpMap',
       // because it seems to bug-out if caught in two animations
       function fitBounds(bounds) {
         //do nothing if the map is locked
-        if (scope.mapLocked) {
+        if (scope.mapLocked || !bounds.isValid()) {
           return;
         }
 
