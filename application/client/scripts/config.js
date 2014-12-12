@@ -20,8 +20,8 @@ angular.module('iswpApp.config', [])
   })
   .constant('LINE_STYLE', {
     color: 'orange',
-    weight: 1.5,
-    opacity: 0.75
+    weight: 1.2,
+    opacity: 0.6
   })
   .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
   .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
