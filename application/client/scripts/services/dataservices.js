@@ -35,7 +35,8 @@ angular.module('iswpApp')
       };
 
       service.getSumsByEntityId = function(year) {
-        return Utils.sumsByEntityId(currentData, year, DATA_VALUE_PREFIXES[name]);
+        var valueKey = DATA_VALUE_PREFIXES[name] + year;
+        return Utils.sumsByEntityId(currentData, valueKey);
       };
 
       return service;
@@ -50,18 +51,7 @@ angular.module('iswpApp')
     return DataServiceFactory.createService('needs');
   })
   .factory('StrategiesService', function (DataServiceFactory) {
-    var service = DataServiceFactory.createService('strategies');
-
-    //override getSumsByEntityId to filter out 0-valued sums for this view
-    var origGetSums = service.getSumsByEntityId;
-    service.getSumsByEntityId = function(year) {
-      var sums = origGetSums(year);
-      return _.omit(sums, function (val) {
-        return val === 0;
-      });
-    };
-
-    return service;
+    return DataServiceFactory.createService('strategies');
   })
   .factory('SuppliesService', function (DataServiceFactory) {
     return DataServiceFactory.createService('supplies');

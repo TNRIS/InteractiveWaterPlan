@@ -43,14 +43,15 @@ angular.module('iswpApp').factory('LinesLayerService',
       return L.polyline(points, LINE_STYLE);
     }
 
-    service.createLinesLayer = function createLinesLayer(entities, currentData, sourceMappingPoints) {
+    service.createLinesLayer = function createLinesLayer(entities, currentData, currValueKey, sourceMappingPoints) {
 
       var lines = [];
 
       _.each(sourceMappingPoints, function (sourceMp) {
 
         _(currentData).filter(function (row) {
-          return row.MapSourceId === sourceMp.id;
+          return angular.isDefined(row[currValueKey]) &&
+            row.MapSourceId === sourceMp.id;
         }).map(function (row) {
           return _.find(entities, {EntityId: row.EntityId});
         })
