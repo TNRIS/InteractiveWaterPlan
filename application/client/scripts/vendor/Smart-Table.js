@@ -2,6 +2,16 @@
 /*
   Smart-Table from https://github.com/lorenzofox3/Smart-Table
   Modified by James Seppi at TNRIS
+
+  @license MIT
+  @author Laurent Renard
+  Copyright (C) 2014 Laurent Renard.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /* Column module */
 
@@ -677,6 +687,7 @@ angular.module("partials/selectionCheckbox.html", []).run(["$templateCache", fun
 }]);
 
 //JAS - use bootstrap table classes and move global-search to outisde of <table> element
+//JAS - add row for totals in tfoot
 angular.module("partials/smartTable.html", []).run(["$templateCache", function ($templateCache) {
     $templateCache.put("partials/smartTable.html",
           "<div>\n" +
@@ -695,8 +706,12 @@ angular.module("partials/smartTable.html", []).run(["$templateCache", function (
           "        <td ng-repeat=\"column in columns\" class=\"smart-table-data-cell {{column.cellClass}}\"></td>\n" +
           "    </tr>\n" +
           "    </tbody>\n" +
-          "    <tfoot ng-show=\"isPaginationEnabled\">\n" +
-          "    <tr class=\"smart-table-footer-row\">\n" +
+          "    <tfoot>\n" +
+          "    <tr ng-show=\"showTotals\" class=\"total-row\">\n" +
+          "       <td class=\"text-center\">Total</td>\n" +
+          "       <td ng-repeat=\"t in totals\" class=\"number\">{{t | number}}</td>\n" +
+          "    </tr>\n" +
+          "    <tr ng-show=\"isPaginationEnabled\" class=\"smart-table-footer-row\">\n" +
           "        <td colspan=\"{{columns.length}}\">\n" +
           "            <div pagination-smart-table=\"\" num-pages=\"numberOfPages\" max-size=\"maxSize\" current-page=\"currentPage\"></div>\n" +
           "        </td>\n" +

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_MAX_RADIUS) {
+angular.module('iswpApp').factory('Utils', function (SUMMARY_TABLE_COLS, ENTITY_MIN_RADIUS, ENTITY_MAX_RADIUS) {
   var service = {};
 
   service.sumsByEntityId = function sumsByEntityId(data, valueKey) {
@@ -44,6 +44,23 @@ angular.module('iswpApp').factory('Utils', function (ENTITY_MIN_RADIUS, ENTITY_M
       return ENTITY_MIN_RADIUS;
     }
     return (ENTITY_MAX_RADIUS - ENTITY_MIN_RADIUS) * (val - min) / (max - min) + ENTITY_MIN_RADIUS;
+  };
+
+  service.calculateSummaryTotals = function calculateSummaryTotals(dataForYear) {
+    var sum = function (arr) {
+        return _.reduce(arr, function (sum, num) {
+          return sum + num;
+        }, 0);
+      };
+
+    var valueFields = _(SUMMARY_TABLE_COLS).pluck('map')
+      .without('WugRegion').value();
+
+    var fieldSums = _(valueFields).map(function (field) {
+        return sum(_.pluck(dataForYear, field));
+      }).value();
+
+    return fieldSums;
   };
 
   return service;

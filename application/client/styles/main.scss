@@ -315,6 +315,11 @@ body {
   span.header-content {
     cursor: pointer;
   }
+
+  tfoot > .total-row {
+    border-top: 2px solid #aaa;
+    font-weight: bold;
+  }
 }
 
 .note-marker {
