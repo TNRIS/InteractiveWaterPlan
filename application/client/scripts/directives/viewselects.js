@@ -4,6 +4,7 @@ angular.module('iswpApp').directive('viewSelects',
   function ($state, $stateParams, EntityService, StrategySourceService, StrategiesService, ISWP_VARS) {
     return {
       restrict: 'A',
+      replace: true,
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 

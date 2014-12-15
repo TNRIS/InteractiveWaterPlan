@@ -1,88 +1,92 @@
+
 <div class="view-select-container">
+  <div class="row">
 
-  <div class="form-horizontal">
-    <div class="form-group">
-      <label class="col-md-2 control-label" for="viewTypeSelect">
-        View data by
-      </label>
-      <div class="col-md-3">
-        <select class="form-control input-sm" id="viewTypeSelect" ng-model="selectedViewType" ng-options="v.text for v in viewTypes"></select>
-      </div>
+    <div class="col-lg-8 col-lg-push-2">
 
+      <div class="well well-sm">
+        <div class="row">
 
-      <div ng-show="selectedViewType.showSub" class="col-md-4">
+          <div class="col-md-6">
+            <div class="view-type-select-group">
+              <label class="" for="viewTypeSelect">
+                View data by
+              </label>
+              <select class="form-control input-sm" id="viewTypeSelect" ng-model="selectedViewType" ng-options="v.text for v in viewTypes"></select>
+            </div>
+          </div>
 
-          <div ng-show="selectedViewType.value == 'region'">
-            <div ui-select theme="bootstrap" ng-model="region.selected">
-              <div ui-select-match placeholder="Select a Region">
-                {{$select.selected.text}}
+          <div ng-show="selectedViewType.showSub" class="col-md-6">
+            <div ng-show="selectedViewType.value == 'region'">
+              <div ui-select theme="bootstrap" ng-model="region.selected">
+                <div ui-select-match placeholder="Select a Region">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="region in regions | filter: $select.search">
+                  <span ng-bind-html="region.text | highlight: $select.search"></span>
+                </div>
               </div>
-              <div ui-select-choices repeat="region in regions | filter: $select.search">
-                <span ng-bind-html="region.text | highlight: $select.search"></span>
+            </div>
+
+           <div ng-show="selectedViewType.value == 'type'">
+              <div ui-select theme="bootstrap" ng-model="type.selected">
+                <div ui-select-match placeholder="Select a Water User Type">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="type in entityTypes | filter: $select.search">
+                  <span ng-bind-html="type.text | highlight: $select.search"></span>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="selectedViewType.value == 'county'">
+              <div ui-select theme="bootstrap" ng-model="county.selected">
+                <div ui-select-match placeholder="Select a County">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="county in counties | filter: $select.search">
+                  <span ng-bind-html="county.text | highlight: $select.search"></span>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="selectedViewType.value == 'entity'">
+              <div ui-select theme="bootstrap" ng-model="entity.selected">
+                <div ui-select-match placeholder="Search for a Water User Group">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="entity in entities"
+                  refresh="loadEntities($select.search)" refresh-delay="0">
+                  <span ng-bind-html="entity.text | highlight: $select.search"></span>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="selectedViewType.value == 'strategyType'">
+              <div ui-select theme="bootstrap" ng-model="strategyType.selected">
+                <div ui-select-match placeholder="Select a Strategy Type">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="strategy in strategyTypes | filter: $select.search">
+                  <span ng-bind-html="strategy.text | highlight: $select.search"></span>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="selectedViewType.value == 'source'">
+              <div ui-select theme="bootstrap" ng-model="source.selected">
+                <div ui-select-match placeholder="Select a Water Source">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="source in sources | filter: $select.search">
+                  <span ng-bind-html="source.text | highlight: $select.search"></span>
+                </div>
               </div>
             </div>
           </div>
 
-         <div ng-show="selectedViewType.value == 'type'">
-            <div ui-select theme="bootstrap" ng-model="type.selected">
-              <div ui-select-match placeholder="Select a Water User Type">
-                {{$select.selected.text}}
-              </div>
-              <div ui-select-choices repeat="type in entityTypes | filter: $select.search">
-                <span ng-bind-html="type.text | highlight: $select.search"></span>
-              </div>
-            </div>
-          </div>
-
-
-          <div ng-show="selectedViewType.value == 'county'">
-            <div ui-select theme="bootstrap" ng-model="county.selected">
-              <div ui-select-match placeholder="Select a County">
-                {{$select.selected.text}}
-              </div>
-              <div ui-select-choices repeat="county in counties | filter: $select.search">
-                <span ng-bind-html="county.text | highlight: $select.search"></span>
-              </div>
-            </div>
-          </div>
-
-          <div ng-show="selectedViewType.value == 'entity'">
-            <div ui-select theme="bootstrap" ng-model="entity.selected">
-              <div ui-select-match placeholder="Search for a Water User Group">
-                {{$select.selected.text}}
-              </div>
-              <div ui-select-choices repeat="entity in entities"
-                refresh="loadEntities($select.search)" refresh-delay="0">
-                <span ng-bind-html="entity.text | highlight: $select.search"></span>
-              </div>
-            </div>
-          </div>
-
-          <div ng-show="selectedViewType.value == 'strategyType'">
-            <div ui-select theme="bootstrap" ng-model="strategyType.selected">
-              <div ui-select-match placeholder="Select a Strategy Type">
-                {{$select.selected.text}}
-              </div>
-              <div ui-select-choices repeat="strategy in strategyTypes | filter: $select.search">
-                <span ng-bind-html="strategy.text | highlight: $select.search"></span>
-              </div>
-            </div>
-          </div>
-
-          <div ng-show="selectedViewType.value == 'source'">
-            <div ui-select theme="bootstrap" ng-model="source.selected">
-              <div ui-select-match placeholder="Select a Water Source">
-                {{$select.selected.text}}
-              </div>
-              <div ui-select-choices repeat="source in sources | filter: $select.search">
-                <span ng-bind-html="source.text | highlight: $select.search"></span>
-              </div>
-            </div>
-          </div>
-
+        </div>
       </div>
     </div>
   </div>
-
 </div>
-

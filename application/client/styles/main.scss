@@ -378,14 +378,30 @@ body {
 .view-select-container {
   margin-bottom: 10px;
 
-  .form-horizontal .control-label {
-    text-align: left;
+  .well {
+    margin-bottom: 0px;
+  }
+
+  .well-sm {
+    padding: 6px;
+  }
+
+  .view-type-select-group {
+    label {
+      font-weight: normal;
+      padding-right: 6px;
+    }
+
+    .form-control {
+      width: 70%;
+      display: inline-block;
+    }
   }
 
   .ui-select-bootstrap {
     .btn-default, .btn-default:hover {
       color: inherit;
-      background-color: inherit;
+      background-color: white;
       border: 1px solid #ccc;
     }
 
