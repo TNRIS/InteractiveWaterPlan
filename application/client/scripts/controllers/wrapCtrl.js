@@ -7,25 +7,20 @@ angular.module('iswpApp').controller('WrapCtrl',
       $scope.heading = val;
     });
 
-    $scope.itemsPerPage = TableSettingsService.getItemsPerPage();
-
     //tableConfig used by most data views
     //it can be overwritten in specific controllers
     $scope.tableConfig = {
       selectionMode: 'single',
       isGlobalSearchActivated: true,
       isPaginationEnabled: true,
-      itemsByPage: $scope.itemsPerPage
+      itemsByPage: TableSettingsService.getItemsPerPage()
     };
 
-    $scope.$watch('itemsPerPage', function() {
-      if (!$scope.itemsPerPage) {
-        return;
-      }
-
-      $scope.tableConfig.itemsByPage = $scope.itemsPerPage;
-      TableSettingsService.setItemsPerPage($scope.itemsPerPage);
+    $scope.$watch(TableSettingsService.getItemsPerPage, function (newVal) {
+      if (!newVal) { return; }
+      $scope.tableConfig.itemsByPage = newVal;
     });
+
 
     $scope.hasValues = function (tableRows) {
       if (!tableRows.length) {
