@@ -160,6 +160,19 @@ body {
   border-right: 2px solid #fff;
   transition: background-color 1s ease;
 
+  &.link-demands {
+    background-color: lighten($demandsColor, 50%);
+  }
+  &.link-supplies {
+    background-color: lighten($suppliesColor, 40%);
+  }
+  &.link-needs {
+    background-color: lighten($needsColor, 60%);
+  }
+  &.link-strategies {
+    background-color: lighten($strategiesColor, 40%);
+  }
+
   &:last-child {
     border-right: none;
   }
@@ -174,14 +187,14 @@ body {
     &.link-demands {
       background-color: lighten($demandsColor, 5%);
     }
+    &.link-supplies {
+      background-color: lighten($suppliesColor, 5%);
+    }
     &.link-needs {
-      background-color: lighten($needsColor, 20%);
+      background-color: lighten($needsColor, 10%);
     }
     &.link-strategies {
       background-color: lighten($strategiesColor, 10%);
-    }
-    &.link-supplies {
-      background-color: lighten($suppliesColor, 5%);
     }
   }
 
@@ -193,14 +206,14 @@ body {
     &.link-demands {
       background-color: $demandsColor;
     }
+    &.link-supplies {
+      background-color: $suppliesColor;
+    }
     &.link-needs {
       background-color: $needsColor;
     }
     &.link-strategies {
       background-color: $strategiesColor;
-    }
-    &.link-supplies {
-      background-color: $suppliesColor;
     }
   }
 }
