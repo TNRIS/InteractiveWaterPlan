@@ -4,6 +4,9 @@ angular.module('iswpApp').controller('WrapCtrl',
   function ($scope, $rootScope, $state, $stateParams, HeadingService, TableSettingsService, DATA_VALUE_PREFIXES, TREE_MAP_SUBJECTS) {
 
     $scope.$watch(HeadingService.get, function (val) {
+      if (!val) {
+        return;
+      }
       $scope.heading = val;
     });
 
@@ -40,11 +43,17 @@ angular.module('iswpApp').controller('WrapCtrl',
       });
     };
 
+    $scope.isParentState = function (parentName) {
+      return $state.includes(parentName);
+    };
+
     $scope.$on('$stateChangeSuccess', function () {
       var parentState = $state.current.name.split('.')[0];
 
       $scope.treeMapSubject = TREE_MAP_SUBJECTS[parentState];
       $scope.currentYear = $scope.$stateParams.year;
+
+      $scope.heading = HeadingService.get();
     });
 
     //Watch for selectionChange events from the Smart-Table

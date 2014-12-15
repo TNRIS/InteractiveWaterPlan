@@ -22,8 +22,7 @@ angular.module('iswpApp').config(function ($stateProvider) {
           return ExistingSourceService.fetch();
         }
       },
-      controller: 'WrapCtrl',
-      templateUrl: 'templates/main.html'
+      template: '<div ui-view></div>'
     })
     .state('supplies.summary', {
       url: '/:year/state',

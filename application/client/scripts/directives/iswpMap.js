@@ -4,10 +4,9 @@ angular.module('iswpApp').directive('iswpMap',
   function ($rootScope, $state, $stateParams, $q, RegionService, MapLayerService,
     NeedsService, DemandsService, EntityService, CountyService, LegendService,
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
-    SourceLayerService, DATA_VALUE_PREFIXES, STATE_MAP_CONFIG) {
+    SourceLayerService, MapSettingsService, DATA_VALUE_PREFIXES, STATE_MAP_CONFIG) {
 
     function postLink(scope, element, attrs) {
-
       var map = MapFactory.createMap(element[0], {
         centerLat: STATE_MAP_CONFIG.centerLat,
         centerLng: STATE_MAP_CONFIG.centerLng,
@@ -16,8 +15,8 @@ angular.module('iswpApp').directive('iswpMap',
 
       window.map = map;
 
-      scope.mapLocked = false;
-      scope.mapHidden = false;
+      scope.mapLocked = MapSettingsService.isMapLocked;
+      scope.mapHidden = MapSettingsService.isMapHidden;
 
       //Create a legend for the Needs colors
       var legendControl = LegendService.Needs.createLegend();
@@ -32,14 +31,16 @@ angular.module('iswpApp').directive('iswpMap',
         }
       );
 
-      $rootScope.$on('map:togglehide',
-        function(event, isHidden) {
-          scope.mapHidden = isHidden;
-        }
-      );
+      scope.$watch(MapSettingsService.getIsMapLocked, function (val) {
+        scope.mapLocked = val;
+      });
+
+      scope.$watch(MapSettingsService.getIsMapHidden, function (val) {
+        scope.mapHidden = val;
+      });
 
       $rootScope.$on('map:togglehighlight',
-        function(event, entity) {
+        function (event, entity) {
           var entityFeatures = entityLayer.getLayers();
           var entityFeature = _.find(entityFeatures, function(e) {
             return entity.EntityId === e.options.entity.EntityId;

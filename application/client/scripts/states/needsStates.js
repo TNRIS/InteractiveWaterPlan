@@ -20,7 +20,7 @@ angular.module('iswpApp').config(function ($stateProvider) {
         }
       },
       controller: 'WrapCtrl',
-      templateUrl: 'templates/main.html'
+      template: '<div ui-view></div>'
     })
     .state('needs.summary', {
       url: '/:year/state', // appended to /needs
