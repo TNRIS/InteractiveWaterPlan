@@ -26,7 +26,7 @@ angular.module('iswpApp').controller('WrapCtrl',
 
 
     $scope.hasValues = function (tableRows) {
-      if (!tableRows.length) {
+      if (!tableRows || !tableRows.length) {
         return false;
       }
 

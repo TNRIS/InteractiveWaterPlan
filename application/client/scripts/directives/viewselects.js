@@ -8,22 +8,6 @@ angular.module('iswpApp').directive('viewSelects',
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
-        $scope.viewTypes = [
-          {text: 'Regional Summary', value: 'summary', showSub: false},
-          {text: 'Usage Type', value: 'type', showSub: true},
-          {text: 'Region', value: 'region', showSub: true},
-          {text: 'County', value: 'county', showSub: true},
-          {text: 'Water User Group', value: 'entity', showSub: true}
-        ];
-
-        if ($state.includes('strategies') || $state.includes('supplies')) {
-          $scope.viewTypes.push(
-            // {text: 'Type of Strategy', value: 'strategyType', showSub: true},
-            {text: 'Water Source', value: 'source', showSub: true}
-          );
-        }
-
-
         $scope.region = {};
         $scope.county = {};
         $scope.type = {};
@@ -39,6 +23,27 @@ angular.module('iswpApp').directive('viewSelects',
           $scope.strategyType = {};
           $scope.source = {};
         };
+
+        function setupViewTypes() {
+          $scope.viewTypes = [
+            {text: 'Regional Summary', value: 'summary', showSub: false},
+            {text: 'Usage Type', value: 'type', showSub: true},
+            {text: 'Region', value: 'region', showSub: true},
+            {text: 'County', value: 'county', showSub: true},
+            {text: 'Water User Group', value: 'entity', showSub: true}
+          ];
+
+          if ($state.includes('strategies') || $state.includes('supplies')) {
+            $scope.viewTypes.push(
+              // {text: 'Type of Strategy', value: 'strategyType', showSub: true},
+              {text: 'Water Source', value: 'source', showSub: true}
+            );
+          }
+        }
+
+        setupViewTypes();
+        $scope.$on('$stateChangeSuccess', setupViewTypes);
+
 
         function setToCurrentState() {
           //grab selectedViewType from route
@@ -61,18 +66,20 @@ angular.module('iswpApp').directive('viewSelects',
           return {value: r, text: "Region " + r};
         });
 
-        //TODO: Might have to modify to have different lists for strategy sources
-        // and existing supply sources
-        if ($state.includes('strategies')) {
-          $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
-            return {value: s.MapSourceId, text: s.SourceName.titleize()};
-          });
-        }
-        else if ($state.includes('supplies')) {
-          $scope.sources = _.map(ISWP_VARS.existingSources, function (s) {
-            return {value: s.MapSourceId, text: s.SourceName.titleize()};
-          });
-        }
+
+
+        $scope.$on('$stateChangeSuccess', function () {
+          if ($state.includes('strategies')) {
+            $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
+              return {value: s.MapSourceId, text: s.SourceName.titleize()};
+            });
+          }
+          else if ($state.includes('supplies')) {
+            $scope.sources = _.map(ISWP_VARS.existingSources, function (s) {
+              return {value: s.MapSourceId, text: s.SourceName.titleize()};
+            });
+          }
+        });
 
 
         $scope.loadEntities = function(query) {
