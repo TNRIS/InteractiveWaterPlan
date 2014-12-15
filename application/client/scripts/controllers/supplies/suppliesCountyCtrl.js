@@ -6,7 +6,7 @@ angular.module('iswpApp').controller('SuppliesCountyCtrl',
     var county = $scope.$stateParams.county.titleize();
 
     HeadingService.current =  county + ' County';
-    $scope.mapDescription = 'Map displays water user groups with projected existing water supplies within <strong>' + county + ' County</strong> and associated sources of water (water system service area boundaries may extend outside of county).';
+    $scope.mapDescription = 'Map displays water user groups within <strong>' + county + ' County</strong> and the relative volumes of their projected existing water supplies and associated sources of water (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' existing water supply within <strong>' + county + ' County</strong> in {year}';
 

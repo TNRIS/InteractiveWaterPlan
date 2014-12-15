@@ -7,7 +7,7 @@ angular.module('iswpApp').controller('SuppliesRegionCtrl',
 
     HeadingService.current =  'Region ' + region;
 
-    $scope.mapDescription = 'Map displays water user groups with projected existing water supplies in <strong>Region ' + region + '</strong> and associated water sources (water system service area boundaries may extend outside of region). <strong>Click</strong> on a dot to view sources of water for that entity.';
+    $scope.mapDescription = 'Map displays water user groups in <strong>Region ' + region + '</strong> and the relative volumes of their projected existing water supplies and associated water sources (water system service area boundaries may extend outside of region). <strong>Click</strong> on a dot to view sources of water for that entity.';
 
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists the share of entities\' existing water supply within <strong>Region ' + region + '</strong> in {year}';
