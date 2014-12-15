@@ -16,7 +16,7 @@ angular.module('iswpApp').controller('StrategiesSourceCtrl',
     var sourceName = source.SourceName;
 
     HeadingService.current =  sourceName;
-    $scope.mapDescription = 'Map displays a schematic representation of all entities with recommended strategies that rely on water from this water source.';
+    $scope.mapDescription = 'Map displays a schematic representation of all water user groups with recommended strategies that rely on water from this water source.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
     var tableDescTpl = 'Table lists recommended water management strategies along with entities using water from <strong>'+ sourceName + '</strong> in {year}.';
 
