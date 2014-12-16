@@ -135,8 +135,6 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
       ]);
     });
 
-    console.log(treeMapData);
-
     var createTooltip = function (rowIndex, value) {
       return '<div class="tree-map-tooltip">' +
         treeMapData[rowIndex+1][0] + '<br>' +
