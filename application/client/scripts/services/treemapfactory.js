@@ -122,7 +122,10 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
 
       var regionData = _.where(data, {'WugRegion': region});
       var regionTotal = _.reduce(regionData, function (sum, curr) {
-        return sum + curr[valueKey];
+        if (angular.isNumber(curr[valueKey])) {
+          return sum + curr[valueKey];
+        }
+        return sum;
       }, 0);
 
       treeMapData.push([
@@ -131,6 +134,8 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
         regionTotal
       ]);
     });
+
+    console.log(treeMapData);
 
     var createTooltip = function (rowIndex, value) {
       return '<div class="tree-map-tooltip">' +
