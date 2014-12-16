@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesWmsTypeCtrl',
-  function ($scope, $rootScope, strategiesData, HeadingService, COUNTY_TABLE_COLS, API_PATH, ISWP_VARS) {
+  function ($scope, $rootScope, strategiesData, HeadingService, WMS_TABLE_ADDL_COLS, API_PATH, ISWP_VARS) {
 
     var wmsType = $scope.$stateParams.wmsType;
 
@@ -28,11 +28,8 @@ angular.module('iswpApp').controller('StrategiesWmsTypeCtrl',
 
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
-      {map: 'StrategyName', label: 'Strategy Name'},
-      {map: 'SourceName', label: 'Source', headerClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
-      {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
-      strategiesCol
-    ];
+      {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'}
+    ].concat(WMS_TABLE_ADDL_COLS).concat(strategiesCol);
 
     $scope.tableRows = strategiesData;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesCountyCtrl',
-  function ($scope, $rootScope, strategiesData, HeadingService, COUNTY_TABLE_COLS, API_PATH) {
+  function ($scope, $rootScope, strategiesData, HeadingService, COUNTY_TABLE_COLS, WMS_TABLE_ADDL_COLS, API_PATH) {
 
     var county = $scope.$stateParams.county.titleize();
 
@@ -12,13 +12,6 @@ angular.module('iswpApp').controller('StrategiesCountyCtrl',
 
     $scope.downloadPath = API_PATH + 'strategies/county/' + county + '?format=csv';
 
-    var sourceCol = {
-      map: 'SourceName',
-      label: 'Source',
-      headerClass: 'text-center',
-      cellTemplateUrl: 'templates/linkcell.html'
-    };
-
     var strategiesCol = {
       map: 'SS2010',
       label: 'Recommended Strategy Supply (acre-feet/year)',
@@ -28,7 +21,7 @@ angular.module('iswpApp').controller('StrategiesCountyCtrl',
       headerClass: 'text-center'
     };
 
-    $scope.tableColumns = COUNTY_TABLE_COLS.concat([sourceCol, strategiesCol]);
+    $scope.tableColumns = COUNTY_TABLE_COLS.concat(WMS_TABLE_ADDL_COLS).concat(strategiesCol);
 
     $scope.tableRows = strategiesData;
 

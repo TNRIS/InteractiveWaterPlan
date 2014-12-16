@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesEntityTypeCtrl',
-  function ($scope, TreeMapFactory, strategiesData, HeadingService, TYPE_TABLE_COLS, ISWP_VARS, API_PATH) {
+  function ($scope, TreeMapFactory, strategiesData, HeadingService, TYPE_TABLE_COLS, WMS_TABLE_ADDL_COLS, ISWP_VARS, API_PATH) {
 
     var entityType = $scope.$stateParams.entityType.titleize();
     $scope.entityType = entityType;
@@ -22,7 +22,7 @@ angular.module('iswpApp').controller('StrategiesEntityTypeCtrl',
       headerClass: 'text-center'
     };
 
-    $scope.tableColumns = TYPE_TABLE_COLS.concat(strategiesCol);
+    $scope.tableColumns = TYPE_TABLE_COLS.concat(WMS_TABLE_ADDL_COLS).concat(strategiesCol);
 
     $scope.tableRows = strategiesData;
 

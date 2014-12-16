@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesSourceCtrl',
-  function ($scope, strategiesData, StrategySourceService, HeadingService, API_PATH) {
+  function ($scope, strategiesData, StrategySourceService, HeadingService, WMS_TABLE_ADDL_COLS, API_PATH) {
 
     var sourceId = $scope.$stateParams.sourceId;
     var source = StrategySourceService.getSource(sourceId);
@@ -32,11 +32,9 @@ angular.module('iswpApp').controller('StrategiesSourceCtrl',
     };
 
     $scope.tableColumns = [
-      {map: 'StrategyName', label: 'Strategy Name'},
       {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
-      {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'},
-      strategiesCol
-    ];
+      {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'}
+    ].concat(WMS_TABLE_ADDL_COLS).concat(strategiesCol);
 
     $scope.tableRows = strategiesData;
 

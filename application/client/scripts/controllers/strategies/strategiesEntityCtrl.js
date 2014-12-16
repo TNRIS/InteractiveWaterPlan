@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesEntityCtrl',
-  function ($scope, strategiesData, entitySummary, ChartService, EntityService, HeadingService, ENTITY_TABLE_COLS, API_PATH) {
+  function ($scope, strategiesData, entitySummary, ChartService, EntityService, HeadingService, ENTITY_TABLE_COLS, WMS_TABLE_ADDL_COLS, API_PATH) {
     //if entitySummary is null then this was called for an invalid entityId
     // so return to home view
     if (!entitySummary) {
@@ -21,18 +21,6 @@ angular.module('iswpApp').controller('StrategiesEntityCtrl',
 
     $scope.downloadPath = API_PATH + 'strategies/entity/' + entityId + '?format=csv';
 
-    var sourceCol = {
-      map: 'SourceName',
-      label: 'Source',
-      headerClass: 'text-center',
-      cellTemplateUrl: 'templates/linkcell.html'
-    };
-
-    var strategyNameCol = {
-      map: 'StrategyName',
-      label: 'Strategy Name',
-      headerClass: 'text-center'
-    };
 
     var strategiesCol = {
       map: 'SS2010',
@@ -43,8 +31,7 @@ angular.module('iswpApp').controller('StrategiesEntityCtrl',
       headerClass: 'text-center'
     };
 
-
-    $scope.tableColumns = ENTITY_TABLE_COLS.concat([strategyNameCol, sourceCol, strategiesCol]);
+    $scope.tableColumns = ENTITY_TABLE_COLS.concat(WMS_TABLE_ADDL_COLS).concat(strategiesCol);
 
     //override the tableConfig from WrapCtrl
     $scope.tableConfig = {

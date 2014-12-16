@@ -137,10 +137,15 @@ angular.module('iswpApp.config', [])
     {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'}
   ])
   .constant('ENTITY_TABLE_COLS', [
-      // {map: 'EntityName', label: 'Name'},
-      {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
-      {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
-      {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
+    // {map: 'EntityName', label: 'Name'},
+    {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
+    {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
+    {map: 'WugType', label: 'Water User Type', cellTemplateUrl: 'templates/linkcell.html'}
+  ])
+  .constant('WMS_TABLE_ADDL_COLS', [
+    {map: 'StrategyName', label: 'Strategy Name'},
+    {map: 'wmsType', label: 'Strategy Type', headerClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
+    {map: 'SourceName', label: 'Source', headerClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'}
   ])
   .constant('ISWP_VARS', ISWP_VARS) //boostrapped variables
   .constant('API_PATH', '/api/v1/')

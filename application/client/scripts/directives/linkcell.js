@@ -28,6 +28,11 @@ angular.module('iswpApp')
         stateParam: 'sourceId',
         stateSuffix: '.source'
       },
+      'wmsType': {
+        paramField: 'wmsType',
+        stateParam: 'wmsType',
+        stateSuffix: '.wmstype'
+      }
     };
 
     return {

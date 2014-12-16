@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesRegionCtrl',
-  function ($scope, $rootScope, strategiesData, HeadingService, REGION_TABLE_COLS, API_PATH) {
+  function ($scope, $rootScope, strategiesData, HeadingService, WMS_TABLE_ADDL_COLS, REGION_TABLE_COLS, API_PATH) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
@@ -23,7 +23,7 @@ angular.module('iswpApp').controller('StrategiesRegionCtrl',
       headerClass: 'text-center'
     };
 
-    $scope.tableColumns = REGION_TABLE_COLS.concat(strategySupplyCol);
+    $scope.tableColumns = REGION_TABLE_COLS.concat(WMS_TABLE_ADDL_COLS).concat(strategySupplyCol);
 
     $scope.tableRows = strategiesData;
 
