@@ -52,9 +52,16 @@ exports.validateSourceId = function validateSourceId(req, res, next) {
 
 
 exports.validateSourceIds = function validateSourceIds(req, res, next) {
-  req.checkQuery('ids', 'Must be a comma-separated list of ids (max 50)')
+  req.checkQuery('ids', 'Must be a comma-separated list of IDs (max 50)')
     .notEmpty()
     .isIntList(50);
+
+  return errOrNext(req, res, next);
+};
+
+exports.validateWmsType = function validateWmsType(req, res, next) {
+  req.check('wmsType', 'Must be a valid Strategy Type')
+    .notEmpty();
 
   return errOrNext(req, res, next);
 };

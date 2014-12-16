@@ -8,21 +8,16 @@ angular.module('iswpApp').directive('viewSelects',
       templateUrl: 'templates/viewselects.html',
       controller: function ($scope, $element, $attrs) {
 
-        $scope.region = {};
-        $scope.county = {};
-        $scope.type = {};
-        $scope.entity = {};
-        $scope.strategyType = {};
-        $scope.source = {};
-
-        var resetSelected = function () {
+        function resetSelected() {
           $scope.region = {};
           $scope.county = {};
           $scope.type = {};
           $scope.entity = {};
-          $scope.strategyType = {};
           $scope.source = {};
-        };
+          $scope.wmstype = {};
+        }
+
+        resetSelected(); //call on init
 
         function setupViewTypes() {
           $scope.viewTypes = [
@@ -35,8 +30,13 @@ angular.module('iswpApp').directive('viewSelects',
 
           if ($state.includes('strategies') || $state.includes('supplies')) {
             $scope.viewTypes.push(
-              // {text: 'Type of Strategy', value: 'strategyType', showSub: true},
               {text: 'Water Source', value: 'source', showSub: true}
+            );
+          }
+
+          if ($state.includes('strategies')) {
+            $scope.viewTypes.push(
+              {text: 'Type of Strategy', value: 'wmstype', showSub: true}
             );
           }
         }
@@ -67,11 +67,13 @@ angular.module('iswpApp').directive('viewSelects',
         });
 
 
-
         $scope.$on('$stateChangeSuccess', function () {
           if ($state.includes('strategies')) {
             $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
               return {value: s.MapSourceId, text: s.SourceName.titleize()};
+            });
+            $scope.wmsTypes = _.map(ISWP_VARS.wmsTypes, function (t) {
+              return {value: t, text: t};
             });
           }
           else if ($state.includes('supplies')) {
@@ -116,66 +118,39 @@ angular.module('iswpApp').directive('viewSelects',
         });
 
 
-        $scope.$watch('type.selected', function (type) {
-          if (!type) { return; }
-
+        function goToView (childName, childParam) {
           var currentYear = $stateParams.year;
           var statePrefix = _.first($state.current.name.split('.'));
 
-          $state.go(statePrefix + '.type', {
-            year: currentYear,
-            entityType: type.value
-          });
-        });
+          $state.go(statePrefix + '.' + childName,
+            _.extend({year: currentYear}, childParam)
+          );
+        }
 
-        $scope.$watch('region.selected', function (region) {
-          if (!region) { return; }
+        $scope.selectType = function (selected) {
+          goToView('type', {entityType: selected.value});
+        };
 
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
+        $scope.selectRegion = function (selected) {
+          goToView('region', {region: selected.value});
+        };
 
-          $state.go(statePrefix + '.region', {
-            year: currentYear,
-            region: region.value
-          });
-        });
+        $scope.selectCounty = function (selected) {
+          goToView('county', {county: selected.value});
+        };
 
-        $scope.$watch('county.selected', function (county) {
-          if (!county) { return; }
+        $scope.selectEntity = function (selected) {
+          goToView('entity', {entityId: selected.value});
+        };
 
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
+        $scope.selectSource = function (selected) {
+          goToView('source', {sourceId: selected.value});
+        };
 
-          $state.go(statePrefix + '.county', {
-            year: currentYear,
-            county: county.value
-          });
-        });
+        $scope.selectWmsType = function (selected) {
+          goToView('wmstype', {wmsType: selected.value});
+        };
 
-        $scope.$watch('entity.selected', function (entity) {
-          if (!entity) { return; }
-
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
-
-          $state.go(statePrefix + '.entity', {
-            year: currentYear,
-            entityId: entity.value
-          });
-        });
-
-        $scope.$watch('source.selected', function (source) {
-          if (!source) { return; }
-
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
-
-          $state.go(statePrefix + '.source', {
-            year: currentYear,
-            sourceId: source.value
-          });
-
-        });
       }
     };
   });

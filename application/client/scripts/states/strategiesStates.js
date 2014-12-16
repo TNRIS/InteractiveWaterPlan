@@ -68,6 +68,12 @@ angular.module('iswpApp').config(function ($stateProvider) {
       controller: 'StrategiesSourceCtrl',
       templateUrl: 'templates/data_table.html'
     })
+    .state('strategies.wmstype', {
+      url: '/:year/wmstype/:wmsType',
+      resolve: strategiesResolver('wmstype', 'wmsType'),
+      controller: 'StrategiesWmsTypeCtrl',
+      templateUrl: 'templates/data_table.html'
+    })
     ;
 
 });

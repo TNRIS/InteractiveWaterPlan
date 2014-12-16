@@ -9,7 +9,7 @@
 
           <div ng-class="selectedViewType.showSub ? 'col-md-6' : 'col-md-12'">
             <div class="view-type-select-group">
-              <label class="" for="viewTypeSelect">
+              <label for="viewTypeSelect">
                 View data by
               </label>
               <select class="form-control input-sm" id="viewTypeSelect" ng-model="selectedViewType" ng-options="v.text for v in viewTypes"></select>
@@ -18,7 +18,7 @@
 
           <div ng-show="selectedViewType.showSub" class="col-md-6">
             <div ng-show="selectedViewType.value == 'region'">
-              <div ui-select theme="bootstrap" ng-model="region.selected">
+              <div ui-select ng-model="region.selected" on-select="selectRegion($item)">
                 <div ui-select-match placeholder="Select a Region">
                   {{$select.selected.text}}
                 </div>
@@ -29,7 +29,7 @@
             </div>
 
            <div ng-show="selectedViewType.value == 'type'">
-              <div ui-select theme="bootstrap" ng-model="type.selected">
+              <div ui-select ng-model="type.selected" on-select="selectType($item)">
                 <div ui-select-match placeholder="Select a Water User Type">
                   {{$select.selected.text}}
                 </div>
@@ -40,7 +40,7 @@
             </div>
 
             <div ng-show="selectedViewType.value == 'county'">
-              <div ui-select theme="bootstrap" ng-model="county.selected">
+              <div ui-select ng-model="county.selected" on-select="selectCounty($item)">
                 <div ui-select-match placeholder="Select a County">
                   {{$select.selected.text}}
                 </div>
@@ -51,7 +51,7 @@
             </div>
 
             <div ng-show="selectedViewType.value == 'entity'">
-              <div ui-select theme="bootstrap" ng-model="entity.selected">
+              <div ui-select ng-model="entity.selected" on-select="selectEntity($item)">
                 <div ui-select-match placeholder="Search for a Water User Group">
                   {{$select.selected.text}}
                 </div>
@@ -62,24 +62,24 @@
               </div>
             </div>
 
-            <div ng-show="selectedViewType.value == 'strategyType'">
-              <div ui-select theme="bootstrap" ng-model="strategyType.selected">
-                <div ui-select-match placeholder="Select a Strategy Type">
-                  {{$select.selected.text}}
-                </div>
-                <div ui-select-choices repeat="strategy in strategyTypes | filter: $select.search">
-                  <span ng-bind-html="strategy.text | highlight: $select.search"></span>
-                </div>
-              </div>
-            </div>
-
             <div ng-show="selectedViewType.value == 'source'">
-              <div ui-select theme="bootstrap" ng-model="source.selected">
+              <div ui-select ng-model="source.selected" on-select="selectSource($item)">
                 <div ui-select-match placeholder="Search for a Water Source">
                   {{$select.selected.text}}
                 </div>
                 <div ui-select-choices repeat="source in sources | filter: $select.search">
                   <span ng-bind-html="source.text | highlight: $select.search"></span>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="selectedViewType.value == 'wmstype'">
+              <div ui-select ng-model="wmsType.selected" on-select="selectWmsType($item)">
+                <div ui-select-match placeholder="Select a Strategy Type">
+                  {{$select.selected.text}}
+                </div>
+                <div ui-select-choices repeat="type in wmsTypes | filter: $select.search">
+                  <span ng-bind-html="type.text | highlight: $select.search"></span>
                 </div>
               </div>
             </div>

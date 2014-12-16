@@ -156,9 +156,10 @@ body {
 
 .theme-nav-link {
   background-color: #eee;
+  opacity: 0.8;
   color: #000;
   border-right: 2px solid #fff;
-  transition: background-color 1s ease;
+  transition: all 0.5s linear;
 
   &.link-demands {
     background-color: lighten($demandsColor, 50%);
@@ -183,6 +184,7 @@ body {
 
   &:hover, &:active {
     color: #fff;
+    opacity: 1.0;
 
     &.link-demands {
       background-color: lighten($demandsColor, 5%);
@@ -202,6 +204,7 @@ body {
     color: #fff;
     box-shadow: none;
     font-weight: bold;
+    opacity: 1.0;
 
     &.link-demands {
       background-color: $demandsColor;

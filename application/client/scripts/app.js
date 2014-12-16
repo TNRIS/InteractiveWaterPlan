@@ -27,6 +27,9 @@ angular.module('iswpApp', [
   .config(function (localStorageServiceProvider) {
     localStorageServiceProvider.setPrefix('iswp');
   })
+  .config(function (uiSelectConfig) {
+    uiSelectConfig.theme = 'bootstrap';
+  })
   //override $anchorScroll to do nothing
   //  (because typically it will scroll the window to 0,0, which is annoying)
   .value('$anchorScroll', angular.noop)

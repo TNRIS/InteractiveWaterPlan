@@ -5,6 +5,7 @@ var Bluebird = require('bluebird');
 var config = require('./../config/config');
 var places = require('./api/places');
 var sources = require('./api/sources');
+var strategies = require('./api/strategies');
 
 /**
  * Send template, or 404 if it doesn't exist
@@ -33,8 +34,9 @@ exports.index = function(req, res) {
     places.selectCountyNames(),
     places.selectRegionsTopoJson(),
     sources.selectStrategySources(),
-    sources.selectExistingSources()
-  ]).spread(function (regions, counties, regionsTopo, strategySources, existingSources) {
+    sources.selectExistingSources(),
+    strategies.selectWmsTypes()
+  ]).spread(function (regions, counties, regionsTopo, strategySources, existingSources, wmsTypes) {
 
     return res.render('index', {
       pageName: 'home',
@@ -44,10 +46,9 @@ exports.index = function(req, res) {
         regionsTopo: regionsTopo,
         years: config.years,
         entityTypes: config.entityTypes,
-        //TODO: Might have to modify to have different lists for strategy sources
-        // and existing supply sources
         strategySources: strategySources,
-        existingSources: existingSources
+        existingSources: existingSources,
+        wmsTypes: wmsTypes
       })
     });
   });

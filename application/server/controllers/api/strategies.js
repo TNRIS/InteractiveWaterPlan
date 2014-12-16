@@ -21,7 +21,7 @@ exports.getRegionSummary = function getRegionSummary(req, res) {
 //TODO: StrategyType
 function selectStrategies() {
   return db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
-    'WugCounty', 'MapSourceId', 'SourceName', 'StrategyName',
+    'WugCounty', 'MapSourceId', 'SourceName', 'StrategyName', 'wmsType',
     'SS2010', 'SS2020', 'SS2030', 'SS2040', 'SS2050', 'SS2060')
     .from('vwMapWugWms');
 }
@@ -83,6 +83,35 @@ exports.getStrategiesForSource = function getStrategiesForSource(req, res) {
     .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
 };
 
+function selectWmsTypes() {
+  return db.distinct('wmsType')
+    .from('vwMapWugWms')
+    .orderBy('wmsType')
+    .then(function (results) {
+      return results.map(function (r) {
+        return r.wmsType;
+      });
+    });
+}
+exports.selectWmsTypes = selectWmsTypes;
+
+exports.getWmsTypeList = function getWmsTypeList(req, res) {
+  selectWmsTypes()
+    .then(function (results) {
+      res.json(results);
+    });
+};
+
+exports.getStrategiesForWmsType = function getStrategiesForWmsType(req, res) {
+  var wmsType = req.params.wmsType;
+  wmsType = wmsType.toUpperCase();
+
+  selectStrategies()
+    .where('wmsType', wmsType)
+    .orderBy('EntityName')
+    .then(_.compose(utils.asJsonOrCsv(req, res), filterZeroValues));
+};
+
 var router = express.Router();
 router.get('/', exports.getAllStrategies);
 router.get('/summary', exports.getRegionSummary);
@@ -91,5 +120,7 @@ router.get('/county/:county', validators.validateCounty, exports.getStrategiesFo
 router.get('/entity/:entityId', validators.validateEntityId, exports.getStrategiesForEntity);
 router.get('/type/:entityType', validators.validateEntityType, exports.getStrategiesForEntityType);
 router.get('/source/:sourceId', validators.validateSourceId, exports.getStrategiesForSource);
+router.get('/wmstype/:wmsType', validators.validateWmsType, exports.getStrategiesForWmsType);
+router.get('/wmstype', exports.getWmsTypeList);
 exports.router = router;
 
