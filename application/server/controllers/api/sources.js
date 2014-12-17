@@ -69,27 +69,6 @@ exports.getSourcesByIds = function getSourcesByIds(req, res) {
     });
 };
 
-exports.getMappingPoints = function getMappingPoints(req, res) {
-  var sourceIds = req.query.ids;
-
-  sourceIds = toIntArr(sourceIds);
-
-  return db.select('id', 'type', 'mappingPoint')
-    .from('SourceFeatures')
-    .whereIn('id', sourceIds)
-    .then(function (results) {
-      results = results.map(function (result) {
-        var coords = result.mappingPoint.split(',').map(parseFloat);
-        result.mappingPoint = {
-          type: 'Point',
-          coordinates: coords
-        };
-        return result;
-      });
-
-      res.json(results);
-    });
-};
 
 function selectStrategySources() {
   return db.distinct('SourceName', 'MapSourceId')
@@ -123,7 +102,6 @@ exports.getExistingSourceList = function getExistingSourceList(req, res) {
 
 
 var router = express.Router();
-router.get('/points', validators.validateSourceIds, exports.getMappingPoints);
 router.get('/strategy', exports.getStrategySourceList);
 router.get('/existing', exports.getExistingSourceList);
 router.get('/:sourceId', validators.validateSourceId, exports.getSourcesById);

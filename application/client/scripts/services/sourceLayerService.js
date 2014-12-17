@@ -30,14 +30,6 @@ angular.module('iswpApp').factory('SourceLayerService',
       return prom;
     };
 
-    service.getMappingPoints = function getMappingPoints(sourceIds) {
-      var requestPath = API_PATH + "sources/points?ids=";
-      requestPath += sourceIds.join(",");
-      return $http.get(requestPath).then(function (results) {
-        return results.data;
-      });
-    };
-
     service.createLayer = function createLayer(sourceIds, map) {
       var sql = "select * from {table} where sourceid in ({sourceIds}) " +
         "order by drawingorder";
