@@ -33,6 +33,7 @@ angular.module('iswpApp').controller('StrategiesSourceCtrl',
 
     $scope.tableColumns = [
       {map: 'WugRegion', label: 'Region', cellClass: 'text-center', cellTemplateUrl: 'templates/linkcell.html'},
+      {map: 'WugCounty', label: 'County', cellTemplateUrl: 'templates/linkcell.html'},
       {map: 'EntityName', label: 'Name', cellTemplateUrl: 'templates/linkcell.html'}
     ].concat(WMS_TABLE_ADDL_COLS).concat(strategiesCol);
 

@@ -23,7 +23,14 @@ angular.module('iswpApp').controller('SuppliesRegionCtrl',
       headerClass: 'text-center'
     };
 
-    $scope.tableColumns = REGION_TABLE_COLS.concat(existingSupplyCol);
+    var sourceCol = {
+      map: 'SourceName',
+      label: 'Source',
+      headerClass: 'text-center',
+      cellTemplateUrl: 'templates/linkcell.html'
+    };
+
+    $scope.tableColumns = REGION_TABLE_COLS.concat([sourceCol, existingSupplyCol]);
 
     $scope.tableRows = suppliesData;
 
