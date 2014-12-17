@@ -91,12 +91,10 @@
             <div map-controls class="col-md-6"></div>
           </div>
 
-
           <div iswp-map class="main-map" ng-hide="mapHidden">
           </div>
 
-
-          <div class="row">
+          <div class="row" ng-hide="isChildState('summary')">
             <div class="col-md-12 map-note">
               <p class="small">
                 Some entities (e.g., county-wide entities) have overlapping locations.

@@ -47,6 +47,11 @@ angular.module('iswpApp').controller('WrapCtrl',
       return $state.includes(parentName);
     };
 
+    $scope.isChildState = function (childName) {
+      var childState = $state.current.name.split('.')[1];
+      return childName === childState;
+    };
+
     $scope.$on('$stateChangeSuccess', function () {
       var parentState = $state.current.name.split('.')[0];
 
