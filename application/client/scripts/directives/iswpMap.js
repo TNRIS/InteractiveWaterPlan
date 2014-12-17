@@ -288,9 +288,26 @@ angular.module('iswpApp').directive('iswpMap',
         //add entity markers
         EntityLayerService.addEntities(entities, currentData, sumsByEntityId);
 
+        //add a listener that prevents state changes before the current view
+        // has been finalized
+        var deregisterListener = scope.$on('$stateChangeStart', function (evt) {
+          evt.preventDefault();
+        });
+
         //add additional features
         addViewFeatures(currentData)
-          .then(setViewBounds); //Set the map bounds according to the current view
+          .then(function () {
+            //Set the map bounds according to the current view
+            setViewBounds();
+            return;
+          })
+          .finally(function () {
+            //deregister the stateChangeStart event that was added above
+            // so that state changes can happen normally
+            deregisterListener();
+          });
+
+
       }
 
       //Update map state every time the state changes
