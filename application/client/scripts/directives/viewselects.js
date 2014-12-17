@@ -70,7 +70,7 @@ angular.module('iswpApp').directive('viewSelects',
         $scope.$on('$stateChangeSuccess', function () {
           if ($state.includes('strategies')) {
             $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
-              return {value: s.MapSourceId, text: s.SourceName.titleize()};
+              return {value: s.MapSourceId, text: s.SourceName};
             });
             $scope.wmsTypes = _.map(ISWP_VARS.wmsTypes, function (t) {
               return {value: t, text: t};
@@ -78,7 +78,7 @@ angular.module('iswpApp').directive('viewSelects',
           }
           else if ($state.includes('supplies')) {
             $scope.sources = _.map(ISWP_VARS.existingSources, function (s) {
-              return {value: s.MapSourceId, text: s.SourceName.titleize()};
+              return {value: s.MapSourceId, text: s.SourceName};
             });
           }
         });
