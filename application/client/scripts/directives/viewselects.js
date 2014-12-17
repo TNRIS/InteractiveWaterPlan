@@ -6,7 +6,7 @@ angular.module('iswpApp').directive('viewSelects',
       restrict: 'A',
       replace: true,
       templateUrl: 'templates/viewselects.html',
-      controller: function ($scope, $element, $attrs) {
+      controller: function ($scope) {
 
         function resetSelected() {
           $scope.region = {};
@@ -54,7 +54,7 @@ angular.module('iswpApp').directive('viewSelects',
         setToCurrentState(); //run at start
         $scope.$on('$stateChangeSuccess', setToCurrentState);
 
-        $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t, i) {
+        $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t) {
           return {value: t, text: t.titleize()};
         });
 

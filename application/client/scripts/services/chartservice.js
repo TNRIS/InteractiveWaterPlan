@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .factory('ChartService', function ChartService($http, DATA_VALUE_PREFIXES, API_PATH, ISWP_VARS) {
+  .factory('ChartService', function ChartService($http, DATA_VALUE_PREFIXES) {
     var service = {};
 
     service.buildEntityChartConfig = function (entitySummary, year) {

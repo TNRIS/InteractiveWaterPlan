@@ -21,20 +21,20 @@ angular.module('iswpApp')
         MapLayerService.setupBaseLayers(map);
 
         $rootScope.$on('map:zoomto:centerzoom',
-          function(event, mapLoc) {
+          function (event, mapLoc) {
             map.setView([mapLoc.centerLat, mapLoc.centerLng],
               mapLoc.zoom, {animate: false});
           }
         );
 
         $rootScope.$on('map:zoomto:bounds',
-          function(event, bounds) {
+          function (event, bounds) {
             map.fitBounds(bounds);
           }
         );
 
         $rootScope.$on('map:zoomto:state',
-          function(event) {
+          function () {
             map.setView([STATE_MAP_CONFIG.centerLat, STATE_MAP_CONFIG.centerLng],
               STATE_MAP_CONFIG.zoom, {animate: false});
           }

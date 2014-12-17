@@ -19,7 +19,7 @@ angular.module('iswpApp')
           position: 'bottomleft'
         });
 
-        legend.onAdd = function(map) {
+        legend.onAdd = function() {
           this._div = L.DomUtil.create('div', 'leaflet-legend legend-needs hidden-xs');
           this._update();
           this.isAdded = true;

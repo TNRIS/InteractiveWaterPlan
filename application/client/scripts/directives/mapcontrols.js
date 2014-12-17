@@ -26,7 +26,7 @@ angular.module('iswpApp')
             '</li>' +
           '</ul>' +
         '</div>',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
 
         scope.mapLocked = false;
         scope.mapHidden = false;

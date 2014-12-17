@@ -11,7 +11,7 @@ angular.module('iswpApp')
           '<a href="" ng-class="{\'active\': itemsPerPage == 100}" ng-click="itemsPerPage=100">100</a> | ' +
           '<a href="" ng-class="{\'active\': itemsPerPage == 10000}" ng-click="itemsPerPage=10000">All</a>' +
           '</div>',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
 
         scope.itemsPerPage = TableSettingsService.getItemsPerPage();
 

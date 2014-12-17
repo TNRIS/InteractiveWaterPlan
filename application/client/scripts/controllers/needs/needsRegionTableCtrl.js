@@ -28,8 +28,6 @@ angular.module('iswpApp').controller('NeedsRegionTableCtrl',
       formatFunction: function(val) { return '' + val + '%'; }
     };
 
-    var cellTemplateUrl = 'templates/linkcell.html';
-
     $scope.tableColumns = REGION_TABLE_COLS.concat([needsCol, percentCol]);
 
     $scope.tableRows = needsData;

@@ -6,7 +6,7 @@ angular.module('iswpApp').directive('iswpMap',
     EntityLayerService, StrategiesService, SuppliesService, MapFactory,
     SourceLayerService, MapSettingsService, DATA_VALUE_PREFIXES, STATE_MAP_CONFIG) {
 
-    function postLink(scope, element, attrs) {
+    function postLink(scope, element) {
       var map = MapFactory.createMap(element[0], {
         centerLat: STATE_MAP_CONFIG.centerLat,
         centerLng: STATE_MAP_CONFIG.centerLng,

@@ -6,7 +6,7 @@ angular.module('iswpApp')
       restrict: 'A',
       replace: true,
       templateUrl: 'templates/themenavs.html',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
 
         function stateRefOrDefault(parent, child) {
           var sref = $state.href(parent + '.' + child, $stateParams);
