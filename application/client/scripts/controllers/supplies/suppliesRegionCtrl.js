@@ -34,7 +34,6 @@ angular.module('iswpApp').controller('SuppliesRegionCtrl',
 
     $scope.tableRows = suppliesData;
 
-    //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
       existingSupplyCol.map = 'WS' + $scope.currentYear;

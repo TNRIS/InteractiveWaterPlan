@@ -52,7 +52,6 @@ angular.module('iswpApp').controller('SuppliesEntityCtrl',
       $scope.$state.go(rowId + '.entity', $scope.$stateParams);
     };
 
-    //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       var year = $scope.currentYear;
       $scope.tableDescription = tableDescTpl.assign({year: year});

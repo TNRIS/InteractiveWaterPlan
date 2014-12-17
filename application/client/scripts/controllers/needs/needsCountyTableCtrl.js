@@ -32,7 +32,6 @@ angular.module('iswpApp')
 
     $scope.tableRows = needsData;
 
-    //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function() {
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 

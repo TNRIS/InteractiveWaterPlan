@@ -27,13 +27,11 @@ angular.module('iswpApp').controller('SuppliesEntityTypeCtrl',
     $scope.tableRows = suppliesData;
 
 
-    //TODO: Remember the sort order when changing Year
     $scope.$on('$stateChangeSuccess', function () {
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
 
       suppliesCol.map = 'WS' + $scope.currentYear;
 
-      //TODO: createTreeMap (put in treemapservice, use also in demands and needs type views)
       $scope.treeMapConfig = TreeMapFactory.entityTypeTreeMap(
         entityType, suppliesData, 'WS' + $scope.currentYear);
     });
