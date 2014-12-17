@@ -106,7 +106,7 @@ angular.module('iswpApp').directive('iswpMap',
         map.fitBounds(bounds, {animate: false, maxZoom: 10});
       }
 
-      function addViewFeatures(currentData, entities) {
+      function addViewFeatures(currentData) {
         var currentState = $state.current.name;
         var parentState = _.first(currentState.split('.'));
         var childState = _.last(currentState.split('.'));
@@ -124,11 +124,8 @@ angular.module('iswpApp').directive('iswpMap',
           promises.push(countyProm);
         }
 
-        var hasSources = [
-          'strategies.region', 'strategies.county', 'strategies.entity', 'strategies.source',
-          'supplies.region', 'supplies.county', 'supplies.entity', 'supplies.source'];
 
-        if (_.contains(hasSources, currentState)) {
+        if (parentState === 'strategies' || parentState === 'supplies') {
           //Get all the sourceIds of the sources to show
           var sourceIds = _(currentData)
             .filter(function (d) {
@@ -292,7 +289,7 @@ angular.module('iswpApp').directive('iswpMap',
         EntityLayerService.addEntities(entities, currentData, sumsByEntityId);
 
         //add additional features
-        addViewFeatures(currentData, entities)
+        addViewFeatures(currentData)
           .then(setViewBounds); //Set the map bounds according to the current view
       }
 
