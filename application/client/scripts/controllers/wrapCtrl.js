@@ -24,6 +24,9 @@ angular.module('iswpApp').controller('WrapCtrl',
       $scope.tableConfig.itemsByPage = newVal;
     });
 
+    $scope.$on('$stateChangeStart', function () {
+      $scope.isStateChanging = true;
+    });
 
     $scope.hasValues = function (tableRows) {
       if (!tableRows || !tableRows.length) {
@@ -59,6 +62,13 @@ angular.module('iswpApp').controller('WrapCtrl',
       $scope.currentYear = $scope.$stateParams.year;
 
       $scope.heading = HeadingService.get();
+
+      $scope.isStateChanging = false;
+    });
+
+    //also need to hide stateChange stuff on error
+    $scope.$on('$stateChangeError', function () {
+      $scope.isStateChanging = false;
     });
 
     //Watch for selectionChange events from the Smart-Table

@@ -65,7 +65,7 @@ gulp.task('misc-ico-and-txt', function () {
 });
 
 gulp.task('misc-images', function () {
-  return gulp.src(dirs.client + '/images/*.{jpg,png}')
+  return gulp.src(dirs.client + '/images/*.{jpg,png,gif}')
     .pipe(gulp.dest(dirs.pub + '/images/'));
 });
 
