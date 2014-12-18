@@ -34,8 +34,11 @@
           <a href="/about/#DownloadingData" target="_self" title="Help with downloading">Help</a>
         </p>
 
-        <p ng-hide="{{ 'summary' | isSubState }}">
+        <p class="small" ng-hide="{{ 'summary' | isSubState }}">
           * For full entity, including portions that may fall outside of region/county (click on entity to view its full details).
+        </p>
+        <p class="small" ng-show="isParentState('strategies') && !isChildState('summary')">
+          Water management strategies with zero supply are not shown.
         </p>
       </div>
     </div>
