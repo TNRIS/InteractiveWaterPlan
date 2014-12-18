@@ -13,7 +13,7 @@ angular.module('iswpApp').controller('StrategiesWmsTypeCtrl',
     HeadingService.current =  wmsType;
     $scope.mapDescription = 'Map shows geographic center of entities using recommended <strong>' + wmsType + '</strong> strategies and associated sources of water (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists the share of entities\' recommended supply from <strong>' + wmsType + '</strong> strategies in {year}';
+    var tableDescTpl = 'Table lists the share of entities\' recommended supply from <strong>' + wmsType + '</strong> strategies in {year}.';
 
     $scope.downloadPath = API_PATH + 'strategies/wmstype/' + wmsType + '?format=csv';
 

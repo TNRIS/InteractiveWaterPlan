@@ -8,7 +8,7 @@ angular.module('iswpApp').controller('StrategiesCountyCtrl',
     HeadingService.current =  county + ' County';
     $scope.mapDescription = 'Map displays water user groups with recommended water management strategy supplies within <strong>' + county + ' County</strong> and associated sources of water (water system service area boundaries may extend outside of county).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists the share of entities\' recommended strategy supply within <strong>' + county + ' County</strong> in {year}';
+    var tableDescTpl = 'Table lists the share of entities\' recommended strategy supply within <strong>' + county + ' County</strong> in {year}.';
 
     $scope.downloadPath = API_PATH + 'strategies/county/' + county + '?format=csv';
 

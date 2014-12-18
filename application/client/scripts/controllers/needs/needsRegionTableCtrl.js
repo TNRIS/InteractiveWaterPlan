@@ -8,7 +8,7 @@ angular.module('iswpApp').controller('NeedsRegionTableCtrl',
     HeadingService.current = 'Region ' + region;
     $scope.mapDescription = 'Map displays entities and their identified water needs in <strong>Region '+region+'</strong> (water system service area boundaries may extend outside of region).';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>Region '+region+'</strong> in {year}';
+    var tableDescTpl = 'Table lists the share of entities\' identified water needs within <strong>Region '+region+'</strong> in {year}.';
 
     $scope.downloadPath = API_PATH + 'needs/region/' + region + '?format=csv';
 

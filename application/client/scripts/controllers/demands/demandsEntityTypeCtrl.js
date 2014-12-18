@@ -9,7 +9,7 @@ angular.module('iswpApp')
     HeadingService.current =  entityType;
     $scope.mapDescription = 'Map displays <strong>' + entityType + '</strong> water user groups and their projected water demands.';
     //$scope.tableDescription has variable year, filled in during $stateChangeSuccess event handler
-    var tableDescTpl = 'Table lists <strong>' + entityType + '</strong> water user groups and projected water demands in {year}';
+    var tableDescTpl = 'Table lists <strong>' + entityType + '</strong> water user groups and projected water demands in {year}.';
 
     $scope.downloadPath = API_PATH + 'demands/type/' + entityType + '?format=csv';
 
