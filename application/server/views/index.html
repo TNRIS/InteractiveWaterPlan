@@ -60,58 +60,60 @@
 
           <div theme-navs></div>
 
+
+
+          <div class="row">
+            <div class="col-md-12 view-intro-text">
+              <p ng-show="isParentState('demands')">
+                Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
+              </p>
+              <p ng-show="isParentState('supplies')">
+                Existing <a href="/about#existing-water-supply" target="_blank" title="Glossary: water supply"><strong>water supplies</strong></a> are the maximum amount of water available from existing sources for use during drought of record conditions that is physically and legally available for use.
+              </p>
+              <p ng-show="isParentState('needs')">
+                Identified water
+                <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
+                are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
+              </p>
+              <p ng-show="isParentState('strategies')">
+                A <a href="/about#water-management-strategy" target="_blank" title="Glossary: water management strategy"><strong>recommended water management strategy</strong></a> is a specific project or action to increase water supply or maximize existing supply to meet a specific need.</a>
+              </p>
+            </div>
+          </div>
+
+          <div view-selects></div>
+
+          <h3 class="view-title">{{heading}} - {{currentYear}}</h3>
+
+          <div class="row map-top-container" >
+            <div class="year-select-container">
+              <div year-select class="col-md-6"></div>
+            </div>
+
+            <div map-controls class="col-md-6"></div>
+          </div>
+
+          <div iswp-map class="main-map" ng-hide="mapHidden">
+          </div>
+
+          <div class="row" ng-hide="isChildState('summary')">
+            <div class="col-md-12 map-note">
+              <p class="small">
+                Some entities (e.g., county-wide entities) have overlapping locations.
+                Clicking on such entities will expand the group so that they may be viewed individually.
+              </p>
+            </div>
+          </div>
+
           <div class="row loader-container" ng-show="isStateChanging">
             <div class="col-md-6 col-md-push-3 text-center">
               LOADING<br>
               <img src="/images/loading_bar.gif" alt="Loading"/>
             </div>
           </div>
-
           <div ng-hide="isStateChanging">
-            <div class="row">
-              <div class="col-md-12 view-intro-text">
-                <p ng-show="isParentState('demands')">
-                  Projected water <a href="/about#water-demand" target="_blank" title="Glossary: demand"><strong>demand</strong></a> is the quantity of water projected to meet the overall necessities of a water user group in a specific future year.
-                </p>
-                <p ng-show="isParentState('supplies')">
-                  Existing <a href="/about#existing-water-supply" target="_blank" title="Glossary: water supply"><strong>water supplies</strong></a> are the maximum amount of water available from existing sources for use during drought of record conditions that is physically and legally available for use.
-                </p>
-                <p ng-show="isParentState('needs')">
-                  Identified water
-                  <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
-                  are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
-                </p>
-                <p ng-show="isParentState('strategies')">
-                  A <a href="/about#water-management-strategy" target="_blank" title="Glossary: water management strategy"><strong>recommended water management strategy</strong></a> is a specific project or action to increase water supply or maximize existing supply to meet a specific need.</a>
-                </p>
-              </div>
+            <div class="data-view-container row" ui-view>
             </div>
-
-            <div view-selects></div>
-
-            <h3 class="view-title">{{heading}} - {{currentYear}}</h3>
-
-            <div class="row map-top-container" >
-              <div class="year-select-container">
-                <div year-select class="col-md-6"></div>
-              </div>
-
-              <div map-controls class="col-md-6"></div>
-            </div>
-
-            <div iswp-map class="main-map" ng-hide="mapHidden">
-            </div>
-
-            <div class="row" ng-hide="isChildState('summary')">
-              <div class="col-md-12 map-note">
-                <p class="small">
-                  Some entities (e.g., county-wide entities) have overlapping locations.
-                  Clicking on such entities will expand the group so that they may be viewed individually.
-                </p>
-              </div>
-            </div>
-
-            <div class="data-view-container row" ui-view></div>
           </div>
         </div>
       </div>
