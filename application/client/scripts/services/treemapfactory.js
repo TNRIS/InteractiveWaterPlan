@@ -196,6 +196,37 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
       ]);
     });
 
+    return {
+      options: _.extend({
+        generateTooltip: createTooltip(treeMapData)
+      }, baseOptions),
+      data: treeMapData
+    };
+  };
+
+  service.regionByStrategyType = function regionByStrategyType(region, data, valueKey) {
+    var treeMapData = [];
+    var parentName = 'All Strategy Types in Region ' + region;
+
+    treeMapData.push(['Strategy Type', 'Parent', 'Amount (acre-feet/year)']);
+    treeMapData.push([parentName, null, null]);
+
+    _.each(ISWP_VARS.wmsTypes, function (type) {
+
+      var typeData = _.where(data, {'wmsType': type});
+      var typeTotal = _.reduce(typeData, function (sum, curr) {
+        if (angular.isNumber(curr[valueKey])) {
+          return sum + curr[valueKey];
+        }
+        return sum;
+      }, 0);
+
+      treeMapData.push([
+        type.toUpperCase(),
+        parentName,
+        typeTotal
+      ]);
+    });
 
     return {
       options: _.extend({

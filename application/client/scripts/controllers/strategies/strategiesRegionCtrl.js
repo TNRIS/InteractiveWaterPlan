@@ -36,5 +36,8 @@ angular.module('iswpApp').controller('StrategiesRegionCtrl',
 
       $scope.entityTypeTreeMapConfig = TreeMapFactory.regionByEntityType(region, strategiesData,
         'SS' + $scope.currentYear);
+
+      $scope.strategyTypeTreeMapConfig = TreeMapFactory.regionByStrategyType(region, strategiesData,
+        'SS' + $scope.currentYear);
     });
   });

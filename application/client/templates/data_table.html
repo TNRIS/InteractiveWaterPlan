@@ -80,6 +80,11 @@
         <h4>Tree Map of {{treeMapSubject}} by Water Use Category - {{currentYear}}</h4>
         <div class="tree-map" google-tree-map tree-map-config="entityTypeTreeMapConfig"></div>
       </div>
+
+      <div ng-if="isParentState('strategies')" class="col-md-12 tree-map-container">
+        <h4>Tree Map of {{treeMapSubject}} by Strategy Type - {{currentYear}}</h4>
+        <div class="tree-map" google-tree-map tree-map-config="strategyTypeTreeMapConfig"></div>
+      </div>
     </div>
 
   </div>
