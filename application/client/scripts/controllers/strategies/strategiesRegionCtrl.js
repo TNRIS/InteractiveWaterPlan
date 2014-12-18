@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('StrategiesRegionCtrl',
-  function ($scope, $rootScope, strategiesData, HeadingService, WMS_TABLE_ADDL_COLS, REGION_TABLE_COLS, API_PATH) {
+  function ($scope, $rootScope, strategiesData, HeadingService, TreeMapFactory, WMS_TABLE_ADDL_COLS, REGION_TABLE_COLS, API_PATH) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
@@ -30,5 +30,11 @@ angular.module('iswpApp').controller('StrategiesRegionCtrl',
     $scope.$on('$stateChangeSuccess', function() {
       $scope.tableDescription = tableDescTpl.assign({year: $scope.currentYear});
       strategySupplyCol.map = 'SS' + $scope.currentYear;
+
+      $scope.countyTreeMapConfig = TreeMapFactory.regionByCounty(region, strategiesData,
+        'SS' + $scope.currentYear);
+
+      $scope.entityTypeTreeMapConfig = TreeMapFactory.regionByEntityType(region, strategiesData,
+        'SS' + $scope.currentYear);
     });
   });

@@ -31,7 +31,7 @@ angular.module('iswpApp')
 
       demandsCol.map = 'D' + $scope.currentYear;
 
-      $scope.treeMapConfig = TreeMapFactory.entityTypeTreeMap(
+      $scope.treeMapConfig = TreeMapFactory.entityTypeByRegion(
         entityType, demandsData, 'D' + $scope.currentYear);
     });
   });

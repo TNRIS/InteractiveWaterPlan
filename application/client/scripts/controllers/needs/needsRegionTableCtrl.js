@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp').controller('NeedsRegionTableCtrl',
-  function ($scope, $rootScope, needsData, HeadingService, REGION_TABLE_COLS, API_PATH) {
+  function ($scope, $rootScope, needsData, HeadingService, TreeMapFactory, REGION_TABLE_COLS, API_PATH) {
 
     var region = $scope.$stateParams.region.toUpperCase();
 
@@ -37,5 +37,11 @@ angular.module('iswpApp').controller('NeedsRegionTableCtrl',
 
       needsCol.map = 'N' + $scope.currentYear;
       percentCol.map = 'NPD' + $scope.currentYear;
+
+      $scope.countyTreeMapConfig = TreeMapFactory.regionByCounty(region, needsData,
+        'N' + $scope.currentYear);
+
+      $scope.entityTypeTreeMapConfig = TreeMapFactory.regionByEntityType(region, needsData,
+        'N' + $scope.currentYear);
     });
   });

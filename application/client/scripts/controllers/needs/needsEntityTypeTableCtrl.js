@@ -39,7 +39,7 @@ angular.module('iswpApp')
       needsCol.map = 'N' + $scope.currentYear;
       percentCol.map = 'NPD' + $scope.currentYear;
 
-      $scope.treeMapConfig = TreeMapFactory.entityTypeTreeMap(
+      $scope.treeMapConfig = TreeMapFactory.entityTypeByRegion(
         entityType, needsData, 'N' + $scope.currentYear);
     });
   });

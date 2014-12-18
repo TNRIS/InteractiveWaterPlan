@@ -32,7 +32,7 @@ angular.module('iswpApp').controller('SuppliesEntityTypeCtrl',
 
       suppliesCol.map = 'WS' + $scope.currentYear;
 
-      $scope.treeMapConfig = TreeMapFactory.entityTypeTreeMap(
+      $scope.treeMapConfig = TreeMapFactory.entityTypeByRegion(
         entityType, suppliesData, 'WS' + $scope.currentYear);
     });
   });

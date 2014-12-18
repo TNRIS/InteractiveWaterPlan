@@ -23,6 +23,11 @@ angular.module('iswpApp.config', [])
     weight: 1.2,
     opacity: 0.6
   })
+  .constant('TREE_MAP_COLORS', {
+    MAX: '#3182bd',
+    MID: '#9ecae1',
+    MIN: '#deebf7'
+  })
   .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
   .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
   .constant('SOURCE_CARTOCSS', [

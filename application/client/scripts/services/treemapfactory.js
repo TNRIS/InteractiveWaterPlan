@@ -1,8 +1,31 @@
 'use strict';
 
-angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS, ISWP_VARS) {
+angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, SUMMARY_TABLE_COLS, ISWP_VARS) {
 
   var service = {};
+
+  var baseOptions = {
+    maxColor: TREE_MAP_COLORS.MAX,
+    midColor: TREE_MAP_COLORS.MID,
+    minColor: TREE_MAP_COLORS.MIN,
+    useWeightedAverageForAggregation: true,
+    fontSize: 14,
+    fontFamily: "'Open Sans', Arial, 'sans serif'"
+  };
+
+  function createTooltip(treeMapData) {
+    return function(rowIndex, value) {
+      return [
+        '<div class="tree-map-tooltip">',
+        treeMapData[rowIndex+1][0],
+        '<br>',
+        value.format(),
+        ' acre-feet/year',
+        '</div>'
+      ].join('');
+    };
+  }
+
   service.categorySummaryTreeMap = function categorySummaryTreeMap(dataForYear) {
     var treeMapData = [],
       parentName = 'All Water Use Categories';
@@ -37,23 +60,10 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
       });
     });
 
-    var createTooltip = function(rowIndex, value) {
-      return '<div class="tree-map-tooltip">' +
-        treeMapData[rowIndex+1][0] + '<br>' +
-        value.format() + ' acre-feet/year' +
-        '</div>';
-    };
-
     return {
-      options: {
-        maxColor: '#3182bd',
-        midColor: '#9ecae1',
-        minColor: '#deebf7',
-        useWeightedAverageForAggregation: true,
-        fontSize: 14,
-        fontFamily: "'Open Sans', Arial, 'sans serif'",
-        generateTooltip: createTooltip
-      },
+      options: _.extend({
+        generateTooltip: createTooltip(treeMapData)
+      }, baseOptions),
       data: treeMapData
     };
   };
@@ -88,36 +98,22 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
       });
     });
 
-    var createTooltip = function(rowIndex, value) {
-      return '<div class="tree-map-tooltip">' +
-        treeMapData[rowIndex+1][0] + '<br>' +
-        value.format() + ' acre-feet/year' +
-        '</div>';
-    };
-
     return {
-      options: {
-        maxColor: '#3182bd',
-        midColor: '#9ecae1',
-        minColor: '#deebf7',
-        useWeightedAverageForAggregation: true,
-        fontSize: 14,
-        fontFamily: "'Open Sans', Arial, 'sans serif'",
-        generateTooltip: createTooltip
-      },
+      options: _.extend({
+        generateTooltip: createTooltip(treeMapData)
+      }, baseOptions),
       data: treeMapData
     };
   };
 
   //valueKey should be something like N2010 or SS2030 (value prefix + current year)
-  service.entityTypeTreeMap = function entityTypeTreeMap(entityType, data, valueKey) {
+  service.entityTypeByRegion = function entityTypeByRegion(entityType, data, valueKey) {
     var treeMapData = [];
     var parentName = 'All Regions';
 
     treeMapData.push(['Region', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
-    //For each region,
     _.each(ISWP_VARS.regions, function (region) {
 
       var regionData = _.where(data, {'WugRegion': region});
@@ -135,24 +131,76 @@ angular.module('iswpApp').factory('TreeMapFactory', function (SUMMARY_TABLE_COLS
       ]);
     });
 
-    var createTooltip = function (rowIndex, value) {
-      return '<div class="tree-map-tooltip">' +
-        treeMapData[rowIndex+1][0] + '<br>' +
-        value.format() + ' acre-feet/year' +
-        '</div>';
+    return {
+      options: _.extend({
+        generateTooltip: createTooltip(treeMapData)
+      }, baseOptions),
+      data: treeMapData
     };
+  };
+
+  //valueKey should be something like N2010 or SS2030 (value prefix + current year)
+  service.regionByCounty = function regionByCounty(region, data, valueKey) {
+    var treeMapData = [];
+    var parentName = 'Counties in Region ' + region;
+
+    treeMapData.push(['County', 'Parent', 'Amount (acre-feet/year)']);
+    treeMapData.push([parentName, null, null]);
+
+    _.each(ISWP_VARS.counties, function (county) {
+
+      var countyData = _.where(data, {'WugCounty': county});
+      var countyTotal = _.reduce(countyData, function (sum, curr) {
+        if (angular.isNumber(curr[valueKey])) {
+          return sum + curr[valueKey];
+        }
+        return sum;
+      }, 0);
+
+      treeMapData.push([
+        county.toUpperCase(),
+        parentName,
+        countyTotal
+      ]);
+    });
 
     return {
-      options: {
-        maxColor: '#3182bd',
-        midColor: '#9ecae1',
-        minColor: '#deebf7',
-        headerHeight: 0,
-        useWeightedAverageForAggregation: true,
-        fontSize: 14,
-        fontFamily: "'Open Sans', Arial, 'sans serif'",
-        generateTooltip: createTooltip
-      },
+      options: _.extend({
+        generateTooltip: createTooltip(treeMapData)
+      }, baseOptions),
+      data: treeMapData
+    };
+  };
+
+  service.regionByEntityType = function regionByEntityType(region, data, valueKey) {
+    var treeMapData = [];
+    var parentName = 'All Water Use Categories in Region ' + region;
+
+    treeMapData.push(['Water Use Category', 'Parent', 'Amount (acre-feet/year)']);
+    treeMapData.push([parentName, null, null]);
+
+    _.each(ISWP_VARS.entityTypes, function (type) {
+
+      var typeData = _.where(data, {'WugType': type});
+      var typeTotal = _.reduce(typeData, function (sum, curr) {
+        if (angular.isNumber(curr[valueKey])) {
+          return sum + curr[valueKey];
+        }
+        return sum;
+      }, 0);
+
+      treeMapData.push([
+        type.toUpperCase(),
+        parentName,
+        typeTotal
+      ]);
+    });
+
+
+    return {
+      options: _.extend({
+        generateTooltip: createTooltip(treeMapData)
+      }, baseOptions),
       data: treeMapData
     };
   };
