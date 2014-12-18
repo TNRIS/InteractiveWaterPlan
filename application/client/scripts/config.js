@@ -120,7 +120,7 @@ angular.module('iswpApp.config', [])
   .constant('TREE_MAP_SUBJECTS', {
     'needs': 'Water Needs',
     'demands': 'Water Demands',
-    'strategies': 'Recommended Supply Strategies',
+    'strategies': 'Recommended Supply Strategy Volumes',
     'supplies': 'Existing Water Supplies'
   })
   .constant('SUMMARY_TABLE_COLS', [
