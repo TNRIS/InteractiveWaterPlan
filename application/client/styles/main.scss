@@ -159,7 +159,7 @@ body {
   opacity: 0.8;
   color: #000;
   border-right: 2px solid #fff;
-  transition: all 0.5s linear;
+  transition: all 0.2s linear;
 
   &.link-demands {
     background-color: lighten($demandsColor, 50%);
