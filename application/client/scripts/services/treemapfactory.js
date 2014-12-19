@@ -36,7 +36,11 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
   }
 
   function pct(num, total) {
-    return Math.round(num/total * 100) + '%';
+    var val = Math.round(num/total * 100);
+    if (val < 1) {
+      return "<1%";
+    }
+    return val + '%';
   }
 
   service.categorySummaryTreeMap = function categorySummaryTreeMap(dataForYear) {
