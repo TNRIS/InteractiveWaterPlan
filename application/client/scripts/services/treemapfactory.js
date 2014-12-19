@@ -46,6 +46,8 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     treeMapData.push(['Category', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
+    var statewideTotal = sum(dataForYear, 'TOTAL');
+
     //For each water use category, calculate the total across regions
     _.each(SUMMARY_TABLE_COLS, function(tc) {
       if (tc.map === 'WugRegion' || tc.map === 'TOTAL') {
@@ -54,9 +56,10 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
 
       var category = tc.map;
       var categorySum = sum(dataForYear, category);
+      var categoryLabel = category + ': ' + pct(categorySum, statewideTotal);
 
       treeMapData.push([
-        category,
+        categoryLabel,
         parentName,
         categorySum
       ]);
@@ -64,8 +67,8 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
       _.each(ISWP_VARS.regions, function (region) {
         var regionData = _.find(dataForYear, {'WugRegion': region});
         treeMapData.push([
-          region + ' - ' + category,
-          category,
+          region + ' - ' + category + ': ' + pct(regionData[category], categorySum),
+          categoryLabel,
           regionData[category]
         ]);
       });
@@ -86,12 +89,16 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     treeMapData.push(['Region', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
+    var statewideTotal = sum(dataForYear, 'TOTAL');
+
     //For each region, generate row for region total
     // and for each category, generate row for amount in region
     _.each(ISWP_VARS.regions, function(region) {
       var regionData = _.find(dataForYear, {'WugRegion': region});
+      var regionLabel = region + ': ' + pct(regionData.TOTAL, statewideTotal);
+
       treeMapData.push([
-        region,
+        regionLabel,
         parentName,
         regionData.TOTAL
       ]);
@@ -102,8 +109,8 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
         }
 
         treeMapData.push([
-          region + ' - ' + tc.map,
-          region,
+          region + ' - ' + tc.map + ': ' + pct(regionData[tc.map], regionData.TOTAL),
+          regionLabel,
           regionData[tc.map]
         ]);
       });
