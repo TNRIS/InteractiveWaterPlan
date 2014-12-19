@@ -36,6 +36,11 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
   }
 
   function pct(num, total) {
+    //if actually 0
+    if (num === 0) {
+      return '0%';
+    }
+    //else compute rounded percentage
     var val = Math.round(num/total * 100);
     if (val < 1) {
       return "<1%";
