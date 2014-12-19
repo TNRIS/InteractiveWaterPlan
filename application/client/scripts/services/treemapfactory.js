@@ -26,6 +26,19 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     };
   }
 
+  function sum(data, valueKey) {
+    return _.reduce(data, function (total, curr) {
+      if (angular.isNumber(curr[valueKey])) {
+        return total + curr[valueKey];
+      }
+      return total;
+    }, 0);
+  }
+
+  function pct(num, total) {
+    return Math.round(num/total * 100) + '%';
+  }
+
   service.categorySummaryTreeMap = function categorySummaryTreeMap(dataForYear) {
     var treeMapData = [],
       parentName = 'All Water Use Categories';
@@ -39,10 +52,8 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
         return;
       }
 
-      var category = tc.map,
-          categorySum = _.reduce(dataForYear, function (sum, data) {
-            return sum + data[category];
-          }, 0);
+      var category = tc.map;
+      var categorySum = sum(dataForYear, category);
 
       treeMapData.push([
         category,
@@ -114,18 +125,15 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     treeMapData.push(['Region', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
+    var total = sum(data, valueKey);
+
     _.each(ISWP_VARS.regions, function (region) {
 
       var regionData = _.where(data, {'WugRegion': region});
-      var regionTotal = _.reduce(regionData, function (sum, curr) {
-        if (angular.isNumber(curr[valueKey])) {
-          return sum + curr[valueKey];
-        }
-        return sum;
-      }, 0);
+      var regionTotal = sum(regionData, valueKey);
 
       treeMapData.push([
-        region + ' - ' + entityType.toUpperCase(),
+        region + ': ' + pct(regionTotal, total),
         parentName,
         regionTotal
       ]);
@@ -147,18 +155,15 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     treeMapData.push(['County', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
+    var total = sum(data, valueKey);
+
     _.each(ISWP_VARS.counties, function (county) {
 
       var countyData = _.where(data, {'WugCounty': county});
-      var countyTotal = _.reduce(countyData, function (sum, curr) {
-        if (angular.isNumber(curr[valueKey])) {
-          return sum + curr[valueKey];
-        }
-        return sum;
-      }, 0);
+      var countyTotal = sum(countyData, valueKey);
 
       treeMapData.push([
-        county.toUpperCase(),
+        county.toUpperCase() + ': ' + pct(countyTotal, total),
         parentName,
         countyTotal
       ]);
@@ -179,18 +184,15 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     treeMapData.push(['Water Use Category', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
+    var total = sum(data, valueKey);
+
     _.each(ISWP_VARS.entityTypes, function (type) {
 
       var typeData = _.where(data, {'WugType': type});
-      var typeTotal = _.reduce(typeData, function (sum, curr) {
-        if (angular.isNumber(curr[valueKey])) {
-          return sum + curr[valueKey];
-        }
-        return sum;
-      }, 0);
+      var typeTotal = sum(typeData, valueKey);
 
       treeMapData.push([
-        type.toUpperCase(),
+        type.toUpperCase() + ': ' + pct(typeTotal, total),
         parentName,
         typeTotal
       ]);
@@ -211,18 +213,15 @@ angular.module('iswpApp').factory('TreeMapFactory', function (TREE_MAP_COLORS, S
     treeMapData.push(['Strategy Type', 'Parent', 'Amount (acre-feet/year)']);
     treeMapData.push([parentName, null, null]);
 
+    var total = sum(data, valueKey);
+
     _.each(ISWP_VARS.wmsTypes, function (type) {
 
       var typeData = _.where(data, {'wmsType': type});
-      var typeTotal = _.reduce(typeData, function (sum, curr) {
-        if (angular.isNumber(curr[valueKey])) {
-          return sum + curr[valueKey];
-        }
-        return sum;
-      }, 0);
+      var typeTotal = sum(typeData, valueKey);
 
       treeMapData.push([
-        type.toUpperCase(),
+        type.toUpperCase() + ': ' + pct(typeTotal, total),
         parentName,
         typeTotal
       ]);
