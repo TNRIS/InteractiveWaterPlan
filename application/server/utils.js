@@ -41,7 +41,11 @@ exports.makeZeroValueFilter = function makeZeroValueFilter(valueKeyPrefix) {
   return function zeroValueFilter(results) {
     return _.map(results, function (row) {
       return _.omit(row, function (val, key) {
-        return valueFields[key] && val === 0;
+        var shouldDisplayZero = row.DisplayZero && row.DisplayZero === 'Y';
+        if (shouldDisplayZero) {
+          console.log("------------------------------------");
+        }
+        return valueFields[key] && (val === 0 && shouldDisplayZero);
       });
     });
   };

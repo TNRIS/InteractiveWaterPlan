@@ -18,10 +18,9 @@ exports.getRegionSummary = function getRegionSummary(req, res) {
 };
 
 
-//TODO: StrategyType
 function selectStrategies() {
   return db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
-    'WugCounty', 'MapSourceId', 'SourceName', 'StrategyName', 'wmsType',
+    'WugCounty', 'MapSourceId', 'SourceName', 'StrategyName', 'DisplayZero', 'wmsType',
     'SS2010', 'SS2020', 'SS2030', 'SS2040', 'SS2050', 'SS2060')
     .from('vwMapWugWms');
 }
