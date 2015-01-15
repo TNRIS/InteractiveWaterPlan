@@ -47,22 +47,22 @@
               <li><code>/places/county/COUNTY_NAME.geojson</code> - GeoJSON representation of COUNTY_NAME</li>
             </ul>
 
+            <h3>Sources</h3>
+            <ul>
+              <li><code>/sources/SOURCE_ID</code> - GeoJSON Feature Collection of the water supply source feature identified by SOURCE_ID</li>
+              <li><code>/sources?ids=SOURCE_ID_LIST</code> - GeoJSON Feature Collection of the water supply source features identified by SOURCE_ID_LIST. SOURCE_ID_LIST should be a comma-separated list of integer IDs</li>
+              l>
+              <li><code>/sources/existing</code> - list of all available Sources for Existing Supplies</li>
+              l>
+              <li><code>/sources/strategy</code> - list of all available Sources for Water Management Strategy Supplies</li>
+            </ul>
+
             <h3>Entities</h3>
             <ul>
               <li><code>/entity</code> - all State Water Plan Entities with their ids, names, and locations (lat/lon)</li>
               <li><code>/entity/ENTITY_ID</code> - information about the Entity with the given ENTITY_ID</li>
               <li><code>/entity/ENTITY_ID/summary</code> - all Demands, Needs, Water Supply, and Strategy Supply data for the Entity with the given ENTITY_ID</li>
               <li><code>/type/entity</code> - list of Entity Water Use Types
-            </ul>
-
-            <h3>Needs</h3>
-            <ul>
-              <li><code>/needs</code> - all Needs data</li>
-              <li><code>/needs/summary</code> - Regional summary of Needs data by Water Use Type</li>
-              <li><code>/needs/county/COUNTY_NAME</code> - Needs data for COUNTY_NAME</li>
-              <li><code>/needs/region/REGION_LETTER</code> - Needs data for the Regional Water Planning Area specified by REGION_LETTER</li>
-              <li><code>/needs/entity/ENTITY_ID</code> - Needs data for the Entity specified by ENTITY_ID</li>
-              <li><code>/needs/type/WATER_USE_TYPE</code> - Needs data for the Entities with the specified WATER_USE_TYPE</li>
             </ul>
 
             <h3>Demands</h3>
@@ -73,6 +73,36 @@
               <li><code>/demands/region/REGION_LETTER</code> - Demands data for the Regional Water Planning Area specified by REGION_LETTER</li>
               <li><code>/demands/entity/ENTITY_ID</code> - Demands data for the Entity specified by ENTITY_ID</li>
               <li><code>/demands/type/WATER_USE_TYPE</code> - Demands data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+            <h3>Existing Supplies</h3>
+            <ul>
+              <li><code>/supplies</code> - all Existing Supplies data</li>
+              <li><code>/supplies/summary</code> - Regional summary of Existing Supplies data by water use type</li>
+              <li><code>/supplies/county/COUNTY_NAME</code> - Existing Supplies data for COUNTY_NAME</li>
+              <li><code>/supplies/region/REGION_LETTER</code> - Existing Supplies data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/supplies/entity/ENTITY_ID</code> - Existing Supplies data for the Entity specified by ENTITY_ID</li>
+              <li><code>/supplies/type/WATER_USE_TYPE</code> - Existing Supplies data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+            <h3>Needs (Unmet Demands)</h3>
+            <ul>
+              <li><code>/needs</code> - all Needs data</li>
+              <li><code>/needs/summary</code> - Regional summary of Needs data by Water Use Type</li>
+              <li><code>/needs/county/COUNTY_NAME</code> - Needs data for COUNTY_NAME</li>
+              <li><code>/needs/region/REGION_LETTER</code> - Needs data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/needs/entity/ENTITY_ID</code> - Needs data for the Entity specified by ENTITY_ID</li>
+              <li><code>/needs/type/WATER_USE_TYPE</code> - Needs data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+            <h3>Water Management Strategy (WMS) Supplies</h3>
+            <ul>
+              <li><code>/strategies</code> - all WMS Supplies data</li>
+              <li><code>/strategies/summary</code> - Regional summary of WMS Supplies data by water use type</li>
+              <li><code>/strategies/county/COUNTY_NAME</code> - WMS Supplies data for COUNTY_NAME</li>
+              <li><code>/strategies/region/REGION_LETTER</code> - WMS Supplies data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/strategies/entity/ENTITY_ID</code> - WMS Supplies data for the Entity specified by ENTITY_ID</li>
+              <li><code>/strategies/type/WATER_USE_TYPE</code> - WMS Supplies data for the Entities with the specified WATER_USE_TYPE</li>
             </ul>
 
           </section>
