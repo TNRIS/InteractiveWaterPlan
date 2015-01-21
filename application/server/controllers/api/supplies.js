@@ -19,7 +19,7 @@ exports.getRegionSummary = function getRegionSummary(req, res) {
 
 function selectSupplies() {
    return db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
-    'WugCounty', 'MapSourceId', 'SourceName',
+    'WugCounty', 'MapSourceId', 'SourceName', 'DisplayZero',
     'WS2010', 'WS2020', 'WS2030', 'WS2040', 'WS2050', 'WS2060')
     .from('vwMapExistingWugSupply');
 }
