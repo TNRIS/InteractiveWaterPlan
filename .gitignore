@@ -3,6 +3,7 @@ node_modules
 .sass-cache
 *.pyc
 application/dist
+secrets
 deploy/.vagrant/
 deploy/production_inventory
 deploy/vagrant_ansible_inventory_default
