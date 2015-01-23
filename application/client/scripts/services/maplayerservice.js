@@ -33,35 +33,35 @@ angular.module('iswpApp').factory('MapLayerService',
       // Overlay Layers
       var regions = L.tileLayer(TILES_URL + '/rwpas/{z}/{x}/{y}.png', {
         opacity: 0.6,
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var rwpd_teams = L.tileLayer(TILES_URL + '/rwpd-teams/{z}/{x}/{y}.png', {
         opacity: 0.9,
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var counties = L.tileLayer(TILES_URL + '/counties-outlines/{z}/{x}/{y}.png', {
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var countyLabels = L.tileLayer(TILES_URL + '/counties-labels/{z}/{x}/{y}.png', {
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var senateDistricts = L.tileLayer(TILES_URL + '/texas-senate-districts/{z}/{x}/{y}.png', {
         opacity: 0.6,
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var houseDistricts = L.tileLayer(TILES_URL + '/texas-house-districts/{z}/{x}/{y}.png', {
         opacity: 0.6,
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var publicWaterSystems = L.tileLayer(TILES_URL + '/public-water-systems/{z}/{x}/{y}.png', {
         opacity: 0.6,
-        subdomains: '123'
+        subdomains: '12'
       });
 
       var grayWithLabels = L.layerGroup([esriGray, countyLabels]);
