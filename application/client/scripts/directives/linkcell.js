@@ -23,6 +23,16 @@ angular.module('iswpApp')
         stateParam: 'entityType',
         stateSuffix: '.type'
       },
+      'SourceName': {
+        paramField: 'MapSourceId',
+        stateParam: 'sourceId',
+        stateSuffix: '.source'
+      },
+      'wmsType': {
+        paramField: 'wmsType',
+        stateParam: 'wmsType',
+        stateSuffix: '.wmstype'
+      }
     };
 
     return {
@@ -30,7 +40,7 @@ angular.module('iswpApp')
       require: '^smartTable',
       template: '<a ng-href="{{stateRef}}" title="View data for {{dataRow[column.map]}}">' +
         '{{dataRow[column.map]}}</a>',
-      link: function postLink(scope, element, attrs, ctrl) {
+      link: function postLink(scope) {
         var mappedField = scope.column.map,
             pMap = paramsMap[mappedField],
             params = {year: $stateParams.year};

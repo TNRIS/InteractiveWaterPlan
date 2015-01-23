@@ -1,4 +1,0 @@
-# slightly modified default vagrant sudoers file; allows vagrant to execute
-# tasks as another user (via sudo -u) which is required for running ansible
-# tasks with sudo_user
-%vagrant   ALL=(ALL:ALL) NOPASSWD: ALL

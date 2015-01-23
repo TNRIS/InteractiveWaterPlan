@@ -3,6 +3,29 @@ module.exports = function(grunt) {
 
    grunt.initConfig({
       pkg: grunt.file.readJSON('package.json'),
+      bower: grunt.file.readJSON('bower.json'),
+
+      shell: {
+         publish: {
+            command: 'npm publish'
+         }
+      },
+
+      bump: {
+         options: {
+            files: ['package.json', 'bower.json'],
+            updateConfigs: ['pkg', 'bower'],
+            commit: true,
+            commitMessage: 'Release v%VERSION%',
+            commitFiles: ['package.json'],
+            createTag: true,
+            tagName: 'v%VERSION%',
+            tagMessage: 'Version %VERSION%',
+            push: true,
+            pushTo: 'upstream',
+            gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
+         }
+      },
 
       karma: {
          unit: {
@@ -36,31 +59,29 @@ module.exports = function(grunt) {
             }
          },
          dist: {
-            files: {
-               'dist/angulartics.min.js': ['src/angulartics.js'],
-               'dist/angulartics-chartbeat.min.js': ['src/angulartics-chartbeat.js'],
-               'dist/angulartics-ga.min.js': ['src/angulartics-ga.js'],
-               'dist/angulartics-ga-cordova.min.js': ['src/angulartics-ga-cordova.js'],
-               'dist/angulartics-kissmetrics.min.js': ['src/angulartics-kissmetrics.js'],
-               'dist/angulartics-mixpanel.min.js': ['src/angulartics-mixpanel.js'],
-               'dist/angulartics-segmentio.min.js': ['src/angulartics-segmentio.js'],
-               'dist/angulartics-gtm.min.js': ['src/angulartics-gtm.js'],
-               'dist/angulartics-woopra.min.js': ['src/angulartics-woopra.js'],
-               'dist/angulartics-splunk.min.js': ['src/angulartics-splunk.js'],
-               'dist/angulartics-flurry.min.js': ['src/angulartics-flurry.js']
-            }
+            files: [{
+               expand: true,
+               cwd: 'src/',
+               src: ['*.js', '!angulartics-scroll.js'],
+               dest: 'dist/',
+               ext: '.min.js'
+            }]
          }
       },
 
       clean: ['dist']
    });
 
-   grunt.loadNpmTasks('grunt-contrib-jshint');
-   grunt.loadNpmTasks('grunt-karma');
-   grunt.loadNpmTasks('grunt-contrib-concat');
-   grunt.loadNpmTasks('grunt-contrib-uglify');
-   grunt.loadNpmTasks('grunt-contrib-clean');
+   require('load-grunt-tasks')(grunt);
 
    grunt.registerTask('test', ['jshint', 'karma']);
    grunt.registerTask('default', ['jshint', 'karma', 'uglify:predist', 'concat:dist', 'uglify:dist']);
+
+   grunt.registerTask('release', 'Release a new version, push it and publish it', function(target) {
+     if (!target) {
+       target = 'patch';
+     }
+     return grunt.task.run('bump-only:' + target, 'default', 'bump-commit', 'shell:publish');
+   });
+
 };

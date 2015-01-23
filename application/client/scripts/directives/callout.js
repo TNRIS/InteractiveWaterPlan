@@ -14,9 +14,6 @@ angular.module('iswpApp')
           'aria-hidden="true" data-dismiss="callout" ng-click="isClosed=true">' +
             '&times;</button>' +
         '<div ng-transclude></div>' +
-        '</div>',
-      link: function postLink(scope, element, attrs) {
-        //TODO: maybe remember isClosed in localStorage
-      }
+        '</div>'
     };
   });

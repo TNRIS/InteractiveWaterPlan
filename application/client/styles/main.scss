@@ -1,7 +1,11 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
-@import 'bootstrap';
+$demandsColor: #0AC763;
+$suppliesColor: #FFB90D;
+$needsColor: #aa0000;
+$strategiesColor: #FF7518;
 
+@import 'bootstrap';
 
 .browsehappy {
   margin: 0.2em 0;
@@ -27,6 +31,10 @@ html.lt-ie9 {
 
 .popover {
   max-width: 340px;
+}
+
+.loader-container {
+  margin-top: 30px;
 }
 
 .about-nav {
@@ -116,6 +124,10 @@ body {
   margin: 30px 0;
 }
 
+.view-title {
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
 
 .map-top-container {
   margin-bottom: 6px;
@@ -137,7 +149,101 @@ body {
   font-weight: normal;
 }
 
-.theme-nav,
+.leaflet-label {
+  border-color: #777;
+  background: rgb(235, 235, 235);
+}
+
+.leaflet-label.sourceLabel {
+  border-color: rgba($strategiesColor, 0.75);
+}
+
+.theme-nav-link {
+  background-color: #eee;
+  opacity: 0.8;
+  color: #000;
+  border-right: 2px solid #fff;
+  transition: all 0.2s linear;
+
+  &.link-demands {
+    background-color: lighten($demandsColor, 50%);
+  }
+  &.link-supplies {
+    background-color: lighten($suppliesColor, 40%);
+  }
+  &.link-needs {
+    background-color: lighten($needsColor, 60%);
+  }
+  &.link-strategies {
+    background-color: lighten($strategiesColor, 40%);
+  }
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+
+  &:hover, &:active {
+    color: #fff;
+    opacity: 1.0;
+
+    &.link-demands {
+      background-color: lighten($demandsColor, 5%);
+    }
+    &.link-supplies {
+      background-color: lighten($suppliesColor, 5%);
+    }
+    &.link-needs {
+      background-color: lighten($needsColor, 10%);
+    }
+    &.link-strategies {
+      background-color: lighten($strategiesColor, 10%);
+    }
+  }
+
+  &.active {
+    color: #fff;
+    box-shadow: none;
+    font-weight: bold;
+    opacity: 1.0;
+
+    &.link-demands {
+      background-color: $demandsColor;
+    }
+    &.link-supplies {
+      background-color: $suppliesColor;
+    }
+    &.link-needs {
+      background-color: $needsColor;
+    }
+    &.link-strategies {
+      background-color: $strategiesColor;
+    }
+  }
+}
+
+.theme-nav-col {
+
+  > a {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #eee;
+    color: #000;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &.active {
+      color: #fff;
+    }
+  }
+}
+
 .map-controls {
   > li > a {
     color: #000;
@@ -225,6 +331,15 @@ body {
       color: #fff;
     }
   }
+
+  span.header-content {
+    cursor: pointer;
+  }
+
+  tfoot > .total-row {
+    border-top: 2px solid #aaa;
+    font-weight: bold;
+  }
 }
 
 .note-marker {
@@ -263,8 +378,50 @@ body {
   }
 }
 
+.view-intro-text {
+  margin-top: 10px;
+}
+
 .view-select-container {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+
+  .well {
+    margin-bottom: 0px;
+  }
+
+  .well-sm {
+    padding: 6px;
+  }
+
+  .view-type-select-group {
+    text-align: center;
+    label {
+      font-weight: normal;
+      padding-right: 6px;
+    }
+
+    .form-control {
+      width: 70%;
+      display: inline-block;
+    }
+  }
+
+  .ui-select-bootstrap {
+    .btn-default, .btn-default:hover {
+      color: inherit;
+      background-color: white;
+      border: 1px solid #ccc;
+    }
+
+    .btn-default {
+      @extend .btn-sm;
+      @extend .input-sm;
+    }
+
+    .ui-select-search {
+      @extend .input-sm;
+    }
+  }
 }
 
 .view-select {
@@ -279,6 +436,10 @@ body {
 
 .pagination-container {
   text-align: center;
+
+  .pagination a {
+    cursor: pointer;
+  }
 }
 
 .leaflet-legend {

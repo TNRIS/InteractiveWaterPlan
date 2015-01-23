@@ -12,13 +12,17 @@ First make sure these are installed:
    platforms, depending on how it is installed)
  - compass (`gem install compass`)
 
-## Building
+Download the sqlite database `cache.db` from https://s3-us-west-2.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
 
-1. Install `bower` and `gulp` globally: `npm install -g bower gulp`
-2. Navigate to `application/` and run `bower install` and `npm install`
-3. Now you should be able to use any of the `gulp` tasks defined in `gulpfile.js`
+## Developing
+
+1. Install `nodemon` and `gulp` globally: `npm install -g nodemon gulp`
+2. Navigate to `application/` and run `npm install`
+3. In one terminal, run `gulp` to watch and build sources. In another terminal run `npm start` to launch the app server.
 
 `gulp` will launch express and watch files for changes
+
+## Building
 
 `gulp dist` will build the app for production
 
@@ -47,7 +51,8 @@ To re-run the deploy, you can either use `vagrant provision` or using the `deplo
 
 Deploying to production works mainly the same way, but you'll need to create a
 production inventory file and set up your authorized_keys file (vagrant does
-these things for you).
+these things for you). You will also need passwordless sudo access for the
+account you are deploying with.
 
 The inventory file should look something like this (with the actual ip address
 to the production server):

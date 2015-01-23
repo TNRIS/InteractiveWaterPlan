@@ -1,0 +1,21 @@
+<div class="header">
+  <ul class="nav nav-pills pull-right">
+    {% if (pageName == 'home') %}
+      <li class="first-time-here ">
+        <a target="_self" title="First time here?" href="/about/#WhatIsThis">
+          First time here?
+        </a>
+      </li>
+    {% endif %}
+    <li class="{% if pageName == 'home' %} active {% endif %}">
+      <a target="_self" title="Home" href="/">Home</a>
+    </li>
+    <li class="{% if pageName == 'about' %} active {% endif %}">
+      <a target="_self" title="About" href="/about">About</a>
+    </li>
+  </ul>
+  <a href="http://www.twdb.texas.gov" title="TWDB Home">
+    <img src="/images/twdb_logo_color.png" alt="TWDB logo" height="60"/>
+  </a>
+  <h1>2012 Texas State Water Plan</h1>
+</div>

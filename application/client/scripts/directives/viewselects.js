@@ -1,112 +1,156 @@
 'use strict';
 
-//TODO: If mobile, just use regular <select> controls instead of select2
-// How to check if mobile?
-
-angular.module('iswpApp')
-  .directive('viewSelects', function ($state, $stateParams, EntityService, ISWP_VARS) {
+angular.module('iswpApp').directive('viewSelects',
+  function ($state, $stateParams, EntityService, StrategySourceService, StrategiesService, ISWP_VARS) {
     return {
       restrict: 'A',
+      replace: true,
       templateUrl: 'templates/viewselects.html',
-      controller: function ($scope, $element, $attrs) {
+      controller: function ($scope) {
 
+        function resetSelected() {
+          $scope.region = {};
+          $scope.county = {};
+          $scope.type = {};
+          $scope.entity = {};
+          $scope.source = {};
+          $scope.wmstype = {};
+        }
 
-        $scope.entityTypes = ISWP_VARS.entityTypes;
-        $scope.counties = ISWP_VARS.counties;
-        $scope.regions = ISWP_VARS.regions;
+        resetSelected(); //call on init
 
-        $scope.entitySelectOpts = {
-          minimumInputLength: 3,
-          query: function(query) {
-            EntityService.search(query.term)
-              .then(function(entities) {
-                var results = _.map(entities, function(e) {
-                  return {
-                    id: e.EntityId,
-                    text: e.EntityName
-                  };
-                });
+        function setupViewTypes() {
+          $scope.viewTypes = [
+            {text: 'Regional Summary', value: 'summary', showSub: false},
+            {text: 'Usage Type', value: 'type', showSub: true},
+            {text: 'Region', value: 'region', showSub: true},
+            {text: 'County', value: 'county', showSub: true},
+            {text: 'Water User Group', value: 'entity', showSub: true}
+          ];
 
-                query.callback({results: results});
-              });
-
-            $scope.$apply();
-          },
-          initSelection: function(el, callback) {
-            callback(null);
+          if ($state.includes('strategies') || $state.includes('supplies')) {
+            $scope.viewTypes.push(
+              {text: 'Water Source', value: 'source', showSub: true}
+            );
           }
-        };
 
-        $scope.$watch('selectedType', function(type) {
-          if (!type || type.isBlank()) {
+          if ($state.includes('strategies')) {
+            $scope.viewTypes.push(
+              {text: 'Type of Strategy', value: 'wmstype', showSub: true}
+            );
+          }
+        }
+
+        setupViewTypes();
+        $scope.$on('$stateChangeSuccess', setupViewTypes);
+
+
+        function setToCurrentState() {
+          //grab selectedViewType from route
+          var currViewValue = $state.current.name.split('.')[1];
+          $scope.selectedViewType = _.find($scope.viewTypes, {value: currViewValue});
+        }
+
+        setToCurrentState(); //run at start
+        $scope.$on('$stateChangeSuccess', setToCurrentState);
+
+        $scope.entityTypes = _.map(ISWP_VARS.entityTypes, function (t) {
+          return {value: t, text: t.titleize()};
+        });
+
+        $scope.counties = _.map(ISWP_VARS.counties, function (c) {
+          return {value: c, text: c.titleize()};
+        });
+
+        $scope.regions = _.map(ISWP_VARS.regions, function (r) {
+          return {value: r, text: "Region " + r};
+        });
+
+
+        $scope.$on('$stateChangeSuccess', function () {
+          if ($state.includes('strategies')) {
+            $scope.sources = _.map(ISWP_VARS.strategySources, function (s) {
+              return {value: s.MapSourceId, text: s.SourceName};
+            });
+            $scope.wmsTypes = _.map(ISWP_VARS.wmsTypes, function (t) {
+              return {value: t, text: t};
+            });
+          }
+          else if ($state.includes('supplies')) {
+            $scope.sources = _.map(ISWP_VARS.existingSources, function (s) {
+              return {value: s.MapSourceId, text: s.SourceName};
+            });
+          }
+        });
+
+
+        $scope.loadEntities = function(query) {
+          if (!query || query.length < 3) {
+            $scope.entities = [];
             return;
           }
+          EntityService.search(query)
+            .then(function(entities) {
+              var results = _.map(entities, function(e) {
+                return {
+                  value: e.EntityId,
+                  text: e.EntityName
+                };
+              });
+              $scope.entities = results;
+            });
+        };
 
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
 
-          if (type.toLowerCase() === 'summary') {
+        $scope.$watch('selectedViewType', function (selected) {
+          if (!selected) { return; }
+
+          if (selected.value === 'summary') {
+            var currentYear = $stateParams.year;
+            var statePrefix = _.first($state.current.name.split('.'));
+
             $state.go(statePrefix + '.summary', {
               year: currentYear
             });
           }
-          else {
-            $state.go(statePrefix + '.type', {
-              year: currentYear,
-              entityType: type
-            });
-          }
 
-          $scope.selectedType = '';
+          resetSelected();
         });
 
-        $scope.$watch('selectedRegion', function(region) {
-          if (!region || region.isBlank()) {
-            return;
-          }
 
+        function goToView (childName, childParam) {
           var currentYear = $stateParams.year;
           var statePrefix = _.first($state.current.name.split('.'));
 
-          $state.go(statePrefix + '.region', {
-            year: currentYear,
-            region: region
-          });
+          $state.go(statePrefix + '.' + childName,
+            _.extend({year: currentYear}, childParam)
+          );
+        }
 
-          $scope.selectedRegion = '';
-        });
+        $scope.selectType = function (selected) {
+          goToView('type', {entityType: selected.value});
+        };
 
-        $scope.$watch('selectedCounty', function(county) {
-          if (!county || county.isBlank()) {
-            return;
-          }
+        $scope.selectRegion = function (selected) {
+          goToView('region', {region: selected.value});
+        };
 
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
+        $scope.selectCounty = function (selected) {
+          goToView('county', {county: selected.value});
+        };
 
-          $state.go(statePrefix + '.county', {
-            year: currentYear,
-            county: county
-          });
+        $scope.selectEntity = function (selected) {
+          goToView('entity', {entityId: selected.value});
+        };
 
-          $scope.selectedCounty = '';
-        });
+        $scope.selectSource = function (selected) {
+          goToView('source', {sourceId: selected.value});
+        };
 
-        $scope.$watch('selectedEntity', function(entityId) {
-          if (entityId === null || angular.isUndefined(entityId)) {
-            return;
-          }
+        $scope.selectWmsType = function (selected) {
+          goToView('wmstype', {wmsType: selected.value});
+        };
 
-          var currentYear = $stateParams.year;
-          var statePrefix = _.first($state.current.name.split('.'));
-
-          $state.go(statePrefix + '.entity', {
-            year: currentYear,
-            entityId: entityId
-          });
-
-          $scope.selectedEntity = null;
-        });
       }
     };
   });

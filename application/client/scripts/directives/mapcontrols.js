@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iswpApp')
-  .directive('mapControls', function($rootScope) {
+  .directive('mapControls', function ($rootScope, MapSettingsService) {
     return {
       restrict: 'A',
       replace: true,
@@ -15,10 +15,10 @@ angular.module('iswpApp')
                 '<span ng-show="!mapLocked">Lock Map</span>' +
               '</a>' +
             '</li>' +
-            '<li class="" ng-hide="mapHidden">' +
+            '<li ng-hide="mapHidden">' +
               '<a href="" ng-click="zoomToState()">Zoom to Texas</a>' +
             '</li>' +
-            '<li class="">' +
+            '<li>' +
               '<a href="" ng-click="toggleMapHide()">' +
                 '<span ng-show="mapHidden">Show Map</span>' +
                 '<span ng-show="!mapHidden">Hide Map</span>' +
@@ -26,14 +26,14 @@ angular.module('iswpApp')
             '</li>' +
           '</ul>' +
         '</div>',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
 
         scope.mapLocked = false;
         scope.mapHidden = false;
 
         scope.toggleMapLock = function() {
           scope.mapLocked = !scope.mapLocked;
-          $rootScope.$emit('map:togglelock', scope.mapLocked);
+          MapSettingsService.isMapLocked = scope.mapLocked;
         };
 
         scope.zoomToState = function() {
@@ -42,7 +42,7 @@ angular.module('iswpApp')
 
         scope.toggleMapHide = function() {
           scope.mapHidden = !scope.mapHidden;
-          $rootScope.$emit('map:togglehide', scope.mapHidden);
+          MapSettingsService.isMapHidden = scope.mapHidden;
         };
 
       }

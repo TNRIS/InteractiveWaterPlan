@@ -9,9 +9,9 @@
     "sugar": "~1.4.1",
     "angular-local-storage": "~0.0.1",
     "angular-ui-router": "~0.2.9",
-    "select2": "~3.4.5",
-    "angular-ui-select2": "~0.0.5",
-    "angulartics": "~0.14.15"
+    "angulartics": "~0.17.1",
+    "angular-ui-select": "~0.8.3",
+    "Leaflet.utfgrid": "danzel/Leaflet.utfgrid"
   },
   "devDependencies": {
     "angular-mocks": "1.2.11",

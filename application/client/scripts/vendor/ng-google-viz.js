@@ -2,7 +2,7 @@
 /**
  * Based on ng-google-chart by Nicolas Bouillon <nicolas@bouil.org>
  */
-(function (document, window) {
+(function () {
   'use strict';
 
   angular.module('googleviz', ['googlechart'])
@@ -23,7 +23,7 @@
             onReady: '&',
             select: '&'
           },
-          link: function ($scope, $elm, $attr) {
+          link: function ($scope, $elm) {
             var dataTable;
 
             // Watches, to refresh the treeMap when its data, title or dimensions change
@@ -32,7 +32,7 @@
             }, true); // true is for deep object equality checking
 
             // Redraw the treeMap if the window is resized
-            $rootScope.$on('resizeMsg', function (e) {
+            $rootScope.$on('resizeMsg', function () {
               $timeout(function () {
                 // Not always defined yet in IE so check
                 if($scope.treeMap && $scope.treeMapConfig.options) {

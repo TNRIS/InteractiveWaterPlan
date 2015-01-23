@@ -14,7 +14,7 @@ angular.module('iswpApp')
             '</li>' +
           '</li>' +
         '</div>',
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope) {
         scope.years = ISWP_VARS.years;
 
         scope.$on('$stateChangeSuccess', function() {

@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('iswpApp')
-  .factory('ChartService', function ChartService($http, API_PATH, ISWP_VARS) {
+  .factory('ChartService', function ChartService($http, DATA_VALUE_PREFIXES) {
     var service = {};
 
-    service.buildEntityChartConfig = function(entitySummary, year) {
-      var demand = entitySummary['D'+ year],
-          supply = entitySummary['WS'+ year],
-          needs = entitySummary['N'+ year],
-          strategySupply = entitySummary['SS'+ year];
+    service.buildEntityChartConfig = function (entitySummary, year) {
+      var demand = entitySummary[DATA_VALUE_PREFIXES.demands + year],
+          supply = entitySummary[DATA_VALUE_PREFIXES.supplies + year],
+          needs = entitySummary[DATA_VALUE_PREFIXES.needs + year],
+          strategySupply = entitySummary[DATA_VALUE_PREFIXES.strategies + year];
 
       var chartConfig = {
           type: 'ColumnChart',
@@ -26,9 +26,9 @@ angular.module('iswpApp')
           data: [
             ['Category', 'Amount (acre-ft/year)', {role: 'style'}, {role: 'tooltip'}, {role: 'id'}],
             ['Water Demand', demand, '#0AC763', demand.format() + ' acre-feet/year', 'demands'],
-            ['Existing Water Supply', supply, '#007fff', supply.format() + ' acre-feet/year', 'existing'],
+            ['Existing Water Supply', supply, '#FFB90D', supply.format() + ' acre-feet/year', 'supplies'],
             ['Water Need', needs, '#aa0000', needs.format() + ' acre-feet/year', 'needs'],
-            ['Strategy Supply', strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/year', 'strategy'],
+            ['Strategy Supply', strategySupply, '#ff7518', strategySupply.format() + ' acre-feet/year', 'strategies'],
           ]
         };
 

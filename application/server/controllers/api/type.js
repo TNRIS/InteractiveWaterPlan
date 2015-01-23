@@ -1,11 +1,16 @@
 'use strict';
 
-var config = require('./../../config/config'),
-    utils = require('./../../utils');
+var express = require('express');
+var config = require('./../../config/config');
 
 exports.getEntityTypes = function(req, res) {
-  var filePath = config.dataPath + 'entityTypes.json';
-  utils.fileAsJsonResponse(res, filePath);
+  res.json(config.entityTypes);
 };
 
 
+/**
+ * Expose a router object
+ */
+var router = express.Router();
+router.get('/entity', exports.getEntityTypes);
+exports.router = router;

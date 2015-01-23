@@ -1,63 +1,49 @@
 'use strict';
 
-var fs = require('fs'),
-    // path = require('path'),
-    _ = require('lodash');
+var _ = require('lodash');
+var config = require('./config/config');
 
-var jsonResponse = _.curry(function(res, err, data) {
-  if (err) { throw err; }
-  res.json(JSON.parse(data));
-});
-
-var readFile = function(path, callback) {
-  fs.readFile(path, {encoding: 'utf8'}, callback);
-};
-
-exports.isCsv = function(req) {
+function isCsv(req) {
   return (req.query.format &&
     req.query.format.toLowerCase() === "csv");
+}
+
+//used with knex queries to return json or csv response
+//example: db.select.from().then(asJsonOrCsv(req,res))
+exports.asJsonOrCsv = function asJsonOrCsv(req, res) {
+  return function (queryResult) {
+    if (isCsv(req)) {
+      return res.csv(queryResult, {
+        fields: _.keys(_.first(queryResult))
+      });
+    }
+    //else
+    return res.json(queryResult);
+  };
 };
 
-exports.fileAsJson = function(path) {
-  var contents = fs.readFileSync(path, {encoding: 'utf8'});
-  return JSON.parse(contents);
-};
 
-exports.fileAsJsonResponse = function(res, filePath) {
-  readFile(filePath, jsonResponse(res));
-};
+exports.makeZeroValueFilter = function makeZeroValueFilter(valueKeyPrefix) {
+  if (!valueKeyPrefix) {
+    throw new Error('Must provide valueKeyPrefix');
+  }
 
-exports.sqlAllAsCsvResponse = function(req, res, db, statement, params) {
-  db.all(statement, params, function(err, rows) {
-    if (err) { throw err; }
-    //TODO: Option to add some descriptive text to the top of each
-    // file (download date, units, where to find more info, etc)
-    res.csv(rows, {
-      //TODO: fileName: path.basename(req.route.path) + ".csv",
-      fields: _.keys(_.first(rows))
+  var years = config.years;
+  var toValueKey = function (year) {
+    return valueKeyPrefix + year;
+  };
+
+  var valueFields = _.zipObject(
+    _.map(years, toValueKey),
+    _.times(years.length, _.constant(true))
+  );
+
+  return function zeroValueFilter(results) {
+    return _.map(results, function (row) {
+      var shouldDisplayZero = row.DisplayZero && row.DisplayZero === 'Y';
+      return _.omit(row, function (val, key) {
+        return !!valueFields[key] && (val === 0 && !shouldDisplayZero);
+      });
     });
-  });
-};
-
-exports.sqlAllAsJsonResponse = function(res, db, statement, params) {
-  db.all(statement, params, function(err, rows) {
-    if (err) { throw err; }
-    res.json(rows);
-  });
-};
-
-exports.sqlOneAsJsonResponse = function(res, db, statement, params) {
-  db.get(statement, params, function(err, row) {
-    if (err) { throw err; }
-    res.json(row);
-  });
-};
-
-exports.csvOrJsonSqlAll = function(req, res, db, statement, params) {
-  if (exports.isCsv(req)) {
-    exports.sqlAllAsCsvResponse(req, res, db, statement, params);
-  }
-  else {
-    exports.sqlAllAsJsonResponse(res, db, statement, params);
-  }
+  };
 };

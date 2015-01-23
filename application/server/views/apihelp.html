@@ -1,0 +1,129 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>API | 2012 Texas State Water Plan</title>
+    <meta name="description" content="Interactive Texas State Water Plan from the Texas Water Development Board">
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles/vendor.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link type="text/plain" rel="author" href="/humans.txt" />
+  </head>
+  <body>
+    <div class="container">
+
+      {% include "partials/_header.html" %}
+
+      <div class="row">
+
+        <div class="col-md-12">
+
+          <h1 class="page-title">API Description - v1</h1>
+
+          <section>
+            <p>
+              This page details the application programming interface (API) that powers the Interactive 2012 State Water Plan website. The API is <a href="http://www.w3.org/wiki/CORS_Enabled" title="W3C Definition of CORS Enabled">CORS-enabled</a> so that JavaScript clients can make use of the resources it exposes. All water volumes given are in units of acre-feet/year. Unless otherwise specified, all methods return JSON responses.
+            </p>
+
+            <p>
+              For any questions regarding the data or how to apply it, please contact: <a href="mailto:WRPdatarequests@twdb.texas.gov" title="">WRPdatarequests@twdb.texas.gov</a>
+            </p>
+
+            <p>
+              The following lists describe all methods of the Interactive 2012 State Water Plan website API.
+              <br>
+              The base URL for all API paths is <a href="http://texasstatewaterplan.org/api/v1" title="Base API URL"><code>http://texasstatewaterplan.org/api/v1</code></a>.
+            </p>
+
+            <h3>Places</h3>
+            <ul>
+              <li><code>/places/regions</code> - list of all valid Regional Water Planning Area letters</li>
+              <li><code>/places/regions.topojson</code> - TopoJSON representation of Regional Water Planning Areas</li>
+              <li><code>/places/counties</code> - list of all valid County names</li>
+              <li><code>/places/counties.geojson</code> - GeoJSON representation of Counties</li>
+              <li><code>/places/county/COUNTY_NAME.geojson</code> - GeoJSON representation of COUNTY_NAME</li>
+            </ul>
+
+            <h3>Sources</h3>
+            <ul>
+              <li><code>/sources/SOURCE_ID</code> - GeoJSON FeatureCollection of the water supply source feature identified by SOURCE_ID</li>
+              <li><code>/sources?ids=SOURCE_ID_LIST</code> - GeoJSON FeatureCollection of the water supply source features identified by SOURCE_ID_LIST. SOURCE_ID_LIST should be a comma-separated list of integer IDs</li>
+              l>
+              <li><code>/sources/existing</code> - list of all available Sources for Existing Supplies</li>
+              l>
+              <li><code>/sources/strategy</code> - list of all available Sources for Water Management Strategy Supplies</li>
+            </ul>
+
+            <h3>Entities</h3>
+            <ul>
+              <li><code>/entity</code> - all State Water Plan Entities with their ids, names, and locations (lat/lon)</li>
+              <li><code>/entity/ENTITY_ID</code> - information about the Entity with the given ENTITY_ID</li>
+              <li><code>/entity/ENTITY_ID/summary</code> - all Demands, Needs, Water Supply, and Strategy Supply data for the Entity with the given ENTITY_ID</li>
+              <li><code>/type/entity</code> - list of Entity Water Use Types
+            </ul>
+
+            <h3>Demands</h3>
+            <ul>
+              <li><code>/demands</code> - all Demands data</li>
+              <li><code>/demands/summary</code> - Regional summary of Demands data by water use type</li>
+              <li><code>/demands/county/COUNTY_NAME</code> - Demands data for COUNTY_NAME</li>
+              <li><code>/demands/region/REGION_LETTER</code> - Demands data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/demands/entity/ENTITY_ID</code> - Demands data for the Entity specified by ENTITY_ID</li>
+              <li><code>/demands/type/WATER_USE_TYPE</code> - Demands data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+            <h3>Existing Supplies</h3>
+            <ul>
+              <li><code>/supplies</code> - all Existing Supplies data</li>
+              <li><code>/supplies/summary</code> - Regional summary of Existing Supplies data by water use type</li>
+              <li><code>/supplies/county/COUNTY_NAME</code> - Existing Supplies data for COUNTY_NAME</li>
+              <li><code>/supplies/region/REGION_LETTER</code> - Existing Supplies data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/supplies/entity/ENTITY_ID</code> - Existing Supplies data for the Entity specified by ENTITY_ID</li>
+              <li><code>/supplies/type/WATER_USE_TYPE</code> - Existing Supplies data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+            <h3>Needs (Unmet Demands)</h3>
+            <ul>
+              <li><code>/needs</code> - all Needs data</li>
+              <li><code>/needs/summary</code> - Regional summary of Needs data by Water Use Type</li>
+              <li><code>/needs/county/COUNTY_NAME</code> - Needs data for COUNTY_NAME</li>
+              <li><code>/needs/region/REGION_LETTER</code> - Needs data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/needs/entity/ENTITY_ID</code> - Needs data for the Entity specified by ENTITY_ID</li>
+              <li><code>/needs/type/WATER_USE_TYPE</code> - Needs data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+            <h3>Water Management Strategy (WMS) Supplies</h3>
+            <ul>
+              <li><code>/strategies</code> - all WMS Supplies data</li>
+              <li><code>/strategies/summary</code> - Regional summary of WMS Supplies data by water use type</li>
+              <li><code>/strategies/county/COUNTY_NAME</code> - WMS Supplies data for COUNTY_NAME</li>
+              <li><code>/strategies/region/REGION_LETTER</code> - WMS Supplies data for the Regional Water Planning Area specified by REGION_LETTER</li>
+              <li><code>/strategies/entity/ENTITY_ID</code> - WMS Supplies data for the Entity specified by ENTITY_ID</li>
+              <li><code>/strategies/type/WATER_USE_TYPE</code> - WMS Supplies data for the Entities with the specified WATER_USE_TYPE</li>
+            </ul>
+
+          </section>
+
+        </div>
+      </div>
+
+      {% include "partials/_footer.html" %}
+
+    </div>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', '{{ gaTrackingCode }}', 'texasstatewaterplan.org');
+      ga('send', 'pageview');
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

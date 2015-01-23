@@ -2,110 +2,83 @@
 
 require('sugar');
 
-var sqlite3 = require('sqlite3'),
-    utils = require('./../../utils'),
-    config = require('./../../config/config');
+var express = require('express');
+var db = require('./../../db');
+var utils = require('./../../utils');
+var validators = require('./../../lib/validators');
 
-var db = new sqlite3.Database(config.dbPath, sqlite3.OPEN_READONLY);
+exports.getRegionSummary = function(req, res) {
+  db.select('REGION as WugRegion', 'DECADE', 'MUNICIPAL', 'IRRIGATION',
+    'MANUFACTURING', 'MINING', 'STEAM-ELECTRIC as STEAMELECTRIC', 'LIVESTOCK',
+    'TOTAL')
+    .from('vwMapWugDemandsA1')
+    .orderBy('WugRegion')
+    .then(utils.asJsonOrCsv(req, res));
+};
+
 
 //The source db has 'EntityId' formatted as entityID for the demands
 // data so we need to select it as `EntityId` in each SQL statement
+function selectDemands() {
+  return db.select('EntityId as EntityId', 'EntityName', 'WugType', 'WugRegion',
+    'WugCounty', 'D2010', 'D2020', 'D2030', 'D2040', 'D2050', 'D2060')
+    .from('vwMapWugDemand');
+}
 
 exports.getAllDemands = function(req, res) {
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement);
+  selectDemands()
+    .then(utils.asJsonOrCsv(req, res));
 };
 
-exports.getRegionSummary = function(req, res) {
-  var statement = 'SELECT REGION as WugRegion, DECADE, MUNICIPAL, IRRIGATION, ' +
-    'MANUFACTURING, MINING, `STEAM-ELECTRIC` as STEAMELECTRIC, LIVESTOCK, TOTAL ' +
-    'FROM vwMapWugDemandsA1 ORDER BY WugRegion';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement);
-};
 
 exports.getDemandsForRegion = function(req, res) {
-  req.check('region', 'Must be a single letter')
-    .notEmpty()
-    .isAlpha()
-    .len(1,1);
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   var region = req.params.region;
   region = region.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE WugRegion == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [region]);
+  selectDemands()
+    .where('WugRegion', region)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForCounty = function(req, res) {
-  req.check('county', 'Must be a valid county name')
-    .notEmpty();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   var county = req.params.county;
   county = county.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE WugCounty == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [county]);
+  selectDemands()
+    .where('WugCounty', county)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForEntityType = function(req, res) {
-  req.check('entityType', 'Must be a valid Water User Group Entity Type')
-    .notEmpty();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   var entityType = req.params.entityType;
   entityType = entityType.toUpperCase();
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE WugType == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [entityType]);
+  selectDemands()
+    .where('WugType', entityType)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
 
 exports.getDemandsForEntity = function(req, res) {
-  req.check('entityId', 'Must be a valid Water User Group Entity ID')
-    .notEmpty()
-    .isInt();
-
-  var errors = req.validationErrors();
-  if (errors && errors.length) {
-    return res.json(400, {errors: errors});
-  }
-
   req.sanitize('entityId').toInt();
   var entityId = req.params.entityId;
 
-  var statement = 'SELECT EntityId as `EntityId`, EntityName, WugType, WugRegion, ' +
-    'WugRegion, WugCounty, D2010, D2020, D2030, D2040, D2050, D2060 ' +
-    'FROM vwMapWugDemand ' +
-    'WHERE EntityId == ? ORDER BY EntityName';
-
-  utils.csvOrJsonSqlAll(req, res, db, statement, [entityId]);
+  selectDemands()
+    .where('EntityId', entityId)
+    .orderBy('EntityName')
+    .then(utils.asJsonOrCsv(req, res));
 };
+
+/**
+ * Expose a router object
+ */
+var router = express.Router();
+router.get('/', exports.getAllDemands);
+router.get('/summary', exports.getRegionSummary);
+router.get('/region/:region', validators.validateRegion, exports.getDemandsForRegion);
+router.get('/county/:county', validators.validateCounty, exports.getDemandsForCounty);
+router.get('/entity/:entityId', validators.validateEntityId, exports.getDemandsForEntity);
+router.get('/type/:entityType', validators.validateEntityType, exports.getDemandsForEntityType);
+exports.router = router;

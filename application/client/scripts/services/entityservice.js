@@ -38,7 +38,7 @@ angular.module('iswpApp')
         idArr = _.map(entityIds, toInt);
       }
 
-      return _.where(service.entities, function (e) {
+      return _.filter(service.entities, function (e) {
         return _.contains(idArr, e.EntityId);
       });
     };

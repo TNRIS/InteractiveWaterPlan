@@ -6,8 +6,8 @@ var flatten = require('gulp-flatten');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var minifyCSS = require('gulp-minify-css');
-var ngmin = require('gulp-ngmin');
-var rimraf = require('gulp-rimraf');
+var del = require('del');
+var ngAnnotate = require('gulp-ng-annotate');
 var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
@@ -17,7 +17,7 @@ var dirs = {
     bower: 'client/bower_components',
     client: 'client',
     clientScripts: 'client/scripts',
-    ngTemplates: 'client/views/templates',
+    ngTemplates: 'client/templates',
     dist: 'dist',
     pub: 'dist/public',
     scripts: 'dist/public/scripts',
@@ -34,34 +34,21 @@ var paths = {
     ngTemplates: dirs.ngTemplates + '/**/*.html',
     compass: dirs.client + '/styles/main.scss',
     serverDir: dirs.server + '/**/*',
-    serverFile: './server.js',
-    views: dirs.client + '/views/**/*.html'
+    serverFile: './server/index.js',
+    views: dirs.server + '/views/**/*.html'
   };
 
-gulp.task('dist', ['misc', 'scripts', 'styles', 'views']);
+gulp.task('dist', ['misc', 'scripts', 'styles']);
 
 gulp.task('clean', ['clean-dist', 'clean-tmp']);
 
-gulp.task('clean-dist', function () {
-  return gulp.src(dirs.dist)
-    .pipe(rimraf());
+gulp.task('clean-dist', function (cb) {
+  del([dirs.dist], cb);
 });
 
-gulp.task('clean-tmp', function () {
-  return gulp.src(dirs.tmp)
-    .pipe(rimraf());
-});
 
-gulp.task('compass', function () {
-  return gulp.src(paths.compass)
-    .pipe(compass({
-      css: dirs.tmp + '/styles',
-      font: dirs.client + '/styles/fonts',
-      image: dirs.client + '/images',
-      relative: true,
-      sass: dirs.client + '/styles'
-    }))
-    .pipe(gulp.dest(dirs.tmp));
+gulp.task('clean-tmp', function (cb) {
+  del([dirs.tmp], cb);
 });
 
 gulp.task('misc', ['misc-fonts', 'misc-ico-and-txt', 'misc-images', 'misc-package-json']);
@@ -78,7 +65,7 @@ gulp.task('misc-ico-and-txt', function () {
 });
 
 gulp.task('misc-images', function () {
-  return gulp.src(dirs.client + '/images/*.{jpg,png}')
+  return gulp.src(dirs.client + '/images/*.{jpg,png,gif}')
     .pipe(gulp.dest(dirs.pub + '/images/'));
 });
 
@@ -90,19 +77,17 @@ gulp.task('misc-package-json', function () {
 gulp.task('scripts', ['scripts-bower', 'scripts-client', 'scripts-server', 'scripts-shims']);
 
 gulp.task('scripts-bower', function () {
-  var bowerDir = dirs.client + '/bower_components';
-
   var vendorScripts = [
-      dirs.bower + "/sugar/release/sugar-full.min.js",
-      dirs.bower + "/lodash/dist/lodash.compat.js",
-      dirs.bower + "/select2/select2.min.js",
-      dirs.bower + "/angular-ui-select2/src/select2.js",
-      dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
-      dirs.bower + "/angular-local-storage/angular-local-storage.min.js",
-      dirs.bower + "/angular-bootstrap/ui-bootstrap-tpls.js",
-      dirs.bower + "/angulartics/dist/angulartics.min.js",
-      dirs.bower + "/angulartics/dist/angulartics-ga.min.js"
-    ];
+    dirs.bower + "/sugar/release/sugar-full.min.js",
+    dirs.bower + "/lodash/dist/lodash.compat.js",
+    dirs.bower + "/Leaflet.utfgrid/dist/leaflet.utfgrid.js",
+    dirs.bower + "/angular-ui-router/release/angular-ui-router.min.js",
+    dirs.bower + "/angular-ui-select/dist/select.min.js",
+    dirs.bower + "/angular-local-storage/angular-local-storage.min.js",
+    dirs.bower + "/angular-bootstrap/ui-bootstrap-tpls.js",
+    dirs.bower + "/angulartics/dist/angulartics.min.js",
+    dirs.bower + "/angulartics/dist/angulartics-ga.min.js",
+  ];
 
   return gulp.src(vendorScripts)
     .pipe(concat('vendor.js'))
@@ -124,9 +109,9 @@ gulp.task('scripts-client', ['scripts-jshint', 'scripts-templates'], function ()
     [dirs.tmp + '/templates.js']);
 
   return gulp.src(scriptsAndTemplates)
-    .pipe(gutil.env.type === 'production' ? ngmin() : gutil.noop())
+    .pipe(gutil.env.type === 'production' ? ngAnnotate() : gutil.noop())
     .pipe(concat('scripts.js'))
-    .pipe(gutil.env.type === 'production' ? uglify({mangle: false}) : gutil.noop())
+    .pipe(gutil.env.type === 'production' ? uglify({mangle: true}) : gutil.noop())
     .pipe(gulp.dest(dirs.scripts));
 });
 
@@ -158,8 +143,20 @@ gulp.task('scripts-shims', function () {
 
 gulp.task('styles', ['styles-compass', 'styles-images', 'styles-vendor']);
 
+gulp.task('compass', function () {
+  return gulp.src(paths.compass)
+    .pipe(compass({
+      css: dirs.tmp + '/styles',
+      font: dirs.client + '/styles/fonts',
+      image: dirs.client + '/images',
+      relative: true,
+      sass: dirs.client + '/styles'
+    }))
+    .pipe(gulp.dest(dirs.tmp));
+});
+
 gulp.task('styles-compass', ['compass'], function () {
-  return gulp.src(dirs.tmp + '/main.css')
+  return gulp.src(dirs.tmp + '/styles/main.css')
     .pipe(gutil.env.type === 'production' ? minifyCSS() : gutil.noop())
     .pipe(gulp.dest(dirs.styles));
 });
@@ -167,13 +164,13 @@ gulp.task('styles-compass', ['compass'], function () {
 gulp.task('styles-images', function () {
   return gulp.src(dirs.client + '/bower_components/**/*.{png,jpg,jpeg,gif,webp,svg}')
     .pipe(flatten())
-    .pipe(gulp.dest(dirs.pub + '/styles/'));
+    .pipe(gulp.dest(dirs.styles));
 });
 
 gulp.task('styles-vendor', function () {
   var vendorStyles = [
     dirs.bower + "/font-awesome/css/font-awesome.min.css",
-    dirs.bower + "/select2/select2.css"
+    dirs.bower + "/angular-ui-select/dist/select.min.css"
   ];
 
   return gulp.src(vendorStyles)
@@ -182,24 +179,15 @@ gulp.task('styles-vendor', function () {
     .pipe(gulp.dest(dirs.styles));
 });
 
-gulp.task('views', function () {
-  return gulp.src(paths.views)
-    .pipe(gulp.dest(dirs.dist + '/views/'));
-});
-
-gulp.task('serve', ['dist', 'serve-dist']);
-
-gulp.task('serve-dist', ['scripts-server'], function () {
-  var app = require('./' + dirs.dist + '/server.js');
-});
-
 gulp.task('watch', function () {
   gulp.watch(paths.clientScripts, ['scripts-client']);
   gulp.watch(paths.ngTemplates, ['scripts-client']);
   gulp.watch(paths.compass, ['styles-compass']);
-  gulp.watch(paths.serverDir, ['scripts-server-dir', 'serve-dist']);
-  // gulp.watch(paths.serverFile, ['scripts-server-file', 'serve-dist']);
-  gulp.watch(paths.views, ['views']);
+  gulp.watch(paths.serverDir, ['scripts-server-dir']);
+
+  console.log('Watches are active for continuously disting dev files.');
+  console.log('  To start dev server: `npm run start` in a separate shell');
+  console.log('  In debug mode: `npm run debug` and `node-inspector` in two separate shells');
 });
 
-gulp.task('default', ['watch', 'serve']);
+gulp.task('default', ['dist', 'watch']);
