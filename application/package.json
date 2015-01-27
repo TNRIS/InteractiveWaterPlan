@@ -7,8 +7,10 @@
     "url": "https://github.com/TNRIS/InteractiveWaterPlan"
   },
   "dependencies": {
+    "Set": "^0.4.1",
     "bluebird": "^2.3.11",
     "cors": "^2.5.2",
+    "debug": "^2.1.1",
     "express": "^4.10.2",
     "express-validator": "^2.7.0",
     "geojson-merge": "^0.1.0",

@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var JSet = require('Set');
 var config = require('./config/config');
 
 function isCsv(req) {
@@ -13,8 +14,13 @@ function isCsv(req) {
 exports.asJsonOrCsv = function asJsonOrCsv(req, res) {
   return function (queryResult) {
     if (isCsv(req)) {
+      var fieldSet = queryResult.reduce(function (currSet, r) {
+        currSet.addAll(_.keys(r));
+        return currSet;
+      }, new JSet());
+      var fields = fieldSet.toArray();
       return res.csv(queryResult, {
-        fields: _.keys(_.first(queryResult))
+        fields: fields
       });
     }
     //else
