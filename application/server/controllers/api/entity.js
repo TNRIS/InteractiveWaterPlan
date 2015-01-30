@@ -10,7 +10,7 @@ var validators = require('./../../lib/validators');
 
 function selectEntities() {
   return db.select('EntityId', 'EntityName', 'Latitude', 'Longitude')
-    .from('EntityCoordinates');
+    .from('vwMapEntityCoordinates');
 }
 
 exports.getEntities = function(req, res) {
