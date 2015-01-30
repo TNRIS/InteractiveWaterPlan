@@ -63,8 +63,6 @@
 
           <div theme-navs></div>
 
-
-
           <div class="row">
             <div class="col-md-12 view-intro-text">
               <p ng-show="isParentState('demands')">
@@ -78,9 +76,15 @@
                 <a href="/about#needs" target="_blank" title="Glossary: needs"><strong popover="<img src='/images/needs_graphic_300.png' title='' alt='' width='300' height='85' />" popover-trigger="mouseenter">needs</strong></a>
                 are projected water demands in excess of existing water supplies during drought of record conditions (i.e., <strong>potential shortage</strong> if no water management strategy is implemented).
               </p>
-              <p ng-show="isParentState('strategies')">
-                A <a href="/about#water-management-strategy" target="_blank" title="Glossary: water management strategy"><strong>recommended water management strategy</strong></a> is a specific project or action to increase water supply or maximize existing supply to meet a specific need.</a>
-              </p>
+              <div ng-show="isParentState('strategies')">
+                <p>
+                  A <a href="/about#water-management-strategy" target="_blank" title="Glossary: water management strategy"><strong>recommended water management strategy</strong></a> is a specific project or action to increase water supply or maximize existing supply to meet a specific need.
+                </p>
+                <p>
+                  Water management strategies and volumes shown are those associated with water user groups.  Some additional volumes associated solely with wholesale provider strategies are not shown.
+                </p>
+              </div>
+
             </div>
           </div>
 
