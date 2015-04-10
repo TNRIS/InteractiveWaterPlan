@@ -18,10 +18,14 @@ Download the sqlite database `cache.db` from https://s3-us-west-2.amazonaws.com/
 
 1. Install `nodemon` and `gulp` globally: `npm install -g nodemon gulp`
 2. Navigate to `application/` and run `npm install`
-3. In one terminal, run `gulp` to watch and build sources. In another terminal run `npm start` to launch the app server.
+3. In one terminal, run `gulp` to build and watch sources for changes.
+4. In another terminal run `npm start` to launch the app server.
 
-`gulp` will launch express and watch files for changes
+`gulp dist` will perform a single build of the app. The `/dist` directory will contain the built application.
 
-## Building
+## Production Build
 
-`gulp dist` will build the app for production. The `/dist` directory will contain the built application.
+1. Navigate your terminal to `application/`.
+1. `npm run production-dist` to make a production build.
+1. `NODE_ENV=production npm start` to start the production app server.
+
