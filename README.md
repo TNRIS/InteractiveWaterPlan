@@ -1,6 +1,6 @@
-# Interactive State Water Plan App
+# 2012 Interactive State Water Plan App
 
-The [Interactive State Water Plan](http://texasstatewaterplan.org/) (ISWP) application displays water planning data for the State of Texas from the [2012 State Water Plan](http://www.twdb.texas.gov/waterplanning/swp/2012/). The ISWP is a single-page app. Its back-end [API](http://texasstatewaterplan.org/api/v1) is built with [Express](http://expressjs.com/) and the front-end is built with [AngularJS](https://angularjs.org/) and [Leaflet](http://leafletjs.com/).
+The [2012 Interactive State Water Plan](http://2012.texasstatewaterplan.org/) (ISWP) application displays water planning data for the State of Texas from the [2012 State Water Plan](http://www.twdb.texas.gov/waterplanning/swp/2012/). The ISWP is a single-page app. Its back-end [API](http://texasstatewaterplan.org/api/v1) is built with [Express](http://expressjs.com/) and the front-end is built with [AngularJS](https://angularjs.org/) and [Leaflet](http://leafletjs.com/).
 
 The ISWP keeps a snapshot of relevant State Water Plan data in a local SQLite database.
 
@@ -17,7 +17,7 @@ First make sure these are installed:
 
 Download the SQLite database `cache.db` from https://s3-us-west-2.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
 
-The spatial features for all of the existing supplies and proposed supplies can be found in the TNRIS CartoDB account: https://tnris.cartodb.com/tables/iswp_sourcefeatures/public 
+The spatial features for all of the existing supplies and proposed supplies can be found in the TNRIS CartoDB account: https://tnris.cartodb.com/tables/iswp_sourcefeatures/public
 
 ## Developing
 
@@ -39,5 +39,5 @@ The spatial features for all of the existing supplies and proposed supplies can 
 
 The ISWP is a product of the [Texas Water Development Board](http://www.twdb.texas.gov/) and was built internally by the [Texas Natural Resources Information System](http://tnris.org) division.
 
-For more information about the application, visit http://texasstatewaterplan.org/about
+For more information about the application, visit http://2012.texasstatewaterplan.org/about
 
