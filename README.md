@@ -15,7 +15,7 @@ First make sure these are installed:
  - [ruby](https://www.ruby-lang.org/en/) and [rubygems](https://rubygems.org/pages/download)
  - compass (`gem install compass`)
 
-Download the SQLite database `cache.db` from https://s3-us-west-2.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
+Download the SQLite database `cache.db` from https://s3.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
 
 The spatial features for all of the existing supplies and proposed supplies can be found in the TNRIS CartoDB account: https://tnris.cartodb.com/tables/iswp_sourcefeatures/public
 
