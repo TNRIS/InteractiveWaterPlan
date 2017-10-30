@@ -28,8 +28,8 @@ angular.module('iswpApp.config', [])
     MID: '#9ecae1',
     MIN: '#deebf7'
   })
-  .constant('CARTODB_URL', 'http://tnris.cartodb.com/api/')
-  .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures')
+  .constant('CARTODB_URL', 'http://tnris-flood.cartodb.com/api/')
+  .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures2012')
   .constant('SOURCE_CARTOCSS', [
     '#iswp_sourcefeatures[sourcetype="groundwater"] {',
       'polygon-fill: #003369;',

@@ -17,7 +17,7 @@ First make sure these are installed:
 
 Download the SQLite database `cache.db` from https://s3.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
 
-The spatial features for all of the existing supplies and proposed supplies can be found in the TNRIS CartoDB account: https://tnris.cartodb.com/tables/iswp_sourcefeatures/public
+The spatial features for all of the existing supplies and proposed supplies can be found in the TNRIS Flood CartoDB account: https://tnris-flood.cartodb.com/tables/iswp_sourcefeatures2012/public
 
 ## Developing
 
