@@ -11,9 +11,9 @@ Back-end code is in `application/server/`
 ## Initial setup
 
 First make sure these are installed:
- - [nodejs](https://nodejs.org/)
+ - [nodejs](https://nodejs.org/) (node v0.12.18 & npm v2.15.11)
  - [ruby](https://www.ruby-lang.org/en/) and [rubygems](https://rubygems.org/pages/download)
- - compass (`gem install compass`)
+ - compass (`sudo gem install compass`)
 
 Download the SQLite database `cache.db` from https://s3.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
 
