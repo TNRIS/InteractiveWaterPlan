@@ -1,65 +1,48 @@
 'use strict';
 
 angular.module('iswpApp').factory('SourceLayerService',
-  function ($http, $state, $stateParams, API_PATH, CARTODB_URL, CARTODB_SOURCE_TBL, SOURCE_CARTOCSS) {
+  function ($http, $state, $stateParams, MAPSERVER_SOURCE_URL, MAPSERVER_POLY_TILES, MAPSERVER_LINE_TILES, MAPSERVER_POINT_TILES) {
 
     var service = {};
 
     service.getBounds = function getBounds(sourceIds) {
-      var sql = "select ST_Extent(the_geom) as extent from {table} " +
-        "where sourceid in ({sourceIds}) limit 1";
-      sql = sql.assign({
-        table: CARTODB_SOURCE_TBL,
-        sourceIds: sourceIds.join(",")
+      var sourceSuffix = '&SourceIds=' + sourceIds.toString();
+      var rootUrls = [
+        MAPSERVER_SOURCE_URL + '&SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=PolygonSources&outputformat=geojson&SRSNAME=EPSG:4326' + sourceSuffix,
+        MAPSERVER_SOURCE_URL + '&SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=LineSources&outputformat=geojson&SRSNAME=EPSG:4326' + sourceSuffix,
+        MAPSERVER_SOURCE_URL + '&SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=PointSources&outputformat=geojson&SRSNAME=EPSG:4326' + sourceSuffix
+      ];
+
+      var promises = rootUrls.map(function (url) {
+        return $http.get(url).then(function(response) {
+          return response.data.features;
+        });
+
       });
 
-      var sqlApiUrl = CARTODB_URL + 'v2/sql';
-      sqlApiUrl = sqlApiUrl + "?q=" + sql;
-
-      var prom = $http.get(sqlApiUrl).then(function (response) {
-        var result = _.first(response.data.rows);
-        if (!result || !result.extent) {
-          return null;
-        }
-        var boxStr = result.extent.remove('BOX(').remove(')');
-        var boundsPoints = boxStr.split(/\s|,/).map(parseFloat);
-        return L.latLngBounds([boundsPoints[1], boundsPoints[0]],
-          [boundsPoints[3], boundsPoints[2]]);
+      return Promise.all(promises).then(function(feats) {
+        var features = [].concat(feats[0], feats[1], feats[2]);
+        var geojson = {
+          "type": "FeatureCollection",
+          "name": "Sources",
+          "features": features
+        };
+        return L.featureGroup([L.geoJson(geojson)]).getBounds();
       });
-
-      return prom;
     };
 
     service.createLayer = function createLayer(sourceIds, map) {
-      var sql = "select * from {table} where sourceid in ({sourceIds}) " +
-        "order by drawingorder";
-      sql = sql.assign({
-        table: CARTODB_SOURCE_TBL,
-        sourceIds: sourceIds.join(",")
-      });
 
-      var mapConfig = {
-        version: "1.0.1",
-        layers: [{
-          type: "cartodb",
-          options: {
-            cartocss_version: "2.1.1",
-            sql: sql,
-            cartocss: SOURCE_CARTOCSS,
-            interactivity: ['name', 'sourceid']
-          }
-        }]
-      };
+      var rootUrls = [
+        MAPSERVER_SOURCE_URL + MAPSERVER_POLY_TILES,
+        MAPSERVER_SOURCE_URL + MAPSERVER_LINE_TILES,
+        MAPSERVER_SOURCE_URL + MAPSERVER_POINT_TILES
+      ];
 
-      var mapApiUrl = CARTODB_URL + 'v1/map/';
-
-      var prom = $http.post(mapApiUrl, mapConfig)
-        .then(function (response) {
-          var layerid = response.data.layergroupid;
-          var zxy = "/{z}/{x}/{y}";
-          var tileLayer = L.tileLayer(mapApiUrl + layerid + zxy + ".png");
+      var promises = rootUrls.map(function (url) {
+          var tileLayer = L.tileLayer(url + 'png&SourceIds=' + sourceIds.toString());
           var utfGridLayer = L.utfGrid(
-            mapApiUrl + layerid + "/0" + zxy + ".grid.json", {
+            url + 'utfgrid&SourceIds=' + sourceIds.toString(), {
             useJsonP: false
           });
 
@@ -93,6 +76,7 @@ angular.module('iswpApp').factory('SourceLayerService',
             });
             return;
           });
+        
 
           var sourceLayerGroup = L.featureGroup([tileLayer, utfGridLayer]);
           map.addLayer(sourceLayerGroup);
@@ -112,9 +96,9 @@ angular.module('iswpApp').factory('SourceLayerService',
           };
 
           return sourceLayerGroup;
-        });
-
-      return prom;
+      });
+        
+      return Promise.all(promises);
     };
 
     return service;

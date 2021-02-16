@@ -28,60 +28,10 @@ angular.module('iswpApp.config', [])
     MID: '#9ecae1',
     MIN: '#deebf7'
   })
-  .constant('CARTODB_URL', 'http://tnris-flood.cartodb.com/api/')
-  .constant('CARTODB_SOURCE_TBL', 'iswp_sourcefeatures2012')
-  .constant('SOURCE_CARTOCSS', [
-    '#iswp_sourcefeatures[sourcetype="groundwater"] {',
-      'polygon-fill: #003369;',
-      'polygon-opacity: 0.7;',
-      'line-color: #FFF;',
-      'line-width: 2;',
-      'line-opacity: 0.5;',
-      '[featuretype="point"]{',
-        'marker-fill: #003369; ',
-        'marker-line-color: #FFF;',
-        'marker-width: 12;',
-      '}',
-    '}',
-    '#iswp_sourcefeatures[sourcetype="seawater"],',
-    '#iswp_sourcefeatures[sourcetype="reservoir"],',
-    '#iswp_sourcefeatures[sourcetype="system"]{',
-      '::glow[zoom>9] {',
-        'line-width: 1;',
-        'line-color: #fff;',
-        'line-opacity: 0.8;',
-      '}',
-      'polygon-fill: #007DFF;',
-      'polygon-opacity: 1;',
-      'line-color: #007DFF;',
-      'line-width: 1;',
-      'line-opacity: 0.8;',
-      '[isnew=true] {',
-        'polygon-fill: #00EDFF;',
-        'line-dasharray: 10, 4;',
-        'line-color: #fff;',
-      '}',
-      '[featuretype="point"]{',
-        'marker-fill: #007DFF; ',
-        'marker-line-color: #FFF;',
-        'marker-width: 12;',
-        '[isnew=true] {',
-          'marker-fill: #00EDFF;',
-        '}',
-      '}',
-    '}',
-    '#iswp_sourcefeatures[sourcetype="river"],',
-    '#iswp_sourcefeatures[sourcetype="indirect"] {',
-      'line-width: 2;',
-      'line-color: #33B0FF;',
-      'line-opacity: 1.0;',
-      '[featuretype="point"] {',
-        'marker-fill: #33B0FF; ',
-        'marker-line-color: #FFF;',
-        'marker-width: 12;',
-      '}',
-    '}'
-  ].join(''))
+  .constant('MAPSERVER_SOURCE_URL', 'https://mapserver.tnris.org?map=/tnris_mapfiles/iswp_sourcefeatures2012.map')
+  .constant('MAPSERVER_POLY_TILES', '&mode=tile&tilemode=gmap&tile={x}+{y}+{z}&layers=PolygonSources&map.imagetype=')
+  .constant('MAPSERVER_LINE_TILES', '&mode=tile&tilemode=gmap&tile={x}+{y}+{z}&layers=LineSources&map.imagetype=')
+  .constant('MAPSERVER_POINT_TILES', '&mode=tile&tilemode=gmap&tile={x}+{y}+{z}&layers=PointSources&map.imagetype=')
   .constant('ENTITY_STYLES', {
     'demands': {
       color: '#000',
