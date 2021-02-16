@@ -81,9 +81,13 @@ angular.module('iswpApp').directive('iswpMap',
       function clearLayers() {
         EntityLayerService.clearLayer();
         countyLayer.clearLayers();
-        if (sourceLayer && map.hasLayer(sourceLayer)) {
-          map.removeLayer(sourceLayer);
-          sourceLayer = null;
+        if (sourceLayer) {
+          sourceLayer.forEach(function(lyr) {
+            if (map.hasLayer(lyr)) {
+              map.removeLayer(lyr);
+            }
+          });
+          // sourceLayer = null;
         }
 
         //clear all labels on state change
