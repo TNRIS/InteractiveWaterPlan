@@ -11,12 +11,12 @@ angular.module('iswpApp').factory('MapLayerService',
       // Base Layers
       var esriGray = L.esri.basemapLayer("Gray");
 
-      var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: 'Map tiles by <a href="http://cartodb.com/attributions#basemaps">CartoDB</a>, under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>. Data by <a href="http://www.openstreetmap.org/">OpenStreetMap</a>, under ODbL.'
       });
 
       var mqOpen = L.tileLayer(
-        'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+        'https://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
         subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,' +
             '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>.' +
@@ -24,7 +24,7 @@ angular.module('iswpApp').factory('MapLayerService',
       });
 
       var mqAerial = L.tileLayer(
-        'http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png', {
+        'https://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png', {
         subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
         attribution: 'Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency. ' +
             'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
