@@ -8,16 +8,16 @@ Front-end code is in `application/client/`
 
 Back-end code is in `application/server/`
 
-## Initial setup
+## Setup
 
 First make sure these are installed:
- - [nodejs](https://nodejs.org/) (node v0.12.18 & npm v2.15.11)
+ - [nodejs](https://nodejs.org/) (node `v0.12.18` & npm `v2.15.11`)
  - [ruby](https://www.ruby-lang.org/en/) and [rubygems](https://rubygems.org/pages/download)
  - compass (`sudo gem install compass`)
 
-Download the SQLite database `cache.db` from https://s3.amazonaws.com/tnris-misc/iswp/cache.db and place it in `application/server/cache/`
+Download the SQLite database `cache.db` from https://s3.amazonaws.com/tnris-droc/iswp/cache.db and place it in `application/server/cache/`
 
-The spatial features for all of the existing supplies and proposed supplies can be found in the TNRIS Flood CartoDB account: https://tnris-flood.cartodb.com/tables/iswp_sourcefeatures2012/public
+The spatial features for all of the existing supplies and proposed supplies are hosted within the tnris mapserver instance via services from the mapfile `/tnris_mapfiles/iswp_sourcefeatures2012.map`
 
 ## Developing
 
@@ -34,6 +34,11 @@ The spatial features for all of the existing supplies and proposed supplies can 
 1. `npm run production-dist` to make a production build.
 1. `NODE_ENV=production npm start` to start the production app server.
 
+## Deployment
+
+1. run the app locally via Setup & Developing instructions above
+2. test locally to ensure changes are ready for production
+3. commit all changes and merge into the 'master' branch. the ci/cd build will automatically rebuild and deploy the application into production
 
 ## About
 
